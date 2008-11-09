@@ -9,9 +9,9 @@ values <- function(object, format='vector', names=FALSE) {
 
 
 
-row.values <- function(raster, rownr) {
+values.row <- function(raster, rownr) {
 	if (!(valid.rows(raster, rownr))) {stop(paste(rownr,'is not a valid rownumber')) }
-	if (data.content(raster) == 'sparse') {return (.row.values.sparse(raster, rownr)) 
+	if (data.content(raster) == 'sparse') {return (.values.row.sparse(raster, rownr)) 
 	} else if (data.content(raster) != 'all') {stop('cannot do. Need all data')
 	} else {
 		startcell <- get.cell.from.rowcol(raster, rownr, 1)
@@ -21,7 +21,7 @@ row.values <- function(raster, rownr) {
 }
 
 
-.row.values.sparse <- function(raster, rownr, explode=TRUE) {
+.values.row.sparse <- function(raster, rownr, explode=TRUE) {
 	if (data.content(raster) != 'sparse') {stop('cannot do. Need sparse')}
 	startcell <- get.cell.from.rowcol(raster, rownr, 1)
 	endcell <- startcell+ncol(raster)-1

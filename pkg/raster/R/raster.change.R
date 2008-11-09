@@ -41,7 +41,7 @@ r.expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 		d <- vector(length=ncells(outraster))
 		d[] <- NA
 		for (r in 1:nrow(raster)) {
-			v <- row.values(raster, r) 
+			v <- values.row(raster, r) 
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- v
 			outraster <- set.values(outraster, d)
@@ -99,7 +99,7 @@ r.merge <- function(rasters, filename="", overwrite=FALSE) {
 					rasters[[i]] <- read.row(rasters[[i]], r + 1 - rowcol[i,1]) 
 					d <- values(rasters[[i]])
 				} else {
-					d <- row.values(rasters[[i]], r + 1 - rowcol[i,1]) 
+					d <- values.row(rasters[[i]], r + 1 - rowcol[i,1]) 
 				}
 				id2 <- seq(1:ncol(rasters[[i]])) + rowcol[i,3] - 1
 				d <- cbind(id2, d)

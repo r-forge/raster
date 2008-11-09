@@ -176,11 +176,18 @@
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncells(raster))]
 	res <- cbind(cells, NA)
 	if (length(uniquecells) > 0) {
-		if (raster@file@driver == 'gdal') {
-			vals <- (.read.cells.gdal(raster, uniquecells))
-		} else {
-			vals <- (.read.cells.raster(raster, uniquecells))
-		}
+		if (data.content(raster) == 'all') {
+			vals <- values(raster)[uniquecells]
+		} else if (data.source(raster) == 'disk') {
+			if (raster@file@driver == 'gdal') {
+				vals <- .read.cells.gdal(raster, uniquecells)
+			} else {
+				vals <- .read.cells.raster(raster, uniquecells)
+			}	
+		} else { 
+			vals <- vector(length=length(uniquecells))
+			vals[] <- NA
+		}	
 		for (i in 1:length(vals[,1])) {
 			res[res[,1]==vals[i,1],2] <- vals[i,2] 
 		}

@@ -90,32 +90,33 @@ setMethod('read.part.of.row', signature(object='RasterStack'),
 		return(.rasterstack.read.part.of.row(object, rownr, startcol, ncolumns))}
 )
 
-if (!isGeneric("extract.cells")) {
-	setGeneric("extract.cells", function(object, cells)
-		standardGeneric("extract.cells"))
+if (!isGeneric("values.cell")) {
+	setGeneric("values.cell", function(object, cells)
+		standardGeneric("values.cell"))
 }	
 	
-setMethod('extract.cells', signature(object='RasterLayer'), 
+setMethod("values.cell", signature(object='RasterLayer'), 
 	function(object, cells) { 
 		return(.raster.read.cells(object, cells))}
 )
 
-setMethod('extract.cells', signature(object='RasterStack'), 
+
+setMethod("values.cell", signature(object='RasterStack'), 
 	function(object, cells) { 
 		return(.rasterstack.read.cells(object, cells))}
 )
 
-if (!isGeneric("extract.xy")) {
-	setGeneric("extract.xy", function(object, xy)
-		standardGeneric("extract.xy"))
+if (!isGeneric("values.xy")) {
+	setGeneric("values.xy", function(object, xy)
+		standardGeneric("values.xy"))
 }	
 	
-setMethod('extract.xy', signature(object='RasterLayer'), 
+setMethod("values.xy", signature(object='RasterLayer'), 
 	function(object, xy) { 
 		return(.raster.read.xy(object, xy))}
 )
 
-setMethod('extract.xy', signature(object='RasterStack'), 
+setMethod("values.xy", signature(object='RasterStack'), 
 	function(object, xy) { 
 		return(.rasterstack.read.xy(object, xy))}
 )
@@ -130,7 +131,7 @@ setMethod('hist', signature(x='RasterLayer'),
 		if (data.source(x) == 'disk') {
 		# also make a function that does this by block and combines  all data into a single histogram
 			x <- .read.skip(x, 1000) 
-		} else { stop('cannot do; there should be data that is either on disk or in memory')}
+		} else { stop('cannot make a histogram; there should be data, either on disk or in memory')}
 	}
 	hist(values(x), ...)
 }

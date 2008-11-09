@@ -1,11 +1,14 @@
 \name{properties}
 \alias{values}
-\alias{row.values}
+\alias{values.row}
+\alias{values.cell}
+\alias{values.xy}
 \alias{maxvalue}
 \alias{minvalue}
 \alias{data.indices}
 \alias{data.content}
 \alias{data.source}
+
 
   
   
@@ -16,7 +19,9 @@
 
 \usage{
 values(object, format='vector', names=FALSE)
-row.values(raster, rownr)
+values.row(raster, rownr)
+values.cell(object, cells)
+valyes.xy(object, xy)
 minvalue(raster)
 maxvalue(raster)
 data.content(raster)
@@ -30,6 +35,8 @@ data.source(raster)
   \item{format}{ use \code{vector} to get the data as a single vector or \code{matrix} to get them as a matrix }
   \item{names}{ If TRUE, row and col names are provided }
   \item{rownr}{ The rownumber for which values are returned }
+  \item{cells}{ vector of cell numbers }
+  \item{xy}{ matrix of x and y coordinates (i.e. 2 columns) }
  }
   
 
@@ -53,6 +60,17 @@ maxvalue(rs)
 data.source(rs)
 data.content(rs)
 data.indices(rs)
+
+
+ rs <- raster.from.file(system.file("external/test.ag", package="sp"))
+
+# read values for cells
+  cells <- c(1, 1900, 5000)
+  values.cell(rs, cells)
+
+# read values for (x, y) coordinates
+  xy <- get.xy.from.cell(rs, cells)
+  values.xy(rs, xy)
 
 }
 \keyword{ spatial }
