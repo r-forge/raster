@@ -48,7 +48,7 @@ raster depends on a number of packages, notably sp and rgdal. We hope this packa
 We are looking for beta-testers...
  </p>
 
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p>Go to the <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>development pages</strong></a> to download the package, to report bugs, ask for features, and more. </p>
 
 </body>
 </html>
