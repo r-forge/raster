@@ -43,7 +43,10 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> No content added. </p>
+<p> 'raster' deals with low level raster (grid) data manipulation. It is used by the other packages, so you need to install it first if you want to use the others. 
+raster depends on a number of packages, notably sp and rgdal. We hope this package to CRAN before the end of this year (2008). 
+We are looking for beta-testers...
+ </p>
 
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
