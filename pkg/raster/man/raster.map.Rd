@@ -1,0 +1,34 @@
+\name{raster.map}
+\alias{raster.map}
+\alias{rasterstack.map}
+\title{ Map a raster layer }
+\description{
+  Make a map of a raster dataset
+}
+\usage{
+raster.map(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ...)
+rasterstack.map(rstack, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ...)
+}
+
+\arguments{
+  \item{raster}{ Raster object}
+  \item{col} {a color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making}
+  \item{subsample}{ if TRUE, the image is resampled using maxdim}
+  \item{maxdim}{ maximum requsted number of pixels in the map display (either vertial or horizontal) }
+  \item{...}{ any argument that can be passed to image.plot(fields) and to image(graphics)} 
+  \item{rstack}{ RasterStack object}
+  \item{index}{ The index of a raster in the RasterStack  1 <= index <= rstack@nrasters }
+
+  }
+\details{
+  If \code{subsample=FALSE}, then \code{maxdim} is ingored. Subsampled maps are made by skipping rows and columns. This is always 
+  done in a regular pattern (e.g. skip every second row). For this reason, the actual number of pixels when \code{subsample = TRUE}
+  is generally not exactely the same as \code{maxdim}. If \code{maxdim} is close to the largest dimension of the raster data matrix 
+  it does not affect it. It needs to be 0.75 times the largest raster dimension to have an effect, in which case the number of pixels
+  will be 0.5 times the largest dimension.  
+}
+\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+
+\examples{  }
+
+\keyword{ spatial }

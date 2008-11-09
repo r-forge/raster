@@ -1,0 +1,11 @@
+Package: raster
+Type: Package
+Title: Raster data handling for geographic data analysis and modeling
+Version: 0.7.3
+Date: 2008-10-30
+Depends: methods, sp, rgdal, fields
+Author: Robert J. Hijmans & Jacob van Etten
+Maintainer: Robert J. Hijmans <r.hijmans@gmail.com> 
+Description: Package for reading and manipulating (geographic, spatial) raster (grid) data
+License: GPL3
+URL: http://www.r-project.org
