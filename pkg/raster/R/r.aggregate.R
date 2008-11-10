@@ -40,6 +40,7 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 		outraster <- set.datatype(outraster, 'numeric') 
 	}
 		
+
 	if (data.content(raster) == 'all') {
 	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(raster)], times=nrow(raster))
@@ -49,7 +50,7 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 		if (rm.NA) { outraster <- set.values(outraster, as.vector(tapply(values(raster), cells, function(x){fun(na.omit(x))}))) 
 		} else {outraster <- set.values(outraster, as.vector(tapply(values(raster), cells, fun))) }
 
-		if (filename != "") {write.raster(outraster)}
+		if (filename(outraster) != "") {write.raster(outraster)}
 
 		
 	} else if ( data.source(raster) == 'disk') { 
@@ -78,7 +79,7 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 				outraster <- write.row(outraster, overwrite)
 			}
 		} 
-		if (filename == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
 	}
 	return(outraster)
 }

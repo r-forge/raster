@@ -4,11 +4,11 @@
 # Version 0,1
 # Licence GPL v3
 
-s.calc <- function(rstack, fun, filename=NA, overwrite=FALSE, ForceIntOutput=FALSE) {
+s.calc <- function(rstack, fun, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
 	if (length(fun(seq(1:5))) > 1) { stop("function 'fun' used returns more than one value") }
 
 	outraster <- set.raster(rstack@rasters[[1]], filename)
-	if (is.na(filename)) {
+	if (filename(outraster)=="") {
 		rstack <- read.all(rstack)
 		outraster <- set.values(outraster, apply(values(rstack), 1, fun)) 
 	} else {

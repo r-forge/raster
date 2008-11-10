@@ -4,7 +4,7 @@
 # Version 0,6
 # Licence GPL v3
 
-r.reclass <- function(raster, rclmat, filename=NA, overwrite=FALSE, INT=FALSE)  {
+r.reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
 	if ( is.null(dim(rclmat)) ) { 
 		rclmat <- matrix(rclmat, ncol=3, byrow=TRUE) 
 	} else if ( dim(rclmat)[2] == 1 ) { 
@@ -30,7 +30,7 @@ r.reclass <- function(raster, rclmat, filename=NA, overwrite=FALSE, INT=FALSE)  
 		}
 		if ( data.content(raster) == 'all') { outraster <- set.values(outraster, res) }
 		if ( data.content(raster) == 'sparse') { outraster <- set.values.row(outraster, res,  data.indices(raster)) }
-		if (!is.na(filename)) {	outraster <- write.raster(outraster) }
+		if (filename(outraster) != "" ) {	outraster <- write.raster(outraster) }
 	} else {
 		for (r in 1:nrow(raster)) {
 			raster <- read.row(raster, r)

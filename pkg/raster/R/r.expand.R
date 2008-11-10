@@ -37,7 +37,7 @@ r.expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 			outraster <- set.values(outraster, d)
-			if (filename != "") {write.raster(outraster)}
+			if (filename(outraster) != "") {write.raster(outraster)}
 		}
 
 	} else if ( data.source(raster) == 'disk' ) { 
@@ -51,14 +51,14 @@ r.expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 
-			if (filename != '') {
+			if (filename(outraster) != '') {
 				outraster <- set.values.row(outraster, d, r)
 				outraster <- write.raster(outraster)
 			} else {
 				v <- c(v, d)
 			}
 		}
-		if (filename == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
 	} 
 	return(outraster)
 }

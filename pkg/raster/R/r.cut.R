@@ -35,7 +35,7 @@ r.cut <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 		selected_cells <- as.vector(mapply(seq, start_cells, end_cells))
 		outraster <- set.values(outraster, values(raster)[selected_cells])
 		outraster <- set.minmax(outraster)
-		if (nchar(filename(outraster)) > 0 ) { 
+		if (filename(outraster) != "" ) { 
 			outraster <- try(write.raster(outraster)) 
 		}		
 
@@ -56,7 +56,7 @@ r.cut <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			}	
 			rownr <- rownr + 1
 		} 
-		if (filename == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
 
 	}
 	return(outraster)

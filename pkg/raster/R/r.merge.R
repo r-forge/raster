@@ -53,13 +53,13 @@ r.merge <- function(rasters, filename="", overwrite=FALSE) {
 				rd[d[,1]] <- d[,2]
 			}		
 		}
-		if (filename != '') {
+		if (filename(outraster) != '') {
 			outraster <- set.values.row(outraster, rd, r)
 			outraster <- write.row(outraster, overwrite)
 		} else {
 			v <- c(v, rd)
 		}
 	}
-	if (filename == '') { outraster <- set.values(outraster, v) }
+	if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
 	return(outraster)
 }

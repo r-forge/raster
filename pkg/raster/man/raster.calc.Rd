@@ -13,7 +13,7 @@
 \usage{
 r.calc(raster, fun, filename="", overwrite=FALSE, INT = FALSE)
 r.isNA(raster, value = 0, filename="", overwrite=FALSE, INT = FALSE)
-r.setNA(raster, operator = "<=", value = 0, filename=NA, overwrite=FALSE, INT = FALSE)
+r.setNA(raster, operator = "<=", value = 0, filename="", overwrite=FALSE, INT = FALSE)
 r.init(raster, fun=runif, filename="", overwrite=FALSE, INT = FALSE) 
 r.neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE) 
 r.reclass(raster, rclmat, filename="", overwrite=FALSE, INT = FALSE)
@@ -33,9 +33,8 @@ r.reclass(raster, rclmat, filename="", overwrite=FALSE, INT = FALSE)
 }
 
 \details{
-	Use calc to calculate values for a new raster based on an existing single raster. E.g. to add, multiply or divide a number. Create and pass the appropriate function as an argument. 
-	r.isNA replaces NA with a value. 
-	r.setNA sets values to NA (raster, operator = "<=", value = 0, filename=NA, overwrite=FALSE, INT = FALSE)
+	Use r.calc to calculate values for a new raster based on an existing single raster. E.g. to add, multiply or divide a number. Create and pass the appropriate function as an argument. 
+	r.isNA replaces NA with a value and r.setNA sets values to NA; both are helper functions based on r.calc.
 	r.init sets a value without reference to existing values. E.g. initialize with a single, sequential, or random number.
 	r.neighborhood computes a neighborhood value. I.e. a value computed with function 'fun', for all cells in the square neigborhood (of size ngb * ngb) around each cell 
 	r.reclass reclassifies groups of values to other values. E.g. All values between 1 and 10 become 1, and between 11 and 15 become 2. 

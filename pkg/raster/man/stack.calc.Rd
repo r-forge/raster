@@ -6,7 +6,7 @@
   Any function that takes a one dimensional vector of value as input, and returns a single value, can be passed as function.
 }
 \usage{
-s.calc(rstack, fun, filename=NA, overwrite=FALSE, ForceIntOutput = FALSE)
+s.calc(rstack, fun, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 }
 \arguments{
   \item{rstack}{ a \code{RasterStack} object }

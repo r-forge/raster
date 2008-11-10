@@ -16,31 +16,31 @@ r.calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, INT=FALSE) {
 	
 	if ( data.content(raster) == 'all') {
 		outraster <- set.values(outraster, fun(values(raster))) 
-		if (filename!="") { outraster <- write.raster(outraster, overwrite=overwrite)
+		if (filename(outraster)!="") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
 	} else if ( data.content(raster) == 'sparse') {
 		outraster <- set.values.sparse(outraster, fun(values(raster)),  data.indices(raster)) 
-		if (filename!="") { outraster <- write.raster(outraster, overwrite=overwrite)
+		if (filename(outraster) != "") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
 	} else if (data.source(raster) == 'disk') {
 		v <- vector(length=0)
 		for (r in 1:nrow(raster)) {
 			raster <- read.row(raster, r)
-			if (filename=="") {
+			if (filename(outraster)=="") {
 				v <- c(v, fun(values(raster)))
 			} else {
 				outraster <- set.values.row(outraster, fun(values(raster)), r)
 				outraster <- write.row(outraster, overwrite=overwrite)
 			}
 		}
-		if (filename == "") { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == "") { outraster <- set.values(outraster, v) }
 	}
 	return(outraster)
 }
 
 
 
-r.init <- function(raster, fun=runif, filename=NA, overwrite=FALSE, INT=FALSE) {
+r.init <- function(raster, fun=runif, filename="", overwrite=FALSE, INT=FALSE) {
 	outraster <- set.raster(raster, filename)
 	if (INT) {set.datatype(outraster, 'integer')}
 
@@ -54,27 +54,27 @@ r.init <- function(raster, fun=runif, filename=NA, overwrite=FALSE, INT=FALSE) {
 		v <- vector(length=0)
 
 		for (r in 1:nrow(raster)) {
-			if (filename=="") {
+			if (filename(outraster)=="") {
 				v <- c(v, fun(n))
 			} else {			
 				outraster <- set.values.row(outraster, fun(n), r) 
 				outraster <- write.row(outraster, overwrite=overwrite)
 			}	
 		}	
-		if (filename == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
 	} 
 	return(outraster)
 }
 
 
-r.isNA <- function(raster, value=0, filename=NA, overwrite=FALSE, INT=FALSE) {
+r.isNA <- function(raster, value=0, filename="", overwrite=FALSE, INT=FALSE) {
 	fun <- function(x) { x[is.na(x)] <- value; return(x)} 
 	raster <- r.calc(raster, fun, filename, overwrite=overwrite, INT=INT)
 	return(raster) 
 }
 
 	
-r.setNA <- function(raster, operator= "<=", value=0, filename=NA, overwrite=FALSE, INT=FALSE) {
+r.setNA <- function(raster, operator= "<=", value=0, filename="", overwrite=FALSE, INT=FALSE) {
 	if (operator == ">") { fun <- function(x) { x[x>value] <- NA; return(x)}
 	} else if (operator == "<") { fun <- function(x) { x[x<value] <- NA; return(x)}
 	} else if (operator == "<=") { fun <- function(x) { x[x<=value] <- NA; return(x)}
@@ -123,7 +123,7 @@ r.setNA <- function(raster, operator= "<=", value=0, filename=NA, overwrite=FALS
 	
 
 
-r.neighborhood <- function(raster, fun=mean, filename=NA, ngb=3, keepdata=TRUE, overwrite=FALSE) {
+r.neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE) {
 	ngb <- round(ngb)
 	if ((ngb / 2) == floor(ngb/2)) { stop("only odd neighborhoods are supported") }
 	if (ngb == 1) { stop("ngb should be 3 or larger")  } 

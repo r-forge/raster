@@ -21,7 +21,7 @@ Use these functions to set name and datatype properties of a raster object. Whil
 }
 
 \usage{
-set.raster(raster, filename=NA)
+set.raster(raster, filename="")
 set.projection(object, projection)
 set.filename(object, filename)
 set.bbox(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster), keepres=FALSE)

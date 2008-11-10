@@ -16,7 +16,7 @@ set.rowcol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 	return(raster)
 }
 
-set.raster <- function(raster, filename=NA) {
+set.raster <- function(raster, filename="") {
 	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
 	if (class(raster) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
 	raster <- clear.values(raster)
