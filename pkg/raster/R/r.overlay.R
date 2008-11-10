@@ -14,10 +14,12 @@ r.overlay <- function(raster1, raster2, fun=function(x,y){return(x+y)}, filename
 	}
 	outraster <- set.raster(raster1)
 	outraster <- set.filename(outraster, filename)
+	
 	if ( data.content(raster1) == 'all' &  data.content(raster2) == 'all') {
 		vals <- fun( values(raster1), values(raster2) )
 		outraster <- set.values(outraster, vals)
 		if (filename != "") { write.raster(outraster, overwrite=overwrite) }
+		
 	} else if ( data.source(raster1) == 'disk' &  data.source(raster2) == 'disk') {
 		for (r in 1:nrow(outraster)) {
 			raster1 <- read.row(raster1, r)

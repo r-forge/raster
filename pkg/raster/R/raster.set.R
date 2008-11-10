@@ -1,9 +1,14 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,1
+# Version 0,6
 # Licence GPL v3
 
+.add.history <- function(raster, message) {
+	if (is.character(message) & message != "") {
+		raster@history <- c(message, raster@history)
+	}	
+}
 
 set.rowcol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 	raster@ncols <- as.integer(ncols)

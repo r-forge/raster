@@ -1,17 +1,12 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,1
+# Version 0,5
 # Licence GPL v3
 
-.add.history <- function(raster, message) {
-	if (is.character(message) & message != "") {
-		raster@history <- c(message, raster@history)
-	}	
-}
 
 
-r.calc <- function(raster, fun=sqrt, filename=NA, overwrite=FALSE, INT=FALSE) {
+r.calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, INT=FALSE) {
 	outraster <- set.raster(raster, filename)
 	if (INT) {set.datatype(outraster, 'integer')}
 	
@@ -19,27 +14,26 @@ r.calc <- function(raster, fun=sqrt, filename=NA, overwrite=FALSE, INT=FALSE) {
 		stop('raster has no data on disk, nor a complete set of raster values in memory')
 	}
 	
-# there is data	
 	if ( data.content(raster) == 'all') {
 		outraster <- set.values(outraster, fun(values(raster))) 
-		if (!is.na(filename) ) { outraster <- write.raster(outraster, overwrite=overwrite)
+		if (filename!="") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
 	} else if ( data.content(raster) == 'sparse') {
 		outraster <- set.values.sparse(outraster, fun(values(raster)),  data.indices(raster)) 
-		if (!is.na(filename) ) { outraster <- write.raster(outraster, overwrite=overwrite)
+		if (filename!="") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
 	} else if (data.source(raster) == 'disk') {
+		v <- vector(length=0)
 		for (r in 1:nrow(raster)) {
 			raster <- read.row(raster, r)
-			outraster <- set.values.row(outraster, fun(values(raster)), r)
-			outraster <- write.row(outraster, overwrite=overwrite)
+			if (filename=="") {
+				v <- c(v, fun(values(raster)))
+			} else {
+				outraster <- set.values.row(outraster, fun(values(raster)), r)
+				outraster <- write.row(outraster, overwrite=overwrite)
+			}
 		}
-	} else if (is.na(filename) ) {
-		if ( data.content(raster) == 'row') {
-			outraster <- set.values.row(outraster, fun(values(raster)), get.row.from.cell(raster,  data.indices(raster)[1])) 
-		} else if ( data.content(raster) == 'block') {
-			outraster <- set.values.block(outraster, fun(values(raster)),  data.indices(raster)[1],  data.indices(raster)[2])  
-		}	
+		if (filename == "") { outraster <- set.values(outraster, v) }
 	}
 	return(outraster)
 }
@@ -49,64 +43,26 @@ r.calc <- function(raster, fun=sqrt, filename=NA, overwrite=FALSE, INT=FALSE) {
 r.init <- function(raster, fun=runif, filename=NA, overwrite=FALSE, INT=FALSE) {
 	outraster <- set.raster(raster, filename)
 	if (INT) {set.datatype(outraster, 'integer')}
+
 	if ( data.content(raster) == 'all' | data.source(raster) == 'ram' ) {
 		n <- ncells(raster)
 		outraster <- set.values(outraster, fun(n)) 
 		if (!is.na(filename)) {	outraster <- write.raster(outraster) }
-	} else if (!is.na(filename)) {
+		
+	} else if (data.source(raster) == 'disk') {
 		n <- length(ncol(raster))
-		for (r in 1:nrow(raster)) {
-			outraster <- set.values.row(outraster, fun(n), r) 
-			outraster <- write.row(outraster, overwrite=overwrite)	
-		}	
-	} else {stop('cannot do')}
-	return(outraster)
-}
+		v <- vector(length=0)
 
-
-r.reclass <- function(raster, rclmat, filename=NA, overwrite=FALSE, INT=FALSE)  {
-	if ( is.null(dim(rclmat)) ) { 
-		rclmat <- matrix(rclmat, ncol=3, byrow=TRUE) 
-	} else if ( dim(rclmat)[2] == 1 ) { 
-		rclmat <- matrix(rclmat, ncol=3, byrow=TRUE) }
-	if ( dim(rclmat)[2] != 3 ) { stop('rclmat must have 3 columns') }
-	colnames(rclmat) <- c("From", "To", "Becomes")	
-	print(rclmat)
-	outraster <- set.raster(raster, filename)
-	if (INT) { 
-		outraster <- set.datatype(outraster, "integer") 
-		res <- vector(mode = "integer", length = ncol(raster))
-	} else { 
-		outraster <- set.datatype(outraster, "numeric") 
-		res <- vector(mode = "numeric", length = ncol(raster))
-	}
-	if ( data.content(raster) == 'all' |  data.content(raster) == 'sparse') {
-		for (i in 1:length(rclmat[,1])) {
-			if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
-				res[ is.na(values(raster)) ] <- rclmat[i, 3] 
-			} else { 
-				res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
-			}
-		}
-		if ( data.content(raster) == 'all') { outraster <- set.values(outraster, res) }
-		if ( data.content(raster) == 'sparse') { outraster <- set.values.row(outraster, res,  data.indices(raster)) }
-		if (!is.na(filename)) {	outraster <- write.raster(outraster) }
-	} else {
 		for (r in 1:nrow(raster)) {
-			raster <- read.row(raster, r)
-			for (i in 1:length(rclmat[,1])) {
-				if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
-					res[ is.na(values(raster)) ] <- rclmat[i, 3] 
-				} else if (is.na(rclmat[i,1]) == is.na(rclmat[i,2])) {
-					res[ values(raster) == rclmat[i,1] ] <- rclmat[i , 3] 
-				} else {
-					res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
-				}
+			if (filename=="") {
+				v <- c(v, fun(n))
+			} else {			
+				outraster <- set.values.row(outraster, fun(n), r) 
+				outraster <- write.row(outraster, overwrite=overwrite)
 			}	
-		}
-		outraster <- set.values.row(outraster, res, r)
-		outraster <- write.row(outraster, overwrite=overwrite)
-	}	
+		}	
+		if (filename == '') { outraster <- set.values(outraster, v) }
+	} 
 	return(outraster)
 }
 
