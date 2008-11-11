@@ -53,6 +53,9 @@ raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, ma
 	y <- (0:nrow(raster)) * yres(raster) + ymin(raster) 		
 
 	z <- t(m[nrow(m):1,])
+	
+	z[is.infinite(z)] <- NA
+	
 	image.plot(x, y, z, col=col, axes = TRUE, xlab="", ylab="", legend.width = 0.8, ...)
 	box()
 #	image(x, y, z, col=col, axes = FALSE, xlab="", ylab="")

@@ -15,7 +15,7 @@ r.aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FAL
 r.disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
 r.cut(raster, boundingbox, filename="", overwrite=FALSE) 
 r.expand(raster, boundingbox, filename="", overwrite=FALSE)
-r.merge(rasters, filename, overwrite=FALSE) 
+r.merge(rasters, slack=0.01, filename="", overwrite=FALSE) 
 }
 
 \arguments{
@@ -29,6 +29,7 @@ r.merge(rasters, filename, overwrite=FALSE)
   \item{rm.NA}{ if \code{rm.NA == TRUE}, remove NA cells from calculations }
   \item{INT}{ logical. If \code{TRUE} the values will be rounded and stored as integer }
   \item{overwrite}{ if TRUE, "filename" will be overwritten if it exists }
+  \item{slack}{ }
 }
 
 \details{
