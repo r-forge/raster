@@ -231,7 +231,7 @@ set.datatype <- function(raster, datatype, datasize=4) {
 		raster@file@datatype <- datatype 
 		if (datasize == 4) {
 			raster@file@datasize <- as.integer(4)
-			raster@file@nodatavalue <- -2147483645
+			raster@file@nodatavalue <- -2147483647
 			raster@file@datanotation <- "INT4S"
 		} else if (datasize == 2) {
 			raster@file@datasize <- as.integer(2)
