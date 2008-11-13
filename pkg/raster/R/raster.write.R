@@ -146,7 +146,7 @@ write.row <- function(raster, overwrite=FALSE) {
 	}	
 
 	if (raster@file@datatype == "integer") { raster@data@values <- as.integer(raster@data@values)  }
-	if (class(values(raster)) == "integer" & data.type(raster) == "numeric") { raster@data@values  <- as.numeric(values(raster)) }
+	if (class(values(raster)) == "integer" & raster@file@datatype == "numeric") { raster@data@values  <- as.numeric(values(raster)) }
 	
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
