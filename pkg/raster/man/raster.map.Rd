@@ -3,18 +3,19 @@
 \alias{rasterstack.map}
 \title{ Map a raster layer }
 \description{
-  Make a map of a raster dataset
+  Make a map of a RasterLayer
 }
 \usage{
-raster.map(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ...)
+raster.map(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, ...)
 rasterstack.map(rstack, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ...)
 }
 
 \arguments{
   \item{raster}{ Raster object}
   \item{col} {a color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making}
-  \item{subsample}{ if TRUE, the image is resampled using maxdim}
+  \item{subsample}{Logical. If \code{TRUE}, the image is resampled using maxdim}
   \item{maxdim}{ maximum requsted number of pixels in the map display (either vertial or horizontal) }
+  \item{addbox}{Logical. If \code{TRUE} a box is drawn around the map } 
   \item{...}{ any argument that can be passed to image.plot(fields) and to image(graphics)} 
   \item{rstack}{ RasterStack object}
   \item{index}{ The index of a raster in the RasterStack  1 <= index <= rstack@nrasters }

@@ -18,7 +18,7 @@ rasterstack.map <- function(rstack, index=1, col = rev(terrain.colors(25)), subs
 }
 
 
-raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ...) {
+raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 #	require(fields)
 
@@ -57,7 +57,7 @@ raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, ma
 	z[is.infinite(z)] <- NA
 	
 	image.plot(x, y, z, col=col, axes = TRUE, xlab="", ylab="", legend.width = 0.8, ...)
-	box()
+	if (addbox) {box()}
 #	image(x, y, z, col=col, axes = FALSE, xlab="", ylab="")
 #	contour(x, y, z, add = TRUE, col = "peru")
 #	xincr <- (raster@xmax - raster@xmin) / 12
