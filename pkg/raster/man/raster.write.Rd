@@ -10,7 +10,7 @@
   Write raster data to a file. Either as binary ('raster') format or Ascii (ESRI Arc Ascii) format. 
 }
 \usage{
-write.raster(raster, filetype="grd", INT=FALSE, overwrite=FALSE)
+write.raster(raster, type="grd", INT=FALSE, overwrite=FALSE)
 write.row(raster, overwrite=FALSE)
 write.ascii(raster, overwrite=FALSE)
 write.import(raster, outfile, overwrite=FALSE)
@@ -20,7 +20,7 @@ write.export(raster, outfile, filetype='ascii', overwrite=FALSE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{raster}{ RasterLayer object }
-  \item{filetype} { type of binary file. Currently only "grd" is supported }
+  \item{type} { type of binary file. Currently only "grd" is supported }
   \item{INT} { Logical. If \code{TRUE}, values will be saved as Integers  }
   \item{overwrite} { Logical. If \code{TRUE} existing files are overwritten }
   \item{outfile}{ The file resulting from import or export }

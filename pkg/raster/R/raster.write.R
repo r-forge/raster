@@ -115,15 +115,15 @@ write.ascii <- function(raster, overwrite=FALSE) {
 	return(raster)
 }
  
-write.raster <- function(raster, filetype="grd", INT=FALSE, overwrite=FALSE) {
+write.raster <- function(raster, type="grd", INT=FALSE, overwrite=FALSE) {
 
 	if (data.content(raster) != 'all' & data.content(raster) != 'sparse' ) {
 		stop('there are not (enough) values to write the file. first use set.values()') 
 	}
-	if (filetype == "grd") {
+	if (type == "grd") {
 		raster <- .write.raster.grd(raster, INT, overwrite)
 	} else {
-		stop(paste("filetype:", filetype, "is not supported"))
+		stop(paste("file type:", type, "is not supported"))
 	}
 	return(raster)
 }

@@ -21,10 +21,15 @@ rasterstack.map <- function(rstack, index=1, col = rev(terrain.colors(25)), subs
 raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 #	require(fields)
+	if (class(raster) == 'character') { raster <- raster.from.file(raster) }
+	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
+	if (class(raster) != 'RasterLayer') { stop("class of 'raster' should be RasterLayer") }
 
+	maxdim <- min(1, maxdim)
 	if ( data.content(raster) == 'all') {
+		skip <- round(max(ncol(raster), nrow(raster)) / maxdim)
+		if (skip < maxdim) { subsample <- FALSE }
 		if (subsample)  {
-			skip <- round(max(ncol(raster), nrow(raster)) / maxdim)
 			cols <- (0:round(ncol(raster)/skip)) * skip + 1
 			cols <- cols[ cols <= ncol(raster) ]
 			rows <- (0:round(nrow(raster)/skip)) * skip + 1

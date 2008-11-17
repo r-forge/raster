@@ -25,7 +25,8 @@ raster.from.bbox <- function(boundingbox, nrows=1, ncols=1) {
 }
 
 raster.from.file <- function(filename, band=1) {
-	if (toupper(file.get.extension(filename)) == ".GRD") {
+	fileext <- toupper(file.get.extension(filename)) 
+	if (fileext == ".GRD" | fileext == ".GRI" ) {
 		raster <- .raster.from.file.binary(filename, band) 
 	} else {
 		raster <- .raster.from.file.gdal(filename, band) 
