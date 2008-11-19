@@ -18,7 +18,7 @@ rasterstack.map <- function(rstack, index=1, col = rev(terrain.colors(25)), subs
 }
 
 
-raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, ...) {
+raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", legend.shrink = 0.5, legend.width = 0.8, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 #	require(fields)
 	if (class(raster) == 'character') { raster <- raster.from.file(raster) }
@@ -61,7 +61,7 @@ raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, ma
 	
 	z[is.infinite(z)] <- NA
 	
-	image.plot(x, y, z, col=col, axes = TRUE, xlab="", ylab="", legend.width = 0.8, ...)
+	image.plot(x, y, z, col=col, axes = TRUE, xlab=xlab, ylab=ylab, legend.shrink = legend.shrink, legend.width=legend.width, ...)
 	if (addbox) {box()}
 #	image(x, y, z, col=col, axes = FALSE, xlab="", ylab="")
 #	contour(x, y, z, add = TRUE, col = "peru")
