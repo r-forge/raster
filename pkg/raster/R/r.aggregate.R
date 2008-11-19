@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-r.aggregate2 <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FALSE, filename="", overwrite=FALSE)  {
+r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FALSE, filename="", overwrite=FALSE)  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -27,11 +27,11 @@ r.aggregate2 <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TR
 		rsteps <- as.integer(floor(nrow(raster)/yfact))
 		csteps <- as.integer(floor(ncol(raster)/xfact))
 	}
-	yexpansion <- rsteps * yfact - nrow(raster) * xres(raster)
-	xexpansion <- csteps * xfact - ncol(raster) * yres(raster)
+	ymn <- ymax(raster) - rsteps * yfact * yres(raster)
+	xmx <- xmin(raster) + csteps * xfact * xres(raster)
 		
 	outraster <- set.raster(raster, filename)
-	outraster <- set.bbox(outraster, xmx = xmax(raster) + xexpansion, ymn = ymin(raster) - yexpansion)
+	outraster <- set.bbox(outraster, xmx = xmx, ymn = ymn)
 	outraster <- set.rowcol(outraster, nrows=rsteps, ncols=csteps) 
 	
 	if (INT) { 
@@ -40,7 +40,6 @@ r.aggregate2 <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TR
 		outraster <- set.datatype(outraster, 'numeric') 
 	}
 		
-
 	if (data.content(raster) == 'all') {
 	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(raster)], times=nrow(raster))
@@ -71,14 +70,14 @@ r.aggregate2 <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TR
 			} else { vals <- tapply(values(raster), cells, fun) }
 			vals <- as.vector(vals)
 
-			if (filename(outraster) == '') {
+			if (filename(outraster) == "") {
 				v <- c(v, vals)
 			} else {
 				outraster <- set.values.row(outraster, vals, r)
 				outraster <- write.row(outraster, overwrite)
 			}
 		} 
-		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == "") { outraster <- set.values(outraster, v) }
 	}
 	return(outraster)
 }
