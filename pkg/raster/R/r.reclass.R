@@ -37,15 +37,13 @@ r.reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  
 			for (i in 1:length(rclmat[,1])) {
 				if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
 					res[ is.na(values(raster)) ] <- rclmat[i, 3] 
-				} else if (is.na(rclmat[i,1]) == is.na(rclmat[i,2])) {
-					res[ values(raster) == rclmat[i,1] ] <- rclmat[i , 3] 
 				} else {
 					res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
 				}
 			}	
-		}
-		outraster <- set.values.row(outraster, res, r)
-		outraster <- write.row(outraster, overwrite=overwrite)
+			outraster <- set.values.row(outraster, res, r)
+			outraster <- write.row(outraster, overwrite=overwrite)
+		}	
 	}	
 	return(outraster)
 }
