@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FALSE, filename="", overwrite=FALSE)  {
+r.aggregate2 <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FALSE, filename="", overwrite=FALSE)  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -64,9 +64,8 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 			endrow <- min(nrow(raster), startrow + yfact - 1)
 			nrows <- endrow - startrow + 1
 			raster <- read.rows(raster, startrow = startrow, nrows = nrows)
-			cols <- cols[1:(nrows * ncol(raster))]
-			rows <- rep(startrow:endrow, each=ncol(raster) * nrows)
-			cells <- (as.integer(csteps * (rows - 1)) + cols)
+			rows <- rep(startrow:endrow, each=ncol(raster))
+			cells <- get.cell.from.rowcol(raster, rows, cols)
 			
 			if (rm.NA) { vals <- tapply(values(raster), cells, function(x){fun(na.omit(x))} ) 
 			} else { vals <- tapply(values(raster), cells, fun) }
