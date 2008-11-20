@@ -22,6 +22,7 @@ r.reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  
 	}
 	if ( data.content(raster) == 'all' |  data.content(raster) == 'sparse') {
 		for (i in 1:length(rclmat[,1])) {
+			res <- values(raster)
 			if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
 				res[ is.na(values(raster)) ] <- rclmat[i, 3] 
 			} else { 
@@ -35,6 +36,7 @@ r.reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  
 		for (r in 1:nrow(raster)) {
 			raster <- read.row(raster, r)
 			for (i in 1:length(rclmat[,1])) {
+				res <- values(raster)
 				if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
 					res[ is.na(values(raster)) ] <- rclmat[i, 3] 
 				} else {
