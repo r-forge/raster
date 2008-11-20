@@ -20,9 +20,10 @@ set.raster <- function(raster, filename="") {
 	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
 	if (class(raster) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
 	raster <- clear.values(raster)
+	if (filename != "" & filename == filename(raster)) {
+		stop("is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
+	}
 	raster <- set.filename(raster, filename)
-#	if (INT) { raster <- set.datatype(raster, "integer")  }
-#	else { raster <- set.datatype(raster, "numeric") }
 	return(raster)
 }
 
