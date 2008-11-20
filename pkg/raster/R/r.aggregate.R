@@ -30,7 +30,7 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 	ymn <- ymax(raster) - rsteps * yfact * yres(raster)
 	xmx <- xmin(raster) + csteps * xfact * xres(raster)
 		
-	outraster <- set.raster(raster, filename)
+	outraster <- set.raster(raster, filename)	
 	outraster <- set.bbox(outraster, xmx = xmx, ymn = ymn)
 	outraster <- set.rowcol(outraster, nrows=rsteps, ncols=csteps) 
 	
@@ -39,9 +39,8 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 	} else { 
 		outraster <- set.datatype(outraster, 'numeric') 
 	}
-		
-	if (data.content(raster) == 'all') {
 	
+	if (data.content(raster) == 'all') {	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(raster)], times=nrow(raster))
 		rows <- rep(1:rsteps, each=ncol(raster) * yfact)[1:ncells(raster)]
 		cells <- get.cell.from.rowcol(raster, rows, cols)
@@ -50,21 +49,26 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 		} else {outraster <- set.values(outraster, as.vector(tapply(values(raster), cells, fun))) }
 
 		if (filename(outraster) != "") {write.raster(outraster)}
-
 		
 	} else if ( data.source(raster) == 'disk') { 
 	
-		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(raster)], times=xfact)
-		newdata <- vector(length=rsteps*csteps)
+		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(raster)], times=yfact)
+		rows <- rep(1, each=(ncol(raster) * yfact))
 		v <- vector(length=0)
 		for (r in 1:rsteps) 
 		{
 			startrow <- 1 + (r - 1) * yfact
-			endrow <- min(nrow(raster), startrow + yfact - 1)
-			nrows <- endrow - startrow + 1
+			if ( r==rsteps) {
+				endrow <- min(nrow(raster), startrow + yfact - 1)
+				nrows <- endrow - startrow + 1
+				theserows <- (startrow * rows)[1:(ncol(raster)*nrows)]
+				cols <- cols[1:(ncol(raster)*nrows)]
+			} else {
+				nrows = yfact
+				theserows <- startrow * rows
+			}	
 			raster <- read.rows(raster, startrow = startrow, nrows = nrows)
-			rows <- rep(startrow:endrow, each=ncol(raster))
-			cells <- get.cell.from.rowcol(raster, rows, cols)
+			cells <- get.cell.from.rowcol(raster, theserows, cols)
 			
 			if (rm.NA) { vals <- tapply(values(raster), cells, function(x){fun(na.omit(x))} ) 
 			} else { vals <- tapply(values(raster), cells, fun) }
@@ -81,5 +85,4 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 	}
 	return(outraster)
 }
-
 
