@@ -4,6 +4,10 @@ setAs('RasterLayer', 'SpatialGridDataFrame',
 	function(from){ return(as.raster (from)) }
 )
 
+setAs('RasterBrick', 'SpatialGridDataFrame', 
+	function(from){ return(as.brick (from)) }
+)
+
 setAs('SpatialGridDataFrame', 'RasterLayer', 
 	function(from){ return(as.spgrid (from)) }
 )
@@ -30,109 +34,114 @@ setMethod('ncol', signature(x='AbstractRaster'),
 )
 
 
-if (!isGeneric("read.all")) {
-	setGeneric("read.all", function(object)
-		standardGeneric("read.all"))
+if (!isGeneric("readAll")) {
+	setGeneric("readAll", function(object)
+		standardGeneric("readAll"))
 }	
-setMethod('read.all', signature(object='RasterLayer'), 
+setMethod('readAll', signature(object='RasterLayer'), 
 	function(object){ return(.raster.read.all(object))}
 )
-setMethod('read.all', signature(object='RasterStack'), 
+setMethod('readAll', signature(object='RasterStack'), 
 	function(object){ return(.rasterstack.read.all(object))}
 )
 
 
-if (!isGeneric("read.row")) {
-	setGeneric("read.row", function(object, rownr)
-		standardGeneric("read.row"))
+if (!isGeneric("readRow")) {
+	setGeneric("readRow", function(object, rownr)
+		standardGeneric("readRow"))
 }
-setMethod('read.row', signature(object='RasterLayer'), 
+setMethod('readRow', signature(object='RasterLayer'), 
 	function(object, rownr){ return(.raster.read.row(object, rownr))}
 )
-setMethod('read.row', signature(object='RasterStack'), 
+setMethod('readRow', signature(object='RasterStack'), 
 	function(object, rownr){ return(.rasterstack.read.row(object, rownr))}
 )
 
 	
-if (!isGeneric("read.rows")) {
-	setGeneric("read.rows", function(object, startrow, nrows=3)
-		standardGeneric("read.rows"))
+if (!isGeneric("readRows")) {
+	setGeneric("readRows", function(object, startrow, nrows=3)
+		standardGeneric("readRows"))
 }	
 
-setMethod('read.rows', signature(object='RasterLayer'), 
+setMethod('readRows', signature(object='RasterLayer'), 
 	function(object, startrow, nrows=3) { 
-		return(.raster.read.rows(object, startrow, nrows))}
-)		
+		#read multiple rows
+		return(.raster.read.block(object, startrow, nrows))
+	}	
+)
 
+		
 
-if (!isGeneric("read.block")) {
-	setGeneric("read.block", function(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1))
-		standardGeneric("read.block"))
+if (!isGeneric("readBlock")) {
+	setGeneric("readBlock", function(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1))
+		standardGeneric("readBlock"))
 }	
 
-setMethod('read.block', signature(object='RasterLayer'), 
+setMethod('readBlock', signature(object='RasterLayer'), 
 	function(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
 		return(.raster.read.block(object, startrow, nrows, ncolumns))}
 )
 
-if (!isGeneric("read.part.of.row")) {
-	setGeneric("read.part.of.row", function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1))
-		standardGeneric("read.part.of.row"))
+if (!isGeneric("readPartOfRow")) {
+	setGeneric("readPartOfRow", function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1))
+		standardGeneric("readPartOfRow"))
 }	
 
-setMethod('read.part.of.row', signature(object='RasterLayer'), 
+setMethod('readPartOfRow', signature(object='RasterLayer'), 
 	function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
 		return(.raster.read.part.of.row(object, rownr, startcol, ncolumns))}
 )
 
-setMethod('read.part.of.row', signature(object='RasterStack'), 
+setMethod('readPartOfRow', signature(object='RasterStack'), 
 	function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
 		return(.rasterstack.read.part.of.row(object, rownr, startcol, ncolumns))}
 )
 
-if (!isGeneric("values.cell")) {
-	setGeneric("values.cell", function(object, cells)
-		standardGeneric("values.cell"))
+if (!isGeneric("valuesCells")) {
+	setGeneric("valuesCells", function(object, cells)
+		standardGeneric("valuesCells"))
 }	
 	
-setMethod("values.cell", signature(object='RasterLayer'), 
+setMethod("valuesCells", signature(object='RasterLayer'), 
 	function(object, cells) { 
 		return(.raster.read.cells(object, cells))}
 )
 
 
-setMethod("values.cell", signature(object='RasterStack'), 
+setMethod("valuesCells", signature(object='RasterStack'), 
 	function(object, cells) { 
 		return(.rasterstack.read.cells(object, cells))}
 )
 
-if (!isGeneric("values.xy")) {
-	setGeneric("values.xy", function(object, xy)
-		standardGeneric("values.xy"))
+if (!isGeneric("valuesXY")) {
+	setGeneric("valuesXY", function(object, xy)
+		standardGeneric("valuesXY"))
 }	
 	
-setMethod("values.xy", signature(object='RasterLayer'), 
+setMethod("valuesXY", signature(object='RasterLayer'), 
 	function(object, xy) { 
-		return(.raster.read.xy(object, xy))}
+		return(.raster.read.xy(object, xy))
+	}
 )
 
-setMethod("values.xy", signature(object='RasterStack'), 
+
+
+
+setMethod("valuesXY", signature(object='RasterStack'), 
 	function(object, xy) { 
 		return(.rasterstack.read.xy(object, xy))}
 )
 
 
 setMethod('hist', signature(x='RasterLayer'), 
-	function(x, ...){.hist.raster(x, ...)}
+	function(x, ...){
+		if (dataContent(x) != 'all') {
+			if (dataSource(x) == 'disk') {
+		# TO DO: ake a function that does this by block and combines  all data into a single histogram
+				x <- .read.skip(x, 1000) 
+			} else { stop('cannot make a histogram; there should be data, either on disk or in memory')}
+		}
+		hist(values(x), ...)
+	}	
 )
-
-.hist.raster <- function(x, ...) {
-	if (data.content(x) != 'all') {
-		if (data.source(x) == 'disk') {
-		# also make a function that does this by block and combines  all data into a single histogram
-			x <- .read.skip(x, 1000) 
-		} else { stop('cannot make a histogram; there should be data, either on disk or in memory')}
-	}
-	hist(values(x), ...)
-}
 

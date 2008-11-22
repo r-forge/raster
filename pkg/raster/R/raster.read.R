@@ -18,11 +18,6 @@
 	return(raster)
 }
 
-#read multiple rows
-.raster.read.rows <- function(raster, startrow, nrows=3) {
-	return(.raster.read.block(raster, startrow, nrows))
-}	
-
 #read a block of data  (a rectangular area  of any dimension)  
 .raster.read.block <- function(raster, startrow, nrows=3, startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
 	if (startrow < 1 ) { stop("startrow too small") } 
@@ -128,7 +123,8 @@
 
 
 #sample while reading and return matrix (for plotting )
-.read.skip <- function(raster, maxdim=500) {
+.read.skip <- function(raster, maxdim=500, bbox=NA) {
+	if (!(is.na(bbox))) { rcut <- r.cut(raster, bbox) }
 	rasdim <- max(ncol(raster), nrow(raster) )
 	if (rasdim <= maxdim) { 
 		outras <- .raster.read.all(raster)
@@ -144,7 +140,7 @@
 		cols <- 1 + (cols-1) * colint 
 		for (i in 1:nr) {
 			row <- 1 + (i-1) * rowint
-			raster <- read.row(raster, row)
+			raster <- readRow(raster, row)
 			if (i == 1) {
 				dd <- values(raster)[cols]
 			} else {
@@ -176,9 +172,9 @@
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncells(raster))]
 	res <- cbind(cells, NA)
 	if (length(uniquecells) > 0) {
-		if (data.content(raster) == 'all') {
-			vals <- values(raster)[uniquecells]
-		} else if (data.source(raster) == 'disk') {
+		if (dataContent(raster) == 'all') {
+			vals <- cbind(uniquecells, values(raster)[uniquecells])
+		} else if (dataSource(raster) == 'disk') {
 			if (raster@file@driver == 'gdal') {
 				vals <- .read.cells.gdal(raster, uniquecells)
 			} else {

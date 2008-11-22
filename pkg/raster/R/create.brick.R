@@ -19,4 +19,11 @@ brick.from.bbox <- function(boundingbox, nrows=1, ncols=1) {
 	}
 }
 
+brick.from.stack <- function(stack, values=FALSE) {
+	stop("not implemented yet")
+}
 
+
+brick.from.file <- function(filename, values=FALSE) {
+	stop("not implemented yet")
+}

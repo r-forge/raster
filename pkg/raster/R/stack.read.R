@@ -25,8 +25,8 @@
 			rstack@data@values <- cbind(rstack@data@values, values(rs)) 
 		}	   
 	}
-	rstack@data@content <- data.content(rs)
-	rstack@data@indices <- data.indices(rs)
+	rstack@data@content <- dataContent(rs)
+	rstack@data@indices <- dataIndices(rs)
 	return(rstack)
 }
 

@@ -1,13 +1,17 @@
 \name{properties}
 \alias{values}
 \alias{values.row}
-\alias{values.cell}
-\alias{values.xy}
-\alias{maxvalue}
-\alias{minvalue}
-\alias{data.indices}
-\alias{data.content}
-\alias{data.source}
+\alias{valuesCells}
+\alias{valuesXY}
+\alias{valuesCells,RasterLayer-method}
+\alias{valuesXY,RasterLayer-method}
+\alias{valuesCells,RasterStack-method}
+\alias{valuesXY,RasterStack-method}
+\alias{maxValue}
+\alias{minValue}
+\alias{dataIndices}
+\alias{dataContent}
+\alias{dataSource}
 
 
   
@@ -20,18 +24,18 @@
 \usage{
 values(object, format='vector', names=FALSE)
 values.row(raster, rownr)
-values.cell(object, cells)
-valyes.xy(object, xy)
-minvalue(raster)
-maxvalue(raster)
-data.content(raster)
-data.indices(raster)
-data.source(raster)
+valuesCells(object, cells)
+valuesXY(object, xy)
+minValue(raster)
+maxValue(raster)
+dataContent(raster)
+dataIndices(raster)
+dataSource(raster)
 }
 
 \arguments{
-  \item{raster}{ raster or stack object }
-  \item{object}{ raster or stack object }
+  \item{raster}{ RasterLayer or RasterStack object }
+  \item{object}{ RasterLayer or RasterStack object }
   \item{format}{ use \code{vector} to get the data as a single vector or \code{matrix} to get them as a matrix }
   \item{names}{ If TRUE, row and col names are provided }
   \item{rownr}{ The rownumber for which values are returned }
@@ -50,27 +54,28 @@ data.source(raster)
 \examples{
 #using a new default raster (1 degree global)
 rs <- raster.new()
-minvalue(rs)
-maxvalue(rs)
-data.content(rs)
-data.indices(rs)
+minValue(rs)
+maxValue(rs)
+dataContent(rs)
+dataIndices(rs)
 rs <- set.values(rs, 1:ncells(rs))
-minvalue(rs)
-maxvalue(rs)
-data.source(rs)
-data.content(rs)
-data.indices(rs)
+valuesCells(rs, c(1, 10, 100))
+minValue(rs)
+maxValue(rs)
+dataSource(rs)
+dataContent(rs)
+dataIndices(rs)
 
 
  rs <- raster.from.file(system.file("external/test.ag", package="sp"))
 
 # read values for cells
   cells <- c(1, 1900, 5000)
-  values.cell(rs, cells)
+  valuesCells(rs, cells)
 
 # read values for (x, y) coordinates
   xy <- get.xy.from.cell(rs, cells)
-  values.xy(rs, xy)
+  valuesXY(rs, xy)
 
 }
 \keyword{ spatial }

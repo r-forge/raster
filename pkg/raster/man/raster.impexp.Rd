@@ -1,6 +1,7 @@
 \name{sp}
 \alias{as.raster}
 \alias{as.spgrid}
+\alias{as.brick}
 
 \title{ Functions to export a Raster to an sp object and to import a Raster from a sp object }
 
@@ -10,6 +11,7 @@
 
 \usage{
 as.raster(spgrid, getdata=TRUE, dataindex=1) 
+as.brick(spgrid, getdata=TRUE) 
 as.spgrid(raster, type='grid') 
 }
 

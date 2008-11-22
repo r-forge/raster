@@ -2,14 +2,33 @@
 \docType{class}
 \alias{RasterLayer-class}
 \alias{show,RasterLayer-method}
+\alias{hist,RasterLayer-method}
+\alias{hist}
+\alias{dim,AbstractRaster-method}
+\alias{dim,RasterStack-method}
+\alias{dim,RasterBrick-method}
+
+
 
 \title{Class "RasterLayer" }
 \description{	Class for handling RasterLayer (grid) data  }
+
+\usage{
+  hist(x, ...)
+}
+
+\arguments{
+  \item{x}{ RasterLayer object }
+  \item{...}{ additional arguments for the generic hist function }
+}
+
+
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("RasterLayer", ...)}.
-	 }
+}
+
 \section{Slots}{
-	 \describe{
+	\describe{
 	\item{\code{title}:}{Object of class \code{"character"}. Short name for raster } 
 	\item{\code{file}:}{ Object of class \code{"RasterFile"}} 
 	\item{\code{data}:}{ Object of class \code{"RasterData"}} 
@@ -22,9 +41,11 @@ Objects can be created by calls of the form \code{new("RasterLayer", ...)}.
 }
 \section{Methods}{
   \describe{
-    \item{show}{\code{signature(object = "RasterLayer")}: ... }
-    \item{hist}{\code{signature(object = "RasterLayer")}: ... }
-	
+    \item{show}{\code{signature(object = "RasterLayer")}: displays information about the RasterLayer object }
+    \item{hist}{\code{signature(object = "RasterLayer")}: creates a histogram of the values of the RasterLayer }
+    \item{dim}{\code{signature(object = "AbstractRaster")}: returns dimensions (ncol and nrow) }
+    \item{dim}{\code{signature(object = "RasterStack")}: returns dimensions (ncol, nrow, and nlayers) }
+    \item{dim}{\code{signature(object = "RasterBrick")}: returns dimensions (ncol, nrow, and nlayers) }
  	 }
 }
 \references{ ~put references to the literature/web site here ~ }
@@ -33,7 +54,6 @@ Objects can be created by calls of the form \code{new("RasterLayer", ...)}.
 \note{  }
 
 \examples{
-showClass("RasterLayer")
 }
 \keyword{classes}
 \keyword{spatial}

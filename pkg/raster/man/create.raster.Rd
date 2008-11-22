@@ -3,10 +3,10 @@
 \alias{raster.from.bbox}
 \alias{raster.from.file}
 
-\title{ Create a new raster object }
+\title{ Create a new RasterLayer object }
 \description{
-  These functions create new raster objects, either from scratch, "raster.new" or from file.
-  The created raster object does not contain any cell (pixel) values, it only has the parameters that describe it.
+  These functions create new RasterLayer objects, either from scratch or from file.
+  The created object does not contain any cell (pixel) values, it only has the parameters that describe it.
   See read* and values() for access to the values
 }
 \usage{

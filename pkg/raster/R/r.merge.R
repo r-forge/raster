@@ -11,7 +11,7 @@ r.merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 	res <- compare(rasters, rowcol=FALSE, slack=slack)
 	
 #	for (i in 1:length(rasters)) {
-#		if (!(data.source(rasters[[i]]) == 'disk' | data.content(rasters[[i]]) == 'all' | data.content(rasters[[i]]) == 'sparse')) { 
+#		if (!(data.source(rasters[[i]]) == 'disk' | dataContent(rasters[[i]]) == 'all' | dataContent(rasters[[i]]) == 'sparse')) { 
 #			stop('rasters should be stored on disk or values should be in memory') 
 #		}
 #	}
@@ -39,9 +39,9 @@ r.merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 		for (i in length(rasters):1) {  #reverse order so that the first raster covers the second etc.
 			if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
 				if (rasters[[i]]@data@source == 'disk') {
-					rasters[[i]] <- read.row(rasters[[i]], r + 1 - rowcol[i,1]) 
+					rasters[[i]] <- readRow(rasters[[i]], r + 1 - rowcol[i,1]) 
 					d <- values(rasters[[i]])
-				} else if (data.content(rasters[[i]]) == 'all') {
+				} else if (dataContent(rasters[[i]]) == 'all') {
 					d <- values.row(rasters[[i]], r + 1 - rowcol[i,1]) 
 				} else {
 					d <- vector(length=ncol(rasters[[i]]))

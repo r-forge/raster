@@ -40,7 +40,7 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 		outraster <- set.datatype(outraster, 'numeric') 
 	}
 	
-	if (data.content(raster) == 'all') {	
+	if (dataContent(raster) == 'all') {	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(raster)], times=nrow(raster))
 		rows <- rep(1:rsteps, each=ncol(raster) * yfact)[1:ncells(raster)]
 		cells <- get.cell.from.rowcol(raster, rows, cols)
@@ -50,7 +50,7 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 
 		if (filename(outraster) != "") {write.raster(outraster)}
 		
-	} else if ( data.source(raster) == 'disk') { 
+	} else if ( dataSource(raster) == 'disk') { 
 	
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(raster)], times=yfact)
 		rows <- rep(1, each=(ncol(raster) * yfact))
@@ -67,7 +67,7 @@ r.aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRU
 				nrows = yfact
 				theserows <- startrow * rows
 			}	
-			raster <- read.rows(raster, startrow = startrow, nrows = nrows)
+			raster <- readRows(raster, startrow = startrow, nrows = nrows)
 			cells <- get.cell.from.rowcol(raster, theserows, cols)
 			
 			if (rm.NA) { vals <- tapply(values(raster), cells, function(x){fun(na.omit(x))} ) 

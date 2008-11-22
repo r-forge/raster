@@ -26,7 +26,7 @@ as.raster <- function(spgrid, getdata=TRUE, dataindex=1) {
 }
 
 
-as.brick <- function(spgrid, getdata=TRUE, dataindex=1) {
+as.brick <- function(spgrid, getdata=TRUE) {
 	brick <- brick.new()
 	brick@bbox <- spgrid@bbox
 	brick@proj4string <- spgrid@proj4string
@@ -62,11 +62,11 @@ as.spgrid <- function(raster, type='grid')  {
 	
 	if (type=='pixel') {
 		raster <- make.sparse(raster)
-		pts <- SpatialPoints(get.xy.from.cell(raster,  data.indices(raster)))
+		pts <- SpatialPoints(get.xy.from.cell(raster,  dataIndices(raster)))
 		sp <- SpatialPixelsDataFrame(points=pts, data=as.data.frame(values(raster)), proj4string=projection(raster, FALSE)) 	
 		
 	} else if (type=='grid') {
-		if ( data.content(raster) == 'all') {
+		if ( dataContent(raster) == 'all') {
 			sp <- SpatialGridDataFrame(grd, proj4string=projection(raster, FALSE), data=as.data.frame(values(raster)))
 		} else { 
 			sp  <- SpatialGrid(grd, proj4string=projection(raster, FALSE))

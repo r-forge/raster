@@ -60,7 +60,7 @@ write.export(raster, outfile, filetype='ascii', overwrite=FALSE)
  rs <- raster.from.file(system.file("external/test.ag", package="sp"))
  ascrow <- set.filename(rs, "ascrow.asc")
  for (r in 1:nrow(rs)) {
-	rs <- read.row(rs, r)
+	rs <- readRow(rs, r)
 	ascrow <- set.values.row(ascrow, values(rs), r)
 	ascrow <- write.ascii(ascrow, overwrite=TRUE) 
  }
@@ -68,9 +68,9 @@ write.export(raster, outfile, filetype='ascii', overwrite=FALSE)
 # read and write row by row; write to binary file
  binras <- set.raster(rs, "binbyrow.grd")
  for (r in 1:nrow(rs)) {
-#	binras <- set.values.row(binras, values(read.row(rs, r)), r)
+#	binras <- set.values.row(binras, values(readRow(rs, r)), r)
 # a shortcut for this:	
-    binras@data <- read.row(rs, r)@data
+    binras@data <- readRow(rs, r)@data
 	binras <- write.row(binras, overwrite=TRUE) }
 }
 }

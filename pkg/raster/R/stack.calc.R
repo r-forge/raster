@@ -9,12 +9,12 @@ s.calc <- function(rstack, fun, filename="", overwrite=FALSE, ForceIntOutput=FAL
 
 	outraster <- set.raster(rstack@rasters[[1]], filename)
 	if (filename(outraster)=="") {
-		rstack <- read.all(rstack)
+		rstack <- .rasterstack.read.all(rstack)
 		outraster <- set.values(outraster, apply(values(rstack), 1, fun)) 
 	} else {
 		if (ForceIntOutput) { outraster <- set.datatype(outraster, "integer") }
 		for (r in 1:nrow(rstack)) {
-			rstack <- read.row(rstack, r)
+			rstack <- readRow(rstack, r)
 			vals <- apply(values(rstack), 1, fun)
 			outraster <- set.values.row(outraster, vals, r) 
 			outraster <- write.row(outraster, overwrite)

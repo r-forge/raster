@@ -77,25 +77,25 @@ origin <- function(object) {
 }
 
 
-minvalue <- function(raster) {
+minValue <- function(raster) {
 	return(raster@data@min)
 }
 
 
-maxvalue <- function(raster) {
+maxValue <- function(raster) {
 	return(raster@data@max)
 }
 
 
-data.content <- function(raster) {
+dataContent <- function(raster) {
 	return(raster@data@content)
 }
 
-data.indices <- function(raster) {
+dataIndices <- function(raster) {
 	i <- raster@data@indices
 }
 
-data.source <- function(raster) {
+dataSource <- function(raster) {
 	return(raster@data@source)
 }
 

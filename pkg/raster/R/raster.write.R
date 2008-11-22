@@ -29,8 +29,8 @@ write.ascii <- function(raster, overwrite=FALSE) {
 		write.table(values(raster), filename(raster), append = TRUE, quote = FALSE, 
 							sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
     }
-	if ( data.indices(raster)[2] >= ncells(raster)) {
-		if ( data.indices(raster)[2] > ncells(raster)) {
+	if ( dataIndices(raster)[2] >= ncells(raster)) {
+		if ( dataIndices(raster)[2] > ncells(raster)) {
 			stop(paste('writing beyond end of file. last cell:', raster@data@indices[2], '>', ncells(raster)))
 		} else {
 		# create a new object with gdal handle tfrom the new file
@@ -61,7 +61,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 
 	binraster <- file.change.extension(raster@file@name, ".gri")
 	con <- file(binraster, "wb")
-	writeBin( as.vector(data.indices(raster)), con, size = as.integer(4)) 
+	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
 	writeBin( as.vector(values(raster)), con, size = raster@file@datasize) 
 	close(con)
 
@@ -117,7 +117,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
  
 write.raster <- function(raster, type="grd", INT=FALSE, overwrite=FALSE) {
 
-	if (data.content(raster) != 'all' & data.content(raster) != 'sparse' ) {
+	if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
 		stop('there are not (enough) values to write the file. first use set.values()') 
 	}
 	if (type == "grd") {
@@ -202,8 +202,8 @@ write.row <- function(raster, overwrite=FALSE) {
 	cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)
 	cat("nBands=",  raster@file@nbands, "\n", file = thefile)
 	cat("BandOrder=",  raster@file@bandorder, "\n", file = thefile)
-	cat("MinValue=",  raster@data@min, "\n", file = thefile)
-	cat("MaxValue=",  raster@data@max, "\n", file = thefile)
+	cat("MinValue=",  minValue(raster), "\n", file = thefile)
+	cat("MaxValue=",  maxValue(raster), "\n", file = thefile)
 	cat("NoDataValue=",  raster@file@nodatavalue, "\n", file = thefile)
 #	cat("Sparse=", raster@sparse, "\n", file = thefile)
 #	cat("nCellvals=", raster@data@ncellvals, "\n", file = thefile)	
@@ -221,7 +221,7 @@ write.import <- function(raster, outfile, overwrite=FALSE) {
 # check extension
 	rsout <- set.raster(raster, filename=outfile)
 	for (r in 1:nrow(raster)) {
-		d <- read.row(raster, r)
+		d <- readRow(raster, r)
 		write.row(rsout, overwrite)
 		}
 	return(rsout)
@@ -231,7 +231,7 @@ write.export <- function(raster, outfile, filetype='ascii', overwrite=FALSE) {
 	rsout <- set.raster(raster, filename=outfile)
 	if (filetype == 'ascii') {
 		for (r in 1:nrow(raster)) {
-			d <- read.row(raster, r)
+			d <- readRow(raster, r)
 			write.ascii(rsout, overwrite) 
 		}
 	} else {

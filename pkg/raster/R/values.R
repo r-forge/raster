@@ -1,5 +1,5 @@
 values <- function(object, format='vector', names=FALSE) {
-	if (object@data@content=="nodata") {stop("first read some data (e.g., read.all()") }
+	if (object@data@content=="nodata") {stop("first read some data (e.g., readAll()") }
 	if (format=='matrix') { 
 		return(.values.as.matrix(object, names)) 
 	} else {
@@ -11,8 +11,8 @@ values <- function(object, format='vector', names=FALSE) {
 
 values.row <- function(raster, rownr) {
 	if (!(valid.rows(raster, rownr))) {stop(paste(rownr,'is not a valid rownumber')) }
-	if (data.content(raster) == 'sparse') {return (.values.row.sparse(raster, rownr)) 
-	} else if (data.content(raster) != 'all') {stop('cannot do. Need all data')
+	if (dataContent(raster) == 'sparse') {return (.values.row.sparse(raster, rownr)) 
+	} else if (dataContent(raster) != 'all') {stop('cannot do. Need all data')
 	} else {
 		startcell <- get.cell.from.rowcol(raster, rownr, 1)
 		endcell <- startcell+ncol(raster)-1
@@ -22,10 +22,10 @@ values.row <- function(raster, rownr) {
 
 
 .values.row.sparse <- function(raster, rownr, explode=TRUE) {
-	if (data.content(raster) != 'sparse') {stop('cannot do. Need sparse')}
+	if (dataContent(raster) != 'sparse') {stop('cannot do. Need sparse')}
 	startcell <- get.cell.from.rowcol(raster, rownr, 1)
 	endcell <- startcell+ncol(raster)-1
-	d <- cbind(data.indices(raster), values(raster))
+	d <- cbind(dataIndices(raster), values(raster))
 	d <- d[d[,1] >= startcell & d[,1] <= endcell, ] 
 	if (explode) { 
 		cells <- startcell:endcell
@@ -40,7 +40,7 @@ values.row <- function(raster, rownr) {
 
 
 .values.as.matrix <- function(raster, names=FALSE) {
-	if (raster@data@content=="nodata") {stop("first read some data (e.g., read.all() or read.row()") }
+	if (raster@data@content=="nodata") {stop("first read some data (e.g., readAll() or readRow()") }
 	
 	if (is.matrix(raster@data@values)) {
 		return(raster@data@values)

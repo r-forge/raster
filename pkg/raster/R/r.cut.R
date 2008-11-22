@@ -27,7 +27,7 @@ r.cut <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	outraster <- set.raster(raster, filename)
 	outraster <- set.bbox(outraster, xmn, xmx, ymn, ymx, keepres=T)
 	
-	if (data.content(raster) == 'all')  {
+	if (dataContent(raster) == 'all')  {
 		first_start_cell <- get.cell.from.xy(raster, c(xmn + 0.5 * xres(raster), ymx - 0.5 * yres(raster) ))	
 		last_start_cell <- get.cell.from.xy(raster, c(xmn + 0.5 * xres(raster), ymn + 0.5 * yres(raster) ))
 		start_cells <- seq(first_start_cell, last_start_cell, by = ncol(raster))
@@ -39,7 +39,7 @@ r.cut <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			outraster <- try(write.raster(outraster)) 
 		}		
 
-	} else if ( data.source(raster) == 'disk') { 
+	} else if ( dataSource(raster) == 'disk') { 
 
 		first_col <- get.col.from.x(raster, xmn + 0.5 * xres(outraster))
 		first_row <- get.row.from.y(raster, ymx - 0.5 * yres(outraster))
@@ -47,7 +47,7 @@ r.cut <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 		rownr <- 1
 		v <- vector(length=0)
 		for (r in first_row:last_row) {
-			raster <- read.part.of.row(raster, r, first_col, ncol(outraster) )
+			raster <- .raster.read.part.of.row(raster, r, first_col, ncol(outraster) )
 			if (filename(outraster) == '') {
 				v <- c(v, values(raster))
 			} else {

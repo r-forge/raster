@@ -133,10 +133,10 @@ setMethod ('show' , 'RasterLayer',
 		cat('ncol        :' , ncol(object), '\n')
 		cat('ncells      :' , ncells(object), '\n')
 		cat('data type   :' , object@file@datanotation, '\n')
-		cat('data content:' ,  data.content(object), '\n')
+		cat('data content:' ,  dataContent(object), '\n')
 		if (object@data@haveminmax) {
-			cat('min value   :' , minvalue(object), '\n')
-			cat('max value   :' , maxvalue(object), '\n')
+			cat('min value   :' , minValue(object), '\n')
+			cat('max value   :' , maxValue(object), '\n')
 		} else { #if (object@data@source == 'disk')  {
 			cat('min value   : NA \n')
 			cat('max value   : NA \n')
@@ -197,8 +197,8 @@ setClass ('RasterBrick',
 setMethod ('show' , 'RasterBrick',
 	function ( object ){
 		cat ('class     :' , class ( object ) , '\n')
-		cat ('filename  :' , object@filename, '\n')
-		cat ('nlayers   :' , object@data@nlayers, '\n')
+		cat ('filename  :' , filename(object), '\n')
+		cat ('nlayers   :' , nlayers(object), '\n')
 		cat ('nrow      :' , nrow(object), '\n')
 		cat ('ncol      :' , ncol(object), '\n')
 		cat ('ncells    :' , ncells(object), '\n')

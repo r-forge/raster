@@ -10,22 +10,22 @@ r.calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, INT=FALSE) {
 	outraster <- set.raster(raster, filename)
 	if (INT) {set.datatype(outraster, 'integer')}
 	
-	if (!(data.content(raster) == 'all' | data.content(raster) == 'sparse' | data.source(raster) == 'disk')) {
+	if (!(dataContent(raster) == 'all' | dataContent(raster) == 'sparse' | dataSource(raster) == 'disk')) {
 		stop('raster has no data on disk, nor a complete set of raster values in memory')
 	}
 	
-	if ( data.content(raster) == 'all') {
+	if ( dataContent(raster) == 'all') {
 		outraster <- set.values(outraster, fun(values(raster))) 
 		if (filename(outraster)!="") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
-	} else if ( data.content(raster) == 'sparse') {
-		outraster <- set.values.sparse(outraster, fun(values(raster)),  data.indices(raster)) 
+	} else if ( dataContent(raster) == 'sparse') {
+		outraster <- set.values.sparse(outraster, fun(values(raster)),  dataIndices(raster)) 
 		if (filename(outraster) != "") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
-	} else if (data.source(raster) == 'disk') {
+	} else if (dataSource(raster) == 'disk') {
 		v <- vector(length=0)
 		for (r in 1:nrow(raster)) {
-			raster <- read.row(raster, r)
+			raster <- readRow(raster, r)
 			if (filename(outraster)=="") {
 				v <- c(v, fun(values(raster)))
 			} else {
@@ -44,12 +44,12 @@ r.init <- function(raster, fun=runif, filename="", overwrite=FALSE, INT=FALSE) {
 	outraster <- set.raster(raster, filename)
 	if (INT) {set.datatype(outraster, 'integer')}
 
-	if ( data.content(raster) == 'all' | data.source(raster) == 'ram' ) {
+	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
 		n <- ncells(raster)
 		outraster <- set.values(outraster, fun(n)) 
 		if (!is.na(filename)) {	outraster <- write.raster(outraster) }
 		
-	} else if (data.source(raster) == 'disk') {
+	} else if (dataSource(raster) == 'disk') {
 		n <- length(ncol(raster))
 		v <- vector(length=0)
 
@@ -138,7 +138,7 @@ r.neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, 
 	
 	rr <- 1
 	for (r in 1:nrow(raster)) {
-		rowdata <- values(read.row(raster, r))
+		rowdata <- values(readRow(raster, r))
 		ngbdata <- rbind(ngbdata[2:ngb,], t(rowdata))
 		if (r > lim) {
 			ngbgrid <- set.values.row(ngbgrid, .calc.ngb(ngbdata, ngb, fun, keepdata), rr)

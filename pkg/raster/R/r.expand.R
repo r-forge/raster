@@ -28,7 +28,7 @@ r.expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	startrow <- get.row.from.y(outraster, ymax(raster))
 	startcol <- get.col.from.x(outraster, xmin(raster))
 	
-	if (data.content(raster) == 'all')  {
+	if (dataContent(raster) == 'all')  {
 
 		d <- vector(length=ncells(outraster))
 		d[] <- NA
@@ -40,12 +40,12 @@ r.expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			if (filename(outraster) != "") {write.raster(outraster)}
 		}
 
-	} else if ( data.source(raster) == 'disk' ) { 
+	} else if ( dataSource(raster) == 'disk' ) { 
 
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
 		for (r in 1:nrow(raster)) {
-			raster <- read.row(raster, r)
+			raster <- readRow(raster, r)
 			vals <- values(raster)
 			d[] <- NA
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol

@@ -120,9 +120,9 @@ new.boundingbox <- function(xmn, xmx, ymn, ymx, projection="") {
 
 
 make.sparse <- function(raster) {
-	if ( data.content(raster) == 'sparse') {return(raster)
+	if ( dataContent(raster) == 'sparse') {return(raster)
 	} else {
-		if ( data.content(raster) == 'all') {
+		if ( dataContent(raster) == 'all') {
 			vals <- seq(1:ncells(raster))
 			vals <- cbind(vals, values(raster))
 			vals <- as.vector(na.omit(vals))
@@ -130,7 +130,7 @@ make.sparse <- function(raster) {
 			return(raster)
 		} else { 
 			# as above, but by reading data from disk, row by row
-			stop('not implemented yet, use read.all() first' )
+			stop('not implemented yet, use readAll() first' )
 		}	
 	}
 }

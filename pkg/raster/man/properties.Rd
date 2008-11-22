@@ -2,6 +2,8 @@
 \alias{filename}
 \alias{ncol}
 \alias{nrow}
+\alias{nrow,AbstractRaster-method}
+\alias{ncol,AbstractRaster-method}
 \alias{ncells}
 \alias{xres}
 \alias{yres}
@@ -18,7 +20,7 @@
   
 \title{ Get raster properties }
 \description{
-  get.col.from.cell etc. get the column, row, or cell number of a Raster (or RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster cell from a column, or cell number(s)
+  get the column, row, or cell number of a Raster (or RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster cell from a column, or cell number(s)
   use bbox() (form sp) to get the bounding box of a raster type object.
   
 }
@@ -43,7 +45,7 @@ nlayers(object)
 
 \arguments{
   \item{object}{ RasterLayer, RasterBrick, or RasterStack object }
-  \item{x}{ RasterLayer, RasterBrick, or RasterStack object (in a standard generic function ) }
+  \item{x}{ RasterLayer, RasterBrick, or RasterStack object }
   \item{asText} { logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned}
  }
   

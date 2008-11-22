@@ -26,7 +26,7 @@ raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, ma
 	if (class(raster) != 'RasterLayer') { stop("class of 'raster' should be RasterLayer") }
 
 	maxdim <- max(1, maxdim)
-	if ( data.content(raster) == 'all') {
+	if ( dataContent(raster) == 'all') {
 		skip <- round(max(ncol(raster), nrow(raster)) / maxdim)
 		if (skip < maxdim) { subsample <- FALSE }
 		if (subsample)  {
