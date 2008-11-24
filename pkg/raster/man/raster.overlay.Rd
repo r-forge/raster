@@ -1,14 +1,14 @@
 \name{overlay}
-\alias{r.overlay}
-\alias{r.cover}
+\alias{overlay}
+\alias{cover}
 
 \title{ Raster overlay calculation }
 \description{
   Calculate values for a new raster object, based on two other rasters.  
 }
 \usage{
-	r.overlay(raster1, raster2, fun=function(x,y){return(x+y)}, filename="", overwrite=TRUE) 
-	r.cover(raster1, raster2, filename="", overwrite=TRUE) 
+	overlay(raster1, raster2, fun=function(x,y){return(x+y)}, filename="", overwrite=TRUE) 
+	cover(raster1, raster2, filename="", overwrite=TRUE) 
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -34,11 +34,11 @@
 
 \examples{
 	r <- raster.new()
-	r1 <- r.init(r)
-	r2 <- r.init(r)
-	r3 <- r.overlay(r1, r2)
-	r4 <- r.setNA(r3, value=1)
-	r5 <- r.cover(r4, r1)
+	r1 <- init(r)
+	r2 <- init(r)
+	r3 <- overlay(r1, r2)
+	r4 <- setNA(r3, value=1)
+	r5 <- cover(r4, r1)
 # hist(r1) 
 # hist(r3)	
 # hist(r4)	

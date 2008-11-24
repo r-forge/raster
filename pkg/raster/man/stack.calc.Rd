@@ -20,7 +20,7 @@ s.calc(rstack, fun, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 
-\seealso{ \code{\link{r.calc}} is a simular function for Raster objects }
+\seealso{ \code{\link{calc}} is a simular function for Raster objects }
 \examples{
 
 }

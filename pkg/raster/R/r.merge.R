@@ -7,8 +7,8 @@
 # Licence GPL v3
 
 
-r.merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
-	res <- compare(rasters, rowcol=FALSE, slack=slack)
+merger <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
+	compare(rasters, rowcol=FALSE, slack=slack)
 	
 #	for (i in 1:length(rasters)) {
 #		if (!(data.source(rasters[[i]]) == 'disk' | dataContent(rasters[[i]]) == 'all' | dataContent(rasters[[i]]) == 'sparse')) { 

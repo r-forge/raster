@@ -4,7 +4,11 @@
 # Version 0,6
 # Licence GPL v3
 
-r.reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
+reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
+	if (class(raster) != 'RasterLayer' ) {
+		stop('first two arguments should be objects of class "RasterLayer"')
+	}
+
 	if ( is.null(dim(rclmat)) ) { 
 		rclmat <- matrix(rclmat, ncol=3, byrow=TRUE) 
 	} else if ( dim(rclmat)[2] == 1 ) { 

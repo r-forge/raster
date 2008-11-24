@@ -3,7 +3,7 @@
 \alias{r.disaggregate}
 \alias{r.cut}
 \alias{r.cut.bbox}
-\alias{r.merge}
+\alias{merger}
 \alias{r.expand}
 
 \title{ Change raster database }
@@ -15,7 +15,7 @@ r.aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FAL
 r.disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
 r.cut(raster, boundingbox, filename="", overwrite=FALSE) 
 r.expand(raster, boundingbox, filename="", overwrite=FALSE)
-r.merge(rasters, slack=0.01, filename="", overwrite=FALSE) 
+merger(rasters, slack=0.01, filename="", overwrite=FALSE) 
 }
 
 \arguments{
@@ -57,13 +57,12 @@ r.merge(rasters, slack=0.01, filename="", overwrite=FALSE)
 	rsc1 <- r.cut(rsa, bb1)	
 	bb2 <- new.boundingbox(0, 50, 0, 90)
 	rsc2 <- r.cut(rsa, bb2)	
-	rsc <- r.merge(c(rsc1, rsc2))
+	rsc <- merger(c(rsc1, rsc2))
 #	raster.map(rsc)
 #	rs provides the bounding box for expand
 	rse <- r.expand(rsc, rs)
 	rsd <- r.disaggregate(rse, 3)
 #   rsn <- r.neighborhood(rse)
-
 }
 
 \keyword{ spatial }
