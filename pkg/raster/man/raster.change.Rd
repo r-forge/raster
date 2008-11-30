@@ -1,20 +1,19 @@
 \name{change}
-\alias{r.aggregate}
-\alias{r.disaggregate}
-\alias{r.cut}
-\alias{r.cut.bbox}
+\alias{aggregater}
+\alias{disaggregate}
+\alias{cutter}
 \alias{merger}
-\alias{r.expand}
+\alias{expand}
 
 \title{ Change raster database }
 \description{
 	Use existing raster(s) to create a new raster with different spatial extent or resolution
 }
 \usage{
-r.aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FALSE, filename="", overwrite=FALSE) 
-r.disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
-r.cut(raster, boundingbox, filename="", overwrite=FALSE) 
-r.expand(raster, boundingbox, filename="", overwrite=FALSE)
+aggregater(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FALSE, filename="", overwrite=FALSE) 
+disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
+cutter(raster, boundingbox, filename="", overwrite=FALSE) 
+expand(raster, boundingbox, filename="", overwrite=FALSE)
 merger(rasters, slack=0.01, filename="", overwrite=FALSE) 
 }
 
@@ -51,18 +50,18 @@ merger(rasters, slack=0.01, filename="", overwrite=FALSE)
 	rs <- raster.new()
 	rs <- set.values(rs, runif(ncells(rs)))
 #	raster.map(rs)
-	rsa <- r.aggregate(rs, fact=10, fun=max)
+	rsa <- aggregater(rs, fact=10, fun=max)
 #	raster.map(rsa)
 	bb1 <- new.boundingbox(-180, -150, 60, 90)
-	rsc1 <- r.cut(rsa, bb1)	
+	rsc1 <- cutter(rsa, bb1)	
 	bb2 <- new.boundingbox(0, 50, 0, 90)
-	rsc2 <- r.cut(rsa, bb2)	
+	rsc2 <- cutter(rsa, bb2)	
 	rsc <- merger(c(rsc1, rsc2))
 #	raster.map(rsc)
 #	rs provides the bounding box for expand
-	rse <- r.expand(rsc, rs)
-	rsd <- r.disaggregate(rse, 3)
-#   rsn <- r.neighborhood(rse)
+	rse <- expand(rsc, rs)
+	rsd <- disaggregate(rse, 3)
 }
 
 \keyword{ spatial }
+

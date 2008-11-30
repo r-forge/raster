@@ -124,7 +124,7 @@
 
 #sample while reading and return matrix (for plotting )
 .read.skip <- function(raster, maxdim=500, bbox=NA) {
-	if (!(is.na(bbox))) { rcut <- r.cut(raster, bbox) }
+	if (!(is.na(bbox))) { rcut <- cutter(raster, bbox) }
 	rasdim <- max(ncol(raster), nrow(raster) )
 	if (rasdim <= maxdim) { 
 		outras <- .raster.read.all(raster)

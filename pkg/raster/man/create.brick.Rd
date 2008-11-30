@@ -27,7 +27,7 @@
   \item{ncols}{ number of columns on raster }
   \item{projection}{ map projection of raster data }
   \item{boundingbox} {bounding box used to cut a raster. Any object that is or has a bounding box (see below) }
-  \item{values} {logical. If \code{TRUE}, RasterBrick values will be read into memory with 'read.all()'}
+  \item{values} {logical. If \code{TRUE}, RasterBrick values will be read into memory with 'readAll()'}
   \item{stack}{ RasterStack object }
  }
 \details{

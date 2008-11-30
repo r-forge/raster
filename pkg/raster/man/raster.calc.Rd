@@ -40,7 +40,7 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, INT = FALSE)
 	'reclass' reclassifies groups of values to other values. E.g. All values between 1 and 10 become 1, and between 11 and 15 become 2. 
 	Reclassification is done with matrix "rclmat". This matrix must have 3 columns. The first two columns are "from" "to" of the input values, and the third column has the new value for that range.
 	
-	If the input raster has all values in memory (after read.all(raster)), the functions will also return the new data in memory. If there is a file name, the data will also be saved to that file. 
+	If the input raster has all values in memory (after readAll(raster)), the functions will also return the new data in memory. If there is a file name, the data will also be saved to that file. 
 	If the values are not in memory the new values will be written to file. 
 	}
 \value{

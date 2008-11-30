@@ -41,7 +41,7 @@ write.export(raster, outfile, filetype='ascii', overwrite=FALSE)
  
 \dontrun{
 #read all data
- rs <- read.all(rs)
+ rs <- readAll(rs)
 
 # write all to a new binary file
  rs <- set.filename(rs, "binall.grd")

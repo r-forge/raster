@@ -33,9 +33,6 @@ new.boundingbox(xmn, xmx, ymn, ymx, projection="")
   \item{ymx}{ the maximum y coordinate of the bounding box }
  }
   
-\value{
-}
-
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 }

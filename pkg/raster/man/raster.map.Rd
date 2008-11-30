@@ -35,6 +35,13 @@ rasterstack.map(rstack, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 }
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
-\examples{  }
+\examples{ 
+	rs <- raster.new()
+	rs <- set.values(rs, runif(ncells(rs)))
+	raster.map(rs)
+	rsa <- aggregater(rs, fact=10, fun=max)
+	windows()
+	raster.map(rsa)
+ }
 
 \keyword{ spatial }

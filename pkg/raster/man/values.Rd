@@ -7,13 +7,8 @@
 \alias{valuesXY,RasterLayer-method}
 \alias{valuesCells,RasterStack-method}
 \alias{valuesXY,RasterStack-method}
-\alias{maxValue}
-\alias{minValue}
-\alias{dataIndices}
-\alias{dataContent}
-\alias{dataSource}
-
-
+\alias{maxValue, layer=1}
+\alias{minValue, layer=1}
   
   
 \title{ Get raster properties }
@@ -41,6 +36,7 @@ dataSource(raster)
   \item{rownr}{ The rownumber for which values are returned }
   \item{cells}{ vector of cell numbers }
   \item{xy}{ matrix of x and y coordinates (i.e. 2 columns) }
+  \item{layer}{ layer number (for RasterStack and RasterBrick objects }
  }
   
 
@@ -54,18 +50,10 @@ dataSource(raster)
 \examples{
 #using a new default raster (1 degree global)
 rs <- raster.new()
-minValue(rs)
-maxValue(rs)
-dataContent(rs)
-dataIndices(rs)
 rs <- set.values(rs, 1:ncells(rs))
 valuesCells(rs, c(1, 10, 100))
 minValue(rs)
 maxValue(rs)
-dataSource(rs)
-dataContent(rs)
-dataIndices(rs)
-
 
  rs <- raster.from.file(system.file("external/test.ag", package="sp"))
 

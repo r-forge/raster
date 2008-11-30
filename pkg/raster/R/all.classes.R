@@ -88,8 +88,8 @@ setClass('SingleLayerData',
 		content='character', #nodata, all, row, block, sparse
 		indices = 'vector',
 		haveminmax = 'logical',
-		min ='numeric',
-		max ='numeric',
+		min = 'vector',
+		max = 'vector',
 		source='character' # ram, disk
 		),
 	prototype (	
