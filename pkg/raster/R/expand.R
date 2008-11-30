@@ -7,7 +7,7 @@
 # Licence GPL v3
 
 
-r.expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
+expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	bbox <- boundingbox(boundingbox)
 	res <- resolution(raster)
 # snap points to pixel boundaries

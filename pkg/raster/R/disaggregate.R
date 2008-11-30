@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-r.disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
+disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }

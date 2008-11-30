@@ -7,12 +7,12 @@
 # Licence GPL v3
 
 
-#r.resample <- function(raster, xmin, xmax, ymin, ymax, ncols, nrows, method="bilinear", filename="", overwrite=FALSE) {
+#resample <- function(raster, xmin, xmax, ymin, ymax, ncols, nrows, method="bilinear", filename="", overwrite=FALSE) {
 #	stop("sorry, not implemented yet")
 #}
 
 
-r.cut <- function(raster, boundingbox, filename="", overwrite=FALSE) {
+cutter <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
 	bb <- bbox(boundingbox)
 
