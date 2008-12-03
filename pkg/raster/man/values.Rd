@@ -7,8 +7,8 @@
 \alias{valuesXY,RasterLayer-method}
 \alias{valuesCells,RasterStack-method}
 \alias{valuesXY,RasterStack-method}
-\alias{maxValue, layer=1}
-\alias{minValue, layer=1}
+\alias{maxValue}
+\alias{minValue}
   
   
 \title{ Get raster properties }
@@ -21,11 +21,8 @@ values(object, format='vector', names=FALSE)
 values.row(raster, rownr)
 valuesCells(object, cells)
 valuesXY(object, xy)
-minValue(raster)
-maxValue(raster)
-dataContent(raster)
-dataIndices(raster)
-dataSource(raster)
+minValue(object, layer=1)
+maxValue(object, layer=1)
 }
 
 \arguments{

@@ -4,7 +4,7 @@
 \alias{dataSource}
 
 \title{ Get data properties }
-\description{
+\description{ Information about the data values associated with the object 
 }
 
 \usage{
@@ -22,9 +22,8 @@ dataSource(object)
 	dataContent returns one of the following: nodata, all, row, block, sparse
 	dataIndices returns the first and last cell number of the data in memory. Or all cell numbers for a sparse RasterLayer
 	dataSource returns one of the following: ram, disk
-	
-
 }
+
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
