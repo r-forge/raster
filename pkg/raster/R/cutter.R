@@ -36,7 +36,7 @@ cutter <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 		outraster <- set.values(outraster, values(raster)[selected_cells])
 		outraster <- set.minmax(outraster)
 		if (filename(outraster) != "" ) { 
-			outraster <- try(write.raster(outraster, overwrite)) 
+			outraster <- try(write.raster(outraster, overwrite=overwrite)) 
 		}		
 
 	} else if ( dataSource(raster) == 'disk') { 

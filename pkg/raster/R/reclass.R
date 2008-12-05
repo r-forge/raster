@@ -35,7 +35,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
 		}
 		if ( dataContent(raster) == 'all') { outraster <- set.values(outraster, res) }
 		if ( dataContent(raster) == 'sparse') { outraster <- set.values.row(outraster, res,  dataIndices(raster)) }
-		if (filename(outraster) != "" ) {	outraster <- write.raster(outraster) }
+		if (filename(outraster) != "" ) {	outraster <- write.raster(outraster, overwrite=overwrite) }
 	} else {
 		for (r in 1:nrow(raster)) {
 			raster <- readRow(raster, r)

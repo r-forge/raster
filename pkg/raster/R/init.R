@@ -12,7 +12,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, INT=FALSE) {
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
 		n <- ncells(raster)
 		outraster <- set.values(outraster, fun(n)) 
-		if (!is.na(filename)) {	outraster <- write.raster(outraster) }
+		if (!is.na(filename)) {	outraster <- write.raster(outraster, overwrite=overwrite) }
 		
 	} else if (dataSource(raster) == 'disk') {
 		n <- length(ncol(raster))
