@@ -6,7 +6,7 @@
 Analysis and modeling of geographic (spatial) data.
 }
 \description{
-This packages implements functionality to use and manipulate 'raster' (or 'grid') data. That is geographic data represented as a matrix).
+This packages implements functionality to use and manipulate 'raster' (or 'grid') data (geographic data that can be represented as a matrix).
 It does this by adding new functions and by pulling together existing R functions in a single package that aims at being easy to use. 
 }
 \details{
@@ -18,20 +18,14 @@ Date: \tab 2008-09-11\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
-Overview here.....
+This package should be particularly useful when using rather large datasets, as it can
+use datasources that are stored on disk without loading them into memory. 
 
 }
 \author{
-Robert J. Hijmans \email{r.hijmans@gmail.com}
-Jacob van Etten
+Robert J. Hijmans and Jacob van Etten
 
 Maintainer: Robert J. Hijmans \email{r.hijmans@gmail.com}
 }
-\references{
-
-}
 \keyword{ package }
 \keyword{ spatial }
-\seealso{
-\code{\link[<pkg>:<sp>-package]{<sp>}}
-}

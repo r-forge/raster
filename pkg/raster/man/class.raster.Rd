@@ -48,12 +48,7 @@ Objects can be created by calls of the form \code{new("RasterLayer", ...)}.
     \item{dim}{\code{signature(object = "RasterBrick")}: returns dimensions (ncol, nrow, and nlayers) }
  	 }
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
-\note{  }
-
-\examples{
-}
 \keyword{classes}
 \keyword{spatial}
