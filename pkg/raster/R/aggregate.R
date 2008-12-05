@@ -47,7 +47,7 @@ aggregater <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE
 		if (rm.NA) { outraster <- set.values(outraster, as.vector(tapply(values(raster), cells, function(x){fun(na.omit(x))}))) 
 		} else {outraster <- set.values(outraster, as.vector(tapply(values(raster), cells, fun))) }
 
-		if (filename(outraster) != "") {write.raster(outraster)}
+		if (filename(outraster) != "") {write.raster(outraster, overwrite=overwrite)}
 		
 	} else if ( dataSource(raster) == 'disk') { 
 	
