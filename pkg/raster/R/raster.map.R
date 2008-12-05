@@ -27,9 +27,9 @@ raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, ma
 
 	maxdim <- max(1, maxdim)
 	if ( dataContent(raster) == 'all') {
-		skip <- round(max(ncol(raster), nrow(raster)) / maxdim)
-		if (skip < maxdim) { subsample <- FALSE }
+		if (round(max(ncol(raster), nrow(raster)) < maxdim)) { subsample <- FALSE }
 		if (subsample)  {
+			skip <- round(max(ncol(raster), nrow(raster)) / maxdim)
 			cols <- (0:round(ncol(raster)/skip)) * skip + 1
 			cols <- cols[ cols <= ncol(raster) ]
 			rows <- (0:round(nrow(raster)/skip)) * skip + 1
