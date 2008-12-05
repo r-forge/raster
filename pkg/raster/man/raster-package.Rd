@@ -13,7 +13,7 @@ It does this by adding new functions and by pulling together existing R function
 \tabular{ll}{
 Package: \tab raster\cr
 Type: \tab Package\cr
-Version: \tab 0.5\cr
+Version: \tab 0.7\cr
 Date: \tab 2008-09-11\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
@@ -33,6 +33,5 @@ Maintainer: Robert J. Hijmans \email{r.hijmans@gmail.com}
 \keyword{ package }
 \keyword{ spatial }
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+\code{\link[<pkg>:<sp>-package]{<sp>}}
 }

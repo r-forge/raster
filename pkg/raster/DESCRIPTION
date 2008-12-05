@@ -1,7 +1,7 @@
 Package: raster
 Type: Package
 Title: Raster data handling for geographic data analysis and modeling
-Version: 0.7.5
+Version: 0.7.6
 Date: 2008-10-30
 Depends: methods, sp, rgdal, fields
 Author: Robert J. Hijmans & Jacob van Etten
