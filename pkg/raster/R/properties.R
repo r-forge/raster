@@ -106,7 +106,7 @@ compare <- function(rasters, origin=TRUE, resolution=TRUE, rowcol=TRUE, projecti
 	res <- TRUE
 	if (length(rasters) < 2) {
 		res <- F
-		if(stopiffalse) {stop('length(rasters) < 2')}
+		stop('length(rasters) < 2')
 	}	
 	res1 <- resolution(rasters[[1]])
 	origin1 <- origin(rasters[[1]])
