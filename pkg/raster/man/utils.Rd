@@ -35,5 +35,14 @@ new.boundingbox(xmn, xmx, ymn, ymx, projection="")
   
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
+	bb <- new.boundingbox(-10, 10, -20, 20, "+proj=longlat +datum=WGS84")
+	crsproj <- new.CRS("+proj=longlat +datum=WGS84")
+	r1 <- raster.new()
+	r2 <- r1
+	compare(c(r1, r2))
+	r3 <- set.rowcol(r1, 10)
+#	compare(c(r1, r3))
+	compare(c(r1, r3), stopiffalse=FALSE)
+	compare(c(r1, r3), resolution=FALSE, rowcol=FALSE)
 }
 \keyword{ spatial }
