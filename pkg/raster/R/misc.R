@@ -46,7 +46,7 @@ string.trim <- function(astring) {
 	return( gsub('^[[:space:]]+', '',  gsub('[[:space:]]+$', '', astring) ) )
 }  
 
-file.get.name <- function(filename) {
+fileName <- function(filename) {
 # Author: Robert Hijmans
 # Version 1; Date: 1-Sep-2008; License: GPL3
     filename <- gsub("\\\\", "/", filename)
@@ -59,14 +59,14 @@ file.get.name <- function(filename) {
 	}	
 }   
    
-file.get.path <- function(filename) {
+filePath <- function(filename) {
     filename <- gsub("\\\\", "/", filename)
-	file <- file.get.name(filename)
+	file <- fileName(filename)
 	path <- gsub(file, '', filename)
 	return(path)
 }   
    
- file.get.extension <- function(filename) {
+ fileExtension <- function(filename) {
 # Author: Robert Hijmans
 # Version 1; Date: 1-Sep-2008; License: GPL3
 	lfn <- nchar(filename)
@@ -85,7 +85,7 @@ file.get.path <- function(filename) {
 }   
 
 
-file.change.extension <- function(filename, newextension="") {
+fileChangeExtension <- function(filename, newextension="") {
 # Author: Robert Hijmans
 # Version 1; Date: 1-Sep-2008; License: GPL3
 	lfn <- nchar(filename)

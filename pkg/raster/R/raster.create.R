@@ -25,7 +25,7 @@ raster.from.bbox <- function(boundingbox, nrows=1, ncols=1) {
 }
 
 raster.from.file <- function(filename, values=FALSE, band=1) {
-	fileext <- toupper(file.get.extension(filename)) 
+	fileext <- toupper(fileExtension(filename)) 
 	if (fileext == ".GRD" | fileext == ".GRI" ) {
 		raster <- .raster.from.file.binary(filename, band) 
 	} else {

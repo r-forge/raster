@@ -1,8 +1,8 @@
 \name{miscellanous}
-\alias{file.change.extension}
-\alias{file.get.extension}
-\alias{file.get.name}
-\alias{file.get.path}
+\alias{fileChangeExtension}
+\alias{fileExtension}
+\alias{fileName}
+\alias{filePath}
 \alias{string.trim}
 \alias{calc.mode}
 \alias{calc.cv}
@@ -13,10 +13,10 @@
   And two miscellanous statistical functions (mode and coefficient of variation)
 }
 \usage{
-file.change.extension(filename, newextension)
-file.get.extension(filename)
-file.get.name(filename)
-file.get.path(filename)
+fileChangeExtension(filename, newextension)
+fileExtension(filename)
+fileName(filename)
+filePath(filename)
 string.trim(astring)
 calc.mode(x, na.rm = TRUE)
 calc.cv(x, na.rm = TRUE, singlevalueaszero=TRUE)
@@ -42,10 +42,10 @@ calc.cv(x, na.rm = TRUE, singlevalueaszero=TRUE)
 
 \examples{
 	fn <- "c:/temp folder/filename.extension"
-	file.get.extension(fn)
-	file.change.extension(fn, ".txt")
-	file.get.name(fn)
-	file.get.path(fn)
+	fileExtension(fn)
+	fileChangeExtension(fn, ".txt")
+	fileName(fn)
+	filePath(fn)
 	data <- c(0,1,2,3,3,3,3,4,4,4,5,5,6,7,7,8,9,NA)
 	calc.mode(data)
 	calc.cv(data)

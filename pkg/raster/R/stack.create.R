@@ -103,7 +103,7 @@ rasterstack.remove.rasters <- function(rstack, indices) {
 
 
 rasterstack.save <- function(rstack, stackfile, forceext = TRUE) {
-    if (forceext) { stackfile <- file.change.extension(stackfile, '.stk') }
+    if (forceext) { stackfile <- fileChangeExtension(stackfile, '.stk') }
 	rstack@file@name <- stackfile
 	thefile <- file(stackfile, "w")
 	for (i in 1:length(rstack@rasters)) {

@@ -12,7 +12,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 		print(paste("raster has unequal horizontal and vertical resolutions","\n", "these data cannot be stored in arc-ascii format"))
 	} else {
 		if (raster@data@indices[1] == 1) {
-			raster <- set.filename(raster, file.change.extension(filename(raster), '.asc'))
+			raster <- set.filename(raster, fileChangeExtension(filename(raster), '.asc'))
 			if (!overwrite & file.exists(filename(raster))) {
 				stop(paste(filename(raster), "exists. Use 'overwrite=TRUE'")) }
 
@@ -45,7 +45,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 
 	raster@file@driver <- 'raster'
     raster@file@gdalhandle <- list()
-	raster <- set.filename(raster, file.change.extension(filename(raster), ".grd"))
+	raster <- set.filename(raster, fileChangeExtension(filename(raster), ".grd"))
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -59,7 +59,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 	}	
 	raster <- set.minmax(raster)
 
-	binraster <- file.change.extension(raster@file@name, ".gri")
+	binraster <- fileChangeExtension(raster@file@name, ".gri")
 	con <- file(binraster, "wb")
 	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
 	writeBin( as.vector(values(raster)), con, size = raster@file@datasize) 
@@ -71,7 +71,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 } 
 
 .write.raster.grd <- function(raster, INT=FALSE, overwrite=FALSE) {
-	raster <- set.filename(raster, file.change.extension(filename(raster), ".grd"))
+	raster <- set.filename(raster, fileChangeExtension(filename(raster), ".grd"))
 	if (!overwrite & file.exists(raster@file@name)) {
 		stop(paste(raster@file@name,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) }
 
@@ -106,7 +106,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 	if (raster@data@content == 'sparse') { 
 		raster <- .write.sparse(raster, overwrite) 
 	} else {
-		binraster <- file.change.extension(filename(raster), ".gri")
+		binraster <- fileChangeExtension(filename(raster), ".gri")
 		con <- file(binraster, "wb")
 		writeBin( values(raster), con, size = raster@file@datasize) 
 		close(con)
@@ -137,8 +137,8 @@ write.row <- function(raster, overwrite=FALSE) {
 		if (!overwrite & file.exists(filename(raster))) {
 			stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 		}
-		raster@file@name <- file.change.extension(raster@file@name, ".grd")
-		binraster <- file.change.extension(raster@file@name, ".gri")
+		raster@file@name <- fileChangeExtension(raster@file@name, ".grd")
+		binraster <- fileChangeExtension(raster@file@name, ".gri")
 		attr(raster, "filecon") <- file(binraster, "wb")
 		raster@data@min <- 3e34
 		raster@data@max <- -3e34 
@@ -178,7 +178,7 @@ write.row <- function(raster, overwrite=FALSE) {
 
 
 .write.hdr.grd <- function(raster) {
-	rastergrd <- file.change.extension(filename(raster), ".grd")
+	rastergrd <- fileChangeExtension(filename(raster), ".grd")
 	thefile <- file(rastergrd, "w")  # open an txt file connectionis
 	cat("[General]", "\n", file = thefile)
 	cat("CREATOR=R package:raster", "\n", file = thefile)
