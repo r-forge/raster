@@ -14,19 +14,19 @@ ncells <- function(object) {
 }
 
 xmin <- function(object) {
-	return (object@bbox[1,1])
+	return(as.numeric(object@bbox[1,1]))
 }
 
 xmax <- function(object) {
-	return (object@bbox[1,2])
+	return(as.numeric(object@bbox[1,2]))
 }
 
 ymin <- function(object) {
-	return (object@bbox[2,1])
+	return(as.numeric( object@bbox[2,1]) )
 }
 
 ymax <- function(object) {
-	return (object@bbox[2,2])
+	return(as.numeric(object@bbox[2,2]))
 }
 
 .zmin <- function(object) {
@@ -38,11 +38,11 @@ ymax <- function(object) {
 }
 
 xres <- function(object) {
-	return ( (xmax(object) - xmin(object)) / ncol(object)  )
+	return ( as.numeric( (xmax(object) - xmin(object)) / ncol(object))  )
 }
 
 yres <- function(object) {
-	return ( (ymax(object) - ymin(object)) / nrow(object)  )
+	return (  as.numeric( (ymax(object) - ymin(object)) / nrow(object))  )
 }
 
 resolution <- function(object) {
