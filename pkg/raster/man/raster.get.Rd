@@ -30,7 +30,7 @@ get.cell.from.xy(raster, xy)
 get.x.from.col(raster, colnr)
 get.y.from.row(raster, rownr)
 get.xy.from.cell(raster, cell)
-get.cxy.from.box(raster, xmin=xmin(raster), xmax=xmax(raster), ymin=ymin(raster), ymax=ymax(raster))
+get.cxy.from.box(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster))
 valid.cells(raster, cell) 
 valid.cols(raster, colnr) 
 valid.rows(raster, rownr) 
@@ -44,10 +44,10 @@ valid.rows(raster, rownr)
   \item{colnr}{  column number(s) }
   \item{rownr}{  row number(s) }
   \item{cell}{  cell number(s) }
-  \item{xmin}{ minimum x coordinate of bounding box to get cell numbers for }
-  \item{xmax}{ maximum x coordinate of bounding box to get cell numbers for }
-  \item{ymin}{ minimum y coordinate of bounding box to get cell numbers for }
-  \item{ymax}{ maximum y coordinate of bounding box to get cell numbers for }
+  \item{xmn}{ minimum x coordinate of bounding box to get cell numbers for }
+  \item{xmx}{ maximum x coordinate of bounding box to get cell numbers for }
+  \item{ymn}{ minimum y coordinate of bounding box to get cell numbers for }
+  \item{ymx}{ maximum y coordinate of bounding box to get cell numbers for }
  }
   
 \details{

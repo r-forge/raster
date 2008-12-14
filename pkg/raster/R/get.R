@@ -97,11 +97,11 @@ get.xy.from.cell <- function(raster, cell) {
 }  
 	
 	
-get.cxy.from.box <- function(raster, xmin=xmin(raster), xmax=xmax(raster), ymin=ymin(raster), ymax=ymax(raster)) {
-	firstrow <- get.row.from.y(raster, ymax)
-	lastrow <- get.row.from.y(raster, ymin)
-	firstcol <- get.col.from.x(raster, xmin)
-	lastcol <- get.col.from.x(raster, xmax)
+get.cxy.from.box <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster)) {
+	firstrow <- get.row.from.y(raster, ymx)
+	lastrow <- get.row.from.y(raster, ymn)
+	firstcol <- get.col.from.x(raster, xmn)
+	lastcol <- get.col.from.x(raster, xmx)
 	cells <- vector("integer", length=0)
 # RH: ouch, this should be done with apply 	
 	for (i in firstrow:lastrow) {
@@ -110,6 +110,7 @@ get.cxy.from.box <- function(raster, xmin=xmin(raster), xmax=xmax(raster), ymin=
 		cells <- append(cells, c(firstcell:lastcell))
 	}
 	cxy <- cbind(cells, get.xy.from.cell(raster, cells))
+	colnames(cxy) <- c("cell", "x", "y")
 	return(cxy)
 }
 
