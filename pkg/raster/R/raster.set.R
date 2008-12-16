@@ -29,7 +29,11 @@ set.raster <- function(raster, filename="") {
 
 set.filename <- function(object, filename) {
 	if (is.na(filename)) {filename <- ""}
-	object@file@name <- filename
+	if (class(object)=='RasterStack') {
+		object@filename <- filename
+	} else {
+		object@file@name <- filename
+	}	
 	if (class(object)=='RasterLayer') {
 		shortname <- fileName(filename)
 		shortname <- fileChangeExtension(shortname, "")

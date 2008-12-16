@@ -20,7 +20,7 @@ rasterstack.from.rasters(rasters)
 rasterstack.add.files(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
 rasterstack.add.rasters(rstack, rasters) 
 rasterstack.remove.rasters(rstack, indices) 
-rasterstack.save(rstack, stackfile, forceext = TRUE)
+rasterstack.save(rstack)
 }
 
 \arguments{
@@ -30,7 +30,6 @@ rasterstack.save(rstack, stackfile, forceext = TRUE)
   \item{bands}{ A vector or list of bands of raster data files (default values = 1)}
   \item{rasters}{ raster object(s) }
   \item{indices}{ the indices (in stack@rasters) of the raster(s) to remove from a stack }
-  \item{forceext}{ Force the stack filename extension to the default '.stk' }
 }
 \details{
   When a  stack is saved to a file, only pointers (filenames) to raster datasets are saved, not the data. If the name or location of a raster file changes, the stack becomes invalid.

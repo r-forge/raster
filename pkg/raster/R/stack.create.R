@@ -102,9 +102,9 @@ rasterstack.remove.rasters <- function(rstack, indices) {
 }
 
 
-rasterstack.save <- function(rstack, stackfile, forceext = TRUE) {
-    if (forceext) { stackfile <- fileChangeExtension(stackfile, '.stk') }
-	rstack@file@name <- stackfile
+rasterstack.save <- function(rstack) {
+	stackfile <- rstack@filename
+	if (stackfile == "") { stop('RasterStack does not have a filename.') }
 	thefile <- file(stackfile, "w")
 	for (i in 1:length(rstack@rasters)) {
 		cat(rstack@rasters[[i]]@file@name, "\t", rstack@rasters[[i]]@band,"\n", file=thefile)
