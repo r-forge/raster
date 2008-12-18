@@ -4,6 +4,7 @@
 \alias{write.ascii}
 \alias{write.import}
 \alias{write.export}
+\alias{writeHdr}
 
 \title{ Write raster data to a file }
 \description{
@@ -15,9 +16,9 @@ write.row(raster, overwrite=FALSE)
 write.ascii(raster, overwrite=FALSE)
 write.import(raster, outfile, overwrite=FALSE)
 write.export(raster, outfile, filetype='ascii', overwrite=FALSE)
+writeHdr(raster)
 }
 
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{raster}{ RasterLayer object }
   \item{type} { type of binary file. Currently only "grd" is supported }
@@ -29,7 +30,7 @@ write.export(raster, outfile, filetype='ascii', overwrite=FALSE)
 
 \details{
 	data in a \code{RasterLayer} object is written to a file. Small datasets can be loaded into memory manipulated, 
-	and saved to disk again. For large datasets, you can read and write by row. 
+	and saved to disk again. For large datasets, you can read and write by row. writeHdr saves the header file only. You should normally not directly call this.
 }
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}

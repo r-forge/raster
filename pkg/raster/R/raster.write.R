@@ -66,7 +66,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 	close(con)
 
 	# add the 'sparse' key word to the hdr file!!!
-	.write.hdr.grd(raster) 
+	writeHdr(raster) 
 	return(raster)
 } 
 
@@ -110,7 +110,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 		con <- file(binraster, "wb")
 		writeBin( values(raster), con, size = raster@file@datasize) 
 		close(con)
-		.write.hdr.grd(raster) 
+		writeHdr(raster) 
 	}	
 	return(raster)
 }
@@ -163,7 +163,7 @@ write.row <- function(raster, overwrite=FALSE) {
 	
 	if (raster@data@indices[2] == ncells(raster)) {
 	# LAST  ROW
-		.write.hdr.grd(raster) 
+		writeHdr(raster) 
 		close(raster@filecon)
 		raster@data@haveminmax <- TRUE
 		raster@data@source <- 'disk'
@@ -177,7 +177,7 @@ write.row <- function(raster, overwrite=FALSE) {
 }
 
 
-.write.hdr.grd <- function(raster) {
+writeHdr <- function(raster) {
 	rastergrd <- fileChangeExtension(filename(raster), ".grd")
 	thefile <- file(rastergrd, "w")  # open an txt file connectionis
 	cat("[General]", "\n", file = thefile)
