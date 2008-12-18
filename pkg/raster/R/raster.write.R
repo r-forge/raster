@@ -194,6 +194,7 @@ write.row <- function(raster, overwrite=FALSE) {
 	cat("MaxY=", ymax(raster), "\n", file = thefile)
 	cat("ResolutionX=", xres(raster), "\n", file = thefile)
 	cat("ResolutionY=", yres(raster), "\n", file = thefile)
+	cat("Projection=", projection(raster), "\n", file = thefile)
 	
 	cat("[Data]", "\n", file = thefile)
 	if (raster@file@datatype == 'integer') {  datatype <- "INT"  } else { datatype <- "FLT" }
