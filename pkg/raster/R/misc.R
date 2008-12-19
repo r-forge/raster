@@ -126,7 +126,7 @@ readIniFile <- function(filename) {
 		}
 	}
 	Lines <- readLines(filename)
-# ; is the start of a comment line...
+# ";" is the start of a comment .
 	strsplitcomment <- function(s) {strSplitOnFirstToken(s, token=";")}
 	ini <- lapply(Lines, strsplitcomment) 
 	Lines <- matrix(unlist(ini), ncol=2, byrow=T)[,1]
