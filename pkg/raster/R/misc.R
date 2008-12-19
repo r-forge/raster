@@ -43,7 +43,8 @@ calc.cv <- function(x, na.rm = TRUE, singlevalueaszero=TRUE) {
 }
 
 string.trim <- function(astring) {
-	return( gsub('^[[:space:]]+', '',  gsub('[[:space:]]+$', '', astring) ) )
+	f <- function(s) {return( gsub('^[[:space:]]+', '',  gsub('[[:space:]]+$', '', s) ) )}
+	return(unlist(lapply(astring, f)))
 }  
 
 fileName <- function(filename) {
@@ -107,4 +108,41 @@ fileChangeExtension <- function(filename, newextension="") {
 	}
   return(fname)  
 }   
+
+
+readIniFile <- function(filename, UPPERname=TRUE) {
+#  not that this function ignores sections. 
+#  if the same keyword is repeated in multiple sections, things go wrong
+	strsplitonce <- function(s, token="=") {
+# this function allows for using inistrings like this "projection = +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
+		pos <- which(strsplit(s, '')[[1]]==token)[1]
+		if (is.na(pos)) {
+			return(c(string.trim(s), NA)) 
+		} else {
+			first <- substr(s, 1, (pos-1))
+			second <- substr(s, (pos+1), nchar(s))
+			return(string.trim(c(first, second)))
+		}
+	}
+	Lines <- readLines(filename)
+# ; is the start of a comment line...
+	strsplitcomment <- function(s) {strsplitonce(s, token=";")}
+	ini <- lapply(Lines, strsplitcomment) 
+	Lines <- matrix(unlist(ini), ncol=2, byrow=T)[,1]
+	ini <- lapply(Lines, strsplitonce) 
+ 	ini <- matrix(unlist(ini), ncol=2, byrow=T)
+	ini <- subset(ini, ini[,1] != "")
+	if (UPPERname) { ini[,1] = toupper(ini[,1]) }
+
+	sections <- c(which(is.na(ini[,2])), length(ini[,2]))
+	ini <- cbind("", ini)
+	for (i in 1:(length(sections)-1)) {
+		ini[sections[i]:(sections[i+1]), 1] <- ini[sections[i],2]
+	}	
+	ini[,1] <- gsub("\\[", "", ini[,1])
+	ini[,1] <- gsub("\\]", "", ini[,1])
+		
+	colnames(ini) <- c("section", "name", "value")
+	return(ini[-sections,])
+}
 
