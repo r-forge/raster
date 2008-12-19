@@ -84,14 +84,9 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 
 
 
-
-
 .raster.from.file.binary <- function(filename, band=1) {
-    if (!file.exists(filename)) { 
-		stop(paste(filename," does not exist")) 
-		}
 	ini <- readIniFile(filename)
-	ini <- subset(ini, !(is.na(ini[,2])))
+	ini[,2] = toupper(ini[,2]) 
 
 	byteorder <- .Platform$endian
 	nbands <- as.integer(1)

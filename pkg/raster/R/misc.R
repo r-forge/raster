@@ -110,11 +110,12 @@ fileChangeExtension <- function(filename, newextension="") {
 }   
 
 
-readIniFile <- function(filename, UPPERname=TRUE) {
-#  not that this function ignores sections. 
-#  if the same keyword is repeated in multiple sections, things go wrong
-	strsplitonce <- function(s, token="=") {
-# this function allows for using inistrings like this "projection = +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
+readIniFile <- function(filename) {
+    if (!file.exists(filename)) { stop(paste(filename, " does not exist")) }
+	
+	strSplitOnFirstToken <- function(s, token="=") {
+# this function allows for using inistrings that have "=" in the value
+# e.g. "projection = +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
 		pos <- which(strsplit(s, '')[[1]]==token)[1]
 		if (is.na(pos)) {
 			return(c(string.trim(s), NA)) 
@@ -126,13 +127,12 @@ readIniFile <- function(filename, UPPERname=TRUE) {
 	}
 	Lines <- readLines(filename)
 # ; is the start of a comment line...
-	strsplitcomment <- function(s) {strsplitonce(s, token=";")}
+	strsplitcomment <- function(s) {strSplitOnFirstToken(s, token=";")}
 	ini <- lapply(Lines, strsplitcomment) 
 	Lines <- matrix(unlist(ini), ncol=2, byrow=T)[,1]
-	ini <- lapply(Lines, strsplitonce) 
+	ini <- lapply(Lines, strSplitOnFirstToken) 
  	ini <- matrix(unlist(ini), ncol=2, byrow=T)
 	ini <- subset(ini, ini[,1] != "")
-	if (UPPERname) { ini[,1] = toupper(ini[,1]) }
 
 	sections <- c(which(is.na(ini[,2])), length(ini[,2]))
 # here I should check whether the section text is enclused in [ ]. If not, it is junk text that should be removed, rather than used as a section
