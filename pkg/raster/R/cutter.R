@@ -21,6 +21,8 @@ cutter <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	ymn <- max(bb[2,1], ymin(raster))
 	ymx <- min(bb[2,2], ymax(raster))
 	
+	if (xmn > xmx | ymn > ymx) {stop("boundingbox is entirely outside of raster")}
+	
 	if (xmn == xmx) {stop("xmin and xmax are less than one cell apart")}
 	if (ymn == ymx) {stop("ymin and ymax are less than one cell apart")}
 	
