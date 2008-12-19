@@ -135,6 +135,7 @@ readIniFile <- function(filename, UPPERname=TRUE) {
 	if (UPPERname) { ini[,1] = toupper(ini[,1]) }
 
 	sections <- c(which(is.na(ini[,2])), length(ini[,2]))
+# here I should check whether the section text is enclused in [ ]. If not, it is junk text that should be removed, rather than used as a section
 	ini <- cbind("", ini)
 	for (i in 1:(length(sections)-1)) {
 		ini[sections[i]:(sections[i+1]), 1] <- ini[sections[i],2]
@@ -143,6 +144,7 @@ readIniFile <- function(filename, UPPERname=TRUE) {
 	ini[,1] <- gsub("\\]", "", ini[,1])
 		
 	colnames(ini) <- c("section", "name", "value")
+	sections <- sections[1:(length(sections)-1)]
 	return(ini[-sections,])
 }
 

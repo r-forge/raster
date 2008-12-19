@@ -85,28 +85,6 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 
 
 
-readIniFile <- function(filename) {
-# not that this function ignores sections. if the same keyword is repeated in multiple sections, things go wrong
-	strsplitonce <- function(s, token="=") {
-	# this function allows for using inistrings like this "projection = +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
-		pos <- which(strsplit(s, '')[[1]]==token)[1]
-		if (is.na(pos)) {
-			return(c(string.trim(s), NA)) 
-		} else {
-			first <- substr(s, 1, (pos-1))
-			second <- substr(s, (pos+1), nchar(s))
-			return(string.trim(c(first, second)))
-		}
-	}	
-	Lines <- na.omit(readLines(filename))
-	ini <- lapply(Lines, strsplitonce) 
-	for (i in 1:length(ini)) {
-		ini[[i]][1] = toupper(ini[[i]][1])
-	}
-	ini <- matrix(unlist(ini), ncol=2, byrow=T)
-	return(ini)
-}
- 
 
 .raster.from.file.binary <- function(filename, band=1) {
     if (!file.exists(filename)) { 
@@ -121,22 +99,23 @@ readIniFile <- function(filename) {
 	bandorder <- "BSQ"
 	ncellvals <- -9
 	projstring <- ""
+	
 	for (i in 1:length(ini[,1])) {
-		if (ini[i,1] == "MINX") {xn <- as.numeric(ini[i,2])} 
-		else if (ini[i,1] == "MAXX") {xx <- as.numeric(ini[i,2])} 
-		else if (ini[i,1] == "MINY") {yn <- as.numeric(ini[i,2])} 
-		else if (ini[i,1] == "MAXY") {yx <- as.numeric(ini[i,2])} 
-		else if (ini[i,1] == "ROWS") {nr <- as.integer(ini[i,2])} 
-		else if (ini[i,1] == "COLUMNS") {nc <- as.integer(ini[i,2])} 
-		else if (ini[i,1] == "MINVALUE") {minval <- as.numeric(ini[i,2])} 
-		else if (ini[i,1] == "MAXVALUE") {maxval <- as.numeric(ini[i,2])} 
-		else if (ini[i,1] == "NODATAVALUE") {nodataval <- as.numeric(ini[i,2])} 
-		else if (ini[i,1] == "DATATYPE") {inidatatype <- ini[i,2]} 
-		else if (ini[i,1] == "BYTEORDER") {byteorder <- ini[i,2]} 
-		else if (ini[i,1] == "NBANDS") {nbands <- ini[i,2]} 
-		else if (ini[i,1] == "BANDORDER") {bandorder <- ini[i,2]} 
-#		else if (ini[i,1] == "NCELLVALS") {ncellvals <- ini[i,2]} 
-		else if (ini[i,1] == "PROJECTION") {projstring <- ini[i,2]} 
+		if (ini[i,2] == "MINX") {xn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "MAXX") {xx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "MINY") {yn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "MAXY") {yx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "ROWS") {nr <- as.integer(ini[i,3])} 
+		else if (ini[i,2] == "COLUMNS") {nc <- as.integer(ini[i,3])} 
+		else if (ini[i,2] == "MINVALUE") {minval <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "MAXVALUE") {maxval <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "NODATAVALUE") {nodataval <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "DATATYPE") {inidatatype <- ini[i,3]} 
+		else if (ini[i,2] == "BYTEORDER") {byteorder <- ini[i,3]} 
+		else if (ini[i,2] == "NBANDS") {nbands <- ini[i,3]} 
+		else if (ini[i,2] == "BANDORDER") {bandorder <- ini[i,3]} 
+#		else if (ini[i,2] == "NCELLVALS") {ncellvals <- ini[i,3]} 
+		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
     }  
 
     raster <- raster.new(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projection=projstring)
