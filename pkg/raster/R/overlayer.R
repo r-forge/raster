@@ -10,26 +10,34 @@ overlayer <- function(raster1, raster2, fun=function(x,y){return(x+y)}, filename
 		stop('first two arguments should be objects of class "RasterLayer"')
 	}
 	if (!compare(c(raster1, raster2))) { 
-		stop('rasters do not match') 
+		stop('Extent and/or resolution of rasters do not match') 
 	}
 	outraster <- set.raster(raster1)
 	outraster <- set.filename(outraster, filename)
-	
+
 	if ( dataContent(raster1) == 'all' &  dataContent(raster2) == 'all') {
 		vals <- fun( values(raster1), values(raster2) )
 		outraster <- set.values(outraster, vals)
 		if (filename(outraster) != "") { write.raster(outraster, overwrite=overwrite) }
 		
 	} else if ( dataSource(raster1) == 'disk' &  dataSource(raster2) == 'disk') {
+		v <- vector(length=0)
 		for (r in 1:nrow(outraster)) {
 			raster1 <- readRow(raster1, r)
 			raster2 <- readRow(raster2, r)
 			vals <- fun(values(raster1), values(raster2))
-			outraster <- set.values.row(outraster, vals, r)
-			outraster <- write.row(outraster, overwrite=overwrite)
+			if (filename(outraster) == "") {
+				v <- c(v, vals)
+			} else {
+				outraster <- set.values.row(outraster, vals, r)
+				outraster <- write.row(outraster, overwrite=overwrite)
+			}	
+		}
+		if (filename(outraster) == "") { 
+			outraster <- set.values(outraster, v) 
 		}
 	} else {
-		stop('data must be either in memory or on disk')
+		stop('values of rasters must be either all in memory or all on disk')
 	}
 	return(outraster)
 }
