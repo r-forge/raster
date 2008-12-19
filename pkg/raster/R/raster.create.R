@@ -84,26 +84,37 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 
 
 
-.readini <- function(filename) {
-# readini thanks to Gabor Grothendieck <ggrothendieck_at_gmail.com> 
-	f  <- function(x) {
-		section <- ""
-		if (length(x) == 1) section <<- gsub("[\\[\\]]", "", x)
-		if (length(x) <= 1) return()
-		return(c(x, section))
+
+readIniFile <- function(filename) {
+# not that this function ignores sections. if the same keyword is repeated in multiple sections, things go wrong
+	strsplitonce <- function(s, token="=") {
+	# this function allows for using inistrings like this "projection = +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
+		pos <- which(strsplit(s, '')[[1]]==token)[1]
+		if (is.na(pos)) {
+			return(c(string.trim(s), NA)) 
+		} else {
+			first <- substr(s, 1, (pos-1))
+			second <- substr(s, (pos+1), nchar(s))
+			return(string.trim(c(first, second)))
+		}
+	}	
+	Lines <- na.omit(readLines(filename))
+	ini <- lapply(Lines, strsplitonce) 
+	for (i in 1:length(ini)) {
+		ini[[i]][1] = toupper(ini[[i]][1])
 	}
-	Lines <- readLines(filename)
-	ini <-  do.call("rbind", lapply(strsplit(Lines, "="), f)) 
-	for (i in 1:length(ini[,1])) {ini[i,1] = toupper(ini[i, 1])}
+	ini <- matrix(unlist(ini), ncol=2, byrow=T)
 	return(ini)
 }
-
+ 
 
 .raster.from.file.binary <- function(filename, band=1) {
     if (!file.exists(filename)) { 
 		stop(paste(filename," does not exist")) 
 		}
-	ini <- .readini(filename)
+	ini <- readIniFile(filename)
+	ini <- subset(ini, !(is.na(ini[,2])))
+
 	byteorder <- .Platform$endian
 	nbands <- as.integer(1)
 	band <- as.integer(1)
