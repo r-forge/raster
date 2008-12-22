@@ -18,7 +18,7 @@ cover <- function(raster1, raster2, filename="", overwrite=TRUE) {
 			raster1 <- readRow(raster1, r)
 			raster2 <- readRow(raster2, r)
 			vals <- values(raster1)
-			vals[is.na(vals)] <- values(raster2) 
+			vals[is.na(vals)] <- values(raster2)[is.na(vals)] 
 			outraster <- set.values.row(outraster, vals, r)
 			outraster <- write.row(outraster, overwrite=overwrite)
 		}
