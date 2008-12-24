@@ -2,21 +2,32 @@
 \alias{write.raster}
 \alias{write.row}
 \alias{write.ascii}
-\alias{write.import}
-\alias{write.export}
+\alias{import}
+\alias{export}
+\alias{grdToBil}
 \alias{writeHdr}
+\alias{writeENVIHdr}
+\alias{writeErdasRawHdr}
+\alias{writeBilHdr}
+\alias{writeWorldFile}
 
 \title{ Write raster data to a file }
 \description{
   Write raster data to a file. Either as binary ('raster') format or Ascii (ESRI Arc Ascii) format. 
+  You can also export an existing raster file to an ASCII or BIL file. Or create an ENVI header for it.
 }
 \usage{
 write.raster(raster, type="grd", INT=FALSE, overwrite=FALSE)
 write.row(raster, overwrite=FALSE)
 write.ascii(raster, overwrite=FALSE)
-write.import(raster, outfile, overwrite=FALSE)
-write.export(raster, outfile, filetype='ascii', overwrite=FALSE)
+import(raster, outfile, overwrite=FALSE)
+export(raster, outfile="", filetype='ascii', overwrite=FALSE)
+grdToBil(raster, outfile="", keepGRD=TRUE, overwrite=FALSE) 
 writeHdr(raster)
+writeENVIHdr(raster)
+writeErdasRawHdr(raster)
+writeBilHdr(raster)
+writeWorldFile(raster, extension=".world")
 }
 
 \arguments{
@@ -26,11 +37,18 @@ writeHdr(raster)
   \item{overwrite} { Logical. If \code{TRUE} existing files are overwritten }
   \item{outfile}{ The file resulting from import or export }
   \item{filetype}{ The type of file to export to }
-}
+  \item{keepGRD} { Logical. If \code{FALSE} the existing raster file GRD/GRI will not be kept after exporting to BIL format}
+  \item{extension}{ File extension for the world file }
+ }
 
 \details{
 	data in a \code{RasterLayer} object is written to a file. Small datasets can be loaded into memory manipulated, 
-	and saved to disk again. For large datasets, you can read and write by row. writeHdr saves the header file only. You should normally not directly call this.
+	and saved to disk again. For large datasets, you can read and write by row. 
+	writeHdr saves the header file only. You should normally not directly call this function.
+	writeENVIHdr writes an ENVI header (.hdr) file. This (hopefully) allows for reading the binary data ("raster.gri") in other programs such as ENVI ArcMap.
+	writeErdasRawHdr writes an header(.raw) file. This (hopefully) allows for reading the binary data ("raster.gri") in other programs such as Erdas and ArcMap.
+	writeBILHdr writes a "bil" format header (.hdr) file
+	writeWorldFile writes an ESRI "world" file, that is sometimes used to georeference images.
 }
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}

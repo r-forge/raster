@@ -80,6 +80,7 @@
 	return(raster)
 }
  
+ 
 write.raster <- function(raster, type="grd", INT=FALSE, overwrite=FALSE) {
 
 	if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
@@ -181,70 +182,4 @@ writeHdr <- function(raster) {
 #   datatype <- "Float32"
 #   writeGDAL(gdata, filename, drivername = filetype, type = datatype, mvFlag = NA, options=NULL)
 #}   
-
-
-grdToBil <- function(raster, keepGRD=TRUE, overwrite=FALSE) {
-	sourcefile <- fileChangeExtension(filename(raster), ".gri")
-	if (keepGRD) {
-		targetfile <- fileChangeExtension(filename(raster), ".bil")
-		if (file.exists(targetfile)) { 
-			if (!(overwrite)) { 
-				stop(paste("File exists:", targetfile, " Use overwrite=TRUE, if you want to overwrite it"))
-			}
-		}	
-		file.copy(from=sourcefile, to=targetfile, overwrite=overwrite)
-	} else {
-		targetfile <- fileChangeExtension(filename(raster), ".bil")
-		if (file.exists(targetfile)) { 
-			if (overwrite) { 
-				file.remove(targetfile) 
-			} else {
-				stop(paste("File exists:", targetfile, " Use overwrite=TRUE, if you want to overwrite it"))
-			}
-		}	
-		file.rename(from=sourcefile, to=targetfile)
-	}
-	writeBilHdr(raster)
-	return(raster.from.file(targetfile))
-}
-
-writeBilHdr <- function(raster) {
-	hdrfile <- fileChangeExtension(filename(raster), ".hdr")
-	thefile <- file(hdrfile, "w")  # open an txt file connectionis
-	cat("NROWS ",  nrow(raster), "\n", file = thefile)
-	cat("NCOLS ",  ncol(raster), "\n", file = thefile)
-	cat("NBANDS ",  raster@file@nbands, "\n", file = thefile)
-	cat("NBITS ",  raster@file@datasize * 8, "\n", file = thefile)
-	if (.Platform$endian == "little") { btorder <- "I" 
-	} else { btorder <- "M" }
-	cat("BYTEORDER ", btorder, "\n", file = thefile)
-	
-#  PIXELTYPE should work for Gdal, and perhpas ArcGIS, see:
-# http://lists.osgeo.org/pipermail/gdal-dev/2006-October/010416.html	
-	if (raster@file@datatype == 'integer') { pixtype <- "SIGNEDINT"
-	} else { pixtype <- "FLOATINGPOINT" }
-	cat("PIXELTYPE ", pixtype, "\n", file = thefile)	
-	cat("LAYOUT ", "BIL", "\n", file = thefile)
-    cat("SKIPBYTES 0\n", file = thefile)
-    cat("ULXMAP", xmin(raster) + 0.5 * xres(raster), "\n", file = thefile) 
-    cat("ULYMAP", ymax(raster) - 0.5 * yres(raster), "\n", file = thefile) 
-	cat("XDIM", xres(raster), "\n", file = thefile)
-	cat("YDIM", yres(raster), "\n", file = thefile)
-	browbytes <- round(ncol(raster) * raster@file@datasize)
-	cat("BANDROWBYTES ", browbytes, "\n", file = thefile)
-	cat("TOTALROWBYTES ", browbytes *  raster@file@nbands, "\n", file = thefile)
-	cat("BANDGAPBYTES  0", "\n", file = thefile)
-    cat("NODATA", raster@file@nodatavalue, "\n", file = thefile)	
-
-	cat("\n\n", file = thefile)
-	cat("The below is additional metadata, not part of the BIL/HDR format\n", file = thefile)
-	cat("----------------------------------------------------------------\n", file = thefile)
-	cat("CREATOR=R package:raster\n", file = thefile)
-	cat("CREATED=", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n", file = thefile)
-	cat("Projection=", projection(raster), "\n", file = thefile)
-	cat("MinValue=",  minValue(raster), "\n", file = thefile)
-	cat("MaxValue=",  maxValue(raster), "\n", file = thefile)
-
-	close(thefile)
-}
 
