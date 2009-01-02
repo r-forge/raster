@@ -20,15 +20,15 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 		stop('length(fact) should be 1 or 2')
 	}
 	
-	outraster <- set.raster(raster, filename)
-	outraster <- set.rowcol(outraster, nrow(raster) * yfact, ncol(raster) * xfact) 
+	outraster <- setRaster(raster, filename)
+	outraster <- setRowcol(outraster, nrow(raster) * yfact, ncol(raster) * xfact) 
 
 	if ( dataContent(raster)=='all') {
 		
 		cols <- rep(rep(1:ncol(raster), each=xfact), times=nrow(raster)*yfact)
 		rows <- rep(1:nrow(raster), each=ncol(raster)*xfact*yfact)
-		cells <- get.cell.from.rowcol(raster, rows, cols)
-		outraster <- set.values(outraster, values(raster)[cells])
+		cells <- cellFromRowcol(raster, rows, cols)
+		outraster <- setValues(outraster, values(raster)[cells])
 		if (filename(outraster) != "") {write.raster(outraster, overwrite=overwrite)}
 		
 	} else if ( dataSource(raster) == 'disk') { 
@@ -42,12 +42,12 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 				if (filename(outraster) == '') {
 					v <- c(v, values(raster)[cols])
 				} else {
-					outraster <- set.values.row(outraster, values(raster)[cols], (r-1) * xfact + i)
+					outraster <- setValuesRow(outraster, values(raster)[cols], (r-1) * xfact + i)
 					outraster <- write.row(outraster, overwrite=overwrite)
 				}	
 			}	
 		}
-		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
 	} 
 	return(outraster)
 }

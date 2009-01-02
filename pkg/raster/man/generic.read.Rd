@@ -56,7 +56,7 @@ readBlock(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol
 
 \examples{
 
- rs <- raster.from.file(system.file("external/test.ag", package="sp"))
+ rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
 
 # read a row
   firstrow <- readRow(rs, 1)

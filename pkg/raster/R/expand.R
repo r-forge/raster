@@ -22,21 +22,21 @@ expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	ymn <- min(ymn, ymin(raster))
 	ymx <- max(ymx, ymax(raster))
 	
-	outraster <- set.raster(raster, filename)
-	outraster <- set.bbox(outraster, xmn, xmx, ymn, ymx, keepres=T)
+	outraster <- setRaster(raster, filename)
+	outraster <- setBbox(outraster, xmn, xmx, ymn, ymx, keepres=T)
 
-	startrow <- get.row.from.y(outraster, ymax(raster))
-	startcol <- get.col.from.x(outraster, xmin(raster))
+	startrow <- rowFromY(outraster, ymax(raster))
+	startcol <- colFromX(outraster, xmin(raster))
 	
 	if (dataContent(raster) == 'all')  {
 
 		d <- vector(length=ncells(outraster))
 		d[] <- NA
 		for (r in 1:nrow(raster)) {
-			vals <- values.row(raster, r) 
+			vals <- valuesRow(raster, r) 
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
-			outraster <- set.values(outraster, d)
+			outraster <- setValues(outraster, d)
 			if (filename(outraster) != "") {write.raster(outraster, overwrite=overwrite)}
 		}
 
@@ -52,13 +52,13 @@ expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 
 			if (filename(outraster) != '') {
-				outraster <- set.values.row(outraster, d, r)
+				outraster <- setValuesRow(outraster, d, r)
 				outraster <- write.raster(outraster, overwrite=overwrite)
 			} else {
 				v <- c(v, d)
 			}
 		}
-		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
 	} 
 	return(outraster)
 }

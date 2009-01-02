@@ -47,7 +47,7 @@ rasterstack.save(rstack)
 # adding the same file multiple times, in most cases you would add different files  
 # this generates warnings, but it is not an error
   st <- rasterstack.add.files(st, c(rasterfile, rasterfile))
-  rs <- raster.from.file(rasterfile)
+  rs <- rasterFromFile(rasterfile)
   st <- rasterstack.add.rasters(st, c(rs, rs))
   st
   st <- rasterstack.remove.rasters(st, c(3, 5))

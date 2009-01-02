@@ -56,38 +56,38 @@ writeWorldFile(raster, extension=".world")
 \seealso{ \code{\link[rgdal]{rgdal}} }
 \examples{ 
 
- rs <- raster.from.file(system.file("external/test.ag", package="sp"))
+ rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
  
 \dontrun{
 #read all data
  rs <- readAll(rs)
 
 # write all to a new binary file
- rs <- set.filename(rs, "binall.grd")
+ rs <- setFilename(rs, "binall.grd")
  rs <- write.raster(rs, overwrite=TRUE)
  
 # write all to integer binary file
- rs <- set.filename(rs, "binallint.grd")
- rs <- set.datatype(rs, "integer")
+ rs <- setFilename(rs, "binallint.grd")
+ rs <- setDatatype(rs, "integer")
  rs <- write.raster(rs, overwrite=TRUE)
  
 # write all to ascii file
- rs <- set.filename(rs, "ascall.asc")
+ rs <- setFilename(rs, "ascall.asc")
  rs <- write.ascii(rs, overwrite=TRUE)
  
 # read and write row by row; write to ascii file
- rs <- raster.from.file(system.file("external/test.ag", package="sp"))
- ascrow <- set.filename(rs, "ascrow.asc")
+ rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+ ascrow <- setFilename(rs, "ascrow.asc")
  for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
-	ascrow <- set.values.row(ascrow, values(rs), r)
+	ascrow <- setValuesRow(ascrow, values(rs), r)
 	ascrow <- write.ascii(ascrow, overwrite=TRUE) 
  }
 	
 # read and write row by row; write to binary file
- binras <- set.raster(rs, "binbyrow.grd")
+ binras <- setRaster(rs, "binbyrow.grd")
  for (r in 1:nrow(rs)) {
-#	binras <- set.values.row(binras, values(readRow(rs, r)), r)
+#	binras <- setValuesRow(binras, values(readRow(rs, r)), r)
 # a shortcut for this:	
     binras@data <- readRow(rs, r)@data
 	binras <- write.row(binras, overwrite=TRUE) }

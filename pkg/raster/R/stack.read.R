@@ -17,7 +17,7 @@
 
 .rasterstack.read.part.of.row <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
 	for (i in 1:length(rstack@rasters)) {
-		rs <- .raster.read.part.of.row(rstack@rasters[[i]], rownumber, startcol, ncolumns)
+		rs <- .raster.read(rstack@rasters[[i]], rownumber, startcol, ncolumns)
 		if ( i == 1 )  {
 			rstack@data@values <- as.matrix( values(rs) )
 		}
@@ -32,7 +32,7 @@
 
 
 .rasterstack.read.xy <- function(rasterstack, xy) {
-	cells <- get.cell.from.xy(rasterstack, xy)
+	cells <- cellFromXY(rasterstack, xy)
 	return(.rasterstack.read.cells(rasterstack, cells))
 }
 

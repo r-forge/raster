@@ -7,16 +7,16 @@
 s.calc <- function(rstack, fun, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
 	if (length(fun(seq(1:5))) > 1) { stop("function 'fun' used returns more than one value") }
 
-	outraster <- set.raster(rstack@rasters[[1]], filename)
+	outraster <- setRaster(rstack@rasters[[1]], filename)
 	if (filename(outraster)=="") {
 		rstack <- .rasterstack.read.all(rstack)
-		outraster <- set.values(outraster, apply(values(rstack), 1, fun)) 
+		outraster <- setValues(outraster, apply(values(rstack), 1, fun)) 
 	} else {
-		if (ForceIntOutput) { outraster <- set.datatype(outraster, "integer") }
+		if (ForceIntOutput) { outraster <- setDatatype(outraster, "integer") }
 		for (r in 1:nrow(rstack)) {
 			rstack <- readRow(rstack, r)
 			vals <- apply(values(rstack), 1, fun)
-			outraster <- set.values.row(outraster, vals, r) 
+			outraster <- setValuesRow(outraster, vals, r) 
 			outraster <- write.row(outraster, overwrite)
 		}
 	}		

@@ -12,7 +12,7 @@
 #}
 
 
-cutter <- function(raster, boundingbox, filename="", overwrite=FALSE) {
+crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
 	bb <- bbox(boundingbox)
 
@@ -26,39 +26,39 @@ cutter <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	if (xmn == xmx) {stop("xmin and xmax are less than one cell apart")}
 	if (ymn == ymx) {stop("ymin and ymax are less than one cell apart")}
 	
-	outraster <- set.raster(raster, filename)
-	outraster <- set.bbox(outraster, xmn, xmx, ymn, ymx, keepres=T)
+	outraster <- setRaster(raster, filename)
+	outraster <- setBbox(outraster, xmn, xmx, ymn, ymx, keepres=T)
 	
 	if (dataContent(raster) == 'all')  {
-		first_start_cell <- get.cell.from.xy(raster, c(xmn + 0.5 * xres(raster), ymx - 0.5 * yres(raster) ))	
-		last_start_cell <- get.cell.from.xy(raster, c(xmn + 0.5 * xres(raster), ymn + 0.5 * yres(raster) ))
+		first_start_cell <- cellFromXY(raster, c(xmn + 0.5 * xres(raster), ymx - 0.5 * yres(raster) ))	
+		last_start_cell <- cellFromXY(raster, c(xmn + 0.5 * xres(raster), ymn + 0.5 * yres(raster) ))
 		start_cells <- seq(first_start_cell, last_start_cell, by = ncol(raster))
 		end_cells <- start_cells + ncol(outraster) - 1
 		selected_cells <- as.vector(mapply(seq, start_cells, end_cells))
-		outraster <- set.values(outraster, values(raster)[selected_cells])
-		outraster <- set.minmax(outraster)
+		outraster <- setValues(outraster, values(raster)[selected_cells])
+		outraster <- setMinmax(outraster)
 		if (filename(outraster) != "" ) { 
 			outraster <- try(write.raster(outraster, overwrite=overwrite)) 
 		}		
 
 	} else if ( dataSource(raster) == 'disk') { 
 
-		first_col <- get.col.from.x(raster, xmn + 0.5 * xres(outraster))
-		first_row <- get.row.from.y(raster, ymx - 0.5 * yres(outraster))
+		first_col <- colFromX(raster, xmn + 0.5 * xres(outraster))
+		first_row <- rowFromY(raster, ymx - 0.5 * yres(outraster))
 		last_row <- first_row + nrow(outraster) - 1
 		rownr <- 1
 		v <- vector(length=0)
 		for (r in first_row:last_row) {
-			raster <- .raster.read.part.of.row(raster, r, first_col, ncol(outraster) )
+			raster <- .raster.read(raster, r, first_col, ncol(outraster) )
 			if (filename(outraster) == '') {
 				v <- c(v, values(raster))
 			} else {
-				outraster <- set.values.row(outraster, values(raster), rownr)
+				outraster <- setValuesRow(outraster, values(raster), rownr)
 				outraster <- write.row(outraster, overwrite)
 			}	
 			rownr <- rownr + 1
 		} 
-		if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
 
 	}
 	return(outraster)

@@ -1,6 +1,6 @@
 
 as.raster <- function(spgrid, getdata=TRUE, dataindex=1) {
-	raster <- raster.new()
+	raster <- newRaster()
 	raster@bbox <- spgrid@bbox
 	raster@proj4string <- spgrid@proj4string
 	raster@ncols <- spgrid@grid@cells.dim[1]
@@ -12,14 +12,14 @@ as.raster <- function(spgrid, getdata=TRUE, dataindex=1) {
 		} else if (class(spgrid)=='SpatialPixelsDataFrame') {
 			cells <- spgrid@grid.index
 			if (length(cells)==0) {
-				cells <- get.cell.from.xy(raster, spgrid@coords)
+				cells <- cellFromXY(raster, spgrid@coords)
 			}
 			vals <- spgrid@data[[dataindex]]
-			raster <- set.values.sparse(raster, cells, vals)
+			raster <- setValuesSparse(raster, cells, vals)
 		} else if ( class(spgrid)=='SpatialGrid' ) {
 			# do nothing, there is no data
 		} else if (class(spgrid)=='SpatialGridDataFrame' ) {
-			raster <- set.values(raster, spgrid@data[[dataindex]])
+			raster <- setValues(raster, spgrid@data[[dataindex]])
 		}
 	}
 	return(raster)
@@ -39,14 +39,14 @@ as.brick <- function(spgrid, getdata=TRUE) {
 		} else if (class(spgrid)=='SpatialPixelsDataFrame') {
 			cells <- spgrid@grid.index
 			if (length(cells)==0) {
-				cells <- get.cell.from.xy(brick, spgrid@coords)
+				cells <- cellFromXY(brick, spgrid@coords)
 			}
 			vals <- as.matrix(spgrid@data)
-			brick <- set.values.sparse(brick, cells, vals)
+			brick <- setValuesSparse(brick, cells, vals)
 		} else if ( class(spgrid)=='SpatialGrid' ) {
 			# do nothing, there is no data
 		} else if (class(spgrid)=='SpatialGridDataFrame' ) {
-			brick <- set.values(brick, as.matrix(spgrid@data))
+			brick <- setValues(brick, as.matrix(spgrid@data))
 		}
 	}
 	return(brick)
@@ -61,8 +61,8 @@ as.spgrid <- function(raster, type='grid')  {
 	grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
 	
 	if (type=='pixel') {
-		raster <- make.sparse(raster)
-		pts <- SpatialPoints(get.xy.from.cell(raster,  dataIndices(raster)))
+		raster <- makeSparse(raster)
+		pts <- SpatialPoints(xyFromCell(raster,  dataIndices(raster)))
 		sp <- SpatialPixelsDataFrame(points=pts, data=as.data.frame(values(raster)), proj4string=projection(raster, FALSE)) 	
 		
 	} else if (type=='grid') {

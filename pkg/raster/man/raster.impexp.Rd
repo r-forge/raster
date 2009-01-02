@@ -34,8 +34,8 @@ as.spgrid(raster, type='grid')
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	rs <- raster.new()
-	rs <- set.values(rs, 1:ncells(rs))
+	rs <- newRaster()
+	rs <- setValues(rs, 1:ncells(rs))
 	sp <- as.spgrid(rs)
 	rs2 <- as.raster(sp) 
 }

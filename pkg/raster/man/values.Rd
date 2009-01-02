@@ -1,6 +1,6 @@
 \name{properties}
 \alias{values}
-\alias{values.row}
+\alias{valuesRow}
 \alias{valuesCells}
 \alias{valuesXY}
 \alias{valuesCells,RasterLayer-method}
@@ -18,7 +18,7 @@
 
 \usage{
 values(object, format='vector', names=FALSE)
-values.row(raster, rownr)
+valuesRow(raster, rownr)
 valuesCells(object, cells)
 valuesXY(object, xy)
 minValue(object, layer=1)
@@ -48,20 +48,20 @@ raster cell value(s)
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
-rs <- raster.new()
-rs <- set.values(rs, 1:ncells(rs))
+rs <- newRaster()
+rs <- setValues(rs, 1:ncells(rs))
 valuesCells(rs, c(1, 10, 100))
 minValue(rs)
 maxValue(rs)
 
- rs <- raster.from.file(system.file("external/test.ag", package="sp"))
+ rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
 
 # read values for cells
   cells <- c(1, 1900, 5000)
   valuesCells(rs, cells)
 
 # read values for (x, y) coordinates
-  xy <- get.xy.from.cell(rs, cells)
+  xy <- xyFromCell(rs, cells)
   valuesXY(rs, xy)
 
 }

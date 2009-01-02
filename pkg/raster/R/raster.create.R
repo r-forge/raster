@@ -5,12 +5,12 @@
 # Licence GPL v3
 
 
-raster.new <- function(xmin=-180, xmax=180, ymin=-90, ymax=90, nrows=180, ncols=360, projection="+proj=longlat +datum=WGS84") {
-	bb <- new.boundingbox(xmin, xmax, ymin, ymax, projection)
-	return(raster.from.bbox(bb, nrows=nrows, ncols=ncols))
+newRaster <- function(xmin=-180, xmax=180, ymin=-90, ymax=90, nrows=180, ncols=360, projection="+proj=longlat +datum=WGS84") {
+	bb <- newBbox(xmin, xmax, ymin, ymax, projection)
+	return(rasterFromBbox(bb, nrows=nrows, ncols=ncols))
 }
 
-raster.from.bbox <- function(boundingbox, nrows=1, ncols=1) {
+rasterFromBbox <- function(boundingbox, nrows=1, ncols=1) {
 	nr = as.integer(round(nrows))
 	nc = as.integer(round(ncols))
 	if (nc < 1) { stop("ncols should be larger than 0") }
@@ -24,18 +24,18 @@ raster.from.bbox <- function(boundingbox, nrows=1, ncols=1) {
 	}
 }
 
-raster.from.file <- function(filename, values=FALSE, band=1) {
+rasterFromFile <- function(filename, values=FALSE, band=1) {
 	fileext <- toupper(fileExtension(filename)) 
 	if (fileext == ".GRD" ) {
-		raster <- .raster.from.file.binary(filename, band) 
+		raster <- .rasterFromFile.binary(filename, band) 
 	} else {
-		raster <- .raster.from.file.gdal(filename, band) 
+		raster <- .rasterFromFile.gdal(filename, band) 
 	}
-	if (values) {raster <- .raster.read.all(raster)}
+	if (values) {raster <- .raster.read(raster, -1)}
 	return(raster)
 }	
 	
-.raster.from.file.gdal <- function(filename, band) {	
+.rasterFromFile.gdal <- function(filename, band) {	
 	gdalinfo <- GDALinfo(filename)
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
@@ -56,9 +56,9 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 	yn <- yx - gdalinfo[["res.y"]] * nr
 	if (yn < 0) { ndecs <- 9 } else { ndecs <- 8 }
 	yn <- as.numeric( substr( as.character(yn), 1, ndecs) )
-	raster <- raster.new(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projection="")
-	raster <- set.filename(raster, filename)
-	raster <- set.datatype(raster, "numeric")
+	raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projection="")
+	raster <- setFilename(raster, filename)
+	raster <- setDatatype(raster, "numeric")
 	
 
 	raster@file@driver <- 'gdal' 
@@ -74,7 +74,7 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 		band <- 1 }
 	raster@file@band <- as.integer(band)
 
-	raster <- set.projection(raster, attr(gdalinfo, "projection"))
+	raster <- setProjection(raster, attr(gdalinfo, "projection"))
 	
 	raster@file@gdalhandle[1] <- GDAL.open(filename)
 #oblique.x   0  #oblique.y   0 
@@ -84,7 +84,7 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 
 
 
-.raster.from.file.binary <- function(filename, band=1) {
+.rasterFromFile.binary <- function(filename, band=1) {
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
 
@@ -113,8 +113,8 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
     }  
 
-    raster <- raster.new(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projection=projstring)
-	raster <- set.filename(raster, filename)
+    raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projection=projstring)
+	raster <- setFilename(raster, filename)
 	raster@file@driver <- "raster"
 
 	raster@data@min <- minval
@@ -122,11 +122,11 @@ raster.from.file <- function(filename, values=FALSE, band=1) {
 	raster@data@haveminmax <- TRUE
 	raster@file@nodatavalue <- nodataval
 	
-	inidatatype <- string.trim(inidatatype)
+	inidatatype <- trim(inidatatype)
 	if (substr(inidatatype, 1, 3) == "INT") { datatp="integer"
 	} else { datatp="numeric" }
 	datasz <- as.integer(substr(inidatatype, 4, 4))
-	raster <- set.datatype(raster, datatype=datatp, datasize=datasz)
+	raster <- setDatatype(raster, datatype=datatp, datasize=datasz)
 	if ((byteorder == "little") | (byteorder == "big")) { raster@file@byteorder <- byteorder } 	
 	raster@file@nbands <- as.integer(nbands)
 	raster@file@band <- as.integer(band)

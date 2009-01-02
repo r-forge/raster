@@ -1,17 +1,16 @@
-\name{raster.map}
-\alias{raster.map}
-\alias{rasterstack.map}
+\name{map}
+\alias{map}
 \title{ Map a raster layer }
 \description{
   Make a map of a RasterLayer
 }
 \usage{
-raster.map(raster, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", legend.shrink = 0.5, legend.width = 0.8, ...)
-rasterstack.map(rstack, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ...)
+map(raster, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", legend.shrink = 0.5, legend.width = 0.8, ...)
 }
 
 \arguments{
-  \item{raster}{ Raster object}
+  \item{raster}{ RasterLayer object}
+  \item{index}{ Ignored for RasterLayers. The index of a raster in a RasterStack  1 <= index <= rstack@nrasters }
   \item{col} {a color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making}
   \item{subsample}{Logical. If \code{TRUE}, the image is resampled using maxdim}
   \item{maxdim}{ maximum requsted number of pixels in the map display (either vertial or horizontal) }
@@ -22,8 +21,6 @@ rasterstack.map(rstack, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
   \item{legend.shrink} {see ?image.plot}
   \item{legend.width} {see ?image.plot}
   \item{...}{ any argument that can be passed to image.plot(fields) and to image(graphics)} 
-  \item{rstack}{ RasterStack object}
-  \item{index}{ The index of a raster in the RasterStack  1 <= index <= rstack@nrasters }
 
   }
 \details{
@@ -36,12 +33,12 @@ rasterstack.map(rstack, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	rs <- raster.new()
-	rs <- set.values(rs, runif(ncells(rs)))
-	raster.map(rs)
-	rsa <- aggregater(rs, fact=10, fun=max)
+	rs <- newRaster()
+	rs <- setValues(rs, runif(ncells(rs)))
+	map(rs)
+	rsa <- Aggregate(rs, fact=10, fun=max)
 	windows()
-	raster.map(rsa)
+	map(rsa)
  }
 
 \keyword{ spatial }

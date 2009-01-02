@@ -1,7 +1,7 @@
 
 
 brick.new <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projection="+proj=longlat +datum=WGS84") {
-	bb <- new.boundingbox(xmn, xmx, ymn, ymx, projection)
+	bb <- newBbox(xmn, xmx, ymn, ymx, projection)
 	return(brick.from.bbox(bb, nrows=nrows, ncols=ncols))
 }
 

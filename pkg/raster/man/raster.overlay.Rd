@@ -33,7 +33,7 @@
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{
-	r <- raster.new()
+	r <- newRaster()
 	r1 <- init(r)
 	r2 <- init(r)
 	r3 <- overlayer(r1, r2)

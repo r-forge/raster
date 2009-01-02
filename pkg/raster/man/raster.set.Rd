@@ -1,17 +1,17 @@
 \name{set}
-\alias{set.raster}
-\alias{set.filename}
-\alias{set.bbox}
-\alias{set.projection}
-\alias{set.datatype}
-\alias{set.rowcol}
-\alias{set.values}
-\alias{set.values.row}
-\alias{set.values.block}
-\alias{set.values.sparse}
-\alias{clear.values}
-\alias{make.sparse}
-\alias{set.minmax}
+\alias{setRaster}
+\alias{setFilename}
+\alias{setBbox}
+\alias{setProjection}
+\alias{setDatatype}
+\alias{setRowcol}
+\alias{setValues}
+\alias{setValuesRow}
+\alias{setValuesBlock}
+\alias{setValuesSparse}
+\alias{clearValues}
+\alias{makeSparse}
+\alias{setMinmax}
 
 \title{ Set properties of a raster object }
 
@@ -21,19 +21,19 @@ Use these functions to set name and datatype properties of a raster object. Whil
 }
 
 \usage{
-set.raster(raster, filename="")
-set.projection(object, projection)
-set.filename(object, filename)
-set.bbox(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster), keepres=FALSE)
-set.datatype(raster, datatype, datasize)
-set.rowcol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
-set.minmax(raster)
-set.values(raster, values) 
-set.values.row(raster, rowvalues, rownr) 
-set.values.block(raster, blockvalues, firstcell, lastcell) 
-set.values.sparse(raster, sparsevalues, indices) 
-clear.values(raster)
-make.sparse(raster)
+setRaster(raster, filename="")
+setProjection(object, projection)
+setFilename(object, filename)
+setBbox(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster), keepres=FALSE)
+setDatatype(raster, datatype, datasize)
+setRowcol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
+setMinmax(raster)
+setValues(raster, values) 
+setValuesRow(raster, rowvalues, rownr) 
+setValuesBlock(raster, blockvalues, firstcell, lastcell) 
+setValuesSparse(raster, sparsevalues, indices) 
+clearValues(raster)
+makeSparse(raster)
 }
 
 \arguments{
@@ -70,10 +70,10 @@ raster.set copies the parameters of a Raster object to a new object, but does no
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	rs <- raster.new()
+	rs <- newRaster()
 	rs
-	rs <- set.filename(rs, "c:/test.grd")
-	rs <- set.rowcol(rs, nrows=18, ncols=36) 
+	rs <- setFilename(rs, "c:/test.grd")
+	rs <- setRowcol(rs, nrows=18, ncols=36) 
 	rs
 }
 

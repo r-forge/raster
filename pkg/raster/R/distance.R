@@ -4,7 +4,7 @@
 # Version 0,7
 # Licence GPL v3
 
-distance.euclidean <- function (point1, point2) {
+distanceEuclidean <- function (point1, point2) {
 	if (length(point1) == 2) {
 		x1 <- point1[1]
 		y1 <- point1[2]
@@ -23,7 +23,7 @@ distance.euclidean <- function (point1, point2) {
 	return(distance)
 }
 
-distance.greatcircle <- function (point1, point2, r=6378137) {
+distanceGreatcircle <- function (point1, point2, r=6378137) {
 # from degrees t o radians
 	if ((length(point1) < 2) | (length(point2) < 2)) { stop('points should have at least 2 elements') } 
 

@@ -27,16 +27,16 @@ dataSource(object)
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
-rs <- raster.new()
+rs <- newRaster()
 dataContent(rs)
 dataIndices(rs)
-rs <- set.values(rs, 1:ncells(rs))
+rs <- setValues(rs, 1:ncells(rs))
 valuesCells(rs, c(1, 10, 100))
 dataSource(rs)
 dataContent(rs)
 dataIndices(rs)
 
-rs <- raster.from.file(system.file("external/test.ag", package="sp"))
+rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
 rs <- readAll(rs)
 rs
 dataSource(rs)

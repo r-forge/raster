@@ -50,14 +50,14 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, INT = FALSE)
 
 \examples{
 
- r <- raster.new(ncols=36, nrows=18)
+ r <- newRaster(ncols=36, nrows=18)
  
 # two ways to set all value to 1 
 #1, with a function
  set1function <- function(x){rep(1, x)}
  r <- init(r, fun=set1function)
 # 2, "manually" 
- r <- set.values(r, rep(1, ncells(r)))
+ r <- setValues(r, rep(1, ncells(r)))
  
 # random values (see ?runif )
  r <- init(r, fun=runif)

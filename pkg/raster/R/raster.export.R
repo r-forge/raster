@@ -4,26 +4,26 @@ import <- function(raster, outfile, overwrite=FALSE) {
 	if (raster@file@driver <- "raster") {
 		stop("file is a raster format file, it cannot be imported")
 	}	
-	if (string.trim(outfile) == "") { 
+	if (trim(outfile) == "") { 
 		outfile <- fileChangeExtension(filename(raster), ".grd")
 	}
-	rsout <- set.raster(raster, filename=outfile)
+	rsout <- setRaster(raster, filename=outfile)
 	for (r in 1:nrow(raster)) {
 		d <- readRow(raster, r)
-		set.values.row(rsout, d, r)
+		setValuesRow(rsout, d, r)
 		write.row(rsout, overwrite=overwrite)
 	}
-	clear.values(rsout)
+	clearValues(rsout)
 	return(rsout)
 }
 
 
 export <- function(raster, outfile="", filetype="ascii", overwrite=FALSE) {
-	if (string.trim(outfile) == "") { 
+	if (trim(outfile) == "") { 
 		outfile <- filename(raster) 
 	}
 	if (filetype == "ascii") {
-		raster <- set.filename(raster,filename=outfile)
+		raster <- setFilename(raster,filename=outfile)
 		write.ascii(raster, overwrite=overwrite) 
 	} else if (filetype == "bil") {
 		grdToBil(raster, outfile=outfile, keepGRD=TRUE, overwrite=overwrite) 
@@ -56,7 +56,7 @@ grdToBil <- function(raster, outfile="", keepGRD=TRUE, overwrite=FALSE) {
 	}
 	writeBilHdr(raster)
 	if (!(keepGRD)) { file.remove(filename(raster)) }
-	return(raster.from.file(targetfile))
+	return(rasterFromFile(targetfile))
 }
 
 
@@ -67,7 +67,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 		print(paste("raster has unequal horizontal and vertical resolutions","\n", "these data cannot be stored in arc-ascii format"))
 	} else {
 		if (raster@data@indices[1] == 1) {
-			raster <- set.filename(raster, fileChangeExtension(filename(raster), '.asc'))
+			raster <- setFilename(raster, fileChangeExtension(filename(raster), '.asc'))
 			if (!overwrite & file.exists(filename(raster))) {
 				stop(paste(filename(raster), "exists. Use 'overwrite=TRUE'")) }
 
@@ -99,7 +99,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 			stop(paste('writing beyond end of file. last cell:', raster@data@indices[2], '>', ncells(raster)))
 		} else {
 		# create a new object with gdal handle tfrom the new file
-			raster <- raster.from.file(filename(raster)) 
+			raster <- rasterFromFile(filename(raster)) 
 		}
 	}
 	return(raster)

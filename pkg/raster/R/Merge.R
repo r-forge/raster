@@ -7,7 +7,7 @@
 # Licence GPL v3
 
 
-merger <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
+Merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 	compare(rasters, rowcol=FALSE, slack=slack)
 	
 #	for (i in 1:length(rasters)) {
@@ -22,16 +22,16 @@ merger <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 		bb[,1] <- pmin(bb[,1], bb2[,1])
 		bb[,2] <- pmax(bb[,2], bb2[,2])
 	}
-	outraster <- set.raster(rasters[[1]], filename)
-	outraster <- set.bbox(outraster, bb[1,1], bb[1,2], bb[2,1], bb[2,2], keepres=TRUE)
+	outraster <- setRaster(rasters[[1]], filename)
+	outraster <- setBbox(outraster, bb[1,1], bb[1,2], bb[2,1], bb[2,2], keepres=TRUE)
 
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
 	for (i in 1:length(rasters)) {
-		xy1 <- get.xy.from.cell(rasters[[i]], 1) # first row/col on old raster[[i]]
-		xy2 <- get.xy.from.cell(rasters[[i]], ncells(rasters[[i]]) ) #last row/col on old raster[[i]]
-		rowcol[i,1] <- get.row.from.y(outraster, xy1[2]) #start row on new raster
-		rowcol[i,2] <- get.row.from.y(outraster, xy2[2]) #end row
-		rowcol[i,3] <- get.col.from.x(outraster, xy1[1]) #start col
+		xy1 <- xyFromCell(rasters[[i]], 1) # first row/col on old raster[[i]]
+		xy2 <- xyFromCell(rasters[[i]], ncells(rasters[[i]]) ) #last row/col on old raster[[i]]
+		rowcol[i,1] <- rowFromY(outraster, xy1[2]) #start row on new raster
+		rowcol[i,2] <- rowFromY(outraster, xy2[2]) #end row
+		rowcol[i,3] <- colFromX(outraster, xy1[1]) #start col
 	}
 	v <- vector(length=0)
 	for (r in 1:nrow(outraster)) {
@@ -42,7 +42,7 @@ merger <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 					rasters[[i]] <- readRow(rasters[[i]], r + 1 - rowcol[i,1]) 
 					d <- values(rasters[[i]])
 				} else if (dataContent(rasters[[i]]) == 'all') {
-					d <- values.row(rasters[[i]], r + 1 - rowcol[i,1]) 
+					d <- valuesRow(rasters[[i]], r + 1 - rowcol[i,1]) 
 				} else {
 					d <- vector(length=ncol(rasters[[i]]))
 					d[] <- NA
@@ -54,12 +54,12 @@ merger <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 			}		
 		}
 		if (filename(outraster) != '') {
-			outraster <- set.values.row(outraster, rd, r)
+			outraster <- setValuesRow(outraster, rd, r)
 			outraster <- write.row(outraster, overwrite)
 		} else {
 			v <- c(v, rd)
 		}
 	}
-	if (filename(outraster) == '') { outraster <- set.values(outraster, v) }
+	if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
 	return(outraster)
 }

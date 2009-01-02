@@ -1,7 +1,7 @@
 \name{raster}
-\alias{raster.new}
-\alias{raster.from.bbox}
-\alias{raster.from.file}
+\alias{newRaster}
+\alias{rasterFromBbox}
+\alias{rasterFromFile}
 
 \title{ Create a new RasterLayer object }
 \description{
@@ -10,9 +10,9 @@
   See read* and values() for access to the values
 }
 \usage{
-	raster.new(xmin = -180, xmax = 180, ymin = -90, ymax = 90, nrows = 180, ncols = 360, projection = "+proj=longlat +datum=WGS84")
-	raster.from.bbox(boundingbox, nrows = 1, ncols = 1)
-	raster.from.file(filename, values=FALSE, band=1)
+	newRaster(xmin = -180, xmax = 180, ymin = -90, ymax = 90, nrows = 180, ncols = 360, projection = "+proj=longlat +datum=WGS84")
+	rasterFromBbox(boundingbox, nrows = 1, ncols = 1)
+	rasterFromFile(filename, values=FALSE, band=1)
 }
 
 \arguments{
@@ -25,11 +25,11 @@
   \item{nrows}{ number of rows on raster }
   \item{ncols}{ number of columns on raster }
   \item{projection}{ map projection of raster data }
-  \item{boundingbox} {bounding box used to cut a raster. Any object that is or has a bounding box (see below) }
+  \item{boundingbox} {bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
   \item{values} {logical. If \code{TRUE}, RasterLayer values will be read into memory with 'readAll()'}
 }
 \details{
-  raster.from.file uses "GDALinfo" from the rgdal package
+  rasterFromFile uses "GDALinfo" from the rgdal package
   see the rgdal help for supported file types
 }
 
@@ -40,9 +40,9 @@
 
 \seealso{  \code{\link[gdal]{rgdal}} }
 \examples{
-  raster1 <- raster.new(nrows=1080, ncols=2160)
+  raster1 <- newRaster(nrows=1080, ncols=2160)
   raster1
-  raster2 <- raster.from.file(system.file("external/test.ag", package="sp"))
+  raster2 <- rasterFromFile(system.file("external/test.ag", package="sp"))
   raster2
 }
 \keyword{ spatial }

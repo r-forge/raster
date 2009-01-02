@@ -6,7 +6,7 @@
 # Version 0,2
 # Licence GPL v3
 
-calc.mode <- function(x, na.rm = TRUE) {
+calcMode <- function(x, na.rm = TRUE) {
 #partly based on http://wiki.r-project.org/rwiki/doku.php?id=tips:stats-basic:modalvalue
 # ties are broken at random
 # earlier approach contained this
@@ -29,7 +29,7 @@ calc.mode <- function(x, na.rm = TRUE) {
 	}	
 }
 
-calc.cv <- function(x, na.rm = TRUE, singlevalueaszero=TRUE) {
+calcCv <- function(x, na.rm = TRUE, singlevalueaszero=TRUE) {
 #  R function to compute the coefficient of variation (expressed as a percentage)
 # if there is only a single value, sd = NA. However, one could argue that cv =0. In this case a NA is returned if(singlevaluecvzero=FALSE) 
 # else a value of 0 is returned.
@@ -42,7 +42,7 @@ calc.cv <- function(x, na.rm = TRUE, singlevalueaszero=TRUE) {
 	}	
 }
 
-string.trim <- function(astring) {
+trim <- function(astring) {
 	f <- function(s) {return( gsub('^[[:space:]]+', '',  gsub('[[:space:]]+$', '', s) ) )}
 	return(unlist(lapply(astring, f)))
 }  
@@ -67,7 +67,7 @@ filePath <- function(filename) {
 	return(path)
 }   
    
- fileExtension <- function(filename) {
+fileExtension <- function(filename) {
 # Author: Robert Hijmans
 # Version 1; Date: 1-Sep-2008; License: GPL3
 	lfn <- nchar(filename)
@@ -90,7 +90,7 @@ fileChangeExtension <- function(filename, newextension="") {
 # Author: Robert Hijmans
 # Version 1; Date: 1-Sep-2008; License: GPL3
 	lfn <- nchar(filename)
-	newextension <- string.trim(newextension)
+	newextension <- trim(newextension)
 	if (newextension != "" & substr(newextension, 1, 1) != ".") {
 		newextension <- paste(".", newextension, sep="") 
 	}
@@ -118,11 +118,11 @@ readIniFile <- function(filename) {
 # e.g. "projection = +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
 		pos <- which(strsplit(s, '')[[1]]==token)[1]
 		if (is.na(pos)) {
-			return(c(string.trim(s), NA)) 
+			return(c(trim(s), NA)) 
 		} else {
 			first <- substr(s, 1, (pos-1))
 			second <- substr(s, (pos+1), nchar(s))
-			return(string.trim(c(first, second)))
+			return(trim(c(first, second)))
 		}
 	}
 	Lines <- readLines(filename)

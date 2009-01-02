@@ -6,23 +6,23 @@
 
 
 
-rasterstack.map <- function(rstack, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ...) {
-	index <- round(index)
-	i <- min(max(1, index), rstack@data@nlayers)
-	if (i != index) {stop("index should be >= 1 and <= rstack@data@nlayers")}
-	raster <- rstack@rasters[[i]]
-	if (rstack@data@content == 'all') {
-		raster <- set.values(raster, rstack@data@values[i,])
-	}
-	raster.map(raster, col=col, subsample=subsample, maxdim=maxdim, ...)
-}
-
-
-raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", legend.shrink = 0.5, legend.width = 0.8, ...) {
+map <- function(raster, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", legend.shrink = 0.5, legend.width = 0.8, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 #	require(fields)
-	if (class(raster) == 'character') { raster <- raster.from.file(raster) }
-	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
+	if (class(raster) == 'character') { 
+		raster <- rasterFromFile(raster) 
+	}
+	if ( class(raster) == 'RasterStack' ) { 
+		index <- round(index)
+		i <- min(max(1, index), raster@data@nlayers)
+		if (i != index) { stop("index should be >= 1 and <= rstack@data@nlayers") }
+		raster2 <- raster@rasters[[i]]
+		if (raster@data@content == 'all') {
+			raster2 <- setValues(raster2, raster@data@values[i,])
+		}
+		raster <- raster2
+	}
+	
 	if (class(raster) != 'RasterLayer') { stop("class of 'raster' should be RasterLayer") }
 
 	maxdim <- max(1, maxdim)
@@ -37,11 +37,11 @@ raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, ma
 			
 			m <- values(raster, format='matrix')[rows, cols]
 
-			sampraster <- set.raster(raster)
-			sampraster <- set.rowcol(sampraster, dim(m)[1], dim(m)[2])
+			sampraster <- setRaster(raster)
+			sampraster <- setRowcol(sampraster, dim(m)[1], dim(m)[2])
 			xmx <- xmax(raster) - (ncol(raster) - cols[length(cols)]) * xres(raster)
 			ymn <- ymin(raster) + (nrow(raster) - rows[length(rows)]) * yres(raster)
-			raster <- set.bbox(sampraster, xmx=xmx, ymn=ymn)
+			raster <- setBbox(sampraster, xmx=xmx, ymn=ymn)
  		} else { 
 			m <- values(raster, format='matrix')
 			subsample=FALSE
@@ -50,7 +50,7 @@ raster.map <- function(raster, col = rev(terrain.colors(25)), subsample=TRUE, ma
 		if (subsample) {
 			raster <- .read.skip(raster, maxdim=maxdim)
 		} else {
-			raster <- .raster.read.all(raster)
+			raster <- .raster.read(raster, -1)
 		}
 		m <- values(raster, format='matrix')
 	} 

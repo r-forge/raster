@@ -6,18 +6,6 @@
 # Licence GPL v3
 
 
-# read entire raster
-.raster.read.all <- function(raster) {
-	raster <- .raster.read.row(raster, -1)
-	return(raster)
-}
-
-#read a single row
-.raster.read.row <- function(raster, rownr) {
-	raster <- .raster.read.part.of.row(raster, rownr)
-	return(raster)
-}
-
 #read a block of data  (a rectangular area  of any dimension)  
 .raster.read.block <- function(raster, startrow, nrows=3, startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
 	if (startrow < 1 ) { stop("startrow too small") } 
@@ -36,23 +24,23 @@
 		endrow <- raster@nrows
 		nrows <- endrow - startrow + 1
 	}
-	raster <- .raster.read.part.of.row(raster, startrow, startcol, ncolumns)
+	raster <- .raster.read(raster, startrow, startcol, ncolumns)
 	blockdata <- values(raster)
 	if (nrows > 1) {
 		for (r in (startrow+1):endrow) {
-			raster <- .raster.read.part.of.row(raster, r,  startcol, ncolumns)
+			raster <- .raster.read(raster, r,  startcol, ncolumns)
 			blockdata <- c(blockdata, values(raster))
 		}	
 	}	
-	startcell <- get.cell.from.rowcol(raster, startrow, startcol)
-	endcell <- get.cell.from.rowcol(raster, endrow, (startcol+ncolumns-1))
-	raster <- set.values.block(raster, blockdata, startcell, endcell)
+	startcell <- cellFromRowcol(raster, startrow, startcol)
+	endcell <- cellFromRowcol(raster, endrow, (startcol+ncolumns-1))
+	raster <- setValuesBlock(raster, blockdata, startcell, endcell)
 	return(raster)
 }
 
 
 #read part of a single row
-.raster.read.part.of.row <- function(raster, rownr,  startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
+.raster.read <- function(raster, rownr,  startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
 	rownr <- round(rownr)
 	if (rownr == 0) { stop("rownr == 0. It should be between 1 and nrow(raster), or -1 for all rows") }
 	if (rownr > nrow(raster)) { stop("rownr too high") }
@@ -109,12 +97,12 @@
 	if (rownr < 0) {
 		raster@data@indices <- c(1, ncells(raster))
 		raster@data@content <- "all"
-		raster <- set.minmax(raster)
+		raster <- setMinmax(raster)
 	} else if (startcol==1 & ncolumns==(ncol(raster)-startcol+1)) {
-		raster@data@indices <- c(get.cell.from.rowcol(raster, rownr, startcol), get.cell.from.rowcol(raster, rownr, endcol))
+		raster@data@indices <- c(cellFromRowcol(raster, rownr, startcol), cellFromRowcol(raster, rownr, endcol))
 		raster@data@content <- "row"
 	} else {
-		raster@data@indices <- c(get.cell.from.rowcol(raster, rownr, startcol), get.cell.from.rowcol(raster, rownr, endcol))
+		raster@data@indices <- c(cellFromRowcol(raster, rownr, startcol), cellFromRowcol(raster, rownr, endcol))
 		raster@data@content <- "block"
 	}	
 	
@@ -124,10 +112,10 @@
 
 #sample while reading and return matrix (for plotting )
 .read.skip <- function(raster, maxdim=500, bbox=NA) {
-	if (!(is.na(bbox))) { rcut <- cutter(raster, bbox) }
+	if (!(is.na(bbox))) { rcut <- crop(raster, bbox) }
 	rasdim <- max(ncol(raster), nrow(raster) )
 	if (rasdim <= maxdim) { 
-		outras <- .raster.read.all(raster)
+		outras <- .raster.read(raster, -1)
 	} else {
 		fact <- maxdim / rasdim
 		nc <- trunc(fact * ncol(raster))
@@ -147,12 +135,12 @@
 				dd <- c(dd, values(raster)[cols])
 			}
 		}	
-		outras <- set.raster(raster)
-		outras <- set.rowcol(outras, nr, nc)
+		outras <- setRaster(raster)
+		outras <- setRowcol(outras, nr, nc)
 		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
-		outras <- set.bbox(outras, xmx=xmx, ymn=ymn)
-		outras <- set.values(outras, dd)
+		outras <- setBbox(outras, xmx=xmx, ymn=ymn)
+		outras <- setValues(outras, dd)
 	}
 	return(outras)
 }
@@ -161,7 +149,7 @@
 #read data on the raster for xy coordinates
 .raster.read.xy <- function(raster, xy) {
 	if (!is.matrix(xy)) { xy <- as.matrix(t(xy)) }
-	cells <- get.cell.from.xy(raster, xy)
+	cells <- cellFromXY(raster, xy)
 	return(.raster.read.cells(raster, cells))
 }	
 
@@ -198,14 +186,14 @@
 #	if (valuename == "") {valuename <- "value" }
 #	colnames(colrow) <- c("id", "colnr", "rownr", "cell", valuename)
 	for  (i in 1:length(cells)) {
-		colrow[i,1] <- get.col.from.cell(raster, cells[i])
-		colrow[i,2] <- get.row.from.cell(raster, cells[i])
+		colrow[i,1] <- colFromCell(raster, cells[i])
+		colrow[i,2] <- rowFromCell(raster, cells[i])
 		colrow[i,3] <- cells[i]
 		colrow[i,4] <- NA
 	}	
 	rows <- na.omit(unique(colrow[order(colrow[,2]), 2]))
 	for (i in 1:length(rows)) {
-		raster <- .raster.read.row(raster, rows[i])
+		raster <- .raster.read(raster, rows[i])
 		thisrow <- subset(colrow, colrow[,2] == rows[i])
 		for (j in 1:length(thisrow[,1])) {
 			colrow[colrow[,3]==thisrow[j,3],4] <- raster@data@values[thisrow[j,1]]

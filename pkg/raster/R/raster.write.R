@@ -10,7 +10,7 @@
 
 	raster@file@driver <- 'raster'
     raster@file@gdalhandle <- list()
-	raster <- set.filename(raster, fileChangeExtension(filename(raster), ".grd"))
+	raster <- setFilename(raster, fileChangeExtension(filename(raster), ".grd"))
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -20,9 +20,9 @@
 		raster@data@values <- as.integer(values(raster)) 
 	}
 	if (class(values(raster))=='integer') {
-		raster <- set.datatype(raster, 'integer')
+		raster <- setDatatype(raster, 'integer')
 	}	
-	raster <- set.minmax(raster)
+	raster <- setMinmax(raster)
 
 	binraster <- fileChangeExtension(raster@file@name, ".gri")
 	con <- file(binraster, "wb")
@@ -36,7 +36,7 @@
 } 
 
 .write.raster.grd <- function(raster, INT=FALSE, overwrite=FALSE) {
-	raster <- set.filename(raster, fileChangeExtension(filename(raster), ".grd"))
+	raster <- setFilename(raster, fileChangeExtension(filename(raster), ".grd"))
 	if (!overwrite & file.exists(raster@file@name)) {
 		stop(paste(raster@file@name,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) }
 
@@ -44,7 +44,7 @@
 	raster@file@gdalhandle <- list()
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
-	raster <- set.minmax(raster)
+	raster <- setMinmax(raster)
 
 	
 	if (class(values(raster))=='integer' | INT==TRUE) {
@@ -52,19 +52,19 @@
 			raster@data@values <- as.integer(values(raster))
 		}
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
-			raster <- set.datatype(raster, 'integer', datasize=2)
+			raster <- setDatatype(raster, 'integer', datasize=2)
 		} else if (xmin(raster) > -2147483647 & xmax(raster) < 2147483648 ) {
-			raster <- set.datatype(raster, 'integer', datasize=4)
+			raster <- setDatatype(raster, 'integer', datasize=4)
 		} else if (xmin(raster) > -(2^63/2) & xmax(raster) < (2^64/2)) {
-			raster <- set.datatype(raster, 'integer', datasize=8)
+			raster <- setDatatype(raster, 'integer', datasize=8)
 		} else {
-			raster <- set.datatype(raster, 'numeric', datasize=8)
+			raster <- setDatatype(raster, 'numeric', datasize=8)
 			raster@data@values <- as.numeric(values(raster))
 		}
 	} else 	if (class(values(raster))=='numeric' ) {
-		raster <- set.datatype(raster, 'numeric')
+		raster <- setDatatype(raster, 'numeric')
 		if (xmin(raster) > -3.4E38 & xmax(raster) < 3.4E38) {
-			raster <- set.datatype(raster, 'numeric', 8)
+			raster <- setDatatype(raster, 'numeric', 8)
 		}	
 	}
 
@@ -84,7 +84,7 @@
 write.raster <- function(raster, type="grd", INT=FALSE, overwrite=FALSE) {
 
 	if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
-		stop('there are not (enough) values to write the file. first use set.values()') 
+		stop('there are not (enough) values to write the file. first use setValues()') 
 	}
 	if (type == "grd") {
 		raster <- .write.raster.grd(raster, INT, overwrite)

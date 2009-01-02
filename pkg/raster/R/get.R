@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 
-get.y.from.row <- function(raster, rownr) {
+yFromRow <- function(raster, rownr) {
 	rownr <- round(rownr)
 	rownr[rownr < 1 | rownr > raster@nrows] <- NA
 	y <- ymax(raster) - ((rownr-0.5) * yres(raster))
@@ -13,14 +13,14 @@ get.y.from.row <- function(raster, rownr) {
 	return(y) }	
 	
 	
-get.x.from.col <- function(raster, colnr) {
+xFromCol <- function(raster, colnr) {
 	colnr <- round(colnr)
 	colnr[colnr < 1 | colnr > raster@ncols] <- NA
 	x <- xmin(raster) + (colnr - 0.5) * xres(raster) 
 	return(x) }  
 
 	
-get.row.from.cell <- function(raster, cell) {
+rowFromCell <- function(raster, cell) {
 	cell <- as.integer(round(cell))
 	cell[cell < 1 | cell > ncells(raster)] <- NA
 	rownr <- as.integer(trunc((cell-1)/raster@ncols) + 1)
@@ -29,7 +29,7 @@ get.row.from.cell <- function(raster, cell) {
 }
 
 
-get.col.from.cell <- function(raster, cell) {
+colFromCell <- function(raster, cell) {
 	cell <- as.integer(round(cell))
 	cell[cell < 1 | cell > ncells(raster)] <- NA	
 	rownr <- as.integer(trunc((cell-1)/raster@ncols) + 1)
@@ -40,7 +40,7 @@ get.col.from.cell <- function(raster, cell) {
 
 
 	
-get.cell.from.xy <- function(raster, xy) {
+cellFromXY <- function(raster, xy) {
 	if (is.null(dim(xy))) { 
 		x <- xy[1]
 		y <- xy[2] 
@@ -51,8 +51,8 @@ get.cell.from.xy <- function(raster, xy) {
 	cell <- vector(mode = "integer", length = length(x))
 	cell[cell == 0] <- NA
 	for (i in 1:length(x)) {
-		colnr <- get.col.from.x(raster, x[i]) - 1
-		rownr <- get.row.from.y(raster, y[i]) - 1
+		colnr <- colFromX(raster, x[i]) - 1
+		rownr <- rowFromY(raster, y[i]) - 1
 		if ((!is.na(colnr)) & (!is.na(rownr))) {
 			cell[i] <- as.integer((rownr * raster@ncols + colnr) + 1)
 		}
@@ -61,7 +61,7 @@ get.cell.from.xy <- function(raster, xy) {
 }
 
 
-get.cell.from.rowcol <- function(raster, rownr, colnr) {
+cellFromRowcol <- function(raster, rownr, colnr) {
 	rownr <- round(rownr)
 	colnr <- round(colnr)
 	rownr[rownr < 1 | rownr > raster@nrows] <- NA
@@ -69,14 +69,14 @@ get.cell.from.rowcol <- function(raster, rownr, colnr) {
 	return((rownr-1) * raster@ncols + colnr)
 }
 
-get.col.from.x <- function ( raster, x )	{
+colFromX <- function ( raster, x )	{
 	colnr <- (trunc((x - xmin(raster)) / xres(raster))) + 1 
 	colnr[x == xmax(raster)] <- ncol(raster)
 	colnr[x < xmin(raster) | x > xmax(raster) ] <- NA
 	return(colnr) }
 	
 	
-get.row.from.y <- function ( raster, y )	{
+rowFromY <- function ( raster, y )	{
 	rownr <- 1 + (trunc((ymax(raster) - y) / yres(raster)))
 	rownr[y == ymin(raster) ] <- raster@nrows 
 	rownr[y > ymax(raster) | y < ymin(raster)] <- NA
@@ -84,24 +84,24 @@ get.row.from.y <- function ( raster, y )	{
 }	
 	
 
-get.xy.from.cell <- function(raster, cell) {
+xyFromCell <- function(raster, cell) {
 	cell <- round(cell)
 	xy <- matrix(data = NA, ncol=2, nrow=length(cell))
-	colnr <- get.col.from.cell(raster, cell)
-	rownr <- get.row.from.cell(raster, cell)
-	xy[,1] <- get.x.from.col(raster, colnr)
-	xy[,2] <- get.y.from.row(raster, rownr) 		
+	colnr <- colFromCell(raster, cell)
+	rownr <- rowFromCell(raster, cell)
+	xy[,1] <- xFromCol(raster, colnr)
+	xy[,2] <- yFromRow(raster, rownr) 		
 
 	colnames(xy) <- c("x", "y")
 	return(xy)
 }  
 	
 	
-get.cxy.from.box <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster)) {
-	firstrow <- get.row.from.y(raster, ymx)
-	lastrow <- get.row.from.y(raster, ymn)
-	firstcol <- get.col.from.x(raster, xmn)
-	lastcol <- get.col.from.x(raster, xmx)
+cxyFromBox <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster)) {
+	firstrow <- rowFromY(raster, ymx)
+	lastrow <- rowFromY(raster, ymn)
+	firstcol <- colFromX(raster, xmn)
+	lastcol <- colFromX(raster, xmx)
 	cells <- vector("integer", length=0)
 # RH: ouch, this should be done with apply 	
 	for (i in firstrow:lastrow) {
@@ -109,20 +109,20 @@ get.cxy.from.box <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymi
 		lastcell <- (i-1) * raster@ncols + lastcol
 		cells <- append(cells, c(firstcell:lastcell))
 	}
-	cxy <- cbind(cells, get.xy.from.cell(raster, cells))
+	cxy <- cbind(cells, xyFromCell(raster, cells))
 	colnames(cxy) <- c("cell", "x", "y")
 	return(cxy)
 }
 
 
-valid.cells <- function(raster, cell) {
+validCells <- function(raster, cell) {
 	cell <- round(cell)
 	validcell <- vector(length=length(cell))
 	validcell[cell > 0 & cell <= ncells(raster)] <- TRUE
 	return(validcell)
 }
 
-valid.rows <- function(raster, rownr) {
+validRows <- function(raster, rownr) {
 	rownr <- round(rownr)
 	validrows <- vector(length=length(rownr))
 	validrows[rownr > 0 & rownr <= nrow(raster)] <- TRUE
@@ -130,7 +130,7 @@ valid.rows <- function(raster, rownr) {
 }
 
 
-valid.cols <- function(raster, colnr) {
+validCols <- function(raster, colnr) {
 	colnr <- round(colnr)
 	validcols <- vector(length=length(colnr))
 	validcols[colnr > 0 & colnr <= nrow(raster)] <- TRUE

@@ -29,7 +29,7 @@
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
 	for (r in 1:nrow(raster)) {
-		ly <- get.y.from.row(raster, r)
+		ly <- yFromRow(raster, r)
 		uly <- ly + 0.01 * yres(raster)
 		lly <- ly - 0.01 * yres(raster)
 		for (i in 1:npol) {

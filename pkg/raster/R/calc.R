@@ -7,19 +7,19 @@
 
 
 calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, INT=FALSE) {
-	outraster <- set.raster(raster, filename)
-	if (INT) {set.datatype(outraster, 'integer')}
+	outraster <- setRaster(raster, filename)
+	if (INT) {setDatatype(outraster, 'integer')}
 	
 	if (!(dataContent(raster) == 'all' | dataContent(raster) == 'sparse' | dataSource(raster) == 'disk')) {
 		stop('raster has no data on disk, nor a complete set of raster values in memory')
 	}
 	
 	if ( dataContent(raster) == 'all') {
-		outraster <- set.values(outraster, fun(values(raster))) 
+		outraster <- setValues(outraster, fun(values(raster))) 
 		if (filename(outraster)!="") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
 	} else if ( dataContent(raster) == 'sparse') {
-		outraster <- set.values.sparse(outraster, fun(values(raster)),  dataIndices(raster)) 
+		outraster <- setValuesSparse(outraster, fun(values(raster)),  dataIndices(raster)) 
 		if (filename(outraster) != "") { outraster <- write.raster(outraster, overwrite=overwrite)
 		}
 	} else if (dataSource(raster) == 'disk') {
@@ -29,11 +29,11 @@ calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, INT=FALSE) {
 			if (filename(outraster)=="") {
 				v <- c(v, fun(values(raster)))
 			} else {
-				outraster <- set.values.row(outraster, fun(values(raster)), r)
+				outraster <- setValuesRow(outraster, fun(values(raster)), r)
 				outraster <- write.row(outraster, overwrite=overwrite)
 			}
 		}
-		if (filename(outraster) == "") { outraster <- set.values(outraster, v) }
+		if (filename(outraster) == "") { outraster <- setValues(outraster, v) }
 	}
 	return(outraster)
 }

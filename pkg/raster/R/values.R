@@ -1,3 +1,4 @@
+
 values <- function(object, format='vector', names=FALSE) {
 	if (object@data@content=="nodata") {stop("first read some data (e.g., readAll()") }
 	if (format=='matrix') { 
@@ -9,21 +10,21 @@ values <- function(object, format='vector', names=FALSE) {
 
 
 
-values.row <- function(raster, rownr) {
-	if (!(valid.rows(raster, rownr))) {stop(paste(rownr,'is not a valid rownumber')) }
-	if (dataContent(raster) == 'sparse') {return (.values.row.sparse(raster, rownr)) 
+valuesRow <- function(raster, rownr) {
+	if (!(validRows(raster, rownr))) {stop(paste(rownr,'is not a valid rownumber')) }
+	if (dataContent(raster) == 'sparse') {return (.valuesRow.sparse(raster, rownr)) 
 	} else if (dataContent(raster) != 'all') {stop('cannot do. Need all data')
 	} else {
-		startcell <- get.cell.from.rowcol(raster, rownr, 1)
+		startcell <- cellFromRowcol(raster, rownr, 1)
 		endcell <- startcell+ncol(raster)-1
 		return(values(raster)[startcell:endcell])
 	}	
 }
 
 
-.values.row.sparse <- function(raster, rownr, explode=TRUE) {
+.valuesRow.sparse <- function(raster, rownr, explode=TRUE) {
 	if (dataContent(raster) != 'sparse') {stop('cannot do. Need sparse')}
-	startcell <- get.cell.from.rowcol(raster, rownr, 1)
+	startcell <- cellFromRowcol(raster, rownr, 1)
 	endcell <- startcell+ncol(raster)-1
 	d <- cbind(dataIndices(raster), values(raster))
 	d <- d[d[,1] >= startcell & d[,1] <= endcell, ] 
@@ -67,16 +68,16 @@ values.row <- function(raster, rownr) {
 		mdata <- matrix(raster@data@values, nrow=1, ncol=raster@ncols, byrow=TRUE)
 		if (names) {
 			colnames(mdata) <- seq(1:raster@ncols)
-			therow <- get.row.from.cell(raster, raster@data@indices[1])
+			therow <- rowFromCell(raster, raster@data@indices[1])
 			rownames(mdata) <- therow
 		}
 		return(mdata)
 		
 	} else if (raster@data@content=="block") {
-		startrow <- get.row.from.cell(raster, raster@data@indices[1])
-		startcol <- get.col.from.cell(raster, raster@data@indices[1])
-		endrow <- get.row.from.cell(raster, raster@data@indices[2])
-		endcol <- get.col.from.cell(raster, raster@data@indices[2])
+		startrow <- rowFromCell(raster, raster@data@indices[1])
+		startcol <- colFromCell(raster, raster@data@indices[1])
+		endrow <- rowFromCell(raster, raster@data@indices[2])
+		endcol <- colFromCell(raster, raster@data@indices[2])
 		ncols <- 1 + endcol - startcol
 		nrows <- 1 + endrow - startrow
 		

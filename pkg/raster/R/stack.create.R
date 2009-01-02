@@ -13,7 +13,7 @@ rasterstack.from.stackfile <- function(stackfile) {
 		bands[i] <- as.integer(st[i,2])
 	}
 	rst <- rasterstack.from.rasterfiles(rasterfiles, bands)
-	rst <- set.filename(stackfile)
+	rst <- setFilename(stackfile)
 	return(rst)
 }
 
@@ -42,11 +42,11 @@ rasterstack.add.files <- function(rstack, rasterfiles, bands= rep(1, length(rast
 			fn <- rasterfiles[i]
 			band <- bands[i]
 		}	
-		filename <- string.trim(fn)
+		filename <- trim(fn)
 		if (!(file.exists(filename))) { 
 			stop(paste(filename, "does not exist")) 
 		}
-		raster <- raster.from.file(filename, band)
+		raster <- rasterFromFile(filename, band)
 		rstack <- rasterstack.add.rasters(rstack, raster) 
 	}
 	return(rstack)
@@ -65,8 +65,8 @@ rasterstack.add.rasters <- function(rstack, rasters) {
 		addraster <- TRUE
 		i <- nlayers(rstack) + 1
 		if (i == 1) {
-			rstack <- set.rowcol(rstack, nrow(raster), ncol(raster))
-			rstack <- set.bbox(rstack, xmin(raster), xmax(raster), ymin(raster), ymax(raster))
+			rstack <- setRowcol(rstack, nrow(raster), ncol(raster))
+			rstack <- setBbox(rstack, xmin(raster), xmax(raster), ymin(raster), ymax(raster))
 			rstack@proj4string = raster@proj4string
 		} else {
 			if (length(attr(rstack@proj4string, "projection")) != 0)

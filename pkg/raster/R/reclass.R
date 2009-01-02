@@ -16,12 +16,12 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
 	if ( dim(rclmat)[2] != 3 ) { stop('rclmat must have 3 columns') }
 	colnames(rclmat) <- c("From", "To", "Becomes")	
 	print(rclmat)
-	outraster <- set.raster(raster, filename)
+	outraster <- setRaster(raster, filename)
 	if (INT) { 
-		outraster <- set.datatype(outraster, "integer") 
+		outraster <- setDatatype(outraster, "integer") 
 		res <- vector(mode = "integer", length = ncol(raster))
 	} else { 
-		outraster <- set.datatype(outraster, "numeric") 
+		outraster <- setDatatype(outraster, "numeric") 
 		res <- vector(mode = "numeric", length = ncol(raster))
 	}
 	if ( dataContent(raster) == 'all' |  dataContent(raster) == 'sparse') {
@@ -33,8 +33,8 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
 				res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
 			}
 		}
-		if ( dataContent(raster) == 'all') { outraster <- set.values(outraster, res) }
-		if ( dataContent(raster) == 'sparse') { outraster <- set.values.row(outraster, res,  dataIndices(raster)) }
+		if ( dataContent(raster) == 'all') { outraster <- setValues(outraster, res) }
+		if ( dataContent(raster) == 'sparse') { outraster <- setValuesRow(outraster, res,  dataIndices(raster)) }
 		if (filename(outraster) != "" ) {	outraster <- write.raster(outraster, overwrite=overwrite) }
 	} else {
 		for (r in 1:nrow(raster)) {
@@ -47,7 +47,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
 					res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
 				}
 			}	
-			outraster <- set.values.row(outraster, res, r)
+			outraster <- setValuesRow(outraster, res, r)
 			outraster <- write.row(outraster, overwrite=overwrite)
 		}	
 	}	

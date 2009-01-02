@@ -10,24 +10,24 @@
 	}	
 }
 
-set.rowcol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
+setRowcol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 	raster@ncols <- as.integer(ncols)
 	raster@nrows <- as.integer(nrows)
 	return(raster)
 }
 
-set.raster <- function(raster, filename="") {
+setRaster <- function(raster, filename="") {
 	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
 	if (class(raster) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
-	raster <- clear.values(raster)
+	raster <- clearValues(raster)
 	if (filename != "" & filename == filename(raster)) {
 		stop("is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
 	}
-	raster <- set.filename(raster, filename)
+	raster <- setFilename(raster, filename)
 	return(raster)
 }
 
-set.filename <- function(object, filename) {
+setFilename <- function(object, filename) {
 	if (is.na(filename)) {filename <- ""}
 	if (class(object)=='RasterStack') {
 		object@filename <- filename
@@ -46,17 +46,17 @@ set.filename <- function(object, filename) {
 }
 
 
-set.projection <- function(object, projection) {
+setProjection <- function(object, projection) {
 	if (class(projection)=="CRS") {
 		object@proj4string <- projection
 	} else {	
-		object@proj4string <- new.CRS(projection)
+		object@proj4string <- newCRS(projection)
 	}	
 	return(object)
 }
 
 
-clear.values <- function(raster) {
+clearValues <- function(raster) {
 	raster@data@content <- 'nodata'
 	raster@data@indices <- ""
 	raster@data@values <- ""
@@ -64,7 +64,7 @@ clear.values <- function(raster) {
 }
 
 
-set.bbox <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster), keepres=FALSE) {
+setBbox <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster), keepres=FALSE) {
 	xrs <- xres(raster)
 	yrs <- yres(raster)
 	if (xmn > xmx) {
@@ -87,7 +87,7 @@ set.bbox <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster
 }
 
 
-new.CRS <- function(projection) {
+newCRS <- function(projection) {
 	if (nchar(projection) < 6) { projs <- (CRS(as.character(NA)))
 	} else {
 		projs <- try(CRS(projection), silent = T)
@@ -99,7 +99,7 @@ new.CRS <- function(projection) {
 	return(projs)
 }
 
-new.boundingbox <- function(xmn, xmx, ymn, ymx, projection="") {
+newBbox <- function(xmn, xmx, ymn, ymx, projection="") {
 	if (xmn > xmx) {
 		x <- xmn
 		xmn <- xmx
@@ -110,7 +110,7 @@ new.boundingbox <- function(xmn, xmx, ymn, ymx, projection="") {
 		ymn <- ymx
 		ymx <- y
 	}
-	projs <- new.CRS(projection)
+	projs <- newCRS(projection)
 	bb <- new("Spatial")
 	bb@bbox[1,1] <- xmn
 	bb@bbox[1,2] <- xmx
@@ -123,14 +123,14 @@ new.boundingbox <- function(xmn, xmx, ymn, ymx, projection="") {
 }
 
 
-make.sparse <- function(raster) {
+makeSparse <- function(raster) {
 	if ( dataContent(raster) == 'sparse') {return(raster)
 	} else {
 		if ( dataContent(raster) == 'all') {
 			vals <- seq(1:ncells(raster))
 			vals <- cbind(vals, values(raster))
 			vals <- as.vector(na.omit(vals))
-			raster <- set.values.sparse(raster, sparsevalues=vals[,2], indices=vals[,1])
+			raster <- setValuesSparse(raster, sparsevalues=vals[,2], indices=vals[,1])
 			return(raster)
 		} else { 
 			# as above, but by reading data from disk, row by row
@@ -139,24 +139,24 @@ make.sparse <- function(raster) {
 	}
 }
 
-set.values.sparse <- function(raster, sparsevalues, indices) {
+setValuesSparse <- function(raster, sparsevalues, indices) {
 	raster@data@content <- 'sparse'
 	raster@data@values <- sparsevalues
 	raster@data@indices <- indices
 	raster@data@source <- 'ram'
-	raster <- set.minmax(raster)
+	raster <- setMinmax(raster)
 	return(raster)
 }
 
-set.values.block <- function(raster, blockvalues, firstcell, lastcell) {
+setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {
 	if (!is.vector(blockvalues)) {	stop('values must be a vector') }
 	if (length(blockvalues) == 0) {	stop('length(blockvalues==0). If this is intended use raster.data.clear(raster)') }
 	if (!(is.numeric(blockvalues) | is.integer(blockvalues) | is.logical(blockvalues))) { stop('values must be numeric, integer or logical') }
 	
-	firstcol <- get.col.from.cell(raster, firstcell)
-	lastcol <- get.col.from.cell(raster, lastcell)
-	firstrow <- get.row.from.cell(raster, firstcell)
-	lastrow <- get.row.from.cell(raster, lastcell)
+	firstcol <- colFromCell(raster, firstcell)
+	lastcol <- colFromCell(raster, lastcell)
+	firstrow <- rowFromCell(raster, firstcell)
+	lastrow <- rowFromCell(raster, lastcell)
 	ncells <- (lastcol - firstcol + 1) * (lastrow - firstrow + 1)
 	
 	if (ncells != length(blockvalues)) { 
@@ -169,7 +169,7 @@ set.values.block <- function(raster, blockvalues, firstcell, lastcell) {
 }
 
 
-set.values.row <- function(raster, rowvalues, rownr) {
+setValuesRow <- function(raster, rowvalues, rownr) {
 	if (!is.vector(rowvalues)) {	stop('data must be a vector') }
 	if (length(rowvalues) == 0) {	stop('length(rowdata==0). If this is intended then use raster.data.clear(raster)') }
 	if (!(is.numeric(rowvalues) | is.integer(rowvalues) | is.logical(rowvalues))) { stop(paste('data must be values, but class =',class(rowvalues))) }
@@ -177,15 +177,15 @@ set.values.row <- function(raster, rowvalues, rownr) {
 	} else {	
 		raster@data@values <- rowvalues
 		raster@data@content <- 'row' 
-		firstcell <- get.cell.from.rowcol(raster, rownr=rownr, colnr=1)
-		lastcell <- get.cell.from.rowcol(raster, rownr=rownr, colnr=ncol(raster))
+		firstcell <- cellFromRowcol(raster, rownr=rownr, colnr=1)
+		lastcell <- cellFromRowcol(raster, rownr=rownr, colnr=ncol(raster))
 		raster@data@indices <- c(firstcell, lastcell)
 		return(raster)
 	}	
 }	
 
 
-set.values <- function(raster, values) {
+setValues <- function(raster, values) {
 	if (!is.vector(values)) {stop('values must be a vector')}
 	if (length(values) == 0) {	stop('length(values==0). If this is intended then use raster.data.clear(raster)') }
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {stop('data must be values')}
@@ -195,13 +195,13 @@ set.values <- function(raster, values) {
 		raster@data@content <- 'all'
 		raster@data@source <- 'ram'
 		raster@data@indices <- c(1, ncells(raster))
-		raster <- set.minmax(raster)
+		raster <- setMinmax(raster)
 		return(raster)	
 	}	
 }
 
 
-set.minmax <- function(raster) {
+setMinmax <- function(raster) {
 	if (raster@data@content == 'nodata') {
 		stop('no data in memory')
 	}
@@ -218,7 +218,7 @@ set.minmax <- function(raster) {
 }
 
 
-set.datatype <- function(raster, datatype, datasize=4) {
+setDatatype <- function(raster, datatype, datasize=4) {
 #  signed"  should become variable
 	signed <- TRUE 
 	if (datatype == "numeric") {

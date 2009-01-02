@@ -53,7 +53,7 @@ resolution <- function(object) {
 
 boundingbox <- function(object) {
 	if (class(object) == 'matrix') {
-		object <- new.boundingbox(object[1,1], object[1,2], object[2,1], object[2,2])
+		object <- newBbox(object[1,1], object[1,2], object[2,1], object[2,2])
 	}
 	b <- bbox(object)[1:2, 1:2]
 	rownames(b) <- c("x", "y")

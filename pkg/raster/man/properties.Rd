@@ -59,12 +59,11 @@ nlayers(object)
   x or y coordinate(s)
   matrix(x,y) of pairs of coordinates 
   matrix(cell, x, y) of cellnumbers and x and y coordinates
-  TRUE of FALSE for raster.is.valid.cell
 }
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
-rs <- raster.new()
+rs <- newRaster()
 ncells(rs)
 ncol(rs)
 nrow(rs)
