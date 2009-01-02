@@ -223,6 +223,9 @@ setDatatype <- function(raster, datatype, datasize=4) {
 	signed <- TRUE 
 	if (datatype == "numeric") {
 		raster@file@datatype <- datatype 
+		if (dataContent(raster) != 'nodata') { 
+			raster@data@values <- as.numeric(values(raster))
+		}
 		if (datasize == 4) {
 			raster@file@datasize <- as.integer(4)
 			raster@file@nodatavalue <- -3.4E38
@@ -231,11 +234,16 @@ setDatatype <- function(raster, datatype, datasize=4) {
 			raster@file@datasize <- as.integer(8)
 			raster@file@nodatavalue <-  -1.7E308
 			raster@file@datanotation <- "FLT8S"
-		} else { 	stop("invalid datasize for this datatype") }
+		} else { 
+			stop("invalid datasize for this datatype") 
+		}
 	} else if (datatype == "integer") {
 		raster@file@datatype <- datatype 
-		raster@data@min <- round(raster@data@min)
-		raster@data@max <- round(raster@data@max)
+		raster@data@min <- round(minValue(raster))
+		raster@data@max <- round(maxValue(raster))
+		if (dataContent(raster) != 'nodata') { 
+			raster@data@values <- as.integer(round(values(raster)))
+		}
 		if (datasize == 4) {
 			raster@file@datasize <- as.integer(4)
 			raster@file@nodatavalue <- -2147483647
@@ -253,8 +261,12 @@ setDatatype <- function(raster, datatype, datasize=4) {
 			raster@file@datasize <- as.integer(8)
 			raster@file@nodatavalue <- -2^63
 			raster@file@datanotation <- "INT8S"
-		} else { stop("invalid datasize for this datatype") }
-	} else {stop("unknown datatype")} 
+		} else {
+			stop("invalid datasize for this datatype") 
+		}
+	} else {
+		stop("unknown datatype")
+	} 
 	return(raster)
 }
 
