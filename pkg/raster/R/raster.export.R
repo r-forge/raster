@@ -63,7 +63,7 @@ grdToBil <- function(raster, filename="", keepGRD=TRUE, overwrite=FALSE) {
 
 
 
-writeAscii <- function(raster, filename, ForceIntOutput=FALSE, overwrite=FALSE) {
+writeAscii <- function(raster, filename, overwrite=FALSE) {
 	if (raster@data@indices[1] == 1) {
 		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
 		if (resdif > 0.01) {
@@ -87,10 +87,17 @@ writeAscii <- function(raster, filename, ForceIntOutput=FALSE, overwrite=FALSE) 
 	}
 
 	raster@data@values[is.na(values(raster))] <- raster@file@nodatavalue 
-	if (ForceIntOutput) { raster@data@values <- round(raster@data@values) }
-	write.table(values(raster), filename, append = TRUE, quote = FALSE, 
+	if (dataContent(raster) == 'all') {
+		for (r in 1:nrow(raster)) {
+			write.table(t(valuesRow(raster, r)), filename, append = TRUE, quote = FALSE, 
+								sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
+		}					
+	} else {
+		write.table(t(values(raster)), filename, append = TRUE, quote = FALSE, 
 							sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
-    if ( dataIndices(raster)[2] == ncells(raster)) {
+    }
+	
+	if ( dataIndices(raster)[2] == ncells(raster)) {
 		return(rasterFromFile(filename))
 	} else {
 		return("writing in progress")

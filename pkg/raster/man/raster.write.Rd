@@ -15,7 +15,7 @@
 }
 \usage{
 writeValues(raster, overwrite=FALSE)
-writeAscii(raster, filename, ForceIntOutput=FALSE, overwrite=FALSE)
+writeAscii(raster, filename, overwrite=FALSE)
 import(raster, filename="", overwrite=FALSE)
 export(raster, filename="", filetype='ascii', overwrite=FALSE)
 grdToBil(raster, filename="", keepGRD=TRUE, overwrite=FALSE) 
@@ -25,7 +25,6 @@ writeOtherHeader(raster, format="BIL")
 
 \arguments{
   \item{raster}{ RasterLayer object }
-  \item{ForceIntOutput} { Logical. If \code{TRUE}, values will be saved as Integers  }
   \item{overwrite} { Logical. If \code{TRUE} existing files are overwritten }
   \item{filename}{ The file resulting from import or export }
   \item{filetype}{ The type of file to export to }
@@ -51,7 +50,6 @@ writeOtherHeader(raster, format="BIL")
 
  rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
  
-#\dontrun{
 #read all data
  rs <- readAll(rs)
 
@@ -65,7 +63,7 @@ writeOtherHeader(raster, format="BIL")
  rs <- writeValues(rs, overwrite=TRUE)
  
 # write all to ascii file
- rs <- writeAscii(rs, "ascall.asc", overwrite=TRUE)
+ rsascii <- writeAscii(rs, "ascall.asc", overwrite=TRUE)
  
 # read and write row by row; write to ascii file
  rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
@@ -77,13 +75,10 @@ writeOtherHeader(raster, format="BIL")
 # read and write row by row; write to binary file
  binras <- setRaster(rs, "binbyrow.grd")
  for (r in 1:nrow(rs)) {
-#	binras <- setValuesRow(binras, values(readRow(rs, r)), r)
-# a shortcut for this:	
-    binras@data <- readRow(rs, r)@data
+	rs <- readRow(rs, r)
+	binras <- setValuesRow(binras, values(rs), r)
 	binras <- writeValues(binras, overwrite=TRUE) 
-	}
-
-#}
+ }
 }
 
 \keyword{ spatial }

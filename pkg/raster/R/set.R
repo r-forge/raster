@@ -234,6 +234,8 @@ setDatatype <- function(raster, datatype, datasize=4) {
 		} else { 	stop("invalid datasize for this datatype") }
 	} else if (datatype == "integer") {
 		raster@file@datatype <- datatype 
+		raster@data@min <- round(raster@data@min)
+		raster@data@max <- round(raster@data@max)
 		if (datasize == 4) {
 			raster@file@datasize <- as.integer(4)
 			raster@file@nodatavalue <- -2147483647

@@ -6,36 +6,6 @@
 
 
  
-.write.sparse <- function(raster, overwrite=FALSE) {
-
-	raster@file@driver <- 'raster'
-    raster@file@gdalhandle <- list()
-	raster <- setFilename(raster, setFileExtension(filename(raster), ".grd"))
-	if (!overwrite & file.exists(filename(raster))) {
-		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
-	}
-
-	raster@data@values[is.nan(values(raster))] <- NA
-	if (raster@file@datatype == "integer") { 
-		raster@data@values <- as.integer(values(raster)) 
-	}
-	if (class(values(raster))=='integer') {
-		raster <- setDatatype(raster, 'integer')
-	}	
-	raster <- setMinmax(raster)
-
-	binraster <- setFileExtension(raster@file@name, ".gri")
-	con <- file(binraster, "wb")
-	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
-	writeBin( as.vector(values(raster)), con, size = raster@file@datasize) 
-	close(con)
-
-	# add the 'sparse' key word to the hdr file!!!
-	writeHeader(raster) 
-	return(raster)
-} 
-
-
 
 writeValues <- function(raster, overwrite=FALSE) {
 	if (dataContent(raster) == 'row' ) {
@@ -61,18 +31,21 @@ writeValues <- function(raster, overwrite=FALSE) {
 	raster@data@values[is.infinite(raster@data@values)] <- NA
 	raster <- setMinmax(raster)
 
-	if (class(values(raster))=='integer') {
+	if ( raster@file@datatype =='integer') {
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
 			raster <- setDatatype(raster, 'integer', datasize=2)
+			raster@data@values <- as.integer(round(values(raster)))
 		} else if (xmin(raster) > -2147483647 & xmax(raster) < 2147483648 ) {
 			raster <- setDatatype(raster, 'integer', datasize=4)
+			raster@data@values <- as.integer(round(values(raster)))
 		} else if (xmin(raster) > -(2^63/2) & xmax(raster) < (2^64/2)) {
 			raster <- setDatatype(raster, 'integer', datasize=8)
+			raster@data@values <- as.integer(round(values(raster)))
 		} else {
 			raster <- setDatatype(raster, 'numeric', datasize=8)
 			raster@data@values <- as.numeric(values(raster))
 		}
-	} else 	if (class(values(raster))=='numeric' ) {
+	} else {
 		raster <- setDatatype(raster, 'numeric')
 		if (xmin(raster) > -3.4E38 & xmax(raster) < 3.4E38) {
 			raster <- setDatatype(raster, 'numeric', 8)
@@ -105,13 +78,13 @@ writeValues <- function(raster, overwrite=FALSE) {
 		binraster <- setFileExtension(raster@file@name, ".gri")
 		attr(raster, "filecon") <- file(binraster, "wb")
 		raster@data@min <- 3e34
-		raster@data@max <- -3e34 
+		raster@data@max <- -3e34
 		raster@data@haveminmax <- FALSE
 		raster@file@driver <- 'raster'
 		raster@file@gdalhandle <- list()
 	}	
 
-	if (raster@file@datatype == "integer") { raster@data@values <- round(raster@data@values)  }
+	if (raster@file@datatype == "integer") { raster@data@values <- as.integer(round(raster@data@values))  }
 	if (class(values(raster)) == "integer" & raster@file@datatype == "numeric") { raster@data@values  <- as.numeric(values(raster)) }
 	
 	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -139,6 +112,38 @@ writeValues <- function(raster, overwrite=FALSE) {
 	}
 	return(raster)	
 }
+
+
+.write.sparse <- function(raster, overwrite=FALSE) {
+
+	raster@file@driver <- 'raster'
+    raster@file@gdalhandle <- list()
+	raster <- setFilename(raster, setFileExtension(filename(raster), ".grd"))
+	if (!overwrite & file.exists(filename(raster))) {
+		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
+	}
+
+	raster@data@values[is.nan(values(raster))] <- NA
+	if (raster@file@datatype == "integer") { 
+		raster@data@values <- as.integer(values(raster)) 
+	}
+	if (class(values(raster))=='integer') {
+		raster <- setDatatype(raster, 'integer')
+	}	
+	raster <- setMinmax(raster)
+
+	binraster <- setFileExtension(raster@file@name, ".gri")
+	con <- file(binraster, "wb")
+	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
+	writeBin( as.vector(values(raster)), con, size = raster@file@datasize) 
+	close(con)
+
+	# add the 'sparse' key word to the hdr file!!!
+	writeHeader(raster) 
+	return(raster)
+} 
+
+
 
 
 writeHeader <- function(raster) {
@@ -174,6 +179,9 @@ writeHeader <- function(raster) {
 #	cat("nCellvals=", raster@data@ncellvals, "\n", file = thefile)	
 	close(thefile)
 }
+
+
+
 
 #
 #write.gdal <- function(gdata, filename, filetype = "GTiff", gdata) {
