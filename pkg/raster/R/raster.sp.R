@@ -1,5 +1,5 @@
 
-as.raster <- function(spgrid, getdata=TRUE, dataindex=1) {
+asRaster <- function(spgrid, getdata=TRUE, dataindex=1) {
 	raster <- newRaster()
 	raster@bbox <- spgrid@bbox
 	raster@proj4string <- spgrid@proj4string
@@ -26,8 +26,8 @@ as.raster <- function(spgrid, getdata=TRUE, dataindex=1) {
 }
 
 
-as.brick <- function(spgrid, getdata=TRUE) {
-	brick <- brick.new()
+asBrick <- function(spgrid, getdata=TRUE) {
+	brick <- newBrick()
 	brick@bbox <- spgrid@bbox
 	brick@proj4string <- spgrid@proj4string
 	brick@ncols <- spgrid@grid@cells.dim[1]
@@ -53,7 +53,7 @@ as.brick <- function(spgrid, getdata=TRUE) {
 }
 
 
-as.spgrid <- function(raster, type='grid')  {
+asSpgrid <- function(raster, type='grid')  {
 	bb <- boundingbox(raster)
 	cs <- resolution(raster)
 	cc <- bb[,1] + (cs/2)

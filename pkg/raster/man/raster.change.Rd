@@ -10,7 +10,7 @@
 	Use existing raster(s) to create a new raster with different spatial extent or resolution
 }
 \usage{
-Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, INT = FALSE, filename="", overwrite=FALSE) 
+Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, ForceIntOutput = FALSE, filename="", overwrite=FALSE) 
 disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
 crop(raster, boundingbox, filename="", overwrite=FALSE) 
 expand(raster, boundingbox, filename="", overwrite=FALSE)
@@ -26,7 +26,7 @@ Merge(rasters, slack=0.01, filename="", overwrite=FALSE)
   \item{fact}{ degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details }
   \item{expand}{ if \code{expand == TRUE} grids will get larger if \code{factor} if the number of the division of the columns or rows with factor does not return an integer }
   \item{rm.NA}{ if \code{rm.NA == TRUE}, remove NA cells from calculations }
-  \item{INT}{ logical. If \code{TRUE} the values will be rounded and stored as integer }
+  \item{ForceIntOutput}{ logical. If \code{TRUE} the values will be rounded and stored as integer }
   \item{overwrite}{ if TRUE, "filename" will be overwritten if it exists }
   \item{slack}{ }
 }

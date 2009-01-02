@@ -36,7 +36,7 @@ setFilename <- function(object, filename) {
 	}	
 	if (class(object)=='RasterLayer') {
 		shortname <- fileName(filename)
-		shortname <- fileChangeExtension(shortname, "")
+		shortname <- setFileExtension(shortname, "")
 		shortname <- gsub(" ", "_", shortname)
 		if (object@file@nbands > 1) { shortname <- paste(shortname, "_", object@file@band) } 
 		object@file@shortname <- shortname

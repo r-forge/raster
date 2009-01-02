@@ -5,7 +5,7 @@ import <- function(raster, outfile, overwrite=FALSE) {
 		stop("file is a raster format file, it cannot be imported")
 	}	
 	if (trim(outfile) == "") { 
-		outfile <- fileChangeExtension(filename(raster), ".grd")
+		outfile <- setFileExtension(filename(raster), ".grd")
 	}
 	rsout <- setRaster(raster, filename=outfile)
 	for (r in 1:nrow(raster)) {
@@ -34,9 +34,9 @@ export <- function(raster, outfile="", filetype="ascii", overwrite=FALSE) {
 
 
 grdToBil <- function(raster, outfile="", keepGRD=TRUE, overwrite=FALSE) {
-	sourcefile <- fileChangeExtension(filename(raster), ".gri")
+	sourcefile <- setFileExtension(filename(raster), ".gri")
 	if (keepGRD) {
-		targetfile <- fileChangeExtension(filename(raster), ".bil")
+		targetfile <- setFileExtension(filename(raster), ".bil")
 		if (file.exists(targetfile)) { 
 			if (!(overwrite)) { 
 				stop(paste("File exists:", targetfile, " Use overwrite=TRUE, if you want to overwrite it"))
@@ -44,7 +44,7 @@ grdToBil <- function(raster, outfile="", keepGRD=TRUE, overwrite=FALSE) {
 		}	
 		file.copy(from=sourcefile, to=targetfile, overwrite=overwrite)
 	} else {
-		targetfile <- fileChangeExtension(filename(raster), ".bil")
+		targetfile <- setFileExtension(filename(raster), ".bil")
 		if (file.exists(targetfile)) { 
 			if (overwrite) { 
 				file.remove(targetfile) 
@@ -67,7 +67,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
 		print(paste("raster has unequal horizontal and vertical resolutions","\n", "these data cannot be stored in arc-ascii format"))
 	} else {
 		if (raster@data@indices[1] == 1) {
-			raster <- setFilename(raster, fileChangeExtension(filename(raster), '.asc'))
+			raster <- setFilename(raster, setFileExtension(filename(raster), '.asc'))
 			if (!overwrite & file.exists(filename(raster))) {
 				stop(paste(filename(raster), "exists. Use 'overwrite=TRUE'")) }
 
@@ -108,7 +108,7 @@ write.ascii <- function(raster, overwrite=FALSE) {
  
  
 writeBilHdr <- function(raster) {
-	hdrfile <- fileChangeExtension(filename(raster), ".hdr")
+	hdrfile <- setFileExtension(filename(raster), ".hdr")
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("NROWS ",  nrow(raster), "\n", file = thefile)
 	cat("NCOLS ",  ncol(raster), "\n", file = thefile)
@@ -149,10 +149,10 @@ writeBilHdr <- function(raster) {
 
 
 writeErdasRawHdr <- function(raster) {
-	hdrfile <- fileChangeExtension(filename(raster), ".raw")
+	hdrfile <- setFileExtension(filename(raster), ".raw")
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("IMAGINE_RAW_FILE\n", file = thefile)
-	cat("PIXEL_FILES ", fileChangeExtension(filename(raster), ".gri"), "\n", file = thefile)
+	cat("PIXEL_FILES ", setFileExtension(filename(raster), ".gri"), "\n", file = thefile)
 # this may not work. Some implementations may ignore this keyword and expect the pixelfile to have the same file name, no extension.		
 
 	cat("HEIGHT ",  nrow(raster), "\n", file = thefile)
@@ -188,7 +188,7 @@ writeErdasRawHdr <- function(raster) {
  }
  
 writeWorldFile <- function(raster, extension=".world") {
-	hdrfile <- fileChangeExtension(filename(raster), ".world")
+	hdrfile <- setFileExtension(filename(raster), ".world")
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat(xres(raster), "\n", file = thefile)
 	cat("0\n", file = thefile)
@@ -203,7 +203,7 @@ writeWorldFile <- function(raster, extension=".world") {
  
 
 writeENVIHdr <- function(raster) {
-	hdrfile <- fileChangeExtension(filename(raster), ".hdr")
+	hdrfile <- setFileExtension(filename(raster), ".hdr")
 	thefile <- file(hdrfile, "w") 
 	cat("ENVI\n", file = thefile)
 	cat("description = {", raster@file@shortname, "}", "\n", file = thefile)

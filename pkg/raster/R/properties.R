@@ -61,6 +61,15 @@ boundingbox <- function(object) {
 }
 
 
+nlayers <- function(object) {
+	if (class(object) == "RasterLayer") {
+		return(1)
+	} else {
+		return(object@data@nlayers)
+	}	
+}
+
+
 projection <- function(object, asText=TRUE) {
 	if (asText) {
 		if (is.na(object@proj4string@projargs)) { return('NA') 

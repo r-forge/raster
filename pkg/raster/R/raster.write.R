@@ -10,7 +10,7 @@
 
 	raster@file@driver <- 'raster'
     raster@file@gdalhandle <- list()
-	raster <- setFilename(raster, fileChangeExtension(filename(raster), ".grd"))
+	raster <- setFilename(raster, setFileExtension(filename(raster), ".grd"))
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -24,7 +24,7 @@
 	}	
 	raster <- setMinmax(raster)
 
-	binraster <- fileChangeExtension(raster@file@name, ".gri")
+	binraster <- setFileExtension(raster@file@name, ".gri")
 	con <- file(binraster, "wb")
 	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
 	writeBin( as.vector(values(raster)), con, size = raster@file@datasize) 
@@ -35,8 +35,8 @@
 	return(raster)
 } 
 
-.write.raster.grd <- function(raster, INT=FALSE, overwrite=FALSE) {
-	raster <- setFilename(raster, fileChangeExtension(filename(raster), ".grd"))
+.write.raster.grd <- function(raster, ForceIntOutput=FALSE, overwrite=FALSE) {
+	raster <- setFilename(raster, setFileExtension(filename(raster), ".grd"))
 	if (!overwrite & file.exists(raster@file@name)) {
 		stop(paste(raster@file@name,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) }
 
@@ -47,8 +47,8 @@
 	raster <- setMinmax(raster)
 
 	
-	if (class(values(raster))=='integer' | INT==TRUE) {
-		if (INT==TRUE) {
+	if (class(values(raster))=='integer' | ForceIntOutput==TRUE) {
+		if (ForceIntOutput==TRUE) {
 			raster@data@values <- as.integer(values(raster))
 		}
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
@@ -71,7 +71,7 @@
 	if (raster@data@content == 'sparse') { 
 		raster <- .write.sparse(raster, overwrite) 
 	} else {
-		binraster <- fileChangeExtension(filename(raster), ".gri")
+		binraster <- setFileExtension(filename(raster), ".gri")
 		con <- file(binraster, "wb")
 		writeBin( values(raster), con, size = raster@file@datasize) 
 		close(con)
@@ -81,13 +81,13 @@
 }
  
  
-write.raster <- function(raster, type="grd", INT=FALSE, overwrite=FALSE) {
+write.raster <- function(raster, type="grd", ForceIntOutput=FALSE, overwrite=FALSE) {
 
 	if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
 		stop('there are not (enough) values to write the file. first use setValues()') 
 	}
 	if (type == "grd") {
-		raster <- .write.raster.grd(raster, INT, overwrite)
+		raster <- .write.raster.grd(raster, ForceIntOutput, overwrite)
 	} else {
 		stop(paste("file type:", type, "is not supported"))
 	}
@@ -103,8 +103,8 @@ write.row <- function(raster, overwrite=FALSE) {
 		if (!overwrite & file.exists(filename(raster))) {
 			stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 		}
-		raster@file@name <- fileChangeExtension(raster@file@name, ".grd")
-		binraster <- fileChangeExtension(raster@file@name, ".gri")
+		raster@file@name <- setFileExtension(raster@file@name, ".grd")
+		binraster <- setFileExtension(raster@file@name, ".gri")
 		attr(raster, "filecon") <- file(binraster, "wb")
 		raster@data@min <- 3e34
 		raster@data@max <- -3e34 
@@ -144,7 +144,7 @@ write.row <- function(raster, overwrite=FALSE) {
 
 
 writeHdr <- function(raster) {
-	rastergrd <- fileChangeExtension(filename(raster), ".grd")
+	rastergrd <- setFileExtension(filename(raster), ".grd")
 	thefile <- file(rastergrd, "w")  # open an txt file connectionis
 	cat("[General]", "\n", file = thefile)
 	cat("CREATOR=R package:raster", "\n", file = thefile)
@@ -163,7 +163,7 @@ writeHdr <- function(raster) {
 	cat("Projection=", projection(raster), "\n", file = thefile)
 	
 	cat("[Data]", "\n", file = thefile)
-	if (raster@file@datatype == 'integer') {  datatype <- "INT"  } else { datatype <- "FLT" }
+	if (raster@file@datatype == 'integer') {  datatype <- "ForceIntOutput"  } else { datatype <- "FLT" }
 	datatype <- paste(datatype, raster@file@datasize, "BYTES", sep="")
 	cat("DataType=",  datatype, "\n", file = thefile)
 	cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)

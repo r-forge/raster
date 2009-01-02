@@ -86,7 +86,7 @@ fileExtension <- function(filename) {
 }   
 
 
-fileChangeExtension <- function(filename, newextension="") {
+setFileExtension <- function(filename, newextension="") {
 # Author: Robert Hijmans
 # Version 1; Date: 1-Sep-2008; License: GPL3
 	lfn <- nchar(filename)

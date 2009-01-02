@@ -1,15 +1,15 @@
 
 
 setAs('RasterLayer', 'SpatialGridDataFrame', 
-	function(from){ return(as.raster (from)) }
+	function(from){ return(asRaster (from)) }
 )
 
 setAs('RasterBrick', 'SpatialGridDataFrame', 
-	function(from){ return(as.brick (from)) }
+	function(from){ return(asBrick (from)) }
 )
 
 setAs('SpatialGridDataFrame', 'RasterLayer', 
-	function(from){ return(as.spgrid (from)) }
+	function(from){ return(asSpgrid (from)) }
 )
 
 

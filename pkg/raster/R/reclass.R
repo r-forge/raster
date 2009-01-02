@@ -4,7 +4,7 @@
 # Version 0,6
 # Licence GPL v3
 
-reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
+reclass <- function(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput=FALSE)  {
 	if (class(raster) != 'RasterLayer' ) {
 		stop('first two arguments should be objects of class "RasterLayer"')
 	}
@@ -17,7 +17,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, INT=FALSE)  {
 	colnames(rclmat) <- c("From", "To", "Becomes")	
 	print(rclmat)
 	outraster <- setRaster(raster, filename)
-	if (INT) { 
+	if (ForceIntOutput) { 
 		outraster <- setDatatype(outraster, "integer") 
 		res <- vector(mode = "integer", length = ncol(raster))
 	} else { 

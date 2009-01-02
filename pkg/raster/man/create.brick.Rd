@@ -1,8 +1,8 @@
 \name{brick create}
-\alias{brick.new}
-\alias{brick.from.bbox}
-\alias{brick.from.file}
-\alias{brick.from.stack}
+\alias{newBrick}
+\alias{brickFromBbox}
+\alias{brickFromFile}
+\alias{brickFromStack}
 
 \title{ Create a new RasterBrick object }
 \description{
@@ -11,10 +11,10 @@
   See read* and values() for access to the values
 }
 \usage{
-	brick.new(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projection = "+proj=longlat +datum=WGS84")
-	brick.from.bbox(boundingbox, nrows = 1, ncols = 1)
-	brick.from.file(filename, values=FALSE)
-	brick.from.stack(stack, values=FALSE)
+	newBrick(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projection = "+proj=longlat +datum=WGS84")
+	brickFromBbox(boundingbox, nrows = 1, ncols = 1)
+	brickFromFile(filename, values=FALSE)
+	brickFromStack(stack, values=FALSE)
 }
 
 \arguments{
@@ -42,7 +42,7 @@
 
 \seealso{  \code{\link[gdal]{rgdal}} }
 \examples{
-  b1 <- brick.new(nrows=1080, ncols=2160)
+  b1 <- newBrick(nrows=1080, ncols=2160)
   b1
 }
 \keyword{ spatial }

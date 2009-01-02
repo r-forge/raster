@@ -11,40 +11,43 @@
   Calculate values for a new raster, from scratch or based on a single existing raster
 }
 \usage{
-calc(raster, fun, filename="", overwrite=FALSE, INT = FALSE)
-isNA(raster, value = 0, filename="", overwrite=FALSE, INT = FALSE)
-setNA(raster, operator = "<=", value = 0, filename="", overwrite=FALSE, INT = FALSE)
-init(raster, fun=runif, filename="", overwrite=FALSE, INT = FALSE) 
+calc(object, fun, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
+isNA(raster, value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
+setNA(raster, operator = "<=", value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
+init(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput = FALSE) 
 neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE) 
-reclass(raster, rclmat, filename="", overwrite=FALSE, INT = FALSE)
+reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 }
 
 \arguments{
+  \item{object}{ a Raster* object }
   \item{raster}{ a RasterLayer object }
-  \item{fun}{ the function to be applied, for \code{calc} this should be a function that takes a single number as an argument }
+  \item{fun}{ the function to be applied }
   \item{value}{ the (threshold) value to replace with NA or that should be set to NA }
   \item{operator}{ the operator in setNA relative to the \code{value}, to set e.g. all values <= 2 to NA}
   \item{rclmat}{ matrix for reclassifcation. (see below) }
   \item{filename}{ output filename for a new raster; if NA the result is not written to a file but returned with the raster object, in the data slot }
   \item{overwrite}{ logical to indicate whether an existing output file should be overwritten }
-  \item{INT}{ logical. If \code{TRUE}, output will be integer values }
+  \item{ForceIntOutput}{ logical. If \code{TRUE}, output will be integer values }
   \item{ngb} { neighborhood size in number of cells }
   \item{keepdata} {logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA }
 }
 
 \details{
-	Use 'calc' to calculate values for a new raster based on an existing single raster. E.g. to add, multiply or divide a number. Create and pass the appropriate function as an argument. 
-	'isNA' replaces NA with a value and r.setNA sets values to NA; both are helper functions based on calc.
-	'init' sets a value without reference to existing values. E.g. initialize with a single, sequential, or random number.
-	'neighborhood' computes a neighborhood value. I.e. a value computed with function 'fun', for all cells in the square neigborhood (of size ngb * ngb) around each cell 
-	'reclass' reclassifies groups of values to other values. E.g. All values between 1 and 10 become 1, and between 11 and 15 become 2. 
+	\code{calc} can be used for a singe RasterLayer, or for multiple layers (Stack, Brick). For a RasterLayer, use \code{calc} to calculate
+	values for a new raster using a function (\code{fun}) that takes a single number as an argument (and retruns a single number). E.g. to add, multiply or divide a number (cell value) by a constant.
+	If the \code{object} passed to \code{calc} has multiple layers, \code{fun} should be a function that takes a one dimensional vector of value as input, and returns a single value.
+	\code{isNA} replaces NA with a value and setNA sets values to NA; both are helper functions based on calc.
+	\code{init} sets a value without reference to existing values. E.g. initialize with a single, sequential, or random number.
+	\code{neighborhood} computes a neighborhood value. I.e. a value computed with function 'fun', for all cells in the square neigborhood (of size ngb * ngb) around each cell 
+	\code{reclass} reclassifies groups of values to other values. E.g. All values between 1 and 10 become 1, and between 11 and 15 become 2. 
 	Reclassification is done with matrix "rclmat". This matrix must have 3 columns. The first two columns are "from" "to" of the input values, and the third column has the new value for that range.
 	
 	If the input raster has all values in memory (after readAll(raster)), the functions will also return the new data in memory. If there is a file name, the data will also be saved to that file. 
 	If the values are not in memory the new values will be written to file. 
 	}
 \value{
-	a new raster file (on disk or in memory) and associated object (in the R environment)
+	a new raster file (on disk and/or in memory) and associated object (in the R environment)
 }
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 

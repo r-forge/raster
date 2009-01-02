@@ -17,7 +17,7 @@
   You can also export an existing raster file to an ASCII or BIL file. Or create an ENVI header for it.
 }
 \usage{
-write.raster(raster, type="grd", INT=FALSE, overwrite=FALSE)
+write.raster(raster, type="grd", ForceIntOutput=FALSE, overwrite=FALSE)
 write.row(raster, overwrite=FALSE)
 write.ascii(raster, overwrite=FALSE)
 import(raster, outfile, overwrite=FALSE)
@@ -33,7 +33,7 @@ writeWorldFile(raster, extension=".world")
 \arguments{
   \item{raster}{ RasterLayer object }
   \item{type} { type of binary file. Currently only "grd" is supported }
-  \item{INT} { Logical. If \code{TRUE}, values will be saved as Integers  }
+  \item{ForceIntOutput} { Logical. If \code{TRUE}, values will be saved as Integers  }
   \item{overwrite} { Logical. If \code{TRUE} existing files are overwritten }
   \item{outfile}{ The file resulting from import or export }
   \item{filetype}{ The type of file to export to }

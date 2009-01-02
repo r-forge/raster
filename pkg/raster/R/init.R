@@ -5,9 +5,9 @@
 # Licence GPL v3
 
 
-init <- function(raster, fun=runif, filename="", overwrite=FALSE, INT=FALSE) {
+init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
 	outraster <- setRaster(raster, filename)
-	if (INT) {setDatatype(outraster, 'integer')}
+	if (ForceIntOutput) {setDatatype(outraster, 'integer')}
 
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
 		n <- ncells(raster)
@@ -32,14 +32,14 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, INT=FALSE) {
 }
 
 
-isNA <- function(raster, value=0, filename="", overwrite=FALSE, INT=FALSE) {
+isNA <- function(raster, value=0, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
 	fun <- function(x) { x[is.na(x)] <- value; return(x)} 
-	raster <- calc(raster, fun, filename, overwrite=overwrite, INT=INT)
+	raster <- calc(raster, fun, filename, overwrite=overwrite, ForceIntOutput=ForceIntOutput)
 	return(raster) 
 }
 
 	
-setNA <- function(raster, operator= "<=", value=0, filename="", overwrite=FALSE, INT=FALSE) {
+setNA <- function(raster, operator= "<=", value=0, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
 	if (operator == ">") { fun <- function(x) { x[x>value] <- NA; return(x)}
 	} else if (operator == "<") { fun <- function(x) { x[x<value] <- NA; return(x)}
 	} else if (operator == "<=") { fun <- function(x) { x[x<=value] <- NA; return(x)}
@@ -47,7 +47,7 @@ setNA <- function(raster, operator= "<=", value=0, filename="", overwrite=FALSE,
 	} else if (operator == "==") { fun <- function(x) { x[x==value] <- NA; return(x)}
 	} else if (operator == "!=") { fun <- function(x) { x[x!=value] <- NA; return(x)}
 	}
-	return(calc(raster, fun, filename, overwrite=overwrite, INT=INT))
+	return(calc(raster, fun, filename, overwrite=overwrite, ForceIntOutput=ForceIntOutput))
 }
 
 

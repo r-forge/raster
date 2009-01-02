@@ -1,5 +1,5 @@
 \name{miscellanous}
-\alias{fileChangeExtension}
+\alias{setFileExtension}
 \alias{fileExtension}
 \alias{fileName}
 \alias{filePath}
@@ -14,7 +14,7 @@
   And two miscellanous statistical functions (mode and coefficient of variation)
 }
 \usage{
-fileChangeExtension(filename, newextension)
+setFileExtension(filename, newextension)
 fileExtension(filename)
 fileName(filename)
 filePath(filename)
@@ -45,7 +45,7 @@ readIniFile(filename)
 \examples{
 	fn <- "c:/temp folder/filename.extension"
 	fileExtension(fn)
-	fileChangeExtension(fn, ".txt")
+	setFileExtension(fn, ".txt")
 	fileName(fn)
 	filePath(fn)
 	data <- c(0,1,2,3,3,3,3,4,4,4,5,5,6,7,7,8,9,NA)
