@@ -12,7 +12,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
 		n <- ncells(raster)
 		outraster <- setValues(outraster, fun(n)) 
-		if (!is.na(filename)) {	outraster <- write.raster(outraster, overwrite=overwrite) }
+		if (!is.na(filename)) {	outraster <- writeValues(outraster, overwrite=overwrite) }
 		
 	} else if (dataSource(raster) == 'disk') {
 		n <- length(ncol(raster))
@@ -23,7 +23,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput
 				v <- c(v, fun(n))
 			} else {			
 				outraster <- setValuesRow(outraster, fun(n), r) 
-				outraster <- write.row(outraster, overwrite=overwrite)
+				outraster <- writeValues(outraster, overwrite=overwrite)
 			}	
 		}	
 		if (filename(outraster) == '') { outraster <- setValues(outraster, v) }

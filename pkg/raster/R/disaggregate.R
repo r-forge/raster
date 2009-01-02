@@ -29,7 +29,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 		rows <- rep(1:nrow(raster), each=ncol(raster)*xfact*yfact)
 		cells <- cellFromRowcol(raster, rows, cols)
 		outraster <- setValues(outraster, values(raster)[cells])
-		if (filename(outraster) != "") {write.raster(outraster, overwrite=overwrite)}
+		if (filename(outraster) != "") {writeValues(outraster, overwrite=overwrite)}
 		
 	} else if ( dataSource(raster) == 'disk') { 
 
@@ -43,7 +43,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 					v <- c(v, values(raster)[cols])
 				} else {
 					outraster <- setValuesRow(outraster, values(raster)[cols], (r-1) * xfact + i)
-					outraster <- write.row(outraster, overwrite=overwrite)
+					outraster <- writeValues(outraster, overwrite=overwrite)
 				}	
 			}	
 		}

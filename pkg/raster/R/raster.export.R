@@ -1,39 +1,41 @@
 
-import <- function(raster, outfile, overwrite=FALSE) {
+import <- function(raster, filename="", overwrite=FALSE) {
 # check extension
 	if (raster@file@driver <- "raster") {
 		stop("file is a raster format file, it cannot be imported")
 	}	
-	if (trim(outfile) == "") { 
-		outfile <- setFileExtension(filename(raster), ".grd")
+	if (trim(filename) == "") { 
+		filename <- setFileExtension(filename(raster), ".grd")
 	}
-	rsout <- setRaster(raster, filename=outfile)
+	rsout <- setRaster(raster, filename=filename)
 	for (r in 1:nrow(raster)) {
 		d <- readRow(raster, r)
 		setValuesRow(rsout, d, r)
-		write.row(rsout, overwrite=overwrite)
+		writeValues(rsout, overwrite=overwrite)
 	}
 	clearValues(rsout)
 	return(rsout)
 }
 
 
-export <- function(raster, outfile="", filetype="ascii", overwrite=FALSE) {
-	if (trim(outfile) == "") { 
-		outfile <- filename(raster) 
+export <- function(raster, filename="", filetype="ascii", overwrite=FALSE) {
+	if (trim(filename) == "") { 
+		filename <- filename(raster) 
 	}
 	if (filetype == "ascii") {
-		raster <- setFilename(raster,filename=outfile)
-		write.ascii(raster, overwrite=overwrite) 
+		raster <- setFilename(raster,filename=filename)
+		for (r in 1:nrow(raster)) {
+			writeAscii(raster, overwrite=overwrite) 
+		}
 	} else if (filetype == "bil") {
-		grdToBil(raster, outfile=outfile, keepGRD=TRUE, overwrite=overwrite) 
+		grdToBil(raster, filename=filename, keepGRD=TRUE, overwrite=overwrite) 
 	} else {
 		stop("filetype not yet supported (sorry..., more coming ...)")
 	}
 }
 
 
-grdToBil <- function(raster, outfile="", keepGRD=TRUE, overwrite=FALSE) {
+grdToBil <- function(raster, filename="", keepGRD=TRUE, overwrite=FALSE) {
 	sourcefile <- setFileExtension(filename(raster), ".gri")
 	if (keepGRD) {
 		targetfile <- setFileExtension(filename(raster), ".bil")
@@ -54,60 +56,64 @@ grdToBil <- function(raster, outfile="", keepGRD=TRUE, overwrite=FALSE) {
 		}	
 		file.rename(from=sourcefile, to=targetfile)
 	}
-	writeBilHdr(raster)
+	.writeBilHdr(raster)
 	if (!(keepGRD)) { file.remove(filename(raster)) }
 	return(rasterFromFile(targetfile))
 }
 
 
 
-write.ascii <- function(raster, overwrite=FALSE) {
-  	resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
-	if (resdif > 0.01) {
-		print(paste("raster has unequal horizontal and vertical resolutions","\n", "these data cannot be stored in arc-ascii format"))
-	} else {
-		if (raster@data@indices[1] == 1) {
-			raster <- setFilename(raster, setFileExtension(filename(raster), '.asc'))
-			if (!overwrite & file.exists(filename(raster))) {
-				stop(paste(filename(raster), "exists. Use 'overwrite=TRUE'")) }
+writeAscii <- function(raster, filename, ForceIntOutput=FALSE, overwrite=FALSE) {
+	if (raster@data@indices[1] == 1) {
+		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
+		if (resdif > 0.01) {
+			stop(paste("raster has unequal horizontal and vertical resolutions","\n", "these data cannot be stored in arc-ascii format"))
+		}
+		if (!overwrite & file.exists(filename)) {
+				stop(paste(filename, "exists. Use 'overwrite=TRUE'")) 
+		}
 
-			thefile <- file(raster@file@name, "w")  # open an txt file connection
-			cat("NCOLS", ncol(raster), "\n", file = thefile)
-			cat("NROWS", nrow(raster), "\n", file = thefile)
-			cat("XLLCORNER", xmin(raster), "\n", file = thefile)
-			cat("YLLCORNER", ymin(raster), "\n", file = thefile)
-			cat("CELLSIZE",  xres(raster), "\n", file = thefile)
-			cat("NODATA_value", raster@file@nodatavalue, "\n", file = thefile)
-			close(thefile) #close connection
-		}
-    }
-	if (dataContent(raster) == "All") {	
-		raster@data@values[is.na(values(raster))] <- raster@file@nodatavalue 
-		write.table(values(raster), filename(raster), append = TRUE, quote = FALSE, 
-							sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
-	} else {
-		for (r in 1:nrow(raster)) {
-			readRow(raster, r)
-			raster@data@values[is.na(values(raster))] <- raster@file@nodatavalue 
-			write.table(values(raster), filename(raster), append = TRUE, quote = FALSE, 
-							sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
-		}
-	}
+		thefile <- file(filename, "w")  # open an txt file connection
+		cat("NCOLS", ncol(raster), "\n", file = thefile)
+		cat("NROWS", nrow(raster), "\n", file = thefile)
+		cat("XLLCORNER", xmin(raster), "\n", file = thefile)
+		cat("YLLCORNER", ymin(raster), "\n", file = thefile)
+		cat("CELLSIZE",  xres(raster), "\n", file = thefile)
+		cat("NODATA_value", raster@file@nodatavalue, "\n", file = thefile)
+		close(thefile) #close connection
 		
-	if ( dataIndices(raster)[2] >= ncells(raster)) {
-		if ( dataIndices(raster)[2] > ncells(raster)) {
-			stop(paste('writing beyond end of file. last cell:', raster@data@indices[2], '>', ncells(raster)))
-		} else {
-		# create a new object with gdal handle tfrom the new file
-			raster <- rasterFromFile(filename(raster)) 
-		}
+    } else if ( dataIndices(raster)[2] > ncells(raster)) {
+		stop(paste('writing beyond end of file. last cell:', raster@data@indices[2], '>', ncells(raster)))
 	}
-	return(raster)
+
+	raster@data@values[is.na(values(raster))] <- raster@file@nodatavalue 
+	if (ForceIntOutput) { raster@data@values <- round(raster@data@values) }
+	write.table(values(raster), filename, append = TRUE, quote = FALSE, 
+							sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
+    if ( dataIndices(raster)[2] == ncells(raster)) {
+		return(rasterFromFile(filename))
+	} else {
+		return("writing in progress")
+	}	
 }
  
  
+
+writeOtherHeader <- function(raster, format="BIL") {
+	if (format=="BIL") {
+		.writeBilHdr(raster)
+	} else if (format=="ErdasRaw") {
+		.writeErdasRawHdr(raster)
+	} else 	if (format=="ENVI") {
+		.writeENVIHdr(raster)
+	} else 	if (format=="worldfile") {
+		.writeWorldfile(raster)
+	} else {
+		stop("This format is not supported")
+	}
+ }
  
-writeBilHdr <- function(raster) {
+.writeBilHdr <- function(raster) {
 	hdrfile <- setFileExtension(filename(raster), ".hdr")
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("NROWS ",  nrow(raster), "\n", file = thefile)
@@ -148,7 +154,7 @@ writeBilHdr <- function(raster) {
 }
 
 
-writeErdasRawHdr <- function(raster) {
+.writeErdasRawHdr <- function(raster) {
 	hdrfile <- setFileExtension(filename(raster), ".raw")
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("IMAGINE_RAW_FILE\n", file = thefile)
@@ -187,7 +193,7 @@ writeErdasRawHdr <- function(raster) {
 	close(thefile)	
  }
  
-writeWorldFile <- function(raster, extension=".world") {
+.writeWorldfile <- function(raster, extension=".world") {
 	hdrfile <- setFileExtension(filename(raster), ".world")
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat(xres(raster), "\n", file = thefile)
@@ -202,7 +208,7 @@ writeWorldFile <- function(raster, extension=".world") {
  
  
 
-writeENVIHdr <- function(raster) {
+.writeENVIHdr <- function(raster) {
 	hdrfile <- setFileExtension(filename(raster), ".hdr")
 	thefile <- file(hdrfile, "w") 
 	cat("ENVI\n", file = thefile)

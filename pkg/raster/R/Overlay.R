@@ -18,7 +18,7 @@ Overlay <- function(raster1, raster2, fun=function(x,y){return(x+y)}, filename="
 	if ( dataContent(raster1) == 'all' &  dataContent(raster2) == 'all') {
 		vals <- fun( values(raster1), values(raster2) )
 		outraster <- setValues(outraster, vals)
-		if (filename(outraster) != "") { write.raster(outraster, overwrite=overwrite) }
+		if (filename(outraster) != "") { writeValues(outraster, overwrite=overwrite) }
 		
 	} else if ( dataSource(raster1) == 'disk' &  dataSource(raster2) == 'disk') {
 		v <- vector(length=0)
@@ -30,7 +30,7 @@ Overlay <- function(raster1, raster2, fun=function(x,y){return(x+y)}, filename="
 				v <- c(v, vals)
 			} else {
 				outraster <- setValuesRow(outraster, vals, r)
-				outraster <- write.row(outraster, overwrite=overwrite)
+				outraster <- writeValues(outraster, overwrite=overwrite)
 			}	
 		}
 		if (filename(outraster) == "") { 

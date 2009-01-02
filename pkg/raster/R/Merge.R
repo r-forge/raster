@@ -55,7 +55,7 @@ Merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 		}
 		if (filename(outraster) != '') {
 			outraster <- setValuesRow(outraster, rd, r)
-			outraster <- write.row(outraster, overwrite)
+			outraster <- writeValues(outraster, overwrite)
 		} else {
 			v <- c(v, rd)
 		}

@@ -61,7 +61,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 		ngbdata <- rbind(ngbdata[2:ngb,], t(rowdata))
 		if (r > lim) {
 			ngbgrid <- setValuesRow(ngbgrid, .calc.ngb(ngbdata, ngb, fun, keepdata), rr)
-			ngbgrid <- write.row(ngbgrid, overwrite)
+			ngbgrid <- writeValues(ngbgrid, overwrite)
 			rr <- rr + 1
 		}
 	}
@@ -70,7 +70,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	for (r in (nrow(raster)+1):(nrow(raster)+lim)) {
 		ngbdata <- rbind(ngbdata[2:ngb,], t(ngbdata1[1,]))
 		ngbgrid <- setValuesRow(ngbgrid, .calc.ngb(ngbdata, ngb, fun, keepdata), rr)
-		ngbgrid <- write.row(ngbgrid, overwrite)
+		ngbgrid <- writeValues(ngbgrid, overwrite)
 		rr <- rr + 1
 	}
 	return(ngbgrid)

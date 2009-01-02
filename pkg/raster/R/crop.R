@@ -38,7 +38,7 @@ crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 		outraster <- setValues(outraster, values(raster)[selected_cells])
 		outraster <- setMinmax(outraster)
 		if (filename(outraster) != "" ) { 
-			outraster <- try(write.raster(outraster, overwrite=overwrite)) 
+			outraster <- try(writeValues(outraster, overwrite=overwrite)) 
 		}		
 
 	} else if ( dataSource(raster) == 'disk') { 
@@ -54,7 +54,7 @@ crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 				v <- c(v, values(raster))
 			} else {
 				outraster <- setValuesRow(outraster, values(raster), rownr)
-				outraster <- write.row(outraster, overwrite)
+				outraster <- writeValues(outraster, overwrite)
 			}	
 			rownr <- rownr + 1
 		} 
