@@ -4,8 +4,8 @@
 \alias{fileName}
 \alias{filePath}
 \alias{trim}
-\alias{calcMode}
-\alias{calcCv}
+\alias{Mode}
+\alias{CV}
 \alias{readIniFile}
 
 \title{ Miscellaneous functions }
@@ -19,8 +19,8 @@ fileExtension(filename)
 fileName(filename)
 filePath(filename)
 trim(astring)
-calcMode(x, na.rm = TRUE)
-calcCv(x, na.rm = TRUE, singlevalueaszero=TRUE)
+Mode(x, na.rm = TRUE)
+CV(x, na.rm = TRUE, singlevalueaszero=TRUE)
 readIniFile(filename)
 }
 \arguments{
@@ -34,9 +34,9 @@ readIniFile(filename)
 
 \value{
   file.get.* returns a file extension, filename or path.  
-  calcMode returns the modal (most frequent) value of a vector of values, ties are broken at random
-  calcCv returns the coefficient of variation (expressed as a percentage). If there is only a single value, sd = NA
-  and calcCv returns NA if singlevaluecvzero=FALSE. However, the default is that cv=0 in this case.
+  Mode returns the modal (most frequent) value of a vector of values, ties are broken at random
+  CV returns the coefficient of variation (expressed as a percentage). If there is only a single value, sd = NA
+  and CV returns NA if singlevaluecvzero=FALSE. However, the default is that cv=0 in this case.
   readIniFile reads "ini-files". I.e. text file databases that are orginized in [sections] and "name = value" pairs.
 }
 
@@ -49,8 +49,8 @@ readIniFile(filename)
 	fileName(fn)
 	filePath(fn)
 	data <- c(0,1,2,3,3,3,3,4,4,4,5,5,6,7,7,8,9,NA)
-	calcMode(data)
-	calcCv(data)
+	Mode(data)
+	CV(data)
 }
 \keyword{ spatial }
 

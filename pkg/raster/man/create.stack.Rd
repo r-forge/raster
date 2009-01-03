@@ -1,11 +1,11 @@
 \name{rasterstack.create}
-\alias{rasterstack.from.stackfile}
-\alias{rasterstack.from.rasterfiles}
-\alias{rasterstack.from.rasters}
-\alias{rasterstack.add.files}
-\alias{rasterstack.add.rasters}
-\alias{rasterstack.remove.rasters}
-\alias{rasterstack.save}
+\alias{stackFromFile}
+\alias{stackFromRasterfiles}
+\alias{stackFromRasters}
+\alias{stackAddFiles}
+\alias{stackAddRasters}
+\alias{stackRemoveRasters}
+\alias{stackSave}
 
 \title{ Create or change a new stack }
 \description{
@@ -14,13 +14,13 @@
 }
 
 \usage{
-rasterstack.from.stackfile(stackfile)
-rasterstack.from.rasterfiles(rasterfiles, bands= rep(1, length(rasterfiles)))
-rasterstack.from.rasters(rasters)
-rasterstack.add.files(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
-rasterstack.add.rasters(rstack, rasters) 
-rasterstack.remove.rasters(rstack, indices) 
-rasterstack.save(rstack)
+stackFromFile(stackfile)
+stackFromRasterfiles(rasterfiles, bands= rep(1, length(rasterfiles)))
+stackFromRasters(rasters)
+stackAddFiles(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
+stackAddRasters(rstack, rasters) 
+stackRemoveRasters(rstack, indices) 
+stackSave(rstack)
 }
 
 \arguments{
@@ -43,14 +43,14 @@ rasterstack.save(rstack)
 \seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
-  st <- rasterstack.from.rasterfiles(rasterfile)
+  st <- stackFromRasterfiles(rasterfile)
 # adding the same file multiple times, in most cases you would add different files  
 # this generates warnings, but it is not an error
-  st <- rasterstack.add.files(st, c(rasterfile, rasterfile))
+  st <- stackAddFiles(st, c(rasterfile, rasterfile))
   rs <- rasterFromFile(rasterfile)
-  st <- rasterstack.add.rasters(st, c(rs, rs))
+  st <- stackAddRasters(st, c(rs, rs))
   st
-  st <- rasterstack.remove.rasters(st, c(3, 5))
+  st <- stackRemoveRasters(st, c(3, 5))
   nlayers(st)
 }
 \keyword{ spatial }

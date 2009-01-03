@@ -6,7 +6,7 @@
 # Version 0,2
 # Licence GPL v3
 
-calcMode <- function(x, na.rm = TRUE) {
+Mode <- function(x, na.rm = TRUE) {
 #partly based on http://wiki.r-project.org/rwiki/doku.php?id=tips:stats-basic:modalvalue
 # ties are broken at random
 # earlier approach contained this
@@ -29,7 +29,7 @@ calcMode <- function(x, na.rm = TRUE) {
 	}	
 }
 
-calcCv <- function(x, na.rm = TRUE, singlevalueaszero=TRUE) {
+CV <- function(x, na.rm = TRUE, singlevalueaszero=TRUE) {
 #  R function to compute the coefficient of variation (expressed as a percentage)
 # if there is only a single value, sd = NA. However, one could argue that cv =0. In this case a NA is returned if(singlevaluecvzero=FALSE) 
 # else a value of 0 is returned.
