@@ -4,13 +4,13 @@
 # Version 0,6
 # Licence GPL v3
 
-.add.history <- function(raster, message) {
+.addHistory <- function(raster, message) {
 	if (is.character(message) & message != "") {
 		raster@history <- c(message, raster@history)
 	}	
 }
 
-setRowcol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
+setRowCol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 	raster@ncols <- as.integer(ncols)
 	raster@nrows <- as.integer(nrows)
 	return(raster)
@@ -24,6 +24,7 @@ setRaster <- function(raster, filename="") {
 		stop("is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
 	}
 	raster <- setFilename(raster, filename)
+	raster <- setDatatype(raster, 'numeric')
 	return(raster)
 }
 
@@ -46,11 +47,11 @@ setFilename <- function(object, filename) {
 }
 
 
-setProjection <- function(object, projection) {
-	if (class(projection)=="CRS") {
-		object@proj4string <- projection
+setProjection <- function(object, projstring) {
+	if (class(projstring)=="CRS") {
+		object@proj4string <- projstring
 	} else {	
-		object@proj4string <- newCRS(projection)
+		object@proj4string <- newCRS(projstring)
 	}	
 	return(object)
 }
@@ -64,42 +65,33 @@ clearValues <- function(raster) {
 }
 
 
-setBbox <- function(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster), keepres=FALSE) {
-	xrs <- xres(raster)
-	yrs <- yres(raster)
-	if (xmn > xmx) {
-		stop('xmn > xmx')
-	}
-	if (ymn > ymx) {
-		stop('ymn > ymx')
-	}
-	raster@bbox[1,1] <- xmn
-	raster@bbox[1,2] <- xmx
-	raster@bbox[2,1] <- ymn
-	raster@bbox[2,2] <- ymx
-	if (keepres) {
-		raster@ncols <- as.integer(round( (xmax(raster) - xmin(raster)) / xrs ))
-		raster@nrows <- as.integer(round( (ymax(raster) - ymin(raster)) / xrs ))
-		raster@bbox[1,2] <- raster@bbox[1,1] + raster@ncols * xrs
-		raster@bbox[2,2] <- raster@bbox[2,1] + raster@nrows * yrs
-	}
-	return(raster)
-}
 
 
-newCRS <- function(projection) {
-	if (nchar(projection) < 6) { projs <- (CRS(as.character(NA)))
+newCRS <- function(projstring) {
+	if (nchar(projstring) < 6) { projs <- (CRS(as.character(NA)))
 	} else {
-		projs <- try(CRS(projection), silent = T)
+		projs <- try(CRS(projstring), silent = T)
 		if (class(projs) == "try-error") { 
-			warning(paste(projection, 'is not a valid proj4 CRS string')) 
+			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
 			projs <- (CRS(as.character(NA)))
 		}
 	}
 	return(projs)
 }
 
-newBbox <- function(xmn, xmx, ymn, ymx, projection="") {
+
+changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), projstring=projection(object)) {
+	object@bbox[1,1] <- xmn
+	object@bbox[1,2] <- xmx
+	object@bbox[2,1] <- ymn
+	object@bbox[2,2] <- ymx
+	projs <- newCRS(projstring)
+	object@proj4string <- projs
+	return(object)
+}
+
+
+newBbox <- function(xmn, xmx, ymn, ymx, projstring="") {
 	if (xmn > xmx) {
 		x <- xmn
 		xmn <- xmx
@@ -110,7 +102,7 @@ newBbox <- function(xmn, xmx, ymn, ymx, projection="") {
 		ymn <- ymx
 		ymx <- y
 	}
-	projs <- newCRS(projection)
+	projs <- newCRS(projstring)
 	bb <- new("Spatial")
 	bb@bbox[1,1] <- xmn
 	bb@bbox[1,2] <- xmx
@@ -120,6 +112,24 @@ newBbox <- function(xmn, xmx, ymn, ymx, projection="") {
 	bb@bbox[3,2] <- 1
 	bb@proj4string <- projs
 	return(bb)
+}
+
+
+setBbox <- function(object, bndbox, projstring=projection(object), keepres=FALSE) {
+	xrs <- xres(object)
+	yrs <- yres(object)
+	object@bbox[1,1] <- bndbox@bbox[1,1]
+	object@bbox[1,2] <- bndbox@bbox[1,2]
+	object@bbox[2,1] <- bndbox@bbox[2,1]
+	object@bbox[2,2] <- bndbox@bbox[2,2]
+	if (keepres) {
+		object@ncols <- as.integer(round( (xmax(object) - xmin(object)) / xrs ))
+		object@nrows <- as.integer(round( (ymax(object) - ymin(object)) / xrs ))
+		object@bbox[1,2] <- object@bbox[1,1] + object@ncols * xrs
+		object@bbox[2,2] <- object@bbox[2,1] + object@nrows * yrs
+	}
+	object <- setProjection(object, projstring)
+	return(object)
 }
 
 
@@ -169,38 +179,36 @@ setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {
 }
 
 
-setValuesRow <- function(raster, rowvalues, rownr) {
-	if (!is.vector(rowvalues)) {	stop('data must be a vector') }
-	if (length(rowvalues) == 0) {	stop('length(rowdata==0). If this is intended then use raster.data.clear(raster)') }
-	if (!(is.numeric(rowvalues) | is.integer(rowvalues) | is.logical(rowvalues))) { stop(paste('data must be values, but class =',class(rowvalues))) }
-	if (length(rowvalues) != ncol(raster)) { stop('length(rowdata) != ncol(raster)') 
-	} else {	
-		raster@data@values <- rowvalues
-		raster@data@content <- 'row' 
-		firstcell <- cellFromRowcol(raster, rownr=rownr, colnr=1)
-		lastcell <- cellFromRowcol(raster, rownr=rownr, colnr=ncol(raster))
-		raster@data@indices <- c(firstcell, lastcell)
-		return(raster)
-	}	
-}	
-
-
-setValues <- function(raster, values) {
+setValues <- function(raster, values, rownr=-1) {
 	if (!is.vector(values)) {stop('values must be a vector')}
-	if (length(values) == 0) {	stop('length(values==0). If this is intended then use raster.data.clear(raster)') }
+	if (length(values) == 0) {	stop('length(values==0). If this is intended then use clearValues(raster)') }
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {stop('data must be values')}
-	if (length(values) != ncells(raster) ) { stop('length(values) != ncells(raster)') 
-	} else {	
+	rownr <- round(rownr)
+	if (length(values) == ncells(raster)) { 
+		if (rownr > 0) {
+			stop("if setting all values, rownr must be < 1")
+		}
 		raster@data@values <- values
 		raster@data@content <- 'all'
 		raster@data@source <- 'ram'
 		raster@data@indices <- c(1, ncells(raster))
 		raster <- setMinmax(raster)
 		return(raster)	
-	}	
-}
-
-
+	} else if (length(values) == ncol(raster)) {
+		if (rownr < 1 | rownr > nrow(raster)) {
+			stop(paste("rownumber out of bounds:", rownr))
+		}
+		raster@data@values <- values
+		raster@data@content <- 'row' 
+		firstcell <- cellFromRowcol(raster, rownr=rownr, colnr=1)
+		lastcell <- cellFromRowcol(raster, rownr=rownr, colnr=ncol(raster))
+		raster@data@indices <- c(firstcell, lastcell)
+		return(raster)
+	} else {
+		stop("length(values) is not equal to ncells(raster) or ncol(raster)") 
+	}
+}	
+	
 setMinmax <- function(raster) {
 	if (raster@data@content == 'nodata') {
 		stop('no data in memory')

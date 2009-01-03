@@ -42,7 +42,7 @@ setMethod('readAll', signature(object='RasterLayer'),
 	function(object){ return(.raster.read(object, -1))}
 )
 setMethod('readAll', signature(object='RasterStack'), 
-	function(object){ return(.rasterstack.read.part.of.row(object, -1))}
+	function(object){ return(.rasterstack.read(object, -1))}
 )
 
 
@@ -54,7 +54,7 @@ setMethod('readRow', signature(object='RasterLayer'),
 	function(object, rownr){ return(.raster.read(object, rownr))}
 )
 setMethod('readRow', signature(object='RasterStack'), 
-	function(object, rownr){ return(.rasterstack.read.row(object, rownr))}
+	function(object, rownr){ return(.rasterstack.read(object, rownr))}
 )
 
 	
@@ -94,7 +94,7 @@ setMethod('readPartOfRow', signature(object='RasterLayer'),
 
 setMethod('readPartOfRow', signature(object='RasterStack'), 
 	function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
-		return(.rasterstack.read.part.of.row(object, rownr, startcol, ncolumns))}
+		return( .rasterstack.read(object, rownr, startcol, ncolumns) ) }
 )
 
 if (!isGeneric("valuesCells")) {

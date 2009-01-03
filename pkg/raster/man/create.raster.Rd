@@ -10,7 +10,7 @@
   See read* and values() for access to the values
 }
 \usage{
-	newRaster(xmin = -180, xmax = 180, ymin = -90, ymax = 90, nrows = 180, ncols = 360, projection = "+proj=longlat +datum=WGS84")
+	newRaster(xmin = -180, xmax = 180, ymin = -90, ymax = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
 	rasterFromBbox(boundingbox, nrows = 1, ncols = 1)
 	rasterFromFile(filename, values=FALSE, band=1)
 }
@@ -24,7 +24,7 @@
   \item{ymax}{ maximum y coordinate of raster (top border) }
   \item{nrows}{ number of rows on raster }
   \item{ncols}{ number of columns on raster }
-  \item{projection}{ map projection of raster data }
+  \item{projstring}{ map projection of raster data, formatted as a PROJ4 string }
   \item{boundingbox} {bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
   \item{values} {logical. If \code{TRUE}, RasterLayer values will be read into memory with 'readAll()'}
 }
@@ -34,7 +34,7 @@
 }
 
 \value{
-  raster object
+  RasterLayer object
 }
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 

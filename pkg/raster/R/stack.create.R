@@ -65,9 +65,8 @@ rasterstack.add.rasters <- function(rstack, rasters) {
 		addraster <- TRUE
 		i <- nlayers(rstack) + 1
 		if (i == 1) {
-			rstack <- setRowcol(rstack, nrow(raster), ncol(raster))
-			rstack <- setBbox(rstack, xmin(raster), xmax(raster), ymin(raster), ymax(raster))
-			rstack@proj4string = raster@proj4string
+			rstack <- setRowCol(rstack, nrow(raster), ncol(raster))
+			rstack <- setBbox(rstack, raster)
 		} else {
 			if (length(attr(rstack@proj4string, "projection")) != 0)
 				{

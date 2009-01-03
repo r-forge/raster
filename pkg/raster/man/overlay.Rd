@@ -4,7 +4,7 @@
 
 \title{ Raster overlay calculation }
 \description{
-  Calculate values for a new raster object, based on two other rasters.  
+  Calculate values for a new RasterLayer object, based on two other rasters.  
 }
 \usage{
 	Overlay(raster1, raster2, fun=function(x,y){return(x+y)}, filename="", overwrite=TRUE) 
@@ -13,8 +13,8 @@
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{raster1}{ a raster object }
-  \item{raster2}{ a raster object }
+  \item{raster1}{ a RasterLayer object }
+  \item{raster2}{ a RasterLayer object }
   \item{fun}{ the function to be appliepd. This should be a function that takes two numbers as an argument }
   \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
   \item{overwrite}{}
@@ -28,7 +28,7 @@
   cover returns the values of the first raster, except where the first raster values are NA
 }
 \value{
-  a new raster object (if a filename is provided, a file on disk) 
+  a new RasterLayer object (if a filename is provided, a file on disk) 
 }
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 

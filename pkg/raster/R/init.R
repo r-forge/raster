@@ -22,7 +22,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput
 			if (filename(outraster)=="") {
 				v <- c(v, fun(n))
 			} else {			
-				outraster <- setValuesRow(outraster, fun(n), r) 
+				outraster <- setValues(outraster, fun(n), r) 
 				outraster <- writeValues(outraster, overwrite=overwrite)
 			}	
 		}	

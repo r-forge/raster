@@ -29,7 +29,7 @@ Overlay <- function(raster1, raster2, fun=function(x,y){return(x+y)}, filename="
 			if (filename(outraster) == "") {
 				v <- c(v, vals)
 			} else {
-				outraster <- setValuesRow(outraster, vals, r)
+				outraster <- setValues(outraster, vals, r)
 				outraster <- writeValues(outraster, overwrite=overwrite)
 			}	
 		}

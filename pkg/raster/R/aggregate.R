@@ -29,9 +29,10 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 	ymn <- ymax(raster) - rsteps * yfact * yres(raster)
 	xmx <- xmin(raster) + csteps * xfact * xres(raster)
 		
-	outraster <- setRaster(raster, filename)	
-	outraster <- setBbox(outraster, xmx = xmx, ymn = ymn)
-	outraster <- setRowcol(outraster, nrows=rsteps, ncols=csteps) 
+	outraster <- setRaster(raster, filename)
+	bndbox <- newBbox(xmin(raster), xmx, ymn, ymax(raster), projection(raster))
+	outraster <- setBbox(outraster, bndbox)
+	outraster <- setRowCol(outraster, nrows=rsteps, ncols=csteps) 
 	
 	if (ForceIntOutput) { 
 		outraster <- setDatatype(outraster, 'integer')
@@ -76,7 +77,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 			if (filename(outraster) == "") {
 				v <- c(v, vals)
 			} else {
-				outraster <- setValuesRow(outraster, vals, r)
+				outraster <- setValues(outraster, vals, r)
 				outraster <- writeValues(outraster, overwrite)
 			}
 		} 

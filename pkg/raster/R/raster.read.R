@@ -136,10 +136,14 @@
 			}
 		}	
 		outras <- setRaster(raster)
-		outras <- setRowcol(outras, nr, nc)
+		outras <- setRowCol(outras, nr, nc)
 		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
-		outras <- setBbox(outras, xmx=xmx, ymn=ymn)
+		
+		bndbox <- bbox(raster)
+		bndbox[1,2] <- xmx
+		bndbox[2,1] <- ymn
+		outras <- setBbox(outras, bndbox)
 		outras <- setValues(outras, dd)
 	}
 	return(outras)
@@ -164,9 +168,9 @@
 			vals <- cbind(uniquecells, values(raster)[uniquecells])
 		} else if (dataSource(raster) == 'disk') {
 			if (raster@file@driver == 'gdal') {
-				vals <- .read.cells.gdal(raster, uniquecells)
+				vals <- .readCellsGDAL(raster, uniquecells)
 			} else {
-				vals <- .read.cells.raster(raster, uniquecells)
+				vals <- .readCellsRaster(raster, uniquecells)
 			}	
 		} else { 
 			vals <- vector(length=length(uniquecells))
@@ -180,7 +184,7 @@
 }
 
 
-.read.cells.gdal <- function(raster, cells) {
+.readCellsGDAL <- function(raster, cells) {
 	colrow <- matrix(ncol=5, nrow=length(cells))
 #	valuename <- raster@file@shortname
 #	if (valuename == "") {valuename <- "value" }
@@ -204,7 +208,7 @@
 
 
 
-.read.cells.raster <- function(raster, cells) {
+.readCellsRaster <- function(raster, cells) {
 	cells <- cbind(cells, NA)
 #	valuename <- raster@file@shortname
 #	if (valuename == "") {valuename <- "value" }

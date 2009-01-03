@@ -17,7 +17,7 @@
 \title{ Get the column, row, or cell number of a raster from coordinates and vice versa }
 
 \description{
-These functions get the column, row, or cell number of a Raster object (and of all other descendants of VirtualRaster, e.g. a RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster cell from a column, or cell number(s)
+These functions get the column, row, or cell number of a RasterLayer object (and of all other descendants of VirtualRaster, e.g. a RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster cell from a column, or cell number(s)
 }
 
 \usage{

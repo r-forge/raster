@@ -38,10 +38,14 @@ map <- function(raster, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 			m <- values(raster, format='matrix')[rows, cols]
 
 			sampraster <- setRaster(raster)
-			sampraster <- setRowcol(sampraster, dim(m)[1], dim(m)[2])
+			sampraster <- setRowCol(sampraster, dim(m)[1], dim(m)[2])
 			xmx <- xmax(raster) - (ncol(raster) - cols[length(cols)]) * xres(raster)
 			ymn <- ymin(raster) + (nrow(raster) - rows[length(rows)]) * yres(raster)
-			raster <- setBbox(sampraster, xmx=xmx, ymn=ymn)
+			bndbox <- bbox(raster)
+			bndbox[1,2] <- xmx
+			bndbox[2,1] <- ymn
+
+			raster <- setBbox(sampraster, bndbox)
  		} else { 
 			m <- values(raster, format='matrix')
 			subsample=FALSE

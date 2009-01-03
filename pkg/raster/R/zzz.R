@@ -1,0 +1,7 @@
+
+.onLoad <- function(lib, pkg)  {
+	pkg.info <- drop(read.dcf(file=system.file("DESCRIPTION", package=pkg), fields=c("Version","Date")))
+	cat(paste(pkg, " version ", pkg.info["Version"], " (built on ", pkg.info["Date"], ")\n", sep=""))
+	return(invisible(0))
+}
+

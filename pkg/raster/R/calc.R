@@ -5,16 +5,7 @@
 # Licence GPL v3
 
 
-calc <- function(object, fun, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
-	if (class(object) == "RasterLayer") { 
-		.singleLayerCalc(object, fun, filename, overwrite, ForceIntOutput) 
-	} else {
-		.multipleLayersCalc(object, fun, filename, overwrite, ForceIntOutput) 
-	}
-}
-
-
-.singleLayerCalc <- function(raster, fun, filename, overwrite, ForceIntOutput) {
+calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
@@ -40,7 +31,7 @@ calc <- function(object, fun, filename="", overwrite=FALSE, ForceIntOutput=FALSE
 			if (filename(outraster)=="") {
 				v <- c(v, fun(values(raster)))
 			} else {
-				outraster <- setValuesRow(outraster, fun(values(raster)), r)
+				outraster <- setValues(outraster, fun(values(raster)), r)
 				outraster <- writeValues(outraster, overwrite=overwrite)
 			}
 		}
@@ -51,21 +42,23 @@ calc <- function(object, fun, filename="", overwrite=FALSE, ForceIntOutput=FALSE
 
 
 
-.multipleLayersCalc <- function(rstack, fun, filename, overwrite, ForceIntOutput) {
+mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
 	if (length(fun(seq(1:5))) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
 
-	outraster <- setRaster(rstack@rasters[[1]], filename)
+	outraster <- setRaster(object@rasters[[1]], filename)
 	if (filename(outraster)=="") {
-		rstack <- .rasterstack.read.all(rstack)
-		outraster <- setValues(outraster, apply(values(rstack), 1, fun)) 
+		object <- readAll(object)
+		outraster <- setValues(outraster, apply(values(object), 1, fun)) 
 	} else {
-		if (ForceIntOutput) { outraster <- setDatatype(outraster, "integer") }
-		for (r in 1:nrow(rstack)) {
-			rstack <- readRow(rstack, r)
-			vals <- apply(values(rstack), 1, fun)
-			outraster <- setValuesRow(outraster, vals, r) 
+		if (ForceIntOutput) { 
+			outraster <- setDatatype(outraster, "integer") 
+		}
+		for (r in 1:nrow(object)) {
+			object <- readRow(object, r)
+			vals <- apply(values(object), 1, fun)
+			outraster <- setValues(outraster, vals, r) 
 			outraster <- writeValues(outraster, overwrite)
 		}
 	}		

@@ -10,7 +10,7 @@ import <- function(raster, filename="", overwrite=FALSE) {
 	rsout <- setRaster(raster, filename=filename)
 	for (r in 1:nrow(raster)) {
 		d <- readRow(raster, r)
-		setValuesRow(rsout, d, r)
+		setValues(rsout, d, r)
 		writeValues(rsout, overwrite=overwrite)
 	}
 	clearValues(rsout)

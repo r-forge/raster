@@ -1,0 +1,39 @@
+\name{bbox}
+\alias{newBbox}
+\alias{setBbox}
+\alias{changeBbox}
+
+  
+\title{ Bounding box functions }
+\description{
+  newBbox creates a new bounding box (a "Spatial" object) that can be used to....
+  setBbox sets a bounding box of a Raster* object
+  changeBbox changes a bounding box of a Raster* object
+}
+
+\usage{
+newBbox(xmn, xmx, ymn, ymx, projstring="")
+setBbox(object, bndbox, projstring=projection(object), keepres=FALSE)
+changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), projstring=projection(object)) 
+}
+
+\arguments{
+  \item{xmn}{ the minimum x coordinate of the bounding box }
+  \item{xmx}{ the maximum x coordinate of the bounding box }
+  \item{ymn}{ the minimum y coordinate of the bounding box }
+  \item{ymx}{ the maximum y coordinate of the bounding box }
+  \item{projstring}{ a PROJ type character string describing projection and datum}
+  \item{object} {A Raster* object }
+  \item{bndbox}{ a bounding box object (which you can create with newBbox() ) }  
+  \item{keepres} {logical. If \code{TRUE}, the resolution will stay the same (by adjusting the number of rows and columns)}
+  }
+  
+\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\examples{
+	rs <- newRaster()
+	bb <- newBbox(-10, 10, -20, 20, "+proj=longlat +datum=WGS84")
+	rs <- setBbox(rs, bb)
+	rs <- changeBbox(rs, ymx = 90)
+}
+
+\keyword{ spatial }

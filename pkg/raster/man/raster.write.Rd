@@ -76,7 +76,7 @@ writeOtherHeader(raster, format="BIL")
  binras <- setRaster(rs, "binbyrow.grd")
  for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
-	binras <- setValuesRow(binras, values(rs), r)
+	binras <- setValues(binras, values(rs), r)
 	binras <- writeValues(binras, overwrite=TRUE) 
  }
 }

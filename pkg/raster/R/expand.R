@@ -23,7 +23,8 @@ expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	ymx <- max(ymx, ymax(raster))
 	
 	outraster <- setRaster(raster, filename)
-	outraster <- setBbox(outraster, xmn, xmx, ymn, ymx, keepres=T)
+	bndbox <- newBbox(xmn, xmx, ymn, ymx, projection(outraster))
+	outraster <- setBbox(outraster, bndbox, keepres=T)
 
 	startrow <- rowFromY(outraster, ymax(raster))
 	startcol <- colFromX(outraster, xmin(raster))
@@ -52,7 +53,7 @@ expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 
 			if (filename(outraster) != '') {
-				outraster <- setValuesRow(outraster, d, r)
+				outraster <- setValues(outraster, d, r)
 				outraster <- writeValues(outraster, overwrite=overwrite)
 			} else {
 				v <- c(v, d)

@@ -11,7 +11,7 @@
   Calculate values for a new raster, from scratch or based on a single existing raster
 }
 \usage{
-calc(object, fun, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
+calc(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
 isNA(raster, value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 setNA(raster, operator = "<=", value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 init(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput = FALSE) 
@@ -20,13 +20,12 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 }
 
 \arguments{
-  \item{object}{ a Raster* object }
   \item{raster}{ a RasterLayer object }
   \item{fun}{ the function to be applied }
   \item{value}{ the (threshold) value to replace with NA or that should be set to NA }
   \item{operator}{ the operator in setNA relative to the \code{value}, to set e.g. all values <= 2 to NA}
   \item{rclmat}{ matrix for reclassifcation. (see below) }
-  \item{filename}{ output filename for a new raster; if NA the result is not written to a file but returned with the raster object, in the data slot }
+  \item{filename}{ output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot }
   \item{overwrite}{ logical to indicate whether an existing output file should be overwritten }
   \item{ForceIntOutput}{ logical. If \code{TRUE}, output will be integer values }
   \item{ngb} { neighborhood size in number of cells }
@@ -34,9 +33,7 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 }
 
 \details{
-	\code{calc} can be used for a singe RasterLayer, or for multiple layers (Stack, Brick). For a RasterLayer, use \code{calc} to calculate
-	values for a new raster using a function (\code{fun}) that takes a single number as an argument (and retruns a single number). E.g. to add, multiply or divide a number (cell value) by a constant.
-	If the \code{object} passed to \code{calc} has multiple layers, \code{fun} should be a function that takes a one dimensional vector of value as input, and returns a single value.
+	Use \code{calc} to calculate values for a new raster using a function (\code{fun}) that takes a single number as an argument (and retruns a single number). E.g. to add, multiply or divide a number (cell value) by a constant.
 	\code{isNA} replaces NA with a value and setNA sets values to NA; both are helper functions based on calc.
 	\code{init} sets a value without reference to existing values. E.g. initialize with a single, sequential, or random number.
 	\code{neighborhood} computes a neighborhood value. I.e. a value computed with function 'fun', for all cells in the square neigborhood (of size ngb * ngb) around each cell 

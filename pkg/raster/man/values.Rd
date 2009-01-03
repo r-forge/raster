@@ -13,7 +13,7 @@
   
 \title{ Get raster properties }
 \description{
-  values returns data values that are associated with the raster object (e.g. after read.* has been used). RasterLayer data are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
+  values returns data values that are associated with the RasterLayer object (e.g. after read.* has been used). RasterLayer data are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
 }
 
 \usage{

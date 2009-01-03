@@ -27,7 +27,8 @@ crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	if (ymn == ymx) {stop("ymin and ymax are less than one cell apart")}
 	
 	outraster <- setRaster(raster, filename)
-	outraster <- setBbox(outraster, xmn, xmx, ymn, ymx, keepres=T)
+	bndbox <- newBbox(xmn, xmx, ymn, ymx, projection(outraster))
+	outraster <- setBbox(outraster, bndbox, keepres=T)
 	
 	if (dataContent(raster) == 'all')  {
 		first_start_cell <- cellFromXY(raster, c(xmn + 0.5 * xres(raster), ymx - 0.5 * yres(raster) ))	
@@ -53,7 +54,7 @@ crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 			if (filename(outraster) == '') {
 				v <- c(v, values(raster))
 			} else {
-				outraster <- setValuesRow(outraster, values(raster), rownr)
+				outraster <- setValues(outraster, values(raster), rownr)
 				outraster <- writeValues(outraster, overwrite)
 			}	
 			rownr <- rownr + 1

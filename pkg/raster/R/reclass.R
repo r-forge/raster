@@ -34,7 +34,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput
 			}
 		}
 		if ( dataContent(raster) == 'all') { outraster <- setValues(outraster, res) }
-		if ( dataContent(raster) == 'sparse') { outraster <- setValuesRow(outraster, res,  dataIndices(raster)) }
+		if ( dataContent(raster) == 'sparse') { outraster <- setValues(outraster, res,  dataIndices(raster)) }
 		if (filename(outraster) != "" ) {	outraster <- writeValues(outraster, overwrite=overwrite) }
 	} else {
 		for (r in 1:nrow(raster)) {
@@ -47,7 +47,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput
 					res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
 				}
 			}	
-			outraster <- setValuesRow(outraster, res, r)
+			outraster <- setValues(outraster, res, r)
 			outraster <- writeValues(outraster, overwrite=overwrite)
 		}	
 	}	

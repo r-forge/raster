@@ -21,7 +21,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 	}
 	
 	outraster <- setRaster(raster, filename)
-	outraster <- setRowcol(outraster, nrow(raster) * yfact, ncol(raster) * xfact) 
+	outraster <- setRowCol(outraster, nrow(raster) * yfact, ncol(raster) * xfact) 
 
 	if ( dataContent(raster)=='all') {
 		
@@ -42,7 +42,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 				if (filename(outraster) == '') {
 					v <- c(v, values(raster)[cols])
 				} else {
-					outraster <- setValuesRow(outraster, values(raster)[cols], (r-1) * xfact + i)
+					outraster <- setValues(outraster, values(raster)[cols], (r-1) * xfact + i)
 					outraster <- writeValues(outraster, overwrite=overwrite)
 				}	
 			}	

@@ -5,8 +5,8 @@
 # Licence GPL v3
 
 
-newRaster <- function(xmin=-180, xmax=180, ymin=-90, ymax=90, nrows=180, ncols=360, projection="+proj=longlat +datum=WGS84") {
-	bb <- newBbox(xmin, xmax, ymin, ymax, projection)
+newRaster <- function(xmin=-180, xmax=180, ymin=-90, ymax=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
+	bb <- newBbox(xmin, xmax, ymin, ymax, projstring)
 	return(rasterFromBbox(bb, nrows=nrows, ncols=ncols))
 }
 
@@ -27,15 +27,15 @@ rasterFromBbox <- function(boundingbox, nrows=1, ncols=1) {
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	fileext <- toupper(fileExtension(filename)) 
 	if (fileext == ".GRD" ) {
-		raster <- .rasterFromFile.binary(filename, band) 
+		raster <- .rasterFromFileBinary(filename, band) 
 	} else {
-		raster <- .rasterFromFile.gdal(filename, band) 
+		raster <- .rasterFromFileGDAL(filename, band) 
 	}
 	if (values) {raster <- .raster.read(raster, -1)}
 	return(raster)
 }	
 	
-.rasterFromFile.gdal <- function(filename, band) {	
+.rasterFromFileGDAL <- function(filename, band) {	
 	gdalinfo <- GDALinfo(filename)
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
@@ -56,7 +56,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	yn <- yx - gdalinfo[["res.y"]] * nr
 	if (yn < 0) { ndecs <- 9 } else { ndecs <- 8 }
 	yn <- as.numeric( substr( as.character(yn), 1, ndecs) )
-	raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projection="")
+	raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projstring="")
 	raster <- setFilename(raster, filename)
 	raster <- setDatatype(raster, "numeric")
 	
@@ -84,7 +84,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 
 
 
-.rasterFromFile.binary <- function(filename, band=1) {
+.rasterFromFileBinary <- function(filename, band=1) {
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
 
@@ -113,7 +113,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
     }  
 
-    raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projection=projstring)
+    raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projstring=projstring)
 	raster <- setFilename(raster, filename)
 	raster@file@driver <- "raster"
 

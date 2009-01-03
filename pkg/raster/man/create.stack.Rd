@@ -9,7 +9,7 @@
 
 \title{ Create or change a new stack }
 \description{
-  A raster stack is a collection of rasters with the same spatial extent and resolution. They can be crated from raster objects, or from raster files.
+  A raster stack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects, or from raster files.
   You can add raster to or remove raster from a rasterstack. You can also save a stack to a file, to recreate it later.  
 }
 
@@ -28,7 +28,7 @@ rasterstack.save(rstack)
   \item{rstack}{ a stack object }
   \item{rasterfiles}{ Filename(s) of (a) raster dataset(s) }
   \item{bands}{ A vector or list of bands of raster data files (default values = 1)}
-  \item{rasters}{ raster object(s) }
+  \item{rasters}{ RasterLayer object(s) }
   \item{indices}{ the indices (in stack@rasters) of the raster(s) to remove from a stack }
 }
 \details{

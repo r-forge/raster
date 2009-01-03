@@ -12,8 +12,8 @@ Objects can be created by calls of the form \code{new("RasterBrick", ...)}.
 \section{Slots}{
 	 \describe{
     \item{\code{filename}:}{Object of class \code{"character"} filename of the RasterBrick (if saved to disk) }
-    \item{\code{nlayers}:}{Object of class \code{"integer"} number of raster objects in the RasterBrick }
-    \item{\code{rasters}:}{Object of class \code{"list"} list of the raster objects }
+    \item{\code{nlayers}:}{Object of class \code{"integer"} number of RasterLayer objects in the RasterBrick }
+    \item{\code{rasters}:}{Object of class \code{"list"} list of the RasterLayer objects }
     \item{\code{projection}:}{Object of class \code{"character"} proj4 projection string }
     \item{\code{ncols}:}{Object of class \code{"integer"} number of columns of the rasters }
     \item{\code{nrows}:}{Object of class \code{"integer"} number of rows of the rasters }
