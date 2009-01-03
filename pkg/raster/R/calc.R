@@ -9,6 +9,7 @@ calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
+	filename <- trim(filename)
 	outraster <- setRaster(raster, filename)
 	if (ForceIntOutput) {setDatatype(outraster, 'integer')}
 	

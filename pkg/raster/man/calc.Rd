@@ -15,7 +15,7 @@ calc(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
 isNA(raster, value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 setNA(raster, operator = "<=", value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 init(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput = FALSE) 
-neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE) 
+neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, ForceIntOutput=FALSE) 
 reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 }
 
@@ -53,17 +53,20 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
  r <- newRaster(ncols=36, nrows=18)
  
 # two ways to set all value to 1 
-#1, with a function
+# with a function
  set1function <- function(x){rep(1, x)}
  r <- init(r, fun=set1function)
-# 2, "manually" 
+# "manually" 
  r <- setValues(r, rep(1, ncells(r)))
  
 # random values (see ?runif )
  r <- init(r, fun=runif)
+ 
+# neighborhood calc
+ ngb <- neighborhood(r, fun=sum) 
 
 # all values below 0.5 become NA
- r2 <- setNA(r, operator ="<", value=0.5)
+ r2 <- setNA(r, operator = "<", value=0.5)
 # change the NAs to -9999
  r3 <- isNA(r2, -9999)  
  

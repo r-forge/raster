@@ -4,13 +4,13 @@
 \alias{show,RasterBrick-method}
 
 \title{Class "RasterBrick" }
-\description{	Class for handling "RasterBricks" of rasters.  }
+\description{	Class for handling "RasterBrick" objects  }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("RasterBrick", ...)}.
 }
 
 \section{Slots}{
-	 \describe{
+ \describe{
     \item{\code{filename}:}{Object of class \code{"character"} filename of the RasterBrick (if saved to disk) }
     \item{\code{nlayers}:}{Object of class \code{"integer"} number of RasterLayer objects in the RasterBrick }
     \item{\code{rasters}:}{Object of class \code{"list"} list of the RasterLayer objects }
@@ -18,12 +18,6 @@ Objects can be created by calls of the form \code{new("RasterBrick", ...)}.
     \item{\code{ncols}:}{Object of class \code{"integer"} number of columns of the rasters }
     \item{\code{nrows}:}{Object of class \code{"integer"} number of rows of the rasters }
     \item{\code{ncells}:}{Object of class \code{"integer"} number of cells of the rasters }
-    \item{\code{xmin}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{xmax}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{ymin}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{ymax}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{xres}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{yres}:}{Object of class \code{"numeric"} ~~ }
     \item{\code{data}:}{Object of class \code{"matrix"} slot to hold the data values (after read ) }	
   }
 }
