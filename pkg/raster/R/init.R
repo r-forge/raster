@@ -6,13 +6,14 @@
 
 
 init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
+	filename <- trim(filename)
 	outraster <- setRaster(raster, filename)
-	if (ForceIntOutput) {setDatatype(outraster, 'integer')}
+	if (ForceIntOutput) {setDatatype(outraster, 'integer') }
 
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
 		n <- ncells(raster)
 		outraster <- setValues(outraster, fun(n)) 
-		if (!is.na(filename)) {	
+		if (filename != "") {	
 			outraster <- writeValues(outraster, overwrite=overwrite) 
 		}
 		
@@ -21,14 +22,14 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput
 		v <- vector(length=0)
 
 		for (r in 1:nrow(raster)) {
-			if (filename(outraster)=="") {
+			if (filename(outraster) == "") {
 				v <- c(v, fun(n))
 			} else {			
 				outraster <- setValues(outraster, fun(n), r) 
 				outraster <- writeValues(outraster, overwrite=overwrite)
 			}	
 		}	
-		if (filename(outraster) == '') { 
+		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	} 
