@@ -30,7 +30,7 @@
 
 
 .calc.ngb2 <- function(rows, ngb, fun, keepdata) {
-#TODO
+#TODO, current function is very slow
 	lim <- floor(ngb / 2)
 	res <- array(dim=length(rows[1,]))
 	addNA <- (matrix(ncol=lim, nrow=ngb))
@@ -41,37 +41,55 @@
 }
 	
 
-
-neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE) {
+neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, ForceIntOutput=FALSE) {
 	ngb <- round(ngb)
 	if ((ngb / 2) == floor(ngb/2)) { stop("only odd neighborhoods are supported") }
 	if (ngb == 1) { stop("ngb should be 3 or larger")  } 
 	lim <- floor(ngb / 2)
 	
-	ngbgrid <- setFilename(raster, filename)
-	
-# first create an empty matrix with nrows = ngb and ncols = raster@ncols
+	filename <- trim(filename)
+	ngbgrid <- setRaster(raster, filename)
+	if (ForceIntOutput) {setDatatype(ngbgrid, 'integer') }
 
+# first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	ngbdata1 <- array(data = NA, dim = c(ngb, raster@ncols))
 	ngbdata <- ngbdata1
 	
 	rr <- 1
+	v <- vector(length=0)
 	for (r in 1:nrow(raster)) {
-		rowdata <- values(readRow(raster, r))
+		if (dataContent(raster)=='all') {
+			rowdata <- valuesRow(raster, r)
+		} else {	
+			rowdata <- values(readRow(raster, r))
+		}	
 		ngbdata <- rbind(ngbdata[2:ngb,], t(rowdata))
 		if (r > lim) {
-			ngbgrid <- setValues(ngbgrid, .calc.ngb(ngbdata, ngb, fun, keepdata), rr)
-			ngbgrid <- writeValues(ngbgrid, overwrite)
+			ngbvals <- .calc.ngb(ngbdata, ngb, fun, keepdata)
+			if (filename != "") {
+				ngbgrid <- setValues(ngbgrid, ngbvals, rr)
+				ngbgrid <- writeValues(ngbgrid, overwrite)
+			} else {
+				v <- c(v, ngbvals)
+			}
 			rr <- rr + 1
 		}
 	}
-
+	
 	ngbdata1 <- array(data = NA, dim = c(ngb, raster@ncols))
 	for (r in (nrow(raster)+1):(nrow(raster)+lim)) {
 		ngbdata <- rbind(ngbdata[2:ngb,], t(ngbdata1[1,]))
-		ngbgrid <- setValues(ngbgrid, .calc.ngb(ngbdata, ngb, fun, keepdata), rr)
-		ngbgrid <- writeValues(ngbgrid, overwrite)
+		ngbvals <- .calc.ngb(ngbdata, ngb, fun, keepdata)
+		if (filename != "") {
+			ngbgrid <- setValues(ngbgrid, ngbvals, rr)
+			ngbgrid <- writeValues(ngbgrid, overwrite)
+		} else {
+			v <- c(v, ngbvals)
+		}
 		rr <- rr + 1
+	}
+	if (filename == "") { 
+		ngbgrid <- setValues(ngbgrid, v) 
 	}
 	return(ngbgrid)
 }
