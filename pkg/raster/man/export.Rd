@@ -1,7 +1,7 @@
 \name{sp}
-\alias{asRaster}
-\alias{asSpgrid}
-\alias{asBrick}
+\alias{asRasterLayer}
+\alias{asRasterBrick}
+\alias{asSpGrid}
 
 \title{ Functions to export a Raster to an sp object and to import a Raster from a sp object }
 
@@ -10,9 +10,9 @@
 }
 
 \usage{
-asRaster(spgrid, getdata=TRUE, dataindex=1) 
-asBrick(spgrid, getdata=TRUE) 
-asSpgrid(raster, type='grid') 
+asRasterLayer(spgrid, getdata=TRUE, dataindex=1) 
+asRasterBrick(spgrid, getdata=TRUE) 
+asSpGrid(raster, type='grid') 
 }
 
 \arguments{
@@ -36,8 +36,8 @@ asSpgrid(raster, type='grid')
 \examples{ 
 	rs <- newRaster()
 	rs <- setValues(rs, 1:ncells(rs))
-	sp <- asSpgrid(rs)
-	rs2 <- asRaster(sp) 
+	sp <- asSpGrid(rs)
+	rs2 <- asRasterLayer(sp) 
 }
 
 \keyword{ spatial }

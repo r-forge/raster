@@ -28,17 +28,30 @@ export <- function(raster, filename="", filetype="ascii", keepGRD=TRUE, overwrit
 		filename <- filename(raster) 
 	}
 	if (filetype == "ascii") {
-		filename <- setFileExtension(filename(raster), ".asc")
+		filename <- setFileExtension(filename, ".asc")
 		for (r in 1:nrow(raster)) {
 			raster <- readRow(raster, r)
 			writeAscii(raster, filename, overwrite=overwrite) 
 		}
+
 	} else if (filetype == "bil") {
 		.exportToBil(raster, filename=filename, keepGRD=keepGRD, overwrite=overwrite) 
+
+	} else if (filetype == "tif") {
+		if (dataContent(raster) != "all") {
+			raster <- readAll(raster)
+		}
+		spgrid <- asSpGrid(raster)	
+		filename <- setFileExtension(filename, ".tif")
+		writeGDAL(spgrid, filename)
+
 	} else {
 		stop("filetype not yet supported (sorry..., more coming ...)")
 	}
+	
+	return(rasterFromFile(filename))
 }
+
 
 
 .exportToBil <- function(raster, filename="", keepGRD=TRUE, overwrite=FALSE) {
