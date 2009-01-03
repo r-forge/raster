@@ -80,13 +80,9 @@ newCRS <- function(projstring) {
 }
 
 
-changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), projstring=projection(object)) {
-	object@bbox[1,1] <- xmn
-	object@bbox[1,2] <- xmx
-	object@bbox[2,1] <- ymn
-	object@bbox[2,2] <- ymx
-	projs <- newCRS(projstring)
-	object@proj4string <- projs
+changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), projstring=projection(object), keepres=FALSE) {
+	bb <- newBbox(xmn, xmx, ymn, ymx) 
+	object <- setBbox(object, bb, projstring, keepres=keepres) 
 	return(object)
 }
 

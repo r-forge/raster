@@ -50,7 +50,10 @@ map <- function(raster, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 			m <- values(raster, format='matrix')
 			subsample=FALSE
 		}
-	} else {
+	} else if (dataSource(raster) != 'disk') {
+		stop('no, or insufficient, values associated with this RasterLayer')
+	}
+	else {
 		if (subsample) {
 			raster <- .read.skip(raster, maxdim=maxdim)
 		} else {

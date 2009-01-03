@@ -26,7 +26,7 @@ rasterFromBbox <- function(boundingbox, nrows=1, ncols=1) {
 
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	fileext <- toupper(fileExtension(filename)) 
-	if (fileext == ".GRD" ) {
+	if (fileext == ".RASTER" | fileext == ".GRD") {
 		raster <- .rasterFromFileBinary(filename, band) 
 	} else {
 		raster <- .rasterFromFileGDAL(filename, band) 
@@ -100,8 +100,14 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 		else if (ini[i,2] == "MAXX") {xx <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "MINY") {yn <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "MAXY") {yx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "XMIN") {xn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "XMAX") {xx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "YMIN") {yn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "YMAX") {yx <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "ROWS") {nr <- as.integer(ini[i,3])} 
 		else if (ini[i,2] == "COLUMNS") {nc <- as.integer(ini[i,3])} 
+		else if (ini[i,2] == "NROWS") {nr <- as.integer(ini[i,3])} 
+		else if (ini[i,2] == "NCOLS") {nc <- as.integer(ini[i,3])} 
 		else if (ini[i,2] == "MINVALUE") {minval <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "MAXVALUE") {maxval <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "NODATAVALUE") {nodataval <- as.numeric(ini[i,3])} 

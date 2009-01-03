@@ -55,7 +55,7 @@
 	}
 
 	if (raster@file@driver == 'raster') {
-		rastergri <- setFileExtension(raster@file@name, ".gri")
+		rastergri <- .setFileExtensionValues(filename(raster))
 		if (!file.exists( filename(raster))) { 
 			stop(paste(filename(raster)," does not exist"))
 		}
@@ -215,7 +215,7 @@
 #	colnames(cells) <- c("id", "cell", valuename)
 #	uniquecells <- na.omit(unique(cells[order(cells[,2]),2]))
 	
-	rastergri <- setFileExtension(filename(raster), ".gri")
+	rastergri <- .setFileExtensionValues(filename(raster))
 	if (!file.exists(filename(raster))) { stop(paste(filename(raster)," does not exist")) }
 	con <- file(rastergri, "rb")
 

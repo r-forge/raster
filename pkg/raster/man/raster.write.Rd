@@ -1,12 +1,11 @@
 \name{write}
-\alias{writeValues}
+
 \alias{writeValues}
 \alias{writeAscii}
 \alias{import}
 \alias{export}
-\alias{grdToBil}
-\alias{writeOtherHeader}
 \alias{writeHeader}
+\alias{writeOtherHeader}
 
 \title{ Write raster data to a file }
 \description{
@@ -17,8 +16,7 @@
 writeValues(raster, overwrite=FALSE)
 writeAscii(raster, filename, overwrite=FALSE)
 import(raster, filename="", overwrite=FALSE)
-export(raster, filename="", filetype='ascii', overwrite=FALSE)
-grdToBil(raster, filename="", keepGRD=TRUE, overwrite=FALSE) 
+export(raster, filename="", filetype='ascii', keepGRD=TRUE, overwrite=FALSE)
 writeHeader(raster)
 writeOtherHeader(raster, format="BIL") 
 }
@@ -27,20 +25,17 @@ writeOtherHeader(raster, format="BIL")
   \item{raster}{ RasterLayer object }
   \item{overwrite} { Logical. If \code{TRUE} existing files are overwritten }
   \item{filename}{ The file resulting from import or export }
-  \item{filetype}{ The type of file to export to }
-  \item{keepGRD} { Logical. If \code{FALSE} the existing raster file GRD/GRI will not be kept after exporting to BIL format}
+  \item{filetype}{ The type of file to export to ('ascii' or 'bil')}
+  \item{keepGRD} { Logical. If \code{FALSE} the existing raster file (internal format) will not be kept after exporting; only applied to other formats that can use the same binary format. }
   \item{format}{ Type of header file. Either: 'BIL', 'ENVI', ErdasRaw', or 'worldfile' }
-  
- }
+}
 
 \details{
 	data in a \code{RasterLayer} object is written to a file. Small datasets can be loaded into memory manipulated, 
 	and saved to disk again. For large datasets, you can read and write by row. 
-	writeHeaderFile saves the header file only. You should normally not directly call this function.
-	writeENVIHdr writes an ENVI header (.hdr) file. This (hopefully) allows for reading the binary data ("raster.gri") in other programs such as ENVI ArcMap.
-	writeErdasRawHdr writes an header(.raw) file. This (hopefully) allows for reading the binary data ("raster.gri") in other programs such as Erdas and ArcMap.
-	writeBILHdr writes a "bil" format header (.hdr) file
-	writeWorldFile writes an ESRI "world" file, that is sometimes used to georeference images.
+	writeHeader saves the header file only. You should normally not directly call this function; but may want to do this to save some of your own parameters to the header file.
+	writeOtherHeader writes an ENVI, or BIL header (.hdr) file; or an Erdas Raw (.raw) header file. This (hopefully) allows for reading the binary data ("raster.gri") in other programs such as ENVI ArcMap.
+	if format = "worldfile", the function writes an ESRI "world" file, that is sometimes used to georeference images.
 }
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
@@ -73,12 +68,17 @@ writeOtherHeader(raster, format="BIL")
  }
 	
 # read and write row by row; write to binary file
- binras <- setRaster(rs, "binbyrow.grd")
+ binras <- setRaster(rs, "binbyrow")
  for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	binras <- setValues(binras, values(rs), r)
 	binras <- writeValues(binras, overwrite=TRUE) 
  }
+
+rsimport <- import(rs, filename="imported", overwrite=TRUE)
+rsexport <- export(rsimport, filename="exported", filetype='ascii', overwrite=TRUE)
+writeOtherHeader(rsexport, format="ENVI") 
+
 }
 
 \keyword{ spatial }

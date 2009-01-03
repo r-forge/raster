@@ -6,12 +6,23 @@
 
 
  
+.setFileExtensionValues <- function(fname) {
+	fname <- setFileExtension(fname, ".gri")
+	return(fname)
+}
+ 
 
+.setFileExtensionHeader <- function(fname) {
+	setFileExtension(fname, ".grd")
+	return(fname)
+}
+ 
+ 
 writeValues <- function(raster, overwrite=FALSE) {
 	if (dataContent(raster) == 'row' ) {
 		raster <- .writeValuesRow(raster, overwrite)
 	} else if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
-		stop('there are not (enough) values to write the file. First use setValues(); or use writeValues') 
+		stop('there are not enough values to write the file. First use setValues(); or use writeValues') 
 	} else {
 		raster <- .writeValuesAll(raster, overwrite)
 	}  
@@ -21,7 +32,7 @@ writeValues <- function(raster, overwrite=FALSE) {
 
 
 .writeValuesAll <- function(raster, overwrite=FALSE) {
-	raster <- setFilename(raster, setFileExtension(filename(raster), ".grd"))
+	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
 	if (!overwrite & file.exists(raster@file@name)) {
 		stop(paste(raster@file@name,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) }
 
@@ -55,7 +66,7 @@ writeValues <- function(raster, overwrite=FALSE) {
 	if (raster@data@content == 'sparse') { 
 		raster <- .write.sparse(raster, overwrite) 
 	} else {
-		binraster <- setFileExtension(filename(raster), ".gri")
+		binraster <- .setFileExtensionValues(filename(raster))
 		con <- file(binraster, "wb")
 		writeBin( values(raster), con, size = raster@file@datasize) 
 		close(con)
@@ -74,8 +85,8 @@ writeValues <- function(raster, overwrite=FALSE) {
 		if (!overwrite & file.exists(filename(raster))) {
 			stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 		}
-		raster@file@name <- setFileExtension(raster@file@name, ".grd")
-		binraster <- setFileExtension(raster@file@name, ".gri")
+		raster@file@name <- .setFileExtensionHeader(filename(raster))
+		binraster <- .setFileExtensionValues(filename(raster))
 		attr(raster, "filecon") <- file(binraster, "wb")
 		raster@data@min <- 3e34
 		raster@data@max <- -3e34
@@ -118,7 +129,7 @@ writeValues <- function(raster, overwrite=FALSE) {
 
 	raster@file@driver <- 'raster'
     raster@file@gdalhandle <- list()
-	raster <- setFilename(raster, setFileExtension(filename(raster), ".grd"))
+	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -132,7 +143,7 @@ writeValues <- function(raster, overwrite=FALSE) {
 	}	
 	raster <- setMinmax(raster)
 
-	binraster <- setFileExtension(raster@file@name, ".gri")
+	binraster <- .setFileExtensionValues(filename(raster))
 	con <- file(binraster, "wb")
 	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
 	writeBin( as.vector(values(raster)), con, size = raster@file@datasize) 
@@ -147,33 +158,41 @@ writeValues <- function(raster, overwrite=FALSE) {
 
 
 writeHeader <- function(raster) {
-	rastergrd <- setFileExtension(filename(raster), ".grd")
+	rastergrd <- .setFileExtensionHeader(filename(raster))
 	thefile <- file(rastergrd, "w")  # open an txt file connectionis
-	cat("[General]", "\n", file = thefile)
-	cat("CREATOR=R package:raster", "\n", file = thefile)
-	cat("CREATED=", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n", file = thefile)
-	cat("TITLE=", raster@file@shortname, "\n", file = thefile)
+	cat("[general]", "\n", file = thefile)
+	cat("creator=R package:raster", "\n", file = thefile)
+	cat("created=", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n", file = thefile)
+	cat("title=", raster@file@shortname, "\n", file = thefile)
 	
-	cat("[GeoReference]", "\n", file = thefile)
-	cat("Rows=",  nrow(raster), "\n", file = thefile)
-	cat("Columns=",  ncol(raster), "\n", file = thefile)
-	cat("MinX=", xmin(raster), "\n", file = thefile)
-	cat("MinY=", ymin(raster), "\n", file = thefile)
-	cat("MaxX=", xmax(raster), "\n", file = thefile)
-	cat("MaxY=", ymax(raster), "\n", file = thefile)
-	cat("ResolutionX=", xres(raster), "\n", file = thefile)
-	cat("ResolutionY=", yres(raster), "\n", file = thefile)
-	cat("Projection=", projection(raster), "\n", file = thefile)
+	cat("[georeference]", "\n", file = thefile)
+	cat("nrows=",  nrow(raster), "\n", file = thefile)
+	cat("ncols=",  ncol(raster), "\n", file = thefile)
+	cat("xmin=", xmin(raster), "\n", file = thefile)
+	cat("ymin=", ymin(raster), "\n", file = thefile)
+	cat("xmax=", xmax(raster), "\n", file = thefile)
+	cat("ymax=", ymax(raster), "\n", file = thefile)
+	cat("xres=", xres(raster), "\n", file = thefile)
+	cat("yres=", yres(raster), "\n", file = thefile)
+	cat("projection=", projection(raster), "\n", file = thefile)
 	
-	cat("[Data]", "\n", file = thefile)
-	if (raster@file@datatype == 'integer') {  datatype <- "ForceIntOutput"  } else { datatype <- "FLT" }
-	datatype <- paste(datatype, raster@file@datasize, "BYTES", sep="")
-	cat("DataType=",  datatype, "\n", file = thefile)
-	cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)
-	cat("nBands=",  raster@file@nbands, "\n", file = thefile)
-	cat("BandOrder=",  raster@file@bandorder, "\n", file = thefile)
-	cat("MinValue=",  minValue(raster), "\n", file = thefile)
-	cat("MaxValue=",  maxValue(raster), "\n", file = thefile)
+	cat("[data]", "\n", file = thefile)
+	if (raster@file@datatype == 'ascii') {  
+		datatype <- "ASC" 
+	} else if (raster@file@datatype == 'integer') {  
+		datatype <- "INT"  
+	} else { 
+		datatype <- "FLT" 
+	}
+	if (datatype != "ASC") {
+		datatype <- paste(datatype, raster@file@datasize, "BYTES", sep="")
+		cat("DataType=",  datatype, "\n", file = thefile)
+		cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)
+	}	
+	cat("nbands=",  raster@file@nbands, "\n", file = thefile)
+	cat("bandOrder=",  raster@file@bandorder, "\n", file = thefile)
+	cat("minValue=",  minValue(raster), "\n", file = thefile)
+	cat("maxValue=",  maxValue(raster), "\n", file = thefile)
 	cat("NoDataValue=",  raster@file@nodatavalue, "\n", file = thefile)
 #	cat("Sparse=", raster@sparse, "\n", file = thefile)
 #	cat("nCellvals=", raster@data@ncellvals, "\n", file = thefile)	

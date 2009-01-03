@@ -1,44 +1,50 @@
 
 import <- function(raster, filename="", overwrite=FALSE) {
 # check extension
-	if (raster@file@driver <- "raster") {
+	if (raster@file@driver == "raster") {
 		stop("file is a raster format file, it cannot be imported")
 	}	
-	if (trim(filename) == "") { 
-		filename <- setFileExtension(filename(raster), ".grd")
+	filename <- trim(filename)
+	if (filename == "") { 
+		filename <- .setFileExtensionHeader(filename(raster))
+	} else {
+		filename <- .setFileExtensionHeader(filename)
 	}
+	
 	rsout <- setRaster(raster, filename=filename)
 	for (r in 1:nrow(raster)) {
-		d <- readRow(raster, r)
-		setValues(rsout, d, r)
-		writeValues(rsout, overwrite=overwrite)
+		raster <- readRow(raster, r)
+		rsout <- setValues(rsout, values(raster), r)
+		rsout <- writeValues(rsout, overwrite=overwrite)
 	}
-	clearValues(rsout)
+	rsout <- clearValues(rsout)
 	return(rsout)
 }
 
 
-export <- function(raster, filename="", filetype="ascii", overwrite=FALSE) {
-	if (trim(filename) == "") { 
+export <- function(raster, filename="", filetype="ascii", keepGRD=TRUE, overwrite=FALSE) {
+	filename <- trim(filename)
+	if (filename == "") { 
 		filename <- filename(raster) 
 	}
 	if (filetype == "ascii") {
-		raster <- setFilename(raster,filename=filename)
+		filename <- setFileExtension(filename(raster), ".asc")
 		for (r in 1:nrow(raster)) {
-			writeAscii(raster, overwrite=overwrite) 
+			raster <- readRow(raster, r)
+			writeAscii(raster, filename, overwrite=overwrite) 
 		}
 	} else if (filetype == "bil") {
-		grdToBil(raster, filename=filename, keepGRD=TRUE, overwrite=overwrite) 
+		.exportToBil(raster, filename=filename, keepGRD=keepGRD, overwrite=overwrite) 
 	} else {
 		stop("filetype not yet supported (sorry..., more coming ...)")
 	}
 }
 
 
-grdToBil <- function(raster, filename="", keepGRD=TRUE, overwrite=FALSE) {
-	sourcefile <- setFileExtension(filename(raster), ".gri")
+.exportToBil <- function(raster, filename="", keepGRD=TRUE, overwrite=FALSE) {
+	sourcefile <- .setFileExtensionValues(filename(raster))
+	targetfile <- setFileExtension(filename(raster), ".bil")
 	if (keepGRD) {
-		targetfile <- setFileExtension(filename(raster), ".bil")
 		if (file.exists(targetfile)) { 
 			if (!(overwrite)) { 
 				stop(paste("File exists:", targetfile, " Use overwrite=TRUE, if you want to overwrite it"))
@@ -46,7 +52,6 @@ grdToBil <- function(raster, filename="", keepGRD=TRUE, overwrite=FALSE) {
 		}	
 		file.copy(from=sourcefile, to=targetfile, overwrite=overwrite)
 	} else {
-		targetfile <- setFileExtension(filename(raster), ".bil")
 		if (file.exists(targetfile)) { 
 			if (overwrite) { 
 				file.remove(targetfile) 
@@ -165,7 +170,7 @@ writeOtherHeader <- function(raster, format="BIL") {
 	hdrfile <- setFileExtension(filename(raster), ".raw")
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("IMAGINE_RAW_FILE\n", file = thefile)
-	cat("PIXEL_FILES ", setFileExtension(filename(raster), ".gri"), "\n", file = thefile)
+	cat("PIXEL_FILES ", .setFileExtensionValues(filename(raster)), "\n", file = thefile)
 # this may not work. Some implementations may ignore this keyword and expect the pixelfile to have the same file name, no extension.		
 
 	cat("HEIGHT ",  nrow(raster), "\n", file = thefile)
