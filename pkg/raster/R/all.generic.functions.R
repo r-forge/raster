@@ -124,11 +124,36 @@ setMethod("valuesXY", signature(object='RasterLayer'),
 	}
 )
 
-
 setMethod("valuesXY", signature(object='RasterStack'), 
 	function(object, xy) { 
 		return(.stackReadXY(object, xy))}
 )
+
+
+setMethod("plot", signature(x='RasterLayer', y='missing'), 
+	function(x, y, ...)  {
+		map(x, ...)
+	}
+)	
+	
+
+setMethod("plot", signature(x='RasterStack', y='numeric'), 
+	function(x, y, ...)  {
+		ind <- as.integer(round(y))
+		ind <- min(max(ind, 1), nlayers(x))
+		map(x, ind, ...)
+	}
+)		
+
+
+setMethod("plot", signature(x='RasterBrick', y='numeric'), 
+	function(x, y, ...)  {
+		ind <- as.integer(round(y))
+		ind <- min(max(ind, 1), nlayers(x))
+		map(x, ind, ...)
+	}
+)		
+
 
 setMethod('summary', signature(object='AbstractRaster'), 
 	function(object, ...) {
@@ -155,18 +180,32 @@ setMethod('summary', signature(object='AbstractRaster'),
 	}	
 )
 
+
 setMethod('hist', signature(x='RasterLayer'), 
 	function(x, ...){
+		maxsamp <- 1000000
 		if (dataContent(x) != 'all') {
 			if (dataSource(x) == 'disk') {
 		# TO DO: ake a function that does this by block and combines  all data into a single histogram
-				x <- .readSkip(x, 1000) 
-				if (length(values(x)) < ncells(x)) {
-					warning(paste(round(100 * length(values(x)) / ncells(x)), "% of the raster values were used"))
-				}
-			} else { stop('cannot make a histogram; there should be data, either on disk or in memory')}
-		}
-		hist(values(x), ...)
+				if (ncells(x) > maxsamp) {
+					cells <- unique(runif(maxsamp) * ncells(x))
+					cells <- cells[cells > 0]
+					values <- valuesCells(x, cells)
+					nas <- length(na.omit(values))
+					msg <- paste(round(100 * length(cells) / ncells(x)), "% of the raster cells were used", sep="")
+					if (nas < length(values)) {
+						msg <- paste(msg, " (of which ", 100 - round(100 * nas / length(values)), "% were NA)", sep="")
+					}
+					msg <- paste(msg, ". ",nas," values used.", sep="")
+					warning(msg)
+				} else {
+					values <- values(readAll(x))
+				}	
+			} else { stop('cannot make a histogram; need data on disk or in memory')}
+		} else {
+			values <- values(x)
+		}			
+		hist(values, ...)
 	}	
 )
 

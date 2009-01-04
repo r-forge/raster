@@ -6,63 +6,63 @@
 
 
 
-map <- function(raster, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) {
+map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 #	require(fields)
-	if (class(raster) == 'character') { 
-		raster <- rasterFromFile(raster) 
+	if (class(object) == 'character') { 
+		object <- rasterFromFile(object) 
 	}
-	if ( class(raster) == 'RasterStack' ) { 
+	if ( class(object) == 'RasterStack' ) { 
 		index <- round(index)
-		i <- min(max(1, index), raster@data@nlayers)
+		i <- min(max(1, index), object@data@nlayers)
 		if (i != index) { stop("index should be >= 1 and <= rstack@data@nlayers") }
-		raster2 <- raster@rasters[[i]]
-		if (raster@data@content == 'all') {
-			raster2 <- setValues(raster2, raster@data@values[i,])
+		raster2 <- object@rasters[[i]]
+		if (object@data@content == 'all') {
+			raster2 <- setValues(raster2, object@data@values[i,])
 		}
-		raster <- raster2
+		object <- raster2
 	}
 	
-	if (class(raster) != 'RasterLayer') { stop("class of 'raster' should be RasterLayer") }
+	if (class(object) != 'RasterLayer') { stop("class of 'object' should be RasterLayer") }
 
 	maxdim <- max(1, maxdim)
-	if ( dataContent(raster) == 'all') {
-		if (round(max(ncol(raster), nrow(raster)) < maxdim)) { subsample <- FALSE }
+	if ( dataContent(object) == 'all') {
+		if (round(max(ncol(object), nrow(object)) < maxdim)) { subsample <- FALSE }
 		if (subsample)  {
-			skip <- round(max(ncol(raster), nrow(raster)) / maxdim)
-			cols <- (0:round(ncol(raster)/skip)) * skip + 1
-			cols <- cols[ cols <= ncol(raster) ]
-			rows <- (0:round(nrow(raster)/skip)) * skip + 1
-			rows <- rows[ rows <= nrow(raster) ]
+			skip <- round(max(ncol(object), nrow(object)) / maxdim)
+			cols <- (0:round(ncol(object)/skip)) * skip + 1
+			cols <- cols[ cols <= ncol(object) ]
+			rows <- (0:round(nrow(object)/skip)) * skip + 1
+			rows <- rows[ rows <= nrow(object) ]
 			
-			m <- values(raster, format='matrix')[rows, cols]
+			m <- values(object, format='matrix')[rows, cols]
 
-			sampraster <- setRaster(raster)
+			sampraster <- setRaster(object)
 			sampraster <- setRowCol(sampraster, dim(m)[1], dim(m)[2])
-			xmx <- xmax(raster) - (ncol(raster) - cols[length(cols)]) * xres(raster)
-			ymn <- ymin(raster) + (nrow(raster) - rows[length(rows)]) * yres(raster)
-			bndbox <- bbox(raster)
+			xmx <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
+			ymn <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)
+			bndbox <- bbox(object)
 			bndbox[1,2] <- xmx
 			bndbox[2,1] <- ymn
 
-			raster <- setBbox(sampraster, bndbox)
+			object <- setBbox(sampraster, bndbox)
  		} else { 
-			m <- values(raster, format='matrix')
+			m <- values(object, format='matrix')
 			subsample=FALSE
 		}
-	} else if (dataSource(raster) != 'disk') {
+	} else if (dataSource(object) != 'disk') {
 		stop('no, or insufficient, values associated with this RasterLayer')
 	}
 	else {
 		if (subsample) {
-			raster <- .readSkip(raster, maxdim=maxdim)
+			object <- .readSkip(object, maxdim=maxdim)
 		} else {
-			raster <- readAll(raster)
+			object <- readAll(object)
 		}
-		m <- values(raster, format='matrix')
+		m <- values(object, format='matrix')
 	} 
-	x <- (0:ncol(raster)) * xres(raster) + xmin(raster) 
-	y <- (0:nrow(raster)) * yres(raster) + ymin(raster) 		
+	x <- (0:ncol(object)) * xres(object) + xmin(object) 
+	y <- (0:nrow(object)) * yres(object) + ymin(object) 		
 
 	z <- t(m[nrow(m):1,])
 	
@@ -72,11 +72,11 @@ map <- function(raster, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 	if (addbox) {box()}
 #	image(x, y, z, col=col, axes = FALSE, xlab="", ylab="")
 #	contour(x, y, z, add = TRUE, col = "peru")
-#	xincr <- (raster@xmax - raster@xmin) / 12
-#	yincr <- (raster@ymax - raster@ymin) / 10
-#	axis(1, at = seq(raster@xmin, raster@xmax, by = xincr))
-#	axis(2, at = seq(raster@ymin, raster@ymax, by = yincr))
-#	title(main = raster@file@shortname, font.main = 4)
+#	xincr <- (object@xmax - object@xmin) / 12
+#	yincr <- (object@ymax - object@ymin) / 10
+#	axis(1, at = seq(object@xmin, object@xmax, by = xincr))
+#	axis(2, at = seq(object@ymin, object@ymax, by = yincr))
+#	title(main = object@file@shortname, font.main = 4)
 }	
 
 
@@ -85,7 +85,7 @@ map <- function(raster, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 
 	
 # The functions below were taken from the fields package !!! (image.plot and subroutines)
-# to be adjusted for raster.
+# to be adjusted for object.
 # author::
 #license:	
 

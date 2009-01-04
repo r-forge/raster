@@ -2,6 +2,7 @@
 \docType{class}
 \alias{RasterBrick-class}
 \alias{show,RasterBrick-method}
+\alias{plot,RasterBrick,numeric-method}
 
 \title{Class "RasterBrick" }
 \description{	Class for handling "RasterBrick" objects  }
@@ -12,13 +13,11 @@ Objects can be created by calls of the form \code{new("RasterBrick", ...)}.
 \section{Slots}{
  \describe{
     \item{\code{filename}:}{Object of class \code{"character"} filename of the RasterBrick (if saved to disk) }
-    \item{\code{nlayers}:}{Object of class \code{"integer"} number of RasterLayer objects in the RasterBrick }
-    \item{\code{rasters}:}{Object of class \code{"list"} list of the RasterLayer objects }
+    \item{\code{nlayers}:}{Object of class \code{"integer"} number of layers in the RasterBrick }
     \item{\code{projection}:}{Object of class \code{"character"} proj4 projection string }
     \item{\code{ncols}:}{Object of class \code{"integer"} number of columns of the rasters }
     \item{\code{nrows}:}{Object of class \code{"integer"} number of rows of the rasters }
     \item{\code{ncells}:}{Object of class \code{"integer"} number of cells of the rasters }
-    \item{\code{data}:}{Object of class \code{"matrix"} slot to hold the data values (after read ) }	
   }
 }
 \section{Methods}{

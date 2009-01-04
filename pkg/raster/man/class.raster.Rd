@@ -1,6 +1,10 @@
 \name{RasterLayer-class}
 \docType{class}
 \alias{RasterLayer-class}
+\alias{plot}
+\alias{plot,RasterLayer,missing-method}
+\alias{summary}
+\alias{summary,AbstractRaster-method}
 \alias{show,RasterLayer-method}
 \alias{hist,RasterLayer-method}
 \alias{hist}
@@ -14,12 +18,12 @@
 \description{	Class for handling RasterLayer (grid) data  }
 
 \usage{
-  hist(x, ...)
+	hist(x, ...)
 }
 
 \arguments{
   \item{x}{ RasterLayer object }
-  \item{...}{ additional arguments for the generic hist function }
+  \item{...}{ additional arguments for the generic functions }
 }
 
 
@@ -42,7 +46,9 @@ Objects can be created by calls of the form \code{new("RasterLayer", ...)}.
 \section{Methods}{
   \describe{
     \item{show}{\code{signature(object = "RasterLayer")}: displays information about the RasterLayer object }
+    \item{summary}{\code{signature(object = "RasterLayer")}: sumary of raster values }
     \item{hist}{\code{signature(object = "RasterLayer")}: creates a histogram of the values of the RasterLayer }
+    \item{plot}{\code{signature(object = "RasterLayer")}: creates a plot (map) of raster values }
     \item{dim}{\code{signature(object = "AbstractRaster")}: returns dimensions (ncol and nrow) }
     \item{dim}{\code{signature(object = "RasterStack")}: returns dimensions (ncol, nrow, and nlayers) }
     \item{dim}{\code{signature(object = "RasterBrick")}: returns dimensions (ncol, nrow, and nlayers) }

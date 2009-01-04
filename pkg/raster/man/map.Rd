@@ -5,11 +5,11 @@
   Make a map of a RasterLayer
 }
 \usage{
-map(raster, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)
+map(object, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)
 }
 
 \arguments{
-  \item{raster}{ RasterLayer object}
+  \item{object}{ RasterLayer object}
   \item{index}{ Ignored for RasterLayers. The index of a raster in a RasterStack  1 <= index <= rstack@nrasters }
   \item{col} {a color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making}
   \item{subsample}{Logical. If \code{TRUE}, the image is resampled using maxdim}
@@ -28,7 +28,10 @@ map(raster, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ad
   will be 0.5 times the largest dimension.  
   
   Most of this function was taken from image.plot (fields package)
+  map is also called when plot() is used with a Raster* object as first argument
 }
+
+
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 

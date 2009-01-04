@@ -2,6 +2,7 @@
 \docType{class}
 \alias{RasterStack-class}
 \alias{show,RasterStack-method}
+\alias{plot,RasterStack,numeric-method}
 
 \title{Class "RasterStack" }
 \description{	Class for handling "Stacks" of rasters.  }
@@ -30,6 +31,7 @@ Objects can be created by calls of the form \code{new("RasterStack", ...)}.
 \section{Methods}{
   \describe{
     \item{show}{\code{signature(object = "RasterStack")}: ... }
+    \item{plot}{\code{signature(object = "RasterStack")}: ... }
 	 }
 }
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
