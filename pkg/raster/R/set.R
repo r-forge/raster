@@ -68,14 +68,16 @@ clearValues <- function(raster) {
 
 
 newCRS <- function(projstring) {
-	if (nchar(projstring) < 6) { projs <- (CRS(as.character(NA)))
-	} else {
+	projstring <- trim(projstring)
+#	if (nchar(projstring) < 3) { 
+#		projs <- (CRS(as.character(NA)))
+#	} else {
 		projs <- try(CRS(projstring), silent = T)
 		if (class(projs) == "try-error") { 
 			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
-			projs <- (CRS(as.character(NA)))
+			projs <- CRS(as.character(NA))
 		}
-	}
+#	}
 	return(projs)
 }
 

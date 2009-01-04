@@ -5,29 +5,29 @@
 # Licence GPL v3
 
 
-.rasterstack.read <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
+.stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
 	for (i in 1:length(rstack@rasters)) {
-		rs <- .raster.read(rstack@rasters[[i]], rownumber, startcol, ncolumns)
+		raster <- readPartOfRow(rstack@rasters[[i]], rownumber, startcol, ncolumns)
 		if ( i == 1 )  {
-			rstack@data@values <- as.matrix( values(rs) )
+			rstack@data@values <- values(raster) 
 		}
 		else {
-			rstack@data@values <- cbind(rstack@data@values, values(rs)) 
+			rstack@data@values <- cbind(rstack@data@values, values(raster)) 
 		}	   
 	}
-	rstack@data@content <- dataContent(rs)
-	rstack@data@indices <- dataIndices(rs)
+	rstack@data@content <- dataContent(raster)
+	rstack@data@indices <- dataIndices(raster)
 	return(rstack)
 }
 
 
-.rasterstack.read.xy <- function(rasterstack, xy) {
+.stackReadXY <- function(rasterstack, xy) {
 	cells <- cellFromXY(rasterstack, xy)
-	return(.rasterstack.read.cells(rasterstack, cells))
+	return(.stackReadCells(rasterstack, cells))
 }
 
 
-.rasterstack.read.cells <- function(rasterstack, cells) {
+.stackReadCells <- function(rasterstack, cells) {
 	for (i in 1:nlayers(rasterstack)) {
 		v <- .readCellsRaster(rasterstack@rasters[[i]], cells)
 		if (i == 1) {

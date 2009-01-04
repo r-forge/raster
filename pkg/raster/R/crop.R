@@ -50,7 +50,7 @@ crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 		rownr <- 1
 		v <- vector(length=0)
 		for (r in first_row:last_row) {
-			raster <- .raster.read(raster, r, first_col, ncol(outraster) )
+			raster <- readPartOfRow(raster, r, first_col, ncol(outraster) )
 			if (filename(outraster) == '') {
 				v <- c(v, values(raster))
 			} else {

@@ -17,33 +17,35 @@
 \title{ Get the column, row, or cell number of a raster from coordinates and vice versa }
 
 \description{
-These functions get the column, row, or cell number of a RasterLayer object (and of all other descendants of VirtualRaster, e.g. a RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster cell from a column, or cell number(s)
+These functions get the column, row, or cell number of a Raster* object for a x and/or y coordinate or get the coordinates of the center of a raster cell from a column, or cell number(s)
 }
 
 \usage{
-colFromCell(raster, cell)
-rowFromCell(raster, cell)
-cellFromRowcol(raster, rownr, colnr)
-colFromX(raster, x)
-rowFromY(raster, y)
-cellFromXY(raster, xy)
-xFromCol(raster, colnr)
-yFromRow(raster, rownr)
-xyFromCell(raster, cell)
-cxyFromBox(raster, xmn=xmin(raster), xmx=xmax(raster), ymn=ymin(raster), ymx=ymax(raster))
-validCells(raster, cell) 
-validCols(raster, colnr) 
-validRows(raster, rownr) 
+colFromCell(object, cell)
+rowFromCell(object, cell)
+cellFromRowcol(object, rownr, colnr)
+colFromX(object, x)
+rowFromY(object, y)
+cellFromXY(object, xy)
+xFromCol(object, colnr)
+yFromRow(object, rownr)
+xyFromCell(object, cell, asSpatialPoints, projstring)
+cxyFromBox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx=ymax(object))
+validCells(object, cell) 
+validCols(object, colnr) 
+validRows(object, rownr) 
 }
 
 \arguments{
-  \item{raster}{ raster or stack object }
-  \item{x}{  x coordinate(s) }
-  \item{y}{  y coordinate(s) }
-  \item{xy}{ matrix of x and y coordinates }
-  \item{colnr}{  column number(s) }
-  \item{rownr}{  row number(s) }
-  \item{cell}{  cell number(s) }
+  \item{object}{ Raster* object (or a SpatialPixels* or SpatialGrid* object) }
+  \item{cell}{ cell number(s) }
+  \item{x}{ x coordinate(s) }
+  \item{y}{ y coordinate(s) }
+  \item{xy}{ matrix of x and y coordinates, or a SpatialPoints or SpatialPointsDataFrame object }
+  \item{colnr}{ column number(s) }
+  \item{rownr}{ row number(s) }
+  \item{asSpatialPoints}{ return a SpatialPoints object (sp package) instead of a matrix}
+  \item{projstring}{ PROJ4 format character string to set projection for SpatialPoints object }
   \item{xmn}{ minimum x coordinate of bounding box to get cell numbers for }
   \item{xmx}{ maximum x coordinate of bounding box to get cell numbers for }
   \item{ymn}{ minimum y coordinate of bounding box to get cell numbers for }
@@ -53,7 +55,7 @@ validRows(raster, rownr)
 \details{
   The colFromCell and similar functions accept a single value (or x, y pair), or a vector or list of these values,
   Cell numbers start at 1 in the upper left corner, and increase from left to right, and then from top to bottom
-  The last cell number equals the number of cells of the raster.
+  The last cell number equals the number of cells of the Raster* object.
 }
 \value{
   row, col or cell number(s) 

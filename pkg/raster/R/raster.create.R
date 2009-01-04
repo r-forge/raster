@@ -31,7 +31,9 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	} else {
 		raster <- .rasterFromFileGDAL(filename, band) 
 	}
-	if (values) {raster <- .raster.read(raster, -1)}
+	if (values) {
+		raster <- readAll(raster)
+	}
 	return(raster)
 }	
 	

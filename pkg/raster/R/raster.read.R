@@ -7,28 +7,28 @@
 
 
 #read a block of data  (a rectangular area  of any dimension)  
-.raster.read.block <- function(raster, startrow, nrows=3, startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
+.rasterReadBlock <- function(raster, startrow, nrows=3, startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
 	if (startrow < 1 ) { stop("startrow too small") } 
-	if (startrow > raster@nrows ) { stop("startrow too high") }
+	if (startrow > nrow(raster) ) { stop("startrow too high") }
 	if (nrows < 1) { stop("nrows should be > 1") } 
 	if (startcol < 1) { stop("startcol < 1") }
-	if (startcol > raster@ncols) { stop("startcol  > raster@ncols")  }
+	if (startcol > ncol(raster)) { stop("startcol  > raster@ncols")  }
 	if (ncolumns < 1) { stop("ncolumns should be > 1") }
-	if ((startcol + ncolumns - 1) > raster@ncols ) {
+	if ((startcol + ncolumns - 1) > ncol(raster) ) {
 		warning("ncolumns too high, truncated")
-		ncolumns <- raster@ncols-startcol }
+		ncolumns <- ncol(raster)-startcol }
 		
 	endrow <- startrow+nrows-1
-	if (endrow > raster@nrows) {
+	if (endrow > nrow(raster)) {
 		warning("Rows beyond raster not read")
-		endrow <- raster@nrows
+		endrow <- nrow(raster)
 		nrows <- endrow - startrow + 1
 	}
-	raster <- .raster.read(raster, startrow, startcol, ncolumns)
+	raster <- .rasterRead(raster, startrow, startcol, ncolumns)
 	blockdata <- values(raster)
 	if (nrows > 1) {
 		for (r in (startrow+1):endrow) {
-			raster <- .raster.read(raster, r,  startcol, ncolumns)
+			raster <- .rasterRead(raster, r,  startcol, ncolumns)
 			blockdata <- c(blockdata, values(raster))
 		}	
 	}	
@@ -40,7 +40,7 @@
 
 
 #read part of a single row
-.raster.read <- function(raster, rownr,  startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
+.rasterRead <- function(raster, rownr,  startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
 	rownr <- round(rownr)
 	if (rownr == 0) { stop("rownr == 0. It should be between 1 and nrow(raster), or -1 for all rows") }
 	if (rownr > nrow(raster)) { stop("rownr too high") }
@@ -111,11 +111,11 @@
 
 
 #sample while reading and return matrix (for plotting )
-.read.skip <- function(raster, maxdim=500, bbox=NA) {
+.readSkip <- function(raster, maxdim=500, bbox=NA) {
 	if (!(is.na(bbox))) { rcut <- crop(raster, bbox) }
 	rasdim <- max(ncol(raster), nrow(raster) )
 	if (rasdim <= maxdim) { 
-		outras <- .raster.read(raster, -1)
+		outras <- .rasterRead(raster, -1)
 	} else {
 		fact <- maxdim / rasdim
 		nc <- trunc(fact * ncol(raster))
@@ -151,15 +151,15 @@
 
 
 #read data on the raster for xy coordinates
-.raster.read.xy <- function(raster, xy) {
+.rasterReadXY <- function(raster, xy) {
 	if (!is.matrix(xy)) { xy <- as.matrix(t(xy)) }
 	cells <- cellFromXY(raster, xy)
-	return(.raster.read.cells(raster, cells))
+	return(.rasterReadCells(raster, cells))
 }	
 
 
 #read data on the raster for cell numbers
-.raster.read.cells <- function(raster, cells) {
+.rasterReadCells <- function(raster, cells) {
 	uniquecells <- na.omit(unique(cells[order(cells)]))
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncells(raster))]
 	res <- cbind(cells, NA)
@@ -197,7 +197,7 @@
 	}	
 	rows <- na.omit(unique(colrow[order(colrow[,2]), 2]))
 	for (i in 1:length(rows)) {
-		raster <- .raster.read(raster, rows[i])
+		raster <- .rasterRead(raster, rows[i])
 		thisrow <- subset(colrow, colrow[,2] == rows[i])
 		for (j in 1:length(thisrow[,1])) {
 			colrow[colrow[,3]==thisrow[j,3],4] <- raster@data@values[thisrow[j,1]]

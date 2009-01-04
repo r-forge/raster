@@ -55,7 +55,7 @@ map <- function(raster, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 	}
 	else {
 		if (subsample) {
-			raster <- .read.skip(raster, maxdim=maxdim)
+			raster <- .readSkip(raster, maxdim=maxdim)
 		} else {
 			raster <- readAll(raster)
 		}
