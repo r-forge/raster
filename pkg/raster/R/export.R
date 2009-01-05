@@ -15,7 +15,7 @@ import <- function(raster, filename="", overwrite=FALSE) {
 	for (r in 1:nrow(raster)) {
 		raster <- readRow(raster, r)
 		rsout <- setValues(rsout, values(raster), r)
-		rsout <- writeValues(rsout, overwrite=overwrite)
+		rsout <- writeRaster(rsout, overwrite=overwrite)
 	}
 	rsout <- clearValues(rsout)
 	return(rsout)
@@ -124,15 +124,16 @@ writeAscii <- function(raster, filename, overwrite=FALSE) {
  
  
 
-writeOtherHeader <- function(raster, format="BIL") {
-	if (format=="BIL") {
+ 
+writeHeader <- function(raster, type) {
+	if (type=="BIL") {
 		.writeBilHdr(raster)
-	} else if (format=="ErdasRaw") {
+	} else if (type=="ErdasRaw") {
 		.writeErdasRawHdr(raster)
-	} else 	if (format=="ENVI") {
+	} else 	if (type=="ENVI") {
 		.writeENVIHdr(raster)
-	} else 	if (format=="worldfile") {
-		.writeWorldfile(raster)
+	} else 	if (type=="raster") {
+		.writeRasterHdr(raster)
 	} else {
 		stop("This format is not supported")
 	}
@@ -216,11 +217,14 @@ writeOtherHeader <- function(raster, format="BIL") {
 	cat("MinValue=",  minValue(raster), "\n", file = thefile)
 	cat("MaxValue=",  maxValue(raster), "\n", file = thefile)
 	close(thefile)	
+	
+	writeWorldfile(raster, ".rww")	
  }
  
-.writeWorldfile <- function(raster, extension=".world") {
-	hdrfile <- setFileExtension(filename(raster), ".world")
-	thefile <- file(hdrfile, "w")  # open an txt file connectionis
+
+writeWorldfile <- function(raster, extension=".wld") {
+	hdrfile <- setFileExtension(filename(raster), extension)
+	thefile <- file(hdrfile, "w")  
 	cat(xres(raster), "\n", file = thefile)
 	cat("0\n", file = thefile)
 	cat("0\n", file = thefile)

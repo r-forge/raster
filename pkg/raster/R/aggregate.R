@@ -48,7 +48,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 		if (rm.NA) { outraster <- setValues(outraster, as.vector(tapply(values(raster), cells, function(x){fun(na.omit(x))}))) 
 		} else {outraster <- setValues(outraster, as.vector(tapply(values(raster), cells, fun))) }
 
-		if (filename(outraster) != "") {writeValues(outraster, overwrite=overwrite)}
+		if (filename(outraster) != "") {writeRaster(outraster, overwrite=overwrite)}
 		
 	} else if ( dataSource(raster) == 'disk') { 
 	
@@ -78,7 +78,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 				v <- c(v, vals)
 			} else {
 				outraster <- setValues(outraster, vals, r)
-				outraster <- writeValues(outraster, overwrite)
+				outraster <- writeRaster(outraster, overwrite)
 			}
 		} 
 		if (filename(outraster) == "") { 

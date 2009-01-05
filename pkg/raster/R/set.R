@@ -30,20 +30,24 @@ setRaster <- function(raster, filename="") {
 
 setFilename <- function(object, filename) {
 	if (is.na(filename)) {filename <- ""}
-	if (class(object)=='RasterStack') {
-		object@filename <- filename
-	} else {
-		object@file@name <- filename
-	}	
-	if (class(object)=='RasterLayer') {
-		shortname <- fileName(filename)
-		shortname <- setFileExtension(shortname, "")
-		shortname <- gsub(" ", "_", shortname)
-		if (object@file@nbands > 1) { shortname <- paste(shortname, "_", object@file@band) } 
-		object@file@shortname <- shortname
-		object@file@gdalhandle <- list()
-	}	
-	return(object)
+	filename <- trim(filename)
+	if (filename != "") {
+		if (class(object)=='RasterStack') {
+			object@filename <- filename
+		} else {
+			object@file@name <- filename
+		}	
+		if (class(object)=='RasterLayer') {
+			filename <- .setFileExtensionHeader(filename) 
+			shortname <- fileName(filename)
+			shortname <- setFileExtension(shortname, "")
+			shortname <- gsub(" ", "_", shortname)
+			if (object@file@nbands > 1) { shortname <- paste(shortname, "_", object@file@band) } 
+			object@file@shortname <- shortname
+			object@file@gdalhandle <- list()
+		}	
+	}
+	return(object)	
 }
 
 

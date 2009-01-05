@@ -12,7 +12,7 @@ cover <- function(raster1, raster2, filename="", overwrite=TRUE) {
 		vals <- values(raster1)
 		vals[is.na(vals)] <- values(raster2)[is.na(vals)]
 		outraster <- setValues(outraster, vals)
-		if (filename(outraster) != "") { writeValues(outraster, overwrite=overwrite) }
+		if (filename(outraster) != "") { writeRaster(outraster, overwrite=overwrite) }
 	} else if ( dataSource(raster1) == 'disk' &  dataSource(raster2) == 'disk') {
 		for (r in 1:nrow(outraster)) {
 			raster1 <- readRow(raster1, r)
@@ -20,7 +20,7 @@ cover <- function(raster1, raster2, filename="", overwrite=TRUE) {
 			vals <- values(raster1)
 			vals[is.na(vals)] <- values(raster2)[is.na(vals)] 
 			outraster <- setValues(outraster, vals, r)
-			outraster <- writeValues(outraster, overwrite=overwrite)
+			outraster <- writeRaster(outraster, overwrite=overwrite)
 		}
 	} else {
 		stop('data must be either in memory or on disk')

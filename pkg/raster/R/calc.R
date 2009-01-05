@@ -19,11 +19,11 @@ calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=
 	
 	if ( dataContent(raster) == 'all') {
 		outraster <- setValues(outraster, fun(values(raster))) 
-		if (filename(outraster)!="") { outraster <- writeValues(outraster, overwrite=overwrite)
+		if (filename(outraster)!="") { outraster <- writeRaster(outraster, overwrite=overwrite)
 		}
 	} else if ( dataContent(raster) == 'sparse') {
 		outraster <- setValuesSparse(outraster, fun(values(raster)),  dataIndices(raster)) 
-		if (filename(outraster) != "") { outraster <- writeValues(outraster, overwrite=overwrite)
+		if (filename(outraster) != "") { outraster <- writeRaster(outraster, overwrite=overwrite)
 		}
 	} else if (dataSource(raster) == 'disk') {
 		v <- vector(length=0)
@@ -33,7 +33,7 @@ calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=
 				v <- c(v, fun(values(raster)))
 			} else {
 				outraster <- setValues(outraster, fun(values(raster)), r)
-				outraster <- writeValues(outraster, overwrite=overwrite)
+				outraster <- writeRaster(outraster, overwrite=overwrite)
 			}
 		}
 		if (filename(outraster) == "") { outraster <- setValues(outraster, v) }
@@ -60,7 +60,7 @@ mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=
 			object <- readRow(object, r)
 			vals <- apply(values(object), 1, fun)
 			outraster <- setValues(outraster, vals, r) 
-			outraster <- writeValues(outraster, overwrite)
+			outraster <- writeRaster(outraster, overwrite)
 		}
 	}		
 	return(outraster)

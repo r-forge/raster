@@ -14,7 +14,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput
 		n <- ncells(raster)
 		outraster <- setValues(outraster, fun(n)) 
 		if (filename != "") {	
-			outraster <- writeValues(outraster, overwrite=overwrite) 
+			outraster <- writeRaster(outraster, overwrite=overwrite) 
 		}
 		
 	} else if (dataSource(raster) == 'disk') {
@@ -26,7 +26,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput
 				v <- c(v, fun(n))
 			} else {			
 				outraster <- setValues(outraster, fun(n), r) 
-				outraster <- writeValues(outraster, overwrite=overwrite)
+				outraster <- writeRaster(outraster, overwrite=overwrite)
 			}	
 		}	
 		if (filename(outraster) == "") { 

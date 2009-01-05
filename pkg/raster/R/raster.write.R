@@ -11,31 +11,33 @@
 	return(fname)
 }
  
-
 .setFileExtensionHeader <- function(fname) {
-	setFileExtension(fname, ".grd")
+	fname <- setFileExtension(fname, ".grd")
 	return(fname)
 }
  
  
-writeValues <- function(raster, overwrite=FALSE) {
+writeRaster <- function(raster, overwrite=FALSE) {
 	if (dataContent(raster) == 'row' ) {
-		raster <- .writeValuesRow(raster, overwrite)
+		raster <- .writeRasterRow(raster, overwrite)
 	} else if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
-		stop('there are not enough values to write the file. First use setValues(); or use writeValues') 
+		stop('First use setValues()') 
 	} else {
-		raster <- .writeValuesAll(raster, overwrite)
+		raster <- .writeRasterAll(raster, overwrite)
 	}  
 	return(raster)
 }
 
 
 
-.writeValuesAll <- function(raster, overwrite=FALSE) {
+.writeRasterAll <- function(raster, overwrite=FALSE) {
 	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
-	if (!overwrite & file.exists(raster@file@name)) {
-		stop(paste(raster@file@name,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) }
-
+	if (filename(raster) == "") {
+		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
+	}
+	if (!overwrite & file.exists(filename(raster))) {
+		stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+	}
 	raster@file@driver <- 'raster'
 	raster@file@gdalhandle <- list()
 	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -64,24 +66,28 @@ writeValues <- function(raster, overwrite=FALSE) {
 	}
 
 	if (raster@data@content == 'sparse') { 
-		raster <- .write.sparse(raster, overwrite) 
+		raster <- .writeSparse(raster, overwrite) 
 	} else {
 		binraster <- .setFileExtensionValues(filename(raster))
 		con <- file(binraster, "wb")
 		writeBin( values(raster), con, size = raster@file@datasize) 
 		close(con)
-		writeHeader(raster) 
+		.writeRasterHdr(raster) 
 	}	
 	return(raster)
 }
  
  
  
-.writeValuesRow <- function(raster, overwrite=FALSE) {
+.writeRasterRow <- function(raster, overwrite=FALSE) {
 	if (raster@data@content != 'row') { stop('raster does not contain a row') }
 	
 	if (raster@data@indices[1] == 1) {
  	#  FIRST  ROW
+		raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+		if (filename(raster) == "") {
+			stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
+		}
 		if (!overwrite & file.exists(filename(raster))) {
 			stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 		}
@@ -111,7 +117,7 @@ writeValues <- function(raster, overwrite=FALSE) {
 	
 	if (raster@data@indices[2] == ncells(raster)) {
 	# LAST  ROW
-		writeHeader(raster) 
+		.writeRasterHdr(raster) 
 		close(raster@filecon)
 		raster@data@haveminmax <- TRUE
 		raster@data@source <- 'disk'
@@ -125,7 +131,7 @@ writeValues <- function(raster, overwrite=FALSE) {
 }
 
 
-.write.sparse <- function(raster, overwrite=FALSE) {
+.writeSparse <- function(raster, overwrite=FALSE) {
 
 	raster@file@driver <- 'raster'
     raster@file@gdalhandle <- list()
@@ -150,21 +156,18 @@ writeValues <- function(raster, overwrite=FALSE) {
 	close(con)
 
 	# add the 'sparse' key word to the hdr file!!!
-	writeHeader(raster) 
+	.writeRasterHdr(raster) 
 	return(raster)
 } 
 
 
-
-
-writeHeader <- function(raster) {
+.writeRasterHdr <- function(raster) {
 	rastergrd <- .setFileExtensionHeader(filename(raster))
 	thefile <- file(rastergrd, "w")  # open an txt file connectionis
 	cat("[general]", "\n", file = thefile)
 	cat("creator=R package:raster", "\n", file = thefile)
 	cat("created=", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n", file = thefile)
 	cat("title=", raster@file@shortname, "\n", file = thefile)
-	
 	cat("[georeference]", "\n", file = thefile)
 	cat("nrows=",  nrow(raster), "\n", file = thefile)
 	cat("ncols=",  ncol(raster), "\n", file = thefile)
@@ -175,7 +178,6 @@ writeHeader <- function(raster) {
 	cat("xres=", xres(raster), "\n", file = thefile)
 	cat("yres=", yres(raster), "\n", file = thefile)
 	cat("projection=", projection(raster), "\n", file = thefile)
-	
 	cat("[data]", "\n", file = thefile)
 	if (raster@file@datatype == 'ascii') {  
 		datatype <- "ASC" 
@@ -198,8 +200,6 @@ writeHeader <- function(raster) {
 #	cat("nCellvals=", raster@data@ncellvals, "\n", file = thefile)	
 	close(thefile)
 }
-
-
 
 
 #
