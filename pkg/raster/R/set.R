@@ -38,7 +38,7 @@ setFilename <- function(object, filename) {
 	}	
 	if (class(object)=='RasterLayer') {
 		if (filename != "") {
-			filename <- .setFileExtensionHeader(filename) 
+			object@file@name <- .setFileExtensionHeader(filename(object)) 
 		}
 		shortname <- fileName(filename)
 		shortname <- setFileExtension(shortname, "")
