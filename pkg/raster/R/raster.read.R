@@ -115,11 +115,11 @@
 	if (!(is.na(bbox))) { rcut <- crop(raster, bbox) }
 	rasdim <- max(ncol(raster), nrow(raster) )
 	if (rasdim <= maxdim) { 
-		outras <- .rasterRead(raster, -1)
+		outras <- readAll(raster)
 	} else {
 		fact <- maxdim / rasdim
-		nc <- trunc(fact * ncol(raster))
-		nr <- trunc(fact * nrow(raster))
+		nc <- max(1, trunc(fact * ncol(raster)))
+		nr <- max(1, trunc(fact * nrow(raster)))
 		colint <- round(ncol(raster) / nc)
 		rowint <- round(nrow(raster) / nr)
 		nc <- trunc(ncol(raster) / colint)
@@ -139,10 +139,7 @@
 		outras <- setRowCol(outras, nr, nc)
 		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
-		
-		bndbox <- bbox(raster)
-		bndbox[1,2] <- xmx
-		bndbox[2,1] <- ymn
+		bndbox <- changeBbox(raster, xmx=xmx, ymn=ymn)
 		outras <- setBbox(outras, bndbox)
 		outras <- setValues(outras, dd)
 	}

@@ -41,10 +41,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 			sampraster <- setRowCol(sampraster, dim(m)[1], dim(m)[2])
 			xmx <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
 			ymn <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)
-			bndbox <- bbox(object)
-			bndbox[1,2] <- xmx
-			bndbox[2,1] <- ymn
-
+			bndbox <- changeBbox(object, xmx=xmx, ymn=ymn)
 			object <- setBbox(sampraster, bndbox)
  		} else { 
 			m <- values(object, format='matrix')
