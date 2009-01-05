@@ -126,18 +126,21 @@ writeAscii <- function(raster, filename, overwrite=FALSE) {
 
  
 writeHeader <- function(raster, type) {
+	type <- toupper(type)
 	if (type=="BIL") {
 		.writeBilHdr(raster)
-	} else if (type=="ErdasRaw") {
+	} else if (type=="ERDASRAW") {
 		.writeErdasRawHdr(raster)
 	} else 	if (type=="ENVI") {
 		.writeENVIHdr(raster)
-	} else 	if (type=="raster") {
+	} else 	if (type=="RASTER") {
 		.writeRasterHdr(raster)
 	} else {
 		stop("This format is not supported")
 	}
  }
+ 
+ 
  
 .writeBilHdr <- function(raster) {
 	hdrfile <- setFileExtension(filename(raster), ".hdr")

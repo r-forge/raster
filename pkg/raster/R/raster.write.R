@@ -59,9 +59,10 @@ writeRaster <- function(raster, overwrite=FALSE) {
 			raster@data@values <- as.numeric(values(raster))
 		}
 	} else {
-		raster <- setDatatype(raster, 'numeric')
-		if (xmin(raster) > -3.4E38 & xmax(raster) < 3.4E38) {
+		if (xmin(raster) < -3.4E38 | xmax(raster) > 3.4E38) {
 			raster <- setDatatype(raster, 'numeric', 8)
+		} else {
+			raster <- setDatatype(raster, 'numeric', 4)
 		}	
 	}
 
