@@ -16,7 +16,7 @@
 yFromRow <- function(object, rownr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	rownr <- round(rownr)
-	rownr[rownr < 1 | rownr > object@nrows] <- NA
+	rownr[rownr < 1 | rownr > nrow(object)] <- NA
 	y <- ymax(object) - ((rownr-0.5) * yres(object))
 	#hello
 	return(y) }	
@@ -25,7 +25,7 @@ yFromRow <- function(object, rownr) {
 xFromCol <- function(object, colnr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	colnr <- round(colnr)
-	colnr[colnr < 1 | colnr > object@ncols] <- NA
+	colnr[colnr < 1 | colnr > ncol(object)] <- NA
 	x <- xmin(object) + (colnr - 0.5) * xres(object) 
 	return(x) }  
 
@@ -34,8 +34,7 @@ rowFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cell <- as.integer(round(cell))
 	cell[cell < 1 | cell > ncells(object)] <- NA
-	rownr <- as.integer(trunc((cell-1)/object@ncols) + 1)
-#	rownr <- as.integer(trunc(cell / (object@ncols+1)) + 1)
+	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
     return(rownr)
 }
 
@@ -44,9 +43,8 @@ colFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cell <- as.integer(round(cell))
 	cell[cell < 1 | cell > ncells(object)] <- NA	
-	rownr <- as.integer(trunc((cell-1)/object@ncols) + 1)
-	colnr <- as.integer(cell - ((rownr-1) * object@ncols))
-#	colnr <- as.integer(trunc(cell - (trunc(cell / (object@ncols+1) )) * object@ncols))
+	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
+	colnr <- as.integer(cell - ((rownr-1) * ncol(object)))
     return(colnr)
 }
 
@@ -81,9 +79,9 @@ cellFromRowcol <- function(object, rownr, colnr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	rownr <- round(rownr)
 	colnr <- round(colnr)
-	rownr[rownr < 1 | rownr > object@nrows] <- NA
-	colnr[colnr < 1 | colnr > object@ncols] <- NA	
-	return((rownr-1) * object@ncols + colnr)
+	rownr[rownr < 1 | rownr > nrow(object)] <- NA
+	colnr[colnr < 1 | colnr > ncol(object)] <- NA	
+	return((rownr-1) * ncol(object) + colnr)
 }
 
 colFromX <- function ( object, x )	{
@@ -100,7 +98,7 @@ rowFromY <- function ( object, y )	{
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	if (class(y) == 'SpatialPoints' | class(y) == 'SpatialPointsDataFrame') {	y <- y@points[,2] }
 	rownr <- 1 + (trunc((ymax(object) - y) / yres(object)))
-	rownr[y == ymin(object) ] <- object@nrows 
+	rownr[y == ymin(object) ] <- nrow(object) 
 	rownr[y > ymax(object) | y < ymin(object)] <- NA
 	return(rownr)
 }	
@@ -131,8 +129,8 @@ cxyFromBox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(obje
 	cells <- vector("integer", length=0)
 # RH: ouch, this should be done with apply 	
 	for (i in firstrow:lastrow) {
-		firstcell <- (i-1) * object@ncols + firstcol
-		lastcell <- (i-1) * object@ncols + lastcol
+		firstcell <- (i-1) * ncol(object) + firstcol
+		lastcell <- (i-1) * ncol(object) + lastcol
 		cells <- append(cells, c(firstcell:lastcell))
 	}
 	cxy <- cbind(cells, xyFromCell(object, cells))

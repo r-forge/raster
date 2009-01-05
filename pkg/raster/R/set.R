@@ -127,8 +127,8 @@ setBbox <- function(object, bndbox, projstring=projection(object), keepres=FALSE
 	if (keepres) {
 		object@ncols <- as.integer(round( (xmax(object) - xmin(object)) / xrs ))
 		object@nrows <- as.integer(round( (ymax(object) - ymin(object)) / xrs ))
-		object@bbox[1,2] <- object@bbox[1,1] + object@ncols * xrs
-		object@bbox[2,2] <- object@bbox[2,1] + object@nrows * yrs
+		object@bbox[1,2] <- object@bbox[1,1] + ncol(object) * xrs
+		object@bbox[2,2] <- object@bbox[2,1] + nrow(object) * yrs
 	}
 	object <- setProjection(object, projstring)
 	return(object)

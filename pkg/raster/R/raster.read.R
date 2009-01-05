@@ -2,7 +2,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date : June 2008
-# Version 0,3
+# Version 0,4
 # Licence GPL v3
 
 
@@ -12,7 +12,7 @@
 	if (startrow > nrow(raster) ) { stop("startrow too high") }
 	if (nrows < 1) { stop("nrows should be > 1") } 
 	if (startcol < 1) { stop("startcol < 1") }
-	if (startcol > ncol(raster)) { stop("startcol  > raster@ncols")  }
+	if (startcol > ncol(raster)) { stop("startcol > ncol(raster)")  }
 	if (ncolumns < 1) { stop("ncolumns should be > 1") }
 	if ((startcol + ncolumns - 1) > ncol(raster) ) {
 		warning("ncolumns too high, truncated")
@@ -111,8 +111,54 @@
 
 
 #sample while reading and return matrix (for plotting )
-.readSkip <- function(raster, maxdim=500, bbox=NA) {
-	if (!(is.na(bbox))) { rcut <- crop(raster, bbox) }
+
+readRandom <- function(raster, n=500, na.rm = TRUE) {
+	if (dataContent(raster) == 'all') {
+		values <- values(raster)
+		if (na.rm) { values <- na.omit(values) }
+		if (length(values) > n) {
+			r <- order(runif(length(values)))
+			values <- values[r]
+			values <- values[1:n]
+		}
+	} else {
+		if (dataSource(raster) == 'disk') {
+			if (ncells(raster) <= n) {
+				raster <- readAll(raster)
+				values <- cbind(1:ncells(raster), values(raster))
+				if (na.rm) { values <- na.omit(values) }
+			} else {	
+				if (na.rm) {
+					N <- n 
+				} else {
+					N <- 2 * n 
+				}	
+				cells <- unique(as.integer(round(runif(N) * ncells(raster) + 0.5)))
+				cells <- cells[cells > 0]
+				values <- cellValues(raster, cells)
+				if (na.rm) {
+					values <- na.omit(values)
+					if (length(values) >= n) {
+						values <- values[1:n]
+					}
+				}	
+			}
+		}
+	}	
+	return(values)
+}
+
+
+
+readSkip <- function(raster, maxdim=500, bbox=NA, asRaster=FALSE) {
+	if (!(is.na(bbox))) { 
+		rcut <- crop(raster, bbox) 
+		warning('bbox option has not been implemented yet')
+	} else {
+		rcut <- setRaster(raster)
+	}
+	# Need to do something with this now.....
+	
 	rasdim <- max(ncol(raster), nrow(raster) )
 	if (rasdim <= maxdim) { 
 		outras <- readAll(raster)
@@ -143,7 +189,11 @@
 		outras <- setBbox(outras, bndbox)
 		outras <- setValues(outras, dd)
 	}
-	return(outras)
+	if (asRaster) {
+		return(outras)
+	} else {
+		return(values(outras))
+	}	
 }
 
 
@@ -206,7 +256,7 @@
 
 
 .readCellsRaster <- function(raster, cells) {
-	cells <- cbind(cells, NA)
+#	cells <- cbind(cells, NA)
 #	valuename <- raster@file@shortname
 #	if (valuename == "") {valuename <- "value" }
 #	colnames(cells) <- c("id", "cell", valuename)

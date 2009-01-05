@@ -1,26 +1,29 @@
-\name{properties}
+\name{Values}
 \alias{values}
 \alias{valuesRow}
-\alias{valuesCells}
-\alias{valuesXY}
-\alias{valuesCells,RasterLayer-method}
-\alias{valuesXY,RasterLayer-method}
-\alias{valuesCells,RasterStack-method}
-\alias{valuesXY,RasterStack-method}
+\alias{cellValues}
+\alias{xyValues}
+\alias{cellValues,RasterLayer-method}
+\alias{xyValues,RasterLayer-method}
+\alias{cellValues,RasterStack-method}
+\alias{xyValues,RasterStack-method}
 \alias{maxValue}
 \alias{minValue}
   
   
 \title{ Get raster properties }
 \description{
-  values returns data values that are associated with the RasterLayer object (e.g. after read.* has been used). RasterLayer data are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
+  values returns cell values for a Raster* object (typically after read* has been used). 
+  valuesRow returns values for a row of values in the case that all values are in memory (if they are on disk, use readRow() and values())
+  cellValues and xyValues return a vector of values for specified cells or xy coordiates
+  minValue and maxValue return the extreme data values for a RasterLayer (or layer in a RasterStack or Brick)
 }
 
 \usage{
 values(object, format='vector', names=FALSE)
 valuesRow(raster, rownr)
-valuesCells(object, cells)
-valuesXY(object, xy)
+cellValues(object, cells)
+xyValues(object, xy)
 minValue(object, layer=1)
 maxValue(object, layer=1)
 }
@@ -38,7 +41,9 @@ maxValue(object, layer=1)
   
 
 \note{
-  Some of these functions simply take the values from the data slots in the Raster or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
+	RasterLayer values are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
+	Some of these functions simply take the values from the data slots in the Raster or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
+  
 }
 
 \value{
@@ -50,7 +55,7 @@ raster cell value(s)
 #using a new default raster (1 degree global)
 rs <- newRaster()
 rs <- setValues(rs, 1:ncells(rs))
-valuesCells(rs, c(1, 10, 100))
+cellValues(rs, c(1, 10, 100))
 minValue(rs)
 maxValue(rs)
 
@@ -58,11 +63,11 @@ maxValue(rs)
 
 # read values for cells
   cells <- c(1, 1900, 5000)
-  valuesCells(rs, cells)
+  cellValues(rs, cells)
 
 # read values for (x, y) coordinates
   xy <- xyFromCell(rs, cells)
-  valuesXY(rs, xy)
+  xyValues(rs, xy)
 
 }
 \keyword{ spatial }

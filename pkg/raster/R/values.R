@@ -47,27 +47,27 @@ valuesRow <- function(raster, rownr) {
 		return(raster@data@values)
 		
 	} else if (raster@data@content=="all") {
-		mdata <- matrix(raster@data@values, nrow=raster@nrows, ncol=raster@ncols, byrow=TRUE)
+		mdata <- matrix(raster@data@values, nrow=nrow(raster), ncol=ncol(raster), byrow=TRUE)
 		if (names) {
-			colnames(mdata) <- seq(1:raster@ncols)
-			rownames(mdata) <- seq(1:raster@nrows)
+			colnames(mdata) <- seq(1:ncol(raster))
+			rownames(mdata) <- seq(1:nrow(raster))
 		}	
 		return(mdata)
 
 	} else if (raster@data@content=="sparse") {
-		mdata <- matrix(NA, nrow=raster@nrows, ncol=raster@ncols, byrow=TRUE)
-		vals <- cbind(raster@data@indices, raster@data@values)
+		mdata <- matrix(NA, nrow=nrow(raster), ncol=ncol(raster), byrow=TRUE)
+		vals <- cbind(raster@data@indices, values(raster))
 		mdata[vals[,1]] <- vals[1,2]
 		if (names) {
-			colnames(mdata) <- seq(1:raster@ncols)
-			rownames(mdata) <- seq(1:raster@nrows)
+			colnames(mdata) <- seq(1:ncol(raster))
+			rownames(mdata) <- seq(1:nrow(raster))
 		}	
 		return(mdata)
 		
 	} else if (raster@data@content=="row") {
-		mdata <- matrix(raster@data@values, nrow=1, ncol=raster@ncols, byrow=TRUE)
+		mdata <- matrix(raster@data@values, nrow=1, ncol=ncol(raster), byrow=TRUE)
 		if (names) {
-			colnames(mdata) <- seq(1:raster@ncols)
+			colnames(mdata) <- seq(1:ncol(raster))
 			therow <- rowFromCell(raster, raster@data@indices[1])
 			rownames(mdata) <- therow
 		}
@@ -85,7 +85,7 @@ valuesRow <- function(raster, rownr) {
 		
 		if (nrows > 1) {
 			for (i in 2:nrows) {
-				arow <- raster@data@values[((i-1)*ncols+1):((i-1)*ncols+ncols)]
+				arow <- values(raster)[((i-1)*ncols+1):((i-1)*ncols+ncols)]
 				mdata <- rbind(mdata, t(arow))
 			}
 		}

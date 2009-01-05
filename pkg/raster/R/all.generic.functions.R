@@ -97,34 +97,34 @@ setMethod('readPartOfRow', signature(object='RasterStack'),
 		return( .stackRead(object, rownr, startcol, ncolumns) ) }
 )
 
-if (!isGeneric("valuesCells")) {
-	setGeneric("valuesCells", function(object, cells)
-		standardGeneric("valuesCells"))
+if (!isGeneric("cellValues")) {
+	setGeneric("cellValues", function(object, cells)
+		standardGeneric("cellValues"))
 }	
 	
-setMethod("valuesCells", signature(object='RasterLayer'), 
+setMethod("cellValues", signature(object='RasterLayer'), 
 	function(object, cells) { 
 		return(.rasterReadCells(object, cells))}
 )
 
 
-setMethod("valuesCells", signature(object='RasterStack'), 
+setMethod("cellValues", signature(object='RasterStack'), 
 	function(object, cells) { 
 		return(.stackReadCells(object, cells))}
 )
 
-if (!isGeneric("valuesXY")) {
-	setGeneric("valuesXY", function(object, xy)
-		standardGeneric("valuesXY"))
+if (!isGeneric("xyValues")) {
+	setGeneric("xyValues", function(object, xy)
+		standardGeneric("xyValues"))
 }	
 	
-setMethod("valuesXY", signature(object='RasterLayer'), 
+setMethod("xyValues", signature(object='RasterLayer'), 
 	function(object, xy) { 
 		return(.rasterReadXY(object, xy))
 	}
 )
 
-setMethod("valuesXY", signature(object='RasterStack'), 
+setMethod("xyValues", signature(object='RasterStack'), 
 	function(object, xy) { 
 		return(.stackReadXY(object, xy))}
 )
@@ -187,19 +187,16 @@ setMethod('hist', signature(x='RasterLayer'),
 		if (dataContent(x) != 'all') {
 			if (dataSource(x) == 'disk') {
 		# TO DO: ake a function that does this by block and combines  all data into a single histogram
-				if (ncells(x) > maxsamp) {
-					cells <- unique(runif(maxsamp) * ncells(x))
-					cells <- cells[cells > 0]
-					values <- valuesCells(x, cells)
-					nas <- length(na.omit(values))
-					msg <- paste(round(100 * length(cells) / ncells(x)), "% of the raster cells were used", sep="")
-					if (nas < length(values)) {
-						msg <- paste(msg, " (of which ", 100 - round(100 * nas / length(values)), "% were NA)", sep="")
-					}
-					msg <- paste(msg, ". ",nas," values used.", sep="")
-					warning(msg)
+				if (ncells(x) <= maxsamp) {
+					values <- na.omit(values(readAll(x)))
 				} else {
-					values <- values(readAll(x))
+					values <- readRandom(x, maxsamp)
+					msg <- paste(round(100 * maxsamp / ncells(x)), "% of the raster cells were used", sep="")
+					if (maxsamp > length(values)) {
+						msg <- paste(msg, " (of which ", 100 - round(100 * length(values) / maxsamp ), "% were NA)", sep="")
+					}
+					msg <- paste(msg, ". ",length(values)," values used.", sep="")
+					warning(msg)
 				}	
 			} else { stop('cannot make a histogram; need data on disk or in memory')}
 		} else {
