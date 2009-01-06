@@ -12,15 +12,15 @@
 \usage{
 Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, ForceIntOutput = FALSE, filename="", overwrite=FALSE) 
 disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
-crop(raster, boundingbox, filename="", overwrite=FALSE) 
-expand(raster, boundingbox, filename="", overwrite=FALSE)
+crop(raster, bndbox, filename="", overwrite=FALSE) 
+expand(raster, bndbox, filename="", overwrite=FALSE)
 Merge(rasters, slack=0.01, filename="", overwrite=FALSE) 
 }
 
 \arguments{
   \item{raster}{ a RasterLayer object }
   \item{rasters}{ a list of RasterLayer objects }
-  \item{boundingbox} {bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
+  \item{bndbox} {bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
   \item{filename}{ output filename for a new raster }
   \item{fun}{ function used to Aggregate values. It should return one number. E.g. mean or max }
   \item{fact}{ degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details }

@@ -11,8 +11,8 @@
   See read* and values() for access to the values
 }
 \usage{
-	newBrick(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projection = "+proj=longlat +datum=WGS84")
-	brickFromBbox(boundingbox, nrows = 1, ncols = 1)
+	newBrick(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
+	brickFromBbox(boundingbox, nrows = 1, ncols = 1, projstring="")
 	brickFromFile(filename, values=FALSE)
 	brickFromStack(stack, values=FALSE)
 }
@@ -25,8 +25,8 @@
   \item{ymx}{ maximum y coordinate of raster (top border) }
   \item{nrows}{ number of rows on raster }
   \item{ncols}{ number of columns on raster }
-  \item{projection}{ map projection of raster data }
-  \item{boundingbox} {bounding box used to crop (cut, subset) a raster. Any object that is or has a bounding box (see below) }
+  \item{projstring}{ PROJ4 type description of a map projection}
+  \item{boundingbox} {bounding box used to create a brick. Can be any object that is or has a bounding box (see below) }
   \item{values} {logical. If \code{TRUE}, RasterBrick values will be read into memory with 'readAll()'}
   \item{stack}{ RasterStack object }
  }

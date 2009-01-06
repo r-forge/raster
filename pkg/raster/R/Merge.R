@@ -23,7 +23,7 @@ Merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 		bb[,2] <- pmax(bb[,2], bb2[,2])
 	}
 	outraster <- setRaster(rasters[[1]], filename)
-	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2], projection(outraster))
+	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2])
 	outraster <- setBbox(outraster, bndbox, keepres=TRUE)
 
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))

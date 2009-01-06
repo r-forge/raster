@@ -12,9 +12,9 @@
 #}
 
 
-crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
+crop <- function(raster, bndbox, filename="", overwrite=FALSE) {
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
-	bb <- bbox(boundingbox)
+	bb <- bbox(bndbox)
 
 	xmn <- max(bb[1,1], xmin(raster))
 	xmx <- min(bb[1,2], xmax(raster))
@@ -27,7 +27,7 @@ crop <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	if (ymn == ymx) {stop("ymin and ymax are less than one cell apart")}
 	
 	outraster <- setRaster(raster, filename)
-	bndbox <- newBbox(xmn, xmx, ymn, ymx, projection(outraster))
+	bndbox <- newBbox(xmn, xmx, ymn, ymx)
 	outraster <- setBbox(outraster, bndbox, keepres=T)
 	
 	if (dataContent(raster) == 'all')  {

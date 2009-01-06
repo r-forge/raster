@@ -7,8 +7,8 @@
 # Licence GPL v3
 
 
-expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
-	bbox <- boundingbox(boundingbox)
+expand <- function(raster, bndbox, filename="", overwrite=FALSE) {
+	bbox <- boundingbox(bndbox)
 	res <- resolution(raster)
 # snap points to pixel boundaries
 	xmn <- round(bbox[1,1] / res[1]) * res[1]
@@ -23,7 +23,7 @@ expand <- function(raster, boundingbox, filename="", overwrite=FALSE) {
 	ymx <- max(ymx, ymax(raster))
 	
 	outraster <- setRaster(raster, filename)
-	bndbox <- newBbox(xmn, xmx, ymn, ymx, projection(outraster))
+	bndbox <- newBbox(xmn, xmx, ymn, ymx)
 	outraster <- setBbox(outraster, bndbox, keepres=T)
 
 	startrow <- rowFromY(outraster, ymax(raster))

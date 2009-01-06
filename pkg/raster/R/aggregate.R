@@ -30,7 +30,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 	xmx <- xmin(raster) + csteps * xfact * xres(raster)
 		
 	outraster <- setRaster(raster, filename)
-	bndbox <- newBbox(xmin(raster), xmx, ymn, ymax(raster), projection(raster))
+	bndbox <- newBbox(xmin(raster), xmx, ymn, ymax(raster))
 	outraster <- setBbox(outraster, bndbox)
 	outraster <- setRowCol(outraster, nrows=rsteps, ncols=csteps) 
 	

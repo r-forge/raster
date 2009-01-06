@@ -68,7 +68,8 @@ stackAddRasters <- function(rstack, rasters) {
 		i <- nlayers(rstack) + 1
 		if (i == 1) {
 			rstack <- setRowCol(rstack, nrow(raster), ncol(raster))
-			rstack <- setBbox(rstack, raster, projection(raster))
+			rstack <- setBbox(rstack, raster)
+			rstack <- setProjection(rstack, projection(raster))
 		} else {
 			if (!compare(c(rstack, raster))) { 
 				stop(paste("could not add raster:", filename(raster))) 
@@ -105,7 +106,7 @@ stackSave <- function(rstack) {
 	if (stackfile == "") { stop('RasterStack does not have a filename.') }
 	thefile <- file(stackfile, "w")
 	for (i in 1:length(rstack@rasters)) {
-		cat(rstack@rasters[[i]]@file@name, "\t", rstack@rasters[[i]]@file@band,"\n", file=thefile)
+		cat(filename(rstack@rasters[[i]]), "\t", rstack@rasters[[i]]@file@band,"\n", file=thefile)
 		}
 	close(thefile)
 	return(rstack)

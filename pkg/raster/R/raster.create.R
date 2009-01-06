@@ -6,17 +6,18 @@
 
 
 newRaster <- function(xmin=-180, xmax=180, ymin=-90, ymax=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
-	bb <- newBbox(xmin, xmax, ymin, ymax, projstring)
-	return(rasterFromBbox(bb, nrows=nrows, ncols=ncols))
+	bb <- newBbox(xmin, xmax, ymin, ymax)
+	return(rasterFromBbox(bb, nrows=nrows, ncols=ncols, projstring))
 }
 
-rasterFromBbox <- function(boundingbox, nrows=1, ncols=1) {
+rasterFromBbox <- function(boundingbox, nrows=1, ncols=1, projstring="") {
 	nr = as.integer(round(nrows))
 	nc = as.integer(round(ncols))
 	if (nc < 1) { stop("ncols should be larger than 0") }
 	if (nr < 1) { stop("nrows should be larger than 0") }
+	proj4string <- newCRS(projstring)
 	if (validObject(boundingbox)) {
-		raster <- new("RasterLayer", bbox = boundingbox@bbox, proj4string=boundingbox@proj4string, ncols = nc, nrows = nr )
+		raster <- new("RasterLayer", bbox = boundingbox@bbox, proj4string=proj4string, ncols = nc, nrows = nr )
 		raster@data@content <- 'nodata'
 		return(raster) 
 	} else {

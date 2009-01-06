@@ -86,14 +86,14 @@ newCRS <- function(projstring) {
 }
 
 
-changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), projstring=projection(object), keepres=FALSE) {
+changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) {
 	bb <- newBbox(xmn, xmx, ymn, ymx) 
-	object <- setBbox(object, bb, projstring, keepres=keepres) 
+	object <- setBbox(object, bb, keepres=keepres) 
 	return(object)
 }
 
 
-newBbox <- function(xmn, xmx, ymn, ymx, projstring="") {
+newBbox <- function(xmn, xmx, ymn, ymx) {
 	if (xmn > xmx) {
 		x <- xmn
 		xmn <- xmx
@@ -104,7 +104,7 @@ newBbox <- function(xmn, xmx, ymn, ymx, projstring="") {
 		ymn <- ymx
 		ymx <- y
 	}
-	projs <- newCRS(projstring)
+#	projs <- newCRS(projstring)
 	bb <- new("Spatial")
 	bb@bbox[1,1] <- xmn
 	bb@bbox[1,2] <- xmx
@@ -112,12 +112,12 @@ newBbox <- function(xmn, xmx, ymn, ymx, projstring="") {
 	bb@bbox[2,2] <- ymx
 	bb@bbox[3,1] <- 0
 	bb@bbox[3,2] <- 1
-	bb@proj4string <- projs
+#	bb@proj4string <- projs
 	return(bb)
 }
 
 
-setBbox <- function(object, bndbox, projstring=projection(object), keepres=FALSE) {
+setBbox <- function(object, bndbox, keepres=FALSE) {
 	xrs <- xres(object)
 	yrs <- yres(object)
 	object@bbox[1,1] <- bndbox@bbox[1,1]
@@ -130,7 +130,6 @@ setBbox <- function(object, bndbox, projstring=projection(object), keepres=FALSE
 		object@bbox[1,2] <- object@bbox[1,1] + ncol(object) * xrs
 		object@bbox[2,2] <- object@bbox[2,1] + nrow(object) * yrs
 	}
-	object <- setProjection(object, projstring)
 	return(object)
 }
 
