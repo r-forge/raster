@@ -10,19 +10,14 @@ newRaster <- function(xmin=-180, xmax=180, ymin=-90, ymax=90, nrows=180, ncols=3
 	return(rasterFromBbox(bb, nrows=nrows, ncols=ncols, projstring))
 }
 
-rasterFromBbox <- function(boundingbox, nrows=1, ncols=1, projstring="") {
+rasterFromBbox <- function(bndbox, nrows=1, ncols=1, projstring="") {
 	nr = as.integer(round(nrows))
 	nc = as.integer(round(ncols))
-	if (nc < 1) { stop("ncols should be larger than 0") }
-	if (nr < 1) { stop("nrows should be larger than 0") }
+	if (nc < 1) { stop("ncols should be > 0") }
+	if (nr < 1) { stop("nrows should be > 0") }
 	proj4string <- newCRS(projstring)
-	if (validObject(boundingbox)) {
-		raster <- new("RasterLayer", bbox = boundingbox@bbox, proj4string=proj4string, ncols = nc, nrows = nr )
-		raster@data@content <- 'nodata'
-		return(raster) 
-	} else {
-		return <- NA 
-	}
+	raster <- new("RasterLayer", bbox = bndbox@bbox, proj4string=proj4string, ncols = nc, nrows = nr )
+	return(raster) 
 }
 
 rasterFromFile <- function(filename, values=FALSE, band=1) {
