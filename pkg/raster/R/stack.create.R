@@ -19,12 +19,14 @@ stackFromFile <- function(stackfile) {
 
 
 stackFromRasterfiles <- function(rasterfiles, bands= rep(1, length(rasterfiles))) {
-	return(stackAddFiles(NA, rasterfiles, bands))
+	rstack <- new("RasterStack") 
+	return(stackAddFiles(rstack, rasterfiles, bands))
 }
 
 
 stackFromRasters <- function(rasters) {
-	return(stackAddRasters(NA, rasters))
+	rstack <- new("RasterStack") 
+	return(stackAddRasters(rstack, rasters))
 }
 
 
@@ -56,7 +58,7 @@ stackAddFiles <- function(rstack, rasterfiles, bands= rep(1, length(rasterfiles)
 
 stackAddRasters <- function(rstack, rasters) {
 #rasters is a list of raster objects
-	if (class(rstack) != "RasterStack") { rstack <- new("RasterStack") }
+	if (class(rstack) != "RasterStack") { stop("rstack should be a RasterStack objectr") }
 
 	for (i in 1 : length(rasters)) { 
 		if (length(rasters) == 1) { raster <- rasters 
@@ -66,14 +68,11 @@ stackAddRasters <- function(rstack, rasters) {
 		i <- nlayers(rstack) + 1
 		if (i == 1) {
 			rstack <- setRowCol(rstack, nrow(raster), ncol(raster))
-			rstack <- setBbox(rstack, raster)
+			rstack <- setBbox(rstack, raster, projection(raster))
 		} else {
-			if (length(attr(rstack@proj4string, "projection")) != 0)
-				{
-				if ( length(attr(raster@proj4string, "projection")) == 0 ) { warning("raster with unknown projection added") 
-				} else if (rstack@proj4string != raster@proj4string) { warning("different projections used") }	
+			if (!compare(c(rstack, raster))) { 
+				stop(paste("could not add raster:", filename(raster))) 
 			}
-			if (!compare(c(rstack, raster))) { stop (paste("could not add raster:", filename(raster))) }
 			count <- 1
 			for (j in 1:(i-1)) {
 				if (filename(raster) == rstack@rasters[[j]]@file@shortname) { 
