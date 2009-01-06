@@ -118,12 +118,13 @@ newBbox <- function(xmn, xmx, ymn, ymx) {
 
 
 setBbox <- function(object, bndbox, keepres=FALSE) {
+	bndbox <- boundingbox(bndbox)
 	xrs <- xres(object)
 	yrs <- yres(object)
-	object@bbox[1,1] <- bndbox@bbox[1,1]
-	object@bbox[1,2] <- bndbox@bbox[1,2]
-	object@bbox[2,1] <- bndbox@bbox[2,1]
-	object@bbox[2,2] <- bndbox@bbox[2,2]
+	object@bbox[1,1] <- bndbox[1,1]
+	object@bbox[1,2] <- bndbox[1,2]
+	object@bbox[2,1] <- bndbox[2,1]
+	object@bbox[2,2] <- bndbox[2,2]
 	if (keepres) {
 		object@ncols <- as.integer(round( (xmax(object) - xmin(object)) / xrs ))
 		object@nrows <- as.integer(round( (ymax(object) - ymin(object)) / xrs ))
