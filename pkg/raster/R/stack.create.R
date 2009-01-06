@@ -105,7 +105,7 @@ stackSave <- function(rstack) {
 	if (stackfile == "") { stop('RasterStack does not have a filename.') }
 	thefile <- file(stackfile, "w")
 	for (i in 1:length(rstack@rasters)) {
-		cat(rstack@rasters[[i]]@file@name, "\t", rstack@rasters[[i]]@band,"\n", file=thefile)
+		cat(rstack@rasters[[i]]@file@name, "\t", rstack@rasters[[i]]@file@band,"\n", file=thefile)
 		}
 	close(thefile)
 	return(rstack)
