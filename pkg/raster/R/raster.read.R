@@ -150,10 +150,10 @@ readRandom <- function(raster, n=500, na.rm = TRUE) {
 
 
 
-readSkip <- function(raster, maxdim=500, bbox=NA, asRaster=FALSE) {
-	if (!(is.na(bbox))) { 
-		rcut <- crop(raster, bbox) 
-		warning('bbox option has not been implemented yet')
+readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
+	if (!(is.na(bndbox))) { 
+		rcut <- crop(raster, bndbox) 
+		warning('bndbox option has not been implemented yet')
 	} else {
 		rcut <- setRaster(raster)
 	}

@@ -14,7 +14,7 @@
 
 crop <- function(raster, bndbox, filename="", overwrite=FALSE) {
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
-	bb <- bbox(bndbox)
+	bb <- boundingbox(bndbox)
 
 	xmn <- max(bb[1,1], xmin(raster))
 	xmx <- min(bb[1,2], xmax(raster))

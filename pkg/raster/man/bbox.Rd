@@ -1,4 +1,4 @@
-\name{bbox}
+\name{boundingbox}
 \alias{newBbox}
 \alias{setBbox}
 \alias{changeBbox}

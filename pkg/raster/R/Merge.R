@@ -16,9 +16,9 @@ Merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 #		}
 #	}
 
-	bb <- bbox(rasters[[1]])
+	bb <- boundingbox(rasters[[1]])
 	for (i in 2:length(rasters)) {
-		bb2 <- bbox(rasters[[i]])
+		bb2 <- boundingbox(rasters[[i]])
 		bb[,1] <- pmin(bb[,1], bb2[,1])
 		bb[,2] <- pmax(bb[,2], bb2[,2])
 	}
