@@ -33,14 +33,20 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput
 				res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
 			}
 		}
-		if ( dataContent(raster) == 'all') { outraster <- setValues(outraster, res) }
-		if ( dataContent(raster) == 'sparse') { outraster <- setValues(outraster, res,  dataIndices(raster)) }
-		if (filename(outraster) != "" ) {	outraster <- writeRaster(outraster, overwrite=overwrite) }
+		if ( dataContent(raster) == 'all') { 
+			outraster <- setValues(outraster, res) 
+		}
+		if ( dataContent(raster) == 'sparse') { 
+			outraster <- setValues(outraster, res,  dataIndices(raster)) 
+		}
+		if (filename(outraster) != "" ) {
+			outraster <- writeRaster(outraster, overwrite=overwrite) 
+		}
 	} else {
 		for (r in 1:nrow(raster)) {
 			raster <- readRow(raster, r)
+			res <- values(raster)
 			for (i in 1:length(rclmat[,1])) {
-				res <- values(raster)
 				if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
 					res[ is.na(values(raster)) ] <- rclmat[i, 3] 
 				} else {
