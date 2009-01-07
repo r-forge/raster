@@ -46,15 +46,24 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	if (xx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
 	xx <- as.numeric( substr( as.character(xx), 1, ndecs) )
 		
-#   as "ll" stands for lower left corner , it should be this,  yn <- gdalinfo[["ll.y"]];   yx <- ymin + gdalinfo[["res.y"]]  * raster$nrows
-#  but in fact  the upper left corner "ul" is returned so we do this:
-	yx <- gdalinfo[["ll.y"]]
+#   as "ll" stands for lower left corner , it should be this,  
+	gdalv <- (packageDescription(pkg = "rgdal")$Version)
+	dif <- compareVersion(gdalv, "0.5-32")
+	if (dif < 0) {
+		yx <- gdalinfo[["ll.y"]]
+		yn <- yx - gdalinfo[["res.y"]] * nr
+	} else {
+		yn <- gdalinfo[["ll.y"]]
+		yx <- yn + gdalinfo[["res.y"]] * nr
+	}
+		
+	if (yn < 0) { ndecs <- 9 } else { ndecs <- 8 }
+	yn <- as.numeric( substr( as.character(yn), 1, ndecs) )
 	if (yx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
 	yx <- as.numeric( substr( as.character(yx), 1, ndecs) )
 
-	yn <- yx - gdalinfo[["res.y"]] * nr
-	if (yn < 0) { ndecs <- 9 } else { ndecs <- 8 }
-	yn <- as.numeric( substr( as.character(yn), 1, ndecs) )
+	#  but in fact  the upper left corner "ul" is returned so we do this:
+
 	raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projstring="")
 	raster <- setFilename(raster, filename)
 	raster <- setDatatype(raster, "numeric")
