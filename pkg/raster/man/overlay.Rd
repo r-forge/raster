@@ -51,5 +51,4 @@
 	r7 <- r1 * r2
 }	
 
-}
 \keyword{ spatial }

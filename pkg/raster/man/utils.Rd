@@ -1,16 +1,19 @@
 \name{utilities}
 \alias{compare}
+\alias{roundCoords}
 \alias{newCRS}
 
   
 \title{ Compare rasters }
 \description{
   compare evaluates whether a list of rasters has the same origin, resolution, number of rows and columns, and projection (or a subset thereof).
+  roundCoords rounds the coordinates to a number of digits specified. 
   newCRS is a helper function to create a CRS map projection object.
 }
 
 \usage{
 compare(rasters, origin=TRUE, resolution=TRUE, rowcol=TRUE, projection=TRUE, slack=0.01, stopiffalse=TRUE) 
+roundCoords(object, digits=0)
 newCRS(projstring)
 
 }
@@ -23,7 +26,9 @@ newCRS(projstring)
   \item{projection}{ logical. If \code{TRUE} projections are compared.}
   \item{slack} { fraction difference allowed in comparing origin and resolution }
   \item{stopiffalse}{logical. If \code{TRUE}, an error will be reported if rasters are not the same}
-  \item{projstring}{ a PROJ type character string describing projection and datum}
+  \item{object} { a Raster* object }
+  \item{digits} { integer indicating the precision to be used} 
+  \item{projstring}{ a PROJ4 type character string describing projection and datum}
  }
   
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}

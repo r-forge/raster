@@ -66,6 +66,15 @@ clearValues <- function(raster) {
 }
 
 
+roundCoords <- function(object, digits=0) {
+	digits <- max(0, digits)
+	object@bbox[1,1] <- round(object@bbox[1,1], digits)
+	object@bbox[1,2] <- round(object@bbox[1,2], digits)
+	object@bbox[2,1] <- round(object@bbox[2,1], digits)
+	object@bbox[2,2] <- round(object@bbox[2,2], digits)
+	return(object)
+}
+
 
 
 newCRS <- function(projstring) {

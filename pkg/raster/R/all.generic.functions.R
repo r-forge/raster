@@ -18,11 +18,14 @@ setAs('SpatialGridDataFrame', 'RasterLayer',
 
 setMethod('==', signature(e1='AbstractRaster', e2='AbstractRaster'),
 	function(e1,e2){
-		c1 <- identical(ncol(e1), ncol(e2))
-		c2 <- identical(nrow(e1), nrow(e2))
-		c3 <- identical(boundingbox(e1), boundingbox(e2))
-		c4 <- identical(projection(e1),projection(e2))
-		cond <- c1 & c2 & c3 & c4
+	cond <- compare(c(e1, e2), origin=TRUE, resolution=TRUE, rowcol=TRUE, projection=TRUE, slack=0.01, stopiffalse=FALSE) 
+	
+#		c1 <- identical(ncol(e1), ncol(e2))
+#		c2 <- identical(nrow(e1), nrow(e2))
+#		c3 <- identical(boundingbox(e1), boundingbox(e2))
+#		c4 <- identical(projection(e1),projection(e2))
+#		cond <- c1 & c2 & c3 & c4
+
 		return(cond)
 	}
 )	
@@ -181,30 +184,6 @@ setMethod("xyValues", signature(object='RasterStack'),
 )
 
 
-setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, y, ...)  {
-		map(x, ...)
-	}
-)	
-	
-
-setMethod("plot", signature(x='RasterStack', y='numeric'), 
-	function(x, y, ...)  {
-		ind <- as.integer(round(y))
-		ind <- min(max(ind, 1), nlayers(x))
-		map(x, ind, ...)
-	}
-)		
-
-
-setMethod("plot", signature(x='RasterBrick', y='numeric'), 
-	function(x, y, ...)  {
-		ind <- as.integer(round(y))
-		ind <- min(max(ind, 1), nlayers(x))
-		map(x, ind, ...)
-	}
-)		
-
 
 setMethod('summary', signature(object='AbstractRaster'), 
 	function(object, ...) {
@@ -231,6 +210,39 @@ setMethod('summary', signature(object='AbstractRaster'),
 	}	
 )
 
+
+setMethod("plot", signature(x='RasterLayer', y='missing'), 
+	function(x, y, ...)  {
+		map(x, ...)
+	}
+)	
+
+
+setMethod("plot", signature(x='RasterStack', y='numeric'), 
+	function(x, y, ...)  {
+		ind <- as.integer(round(y))
+		ind <- min(max(ind, 1), nlayers(x))
+		map(x, ind, ...)
+	}
+)		
+
+
+setMethod("plot", signature(x='RasterBrick', y='numeric'), 
+	function(x, y, ...)  {
+		ind <- as.integer(round(y))
+		ind <- min(max(ind, 1), nlayers(x))
+		map(x, ind, ...)
+	}
+)		
+
+
+
+setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
+	function(x, y, ...)  {
+		plot(values(x), values(y), ...)
+	}
+)	
+	
 
 setMethod('hist', signature(x='RasterLayer'), 
 	function(x, ...){
