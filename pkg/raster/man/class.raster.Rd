@@ -12,7 +12,11 @@
 \alias{dim,RasterStack-method}
 \alias{dim,RasterBrick-method}
 \alias{==,AbstractRaster,AbstractRaster-method}
-
+\alias{*,RasterLayer,RasterLayer-method}
+\alias{/,RasterLayer,RasterLayer-method}
+\alias{+,RasterLayer,RasterLayer-method}
+\alias{-,RasterLayer,RasterLayer-method}
+\alias{sqrt,RasterLayer-method}
 
 \title{Class "RasterLayer" }
 \description{	Class for handling RasterLayer (grid) data  }

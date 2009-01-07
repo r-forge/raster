@@ -26,6 +26,43 @@ setMethod('==', signature(e1='AbstractRaster', e2='AbstractRaster'),
 		return(cond)
 	}
 )	
+
+setMethod('*', signature(e1='RasterLayer', e2='RasterLayer'),
+	function(e1,e2){
+		rs <- Overlay(e1, e2, fun=function(x,y){return(x*y)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
+setMethod('/', signature(e1='RasterLayer', e2='RasterLayer'),
+	function(e1,e2){
+		rs <- Overlay(e1, e2, fun=function(x,y){return(x/y)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
+setMethod('+', signature(e1='RasterLayer', e2='RasterLayer'),
+	function(e1,e2){
+		rs <- Overlay(e1, e2, fun=function(x,y){return(x+y)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
+setMethod('-', signature(e1='RasterLayer', e2='RasterLayer'),
+	function(e1,e2){
+		rs <- Overlay(e1, e2, fun=function(x,y){return(x-y)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
+setMethod('sqrt', signature(x='RasterLayer'),
+	function(x){
+		rs <- calc(x, fun=sqrt, filename="", overwrite=FALSE , ForceIntOutput=FALSE) 
+		return(rs)
+	}
+)	
+
+
 	
 setMethod('dim', signature(x='AbstractRaster'), 
 	function(x){ return(c(nrow(x), ncol(x)))}
