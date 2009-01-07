@@ -11,7 +11,7 @@
 \alias{dim,AbstractRaster-method}
 \alias{dim,RasterStack-method}
 \alias{dim,RasterBrick-method}
-
+\alias{==,AbstractRaster,AbstractRaster-method}
 
 
 \title{Class "RasterLayer" }
