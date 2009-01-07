@@ -36,6 +36,24 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 )	
 
 
+
+setMethod("Math", signature(x='RasterLayer'),
+    function(x){ 
+		if (dataContent(x) != 'all') {
+			if (dataSource(x) == 'ram') {
+				stop('no data on disk or in memory')
+			} else {
+				x <- readAll(x)
+			}	
+		}
+	    v = callGeneric(values(x))
+		rs <- setRaster(x)
+		rs <- setValues(rs, v)
+		return(rs)
+	}
+)
+
+
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if (dataContent(e1) != 'all') {
@@ -75,14 +93,66 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 	}
 )
 
+setMethod("max", signature(x='RasterLayer'),
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(x)
+		} else {
+			v <- values(x)
+			for (i in 1:length(obs)) {
+				v <- pmax(v, values(obs[[i]]), na.rm=na.rm)
+			}
+			rs <- setRaster(x)
+			rs <- setValues(rs, v)
+			return(rs)
+		}
+	}
+)
 
+setMethod("min", signature(x='RasterLayer'),
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(x)
+		} else {
+			v <- values(x)
+			for (i in 1:length(obs)) {
+				v <- pmin(v, values(obs[[i]]), na.rm=na.rm)
+			}
+			rs <- setRaster(x)
+			rs <- setValues(rs, v)
+			return(rs)
+		}
+	}
+)
 
-setMethod('sqrt', signature(x='RasterLayer'),
-	function(x){
-		rs <- calc(x, fun=sqrt, filename="", overwrite=FALSE , ForceIntOutput=FALSE) 
+	
+setMethod("range", signature(x='RasterLayer'),
+	function(x, ..., na.rm=FALSE){
+		mx <- max(x, ..., na.rm=na.rm)
+		mn <- max(x, ..., na.rm=na.rm)
+		rn <- mx - mn
+		return(rn)
+	}
+)	
+
+setMethod("is.na", signature(x='RasterLayer'),
+	function(x) {
+		if (dataContent(x) != 'all') {
+			if (dataSource(x) == 'ram') {
+				stop('no data on disk or in memory')
+			} else {
+				x <- readAll(x)
+			}	
+		}
+		v <- is.na(values(x))
+		rs <- setRaster(x)
+		rs <- setValues(rs, v)
 		return(rs)
 	}
 )	
+	
 
 
 	

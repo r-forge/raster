@@ -14,18 +14,13 @@
 \alias{dim,RasterBrick-method}
 \alias{==,AbstractRaster,AbstractRaster-method}
 \alias{!=,AbstractRaster,AbstractRaster-method}
-\alias{*,RasterLayer,RasterLayer-method}
-\alias{*,RasterLayer,numeric-method}
-\alias{/,RasterLayer,RasterLayer-method}
-\alias{/,RasterLayer,numeric-method}
-\alias{+,RasterLayer,RasterLayer-method}
-\alias{+,RasterLayer,numeric-method}
-\alias{-,RasterLayer,RasterLayer-method}
-\alias{-,RasterLayer,numeric-method}
-\alias{sqrt,RasterLayer-method}
+\alias{is.na,RasterLayer-method}
+\alias{min,RasterLayer-method}
+\alias{max,RasterLayer-method}
+\alias{range,RasterLayer-method}
 
 \title{Class "RasterLayer" }
-\description{	Class for handling RasterLayer (grid) data  }
+\description{ Class for handling spatial raster (grid) data  }
 
 \usage{
 	hist(x, ...)
