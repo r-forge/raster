@@ -18,17 +18,23 @@ setAs('SpatialGridDataFrame', 'RasterLayer',
 
 setMethod('==', signature(e1='AbstractRaster', e2='AbstractRaster'),
 	function(e1,e2){
-	cond <- compare(c(e1, e2), origin=TRUE, resolution=TRUE, rowcol=TRUE, projection=TRUE, slack=0.01, stopiffalse=FALSE) 
-	
+		cond <- compare(c(e1, e2), origin=TRUE, resolution=TRUE, rowcol=TRUE, projection=TRUE, slack=0.01, stopiffalse=FALSE) 
 #		c1 <- identical(ncol(e1), ncol(e2))
 #		c2 <- identical(nrow(e1), nrow(e2))
 #		c3 <- identical(boundingbox(e1), boundingbox(e2))
 #		c4 <- identical(projection(e1),projection(e2))
 #		cond <- c1 & c2 & c3 & c4
-
 		return(cond)
 	}
 )	
+
+setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
+	function(e1,e2){
+		cond <- compare(c(e1, e2), origin=TRUE, resolution=TRUE, rowcol=TRUE, projection=TRUE, slack=0.01, stopiffalse=FALSE) 
+		return(!cond)
+	}
+)	
+
 
 setMethod('*', signature(e1='RasterLayer', e2='RasterLayer'),
 	function(e1,e2){
@@ -37,9 +43,24 @@ setMethod('*', signature(e1='RasterLayer', e2='RasterLayer'),
 	}
 )	
 
+setMethod('*', signature(e1='RasterLayer', e2='numeric'),
+	function(e1,e2){
+		rs <- calc(e1, fun=function(x){return(x*e2)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
+
 setMethod('/', signature(e1='RasterLayer', e2='RasterLayer'),
 	function(e1,e2){
 		rs <- Overlay(e1, e2, fun=function(x,y){return(x/y)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
+setMethod('/', signature(e1='RasterLayer', e2='numeric'),
+	function(e1,e2){
+		rs <- calc(e1, fun=function(x){return(x/e2)}, filename="", overwrite=FALSE) 
 		return(rs)
 	}
 )	
@@ -50,6 +71,13 @@ setMethod('+', signature(e1='RasterLayer', e2='RasterLayer'),
 		return(rs)
 	}
 )	
+setMethod('+', signature(e1='RasterLayer', e2='numeric'),
+	function(e1,e2){
+		rs <- calc(e1, fun=function(x){return(x+e2)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
 
 setMethod('-', signature(e1='RasterLayer', e2='RasterLayer'),
 	function(e1,e2){
@@ -57,6 +85,14 @@ setMethod('-', signature(e1='RasterLayer', e2='RasterLayer'),
 		return(rs)
 	}
 )	
+setMethod('-', signature(e1='RasterLayer', e2='numeric'),
+	function(e1,e2){
+		rs <- Overlay(e1, fun=function(x,y){return(x-e2)}, filename="", overwrite=FALSE) 
+		return(rs)
+	}
+)	
+
+
 
 setMethod('sqrt', signature(x='RasterLayer'),
 	function(x){
@@ -239,7 +275,35 @@ setMethod("plot", signature(x='RasterBrick', y='numeric'),
 
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
 	function(x, y, ...)  {
-		plot(values(x), values(y), ...)
+		comp <- compare(c(x, y), origin=FALSE, resolution=FALSE, rowcol=TRUE, projection=FALSE, slack=0, stopiffalse=TRUE) 
+		if (dataContent(x) != 'all') {
+			if (ncells(x) > 15000) {
+				maxdim <- 200
+			} else {
+				maxdim <- 10000
+			}
+			x <- readSkip(x, maxdim=maxdim)
+			if (x != y) {
+				warning(paste('plot used a sample of ', round(100*ncells(x)/ncells(y)), "% of the cells", sep=""))
+			}
+			y <- readSkip(y, maxdim=maxdim)
+			x <- values(x)
+			y <- values(y)
+			plot(x, y, cex=0.1, ...)			
+		} else {
+			maxcell <- 15000
+			if (length(na.omit(values(x))) > maxcell) {
+				v <- na.omit(cbind(values(x), values(y)))
+				r <- order(runif(length(v[,1])))
+				v <- v[r,]
+				l <- min(maxcell, length(v))
+				v <- v[1:l,]
+				warning(paste("plot used a sample of ", l, " cells (with data; ", maxcell, " when counting NA cells)", sep=""))
+				x <- v[,1]
+				y <- v[,2]
+				plot(x, y, cex=0.1, ...)
+			}	
+		}
 	}
 )	
 	

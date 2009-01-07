@@ -19,16 +19,17 @@ Use these functions to set name and datatype properties of a RasterLayer object.
 }
 
 \usage{
-setRaster(raster, filename="")
 setProjection(object, projstring)
 setFilename(object, filename)
+clearValues(object)
+setRaster(raster, filename="")
 setDatatype(raster, datatype, datasize)
 setRowCol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
 setMinmax(raster)
 setValues(raster, values, rownr=-1) 
 setValuesBlock(raster, blockvalues, firstcell, lastcell) 
 setValuesSparse(raster, sparsevalues, indices) 
-clearValues(raster)
+
 makeSparse(raster)
 }
 

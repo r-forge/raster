@@ -11,15 +11,16 @@
 }
 
 setRowCol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
+	raster <- clearValues(raster)
 	raster@ncols <- as.integer(ncols)
 	raster@nrows <- as.integer(nrows)
 	return(raster)
 }
 
 setRaster <- function(raster, filename="") {
+	raster <- clearValues(raster)
 	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
 	if (class(raster) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
-	raster <- clearValues(raster)
 	if (filename != "" & filename == filename(raster)) {
 		stop("is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
 	}
@@ -58,11 +59,15 @@ setProjection <- function(object, projstring) {
 }
 
 
-clearValues <- function(raster) {
-	raster@data@content <- 'nodata'
-	raster@data@indices <- ""
-	raster@data@values <- ""
-	return(raster)
+clearValues <- function(object) {
+	object@data@content <- 'nodata'
+	object@data@indices <- ""
+	if (class(object) == 'RasterLayer') {
+		object@data@values <- vector()
+	} else {
+		object@data@values <- matrix(NA,0,0)
+	}
+	return(object)
 }
 
 
