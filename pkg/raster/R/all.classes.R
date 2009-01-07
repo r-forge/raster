@@ -36,6 +36,10 @@ setClass ('AbstractRaster',
 		ncols ='integer',
 		nrows ='integer'
 		),
+	prototype (	
+		ncols= as.integer(1),
+		nrows= as.integer(1)
+	),
 	validity = function(object)
 	{
 		c1 <- (object@ncols > 0)
@@ -43,6 +47,9 @@ setClass ('AbstractRaster',
 		return(c1 & c2)
 	}
 )
+	
+	
+
 	
 	
 setClass('RasterFile', 
@@ -97,8 +104,8 @@ setClass('SingleLayerData',
 		content='nodata', 
 		indices =vector(mode='numeric'),
 		haveminmax = FALSE,
-		min = numeric(1),
-		max = numeric(1),
+		min = numeric(0),
+		max = numeric(0),
 		source='ram'
 	),	
 	validity = function(object)

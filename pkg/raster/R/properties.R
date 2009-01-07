@@ -52,11 +52,13 @@ resolution <- function(object) {
 }
 
 boundingbox <- function(object) {
-	if (class(object) == 'matrix') {
-		object <- newBbox(object[1,1], object[1,2], object[2,1], object[2,2])
+	if (class(object) != "matrix") {
+		b <- bbox(object)[1:2, 1:2]
+	} else {
+		b <- object[1:2, 1:2]
 	}
-	b <- bbox(object)[1:2, 1:2]
 	rownames(b) <- c("x", "y")
+	colnames(b) <- c("min", "max")
 	return(b)
 }
 
@@ -69,12 +71,32 @@ nlayers <- function(object) {
 	}	
 }
 
+band <- function(object) {
+	if (class(object) == "RasterBrick") {
+		return(-1)
+	} else {
+		return(object@file@band)
+	}	
+}
+
+nbands <- function(object) {
+	if (class(object) == "RasterLayer") {
+		return(1)
+	} else {
+		return(object@file@nbands)
+	}	
+}
 
 projection <- function(object, asText=TRUE) {
 	if (asText) {
-		if (is.na(object@proj4string@projargs)) { return('NA') 
-		} else return(object@proj4string@projargs)
-	} else {return(object@proj4string)}
+		if (is.na(object@proj4string@projargs)) { 
+			return("NA") 
+		} else {
+			return(object@proj4string@projargs)
+		}	
+	} else {
+		return(object@proj4string)
+	}
 }
 
 

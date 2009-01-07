@@ -16,6 +16,8 @@
 \alias{boundingbox}
 \alias{origin}
 \alias{nlayers}
+\alias{band}
+\alias{nbands}
  
   
 \title{ RasterLayer properties }
@@ -41,11 +43,13 @@ projection(object, asText=TRUE)
 boundingbox(object)
 origin(object)
 nlayers(object)
+band(object)
+nbands(object)
 }
 
 \arguments{
-  \item{object}{ RasterLayer, RasterBrick, or RasterStack object }
-  \item{x}{ RasterLayer, RasterBrick, or RasterStack object }
+  \item{object}{ Raster* object }
+  \item{x}{ Raster* object }
   \item{asText} { logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned}
  }
   
@@ -78,6 +82,7 @@ ymax(rs)
 projection(rs)
 origin(rs)
 boundingbox(rs)
-
+nbands(rs)
+band(rs)
 }
 \keyword{ spatial }

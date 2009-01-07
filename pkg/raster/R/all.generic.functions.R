@@ -1,4 +1,8 @@
-
+# Authors: Robert J. Hijmans, r.hijmans@gmail.com and Jacob van Etten
+# International Rice Research Institute
+# Date :  June 2008
+# Version 0,8
+# Licence GPL v3
 
 setAs('RasterLayer', 'SpatialGridDataFrame', 
 	function(from){ return(asSpGrid (from)) }
@@ -16,7 +20,7 @@ setMethod('==', signature(e1='AbstractRaster', e2='AbstractRaster'),
 	function(e1,e2){
 		c1 <- identical(ncol(e1), ncol(e2))
 		c2 <- identical(nrow(e1), nrow(e2))
-		c3 <- identical(bbox(e1), bbox(e2))
+		c3 <- identical(boundingbox(e1), boundingbox(e2))
 		c4 <- identical(projection(e1),projection(e2))
 		cond <- c1 & c2 & c3 & c4
 		return(cond)

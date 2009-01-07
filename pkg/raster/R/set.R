@@ -32,14 +32,11 @@ setFilename <- function(object, filename) {
 	if (is.na(filename)) {filename <- ""}
 	filename <- trim(filename)
 	if (class(object)=='RasterStack') {
-		object@filename <- filename
+		object@filename <- setFileExtension(filename, ".stk")
 	} else {
 		object@file@name <- filename
 	}	
 	if (class(object)=='RasterLayer') {
-		if (filename != "") {
-			object@file@name <- .setFileExtensionHeader(filename(object)) 
-		}
 		shortname <- fileName(filename)
 		shortname <- setFileExtension(shortname, "")
 		shortname <- gsub(" ", "_", shortname)
@@ -73,15 +70,15 @@ clearValues <- function(raster) {
 
 newCRS <- function(projstring) {
 	projstring <- trim(projstring)
-#	if (nchar(projstring) < 3) { 
-#		projs <- (CRS(as.character(NA)))
-#	} else {
+	if (is.na(projstring) | nchar(projstring) < 3) { 
+		projs <- (CRS(as.character(NA)))
+	} else {
 		projs <- try(CRS(projstring), silent = T)
 		if (class(projs) == "try-error") { 
 			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
 			projs <- CRS(as.character(NA))
 		}
-#	}
+	}
 	return(projs)
 }
 
@@ -93,7 +90,7 @@ changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(obje
 }
 
 
-newBbox <- function(xmn, xmx, ymn, ymx) {
+.newSpatial <- function(xmn, xmx, ymn, ymx, projstring='') {
 	if (xmn > xmx) {
 		x <- xmn
 		xmn <- xmx
@@ -104,7 +101,7 @@ newBbox <- function(xmn, xmx, ymn, ymx) {
 		ymn <- ymx
 		ymx <- y
 	}
-#	projs <- newCRS(projstring)
+	projs <- newCRS(projstring)
 	bb <- new("Spatial")
 	bb@bbox[1,1] <- xmn
 	bb@bbox[1,2] <- xmx
@@ -112,7 +109,13 @@ newBbox <- function(xmn, xmx, ymn, ymx) {
 	bb@bbox[2,2] <- ymx
 	bb@bbox[3,1] <- 0
 	bb@bbox[3,2] <- 1
-#	bb@proj4string <- projs
+	bb@proj4string <- projs
+	return(bb)
+}
+
+newBbox <- function(xmn, xmx, ymn, ymx) {
+	sp <- .newSpatial(xmn, xmx, ymn, ymx)
+	bb <- boundingbox(sp)
 	return(bb)
 }
 

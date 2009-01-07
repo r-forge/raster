@@ -13,7 +13,7 @@ stackFromFile <- function(stackfile) {
 		bands[i] <- as.integer(st[i,2])
 	}
 	rst <- stackFromRasterfiles(rasterfiles, bands)
-	rst <- setFilename(stackfile)
+	rst <- setFilename(rst, stackfile)
 	return(rst)
 }
 
@@ -31,7 +31,9 @@ stackFromRasters <- function(rasters) {
 
 
 stackAddFiles <- function(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) {
-	if (class(rstack) != "RasterStack") { rstack <- new("RasterStack") }
+	if (class(rstack) != "RasterStack") { 
+		stop("rstack should be a RasterStack objectr") 
+	}
 	
 	if (is.list(rasterfiles)) {rasterfiles <- unlist(rasterfiles)}
 	if (is.list(bands)) {bands <- unlist(bands)}
@@ -58,8 +60,9 @@ stackAddFiles <- function(rstack, rasterfiles, bands= rep(1, length(rasterfiles)
 
 stackAddRasters <- function(rstack, rasters) {
 #rasters is a list of raster objects
-	if (class(rstack) != "RasterStack") { stop("rstack should be a RasterStack objectr") }
-
+	if (class(rstack) != "RasterStack") { 
+		stop("rstack should be a RasterStack objectr") 
+	}
 	for (i in 1 : length(rasters)) { 
 		if (length(rasters) == 1) { raster <- rasters 
 		} else { raster <- rasters[[i]] }
@@ -102,7 +105,7 @@ stackRemoveRasters <- function(rstack, indices) {
 
 
 stackSave <- function(rstack) {
-	stackfile <- rstack@filename
+	stackfile <- trim(rstack@filename)
 	if (stackfile == "") { stop('RasterStack does not have a filename.') }
 	thefile <- file(stackfile, "w")
 	for (i in 1:length(rstack@rasters)) {
@@ -111,5 +114,4 @@ stackSave <- function(rstack) {
 	close(thefile)
 	return(rstack)
 }
-
 

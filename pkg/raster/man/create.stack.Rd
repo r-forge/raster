@@ -44,13 +44,18 @@ stackSave(rstack)
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
   st <- stackFromRasterfiles(rasterfile)
-# adding the same file multiple times, in most cases you would add different files  
+# now adding the same file multiple times, in most cases you would add different files  
 # this generates warnings, but it is not an error
-#  st <- stackAddFiles(st, c(rasterfile, rasterfile))
-#  rs <- rasterFromFile(rasterfile)
-#  st <- stackAddRasters(st, c(rs, rs))
-#  st
-#  st <- stackRemoveRasters(st, c(3, 5))
-#  nlayers(st)
+  st <- stackAddFiles(st, c(rasterfile, rasterfile))
+  rs <- rasterFromFile(rasterfile)
+  st <- stackAddRasters(st, c(rs, rs))
+  st
+  st <- stackRemoveRasters(st, c(3, 5))
+  nlayers(st)
+  st <- setFilename(st, "mystack")
+  st <- stackSave(st)
+# note that setFilename adds an extension .stk to a stackfile  
+  st2 <- stackFromFile("mystack.stk")
+  st2
 }
 \keyword{ spatial }
