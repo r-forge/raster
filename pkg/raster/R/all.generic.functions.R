@@ -36,61 +36,44 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 )	
 
 
-setMethod('*', signature(e1='RasterLayer', e2='RasterLayer'),
-	function(e1,e2){
-		rs <- Overlay(e1, e2, fun=function(x,y){return(x*y)}, filename="", overwrite=FALSE) 
+setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
+    function(e1, e2){ 
+		if (dataContent(e1) != 'all') {
+			if (dataSource(e1) == 'ram') {
+				stop('no data on disk or in memory')
+			} else {
+				e1 <- readAll(e1)
+			}	
+		}
+		if (dataContent(e2) != 'all') {
+			if (dataSource(e2) == 'ram') {
+				stop('no data on disk or in memory')
+			} else {
+				e2 <- readAll(e2)
+			}	
+		}
+	    v = callGeneric(values(e1), values(e2))
+		rs <- setRaster(e1)
+		rs <- setValues(rs, v)
 		return(rs)
 	}
-)	
+)
 
-setMethod('*', signature(e1='RasterLayer', e2='numeric'),
-	function(e1,e2){
-		rs <- calc(e1, fun=function(x){return(x*e2)}, filename="", overwrite=FALSE) 
+setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
+    function(e1, e2){ 
+		if (dataContent(e1) != 'all') {
+			if (dataSource(e1) == 'ram') {
+				stop('no data on disk or in memory')
+			} else {
+				e1 <- readAll(e1)
+			}	
+		}
+	    v = callGeneric(values(e1), e2)
+		rs <- setRaster(e1)
+		rs <- setValues(rs, v)
 		return(rs)
 	}
-)	
-
-
-setMethod('/', signature(e1='RasterLayer', e2='RasterLayer'),
-	function(e1,e2){
-		rs <- Overlay(e1, e2, fun=function(x,y){return(x/y)}, filename="", overwrite=FALSE) 
-		return(rs)
-	}
-)	
-
-setMethod('/', signature(e1='RasterLayer', e2='numeric'),
-	function(e1,e2){
-		rs <- calc(e1, fun=function(x){return(x/e2)}, filename="", overwrite=FALSE) 
-		return(rs)
-	}
-)	
-
-setMethod('+', signature(e1='RasterLayer', e2='RasterLayer'),
-	function(e1,e2){
-		rs <- Overlay(e1, e2, fun=function(x,y){return(x+y)}, filename="", overwrite=FALSE) 
-		return(rs)
-	}
-)	
-setMethod('+', signature(e1='RasterLayer', e2='numeric'),
-	function(e1,e2){
-		rs <- calc(e1, fun=function(x){return(x+e2)}, filename="", overwrite=FALSE) 
-		return(rs)
-	}
-)	
-
-
-setMethod('-', signature(e1='RasterLayer', e2='RasterLayer'),
-	function(e1,e2){
-		rs <- Overlay(e1, e2, fun=function(x,y){return(x-y)}, filename="", overwrite=FALSE) 
-		return(rs)
-	}
-)	
-setMethod('-', signature(e1='RasterLayer', e2='numeric'),
-	function(e1,e2){
-		rs <- Overlay(e1, fun=function(x,y){return(x-e2)}, filename="", overwrite=FALSE) 
-		return(rs)
-	}
-)	
+)
 
 
 
