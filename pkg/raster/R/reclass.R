@@ -16,6 +16,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput
 	if ( dim(rclmat)[2] != 3 ) { stop('rclmat must have 3 columns') }
 	colnames(rclmat) <- c("From", "To", "Becomes")	
 	print(rclmat)
+	
 	outraster <- setRaster(raster, filename)
 	if (ForceIntOutput) { 
 		outraster <- setDatatype(outraster, "integer") 
@@ -24,9 +25,10 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput
 		outraster <- setDatatype(outraster, "numeric") 
 		res <- vector(mode = "numeric", length = ncol(raster))
 	}
+	
 	if ( dataContent(raster) == 'all' |  dataContent(raster) == 'sparse') {
+		res <- values(raster)
 		for (i in 1:length(rclmat[,1])) {
-			res <- values(raster)
 			if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
 				res[ is.na(values(raster)) ] <- rclmat[i, 3] 
 			} else { 
@@ -42,6 +44,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput
 		if (filename(outraster) != "" ) {
 			outraster <- writeRaster(outraster, overwrite=overwrite) 
 		}
+		
 	} else {
 		for (r in 1:nrow(raster)) {
 			raster <- readRow(raster, r)
