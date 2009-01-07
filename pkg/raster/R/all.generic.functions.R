@@ -36,17 +36,21 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 )	
 
 
+.getvalues <- function(x) {
+	if (dataContent(x) != 'all') {
+		if (dataSource(x) == 'ram') {
+			stop('no data on disk or in memory')
+		} else {
+			x <- readAll(x)
+		}	
+	}
+	return(values(x))
+}	
+
 
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
-		if (dataContent(x) != 'all') {
-			if (dataSource(x) == 'ram') {
-				stop('no data on disk or in memory')
-			} else {
-				x <- readAll(x)
-			}	
-		}
-	    v = callGeneric(values(x))
+	    v = callGeneric(.getvalues(x))
 		rs <- setRaster(x)
 		rs <- setValues(rs, v)
 		return(rs)
@@ -54,23 +58,10 @@ setMethod("Math", signature(x='RasterLayer'),
 )
 
 
+
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
-		if (dataContent(e1) != 'all') {
-			if (dataSource(e1) == 'ram') {
-				stop('no data on disk or in memory')
-			} else {
-				e1 <- readAll(e1)
-			}	
-		}
-		if (dataContent(e2) != 'all') {
-			if (dataSource(e2) == 'ram') {
-				stop('no data on disk or in memory')
-			} else {
-				e2 <- readAll(e2)
-			}	
-		}
-	    v = callGeneric(values(e1), values(e2))
+	    v = callGeneric(.getvalues(e1), .getvalues(e2))
 		rs <- setRaster(e1)
 		rs <- setValues(rs, v)
 		return(rs)
@@ -79,14 +70,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 
 setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
     function(e1, e2){ 
-		if (dataContent(e1) != 'all') {
-			if (dataSource(e1) == 'ram') {
-				stop('no data on disk or in memory')
-			} else {
-				e1 <- readAll(e1)
-			}	
-		}
-	    v = callGeneric(values(e1), e2)
+	    v <- callGeneric(.getvalues(e1), e2)
 		rs <- setRaster(e1)
 		rs <- setValues(rs, v)
 		return(rs)
@@ -99,9 +83,17 @@ setMethod("max", signature(x='RasterLayer'),
 		if (length(obs) == 0) {
 			return(x)
 		} else {
-			v <- values(x)
+			v <- .getvalues(x)
 			for (i in 1:length(obs)) {
-				v <- pmax(v, values(obs[[i]]), na.rm=na.rm)
+				if (class(obs[[1]]) == 'RasterLayer') {
+					v <- pmax(v, .getvalues(obs[[i]]), na.rm=na.rm)
+				} else if (is.atomic(obs[[1]])) {
+					v <- pmax(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
+				} else if (length(obs[[1]])==ncells(x)) {
+					v <- pmax(v, obs[[1]], na.rm=na.rm)
+				} else {
+					stop(paste("I do not understand this argument:",obs[1])) 
+				}	
 			}
 			rs <- setRaster(x)
 			rs <- setValues(rs, v)
@@ -110,15 +102,24 @@ setMethod("max", signature(x='RasterLayer'),
 	}
 )
 
+
 setMethod("min", signature(x='RasterLayer'),
 	function(x, ..., na.rm=FALSE){
 		obs <- list(...)
 		if (length(obs) == 0) {
 			return(x)
 		} else {
-			v <- values(x)
+			v <- .getvalues(x)
 			for (i in 1:length(obs)) {
-				v <- pmin(v, values(obs[[i]]), na.rm=na.rm)
+				if (class(obs[[1]]) == 'RasterLayer') {
+					v <- pmin(v, .getvalues(obs[[i]]), na.rm=na.rm)
+				} else if (is.atomic(obs[[1]])) {
+					v <- pmin(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
+				} else if (length(obs[[1]])==ncells(x)) {
+					v <- pmin(v, obs[[1]], na.rm=na.rm)
+				} else {
+					stop(paste("I do not understand this argument:",obs[1])) 
+				}	
 			}
 			rs <- setRaster(x)
 			rs <- setValues(rs, v)
@@ -126,6 +127,35 @@ setMethod("min", signature(x='RasterLayer'),
 		}
 	}
 )
+
+
+
+setMethod("sum", signature(x='RasterLayer'),
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(x)
+		} else {
+			v <- .getvalues(x)
+			for (i in 1:length(obs)) {
+				if (class(obs[[1]]) == 'RasterLayer') {
+					v <- rowSums(cbind(v, .getvalues(obs[[i]]), na.rm=na.rm))
+				} else if (is.atomic(obs[[1]])) {
+					v <- rowSums(cbind(v, rep(obs[[1]], ncells(x)), na.rm=na.rm))
+				} else if (length(obs[[1]])==ncells(x)) {
+					v <- rowSums(cbind(v, obs[[1]], na.rm=na.rm))
+				} else {
+					stop(paste("I do not understand this argument:",obs[1])) 
+				}	
+			}
+			rs <- setRaster(x)
+			rs <- setValues(rs, v)
+			return(rs)
+		}
+	}
+)
+
+#todo "any", "all" 
 
 	
 setMethod("range", signature(x='RasterLayer'),

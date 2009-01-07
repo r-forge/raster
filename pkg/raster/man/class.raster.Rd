@@ -18,6 +18,7 @@
 \alias{min,RasterLayer-method}
 \alias{max,RasterLayer-method}
 \alias{range,RasterLayer-method}
+\alias{sum,RasterLayer-method}
 
 \title{Class "RasterLayer" }
 \description{ Class for handling spatial raster (grid) data  }
