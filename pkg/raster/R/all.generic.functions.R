@@ -14,13 +14,14 @@ setAs('SpatialGridDataFrame', 'RasterLayer',
 
 setMethod('==', signature(e1='AbstractRaster', e2='AbstractRaster'),
 	function(e1,e2){
-		c1 <- identical(ncols(e1),ncols(e2))
-		c2 <- identical(nrows(e1),nrows(e2))
+		c1 <- identical(ncol(e1), ncol(e2))
+		c2 <- identical(nrow(e1), nrow(e2))
 		c3 <- identical(bbox(e1), bbox(e2))
-		c4 <- identical(proj4string(e1),proj4string(e2))
+		c4 <- identical(projection(e1),projection(e2))
 		cond <- c1 & c2 & c3 & c4
 		return(cond)
 	}
+)	
 	
 setMethod('dim', signature(x='AbstractRaster'), 
 	function(x){ return(c(nrow(x), ncol(x)))}
