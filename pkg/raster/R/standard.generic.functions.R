@@ -4,17 +4,8 @@
 # Version 0,8
 # Licence GPL v3
 
-setAs('RasterLayer', 'SpatialGridDataFrame', 
-	function(from){ return(asSpGrid (from)) }
-)
 
-setAs('SpatialGridDataFrame', 'RasterBrick',
-	function(from){ return(asRasterBrick (from)) }
-)
 
-setAs('SpatialGridDataFrame', 'RasterLayer', 
-	function(from){ return(asRasterLayer (from)) }
-)
 
 setMethod('==', signature(e1='AbstractRaster', e2='AbstractRaster'),
 	function(e1,e2){
@@ -36,7 +27,8 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 )	
 
 
-.getvalues <- function(x) {
+.getValues <- function(x) {
+# need to take care of 'spase'
 	if (dataContent(x) != 'all') {
 		if (dataSource(x) == 'ram') {
 			stop('no data on disk or in memory')
@@ -47,45 +39,45 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 	return(values(x))
 }	
 
+.getLogicalValues <- function(x) {
+	v <- .getValues(x)
+	v[v<0] <- 0
+	v[v>0] <- 1
+	return(v)
+}
+
 
 setMethod("[", "RasterLayer",
 	function(x, i, j, ..., drop = TRUE) {
 		if (!missing(drop)) { stop("don't supply drop: it needs to be FALSE anyway") }
 		if (!missing(j)) { stop("can only set values with a single index (a vector)") }
 		if (missing(i)) { return(x) }
-		rs <- setRaster(x)
-		rs <- setValues(rs, i)
-		return(x)
+		return(setRaster(x, values=i))
 	}
 )
 
 
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
-	    v = callGeneric(.getvalues(x))
-		rs <- setRaster(x)
-		rs <- setValues(rs, v)
-		return(rs)
+		return(setRaster(x, values=callGeneric(.getValues(x))))
 	}
 )
 
-
+setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
+    function(e1, e2){ 
+		return(setRaster(e1, values=callGeneric(.getLogicalValues(e1), .getLogicalValues(e2))))
+	}
+)
 
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
-	    v = callGeneric(.getvalues(e1), .getvalues(e2))
-		rs <- setRaster(e1)
-		rs <- setValues(rs, v)
-		return(rs)
+		return(setRaster(e1, values=callGeneric(.getValues(e1), .getValues(e2))))
 	}
 )
 
 setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
     function(e1, e2){ 
-	    v <- callGeneric(.getvalues(e1), e2)
-		rs <- setRaster(e1)
-		rs <- setValues(rs, v)
-		return(rs)
+		return(setRaster(e1, values=callGeneric(.getValues(e1), e2)))
 	}
 )
 
@@ -95,10 +87,10 @@ setMethod("max", signature(x='RasterLayer'),
 		if (length(obs) == 0) {
 			return(x)
 		} else {
-			v <- .getvalues(x)
+			v <- .getValues(x)
 			for (i in 1:length(obs)) {
 				if (class(obs[[1]]) == 'RasterLayer') {
-					v <- pmax(v, .getvalues(obs[[i]]), na.rm=na.rm)
+					v <- pmax(v, .getValues(obs[[i]]), na.rm=na.rm)
 				} else if (is.atomic(obs[[1]])) {
 					v <- pmax(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
 				} else if (length(obs[[1]])==ncells(x)) {
@@ -107,9 +99,7 @@ setMethod("max", signature(x='RasterLayer'),
 					stop(paste("I do not understand this argument:",obs[1])) 
 				}	
 			}
-			rs <- setRaster(x)
-			rs <- setValues(rs, v)
-			return(rs)
+			return(setRaster(x, values=v))
 		}
 	}
 )
@@ -121,10 +111,10 @@ setMethod("min", signature(x='RasterLayer'),
 		if (length(obs) == 0) {
 			return(x)
 		} else {
-			v <- .getvalues(x)
+			v <- .getValues(x)
 			for (i in 1:length(obs)) {
 				if (class(obs[[1]]) == 'RasterLayer') {
-					v <- pmin(v, .getvalues(obs[[i]]), na.rm=na.rm)
+					v <- pmin(v, .getValues(obs[[i]]), na.rm=na.rm)
 				} else if (is.atomic(obs[[1]])) {
 					v <- pmin(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
 				} else if (length(obs[[1]])==ncells(x)) {
@@ -133,9 +123,7 @@ setMethod("min", signature(x='RasterLayer'),
 					stop(paste("I do not understand this argument:",obs[1])) 
 				}	
 			}
-			rs <- setRaster(x)
-			rs <- setValues(rs, v)
-			return(rs)
+			return(setRaster(x, values=v))
 		}
 	}
 )
@@ -148,10 +136,10 @@ setMethod("sum", signature(x='RasterLayer'),
 		if (length(obs) == 0) {
 			return(x)
 		} else {
-			v <- .getvalues(x)
+			v <- .getValues(x)
 			for (i in 1:length(obs)) {
 				if (class(obs[[1]]) == 'RasterLayer') {
-					v <- rowSums(cbind(v, .getvalues(obs[[i]]), na.rm=na.rm))
+					v <- rowSums(cbind(v, .getValues(obs[[i]]), na.rm=na.rm))
 				} else if (is.atomic(obs[[1]])) {
 					v <- rowSums(cbind(v, rep(obs[[1]], ncells(x)), na.rm=na.rm))
 				} else if (length(obs[[1]])==ncells(x)) {
@@ -160,9 +148,7 @@ setMethod("sum", signature(x='RasterLayer'),
 					stop(paste("I do not understand this argument:",obs[1])) 
 				}	
 			}
-			rs <- setRaster(x)
-			rs <- setValues(rs, v)
-			return(rs)
+			return(setRaster(x, values=v))
 		}
 	}
 )
@@ -172,24 +158,16 @@ setMethod("sum", signature(x='RasterLayer'),
 	
 setMethod("range", signature(x='RasterLayer'),
 	function(x, ..., na.rm=FALSE){
-		mx <- max(x, ..., na.rm=na.rm)
-		mn <- max(x, ..., na.rm=na.rm)
-		rn <- mx - mn
-		return(rn)
+		return(max(x, ..., na.rm=na.rm) - min(x, ..., na.rm=na.rm))
 	}
 )	
 
 setMethod("is.na", signature(x='RasterLayer'),
 	function(x) {
-		v <- is.na(.getvalues(x))
-		rs <- setRaster(x)
-		rs <- setValues(rs, v)
-		return(rs)
+		return(setRaster(x, values=is.na(.getValues(x))))
 	}
 )	
 	
-
-
 	
 setMethod('dim', signature(x='AbstractRaster'), 
 	function(x){ return(c(nrow(x), ncol(x)))}
@@ -211,101 +189,6 @@ setMethod('ncol', signature(x='AbstractRaster'),
 	function(x){ return(x@ncols) }
 )
 
-
-if (!isGeneric("readAll")) {
-	setGeneric("readAll", function(object)
-		standardGeneric("readAll"))
-}	
-setMethod('readAll', signature(object='RasterLayer'), 
-	function(object){ return(.rasterRead(object, -1))}
-)
-setMethod('readAll', signature(object='RasterStack'), 
-	function(object){ return(.stackRead(object, -1))}
-)
-
-
-if (!isGeneric("readRow")) {
-	setGeneric("readRow", function(object, rownr)
-		standardGeneric("readRow"))
-}
-setMethod('readRow', signature(object='RasterLayer'), 
-	function(object, rownr){ return(.rasterRead(object, rownr))}
-)
-setMethod('readRow', signature(object='RasterStack'), 
-	function(object, rownr){ return(.stackRead(object, rownr))}
-)
-
-	
-if (!isGeneric("readRows")) {
-	setGeneric("readRows", function(object, startrow, nrows=3)
-		standardGeneric("readRows"))
-}	
-
-setMethod('readRows', signature(object='RasterLayer'), 
-	function(object, startrow, nrows=3) { 
-		#read multiple rows
-		return(.rasterReadBlock(object, startrow, nrows))
-	}	
-)
-
-		
-
-if (!isGeneric("readBlock")) {
-	setGeneric("readBlock", function(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1))
-		standardGeneric("readBlock"))
-}	
-
-setMethod('readBlock', signature(object='RasterLayer'), 
-	function(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
-		return(.rasterReadBlock(object, startrow, nrows, ncolumns))}
-)
-
-if (!isGeneric("readPartOfRow")) {
-	setGeneric("readPartOfRow", function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1))
-		standardGeneric("readPartOfRow"))
-}	
-
-setMethod('readPartOfRow', signature(object='RasterLayer'), 
-	function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
-		return(.rasterRead(object, rownr, startcol, ncolumns))}
-)
-
-setMethod('readPartOfRow', signature(object='RasterStack'), 
-	function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
-		return( .stackRead(object, rownr, startcol, ncolumns) ) }
-)
-
-if (!isGeneric("cellValues")) {
-	setGeneric("cellValues", function(object, cells)
-		standardGeneric("cellValues"))
-}	
-	
-setMethod("cellValues", signature(object='RasterLayer'), 
-	function(object, cells) { 
-		return(.rasterReadCells(object, cells))}
-)
-
-
-setMethod("cellValues", signature(object='RasterStack'), 
-	function(object, cells) { 
-		return(.stackReadCells(object, cells))}
-)
-
-if (!isGeneric("xyValues")) {
-	setGeneric("xyValues", function(object, xy)
-		standardGeneric("xyValues"))
-}	
-	
-setMethod("xyValues", signature(object='RasterLayer'), 
-	function(object, xy) { 
-		return(.rasterReadXY(object, xy))
-	}
-)
-
-setMethod("xyValues", signature(object='RasterStack'), 
-	function(object, xy) { 
-		return(.stackReadXY(object, xy))}
-)
 
 
 
