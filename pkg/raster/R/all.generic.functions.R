@@ -48,6 +48,18 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 }	
 
 
+setMethod("[", "RasterLayer",
+	function(x, i, j, ..., drop = TRUE) {
+		if (!missing(drop)) { stop("don't supply drop: it needs to be FALSE anyway") }
+		if (!missing(j)) { stop("can only set values with a single index (a vector)") }
+		if (missing(i)) { return(x) }
+		rs <- setRaster(x)
+		rs <- setValues(rs, i)
+		return(x)
+	}
+)
+
+
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
 	    v = callGeneric(.getvalues(x))
@@ -169,14 +181,7 @@ setMethod("range", signature(x='RasterLayer'),
 
 setMethod("is.na", signature(x='RasterLayer'),
 	function(x) {
-		if (dataContent(x) != 'all') {
-			if (dataSource(x) == 'ram') {
-				stop('no data on disk or in memory')
-			} else {
-				x <- readAll(x)
-			}	
-		}
-		v <- is.na(values(x))
+		v <- is.na(.getvalues(x))
 		rs <- setRaster(x)
 		rs <- setValues(rs, v)
 		return(rs)
