@@ -81,6 +81,13 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 	}
 )
 
+setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
+    function(e1, e2){ 
+		return(setRaster(e2, values=callGeneric(.getValues(e2), e1)))
+	}
+)
+
+
 setMethod("max", signature(x='RasterLayer'),
 	function(x, ..., na.rm=FALSE){
 		obs <- list(...)
