@@ -10,15 +10,15 @@
 }
 
 \usage{
-asRasterLayer(spgrid, getdata=TRUE, dataindex=1) 
-asRasterBrick(spgrid, getdata=TRUE) 
+asRasterLayer(object, dataindex=1) 
+asRasterBrick(spgrid) 
 asSpGrid(raster, type='grid') 
 }
 
 \arguments{
   \item{raster} { a  RasterLayer object }
+  \item{object} { a Raster* or a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
   \item{spgrid} { a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{getdata} { logical. If \code{TRUE}, values are added to the RasterLayer object }
   \item{dataindex} {integer values >= 1 indicating the column in the sp dataframe to take the values from}
   \item{type} {character. Indicating what type of sp object to return. Should be 'pixel' or 'grid'.}
 }

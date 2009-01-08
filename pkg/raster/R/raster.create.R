@@ -5,8 +5,8 @@
 # Licence GPL v3
 
 
-newRaster <- function(xmin=-180, xmax=180, ymin=-90, ymax=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
-	bb <- newBbox(xmin, xmax, ymin, ymax)
+newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
+	bb <- newBbox(xmn, xmx, ymn, ymx)
 	return(rasterFromBbox(bb, nrows=nrows, ncols=ncols, projstring))
 }
 
@@ -61,7 +61,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	if (yx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
 	yx <- as.numeric( substr( as.character(yx), 1, ndecs) )
 
-	raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projstring="")
+	raster <- newRaster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projstring="")
 	raster <- setFilename(raster, filename)
 	raster <- setDatatype(raster, "numeric")
 	
@@ -124,7 +124,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
     }  
 
-    raster <- newRaster(ncols=nc, nrows=nr, xmin=xn, ymin=yn, xmax=xx, ymax=yx, projstring=projstring)
+    raster <- newRaster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projstring=projstring)
 	raster <- setFilename(raster, filename)
 	raster@file@driver <- "raster"
 

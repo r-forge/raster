@@ -10,7 +10,7 @@
   See read* and values() for access to the values
 }
 \usage{
-	newRaster(xmin = -180, xmax = 180, ymin = -90, ymax = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
+	newRaster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
 	rasterFromBbox(bndbox, nrows = 1, ncols = 1, projstring="")
 	rasterFromFile(filename, values=FALSE, band=1)
 }
@@ -18,10 +18,10 @@
 \arguments{
   \item{filename}{ name of raster data file  }
   \item{band}{ band number in case of a file of multiple bands, default = 1 }
-  \item{xmin}{ minimum x coordinate or raster (left border) }
-  \item{xmax}{ maximum x coordinate of raster (right border) }
-  \item{ymin}{ minimum y coordinate or raster (bottom border) }
-  \item{ymax}{ maximum y coordinate of raster (top border) }
+  \item{xmn}{ minimum x coordinate or raster (left border) }
+  \item{xmx}{ maximum x coordinate of raster (right border) }
+  \item{ymn}{ minimum y coordinate or raster (bottom border) }
+  \item{ymx}{ maximum y coordinate of raster (top border) }
   \item{nrows}{ number of rows on raster }
   \item{ncols}{ number of columns on raster }
   \item{projstring}{ PROJ4 type description of a map projection}

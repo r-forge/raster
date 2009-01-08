@@ -22,7 +22,7 @@ Use these functions to set name and datatype properties of a RasterLayer object.
 setProjection(object, projstring)
 setFilename(object, filename)
 clearValues(object)
-setRaster(raster, filename="")
+setRaster(raster, filename="", values=NA)
 setDatatype(raster, datatype, datasize)
 setRowCol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
 setMinmax(raster)
