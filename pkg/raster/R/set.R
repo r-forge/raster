@@ -18,7 +18,6 @@ setRowCol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 }
 
 setRaster <- function(raster, filename="", values=NA) {
-
 	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
 	if (class(raster) == 'RasterBrick') { raster <- raster }
 	if (class(raster) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
@@ -34,9 +33,9 @@ setRaster <- function(raster, filename="", values=NA) {
 
 	raster <- setFilename(raster, filename)
 	raster <- setDatatype(raster, 'numeric')
-	if (!is.na(values[1])) {
+	if ( length(values) != 1 | ( length(values) == 1 & ncells(raster) == 1) ) {
 		raster <- setValues(raster, values)
-	}	
+	}
 	return(raster)
 }
 
