@@ -15,10 +15,13 @@
 \alias{==,AbstractRaster,AbstractRaster-method}
 \alias{!=,AbstractRaster,AbstractRaster-method}
 \alias{is.na,RasterLayer-method}
+
+\alias{sum,RasterLayer-method}
+\alias{sum,RasterStack-method}
+\alias{sum,RasterBrick-method}
 \alias{min,RasterLayer-method}
 \alias{max,RasterLayer-method}
 \alias{range,RasterLayer-method}
-\alias{sum,RasterLayer-method}
 \alias{[,RasterLayer-method}
 
 \title{Class "RasterLayer" }

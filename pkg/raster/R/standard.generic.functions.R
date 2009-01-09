@@ -65,13 +65,17 @@ setMethod("Math", signature(x='RasterLayer'),
 
 setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
-		return(setRaster(e1, values=callGeneric(.getLogicalValues(e1), .getLogicalValues(e2))))
+		if ( compare(c(e1, e2)) ) {
+			return(setRaster(e1, values=callGeneric(.getLogicalValues(e1), .getLogicalValues(e2))))
+		}
 	}
 )
 
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
-		return(setRaster(e1, values=callGeneric(.getValues(e1), .getValues(e2))))
+		if (compare(c(e1, e2))) {
+			return(setRaster(e1, values=callGeneric(.getValues(e1), .getValues(e2))))
+		}	
 	}
 )
 
@@ -96,7 +100,7 @@ setMethod("max", signature(x='RasterLayer'),
 		} else {
 			v <- .getValues(x)
 			for (i in 1:length(obs)) {
-				if (class(obs[[1]]) == 'RasterLayer') {
+				if (class(obs[[1]]) == 'RasterLayer' & compare(c(x, obs[[1]]))) {
 					v <- pmax(v, .getValues(obs[[i]]), na.rm=na.rm)
 				} else if (is.atomic(obs[[1]])) {
 					v <- pmax(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
@@ -120,7 +124,7 @@ setMethod("min", signature(x='RasterLayer'),
 		} else {
 			v <- .getValues(x)
 			for (i in 1:length(obs)) {
-				if (class(obs[[1]]) == 'RasterLayer') {
+				if (class(obs[[1]]) == 'RasterLayer' & compare(c(x, obs[[1]]))) {
 					v <- pmin(v, .getValues(obs[[i]]), na.rm=na.rm)
 				} else if (is.atomic(obs[[1]])) {
 					v <- pmin(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
@@ -136,6 +140,25 @@ setMethod("min", signature(x='RasterLayer'),
 )
 
 
+.getSum <- function(obs, x, ..., na.rm=FALSE) {
+	v <- .getValues(x)
+	if (!(is.null(dim(v)))) {
+		v <- rowSums(.getValues(x), na.rm=na.rm)
+	}
+	for (i in 1:length(obs)) {
+		if ( (class(obs[[1]]) == 'RasterLayer' | class(obs[[1]]) == 'RasterStack' | class(obs[[1]]) == 'RasterBrick') & compare(c(x, obs[[1]])) ) {			
+			v <- rowSums(cbind(v, .getValues(obs[[i]]), na.rm=na.rm))
+		} else if (is.atomic(obs[[1]])) {
+			v <- rowSums(cbind(v, rep(obs[[1]], ncells(x)), na.rm=na.rm))
+		} else if (length(obs[[1]])==ncells(x)) {
+			v <- rowSums(cbind(v, obs[[1]], na.rm=na.rm))
+		} else {
+			stop(paste("I do not understand this argument:",obs[1])) 
+		}	
+	}
+	return(setRaster(x, values=v))
+}
+
 
 setMethod("sum", signature(x='RasterLayer'),
 	function(x, ..., na.rm=FALSE){
@@ -143,19 +166,31 @@ setMethod("sum", signature(x='RasterLayer'),
 		if (length(obs) == 0) {
 			return(x)
 		} else {
-			v <- .getValues(x)
-			for (i in 1:length(obs)) {
-				if (class(obs[[1]]) == 'RasterLayer') {
-					v <- rowSums(cbind(v, .getValues(obs[[i]]), na.rm=na.rm))
-				} else if (is.atomic(obs[[1]])) {
-					v <- rowSums(cbind(v, rep(obs[[1]], ncells(x)), na.rm=na.rm))
-				} else if (length(obs[[1]])==ncells(x)) {
-					v <- rowSums(cbind(v, obs[[1]], na.rm=na.rm))
-				} else {
-					stop(paste("I do not understand this argument:",obs[1])) 
-				}	
-			}
-			return(setRaster(x, values=v))
+			return(.getSum(obs, x, ..., na.rm))
+		}
+	}
+)
+
+
+setMethod("sum", signature(x='RasterStack'),
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(setRaster(x, values=rowSums(.getValues(x), na.rm)))
+		} else {
+			return(.getSum(obs, x, ..., na.rm))		
+		}
+	}
+)
+
+
+setMethod("sum", signature(x='RasterBrick'),
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(setRaster(x, values=rowSums(.getValues(x), na.rm)))
+		} else {
+			return(.getSum(obs, x, ..., na.rm))		
 		}
 	}
 )
@@ -174,6 +209,10 @@ setMethod("is.na", signature(x='RasterLayer'),
 		return(setRaster(x, values=is.na(.getValues(x))))
 	}
 )	
+	
+	
+	
+	
 	
 	
 setMethod('dim', signature(x='AbstractRaster'), 
