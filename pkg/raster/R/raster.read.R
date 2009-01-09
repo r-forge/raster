@@ -223,8 +223,12 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 			vals <- vector(length=length(uniquecells))
 			vals[] <- NA
 		}	
-		for (i in 1:length(vals[,1])) {
-			res[res[,1]==vals[i,1],2] <- vals[i,2] 
+		if (length((vals) == 1)) {
+			res[res[,1]==vals[1],2] <- vals[2] 
+		} else {
+			for (i in 1:length(vals[,1])) {
+				res[res[,1]==vals[i,1],2] <- vals[i,2] 
+			}	
 		}
 	}	
 	return(res[,2])

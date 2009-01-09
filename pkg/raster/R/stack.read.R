@@ -29,14 +29,23 @@
 
 .stackReadCells <- function(rasterstack, cells) {
 	for (i in 1:nlayers(rasterstack)) {
-		v <- .readCellsRaster(rasterstack@rasters[[i]], cells)
+		v <- .rasterReadCells (rasterstack@rasters[[i]], cells)
 		if (i == 1) {
 			result <- v
 		} else {
-			result <- cbind(result, v[,2])
+			result <- cbind(result, v)
 #			colnames(result)[length(result[1,])] <- rstack@rasters[[i]]@file@shortname
 		}
 	}
+	if (!(is.null(dim(result)))) {
+		for (i in 1:nlayers(rasterstack)) {
+			label <- rasterstack@rasters[[i]]@file@shortname
+			if (nchar(label) == "") { 
+				label <- paste("raster_", i, sep="") 
+			}
+			colnames(result)[i] <- label
+		}
+	}	
 	return(result)
 }
 
