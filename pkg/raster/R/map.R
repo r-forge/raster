@@ -15,7 +15,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 	if ( class(object) == 'RasterStack' ) { 
 		index <- round(index)
 		i <- min(max(1, index), object@data@nlayers)
-		if (i != index) { stop("index should be >= 1 and <= rstack@data@nlayers") }
+		if (i != index) { stop("index should be >= 1 and <=", nlayers(object), " =nlayers(stack)") }
 		raster2 <- object@rasters[[i]]
 		if (object@data@content == 'all') {
 			raster2 <- setValues(raster2, object@data@values[i,])

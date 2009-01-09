@@ -161,7 +161,11 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 	
 	rasdim <- max(ncol(raster), nrow(raster) )
 	if (rasdim <= maxdim) { 
-		outras <- readAll(raster)
+		if (dataContent(raster) == 'all') {
+			outras <- raster
+		} else { 
+			outras <- readAll(raster) 
+		}
 	} else {
 		fact <- maxdim / rasdim
 		nc <- max(1, trunc(fact * ncol(raster)))
@@ -172,14 +176,19 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		nr <- trunc(nrow(raster) / rowint)
 		cols <- 1:nc
 		cols <- 1 + (cols-1) * colint 
-		for (i in 1:nr) {
-			row <- 1 + (i-1) * rowint
-			raster <- readRow(raster, row)
-			if (i == 1) {
-				dd <- values(raster)[cols]
-			} else {
+		dd <- vector()
+		if (dataContent(raster) == 'all') {
+			for (i in 1:nr) {
+				row <- 1 + (i-1) * rowint
+				v <- values(raster, row)
+				dd <- c(dd, v[cols])
+			}	
+		} else {
+			for (i in 1:nr) {
+				row <- 1 + (i-1) * rowint
+				raster <- readRow(raster, row)
 				dd <- c(dd, values(raster)[cols])
-			}
+			}	
 		}	
 		outras <- setRaster(raster)
 		outras <- setRowCol(outras, nr, nc)
@@ -195,6 +204,17 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		return(values(outras))
 	}	
 }
+
+#.readrandom
+#			if (length(na.omit(values(x))) > maxcell) {
+#				v <- na.omit(cbind(values(x), values(y)))
+#				r <- order(runif(length(v[,1])))
+#				v <- v[r,]
+#				l <- min(maxcell, length(v))
+#				v <- v[1:l,]
+#				warning(paste("plot used a sample of ", l, " cells (with data; ", maxcell, " when counting NA cells)", sep=""))
+#				x <- v[,1]
+#				y <- v[,2]
 
 
 #read data on the raster for xy coordinates

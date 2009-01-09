@@ -1,9 +1,7 @@
 \name{RasterLayer-class}
 \docType{class}
 \alias{RasterLayer-class}
-\alias{plot}
-\alias{plot,RasterLayer,missing-method}
-\alias{plot,RasterLayer,RasterLayer-method}
+
 \alias{summary}
 \alias{summary,AbstractRaster-method}
 \alias{show,RasterLayer-method}
@@ -19,8 +17,10 @@
 \alias{sum,RasterLayer-method}
 \alias{sum,RasterStack-method}
 \alias{sum,RasterBrick-method}
-\alias{min,RasterLayer-method}
 \alias{max,RasterLayer-method}
+\alias{max,RasterStack-method}
+\alias{min,RasterLayer-method}
+\alias{min,RasterStack-method}
 \alias{range,RasterLayer-method}
 \alias{[,RasterLayer-method}
 
@@ -29,6 +29,7 @@
 
 \usage{
 	hist(x, ...)
+
 }
 
 \arguments{

@@ -71,6 +71,21 @@ nlayers <- function(object) {
 	}	
 }
 
+layers <- function(object) {
+	if (class(object) == "RasterLayer") {
+		return(filename(object))
+	} else 	if (class(object) == "RasterBrick") {
+		return(paste(filename(object), "with", nlayers(object), "layers"))
+	} else if (class(object) == "RasterStack") {
+		l <- vector('character')
+		for (i in 1:nlayers(object)) {
+			l <- c(l, filename(object@rasters[[i]]))
+		}
+		return(l)
+	}	
+}
+
+
 band <- function(object) {
 	if (class(object) == "RasterBrick") {
 		return(-1)

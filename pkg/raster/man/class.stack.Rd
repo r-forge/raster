@@ -2,7 +2,6 @@
 \docType{class}
 \alias{RasterStack-class}
 \alias{show,RasterStack-method}
-\alias{plot,RasterStack,numeric-method}
 
 \title{Class "RasterStack" }
 \description{	Class for handling "Stacks" of rasters.  }

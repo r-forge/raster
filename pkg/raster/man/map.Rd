@@ -1,5 +1,11 @@
 \name{map}
 \alias{map}
+\alias{plot}
+\alias{plot,RasterLayer,missing-method}
+\alias{plot,RasterLayer,RasterLayer-method}
+\alias{plot,RasterStack,numeric-method}
+\alias{plot,RasterStack,missing-method}
+
 \title{ Map a raster layer }
 \description{
   Make a map of a RasterLayer

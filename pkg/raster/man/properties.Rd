@@ -16,6 +16,7 @@
 \alias{boundingbox}
 \alias{origin}
 \alias{nlayers}
+\alias{layers}
 \alias{band}
 \alias{nbands}
  
@@ -43,6 +44,7 @@ projection(object, asText=TRUE)
 boundingbox(object)
 origin(object)
 nlayers(object)
+layers(object)
 band(object)
 nbands(object)
 }

@@ -9,7 +9,7 @@
 	for (i in 1:length(rstack@rasters)) {
 		raster <- readPartOfRow(rstack@rasters[[i]], rownumber, startcol, ncolumns)
 		if ( i == 1 )  {
-			rstack@data@values <- values(raster) 
+			rstack@data@values <- as.matrix(values(raster))
 		}
 		else {
 			rstack@data@values <- cbind(rstack@data@values, values(raster)) 

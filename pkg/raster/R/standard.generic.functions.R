@@ -30,11 +30,13 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 .getValues <- function(x) {
 # need to take care of 'spase'
 	if (dataContent(x) != 'all') {
-		if (dataSource(x) == 'ram') {
-			stop('no data on disk or in memory')
+		if (class(x) == "RasterLayer") {
+			if (dataSource(x) == 'ram') {
+				stop('no data on disk or in memory')
+			} else x <- readAll(x)	
 		} else {
 			x <- readAll(x)
-		}	
+		}
 	}
 	return(values(x))
 }	
@@ -46,6 +48,17 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 	return(v)
 }
 
+.getTheValues <- function(x, y, i) {
+	if ( (class(y) == 'RasterLayer' | class(y) == 'RasterStack' | class(y) == 'RasterBrick') & compare(c(x, y)) ) {			
+		return(.getValues(y))
+	} else if (is.atomic(y)) {
+		return(rep(y, ncells(x)))
+	} else if (length(y)==ncells(x)) {
+		return(y)
+	} else {
+		stop(paste("I do not understand argument",i + 1)) 
+	}	
+}
 
 setMethod("[", "RasterLayer",
 	function(x, i, j, ..., drop = TRUE) {
@@ -100,20 +113,28 @@ setMethod("max", signature(x='RasterLayer'),
 		} else {
 			v <- .getValues(x)
 			for (i in 1:length(obs)) {
-				if (class(obs[[1]]) == 'RasterLayer' & compare(c(x, obs[[1]]))) {
-					v <- pmax(v, .getValues(obs[[i]]), na.rm=na.rm)
-				} else if (is.atomic(obs[[1]])) {
-					v <- pmax(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
-				} else if (length(obs[[1]])==ncells(x)) {
-					v <- pmax(v, obs[[1]], na.rm=na.rm)
-				} else {
-					stop(paste("I do not understand this argument:",obs[1])) 
-				}	
+				v <- apply(cbind(v, .getTheValues(x, obs[[i]], i)), 1, max, na.rm=na.rm)
 			}
 			return(setRaster(x, values=v))
 		}
 	}
 )
+
+setMethod("max", signature(x='RasterStack'),
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(setRaster(x, values=apply(.getValues(x), 1, max, na.rm=na.rm)))
+		} else {
+			v <- .getValues(x)
+			for (i in 1:length(obs)) {
+				v <- apply(cbind(v, .getTheValues(x, obs[[i]], i)), 1, max, na.rm=na.rm)
+			}
+			return(setRaster(x, values=v))
+		}
+	}
+)
+
 
 
 setMethod("min", signature(x='RasterLayer'),
@@ -124,15 +145,8 @@ setMethod("min", signature(x='RasterLayer'),
 		} else {
 			v <- .getValues(x)
 			for (i in 1:length(obs)) {
-				if (class(obs[[1]]) == 'RasterLayer' & compare(c(x, obs[[1]]))) {
-					v <- pmin(v, .getValues(obs[[i]]), na.rm=na.rm)
-				} else if (is.atomic(obs[[1]])) {
-					v <- pmin(v, rep(obs[[1]], ncells(x)), na.rm=na.rm)
-				} else if (length(obs[[1]])==ncells(x)) {
-					v <- pmin(v, obs[[1]], na.rm=na.rm)
-				} else {
-					stop(paste("I do not understand this argument:",obs[1])) 
-				}	
+				vv <- .getTheValues(x, obs[[i]], i)
+				v <- pmin(v, vv, na.rm=na.rm)
 			}
 			return(setRaster(x, values=v))
 		}
@@ -140,21 +154,33 @@ setMethod("min", signature(x='RasterLayer'),
 )
 
 
+setMethod("min", signature(x='RasterStack'),
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(setRaster(x, values=pmin(.getValues(x), na.rm)))
+		} else {
+			v <- .getValues(x)
+			for (i in 1:length(obs)) {
+				vv <- .getTheValues(x, obs[[i]], i)
+				v <- pmin(v, vv, na.rm=na.rm)
+			}
+			return(setRaster(x, values=v))
+		}
+	}
+)
+
+
+
+
 .getSum <- function(obs, x, ..., na.rm=FALSE) {
 	v <- .getValues(x)
 	if (!(is.null(dim(v)))) {
 		v <- rowSums(.getValues(x), na.rm=na.rm)
-	}
+	} 
 	for (i in 1:length(obs)) {
-		if ( (class(obs[[1]]) == 'RasterLayer' | class(obs[[1]]) == 'RasterStack' | class(obs[[1]]) == 'RasterBrick') & compare(c(x, obs[[1]])) ) {			
-			v <- rowSums(cbind(v, .getValues(obs[[i]]), na.rm=na.rm))
-		} else if (is.atomic(obs[[1]])) {
-			v <- rowSums(cbind(v, rep(obs[[1]], ncells(x)), na.rm=na.rm))
-		} else if (length(obs[[1]])==ncells(x)) {
-			v <- rowSums(cbind(v, obs[[1]], na.rm=na.rm))
-		} else {
-			stop(paste("I do not understand this argument:",obs[1])) 
-		}	
+		vv <- .getTheValues(x, obs[[i]], i)
+		v <- rowSums(cbind(v, vv), na.rm=na.rm)
 	}
 	return(setRaster(x, values=v))
 }
@@ -209,10 +235,6 @@ setMethod("is.na", signature(x='RasterLayer'),
 		return(setRaster(x, values=is.na(.getValues(x))))
 	}
 )	
-	
-	
-	
-	
 	
 	
 setMethod('dim', signature(x='AbstractRaster'), 
@@ -273,9 +295,13 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 
 setMethod("plot", signature(x='RasterStack', y='numeric'), 
 	function(x, y, ...)  {
-		ind <- as.integer(round(y))
-		ind <- min(max(ind, 1), nlayers(x))
-		map(x, ind, ...)
+		map(x, y, ...)
+	}
+)		
+
+setMethod("plot", signature(x='RasterStack', y='missing'), 
+	function(x, ...)  {
+		map(x, 1, ...)
 	}
 )		
 
@@ -290,39 +316,29 @@ setMethod("plot", signature(x='RasterBrick', y='numeric'),
 
 
 
+.getmaxdim <- function(maxdim=1000, ...) {
+	return(maxdim)
+}
+
+.getcex <- function(cex = 0.1, ...) {
+	return(cex)
+}
+
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
 	function(x, y, ...)  {
 		comp <- compare(c(x, y), origin=FALSE, resolution=FALSE, rowcol=TRUE, projection=FALSE, slack=0, stopiffalse=TRUE) 
-		if (dataContent(x) != 'all') {
-			if (ncells(x) > 15000) {
-				maxdim <- 200
-			} else {
-				maxdim <- 10000
-			}
-			x <- readSkip(x, maxdim=maxdim)
-			if (x != y) {
-				warning(paste('plot used a sample of ', round(100*ncells(x)/ncells(y)), "% of the cells", sep=""))
-			}
-			y <- readSkip(y, maxdim=maxdim)
-			x <- values(x)
-			y <- values(y)
-			plot(x, y, cex=0.1, ...)			
-		} else {
-			maxcell <- 15000
-			if (length(na.omit(values(x))) > maxcell) {
-				v <- na.omit(cbind(values(x), values(y)))
-				r <- order(runif(length(v[,1])))
-				v <- v[r,]
-				l <- min(maxcell, length(v))
-				v <- v[1:l,]
-				warning(paste("plot used a sample of ", l, " cells (with data; ", maxcell, " when counting NA cells)", sep=""))
-				x <- v[,1]
-				y <- v[,2]
-				plot(x, y, cex=0.1, ...)
-			}	
+		maxdim <- .getmaxdim(...)
+		nc <- ncells(x)
+		x <- readSkip(x, maxdim=maxdim)
+		y <- readSkip(y, maxdim=maxdim)
+		rm(maxdim)
+		if (length(x) < nc) {
+			warning(paste('plot used a sample of ', round(100*length(x)/ncells(y)), "% of the cells", sep=""))
 		}
+		cex <- .getcex(...)
+		plot(x, y, ...)			
 	}
-)	
+)
 	
 
 setMethod('hist', signature(x='RasterLayer'), 
@@ -349,4 +365,6 @@ setMethod('hist', signature(x='RasterLayer'),
 		hist(values, ...)
 	}	
 )
+
+
 
