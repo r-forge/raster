@@ -6,17 +6,17 @@
 
 
 .stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
-	for (i in 1:length(rstack@rasters)) {
+	for (i in seq(nlayers(rstack))) {
 		raster <- readPartOfRow(rstack@rasters[[i]], rownumber, startcol, ncolumns)
 		if ( i == 1 )  {
 			rstack@data@values <- as.matrix(values(raster))
+			rstack@data@content <- dataContent(raster)
+			rstack@data@indices <- dataIndices(raster)
 		}
 		else {
 			rstack@data@values <- cbind(rstack@data@values, values(raster)) 
 		}	   
 	}
-	rstack@data@content <- dataContent(raster)
-	rstack@data@indices <- dataIndices(raster)
 	return(rstack)
 }
 
@@ -28,7 +28,7 @@
 
 
 .stackReadCells <- function(rasterstack, cells) {
-	for (i in 1:nlayers(rasterstack)) {
+	for (i in seq(nlayers(rasterstack))) {
 		v <- .rasterReadCells (rasterstack@rasters[[i]], cells)
 		if (i == 1) {
 			result <- v
@@ -38,7 +38,7 @@
 		}
 	}
 	if (!(is.null(dim(result)))) {
-		for (i in 1:nlayers(rasterstack)) {
+		for (i in seq(nlayers(rasterstack))) {
 			label <- rasterstack@rasters[[i]]@file@shortname
 			if (nchar(label) == "") { 
 				label <- paste("raster_", i, sep="") 

@@ -12,19 +12,19 @@
 }
 
 \usage{
-compare(rasters, origin=TRUE, resolution=TRUE, rowcol=TRUE, projection=TRUE, slack=0.01, stopiffalse=TRUE) 
+compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE) 
 roundCoords(object, digits=0)
 newCRS(projstring)
-
 }
 
 \arguments{
-  \item{rasters} { vector of RasterLayer objects}
-  \item{origin} { logical. If \code{TRUE}, origins of rasters are compared}
-  \item{resolution}{logical. If \code{TRUE}, resolution of rasters are compared }
-  \item{rowcol}{logical. If \code{TRUE}, number of rows and columns of rasters are compared}
-  \item{projection}{ logical. If \code{TRUE} projections are compared.}
-  \item{slack} { fraction difference allowed in comparing origin and resolution }
+  \item{objects} { vector or list of Raster* objects }
+  \item{bb} { logical. If \code{TRUE}, bounding boxes are compared}
+  \item{rowcol}{logical. If \code{TRUE}, number of rows and columns of the objects are compared}
+  \item{prj}{ logical. If \code{TRUE} projections are compared.}
+  \item{res} { logical. If \code{TRUE}, resolutions are compared}
+  \item{orig} { logical. If \code{TRUE}, origins are compared}
+  \item{tolerance} { difference permissable (relative to the cell resolution) for objects to be 'equal', for non integer numbers in origin and resolution. See ?all.equal }
   \item{stopiffalse}{logical. If \code{TRUE}, an error will be reported if rasters are not the same}
   \item{object} { a Raster* object }
   \item{digits} { integer indicating the precision to be used} 
@@ -40,6 +40,7 @@ newCRS(projstring)
 	r3 <- setRowCol(r1, 10)
 #	compare(c(r1, r3))
 	compare(c(r1, r3), stopiffalse=FALSE)
-	compare(c(r1, r3), resolution=FALSE, rowcol=FALSE)
+	compare(c(r1, r3), rowcol=FALSE)
 }
 \keyword{ spatial }
+

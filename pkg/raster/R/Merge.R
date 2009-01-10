@@ -3,18 +3,14 @@
 # International Rice Research Institute
 #contact: r.hijmans@gmail.com
 # Date : October 2008
-# Version 0,7
+# Version 0.7
 # Licence GPL v3
 
 
-Merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
-	compare(rasters, rowcol=FALSE, slack=slack)
+Merge <- function(rasters, tolerance=0.0001, filename="", overwrite=FALSE) {
+	compare(rasters, bb=FALSE, rowcol=FALSE, orig=TRUE, tolerance=tolerance)
 	
-#	for (i in 1:length(rasters)) {
-#		if (!(data.source(rasters[[i]]) == 'disk' | dataContent(rasters[[i]]) == 'all' | dataContent(rasters[[i]]) == 'sparse')) { 
-#			stop('rasters should be stored on disk or values should be in memory') 
-#		}
-#	}
+#	f
 
 	bb <- boundingbox(rasters[[1]])
 	for (i in 2:length(rasters)) {
@@ -39,7 +35,7 @@ Merge <- function(rasters, slack=0.01, filename="", overwrite=FALSE) {
 		rd <- as.vector(matrix(NA, nrow=1, ncol=ncol(outraster))) 
 		for (i in length(rasters):1) {  #reverse order so that the first raster covers the second etc.
 			if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
-				if (rasters[[i]]@data@source == 'disk') {
+				if (dataSource(rasters[[i]]) == 'disk') {
 					rasters[[i]] <- readRow(rasters[[i]], r + 1 - rowcol[i,1]) 
 					d <- values(rasters[[i]])
 				} else if (dataContent(rasters[[i]]) == 'all') {

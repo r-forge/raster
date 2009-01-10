@@ -14,7 +14,7 @@ Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, ForceIntOut
 disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
 crop(raster, bndbox, filename="", overwrite=FALSE) 
 expand(raster, bndbox, filename="", overwrite=FALSE)
-Merge(rasters, slack=0.01, filename="", overwrite=FALSE) 
+Merge(rasters, tolerance=0.0001, filename="", overwrite=FALSE) 
 }
 
 \arguments{
@@ -28,7 +28,7 @@ Merge(rasters, slack=0.01, filename="", overwrite=FALSE)
   \item{rm.NA}{ if \code{rm.NA == TRUE}, remove NA cells from calculations }
   \item{ForceIntOutput}{ logical. If \code{TRUE} the values will be rounded and stored as integer }
   \item{overwrite}{ if TRUE, "filename" will be overwritten if it exists }
-  \item{slack}{ }
+  \item{tolerance}{ }
 }
 
 \details{

@@ -64,7 +64,7 @@ cellFromXY <- function(object, xy) {
 	}
 	cell <- vector(mode = "integer", length = length(x))
 	cell[] <- NA
-	for (i in 1:length(x)) {
+	for (i in seq(length(x))) {
 		colnr <- colFromX(object, x[i]) - 1
 		rownr <- rowFromY(object, y[i]) - 1
 		if ((!is.na(colnr)) & (!is.na(rownr))) {

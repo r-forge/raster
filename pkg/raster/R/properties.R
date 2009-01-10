@@ -130,6 +130,8 @@ minValue <- function(object, layer=1) {
 
 
 maxValue <- function(object, layer=1) {
+	layer <- round(layer)
+	layer <- max(1, min(nlayers(object), layer))
 	if (layer < 1) { return(NA)
 	} else { return(object@data@max[layer]) }
 }
@@ -146,59 +148,4 @@ dataIndices <- function(object) {
 dataSource <- function(object) {
 	return(object@data@source)
 }
-
-
-compare <- function(rasters, origin=TRUE, resolution=TRUE, rowcol=TRUE, projection=TRUE, slack=0.01, stopiffalse=TRUE) {
-	res <- TRUE
-	if (length(rasters) < 2) {
-		res <- F
-		stop('length(rasters) < 2')
-	}	
-	res1 <- resolution(rasters[[1]])
-	origin1 <- origin(rasters[[1]])
-	for (i in 2:length(rasters)) { 
-		if (rowcol) {
-			if (ncol(rasters[[1]]) != ncol(rasters[[i]])) {
-				res <- F
-				if(stopiffalse) { stop('ncols different') } 
-			}	
-			if (nrow(rasters[[1]]) != nrow(rasters[[i]])) {
-				res <- F
-				if(stopiffalse) { stop('nrows different') }
-			}
-		}
-		if (projection) {
-			if (projection(rasters[[1]]) != projection(rasters[[2]]) )  { 
-				res <- F
-				if(stopiffalse) {stop('different projections')}
-			}
-		}
-		resi <- resolution(rasters[[i]])
-		xr <-  min(res1[1], resi[1])
-		yr <-  min(res1[2], resi[2])
-		if (resolution) {
-			if (abs(resi[1] - res1[1]) > slack * xr) {
-				res <- F
-				if(stopiffalse)  { stop('different x resolution') }
-			}	
-			if (abs(resi[2] - res1[2]) > slack * yr) { 
-				res <- F
-				if(stopiffalse) { stop('different y resolution') }
-			}
-		}
-		if (origin) {
-			origini <- origin(rasters[[1]])
-			if ((abs(origini[1] - origin1[1])) > slack * xr) {
-				res <- F
-				if(stopiffalse) { stop('different x origins') }
-			} 
-			if ((abs(origini[2] - origin1[2])) > slack * yr) {
-				res <- F
-				if(stopiffalse) { stop('different y origins')}
-			}	
-		}
-	}
-	return(res)
-}
-
 
