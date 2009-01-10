@@ -18,17 +18,35 @@ stackFromFile <- function(stackfile) {
 }
 
 
+#makeStack <- function(objects, bands= rep(1, length(objects))) {
+#	if !isTRUE(all.equal(length(bands), length(objects))) {
+#		warning("length of bands vectors != length of objects vector")
+#	}
+#	rstack <- new("RasterStack")
+#	for (i in seq(objects)) {
+#		if (class(object[i])=='character') {
+#			rstack <- stackAddFiles(rstack, objects[i], band[i])
+#		} else {
+#			rstack <- stackAddRasters(rstack, objects[i])
+#		}
+#	}
+#	return(rstack)
+#}
+
+
+
 stackFromRasterfiles <- function(rasterfiles, bands= rep(1, length(rasterfiles))) {
+#	stop("this function is depracated. Use makeStack() instead.")
 	rstack <- new("RasterStack") 
 	return(stackAddFiles(rstack, rasterfiles, bands))
 }
 
 
 stackFromRasters <- function(rasters) {
+#stop("this function is depracated. Use makeStack() instead.")
 	rstack <- new("RasterStack") 
 	return(stackAddRasters(rstack, rasters))
 }
-
 
 stackAddFiles <- function(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) {
 	if (class(rstack) != "RasterStack") { 
@@ -61,7 +79,7 @@ stackAddFiles <- function(rstack, rasterfiles, bands= rep(1, length(rasterfiles)
 stackAddRasters <- function(rstack, rasters) {
 #rasters is a list of raster objects
 	if (class(rstack) != "RasterStack") { 
-		stop("rstack should be a RasterStack objectr") 
+		stop("rstack should be a RasterStack object") 
 	}
 	for (i in 1 : length(rasters)) { 
 		if (length(rasters) == 1) { raster <- rasters 
