@@ -25,11 +25,16 @@ asRasterLayer <- function(object, dataindex=1) {
 		return(object)
 	} else if (class(object) == 'RasterBrick' | class(object) == 'RasterStack') {
 		rs <- newRaster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
+		if (dataContent(object) == 'all') {
+			dindex <- max(1, min(nlayers(object), dataindex))
+			if (dindex != dataindex) { warning(paste("dataindex was changed to", dindex))}
+			rs <- setValues(rs, values(object, format='matrix')[,dindex])
+		}
 		return(rs)
 	} else { # assuming an SP raster
 		raster <- newRaster()
-		raster@bbox <- object@bbox
-		raster@proj4string <- object@proj4string
+		raster@bbox <- getBbox(object)
+		raster@crs <- object@proj4string
 		raster@ncols <- object@grid@cells.dim[1]
 		raster@nrows <- object@grid@cells.dim[2]
 		if (class(object)=='SpatialPixels') {
@@ -40,11 +45,13 @@ asRasterLayer <- function(object, dataindex=1) {
 			if (length(cells)==0) {
 				cells <- cellFromXY(raster, object@coords)
 			}
+#			if (dindex != dataindex) { warning(paste("dataindex was changed to", dindex))}
 			vals <- object@data[[dataindex]]
 			raster <- setValuesSparse(raster, cells, vals)
 		} else if ( class(object)=='SpatialGrid' ) {
 			# do nothing, there is no data
 		} else if (class(object)=='SpatialGridDataFrame' ) {
+#			if (dindex != dataindex) { warning(paste("dataindex was changed to", dindex))}
 			raster <- setValues(raster, object@data[[dataindex]])
 		}
 		return(raster)
@@ -55,7 +62,7 @@ asRasterLayer <- function(object, dataindex=1) {
 asRasterBrick <- function(spgrid) {
 	brick <- newBrick()
 	brick@bbox <- spgrid@bbox
-	brick@proj4string <- spgrid@proj4string
+	brick@crs <- spgrid@proj4string
 	brick@ncols <- spgrid@grid@cells.dim[1]
 	brick@nrows <- spgrid@grid@cells.dim[2]
 	if (class(spgrid)=='SpatialPixels') {
@@ -77,8 +84,20 @@ asRasterBrick <- function(spgrid) {
 }
 
 
+.toSpBbox <- function(object) {
+	b <- getBbox(object)
+	bb <- matrix(NA, 2, 2)
+	bb[1,1] <- b@xmin
+	bb[1,2] <- b@xmax
+	bb[2,1] <- b@ymin
+	bb[2,2] <- b@ymax
+	return(bb)
+}	
+
+
+
 asSpGrid <- function(raster, type='grid')  {
-	bb <- boundingbox(raster)
+	bb <- .toSpBbox(raster)
 	cs <- resolution(raster)
 	cc <- bb[,1] + (cs/2)
 	cd <- ceiling(diff(t(bb))/cs)

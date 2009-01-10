@@ -14,7 +14,7 @@ Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, ForceIntOut
 disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
 crop(raster, bndbox, filename="", overwrite=FALSE) 
 expand(raster, bndbox, filename="", overwrite=FALSE)
-Merge(rasters, tolerance=0.0001, filename="", overwrite=FALSE) 
+Merge(rasters, tolerance=0.05, filename="", overwrite=FALSE) 
 }
 
 \arguments{
@@ -28,12 +28,12 @@ Merge(rasters, tolerance=0.0001, filename="", overwrite=FALSE)
   \item{rm.NA}{ if \code{rm.NA == TRUE}, remove NA cells from calculations }
   \item{ForceIntOutput}{ logical. If \code{TRUE} the values will be rounded and stored as integer }
   \item{overwrite}{ if TRUE, "filename" will be overwritten if it exists }
-  \item{tolerance}{ }
+  \item{tolerance} { difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal }
 }
 
 \details{
  Objects that have bounding boxes include RasterLayer, and other objects descending from the Spatial class in the sp package. 
- You can check this with boundingbox(object)
+ You can check this with getBbox(object)
  They can be created with the function newBbox
  In aggregation \code{fact = 2} will result in a grid with 2 x 2 = 4 times fewer cells, while in disaggregation 4 times more cells will be created.
  In disaggregation fact can be a single integer or two integers c(x,y), in which case the first one is the horizontal disaggregation factor and y the vertical disaggreation factor

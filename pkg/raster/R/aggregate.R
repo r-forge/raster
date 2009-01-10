@@ -31,7 +31,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 		
 	outraster <- setRaster(raster, filename)
 	bndbox <- newBbox(xmin(raster), xmx, ymn, ymax(raster))
-	outraster <- setBbox(outraster, bndbox)
+	outraster <- setBbox(outraster, bndbox, keepres=F)
 	outraster <- setRowCol(outraster, nrows=rsteps, ncols=csteps) 
 	
 	if (ForceIntOutput) { 

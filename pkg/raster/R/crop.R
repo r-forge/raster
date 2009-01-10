@@ -12,27 +12,16 @@
 #}
 
 
+
 crop <- function(raster, bndbox, filename="", overwrite=FALSE) {
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
-	bb <- boundingbox(bndbox)
-
-	xmn <- max(bb[1,1], xmin(raster))
-	xmx <- min(bb[1,2], xmax(raster))
-	ymn <- max(bb[2,1], ymin(raster))
-	ymx <- min(bb[2,2], ymax(raster))
-	
-	if (xmn > xmx | ymn > ymx) {stop("boundingbox is entirely outside of raster")}
-	
-	if (xmn == xmx) {stop("xmin and xmax are less than one cell apart")}
-	if (ymn == ymx) {stop("ymin and ymax are less than one cell apart")}
-	
+	bb <- .innerBox(c(raster, bndbox))
 	outraster <- setRaster(raster, filename)
-	bndbox <- newBbox(xmn, xmx, ymn, ymx)
-	outraster <- setBbox(outraster, bndbox, keepres=T)
+	outraster <- setBbox(outraster, bb, keepres=T)
 	
 	if (dataContent(raster) == 'all')  {
-		first_start_cell <- cellFromXY(raster, c(xmn + 0.5 * xres(raster), ymx - 0.5 * yres(raster) ))	
-		last_start_cell <- cellFromXY(raster, c(xmn + 0.5 * xres(raster), ymn + 0.5 * yres(raster) ))
+		first_start_cell <- cellFromXY(raster, c(xmin(outraster) + 0.5 * xres(raster), ymax(outraster) - 0.5 * yres(raster) ))	
+		last_start_cell <- cellFromXY(raster, c(xmin(outraster) + 0.5 * xres(raster), ymin(outraster) + 0.5 * yres(raster) ))
 		start_cells <- seq(first_start_cell, last_start_cell, by = ncol(raster))
 		end_cells <- start_cells + ncol(outraster) - 1
 		selected_cells <- as.vector(mapply(seq, start_cells, end_cells))
@@ -44,8 +33,8 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE) {
 
 	} else if ( dataSource(raster) == 'disk') { 
 
-		first_col <- colFromX(raster, xmn + 0.5 * xres(outraster))
-		first_row <- rowFromY(raster, ymx - 0.5 * yres(outraster))
+		first_col <- colFromX(raster, xmin(outraster) + 0.5 * xres(outraster))
+		first_row <- rowFromY(raster, ymax(outraster) - 0.5 * yres(outraster))
 		last_row <- first_row + nrow(outraster) - 1
 		rownr <- 1
 		v <- vector(length=0)

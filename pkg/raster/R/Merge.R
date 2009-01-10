@@ -7,20 +7,45 @@
 # Licence GPL v3
 
 
-Merge <- function(rasters, tolerance=0.0001, filename="", overwrite=FALSE) {
-	compare(rasters, bb=FALSE, rowcol=FALSE, orig=TRUE, tolerance=tolerance)
-	
-#	f
-
-	bb <- boundingbox(rasters[[1]])
-	for (i in 2:length(rasters)) {
-		bb2 <- boundingbox(rasters[[i]])
-		bb[,1] <- pmin(bb[,1], bb2[,1])
-		bb[,2] <- pmax(bb[,2], bb2[,2])
+.outerBox <- function(objects) {
+	if (length(objects) == 1) {
+		return(getBbox(objects))
 	}
+	bb <- getBbox(objects[[1]])
+	for (i in 2:length(objects)) {
+		bb2 <- getBbox(objects[[i]])
+		bb@xmin <- min(bb@xmin, bb2@xmin)
+		bb@xmax <- max(bb@xmax, bb2@xmax)
+		bb@ymin <- min(bb@ymin, bb2@ymin)
+		bb@ymax <- max(bb@ymax, bb2@ymax)
+	}
+	return(bb)
+}
+
+.innerBox <- function(objects) {
+	if (length(objects) == 1) {
+		return(getBbox(objects))
+	}
+	bb <- getBbox(objects[[1]])
+	for (i in 2:length(objects)) {
+		bb2 <- getBbox(objects[[i]])
+		bb@xmin <- max(bb@xmin, bb2@xmin)
+		bb@xmax <- min(bb@xmax, bb2@xmax)
+		bb@ymin <- max(bb@ymin, bb2@ymin)
+		bb@ymax <- min(bb@ymax, bb2@ymax)
+	}
+	validObject(bb)
+	return(bb)
+}
+
+
+
+Merge <- function(rasters, tolerance=0.05, filename="", overwrite=FALSE) {
+	compare(rasters, bb=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
+	bb <- .outerBox(rasters)
 	outraster <- setRaster(rasters[[1]], filename)
-	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2])
-	outraster <- setBbox(outraster, bndbox, keepres=TRUE)
+#	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2])
+	outraster <- setBbox(outraster, bb, keepres=TRUE)
 
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
 	for (i in 1:length(rasters)) {
@@ -30,6 +55,7 @@ Merge <- function(rasters, tolerance=0.0001, filename="", overwrite=FALSE) {
 		rowcol[i,2] <- rowFromY(outraster, xy2[2]) #end row
 		rowcol[i,3] <- colFromX(outraster, xy1[1]) #start col
 	}
+	
 	v <- vector(length=0)
 	for (r in 1:nrow(outraster)) {
 		rd <- as.vector(matrix(NA, nrow=1, ncol=ncol(outraster))) 

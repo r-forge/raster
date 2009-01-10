@@ -13,7 +13,6 @@
 \alias{ymin}
 \alias{ymax}
 \alias{projection}
-\alias{boundingbox}
 \alias{origin}
 \alias{nlayers}
 \alias{layers}
@@ -23,8 +22,7 @@
   
 \title{ RasterLayer properties }
 \description{
-  get the column, row, or cell number of a Raster (or RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster cell from a column, or cell number(s)
-  use bbox() (form sp) to get the bounding box of a raster type object.
+  get the column, row, or cell number of a Raster (or RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster-cell from a column, or cell number(s)
   
 }
 
@@ -41,7 +39,6 @@ xmax(object)
 ymin(object)
 ymax(object)
 projection(object, asText=TRUE)
-boundingbox(object)
 origin(object)
 nlayers(object)
 layers(object)
@@ -83,7 +80,6 @@ ymin(rs)
 ymax(rs)
 projection(rs)
 origin(rs)
-boundingbox(rs)
 nbands(rs)
 band(rs)
 }

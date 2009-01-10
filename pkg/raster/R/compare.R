@@ -17,7 +17,7 @@ compare <- function(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FAL
 	minres <- min(resolution(objects[[1]]))
 	for (i in 2:length(objects)) { 
 		if (bb) {
-			if (!(isTRUE(all.equal(boundingbox(objects[[1]]), boundingbox(objects[[i]]), tolerance=tolerance, scale=minres )))) {
+			if (!(isTRUE(all.equal(getBbox(objects[[1]]), getBbox(objects[[i]]), tolerance=tolerance, scale=minres )))) {
 				result <- F
 				if (stopiffalse) { stop('Different bounding box') }
 				if (showwarning) { warning('Different bounding box') }

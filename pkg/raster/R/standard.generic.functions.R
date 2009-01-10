@@ -78,7 +78,7 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 		}
 	}
 )
-
+	
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if (compare(c(e1, e2))) {

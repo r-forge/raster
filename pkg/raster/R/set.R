@@ -61,9 +61,9 @@ setFilename <- function(object, filename) {
 
 setProjection <- function(object, projstring) {
 	if (class(projstring)=="CRS") {
-		object@proj4string <- projstring
+		object@crs <- projstring
 	} else {	
-		object@proj4string <- newCRS(projstring)
+		object@crs <- newCRS(projstring)
 	}	
 	return(object)
 }
@@ -83,10 +83,10 @@ clearValues <- function(object) {
 
 roundCoords <- function(object, digits=0) {
 	digits <- max(0, digits)
-	object@bbox[1,1] <- round(object@bbox[1,1], digits)
-	object@bbox[1,2] <- round(object@bbox[1,2], digits)
-	object@bbox[2,1] <- round(object@bbox[2,1], digits)
-	object@bbox[2,2] <- round(object@bbox[2,2], digits)
+	object@bbox@xmin <- round(object@bbox@xmin, digits)
+	object@bbox@xmax <- round(object@bbox@xmax, digits)
+	object@bbox@ymin <- round(object@bbox@ymin, digits)
+	object@bbox@ymax <- round(object@bbox@ymax, digits)
 	return(object)
 }
 
@@ -114,49 +114,57 @@ changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(obje
 }
 
 
-.newSpatial <- function(xmn, xmx, ymn, ymx, projstring='') {
-	if (xmn > xmx) {
-		x <- xmn
-		xmn <- xmx
-		xmx <- x
-	}
-	if (ymn > ymx) {
-		y <- ymn
-		ymn <- ymx
-		ymx <- y
-	}
-	projs <- newCRS(projstring)
-	bb <- new("Spatial")
-	bb@bbox[1,1] <- xmn
-	bb@bbox[1,2] <- xmx
-	bb@bbox[2,1] <- ymn
-	bb@bbox[2,2] <- ymx
-	bb@bbox[3,1] <- 0
-	bb@bbox[3,2] <- 1
-	bb@proj4string <- projs
+newBbox <- function(xmn, xmx, ymn, ymx) {
+	bb <- new('BoundingBox')
+	bb@xmin <- xmn
+	bb@xmax <- xmx
+	bb@ymin <- ymn
+	bb@ymax <- ymx
 	return(bb)
 }
 
-newBbox <- function(xmn, xmx, ymn, ymx) {
-	sp <- .newSpatial(xmn, xmx, ymn, ymx)
-	bb <- boundingbox(sp)
+getBbox <- function(object) {
+	if ( class(object) == 'BoundingBox' ) { 
+		bb <- object 
+	} else if ( class(object) == 'RasterLayer' | class(object) == 'RasterStack' | class(object) == 'RasterBrick' ) {
+		bb <- object@bbox
+	} else if (class(object) == "matrix") {
+		bb <- new('BoundingBox')
+		bb@xmin <- object[1,1]
+		bb@xmax <- object[1,2]
+		bb@ymin <- object[2,1]
+		bb@ymax <- object[2,2]
+	} else if (class(object) == "vector") {
+		bb <- new('BoundingBox')
+		bb@xmin <- object[1]
+		bb@xmax <- object[2]
+		bb@ymin <- object[3]
+		bb@ymax <- object[4]
+	} else {
+		bndbox <- bbox(object)
+		bb <- new('BoundingBox')
+		bb@xmin <- bndbox[1,1]
+		bb@xmax <- bndbox[1,2]
+		bb@ymin <- bndbox[2,1]
+		bb@ymax <- bndbox[2,2]
+	}
 	return(bb)
 }
 
 
 setBbox <- function(object, bndbox, keepres=FALSE) {
-	bndbox <- boundingbox(bndbox)
 	xrs <- xres(object)
 	yrs <- yres(object)
-	object@bbox[1,1] <- bndbox[1,1]
-	object@bbox[1,2] <- bndbox[1,2]
-	object@bbox[2,1] <- bndbox[2,1]
-	object@bbox[2,2] <- bndbox[2,2]
+	object@bbox <- getBbox(bndbox)
 	if (keepres) {
-		object@ncols <- as.integer(round( (xmax(object) - xmin(object)) / xrs ))
-		object@nrows <- as.integer(round( (ymax(object) - ymin(object)) / xrs ))
-		object@bbox[1,2] <- object@bbox[1,1] + ncol(object) * xrs
-		object@bbox[2,2] <- object@bbox[2,1] + nrow(object) * yrs
+		nc <- as.integer(round( (xmax(object) - xmin(object)) / xrs ))
+		if (nc < 1) { stop( "xmin and xmax are less than one cell apart" ) 
+		} else { object@ncols <- nc }
+		nr <- as.integer(round( (ymax(object) - ymin(object)) / xrs ) )
+		if (nr < 1) { stop( "ymin and ymax are less than one cell apart" )
+		} else { object@nrows <- nr }
+		object@bbox@xmax <- object@bbox@xmin + ncol(object) * xrs
+		object@bbox@ymax <- object@bbox@ymin + nrow(object) * yrs
 	}
 	return(object)
 }

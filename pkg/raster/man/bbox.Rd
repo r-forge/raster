@@ -1,4 +1,5 @@
-\name{boundingbox}
+\name{box}
+\alias{getBbox}
 \alias{newBbox}
 \alias{setBbox}
 \alias{changeBbox}
@@ -12,6 +13,7 @@
 }
 
 \usage{
+getBbox(object)
 newBbox(xmn, xmx, ymn, ymx)
 setBbox(object, bndbox, keepres=FALSE)
 changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) 
@@ -23,7 +25,7 @@ changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = y
   \item{ymn}{ the minimum y coordinate of the bounding box }
   \item{ymx}{ the maximum y coordinate of the bounding box }
   \item{object} {A Raster* object }
-  \item{bndbox}{ a bounding box object (which you can create with newBbox() ) }  
+  \item{bndbox}{ An object of class BoundingBox (which you can create with newBbox() ) }  
   \item{keepres} {logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
 }
   

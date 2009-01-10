@@ -7,38 +7,39 @@
 # Licence GPL v3
 
 
-# the below may be necessary as the function is not imported from SP (it is internal)
-# It is to check the bounds of lat/lon values, SP gives an error, I prefer a warning
-.ll_sanity <- function(bb) {
-	outside <- FALSE
-	if (bb[1,1] < -180) {outside <- TRUE }
-	if (bb[1,2] > 180) {outside <- TRUE }
-	if (bb[2,1] < -90) {outside <- TRUE }
-	if (bb[2,2] > 90) {outside <- TRUE }	
-	if (outside) { warning('latitude/longitude values are outside their normal range') }
-	return(TRUE)
-}
-
-
-#setMethod ('show' , 'Spatial', 
-#	function(object) {
-#		cat('class     :', class(object), '\n')
-#		cat('projection:', projection(object), '\n')
-#		boundingbox(object)
-#	}
-#)	
+setClass('BoundingBox',
+	representation (
+		xmin = 'numeric',
+		xmax = 'numeric',
+		ymin = 'numeric',
+		ymax = 'numeric'
+	),	
+	prototype (	
+		xmin = 0,
+		xmax = 1,
+		ymin = 0,
+		ymax = 1
+	),
+	validity = function(object)
+	{
+		c1 <- (object@xmin <= object@xmax)
+		c2 <- (object@ymin <= object@ymax)
+		return(c1 & c2)
+	}
+)
 
 
 setClass ('AbstractRaster',
-# importing "Spatial" (bounding box + Proj4string) from the sp package
-	contains = 'Spatial',
 	representation (
+		bbox = 'BoundingBox',
 		ncols ='integer',
-		nrows ='integer'
-		),
+		nrows ='integer',
+		crs = 'CRS'
+	),
 	prototype (	
 		ncols= as.integer(1),
-		nrows= as.integer(1)
+		nrows= as.integer(1),
+		crs = CRS(as.character(NA))
 	),
 	validity = function(object)
 	{
@@ -47,8 +48,6 @@ setClass ('AbstractRaster',
 		return(c1 & c2)
 	}
 )
-	
-	
 
 	
 	
@@ -102,7 +101,7 @@ setClass('SingleLayerData',
 	prototype (	
 		values=vector(),
 		content='nodata', 
-		indices =vector(mode='numeric'),
+		indices = vector(mode='numeric'),
 		haveminmax = FALSE,
 		min = numeric(0),
 		max = numeric(0),

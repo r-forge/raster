@@ -11,13 +11,13 @@ newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, 
 }
 
 rasterFromBbox <- function(bndbox, nrows=1, ncols=1, projstring="") {
-	bndbox <- boundingbox(bndbox)
+	bndbox <- getBbox(bndbox)
 	nr = as.integer(round(nrows))
 	nc = as.integer(round(ncols))
 	if (nc < 1) { stop("ncols should be > 0") }
 	if (nr < 1) { stop("nrows should be > 0") }
-	proj4string <- newCRS(projstring)
-	raster <- new("RasterLayer", bbox = bndbox, proj4string=proj4string, ncols = nc, nrows = nr )
+	crs <- newCRS(projstring)
+	raster <- new("RasterLayer", bbox = bndbox, crs=crs, ncols = nc, nrows = nr )
 	return(raster) 
 }
 

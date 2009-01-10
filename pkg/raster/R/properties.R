@@ -14,27 +14,23 @@ ncells <- function(object) {
 }
 
 xmin <- function(object) {
-	return(as.numeric(object@bbox[1,1]))
+	object <- getBbox(object)
+	return(as.numeric(object@xmin))
 }
 
 xmax <- function(object) {
-	return(as.numeric(object@bbox[1,2]))
+	object <- getBbox(object)
+	return(as.numeric(object@xmax))
 }
 
 ymin <- function(object) {
-	return(as.numeric( object@bbox[2,1]) )
+	object <- getBbox(object)
+	return(as.numeric( object@ymin))
 }
 
 ymax <- function(object) {
-	return(as.numeric(object@bbox[2,2]))
-}
-
-.zmin <- function(object) {
-	return (object@bbox[3,1])
-}
-
-.zmax <- function(object) {
-	return (object@bbox[3,2])
+	object <- getBbox(object)
+	return(as.numeric(object@ymax))
 }
 
 xres <- function(object) {
@@ -49,17 +45,6 @@ resolution <- function(object) {
 	x <- xres(object)
 	y <- yres(object)
 	return(c(x, y))
-}
-
-boundingbox <- function(object) {
-	if (class(object) != "matrix") {
-		b <- bbox(object)[1:2, 1:2]
-	} else {
-		b <- object[1:2, 1:2]
-	}
-	rownames(b) <- c("x", "y")
-	colnames(b) <- c("min", "max")
-	return(b)
 }
 
 
@@ -104,13 +89,13 @@ nbands <- function(object) {
 
 projection <- function(object, asText=TRUE) {
 	if (asText) {
-		if (is.na(object@proj4string@projargs)) { 
+		if (is.na(object@crs@projargs)) { 
 			return("NA") 
 		} else {
-			return(object@proj4string@projargs)
+			return(object@crs@projargs)
 		}	
 	} else {
-		return(object@proj4string)
+		return(object@crs)
 	}
 }
 

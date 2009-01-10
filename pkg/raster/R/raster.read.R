@@ -195,7 +195,7 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
 		bndbox <- changeBbox(raster, xmx=xmx, ymn=ymn)
-		outras <- setBbox(outras, bndbox)
+		outras <- setBbox(outras, bndbox, keepres=F)
 		outras <- setValues(outras, dd)
 	}
 	if (asRaster) {

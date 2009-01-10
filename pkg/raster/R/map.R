@@ -42,7 +42,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 			xmx <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
 			ymn <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)
 			bndbox <- changeBbox(object, xmx=xmx, ymn=ymn)
-			object <- setBbox(sampraster, bndbox)
+			object <- setBbox(sampraster, bndbox, keepres=F)
  		} else { 
 			m <- values(object, format='matrix')
 			subsample=FALSE
@@ -67,13 +67,6 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 	
 	.imageplot(x, y, z, col=col, axes = TRUE, xlab=xlab, ylab=ylab, ...)
 	if (addbox) {box()}
-#	image(x, y, z, col=col, axes = FALSE, xlab="", ylab="")
-#	contour(x, y, z, add = TRUE, col = "peru")
-#	xincr <- (object@xmax - object@xmin) / 12
-#	yincr <- (object@ymax - object@ymin) / 10
-#	axis(1, at = seq(object@xmin, object@xmax, by = xincr))
-#	axis(2, at = seq(object@ymin, object@ymax, by = yincr))
-#	title(main = object@file@shortname, font.main = 4)
 }	
 
 
@@ -82,7 +75,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 
 	
 # The functions below were taken from the fields package !!! (image.plot and subroutines)
-# to be adjusted for object.
+# to be adjusted for the RasterLayer object.
 # author::
 #license:	
 
