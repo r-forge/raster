@@ -29,7 +29,8 @@ setClass('BoundingBox',
 )
 
 
-setClass ('AbstractRaster',
+setClass ('Raster',
+	contains = 'VIRTUAL',
 	representation (
 		bbox = 'BoundingBox',
 		ncols ='integer',
@@ -49,7 +50,7 @@ setClass ('AbstractRaster',
 	}
 )
 
-	
+
 	
 setClass('RasterFile', 
 	representation (
@@ -114,7 +115,7 @@ setClass('SingleLayerData',
 
 	
 setClass ('RasterLayer',
-	contains = 'AbstractRaster',
+	contains = 'Raster',
 	representation (
 		title = 'character',
 		file = 'RasterFile',
@@ -126,38 +127,6 @@ setClass ('RasterLayer',
 		)
 	)
 	
-	
-setMethod ('show' , 'RasterLayer', 
-	function(object) {
-		cat('class       :' , class(object), '\n')
-		cat('filename    :' , filename(object), '\n')
-		if (object@file@nbands > 1) {
-#			cat('nbands      :' , object@file@nbands, '\n')
-			cat('band        :' , object@file@band, '\n')
-		}	
-		cat('nrow        :' , nrow(object), '\n')
-		cat('ncol        :' , ncol(object), '\n')
-		cat('ncells      :' , ncells(object), '\n')
-		cat('data type   :' , object@file@datanotation, '\n')
-		cat('data content:' ,  dataContent(object), '\n')
-		if (object@data@haveminmax) {
-			cat('min value   :' , minValue(object), '\n')
-			cat('max value   :' , maxValue(object), '\n')
-		} else { #if (object@data@source == 'disk')  {
-			cat('min value   : NA \n')
-			cat('max value   : NA \n')
-		}
-		cat('projection  :' , projection(object, TRUE), '\n')
-		cat('xmin        :' , xmin(object), '\n')
-		cat('xmax        :' , xmax(object), '\n')
-		cat('ymin        :' , ymin(object), '\n')
-		cat('ymax        :' , ymax(object), '\n')
-		cat('xres        :' , xres(object), '\n')
-		cat('yres        :' , yres(object), '\n')
-		cat ('\n')
-	}
-)
-
 
 setClass('MultipleRasterData', 
 	representation (
@@ -181,7 +150,7 @@ setClass('MultipleRasterData',
 
 
 setClass ('RasterBrick',
-	contains = 'AbstractRaster',
+	contains = 'Raster',
 	representation (
 		data = 'MultipleRasterData',
 		title = 'character',
@@ -200,29 +169,10 @@ setClass ('RasterBrick',
 	
 
 
-setMethod ('show' , 'RasterBrick',
-	function ( object ){
-		cat ('class     :' , class ( object ) , '\n')
-		cat ('filename  :' , filename(object), '\n')
-		cat ('nlayers   :' , nlayers(object), '\n')
-		cat ('nrow      :' , nrow(object), '\n')
-		cat ('ncol      :' , ncol(object), '\n')
-		cat ('ncells    :' , ncells(object), '\n')
-		cat ('projection:' , projection(object, TRUE), '\n')
-		cat ('xmin      :' , xmin(object), '\n')
-		cat ('xmax      :' , xmax(object), '\n')
-		cat ('ymin      :' , ymin(object), '\n')
-		cat ('ymax      :' , ymax(object), '\n')
-		cat ('xres      :' , xres(object) , '\n')
-		cat ('yres      :' , yres(object) , '\n')
-		cat ('\n')
-	}
-)
-
 
 	
 setClass ('RasterStack',
-	contains = 'AbstractRaster',
+	contains = 'Raster',
 	representation (
 	    filename ='character',
 		rasters ='list',
@@ -238,26 +188,6 @@ setClass ('RasterStack',
 		#cond2 <- Are the rasters equal in dimensions etc.? The exact implementation will depend on the format of the raster@data slot (list, array, vector)
 		cond <- cond1 #& cond2
 		return(cond)
-	}
-)
-
-
-setMethod ('show' , 'RasterStack',
-	function ( object ){
-		cat ('class     :' , class ( object ) , '\n')
-		cat ('filename  :' , object@filename, '\n')
-		cat ('nlayers   :' , object@data@nlayers, '\n')
-		cat ('nrow      :' , nrow(object), '\n')
-		cat ('ncol      :' , ncol(object), '\n')
-		cat ('ncells    :' , ncells(object), '\n')
-		cat ('projection:' , projection(object, TRUE), '\n')
-		cat ('xmin      :' , xmin(object), '\n')
-		cat ('xmax      :' , xmax(object), '\n')
-		cat ('ymin      :' , ymin(object), '\n')
-		cat ('ymax      :' , ymax(object), '\n')
-		cat ('xres      :' , xres(object) , '\n')
-		cat ('yres      :' , yres(object) , '\n')
-		cat ('\n')
 	}
 )
 

@@ -6,6 +6,9 @@
 
 
 filename <- function(object) {
+	if (class(object) == 'RasterStack') { 
+		return(object@filename) 
+	} 
 	return(object@file@name)
 }
 
@@ -134,3 +137,13 @@ dataSource <- function(object) {
 	return(object@data@source)
 }
 
+.driver <- function(object) {
+	return(object@file@driver)
+}	
+
+.nodatavalue <- function(object) {
+	if (class(object) == 'RasterStack') {
+		stop("no such thing exist for an entire 'RasterStack'")
+	}
+	return(object@file@nodatavalue)
+}	

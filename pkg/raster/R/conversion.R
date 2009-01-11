@@ -96,23 +96,23 @@ asRasterBrick <- function(spgrid) {
 
 
 
-asSpGrid <- function(raster, type='grid')  {
-	bb <- .toSpBbox(raster)
-	cs <- resolution(raster)
+asSpGrid <- function(object, type='grid')  {
+	bb <- .toSpBbox(object)
+	cs <- resolution(object)
 	cc <- bb[,1] + (cs/2)
 	cd <- ceiling(diff(t(bb))/cs)
 	grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
 	if (type=='pixel') {
-		raster <- makeSparse(raster)
-		pts <- SpatialPoints(xyFromCell(raster,  dataIndices(raster)))
-		sp <- SpatialPixelsDataFrame(points=pts, data=as.data.frame(values(raster)), proj4string=projection(raster, FALSE)) 	
+		object <- makeSparse(object)
+		pts <- SpatialPoints(xyFromCell(object,  dataIndices(object)))
+		sp <- SpatialPixelsDataFrame(points=pts, data=as.data.frame(values(object)), proj4string=projection(object, FALSE)) 	
 		
 	} else if (type=='grid') {
-		if ( dataContent(raster) == 'all') {
-			values <- as.data.frame(values(raster))
-			sp <- SpatialGridDataFrame(grd, proj4string=projection(raster, FALSE), data=values)
+		if ( dataContent(object) == 'all') {
+			values <- as.data.frame(values(object))
+			sp <- SpatialGridDataFrame(grd, proj4string=projection(object, FALSE), data=values)
 		} else { 
-			sp  <- SpatialGrid(grd, proj4string=projection(raster, FALSE))
+			sp  <- SpatialGrid(grd, proj4string=projection(object, FALSE))
 		}	
 	}
 	return(sp)

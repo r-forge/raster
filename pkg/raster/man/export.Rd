@@ -3,21 +3,21 @@
 \alias{asRasterBrick}
 \alias{asSpGrid}
 
-\title{ Functions to export a Raster to an sp object and to import a Raster from a sp object }
+\title{ Conversion between sp and raster type objects. }
 
 \description{  
-	sp is ...
+	Functions to coerce a Raster* objects into an sp SpatialGridDataFrame object and 
+	to coerce a RasterLayer or RasterBrick object from a sp SpatialPixels* or SpatialGrid* object
 }
 
 \usage{
 asRasterLayer(object, dataindex=1) 
 asRasterBrick(spgrid) 
-asSpGrid(raster, type='grid') 
+asSpGrid(object, type='grid') 
 }
 
 \arguments{
-  \item{raster} { a  RasterLayer object }
-  \item{object} { a Raster* or a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
+  \item{object} { a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
   \item{spgrid} { a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
   \item{dataindex} {integer values >= 1 indicating the column in the sp dataframe to take the values from}
   \item{type} {character. Indicating what type of sp object to return. Should be 'pixel' or 'grid'.}

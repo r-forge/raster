@@ -14,10 +14,10 @@
 	bb <- getBbox(objects[[1]])
 	for (i in 2:length(objects)) {
 		bb2 <- getBbox(objects[[i]])
-		bb@xmin <- min(bb@xmin, bb2@xmin)
-		bb@xmax <- max(bb@xmax, bb2@xmax)
-		bb@ymin <- min(bb@ymin, bb2@ymin)
-		bb@ymax <- max(bb@ymax, bb2@ymax)
+		bb@xmin <- min(xmin(bb), xmin(bb2))
+		bb@xmax <- max(xmax(bb), xmax(bb2))
+		bb@ymin <- min(ymin(bb), ymin(bb2))
+		bb@ymax <- max(ymax(bb), ymax(bb2))
 	}
 	return(bb)
 }
@@ -29,10 +29,10 @@
 	bb <- getBbox(objects[[1]])
 	for (i in 2:length(objects)) {
 		bb2 <- getBbox(objects[[i]])
-		bb@xmin <- max(bb@xmin, bb2@xmin)
-		bb@xmax <- min(bb@xmax, bb2@xmax)
-		bb@ymin <- max(bb@ymin, bb2@ymin)
-		bb@ymax <- min(bb@ymax, bb2@ymax)
+		bb@xmin <- max(xmin(bb), xmin(bb2))
+		bb@xmax <- min(xmax(bb), xmax(bb2))
+		bb@ymin <- max(ymin(bb), ymin(bb2))
+		bb@ymax <- min(ymax(bb), ymax(bb2))
 	}
 	validObject(bb)
 	return(bb)

@@ -247,7 +247,7 @@ setValues <- function(raster, values, rownr=-1) {
 }	
 	
 setMinmax <- function(raster) {
-	if (raster@data@content == 'nodata') {
+	if (dataContent(raster) == 'nodata') {
 		stop('no data in memory')
 	}
 	vals <- na.omit(values(raster)) # min and max values

@@ -52,7 +52,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	if (ForceIntOutput) {setDatatype(ngbgrid, 'integer') }
 
 # first create an empty matrix with nrows = ngb and ncols = raster@ncols
-	ngbdata1 <- array(data = NA, dim = c(ngb, raster@ncols))
+	ngbdata1 <- array(data = NA, dim = c(ngb, ncol(raster)))
 	ngbdata <- ngbdata1
 	
 	rr <- 1

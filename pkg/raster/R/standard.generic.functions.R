@@ -5,16 +5,87 @@
 # Licence GPL v3
 
 
+	
+setMethod ('show' , 'RasterLayer', 
+	function(object) {
+		cat('class       :' , class(object), '\n')
+		cat('filename    :' , filename(object), '\n')
+		if (nbands(object) > 1) {
+			cat('band        :' , band(object), '\n')
+		}	
+		cat('nrow        :' , nrow(object), '\n')
+		cat('ncol        :' , ncol(object), '\n')
+		cat('ncells      :' , ncells(object), '\n')
+		cat('data type   :' , object@file@datanotation, '\n')
+		cat('data content:' ,  dataContent(object), '\n')
+		if (object@data@haveminmax) {
+			cat('min value   :' , minValue(object), '\n')
+			cat('max value   :' , maxValue(object), '\n')
+		} else { #if (object@data@source == 'disk')  {
+			cat('min value   : NA \n')
+			cat('max value   : NA \n')
+		}
+		cat('projection  :' , projection(object, TRUE), '\n')
+		cat('xmin        :' , xmin(object), '\n')
+		cat('xmax        :' , xmax(object), '\n')
+		cat('ymin        :' , ymin(object), '\n')
+		cat('ymax        :' , ymax(object), '\n')
+		cat('xres        :' , xres(object), '\n')
+		cat('yres        :' , yres(object), '\n')
+		cat ('\n')
+	}
+)
 
 
-setMethod('==', signature(e1='AbstractRaster', e2='AbstractRaster'),
+setMethod ('show' , 'RasterBrick',
+	function ( object ){
+		cat ('class     :' , class ( object ) , '\n')
+		cat ('filename  :' , filename(object), '\n')
+		cat ('nlayers   :' , nlayers(object), '\n')
+		cat ('nrow      :' , nrow(object), '\n')
+		cat ('ncol      :' , ncol(object), '\n')
+		cat ('ncells    :' , ncells(object), '\n')
+		cat ('projection:' , projection(object, TRUE), '\n')
+		cat ('xmin      :' , xmin(object), '\n')
+		cat ('xmax      :' , xmax(object), '\n')
+		cat ('ymin      :' , ymin(object), '\n')
+		cat ('ymax      :' , ymax(object), '\n')
+		cat ('xres      :' , xres(object) , '\n')
+		cat ('yres      :' , yres(object) , '\n')
+		cat ('\n')
+	}
+)
+
+
+setMethod ('show' , 'RasterStack',
+	function ( object ){
+		cat ('class     :' , class ( object ) , '\n')
+		cat ('filename  :' , filename(object), '\n')
+		cat ('nlayers   :' , nlayers(object), '\n')
+		cat ('nrow      :' , nrow(object), '\n')
+		cat ('ncol      :' , ncol(object), '\n')
+		cat ('ncells    :' , ncells(object), '\n')
+		cat ('projection:' , projection(object, TRUE), '\n')
+		cat ('xmin      :' , xmin(object), '\n')
+		cat ('xmax      :' , xmax(object), '\n')
+		cat ('ymin      :' , ymin(object), '\n')
+		cat ('ymax      :' , ymax(object), '\n')
+		cat ('xres      :' , xres(object) , '\n')
+		cat ('yres      :' , yres(object) , '\n')
+		cat ('\n')
+	}
+)
+
+
+
+setMethod('==', signature(e1='Raster', e2='Raster'),
 	function(e1,e2){
 		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
 		return(cond)
 	}
 )	
 
-setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
+setMethod('!=', signature(e1='Raster', e2='Raster'),
 	function(e1,e2){
 		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
 		return(!cond)
@@ -22,7 +93,7 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 )	
 
 
-.getValues <- function(x) {
+.getRasterValues <- function(x) {
 # need to take care of 'spase'
 	if (dataContent(x) != 'all') {
 		if (class(x) == "RasterLayer") {
@@ -37,15 +108,15 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 }	
 
 .getLogicalValues <- function(x) {
-	v <- .getValues(x)
+	v <- .getRasterValues(x)
 	v[v<0] <- 0
 	v[v>0] <- 1
 	return(v)
 }
 
-.getTheValues <- function(x, y, i) {
+.getAllTypeOfValues <- function(x, y, i) {
 	if ( (class(y) == 'RasterLayer' | class(y) == 'RasterStack' | class(y) == 'RasterBrick') & compare(c(x, y)) ) {			
-		return(.getValues(y))
+		return(.getRasterValues(y))
 	} else if (is.atomic(y)) {
 		return(rep(y, ncells(x)))
 	} else if (length(y)==ncells(x)) {
@@ -57,7 +128,7 @@ setMethod('!=', signature(e1='AbstractRaster', e2='AbstractRaster'),
 
 setMethod("[", "RasterLayer",
 	function(x, i, j, ..., drop = TRUE) {
-		if (!missing(drop)) { stop("don't supply drop: it needs to be FALSE anyway") }
+		if (!missing(drop)) { stop("drop is ignored. It is always set to FALSE") }
 		if (!missing(j)) { stop("can only set values with a single index (a vector)") }
 		if (missing(i)) { return(x) }
 		return(setRaster(x, values=i))
@@ -67,7 +138,7 @@ setMethod("[", "RasterLayer",
 
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
-		return(setRaster(x, values=callGeneric(.getValues(x))))
+		return(setRaster(x, values=callGeneric(.getRasterValues(x))))
 	}
 )
 
@@ -82,48 +153,33 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if (compare(c(e1, e2))) {
-			return(setRaster(e1, values=callGeneric(.getValues(e1), .getValues(e2))))
+			return(setRaster(e1, values=callGeneric(.getRasterValues(e1), .getRasterValues(e2))))
 		}	
 	}
 )
 
 setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
     function(e1, e2){ 
-		return(setRaster(e1, values=callGeneric(.getValues(e1), e2)))
+		return(setRaster(e1, values=callGeneric(.getRasterValues(e1), e2)))
 	}
 )
 
 setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
     function(e1, e2){ 
-		return(setRaster(e2, values=callGeneric(.getValues(e2), e1)))
+		return(setRaster(e2, values=callGeneric(.getRasterValues(e2), e1)))
 	}
 )
 
 
-setMethod("max", signature(x='RasterLayer'),
+setMethod("max", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
 		obs <- list(...)
 		if (length(obs) == 0) {
-			return(x)
+			return(setRaster(x, values=apply(as.matrix(.getRasterValues(x)), 1, max, na.rm=na.rm)))
 		} else {
-			v <- .getValues(x)
+			v <- .getRasterValues(x)
 			for (i in 1:length(obs)) {
-				v <- apply(cbind(v, .getTheValues(x, obs[[i]], i)), 1, max, na.rm=na.rm)
-			}
-			return(setRaster(x, values=v))
-		}
-	}
-)
-
-setMethod("max", signature(x='RasterStack'),
-	function(x, ..., na.rm=FALSE){
-		obs <- list(...)
-		if (length(obs) == 0) {
-			return(setRaster(x, values=apply(.getValues(x), 1, max, na.rm=na.rm)))
-		} else {
-			v <- .getValues(x)
-			for (i in 1:length(obs)) {
-				v <- apply(cbind(v, .getTheValues(x, obs[[i]], i)), 1, max, na.rm=na.rm)
+				v <- apply(cbind(v, .getAllTypeOfValues(x, obs[[i]], i)), 1, max, na.rm=na.rm)
 			}
 			return(setRaster(x, values=v))
 		}
@@ -131,17 +187,15 @@ setMethod("max", signature(x='RasterStack'),
 )
 
 
-
-setMethod("min", signature(x='RasterLayer'),
+setMethod("min", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
 		obs <- list(...)
 		if (length(obs) == 0) {
-			return(x)
+			return(setRaster(x, values=apply(as.matrix(.getRasterValues(x)), 1, min, na.rm=na.rm)))
 		} else {
-			v <- .getValues(x)
+			v <- .getRasterValues(x)
 			for (i in 1:length(obs)) {
-				vv <- .getTheValues(x, obs[[i]], i)
-				v <- pmin(v, vv, na.rm=na.rm)
+				v <- apply(cbind(v, .getAllTypeOfValues(x, obs[[i]], i)), 1, min, na.rm=na.rm)
 			}
 			return(setRaster(x, values=v))
 		}
@@ -149,77 +203,30 @@ setMethod("min", signature(x='RasterLayer'),
 )
 
 
-setMethod("min", signature(x='RasterStack'),
+setMethod("sum", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
 		obs <- list(...)
 		if (length(obs) == 0) {
-			return(setRaster(x, values=pmin(.getValues(x), na.rm)))
+			return(setRaster(x, values=rowSums(as.matrix(.getRasterValues(x)), na.rm)))
 		} else {
-			v <- .getValues(x)
+			v <- .getRasterValues(x)
+			if (!(is.null(dim(v)))) {
+				v <- rowSums(as.matrix(.getRasterValues(x)), na.rm=na.rm)
+			} 
 			for (i in 1:length(obs)) {
-				vv <- .getTheValues(x, obs[[i]], i)
-				v <- pmin(v, vv, na.rm=na.rm)
+				vv <- .getAllTypeOfValues(x, obs[[i]], i)
+				v <- rowSums(cbind(v, vv), na.rm=na.rm)
 			}
-			return(setRaster(x, values=v))
+		return(setRaster(x, values=v))
 		}
 	}
 )
 
-
-
-
-.getSum <- function(obs, x, ..., na.rm=FALSE) {
-	v <- .getValues(x)
-	if (!(is.null(dim(v)))) {
-		v <- rowSums(.getValues(x), na.rm=na.rm)
-	} 
-	for (i in 1:length(obs)) {
-		vv <- .getTheValues(x, obs[[i]], i)
-		v <- rowSums(cbind(v, vv), na.rm=na.rm)
-	}
-	return(setRaster(x, values=v))
-}
-
-
-setMethod("sum", signature(x='RasterLayer'),
-	function(x, ..., na.rm=FALSE){
-		obs <- list(...)
-		if (length(obs) == 0) {
-			return(x)
-		} else {
-			return(.getSum(obs, x, ..., na.rm))
-		}
-	}
-)
-
-
-setMethod("sum", signature(x='RasterStack'),
-	function(x, ..., na.rm=FALSE){
-		obs <- list(...)
-		if (length(obs) == 0) {
-			return(setRaster(x, values=rowSums(.getValues(x), na.rm)))
-		} else {
-			return(.getSum(obs, x, ..., na.rm))		
-		}
-	}
-)
-
-
-setMethod("sum", signature(x='RasterBrick'),
-	function(x, ..., na.rm=FALSE){
-		obs <- list(...)
-		if (length(obs) == 0) {
-			return(setRaster(x, values=rowSums(.getValues(x), na.rm)))
-		} else {
-			return(.getSum(obs, x, ..., na.rm))		
-		}
-	}
-)
 
 #todo "any", "all" 
 
 	
-setMethod("range", signature(x='RasterLayer'),
+setMethod("range", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
 		return(max(x, ..., na.rm=na.rm) - min(x, ..., na.rm=na.rm))
 	}
@@ -227,35 +234,26 @@ setMethod("range", signature(x='RasterLayer'),
 
 setMethod("is.na", signature(x='RasterLayer'),
 	function(x) {
-		return(setRaster(x, values=is.na(.getValues(x))))
+		return(setRaster(x, values=is.na(.getRasterValues(x))))
 	}
 )	
 	
 	
-setMethod('dim', signature(x='AbstractRaster'), 
-	function(x){ return(c(nrow(x), ncol(x)))}
-)
-
-setMethod('dim', signature(x='RasterStack'), 
+setMethod('dim', signature(x='Raster'), 
 	function(x){ return(c(nrow(x), ncol(x), nlayers(x)))}
 )
 
-setMethod('dim', signature(x='RasterBrick'), 
-	function(x){ return(c(nrow(x), ncol(x), nlayers(x)))}
-)
-
-setMethod('nrow', signature(x='AbstractRaster'), 
+setMethod('nrow', signature(x='Raster'), 
 	function(x){ return(x@nrows)}
 )
 
-setMethod('ncol', signature(x='AbstractRaster'), 
+setMethod('ncol', signature(x='Raster'), 
 	function(x){ return(x@ncols) }
 )
 
 
 
-
-setMethod('summary', signature(object='AbstractRaster'), 
+setMethod('summary', signature(object='Raster'), 
 	function(object, ...) {
 	# to be replaces by something more typical for summary in R, i.e. a sumary of the raster values
 		cat ("Cells: " , ncells(object), '\n')
@@ -281,36 +279,20 @@ setMethod('summary', signature(object='AbstractRaster'),
 )
 
 
-setMethod("plot", signature(x='RasterLayer', y='missing'), 
+setMethod("plot", signature(x='Raster', y='missing'), 
 	function(x, y, ...)  {
 		map(x, ...)
 	}
 )	
 
-
-setMethod("plot", signature(x='RasterStack', y='numeric'), 
+setMethod("plot", signature(x='Raster', y='numeric'), 
 	function(x, y, ...)  {
 		map(x, y, ...)
 	}
 )		
 
-setMethod("plot", signature(x='RasterStack', y='missing'), 
-	function(x, ...)  {
-		map(x, 1, ...)
-	}
-)		
 
-
-setMethod("plot", signature(x='RasterBrick', y='numeric'), 
-	function(x, y, ...)  {
-		ind <- as.integer(round(y))
-		ind <- min(max(ind, 1), nlayers(x))
-		map(x, ind, ...)
-	}
-)		
-
-
-
+# helper functions to set ... variables if they are not specified by the user. There probably exists a formal, and direct, mechanism to do this in R, but I have not discovered this yet...
 .getmaxdim <- function(maxdim=1000, ...) {
 	return(maxdim)
 }
@@ -326,7 +308,6 @@ setMethod("plot", signature(x='RasterLayer', y='RasterLayer'),
 		nc <- ncells(x)
 		x <- readSkip(x, maxdim=maxdim)
 		y <- readSkip(y, maxdim=maxdim)
-		rm(maxdim)
 		if (length(x) < nc) {
 			warning(paste('plot used a sample of ', round(100*length(x)/ncells(y)), "% of the cells", sep=""))
 		}

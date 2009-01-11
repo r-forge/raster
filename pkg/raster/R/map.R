@@ -12,13 +12,13 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 	if (class(object) == 'character') { 
 		object <- rasterFromFile(object) 
 	}
-	if ( class(object) == 'RasterStack' ) { 
+	if ( class(object) != 'RasterLayer' ) { 
 		index <- round(index)
-		i <- min(max(1, index), object@data@nlayers)
+		i <- min(max(1, index), nlayers(object))
 		if (i != index) { stop("index should be >= 1 and <=", nlayers(object), " =nlayers(stack)") }
 		raster2 <- object@rasters[[i]]
-		if (object@data@content == 'all') {
-			raster2 <- setValues(raster2, object@data@values[i,])
+		if (dataContent(object) == 'all') {
+			raster2 <- setValues(raster2, values(object)[i,])
 		}
 		object <- raster2
 	}

@@ -1,7 +1,7 @@
 
 import <- function(raster, filename="", overwrite=FALSE) {
 # check extension
-	if (raster@file@driver == "raster") {
+	if (.driver(raster) == "raster") {
 		stop("file is a raster format file, it cannot be imported")
 	}	
 	filename <- trim(filename)
@@ -82,7 +82,7 @@ export <- function(raster, filename="", filetype="ascii", keepGRD=TRUE, overwrit
 
 
 writeAscii <- function(raster, filename, overwrite=FALSE) {
-	if (raster@data@indices[1] == 1) {
+	if (dataIndices(raster)[1] == 1) {
 		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
 		if (resdif > 0.01) {
 			stop(paste("raster has unequal horizontal and vertical resolutions","\n", "these data cannot be stored in arc-ascii format"))
@@ -97,14 +97,15 @@ writeAscii <- function(raster, filename, overwrite=FALSE) {
 		cat("XLLCORNER", xmin(raster), "\n", file = thefile)
 		cat("YLLCORNER", ymin(raster), "\n", file = thefile)
 		cat("CELLSIZE",  xres(raster), "\n", file = thefile)
-		cat("NODATA_value", raster@file@nodatavalue, "\n", file = thefile)
+		cat("NODATA_value", .nodatavalue(raster), "\n", file = thefile)
 		close(thefile) #close connection
 		
     } else if ( dataIndices(raster)[2] > ncells(raster)) {
-		stop(paste('writing beyond end of file. last cell:', raster@data@indices[2], '>', ncells(raster)))
+		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncells(raster)))
 	}
 
-	raster@data@values[is.na(values(raster))] <- raster@file@nodatavalue 
+	
+	raster@data@values[is.na(values(raster))] <- .nodatavalue(raster)
 	if (dataContent(raster) == 'all') {
 		for (r in 1:nrow(raster)) {
 			write.table(t(valuesRow(raster, r)), filename, append = TRUE, quote = FALSE, 
@@ -147,7 +148,7 @@ writeHeader <- function(raster, type) {
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("NROWS ",  nrow(raster), "\n", file = thefile)
 	cat("NCOLS ",  ncol(raster), "\n", file = thefile)
-	cat("NBANDS ",  raster@file@nbands, "\n", file = thefile)
+	cat("NBANDS ",  nbands(raster), "\n", file = thefile)
 	cat("NBITS ",  raster@file@datasize * 8, "\n", file = thefile)
 	if (.Platform$endian == "little") { btorder <- "I" 
 	} else { btorder <- "M" }
@@ -166,9 +167,9 @@ writeHeader <- function(raster, type) {
 	cat("YDIM", yres(raster), "\n", file = thefile)
 	browbytes <- round(ncol(raster) * raster@file@datasize)
 	cat("BANDROWBYTES ", browbytes, "\n", file = thefile)
-	cat("TOTALROWBYTES ", browbytes *  raster@file@nbands, "\n", file = thefile)
+	cat("TOTALROWBYTES ", browbytes *  nbands(raster), "\n", file = thefile)
 	cat("BANDGAPBYTES  0", "\n", file = thefile)
-    cat("NODATA", raster@file@nodatavalue, "\n", file = thefile)	
+    cat("NODATA", .nodatavalue(raster), "\n", file = thefile)	
 
 	cat("\n\n", file = thefile)
 	cat("The below is additional metadata, not part of the BIL/HDR format\n", file = thefile)
@@ -192,7 +193,7 @@ writeHeader <- function(raster, type) {
 
 	cat("HEIGHT ",  nrow(raster), "\n", file = thefile)
 	cat("WIDTH ",  ncol(raster), "\n", file = thefile)
-	cat("NUM_LAYERS ",  raster@file@nbands, "\n", file = thefile)
+	cat("NUM_LAYERS ",  nbands(raster), "\n", file = thefile)
 
 	if (raster@file@datatype == 'integer') { dd <- "S"
 	} else { dd <- "F" }

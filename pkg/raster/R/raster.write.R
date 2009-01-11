@@ -81,9 +81,9 @@ writeRaster <- function(raster, overwrite=FALSE) {
  
  
 .writeRasterRow <- function(raster, overwrite=FALSE) {
-	if (raster@data@content != 'row') { stop('raster does not contain a row') }
+	if (dataContent(raster) != 'row') { stop('raster does not contain a row') }
 	
-	if (raster@data@indices[1] == 1) {
+	if (dataIndices(raster)[1] == 1) {
  	#  FIRST  ROW
 		raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
 		if (filename(raster) == "") {
@@ -116,7 +116,7 @@ writeRaster <- function(raster, overwrite=FALSE) {
 #	raster@data@values[is.na(raster@data@values)] <-  raster@file@nodatavalue
 	writeBin(as.vector(raster@data@values), raster@filecon, size = raster@file@datasize)
 	
-	if (raster@data@indices[2] == ncells(raster)) {
+	if (dataIndices(raster)[2] == ncells(raster)) {
 	# LAST  ROW
 		.writeRasterHdr(raster) 
 		close(raster@filecon)
@@ -125,8 +125,8 @@ writeRaster <- function(raster, overwrite=FALSE) {
 		raster@data@content <- 'nodata'
 		raster@data@values <- vector(length=0)
 	}		
-	if (raster@data@indices[2] > ncells(raster)) {
-		stop(paste('writing beyond end of file. last cell:', raster@data@indices[2], '>', ncells(raster)))
+	if (dataIndices(raster)[2] > ncells(raster)) {
+		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncells(raster)))
 	}
 	return(raster)	
 }
@@ -192,11 +192,11 @@ writeRaster <- function(raster, overwrite=FALSE) {
 		cat("DataType=",  datatype, "\n", file = thefile)
 		cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)
 	}	
-	cat("nbands=",  raster@file@nbands, "\n", file = thefile)
+	cat("nbands=",  nbands(raster), "\n", file = thefile)
 	cat("bandOrder=",  raster@file@bandorder, "\n", file = thefile)
 	cat("minValue=",  minValue(raster), "\n", file = thefile)
 	cat("maxValue=",  maxValue(raster), "\n", file = thefile)
-	cat("NoDataValue=",  raster@file@nodatavalue, "\n", file = thefile)
+	cat("NoDataValue=", .nodatavalue(raster), "\n", file = thefile)
 #	cat("Sparse=", raster@sparse, "\n", file = thefile)
 #	cat("nCellvals=", raster@data@ncellvals, "\n", file = thefile)	
 	close(thefile)

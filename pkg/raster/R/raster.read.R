@@ -54,7 +54,7 @@
 		ncolumns <- ncol(raster) - startcol + 1  
 	}
 
-	if (raster@file@driver == 'raster') {
+	if (.driver(raster) == 'raster') {
 		rastergri <- .setFileExtensionValues(filename(raster))
 		if (!file.exists( filename(raster))) { 
 			stop(paste(filename(raster)," does not exist"))
@@ -73,7 +73,7 @@
 		}
 		close(con)
 		result[is.nan(result)] <- NA
-		result[result <=  (0.999 * raster@file@nodatavalue) ] <- NA 
+		result[result <=  (0.999 * .nodatavalue(raster)) ] <- NA 
 	}
 	else { #use GDAL  
 		if (is.na(raster@file@band)) { result <- NA }
@@ -234,7 +234,7 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		if (dataContent(raster) == 'all') {
 			vals <- cbind(uniquecells, values(raster)[uniquecells])
 		} else if (dataSource(raster) == 'disk') {
-			if (raster@file@driver == 'gdal') {
+			if (.driver(raster) == 'gdal') {
 				vals <- .readCellsGDAL(raster, uniquecells)
 			} else {
 				vals <- .readCellsRaster(raster, uniquecells)
@@ -298,7 +298,7 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 			res[i] <- readBin(con, what=dtype, n=1, size=raster@file@datasize, endian=raster@file@byteorder) 
 	}
 	close(con)
-	res[res <=  max(-3e+38, raster@file@nodatavalue)] <- NA
+	res[res <=  max(-3e+38, .nodatavalue(raster))] <- NA
 	return(cbind(cells,res))
 }
 

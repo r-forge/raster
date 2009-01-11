@@ -71,9 +71,9 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 
 	raster@file@nbands <- as.integer(gdalinfo[["bands"]])
 	band <- as.integer(band)
-	if (band > raster@file@nbands) {
+	if (band > nbands(raster) ) {
 		warning("band too high. Set to nbands")
-		band <- raster@file@nbands }
+		band <- nbands(raster) }
 	if ( band < 1) { 
 		warning("band too low. Set to 1")
 		band <- 1 }

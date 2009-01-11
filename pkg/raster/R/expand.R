@@ -11,10 +11,10 @@ expand <- function(raster, bndbox, filename="", overwrite=FALSE) {
 	bndbox <- getBbox(bndbox)
 	res <- resolution(raster)
 # snap points to pixel boundaries
-	xmn <- round(bndbox@xmin / res[1]) * res[1]
-	xmx <- round(bndbox@xmax / res[1]) * res[1]
-	ymn <- round(bndbox@ymin / res[2]) * res[2]
-	ymx <- round(bndbox@ymax / res[2]) * res[2]
+	xmn <- round(xmin(bndbox) / res[1]) * res[1]
+	xmx <- round(xmax(bndbox) / res[1]) * res[1]
+	ymn <- round(ymin(bndbox) / res[2]) * res[2]
+	ymx <- round(ymax(bndbox) / res[2]) * res[2]
 	
 # only expanding here, not cutting
 	xmn <- min(xmn, xmin(raster))
