@@ -67,7 +67,7 @@ layers <- function(object) {
 	} else if (class(object) == "RasterStack") {
 		l <- vector('character')
 		for (i in 1:nlayers(object)) {
-			l <- c(l, filename(object@rasters[[i]]))
+			l <- c(l, filename(asRasterLayer(object, i)))
 		}
 		return(l)
 	}	

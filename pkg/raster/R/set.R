@@ -17,17 +17,17 @@ setRowCol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 	return(raster)
 }
 
-setRaster <- function(raster, filename="", values=NA) {
-	if (class(raster) == 'RasterStack') { raster <- raster@rasters[[1]] }
-	if (class(raster) == 'RasterBrick') { raster <- raster }
-	if (class(raster) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
+setRaster <- function(object, filename="", values=NA) {
+	if (class(object) == 'RasterStack') { object <- asRasterLayer(object, 1) }
+	if (class(object) == 'RasterBrick') { object <- asRasterLayer(object, 1) }
+	if (class(object) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
 
 	filename <- trim(filename)
-	if (filename != "" & filename == filename(raster)) {
+	if (filename != "" & filename == filename(object)) {
 		stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
 	}
 
-	raster <- clearValues(raster)
+	raster <- clearValues(object)
 	raster@data@min <- NA
 	raster@data@max <- NA
 

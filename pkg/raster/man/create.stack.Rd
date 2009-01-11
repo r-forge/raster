@@ -29,7 +29,7 @@ stackSave(rstack)
   \item{rasterfiles}{ Filename(s) of (a) raster dataset(s) }
   \item{bands}{ A vector or list of bands of raster data files (default values = 1)}
   \item{rasters}{ RasterLayer object(s) }
-  \item{indices}{ the indices (in stack@rasters) of the raster(s) to remove from a stack }
+  \item{indices}{ the indices of the raster(s) to remove from a stack }
 }
 \details{
   When a  stack is saved to a file, only pointers (filenames) to raster datasets are saved, not the data. If the name or location of a raster file changes, the stack becomes invalid.

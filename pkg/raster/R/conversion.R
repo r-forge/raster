@@ -28,7 +28,7 @@ asRasterLayer <- function(object, dataindex=1) {
 		if (dataContent(object) == 'all') {
 			dindex <- max(1, min(nlayers(object), dataindex))
 			if (dindex != dataindex) { warning(paste("dataindex was changed to", dindex))}
-			rs <- setValues(rs, values(object, format='matrix')[,dindex])
+			rs <- setValues(rs, as.matrix(values(object))[,dindex])
 		}
 		return(rs)
 	} else { # assuming an SP raster

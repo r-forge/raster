@@ -16,7 +16,7 @@ map(object, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ad
 
 \arguments{
   \item{object}{ RasterLayer object}
-  \item{index}{ Ignored for RasterLayers. The index of a raster in a RasterStack  1 <= index <= rstack@nrasters }
+  \item{index}{ Ignored for RasterLayers. The index of a raster in a RasterStack  1 <= index <= nlayers(rstack) }
   \item{col} {a color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making}
   \item{subsample}{Logical. If \code{TRUE}, the image is resampled using maxdim}
   \item{maxdim}{ maximum requsted number of pixels in the map display (either vertial or horizontal) }
