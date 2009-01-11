@@ -5,7 +5,7 @@
 \alias{RasterLayer-class}
 \alias{RasterStack-class}
 \alias{RasterBrick-class}
-
+\alias{show,BoundingBox-method}
 \alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
 \alias{show,RasterBrick-method}

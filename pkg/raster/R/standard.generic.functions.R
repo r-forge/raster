@@ -5,6 +5,16 @@
 # Licence GPL v3
 
 
+setMethod ('show' , 'BoundingBox', 
+	function(object) {
+		cat('class       :' , class(object), '\n')
+		cat('xmin        :' , xmin(object), '\n')
+		cat('xmax        :' , xmax(object), '\n')
+		cat('ymin        :' , ymin(object), '\n')
+		cat('ymax        :' , ymax(object), '\n')
+	}
+)	
+	
 	
 setMethod ('show' , 'RasterLayer', 
 	function(object) {

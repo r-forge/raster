@@ -61,7 +61,6 @@ readRandom(raster, n=500, na.rm = TRUE)
 
 \note{ After read* the values are accessible with the "values(object)" function }
 
-\references{ ~put references to the literature/web site here ~ }
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
 \examples{

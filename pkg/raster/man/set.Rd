@@ -34,7 +34,7 @@ makeSparse(raster)
 }
 
 \arguments{
-  \item{object} {A Raster* object }
+  \item{object}{A Raster* object }
   \item{raster}{ A \code{RasterLayer} object }
   \item{filename}{ filename, can be blank }
   \item{datatype}{ the type of data ('numeric' or 'integer' that will be written to disk }

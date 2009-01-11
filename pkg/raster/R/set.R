@@ -83,10 +83,15 @@ clearValues <- function(object) {
 
 roundCoords <- function(object, digits=0) {
 	digits <- max(0, digits)
-	object@bbox@xmin <- round(object@bbox@xmin, digits)
-	object@bbox@xmax <- round(object@bbox@xmax, digits)
-	object@bbox@ymin <- round(object@bbox@ymin, digits)
-	object@bbox@ymax <- round(object@bbox@ymax, digits)
+	b <- getBbox(object)
+	b@xmin <- round(b@xmin, digits)
+	b@xmax <- round(b@xmax, digits)
+	b@ymin <- round(b@ymin, digits)
+	b@ymax <- round(b@ymax, digits)
+	if (class(object) == 'BoundingBox') {
+		return(b)
+	}
+	object <- setBbox(object, b)
 	return(object)
 }
 
