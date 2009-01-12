@@ -182,7 +182,7 @@ makeSparse <- function(raster) {
 			vals <- seq(1:ncells(raster))
 			vals <- cbind(vals, values(raster))
 			vals <- as.vector(na.omit(vals))
-			raster <- setValuesSparse(raster, sparsevalues=vals[,2], indices=vals[,1])
+			raster <- setValuesSparse(raster, sparsevalues=vals[,2], cellnumbers=vals[,1])
 			return(raster)
 		} else { 
 			# as above, but by reading data from disk, row by row

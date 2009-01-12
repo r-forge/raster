@@ -309,7 +309,7 @@ setMethod("plot", signature(x='Raster', y='numeric'),
 #	return(maxdim)
 #}
 
-getcex <- function(cex = 0.1, ...) {
+.getcex <- function(cex = 0.1, ...) {
 	return(cex)
 }
 
@@ -322,7 +322,7 @@ setMethod("plot", signature(x='RasterLayer', y='RasterLayer'),
 		if (length(x) < nc) {
 			warning(paste('plot used a sample of ', round(100*length(x)/nc), "% of the cells", sep=""))
 		}
-		cex <- getcex(...)
+		cex <- .getcex(...)
 		plot(x, y, ...)			
 	}
 )
