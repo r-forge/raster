@@ -3,6 +3,8 @@ values <- function(object, format='vector', names=FALSE) {
 	if (object@data@content=="nodata") {stop("first read some data (e.g., readAll()") }
 	if (format=='matrix') { 
 		return(.values.as.matrix(object, names)) 
+	if (format=='dataframe') { 
+		return(.values.as.dataframe(object)) 
 	} else {
 		return(object@data@values) 
 	}
@@ -39,15 +41,25 @@ valuesRow <- function(raster, rownr) {
 }
 
 
+.values.as.dataframe <- function(raster) {
+	m <- as.data.frame(values.as.matrix(raster, FALSE))
+	if raster@data@colnames != '' { 
+		colnames(m) <- raster@data@colnames 
+	} else {
+		colnames(m) <- seq(1:ncol(m))
+	}	
+	rownames(m) <- seq(1:nrow(m))
+	return(m)
+}
 
 .values.as.matrix <- function(raster, names=FALSE) {
 	if (dataContent(raster)=="nodata") {stop("first read some data (e.g., readAll() or readRow()") }
 	
-	if (is.matrix(raster@data@values)) {
-		return(raster@data@values)
+	if (is.matrix(values(raster))) {
+		return(values(raster))
 		
 	} else if (dataContent(raster)=="all") {
-		mdata <- matrix(raster@data@values, nrow=nrow(raster), ncol=ncol(raster), byrow=TRUE)
+		mdata <- matrix(values(raster), nrow=nrow(raster), ncol=ncol(raster), byrow=TRUE)
 		if (names) {
 			colnames(mdata) <- seq(1:ncol(raster))
 			rownames(mdata) <- seq(1:nrow(raster))
@@ -65,7 +77,7 @@ valuesRow <- function(raster, rownr) {
 		return(mdata)
 		
 	} else if (dataContent(raster)=="row") {
-		mdata <- matrix(raster@data@values, nrow=1, ncol=ncol(raster), byrow=TRUE)
+		mdata <- matrix(values(raster), nrow=1, ncol=ncol(raster), byrow=TRUE)
 		if (names) {
 			colnames(mdata) <- seq(1:ncol(raster))
 			therow <- rowFromCell(raster, dataIndices(raster)[1])

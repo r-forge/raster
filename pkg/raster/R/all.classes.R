@@ -94,6 +94,7 @@ setClass('SingleLayerData',
 		values='vector', 
 		content='character', #nodata, all, row, block, sparse
 		indices = 'vector',
+		colnames = 'character',
 		haveminmax = 'logical',
 		min = 'vector',
 		max = 'vector',
@@ -103,6 +104,7 @@ setClass('SingleLayerData',
 		values=vector(),
 		content='nodata', 
 		indices = vector(mode='numeric'),
+		colnames = '',
 		haveminmax = FALSE,
 		min = numeric(0),
 		max = numeric(0),
@@ -133,14 +135,14 @@ setClass('MultipleRasterData',
 		values='matrix', 
 		content='character', #nodata, all, row, block, sparse
 		indices = 'vector',
-		varnames = 'character',
+		colnames = 'vector',
 		nlayers='integer'
 		),
 	prototype (	
 		values=matrix(NA,0,0),
 		content='nodata', 
 		indices =vector(mode='numeric'),
-		varnames =vector(mode='character'),
+		colnames =vector(mode='character'),
 		nlayers=as.integer(0)
 	),	
 	validity = function(object)
