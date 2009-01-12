@@ -24,10 +24,10 @@ writeWorldfile(raster, extension=".wld")
 
 \arguments{
   \item{raster}{ RasterLayer object }
-  \item{overwrite} { Logical. If \code{TRUE} existing files are overwritten }
+  \item{overwrite}{ Logical. If \code{TRUE} existing files are overwritten }
   \item{filename}{ The file resulting from import or export }
   \item{filetype}{ The type of file to export to ('ascii' or 'bil')}
-  \item{keepGRD} { Logical. If \code{FALSE} the existing raster file (internal format) will not be kept after exporting; only applied to other formats that can use the same binary format. }
+  \item{keepGRD}{ Logical. If \code{FALSE} the existing raster file (internal format) will not be kept after exporting; only applied to other formats that can use the same binary format. }
   \item{type}{ Type of header file: 'BIL', 'ENVI', 'ErdasRaw', 'raster' }
   \item{extension}{ extension of header file. Only implemented for worldfile. }
 }

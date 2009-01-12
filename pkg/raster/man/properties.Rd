@@ -49,7 +49,7 @@ nbands(object)
 \arguments{
   \item{object}{ Raster* object }
   \item{x}{ Raster* object }
-  \item{asText} {logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned }
+  \item{asText}{logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned }
 }
   
 

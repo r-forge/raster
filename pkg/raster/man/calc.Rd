@@ -28,8 +28,8 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
   \item{filename}{ output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot }
   \item{overwrite}{ logical to indicate whether an existing output file should be overwritten }
   \item{ForceIntOutput}{ logical. If \code{TRUE}, output will be integer values }
-  \item{ngb} { neighborhood size in number of cells }
-  \item{keepdata} {logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA }
+  \item{ngb}{ neighborhood size in number of cells }
+  \item{keepdata}{logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA }
 }
 
 \details{

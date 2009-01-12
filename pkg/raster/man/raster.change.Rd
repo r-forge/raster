@@ -20,7 +20,7 @@ Merge(rasters, tolerance=0.05, filename="", overwrite=FALSE)
 \arguments{
   \item{raster}{ a RasterLayer object }
   \item{rasters}{ a list of RasterLayer objects }
-  \item{bndbox} {bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
+  \item{bndbox}{bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
   \item{filename}{ output filename for a new raster }
   \item{fun}{ function used to Aggregate values. It should return one number. E.g. mean or max }
   \item{fact}{ degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details }
@@ -28,7 +28,7 @@ Merge(rasters, tolerance=0.05, filename="", overwrite=FALSE)
   \item{rm.NA}{ if \code{rm.NA == TRUE}, remove NA cells from calculations }
   \item{ForceIntOutput}{ logical. If \code{TRUE} the values will be rounded and stored as integer }
   \item{overwrite}{ if TRUE, "filename" will be overwritten if it exists }
-  \item{tolerance} { difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal }
+  \item{tolerance}{ difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal }
 }
 
 \details{

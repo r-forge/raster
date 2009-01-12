@@ -69,16 +69,20 @@ setProjection <- function(object, projstring) {
 }
 
 
-clearValues <- function(object) {
-	object@data@content <- 'nodata'
-	object@data@indices <- ""
-	if (class(object) == 'RasterLayer') {
-		object@data@values <- vector()
+newCRS <- function(projstring) {
+	projstring <- trim(projstring)
+	if (is.na(projstring) | nchar(projstring) < 3) { 
+		projs <- (CRS(as.character(NA)))
 	} else {
-		object@data@values <- matrix(NA,0,0)
+		projs <- try(CRS(projstring), silent = T)
+		if (class(projs) == "try-error") { 
+			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
+			projs <- CRS(as.character(NA))
+		}
 	}
-	return(object)
+	return(projs)
 }
+
 
 
 roundCoords <- function(object, digits=0) {
@@ -96,163 +100,6 @@ roundCoords <- function(object, digits=0) {
 }
 
 
-
-newCRS <- function(projstring) {
-	projstring <- trim(projstring)
-	if (is.na(projstring) | nchar(projstring) < 3) { 
-		projs <- (CRS(as.character(NA)))
-	} else {
-		projs <- try(CRS(projstring), silent = T)
-		if (class(projs) == "try-error") { 
-			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
-			projs <- CRS(as.character(NA))
-		}
-	}
-	return(projs)
-}
-
-
-changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) {
-	bb <- newBbox(xmn, xmx, ymn, ymx) 
-	object <- setBbox(object, bb, keepres=keepres) 
-	return(object)
-}
-
-
-newBbox <- function(xmn, xmx, ymn, ymx) {
-	bb <- new('BoundingBox')
-	bb@xmin <- xmn
-	bb@xmax <- xmx
-	bb@ymin <- ymn
-	bb@ymax <- ymx
-	return(bb)
-}
-
-getBbox <- function(object) {
-	if ( class(object) == 'BoundingBox' ) { 
-		bb <- object 
-	} else if ( class(object) == 'RasterLayer' | class(object) == 'RasterStack' | class(object) == 'RasterBrick' ) {
-		bb <- object@bbox
-	} else if (class(object) == "matrix") {
-		bb <- new('BoundingBox')
-		bb@xmin <- object[1,1]
-		bb@xmax <- object[1,2]
-		bb@ymin <- object[2,1]
-		bb@ymax <- object[2,2]
-	} else if (class(object) == "vector") {
-		bb <- new('BoundingBox')
-		bb@xmin <- object[1]
-		bb@xmax <- object[2]
-		bb@ymin <- object[3]
-		bb@ymax <- object[4]
-	} else {
-		bndbox <- bbox(object)
-		bb <- new('BoundingBox')
-		bb@xmin <- bndbox[1,1]
-		bb@xmax <- bndbox[1,2]
-		bb@ymin <- bndbox[2,1]
-		bb@ymax <- bndbox[2,2]
-	}
-	return(bb)
-}
-
-
-setBbox <- function(object, bndbox, keepres=FALSE) {
-	xrs <- xres(object)
-	yrs <- yres(object)
-	object@bbox <- getBbox(bndbox)
-	if (keepres) {
-		nc <- as.integer(round( (xmax(object) - xmin(object)) / xrs ))
-		if (nc < 1) { stop( "xmin and xmax are less than one cell apart" ) 
-		} else { object@ncols <- nc }
-		nr <- as.integer(round( (ymax(object) - ymin(object)) / xrs ) )
-		if (nr < 1) { stop( "ymin and ymax are less than one cell apart" )
-		} else { object@nrows <- nr }
-		object@bbox@xmax <- object@bbox@xmin + ncol(object) * xrs
-		object@bbox@ymax <- object@bbox@ymin + nrow(object) * yrs
-	}
-	return(object)
-}
-
-
-makeSparse <- function(raster) {
-	if ( dataContent(raster) == 'sparse') {return(raster)
-	} else {
-		if ( dataContent(raster) == 'all') {
-			vals <- seq(1:ncells(raster))
-			vals <- cbind(vals, values(raster))
-			vals <- as.vector(na.omit(vals))
-			raster <- setValuesSparse(raster, sparsevalues=vals[,2], cellnumbers=vals[,1])
-			return(raster)
-		} else { 
-			# as above, but by reading data from disk, row by row
-			stop('not implemented yet, use readAll() first' )
-		}	
-	}
-}
-
-setValuesSparse <- function(raster, sparsevalues, cellnumbers) {
-	if (!(isTRUE(length(cellnumbers) == (length(sparsevalues))))) {
-		stop()
-	}
-	raster@data@content <- 'sparse'
-	raster@data@values <- sparsevalues
-	raster@data@indices <- cellnumbers
-	raster@data@source <- 'ram'
-	raster <- setMinmax(raster)
-	return(raster)
-}
-
-setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {
-	if (!is.vector(blockvalues)) {	stop('values must be a vector') }
-	if (length(blockvalues) == 0) {	stop('length(blockvalues==0). If this is intended use raster.data.clear(raster)') }
-	if (!(is.numeric(blockvalues) | is.integer(blockvalues) | is.logical(blockvalues))) { stop('values must be numeric, integer or logical') }
-	
-	firstcol <- colFromCell(raster, firstcell)
-	lastcol <- colFromCell(raster, lastcell)
-	firstrow <- rowFromCell(raster, firstcell)
-	lastrow <- rowFromCell(raster, lastcell)
-	ncells <- (lastcol - firstcol + 1) * (lastrow - firstrow + 1)
-	
-	if (ncells != length(blockvalues)) { 
-		stop( paste("length(blockdata):", length(blockvalues), "does not match the number implied by firstcell and lastcell:", ncells)) 
-	}
-	raster@data@values <- blockvalues
-	raster@data@content <- 'block' 
-	raster@data@indices <- c(firstcell, lastcell)
-	return(raster)
-}
-
-
-setValues <- function(raster, values, rownr=-1) {
-	if (!is.vector(values)) {stop('values must be a vector')}
-	if (length(values) == 0) {	stop('length(values==0). If this is intended then use clearValues(raster)') }
-	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {stop('data must be values')}
-	rownr <- round(rownr)
-	if (length(values) == ncells(raster)) { 
-		if (rownr > 0) {
-			stop("if setting all values, rownr must be < 1")
-		}
-		raster@data@values <- values
-		raster@data@content <- 'all'
-		raster@data@source <- 'ram'
-		raster@data@indices <- c(1, ncells(raster))
-		raster <- setMinmax(raster)
-		return(raster)	
-	} else if (length(values) == ncol(raster)) {
-		if (rownr < 1 | rownr > nrow(raster)) {
-			stop(paste("rownumber out of bounds:", rownr))
-		}
-		raster@data@values <- values
-		raster@data@content <- 'row' 
-		firstcell <- cellFromRowcol(raster, rownr=rownr, colnr=1)
-		lastcell <- cellFromRowcol(raster, rownr=rownr, colnr=ncol(raster))
-		raster@data@indices <- c(firstcell, lastcell)
-		return(raster)
-	} else {
-		stop("length(values) is not equal to ncells(raster) or ncol(raster)") 
-	}
-}	
 	
 setMinmax <- function(raster) {
 	if (dataContent(raster) == 'nodata') {

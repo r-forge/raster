@@ -24,9 +24,9 @@ changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = y
   \item{xmx}{ the maximum x coordinate of the bounding box }
   \item{ymn}{ the minimum y coordinate of the bounding box }
   \item{ymx}{ the maximum y coordinate of the bounding box }
-  \item{object} {A Raster* object }
+  \item{object}{A Raster* object }
   \item{bndbox}{ An object of class BoundingBox (which you can create with newBbox() ) }  
-  \item{keepres} {logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
+  \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
 }
   
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}

@@ -19,17 +19,18 @@ fileExtension(filename)
 fileName(filename)
 filePath(filename)
 trim(astring)
-Mode(x, na.rm = TRUE)
+Mode(x, ties='random', na.rm = TRUE)
 CV(x, na.rm = TRUE, singlevalueaszero=TRUE)
 readIniFile(filename)
 }
 \arguments{
   \item{filename}{ a filename with or without the path }
   \item{newextension}{ a file extension, e.g., ".txt"  }
-  \item{astring} { a string that needs to be trimmed }
-  \item{x} { a vector of numbers (typically integers for mode) }
-  \item{na.rm} { remove (ignore) NA values }
-  \item{singlevalueaszero} { if TRUE a zero is returned (rather than an NA) if the mode of single value is computed }
+  \item{astring}{ a string that needs to be trimmed }
+  \item{x}{a vector of numbers (typically integers for mode) }
+  \item{ties}{character. Indicates how to treat ties. Either 'random', 'lowest', 'highest', or 'NA'}
+  \item{na.rm}{ remove (ignore) NA values }
+  \item{singlevalueaszero}{ if TRUE a zero is returned (rather than an NA) if the mode of single value is computed }
 }
 
 \value{

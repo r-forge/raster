@@ -48,7 +48,7 @@ makeSparse(raster)
   \item{cellnumbers}{ the cell numbers corresponding to the sparse data }
   \item{nrows}{ the new number of rows for the raster }
   \item{ncols}{ the new number of cols for the raster }  
-  \item{projstring} {a character string describing a projection and datum in PROJ4 format }
+  \item{projstring}{a character string describing a projection and datum in PROJ4 format }
 }
 
 \details{

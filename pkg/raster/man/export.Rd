@@ -17,10 +17,10 @@ asSpGrid(object, type='grid')
 }
 
 \arguments{
-  \item{object} { a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{spgrid} { a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{dataindex} {integer values >= 1 indicating the column in the sp dataframe to take the values from}
-  \item{type} {character. Indicating what type of sp object to return. Should be 'pixel' or 'grid'.}
+  \item{object}{ a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
+  \item{spgrid}{ a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
+  \item{dataindex}{integer values >= 1 indicating the column in the sp dataframe to take the values from}
+  \item{type}{character. Indicating what type of sp object to return. Should be 'pixel' or 'grid'.}
 }
 
 \details{

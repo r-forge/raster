@@ -25,8 +25,8 @@
   \item{nrows}{ number of rows on raster }
   \item{ncols}{ number of columns on raster }
   \item{projstring}{ PROJ4 type description of a map projection}
-  \item{bndbox} {bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
-  \item{values} {logical. If \code{TRUE}, RasterLayer values will be read into memory with 'readAll()'}
+  \item{bndbox}{bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
+  \item{values}{logical. If \code{TRUE}, RasterLayer values will be read into memory with 'readAll()'}
 }
 \details{
   rasterFromFile uses "GDALinfo" from the rgdal package

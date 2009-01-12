@@ -26,8 +26,8 @@
   \item{nrows}{ number of rows on raster }
   \item{ncols}{ number of columns on raster }
   \item{projstring}{ PROJ4 type description of a map projection}
-  \item{bndbox} {bounding box used to create a brick. Can be any object that is or has a bounding box (see below) }
-  \item{values} {logical. If \code{TRUE}, RasterBrick values will be read into memory with 'readAll()'}
+  \item{bndbox}{bounding box used to create a brick. Can be any object that is or has a bounding box (see below) }
+  \item{values}{logical. If \code{TRUE}, RasterBrick values will be read into memory with 'readAll()'}
   \item{stack}{ RasterStack object }
  }
 \details{

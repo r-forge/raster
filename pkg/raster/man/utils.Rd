@@ -15,8 +15,8 @@ newCRS(projstring)
 }
 
 \arguments{
-  \item{object} { a Raster* object }
-  \item{digits} { integer indicating the precision to be used} 
+  \item{object}{ a Raster* object }
+  \item{digits}{ integer indicating the precision to be used} 
   \item{projstring}{ a PROJ4 type character string describing projection and datum}
  }
   
