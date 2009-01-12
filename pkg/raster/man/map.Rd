@@ -15,16 +15,16 @@ map(object, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ad
 }
 
 \arguments{
-  \item{object}{ RasterLayer object}
-  \item{index}{ Ignored for RasterLayers. The index of a raster in a RasterStack  1 <= index <= nlayers(rstack) }
-  \item{col} {a color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making}
+  \item{object}{RasterLayer object}
+  \item{index}{Ignored for RasterLayers. The index of a raster in a RasterStack  1 <= index <= nlayers(rstack) }
+  \item{col}{A color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making}
   \item{subsample}{Logical. If \code{TRUE}, the image is resampled using maxdim}
-  \item{maxdim}{ maximum requsted number of pixels in the map display (either vertial or horizontal) }
+  \item{maxdim}{Maximum requested number of pixels in the map display (either vertical or horizontal) }
   \item{addbox}{Logical. If \code{TRUE} a box is drawn around the map } 
-  \item{axes} {see ?image}
-  \item{xlab} {see ?image}
-  \item{ylab} {see ?image}
-  \item{...}{ any argument that can be passed to image.plot(fields) and to image(graphics)} 
+  \item{axes}{see ?image}
+  \item{xlab}{see ?image}
+  \item{ylab}{see ?image}
+  \item{...}{Any argument that can be passed to image.plot(fields) and to image(graphics)} 
  }
 \details{
   If \code{subsample=FALSE}, then \code{maxdim} is ingored. Subsampled maps are made by skipping rows and columns. This is always 

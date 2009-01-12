@@ -141,7 +141,9 @@ setMethod("[", "RasterLayer",
 		if (!missing(drop)) { stop("drop is ignored. It is always set to FALSE") }
 		if (!missing(j)) { stop("can only set values with a single index (a vector)") }
 		if (missing(i)) { return(x) }
-		return(setRaster(x, values=i))
+		v <- values(i)
+		v[x] <- i
+		return(setRaster(x, v))
 	}
 )
 
