@@ -1,5 +1,11 @@
 \name{box}
 \alias{getBbox}
+\alias{getBbox,BoundingBox-method}
+\alias{getBbox,BasicRaster-method}
+\alias{getBbox,Spatial-method}
+\alias{getBbox,matrix-method}
+\alias{getBbox,vector-method}
+
 \alias{newBbox}
 \alias{setBbox}
 \alias{changeBbox}
@@ -7,9 +13,10 @@
   
 \title{ Bounding box functions }
 \description{
-  newBbox creates a new bounding box (as in the "Spatial" object from the SP package)
-  setBbox sets the bounding box of a Raster* object
-  changeBbox changes the bounding box of a Raster* object
+	getBbox extracts a bounding box from a Raster* or Spatial* object (or from a BoundingBox object). It will also create a BoundingBox object from a matrix (2 x 2) or vector (length=4)
+	newBbox creates a new bounding box (as in the "Spatial" object from the SP package)
+	setBbox sets the bounding box of a Raster* object
+	changeBbox changes the bounding box of a Raster* object
 }
 
 \usage{

@@ -29,8 +29,7 @@ setClass('BoundingBox',
 )
 
 
-setClass ('Raster',
-	contains = 'VIRTUAL',
+setClass ('BasicRaster',
 	representation (
 		bbox = 'BoundingBox',
 		ncols ='integer',
@@ -50,6 +49,7 @@ setClass ('Raster',
 	}
 )
 
+setClass ('Raster', contains = c('BasicRaster', 'VIRTUAL') )
 
 	
 setClass('RasterFile', 
@@ -193,3 +193,8 @@ setClass ('RasterStack',
 	}
 )
 
+
+
+setClassUnion("RasterStackBrick", c("RasterStack", "RasterBrick"))
+
+#setClassUnion("SpatialPixelsGrid", c("SpatialPixels", "SpatialGrid"))

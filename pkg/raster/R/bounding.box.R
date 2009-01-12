@@ -1,9 +1,12 @@
+# R function for the raster package
+# Author: Robert J. Hijmans
+# International Rice Research Institute. Philippines
+# contact: r.hijmans@gmail.com
+# Date : January 2009
+# Version 0.8
+# Licence GPL v3
 
-changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) {
-	bb <- newBbox(xmn, xmx, ymn, ymx) 
-	object <- setBbox(object, bb, keepres=keepres) 
-	return(object)
-}
+
 
 
 newBbox <- function(xmn, xmx, ymn, ymx) {
@@ -15,33 +18,58 @@ newBbox <- function(xmn, xmx, ymn, ymx) {
 	return(bb)
 }
 
-getBbox <- function(object) {
-	if ( class(object) == 'BoundingBox' ) { 
-		bb <- object 
-	} else if ( class(object) == 'RasterLayer' | class(object) == 'RasterStack' | class(object) == 'RasterBrick' ) {
-		bb <- object@bbox
-	} else if (class(object) == "matrix") {
-		bb <- new('BoundingBox')
-		bb@xmin <- object[1,1]
-		bb@xmax <- object[1,2]
-		bb@ymin <- object[2,1]
-		bb@ymax <- object[2,2]
-	} else if (class(object) == "vector") {
-		bb <- new('BoundingBox')
-		bb@xmin <- object[1]
-		bb@xmax <- object[2]
-		bb@ymin <- object[3]
-		bb@ymax <- object[4]
-	} else {
+
+if (!isGeneric("getBbox")) {
+	setGeneric("getBbox", function(object)
+		standardGeneric("getBbox"))
+}	
+
+setMethod('getBbox', signature(object='BoundingBox'), 
+	function(object){ return(object) }
+)
+
+setMethod('getBbox', signature(object='BasicRaster'), 
+	function(object){ return(object@bbox) }
+)
+
+setMethod('getBbox', signature(object='Spatial'), 
+	function(object){ 
 		bndbox <- bbox(object)
 		bb <- new('BoundingBox')
 		bb@xmin <- bndbox[1,1]
 		bb@xmax <- bndbox[1,2]
 		bb@ymin <- bndbox[2,1]
 		bb@ymax <- bndbox[2,2]
+		return(bb) 
 	}
-	return(bb)
-}
+)
+
+setMethod('getBbox', signature(object='matrix'), 
+	function(object){ 
+		bb <- new('BoundingBox')
+		bb@xmin <- object[1,1]
+		bb@xmax <- object[1,2]
+		bb@ymin <- object[2,1]
+		bb@ymax <- object[2,2]
+	}
+)
+	
+setMethod('getBbox', signature(object='vector'), 
+	function(object){ 
+		if (length(object) < 4) {
+			stop('vector supplied is too short')
+		}
+		if (length(object) > 4) {
+			warning('vector supplied is longer then expected (should be 4)')
+		}
+		bb <- new('BoundingBox')
+		bb@xmin <- object[1]
+		bb@xmax <- object[2]
+		bb@ymin <- object[3]
+		bb@ymax <- object[4]
+		return(bb)
+	}	
+)
 
 
 setBbox <- function(object, bndbox, keepres=FALSE) {
@@ -61,4 +89,11 @@ setBbox <- function(object, bndbox, keepres=FALSE) {
 	return(object)
 }
 
+
+
+changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) {
+	bb <- newBbox(xmn, xmx, ymn, ymx) 
+	object <- setBbox(object, bb, keepres=keepres) 
+	return(object)
+}
 

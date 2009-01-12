@@ -1,19 +1,23 @@
 \name{RasterLayer-class}
 \docType{class}
 
+\alias{BoundingBox-class}
+\alias{BasicRaster-class}
 \alias{Raster-class}
 \alias{RasterLayer-class}
 \alias{RasterStack-class}
 \alias{RasterBrick-class}
 \alias{show,BoundingBox-method}
+\alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
 \alias{show,RasterBrick-method}
-\alias{hist,RasterLayer-method}
+\alias{hist,Raster-method}
 \alias{plot,Raster,missing-method}
 \alias{plot,Raster,numeric-method}
-\alias{dim,Raster-method}
-\alias{summary,Raster-method}
+\alias{dim,BasicRaster-method}
+\alias{summary,RasterLayer-method}
+\alias{summary,RasterStackBrick-method}
 \alias{[,RasterLayer-method}
 
 \title{Classes for handling raster data }

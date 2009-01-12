@@ -1,3 +1,11 @@
+# R function for the raster package
+# Author: Robert J. Hijmans
+# International Rice Research Institute. Philippines
+# contact: r.hijmans@gmail.com
+# Date : November 2008
+# Version 0.8
+# Licence GPL v3
+
 
 if (!isGeneric("readAll")) {
 	setGeneric("readAll", function(object)

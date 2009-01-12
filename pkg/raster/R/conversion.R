@@ -20,51 +20,84 @@ setAs('RasterStack', 'RasterLayer',
 )
 
 
-asRasterLayer <- function(object, dataindex=1) {
-	if (class(object) == 'RasterLayer') {
+
+
+if (!isGeneric("asRasterLayer")) {
+	setGeneric("asRasterLayer", function(object,index)
+		standardGeneric("asRasterLayer"))
+}	
+setMethod('asRasterLayer', signature(object='Raster',index='missing'), 
+	function(object){
+		return(asRasterLayer(object, 1))
+	}
+)
+setMethod('asRasterLayer', signature(object='SpatialPixels',index='missing'), 
+	function(object){
+		return(asRasterLayer(object, 1))
+	}
+)
+
+
+setMethod('asRasterLayer', signature(object='RasterLayer', index='numeric'), 
+	function(object, index){
 		return(object)
-	} else if (class(object) == 'RasterBrick' | class(object) == 'RasterStack') {
+	}
+)
+
+setMethod('asRasterLayer', signature(object='RasterStackBrick', index='numeric'), 
+	function(object, index){
 		rs <- newRaster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
 		if (dataContent(object) == 'all') {
-			dindex <- max(1, min(nlayers(object), dataindex))
-			if (dindex != dataindex) { warning(paste("dataindex was changed to", dindex))}
+			dindex <- max(1, min(nlayers(object), index))
+			if (dindex != index) { warning(paste("index was changed to", dindex))}
 			rs <- setValues(rs, as.matrix(values(object))[,dindex])
 		}
 		return(rs)
-	} else { # assuming an SP raster
+	}
+)
+
+
+
+setMethod('asRasterLayer', signature(object='SpatialPixels', index='numeric'), 
+	function(object, index){
 		raster <- newRaster()
-		raster@bbox <- getBbox(object)
-		raster@crs <- object@proj4string
-		raster@ncols <- object@grid@cells.dim[1]
-		raster@nrows <- object@grid@cells.dim[2]
-		if (class(object)=='SpatialPixels') {
-			# do noting, there is no data
-			# we could store the indices, but then we would have a sparse raster with no data (or with NAs). That goes against our definition of sparse (all NAs have been removed)
-		} else if (class(object)=='SpatialPixelsDataFrame') {
-			cells <- object@grid.index
-			if (length(cells)==0) {
-				cells <- cellFromXY(raster, object@coords)
-			}
-#			if (dindex != dataindex) { warning(paste("dataindex was changed to", dindex))}
-			vals <- object@data[[dataindex]]
-			raster <- setValuesSparse(raster, cells, vals)
-		} else if ( class(object)=='SpatialGrid' ) {
-			# do nothing, there is no data
-		} else if (class(object)=='SpatialGridDataFrame' ) {
-#			if (dindex != dataindex) { warning(paste("dataindex was changed to", dindex))}
-			raster <- setValues(raster, object@data[[dataindex]])
+		raster <- setBbox(raster, getBbox(object))
+		raster <- setProjection(raster, object@proj4string)
+		raster <- setRowCol(raster, object@grid@cells.dim[2], object@grid@cells.dim[1])
+		return(raster)
+	}
+)
+
+setMethod('asRasterLayer', signature(object='SpatialPixelsDataFrame', index='numeric'), 
+	function(object, index){
+		raster <- asRasterLayer(as(object, "SpatialPixels"))
+		cells <- object@grid.index
+		if (length(cells)==0) {
+			cells <- cellFromXY(raster, object@coords)
 		}
+		dindex <- max(1, min(dim(object@data)[2], index))
+		if (dindex != index) { warning(paste("index was changed to", dindex))}
+		raster <- setValuesSparse(raster, cells, object@data[[dindex]])
+	}
+)	
+
+setMethod('asRasterLayer', signature(object='SpatialGridDataFrame', index='numeric'), 
+	function(object, index){
+		raster <- asRasterLayer(as(object, "SpatialPixels"))
+		dindex <- max(1, min(dim(object@data)[2], index))
+		if (dindex != index) { warning(paste("index was changed to", dindex))}
+		raster <- setValues(raster, object@data[[dindex]])
 		return(raster)
 	}	
-}
+)
 
 
 asRasterBrick <- function(spgrid) {
 	brick <- newBrick()
-	brick@bbox <- spgrid@bbox
-	brick@crs <- spgrid@proj4string
-	brick@ncols <- spgrid@grid@cells.dim[1]
-	brick@nrows <- spgrid@grid@cells.dim[2]
+	brick <- setBbox(brick, getBbox(spgrid))
+	brick <- setProjection(brick, spgrid@proj4string)
+	brick <- setRowCol(brick, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
+
 	if (class(spgrid)=='SpatialPixels') {
 		# do noting, there is no data
 		# we could store the indices, but then we would have a sparse raster with no data (or with NAs). That goes against our definition of sparse (all NAs have been removed)

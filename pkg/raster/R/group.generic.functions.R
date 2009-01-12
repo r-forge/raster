@@ -5,19 +5,33 @@
 # Licence GPL v3
 
 
-setMethod('==', signature(e1='Raster', e2='Raster'),
+setMethod('==', signature(e1='BasicRaster', e2='BasicRaster'),
 	function(e1,e2){
 		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
 		return(cond)
 	}
 )	
 
-setMethod('!=', signature(e1='Raster', e2='Raster'),
+
+setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 	function(e1,e2){
 		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
 		return(!cond)
 	}
 )	
+
+
+setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
+	function(e1,e2){
+		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
+		if (!cond) {
+			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See 'as(e1, 'BasicRaster')==as(e2, 'BasicRaster')")
+		}	
+		return(setRaster(e1, values=callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) )
+	}
+)	
+
+
 
 
 .getRasterValues <- function(x) {
@@ -78,6 +92,8 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 		}
 	}
 )
+
+
 	
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 

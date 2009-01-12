@@ -1,9 +1,17 @@
-\name{sp}
+\name{Coercion}
+\alias{asRasterLayer,Raster,missing-method}
+\alias{asRasterLayer,RasterLayer,numeric-method}
+\alias{asRasterLayer,RasterStackBrick,numeric-method}
+\alias{asRasterLayer,SpatialPixels,missing-method}
+\alias{asRasterLayer,SpatialPixels,numeric-method}
+\alias{asRasterLayer,SpatialPixelsDataFrame,numeric-method}
+\alias{asRasterLayer,SpatialGridDataFrame,numeric-method}
+
 \alias{asRasterLayer}
 \alias{asRasterBrick}
 \alias{asSpGrid}
 
-\title{ Conversion between sp and raster type objects. }
+\title{ Coercion of Raster*, SpatialGrid and SpatialPixels* objects. }
 
 \description{  
 	Functions to coerce a Raster* objects into an sp SpatialGridDataFrame object and 
@@ -11,7 +19,7 @@
 }
 
 \usage{
-asRasterLayer(object, dataindex=1) 
+asRasterLayer(object, index) 
 asRasterBrick(spgrid) 
 asSpGrid(object, type='grid') 
 }
@@ -19,7 +27,7 @@ asSpGrid(object, type='grid')
 \arguments{
   \item{object}{ a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
   \item{spgrid}{ a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{dataindex}{integer values >= 1 indicating the column in the sp dataframe to take the values from}
+  \item{index}{integer values >= 1 indicating the layer in the RasterStack or RasterBrick, or the column in the sp object dataframe to take the values from}
   \item{type}{character. Indicating what type of sp object to return. Should be 'pixel' or 'grid'.}
 }
 

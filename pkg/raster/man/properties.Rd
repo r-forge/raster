@@ -2,8 +2,8 @@
 \alias{filename}
 \alias{ncol}
 \alias{nrow}
-\alias{nrow,Raster-method}
-\alias{ncol,Raster-method}
+\alias{nrow,BasicRaster-method}
+\alias{ncol,BasicRaster-method}
 \alias{ncells}
 \alias{xres}
 \alias{yres}

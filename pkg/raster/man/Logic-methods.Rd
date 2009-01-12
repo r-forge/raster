@@ -9,10 +9,6 @@
 	The following boolean operators are available: '&', '|'
 	is.na(object) can also be called. 
 }
-\section{Methods}{
-}
-\describe{
-}
 
 \keyword{methods}
 \keyword{math}
