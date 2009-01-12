@@ -191,10 +191,13 @@ makeSparse <- function(raster) {
 	}
 }
 
-setValuesSparse <- function(raster, sparsevalues, indices) {
+setValuesSparse <- function(raster, sparsevalues, cellnumbers) {
+	if (!(isTRUE(length(cellnumbers) == (length(sparsevalues))))) {
+		stop()
+	}
 	raster@data@content <- 'sparse'
 	raster@data@values <- sparsevalues
-	raster@data@indices <- indices
+	raster@data@indices <- cellnumbers
 	raster@data@source <- 'ram'
 	raster <- setMinmax(raster)
 	return(raster)

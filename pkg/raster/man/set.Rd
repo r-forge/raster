@@ -28,7 +28,7 @@ setRowCol(raster, nrows=nrow(raster), ncols=ncol(raster))
 setMinmax(raster)
 setValues(raster, values, rownr=-1) 
 setValuesBlock(raster, blockvalues, firstcell, lastcell) 
-setValuesSparse(raster, sparsevalues, indices) 
+setValuesSparse(raster, sparsevalues, cellnumbers) 
 
 makeSparse(raster)
 }
@@ -45,7 +45,7 @@ makeSparse(raster)
   \item{firstcell}{ first cell (upper left corner) of the blockdata }
   \item{lastcell}{ last cell (upper left corner) of the blockdata }
   \item{sparsevalues}{ not implemented yet -- sparse data values. I.e. values for a number of raster cells }
-  \item{indices}{ the cell numbers corresponding to the sparse data }
+  \item{cellnumbers}{ the cell numbers corresponding to the sparse data }
   \item{nrows}{ the new number of rows for the raster }
   \item{ncols}{ the new number of cols for the raster }  
   \item{projstring} {a character string describing a projection and datum in PROJ4 format }

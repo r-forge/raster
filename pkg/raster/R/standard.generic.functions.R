@@ -304,34 +304,32 @@ setMethod("plot", signature(x='Raster', y='numeric'),
 )		
 
 
-# helper functions to set ... variables if they are not specified by the user. There probably exists a formal, and direct, mechanism to do this in R, but I have not discovered this yet...
-.getmaxdim <- function(maxdim=1000, ...) {
-	return(maxdim)
-}
+# helper function to set ... variables if they are not specified by the user. There probably exists a formal, and direct, mechanism to do this in R, but I have not discovered this yet...
+#.getmaxdim <- function(maxdim=1000, ...) {
+#	return(maxdim)
+#}
 
-.getcex <- function(cex = 0.1, ...) {
+getcex <- function(cex = 0.1, ...) {
 	return(cex)
 }
 
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, ...)  {
+	function(x, y, maxdim=1000, ...)  {
 		comp <- compare(c(x, y), bb=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
-		maxdim <- .getmaxdim(...)
 		nc <- ncells(x)
 		x <- readSkip(x, maxdim=maxdim)
 		y <- readSkip(y, maxdim=maxdim)
 		if (length(x) < nc) {
-			warning(paste('plot used a sample of ', round(100*length(x)/ncells(y)), "% of the cells", sep=""))
+			warning(paste('plot used a sample of ', round(100*length(x)/nc), "% of the cells", sep=""))
 		}
-		cex <- .getcex(...)
+		cex <- getcex(...)
 		plot(x, y, ...)			
 	}
 )
 	
 
 setMethod('hist', signature(x='RasterLayer'), 
-	function(x, ...){
-		maxsamp <- 1000000
+	function(x, maxsamp=10000, ...){
 		if (dataContent(x) != 'all') {
 			if (dataSource(x) == 'disk') {
 		# TO DO: ake a function that does this by block and combines  all data into a single histogram
