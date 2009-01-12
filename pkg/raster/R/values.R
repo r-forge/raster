@@ -1,9 +1,9 @@
 
 values <- function(object, format='vector', names=FALSE) {
-	if (object@data@content=="nodata") {stop("first read some data (e.g., readAll()") }
+	if (dataContent(object)=="nodata") {stop("first read some data (e.g., readAll()") }
 	if (format=='matrix') { 
 		return(.values.as.matrix(object, names)) 
-	if (format=='dataframe') { 
+	} else if (format=='dataframe') { 
 		return(.values.as.dataframe(object)) 
 	} else {
 		return(object@data@values) 
@@ -42,8 +42,8 @@ valuesRow <- function(raster, rownr) {
 
 
 .values.as.dataframe <- function(raster) {
-	m <- as.data.frame(values.as.matrix(raster, FALSE))
-	if raster@data@colnames != '' { 
+	m <- as.data.frame(.values.as.matrix(raster, FALSE))
+	if (isTRUE(length(raster@data@colnames) == dim(m)[2])) { 
 		colnames(m) <- raster@data@colnames 
 	} else {
 		colnames(m) <- seq(1:ncol(m))
