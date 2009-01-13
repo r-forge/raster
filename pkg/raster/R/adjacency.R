@@ -1,7 +1,7 @@
 # Author: Jacob van Etten jacobvanetten@yahoo.com
 # International Rice Research Institute
 # Date :  January 2009
-# Version 1.0
+# Version 0.8
 # Licence GPL v3
 
 .cs <- function(a,b)
@@ -15,7 +15,7 @@
 
 adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConnect)
 {
-	nCols <- ncols(raster)
+	nCols <- ncol(raster)
 	nCells <- ncells(raster)
 	
 	left <- seq(nCols+1,(nCells-2*nCols+1),by=nCols) 

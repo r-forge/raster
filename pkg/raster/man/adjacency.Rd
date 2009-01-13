@@ -6,7 +6,7 @@
 	calculate adjacent cells in a grid
 }
 \usage{
-adjacency(raster, fromCells, toCells, mode, outerMeridianConnect) 
+adjacency(raster, fromCells, toCells, directions, outerMeridianConnect) 
 }
 
 \arguments{
