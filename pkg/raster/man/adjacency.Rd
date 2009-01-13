@@ -1,5 +1,6 @@
 \name{adjacency}
 \alias{adjacency}
+\alias{adjBishop}
 
 \title{ adjacency }
 \description{
@@ -7,6 +8,7 @@
 }
 \usage{
 adjacency(raster, fromCells, toCells, directions, outerMeridianConnect) 
+adjBishop(raster, fromCells, toCells, outerMeridianConnect)
 }
 
 \arguments{
@@ -20,6 +22,7 @@ adjacency(raster, fromCells, toCells, directions, outerMeridianConnect)
 \details{
 Cell numbers start with 1 in the upperleft corner and increase from left to right and from top to bottom.
 Number of directions: 4 connects cells with one-cell rook moves, 8 with one-cell queen moves, and 16 with knight and one-cell queen moves.
+For one-cell bishop moves use adjBishop (special cases).
 }
 
 \value{
@@ -30,6 +33,7 @@ Number of directions: 4 connects cells with one-cell rook moves, 8 with one-cell
 \examples{
 	rs <- newRaster(nrows=10, ncols=10)
 	adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), directions=16, outerMeridianConnect = TRUE) 
+	adjBishop(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), outerMeridianConnect = TRUE) 
 }
 
 \keyword{ spatial }

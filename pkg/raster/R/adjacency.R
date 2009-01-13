@@ -232,3 +232,59 @@ adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConne
 	colnames(fromto) <- c("from","to")
 	return(fromto)
 }
+
+adjBishop <- function(raster, fromCells, toCells, outerMeridianConnect)
+{
+	nCols <- ncol(raster)
+	nCells <- ncells(raster)
+	
+	left <- seq(nCols+1,(nCells-2*nCols+1),by=nCols) 
+	right <- seq(2*nCols,nCells-nCols,by=nCols)
+	upper <- 2:(nCols-1)
+	lower <- seq((nCells-nCols+2),(nCells-1),by=1)
+	upperleft <- 1
+	upperright <- nCols
+	lowerleft <- nCells-nCols+1
+	lowerright <- nCells
+
+	fromCellsCore <- as.integer(setdiff(fromCells,(c(left,right,upper,lower,upperleft,upperright,lowerleft,lowerright))))
+	fromCellsUpper <- as.integer(intersect(fromCells,upper))
+	fromCellsLower <- as.integer(intersect(fromCells,lower))
+	fromCellsLeft <- as.integer(intersect(fromCells,left))
+	fromCellsRight <- as.integer(intersect(fromCells,right))
+	fromCellUpperleft <- as.integer(intersect(fromCells,upperleft))
+	fromCellUpperright <- as.integer(intersect(fromCells,upperright))
+	fromCellLowerleft <- as.integer(intersect(fromCells,lowerleft))
+	fromCellLowerright <- as.integer(intersect(fromCells,lowerright))
+	
+	bishop <- as.integer(c(-nCols-1, -nCols+1, nCols-1,+nCols+1))
+		
+	coreFromToBishop <- .cs(fromCellsCore,bishop)
+	upperFromToBishop <- .cs(fromCellsUpper,bishop[3:4])
+	lowerFromToBishop <- .cs(fromCellsLower,bishop[1:2])
+	leftFromToBishop <- .cs(fromCellsLeft,bishop[c(2,4)])
+	rightFromToBishop <- .cs(fromCellsRight,bishop[c(1,3)])
+	upperleftFromToBishop <- .cs(fromCellUpperleft,bishop[4])
+	upperrightFromToBishop <- .cs(fromCellUpperright,bishop[3])
+	lowerleftFromToBishop <- .cs(fromCellLowerleft,bishop[2])
+	lowerrightFromToBishop <- .cs(fromCellLowerright,bishop[1])
+
+	fromto <- rbind(coreFromToBishop,upperFromToBishop,lowerFromToBishop,leftFromToBishop,rightFromToBishop,upperleftFromToBishop,upperrightFromToBishop,lowerleftFromToBishop,lowerrightFromToBishop)
+	
+	if (outerMeridianConnect) 
+	{
+		meridianFromLeft <- rbind(
+			.cs(fromCellsLeft,c(2*nCols-1,-1)),
+			cbind(fromCellUpperleft,as.integer(fromCellUpperleft+2*nCols-1)),
+			cbind(fromCellLowerleft,as.integer(fromCellLowerleft-1))
+			) 
+		meridianFromRight <- rbind(
+			cbind(rep(fromCellsRight,times=2),as.integer(c(fromCellsRight-2*nCols+1,fromCellsRight+1))),
+			cbind(fromCellUpperright,as.integer(fromCellUpperright+1)),
+			cbind(fromCellLowerright,as.integer(fromCellLowerright-2*nCols+1))
+			)
+		fromto <- rbind(fromto,meridianFromLeft,meridianFromRight)
+	}
+	else{}
+	fromto <- subset(fromto,fromto[,2] %in% toCells)
+}
