@@ -179,6 +179,13 @@ setDatatype <- function(raster, datatype, datasize=4) {
 		} else {
 			stop("invalid datasize for this datatype") 
 		}
+#	} else if ( datatype == 'logical' ) {
+#		raster@file@datatype <- datatype 
+#		raster@data@min <- round(minValue(raster))
+#		raster@data@max <- round(maxValue(raster))
+#		raster@file@datasize <- as.integer(2)
+#		raster@file@nodatavalue <- -32768
+#		raster@file@datanotation <- "LOGICAL"
 	} else {
 		stop("unknown datatype")
 	} 

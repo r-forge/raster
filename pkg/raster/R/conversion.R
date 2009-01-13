@@ -26,6 +26,23 @@ if (!isGeneric("asRasterLayer")) {
 	setGeneric("asRasterLayer", function(object,index)
 		standardGeneric("asRasterLayer"))
 }	
+setMethod('asRasterLayer', signature(object='missing',index='missing'), 
+	function(object){
+		return(newRaster())
+	}
+)
+setMethod('asRasterLayer', signature(object='character',index='missing'), 
+	function(object){
+		r <- newRaster()
+		if (object == 'runif') {
+			r <- setValues(r, runif(ncells(r)))
+		} else if (object == 'seq') {
+			r <- setValues(r, 1:ncells(r))
+		}
+		return(r)
+	}
+)
+
 setMethod('asRasterLayer', signature(object='Raster',index='missing'), 
 	function(object){
 		return(asRasterLayer(object, 1))

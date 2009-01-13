@@ -26,7 +26,9 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
 			stop('second argument should be a single number')
 		}
-		return(setRaster(e1, values=callGeneric(.getRasterValues(e1), rep(e2, ncells(e1)) ) ) )
+		rs <- setRaster(e1, values=callGeneric(.getRasterValues(e1), rep(e2, ncells(e1)) ) )
+		rs <- setDatatype(rs, datatype='integer', datasize=2)
+		return(rs)
 	}
 )	
 
@@ -35,7 +37,9 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
 			stop('first argument should be a single number')
 		}
-		return(setRaster(e2, values=callGeneric(.getRasterValues(e2), rep(e1, ncells(e2)) ) ) )
+		rs <- setRaster(e2, values=callGeneric(.getRasterValues(e2), rep(e1, ncells(e2)) ) ) 
+		rs <- setDatatype(rs, datatype='integer', datasize=2)
+		return(rs)
 	}
 )	
 
@@ -45,7 +49,9 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 		if (!cond) {
 			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See compare()")
 		}	
-		return(setRaster(e1, values=callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) )
+		rs <- setRaster(e1, values=callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) 
+		rs <- setDatatype(rs, datatype='integer', datasize=2)
+		return(rs)
 	}
 )	
 

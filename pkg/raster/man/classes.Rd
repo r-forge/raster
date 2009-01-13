@@ -1,6 +1,7 @@
 \name{RasterLayer-class}
 \docType{class}
 
+
 \alias{BoundingBox-class}
 \alias{BasicRaster-class}
 \alias{Raster-class}
@@ -19,6 +20,9 @@
 \alias{summary,RasterLayer-method}
 \alias{summary,RasterStackBrick-method}
 \alias{[,RasterLayer-method}
+\alias{[<-,RasterLayer,ANY,missing-method}
+\alias{[[,RasterLayer,ANY,missing-method}
+\alias{[[<-,RasterLayer,ANY,missing-method}
 
 \title{Classes for handling raster data }
 \description{ \code{RasterLayer}, \code{RasterStack}, and \code{RasterBrick} (Raster* in short) are all classes for handling spatial raster (grid) data.

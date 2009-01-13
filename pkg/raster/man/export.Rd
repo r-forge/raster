@@ -1,4 +1,6 @@
 \name{Coercion}
+\alias{asRasterLayer,missing,missing-method}
+\alias{asRasterLayer,character,missing-method}
 \alias{asRasterLayer,Raster,missing-method}
 \alias{asRasterLayer,RasterLayer,numeric-method}
 \alias{asRasterLayer,RasterStackBrick,numeric-method}

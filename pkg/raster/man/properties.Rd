@@ -2,6 +2,8 @@
 \alias{filename}
 \alias{ncol}
 \alias{nrow}
+\alias{ncol<-}
+\alias{nrow<-}
 \alias{nrow,BasicRaster-method}
 \alias{ncol,BasicRaster-method}
 \alias{ncells}
@@ -13,6 +15,7 @@
 \alias{ymin}
 \alias{ymax}
 \alias{projection}
+\alias{projection<-}
 \alias{origin}
 \alias{nlayers}
 \alias{layers}
