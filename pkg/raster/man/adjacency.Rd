@@ -2,9 +2,9 @@
 \alias{adjacency}
 \alias{adjBishop}
 
-\title{ adjacency }
+\title{adjacency}
 \description{
-	calculate adjacent cells in a grid
+	calculate adjacent cells on a grid
 }
 \usage{
 adjacency(raster, fromCells, toCells, directions, outerMeridianConnect) 
@@ -12,11 +12,11 @@ adjBishop(raster, fromCells, toCells, outerMeridianConnect)
 }
 
 \arguments{
-  \item{raster}{ an object of the Raster family }
-  \item{fromCells}{ a vector of cell numbers for which adjacent cells should be calculated }
-  \item{toCells}{ a vector of cell numbers from which adjacent cells are selected }
-  \item{directions}{ in how many direction cells should be connected: 4, 8 or 16. }
-  \item{outerMeridianConnect}{ logical value indicating whether the outer columns of the raster should be connected as a cylinder }
+  \item{raster}{an object of the Raster family}
+  \item{fromCells}{a vector of cell numbers for which adjacent cells should be calculated}
+  \item{toCells}{a vector of cell numbers from which adjacent cells are selected}
+  \item{directions}{in how many direction cells should be connected: 4, 8 or 16.}
+  \item{outerMeridianConnect}{logical value indicating whether the outer columns of the raster should be connected as a cylinder}
 }
 
 \details{
@@ -28,12 +28,18 @@ For one-cell bishop moves use adjBishop (special cases).
 \value{
   a two column matrix with each row containing a pair of adjacent cells. 
 }
-\author{ Jacob van Etten \email{jacobvanetten@yahoo.com} }
+\author{Jacob van Etten \email{jacobvanetten@yahoo.com}}
 
 \examples{
 	rs <- newRaster(nrows=10, ncols=10)
-	adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), directions=16, outerMeridianConnect = TRUE) 
-	adjBishop(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), outerMeridianConnect = TRUE) 
+	adj <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), directions=4, outerMeridianConnect = TRUE) 
+	v <- vector(length=ncells(rs))
+	v[adj[,2]] <- 2
+	v[adj[,1]] <- 1
+	rs <- setValues(rs, v)
+	plot(rs)
+
+	adjbis <- adjBishop(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), outerMeridianConnect = TRUE) 
 }
 
-\keyword{ spatial }
+\keyword{spatial}

@@ -287,4 +287,5 @@ adjBishop <- function(raster, fromCells, toCells, outerMeridianConnect)
 	}
 	else{}
 	fromto <- subset(fromto,fromto[,2] %in% toCells)
+	return(fromto)
 }
