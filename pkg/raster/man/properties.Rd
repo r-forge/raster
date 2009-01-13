@@ -20,7 +20,7 @@
 \alias{nbands}
  
   
-\title{ RasterLayer properties }
+\title{RasterLayer properties}
 \description{
   get the column, row, or cell number of a Raster (or RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster-cell from a column, or cell number(s)
   
@@ -47,9 +47,9 @@ nbands(object)
 }
 
 \arguments{
-  \item{object}{ Raster* object }
-  \item{x}{ Raster* object }
-  \item{asText}{logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned }
+  \item{object}{Raster* object}
+  \item{x}{Raster* object}
+  \item{asText}{logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned}
 }
   
 
@@ -83,4 +83,4 @@ origin(rs)
 nbands(rs)
 band(rs)
 }
-\keyword{ spatial }
+\keyword{spatial}

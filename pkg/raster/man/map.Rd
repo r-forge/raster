@@ -21,9 +21,9 @@ map(object, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ad
   \item{subsample}{Logical. If \code{TRUE}, the image is resampled using maxdim}
   \item{maxdim}{Maximum requested number of pixels in the map display (either vertical or horizontal) }
   \item{addbox}{Logical. If \code{TRUE} a box is drawn around the map } 
-  \item{axes}{see ?image}
-  \item{xlab}{see ?image}
-  \item{ylab}{see ?image}
+  \item{axes}{see "?image"}
+  \item{xlab}{see "?image"}
+  \item{ylab}{see "?image"}
   \item{...}{Any argument that can be passed to image.plot(fields) and to image(graphics)} 
  }
 \details{

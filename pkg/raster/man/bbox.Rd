@@ -11,7 +11,7 @@
 \alias{changeBbox}
 
   
-\title{ Bounding box functions }
+\title{Bounding box functions}
 \description{
 	getBbox extracts a bounding box from a Raster* or Spatial* object (or from a BoundingBox object). It will also create a BoundingBox object from a matrix (2 x 2) or vector (length=4)
 	newBbox creates a new bounding box (as in the "Spatial" object from the SP package)
@@ -27,12 +27,12 @@ changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = y
 }
 
 \arguments{
-  \item{xmn}{ the minimum x coordinate of the bounding box }
-  \item{xmx}{ the maximum x coordinate of the bounding box }
-  \item{ymn}{ the minimum y coordinate of the bounding box }
-  \item{ymx}{ the maximum y coordinate of the bounding box }
-  \item{object}{A Raster* object }
-  \item{bndbox}{ An object of class BoundingBox (which you can create with newBbox() ) }  
+  \item{xmn}{the minimum x coordinate of the bounding box}
+  \item{xmx}{the maximum x coordinate of the bounding box}
+  \item{ymn}{the minimum y coordinate of the bounding box}
+  \item{ymx}{the maximum y coordinate of the bounding box}
+  \item{object}{A Raster* object}
+  \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
   \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
 }
   
@@ -44,4 +44,4 @@ changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = y
 	rs <- changeBbox(rs, ymx = 90)
 }
 
-\keyword{ spatial }
+\keyword{spatial}

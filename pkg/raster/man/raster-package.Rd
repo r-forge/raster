@@ -24,8 +24,7 @@ use datasources that are stored on disk without loading them into memory.
 }
 \author{
 Robert J. Hijmans and Jacob van Etten
-
 Maintainer: Robert J. Hijmans \email{r.hijmans@gmail.com}
 }
-\keyword{ package }
-\keyword{ spatial }
+\keyword{package}
+\keyword{spatial}

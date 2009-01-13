@@ -8,7 +8,7 @@
 \alias{CV}
 \alias{readIniFile}
 
-\title{ Miscellaneous functions }
+\title{Miscellaneous functions}
 \description{
   Low level functions for file and string handling. Get or change file extension or extract the filename or path from a full name (path + filename). Trim a string of characters (remove the whitespace before or after the string).
   And two miscellanous statistical functions (mode and coefficient of variation)
@@ -24,13 +24,13 @@ CV(x, na.rm = TRUE, singlevalueaszero=TRUE)
 readIniFile(filename)
 }
 \arguments{
-  \item{filename}{ a filename with or without the path }
-  \item{newextension}{ a file extension, e.g., ".txt"  }
-  \item{astring}{ a string that needs to be trimmed }
-  \item{x}{a vector of numbers (typically integers for mode) }
+  \item{filename}{A filename with or without the path}
+  \item{newextension}{A file extension, e.g., ".txt" }
+  \item{astring}{A string that needs to be trimmed}
+  \item{x}{A vector of numbers (typically integers for mode)}
   \item{ties}{character. Indicates how to treat ties. Either 'random', 'lowest', 'highest', or 'NA'}
-  \item{na.rm}{ remove (ignore) NA values }
-  \item{singlevalueaszero}{ if TRUE a zero is returned (rather than an NA) if the mode of single value is computed }
+  \item{na.rm}{Remove (ignore) NA values}
+  \item{singlevalueaszero}{If \code{TRUE} a zero is returned (rather than an NA) if the mode of single value is computed}
 }
 
 \value{
@@ -53,5 +53,4 @@ readIniFile(filename)
 	Mode(data)
 	CV(data)
 }
-\keyword{ spatial }
-
+\keyword{spatial}

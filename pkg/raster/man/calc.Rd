@@ -1,4 +1,5 @@
 \name{calc}
+
 \alias{calc}
 \alias{reclass}
 \alias{neighborhood}
@@ -6,7 +7,7 @@
 \alias{setNA}
 \alias{init}
 
-\title{ RasterLayer calculate }
+\title{RasterLayer calculate}
 \description{
   Calculate values for a new raster, from scratch or based on a single existing raster
 }
@@ -20,16 +21,16 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 }
 
 \arguments{
-  \item{raster}{ a RasterLayer object }
-  \item{fun}{ the function to be applied }
-  \item{value}{ the (threshold) value to replace with NA or that should be set to NA }
-  \item{operator}{ the operator in setNA relative to the \code{value}, to set e.g. all values <= 2 to NA}
-  \item{rclmat}{ matrix for reclassifcation. (see below) }
-  \item{filename}{ output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot }
-  \item{overwrite}{ logical to indicate whether an existing output file should be overwritten }
-  \item{ForceIntOutput}{ logical. If \code{TRUE}, output will be integer values }
-  \item{ngb}{ neighborhood size in number of cells }
-  \item{keepdata}{logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA }
+  \item{raster}{A RasterLayer object}
+  \item{fun}{The function to be applied}
+  \item{value}{The (threshold) value to replace with NA or that should be set to NA}
+  \item{operator}{The operator in setNA relative to the \code{value}, to set e.g. all values <= 2 to NA}
+  \item{rclmat}{Matrix for reclassifcation. (see below)}
+  \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
+  \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
+  \item{ForceIntOutput}{logical. If \code{TRUE}, output will be integer values}
+  \item{ngb}{Neighborhood size. Expressed in number of cells in a single direction. I.e. 3 refers to 2 cells at each side of the focal cell. Queen's case, 8 cells in total}
+  \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
 }
 
 \details{
@@ -46,7 +47,7 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 \value{
 	a new raster file (on disk and/or in memory) and associated object (in the R environment)
 }
-\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
 \examples{
 
@@ -82,4 +83,4 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
 #hist(r4)
  
 }
-\keyword{ spatial }
+\keyword{spatial}
