@@ -19,7 +19,7 @@ setValues <- function(raster, values, rownr=-1) {
 		raster@data@content <- 'all'
 		raster@data@source <- 'ram'
 		raster@data@indices <- c(1, ncells(raster))
-		raster <- setMinmax(raster)
+		raster <- setMinMax(raster)
 		return(raster)	
 	} else if (length(values) == ncol(raster)) {
 		if (rownr < 1 | rownr > nrow(raster)) {
@@ -75,7 +75,7 @@ setValuesSparse <- function(raster, sparsevalues, cellnumbers) {
 	raster@data@values <- sparsevalues
 	raster@data@indices <- cellnumbers
 	raster@data@source <- 'ram'
-	raster <- setMinmax(raster)
+	raster <- setMinMax(raster)
 	return(raster)
 }
 

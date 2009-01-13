@@ -7,6 +7,8 @@
 # Licence GPL v3
 
 
+###   readAll   ###
+
 if (!isGeneric("readAll")) {
 	setGeneric("readAll", function(object)
 		standardGeneric("readAll"))
@@ -19,6 +21,8 @@ setMethod('readAll', signature(object='RasterStack'),
 )
 
 
+###   readRow   ###
+
 if (!isGeneric("readRow")) {
 	setGeneric("readRow", function(object, rownr)
 		standardGeneric("readRow"))
@@ -30,6 +34,8 @@ setMethod('readRow', signature(object='RasterStack'),
 	function(object, rownr){ return(.stackRead(object, rownr))}
 )
 
+
+###   readRows   ###
 	
 if (!isGeneric("readRows")) {
 	setGeneric("readRows", function(object, startrow, nrows=3)
@@ -44,6 +50,7 @@ setMethod('readRows', signature(object='RasterLayer'),
 )
 
 		
+###   readBlock   ###		
 
 if (!isGeneric("readBlock")) {
 	setGeneric("readBlock", function(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1))
@@ -54,6 +61,9 @@ setMethod('readBlock', signature(object='RasterLayer'),
 	function(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1)) { 
 		return(.rasterReadBlock(object, startrow, nrows, ncolumns))}
 )
+
+
+###   readPartOfRow   ###
 
 if (!isGeneric("readPartOfRow")) {
 	setGeneric("readPartOfRow", function(object, rownr, startcol=1, ncolumns=(ncol(object)-startcol+1))
@@ -70,35 +80,74 @@ setMethod('readPartOfRow', signature(object='RasterStack'),
 		return( .stackRead(object, rownr, startcol, ncolumns) ) }
 )
 
+
+###   cellValues   ###
+
 if (!isGeneric("cellValues")) {
 	setGeneric("cellValues", function(object, cells)
 		standardGeneric("cellValues"))
 }	
 	
-setMethod("cellValues", signature(object='RasterLayer'), 
+setMethod("cellValues", signature(object='RasterLayer', cells='vector'), 
 	function(object, cells) { 
-		return(.rasterReadCells(object, cells))}
-)
-
-
-setMethod("cellValues", signature(object='RasterStack'), 
-	function(object, cells) { 
-		return(.stackReadCells(object, cells))}
-)
-
-if (!isGeneric("xyValues")) {
-	setGeneric("xyValues", function(object, xy)
-		standardGeneric("xyValues"))
-}	
-	
-setMethod("xyValues", signature(object='RasterLayer'), 
-	function(object, xy) { 
-		return(.rasterReadXY(object, xy))
+		return(.rasterReadCells(object, cells))
 	}
 )
 
-setMethod("xyValues", signature(object='RasterStack'), 
-	function(object, xy) { 
-		return(.stackReadXY(object, xy))}
+
+setMethod("cellValues", signature(object='RasterStack', cells='vector'), 
+	function(object, cells) { 
+		return(.stackReadCells(object, cells))
+	}
 )
+
+
+###   xyValues   ###
+
+if (!isGeneric("xyValues")) {
+	setGeneric("xyValues", function(object, xyCoords)
+		standardGeneric("xyValues"))
+}	
+	
+setMethod("xyValues", signature(object='RasterLayer', xyCoords='matrix'), 
+	function(object, xyCoords) { 
+		if (dim(xyCoords)[2] != 2) {
+			stop('xyCoords has wrong dimensions; there should be 2 columns only' )
+		}
+		cells <- cellFromXY(object, xyCoords)
+		return(.rasterReadCells(object, cells))
+	}	
+)	
+
+
+setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'), 
+	function(object, xyCoords) { 
+		if (dim(xyCoords)[2] != 2) {
+			stop('xyCoords has wrong dimensions; there should be 2 columns only' )
+		}
+		cells <- cellFromXY(object, xyCoords)
+		return(.stackReadCells(object, cells))
+	}	
+)
+
+
+
+setMethod("xyValues", signature(object='RasterStack', xyCoords='SpatialPoints'), 
+	function(object, xyCoords) { 
+		xyCoords <- coordinates(xyCoords)
+		cells <- cellFromXY(object, xyCoords)
+		return(.stackReadCells(object, cells))
+	}	
+)
+
+
+setMethod("xyValues", signature(object='RasterStack', xyCoords='SpatialPoints'), 
+	function(object, xyCoords) { 
+		xyCoords <- coordinates(xyCoords)
+		cells <- cellFromXY(object, xyCoords)
+		return(.stackReadCells(object, cells))
+	}	
+)
+
+
 

@@ -26,7 +26,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE) {
 		end_cells <- start_cells + ncol(outraster) - 1
 		selected_cells <- as.vector(mapply(seq, start_cells, end_cells))
 		outraster <- setValues(outraster, values(raster)[selected_cells])
-		outraster <- setMinmax(outraster)
+		outraster <- setMinMax(outraster)
 		if (filename(outraster) != "" ) { 
 			outraster <- try(writeRaster(outraster, overwrite=overwrite)) 
 		}		

@@ -9,7 +9,7 @@
 \alias{setValuesSparse}
 \alias{clearValues}
 \alias{makeSparse}
-\alias{setMinmax}
+\alias{setMinMax}
 
 \title{ Set properties of a RasterLayer object }
 
@@ -25,7 +25,7 @@ clearValues(object)
 setRaster(object, filename="", values=NA)
 setDatatype(raster, datatype, datasize)
 setRowCol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
-setMinmax(raster)
+setMinMax(raster, readfromdisk=FALSE)
 setValues(raster, values, rownr=-1) 
 setValuesBlock(raster, blockvalues, firstcell, lastcell) 
 setValuesSparse(raster, sparsevalues, cellnumbers) 
@@ -49,6 +49,7 @@ makeSparse(raster)
   \item{nrows}{ the new number of rows for the raster }
   \item{ncols}{ the new number of cols for the raster }  
   \item{projstring}{a character string describing a projection and datum in PROJ4 format }
+  \item{readfromdisk}{Logical. If \code{TRUE} then data are read from disk (if available) to determine the min and max value}
 }
 
 \details{

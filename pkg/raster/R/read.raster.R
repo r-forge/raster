@@ -97,7 +97,7 @@
 	if (rownr < 0) {
 		raster@data@indices <- c(1, ncells(raster))
 		raster@data@content <- "all"
-		raster <- setMinmax(raster)
+		raster <- setMinMax(raster)
 	} else if (startcol==1 & ncolumns==(ncol(raster)-startcol+1)) {
 		raster@data@indices <- c(cellFromRowcol(raster, rownr, startcol), cellFromRowcol(raster, rownr, endcol))
 		raster@data@content <- "row"
@@ -217,12 +217,6 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 #				y <- v[,2]
 
 
-#read data on the raster for xy coordinates
-.rasterReadXY <- function(raster, xy) {
-	if (!is.matrix(xy)) { xy <- as.matrix(t(xy)) }
-	cells <- cellFromXY(raster, xy)
-	return(.rasterReadCells(raster, cells))
-}	
 
 
 #read data on the raster for cell numbers
@@ -243,7 +237,7 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 			vals <- vector(length=length(uniquecells))
 			vals[] <- NA
 		}	
-		if (length((vals) == 1)) {
+		if (length(vals) == 1) {
 			res[res[,1]==vals[1],2] <- vals[2] 
 		} else {
 			for (i in 1:length(vals[,1])) {
@@ -303,3 +297,39 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 }
 
 
+.stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
+	for (i in seq(nlayers(rstack))) {
+		raster <- readPartOfRow(rstack@rasters[[i]], rownumber, startcol, ncolumns)
+		if ( i == 1 )  {
+			rstack@data@values <- as.matrix(values(raster))
+			rstack@data@content <- dataContent(raster)
+			rstack@data@indices <- dataIndices(raster)
+		}
+		else {
+			rstack@data@values <- cbind(rstack@data@values, values(raster)) 
+		}	   
+	}
+	return(rstack)
+}
+
+.stackReadCells <- function(object, cells) {
+		for (i in seq(nlayers(object))) {
+			v <- .rasterReadCells(object@rasters[[i]], cells)
+			if (i == 1) {
+				result <- v
+			} else {
+				result <- cbind(result, v)
+	#			colnames(result)[length(result[1,])] <- rstack@rasters[[i]]@file@shortname
+			}
+		}
+		if (!(is.null(dim(result)))) {
+			for (i in seq(nlayers(object))) {
+				label <- object@rasters[[i]]@file@shortname
+				if (nchar(label) == "") { 
+					label <- paste("raster_", i, sep="") 
+				}
+				colnames(result)[i] <- label
+			}
+		}	
+		return(result)
+}

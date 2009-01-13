@@ -42,7 +42,7 @@ writeRaster <- function(raster, overwrite=FALSE) {
 	raster@file@gdalhandle <- list()
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
-	raster <- setMinmax(raster)
+	raster <- setMinMax(raster)
 
 	if ( raster@file@datatype =='integer') {
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
@@ -148,7 +148,7 @@ writeRaster <- function(raster, overwrite=FALSE) {
 	if (class(values(raster))=='integer') {
 		raster <- setDatatype(raster, 'integer')
 	}	
-	raster <- setMinmax(raster)
+	raster <- setMinMax(raster)
 
 	binraster <- .setFileExtensionValues(filename(raster))
 	con <- file(binraster, "wb")
