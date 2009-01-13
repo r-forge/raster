@@ -6,6 +6,11 @@
 
 
 
+#if (!isGeneric("setValues")) {
+#	setGeneric("setValues", function(object, values, rownr)
+#		standardGeneric("xyValues"))   }	
+
+	
 setValues <- function(raster, values, rownr=-1) {
 	if (!is.vector(values)) {stop('values must be a vector')}
 	if (length(values) == 0) {	stop('length(values==0). If this is intended then use clearValues(raster)') }

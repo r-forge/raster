@@ -23,8 +23,8 @@ setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 
 setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 	function(e1,e2){
-		if (!is.atomic(e2)) {
-			stop('second argument should be atomic (a single number)')
+		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
+			stop('second argument should be a single number')
 		}
 		return(setRaster(e1, values=callGeneric(.getRasterValues(e1), rep(e2, ncells(e1)) ) ) )
 	}
@@ -32,20 +32,18 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 
 setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 	function(e1,e2){
-		if (!is.atomic(e1)) {
-			stop('first argument should be atomic (a single number)')
+		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
+			stop('first argument should be a single number')
 		}
 		return(setRaster(e2, values=callGeneric(.getRasterValues(e2), rep(e1, ncells(e2)) ) ) )
 	}
 )	
 
-
-
 setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 	function(e1,e2){
 		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
 		if (!cond) {
-			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See 'as(e1, 'BasicRaster')==as(e2, 'BasicRaster')")
+			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See compare()")
 		}	
 		return(setRaster(e1, values=callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) )
 	}
