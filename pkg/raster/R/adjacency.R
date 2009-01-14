@@ -12,6 +12,14 @@
 }
 
 #Costumized (internal) functions can be created for each number of directions and for upper, middle and lower rows to optimize the code for row-level processing. 32 directions can be created if higher precision is needed.
+#adjraster <- function(raster, directions, outerMeridianConnect) {
+#	adjacency(raster, !is.na(cbind(1:ncells(raster),values(raster)))[,1], 1:ncells(raster), directions, outerMeridianConnect)
+#	v <- vector(length=ncells(raster))
+#	v[adj[,2]] <- 2
+#	v[adj[,1]] <- 1
+#	rs <- setValues(rs, v)
+#	return(raster)
+#}
 
 adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConnect)
 {

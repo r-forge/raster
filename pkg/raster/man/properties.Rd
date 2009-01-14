@@ -15,6 +15,8 @@
 \alias{ymin}
 \alias{ymax}
 \alias{projection}
+\alias{isLatLon}
+\alias{isLatLon,Raster-method}
 \alias{projection<-}
 \alias{origin}
 \alias{nlayers}
@@ -42,6 +44,7 @@ xmax(object)
 ymin(object)
 ymax(object)
 projection(object, asText=TRUE)
+isLatLon(object)
 origin(object)
 nlayers(object)
 layers(object)

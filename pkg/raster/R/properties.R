@@ -5,6 +5,31 @@
 # Licence GPL v3
 
 
+if (!isGeneric("isLatLon")) {
+	setGeneric("isLatLon", function(object)
+		standardGeneric("isLatLon"))
+}	
+
+setMethod('isLatLon', signature(object='Raster'), 
+# copied from the SP package (slightly adapted)
+#author:
+# ...
+	function(object){
+		p4str <- projection(object)
+		if (is.na(p4str) || nchar(p4str) == 0) {
+			return(as.logical(NA))
+		} 
+		res <- grep("longlat", p4str, fixed = TRUE)
+		if (length(res) == 0) {
+			return(FALSE)
+		} else {
+			return(TRUE)
+		}
+    }
+)
+
+
+
 filename <- function(object) {
 	if (class(object) == 'RasterStack') { 
 		return(object@filename) 
