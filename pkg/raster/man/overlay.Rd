@@ -21,8 +21,8 @@
 
 \details{
   The default function of Overlay sums the two rasters. Here are two other examples of functions that you can use:
-  multiply: fun=function(x,y){return(x*y)}
-  percentage: fun=function(x,y){return(100 * x / y)}
+  multiply: \code{fun=function(x,y){return(x*y)}}
+  percentage: \code{fun=function(x,y){return(100 * x / y)}}
   
   some overlay functions have been implemented as generic functions (*, /, +, -)
   

@@ -6,10 +6,7 @@
 \alias{Arith,RasterLayer,RasterLayer-method}
 \title{Methods for arithmic function for RasterLayer objects}
 \description{
-  The following standard arithmic functions can be used for computations with RasterLayers objects and numeric values.
-\begin{verbatim}  
-  "+", "-", "*", "^", "%%", "%/%", "/" 
-\end{verbatim}  
+  The following standard arithmic functions can be used for computations with RasterLayers objects and numeric values: +, -, *, ^, /
 }
 \section{Note}{
  The RasterLayer objects must have either all data in memory or on disk. If the data do not fit into memory you should use the Overlay() function instead.
