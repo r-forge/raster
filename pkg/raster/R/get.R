@@ -75,6 +75,8 @@ cellFromXY <- function(object, xy) {
 }
 
 
+
+
 cellFromRowCol <- function(object, rownr, colnr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	rownr <- round(rownr)
@@ -119,20 +121,25 @@ xyFromCell <- function(object, cell, asSpatialPoints=FALSE, projstring="") {
 	return(xy)
 }  
 	
-	
-cxyFromBox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx=ymax(object)) {
+
+cellFromBbox <- function(object, bbox) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	firstrow <- rowFromY(object, ymx)
-	lastrow <- rowFromY(object, ymn)
-	firstcol <- colFromX(object, xmn)
-	lastcol <- colFromX(object, xmx)
-	cells <- vector("integer", length=0)
-# RH: ouch, this should be done with apply 	
-	for (i in firstrow:lastrow) {
-		firstcell <- (i-1) * ncol(object) + firstcol
-		lastcell <- (i-1) * ncol(object) + lastcol
-		cells <- append(cells, c(firstcell:lastcell))
-	}
+	bbox <- getBbox(bbox)
+	startrow <- rowFromY(object, ymax(bbox))
+	endrow <- rowFromY(object, ymin(bbox))
+	startcol <- colFromX(object, xmin(bbox))
+	endcol <- colFromX(object, xmax(bbox))
+	cols <- rep(startcol:endcol, times=(endrow - startrow))
+	rows <- rep(startrow:endrow, each=(endcol - startcol))
+	cells <- cellFromRowCol(object, rows, cols)
+	return(cells)
+}
+
+	
+cxyFromBbox <- function(object, bbox) {
+	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	bbox <- getBbox(bbox)
+	cells <- cellFromBbox(object, bbox)
 	cxy <- cbind(cells, xyFromCell(object, cells))
 	colnames(cxy) <- c("cell", "x", "y")
 	return(cxy)
