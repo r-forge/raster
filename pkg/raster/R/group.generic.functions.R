@@ -206,4 +206,21 @@ setMethod("is.na", signature(x='RasterLayer'),
 	}
 )	
 
+setMethod("is.nan", signature(x='RasterLayer'),
+	function(x) {
+		return(setRaster(x, values=is.nan(.getRasterValues(x))))
+	}
+)	
+
+setMethod("is.infinite", signature(x='RasterLayer'),
+	function(x) {
+		return(setRaster(x, values=is.infinite(.getRasterValues(x))))
+	}
+)	
+
+setMethod("is.finite", signature(x='RasterLayer'),
+	function(x) {
+		return(setRaster(x, values=is.finite(.getRasterValues(x))))
+	}
+)	
 
