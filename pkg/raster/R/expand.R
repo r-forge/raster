@@ -31,7 +31,7 @@ expand <- function(raster, bndbox, filename="", overwrite=FALSE) {
 	
 	if (dataContent(raster) == 'all')  {
 
-		d <- vector(length=ncells(outraster))
+		d <- vector(length=ncell(outraster))
 		d[] <- NA
 		for (r in 1:nrow(raster)) {
 			vals <- valuesRow(raster, r) 

@@ -50,7 +50,7 @@ Merge <- function(rasters, tolerance=0.05, filename="", overwrite=FALSE) {
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
 	for (i in 1:length(rasters)) {
 		xy1 <- xyFromCell(rasters[[i]], 1) # first row/col on old raster[[i]]
-		xy2 <- xyFromCell(rasters[[i]], ncells(rasters[[i]]) ) #last row/col on old raster[[i]]
+		xy2 <- xyFromCell(rasters[[i]], ncell(rasters[[i]]) ) #last row/col on old raster[[i]]
 		rowcol[i,1] <- rowFromY(outraster, xy1[2]) #start row on new raster
 		rowcol[i,2] <- rowFromY(outraster, xy2[2]) #end row
 		rowcol[i,3] <- colFromX(outraster, xy1[1]) #start col

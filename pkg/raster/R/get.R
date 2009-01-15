@@ -33,7 +33,7 @@ xFromCol <- function(object, colnr) {
 rowFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cell <- as.integer(round(cell))
-	cell[cell < 1 | cell > ncells(object)] <- NA
+	cell[cell < 1 | cell > ncell(object)] <- NA
 	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
     return(rownr)
 }
@@ -42,7 +42,7 @@ rowFromCell <- function(object, cell) {
 colFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cell <- as.integer(round(cell))
-	cell[cell < 1 | cell > ncells(object)] <- NA	
+	cell[cell < 1 | cell > ncell(object)] <- NA	
 	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
 	colnr <- as.integer(cell - ((rownr-1) * ncol(object)))
     return(colnr)
@@ -75,7 +75,7 @@ cellFromXY <- function(object, xy) {
 }
 
 
-cellFromRowcol <- function(object, rownr, colnr) {
+cellFromRowCol <- function(object, rownr, colnr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	rownr <- round(rownr)
 	colnr <- round(colnr)
@@ -143,7 +143,7 @@ validCells <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cell <- round(cell)
 	validcell <- vector(length=length(cell))
-	validcell[cell > 0 & cell <= ncells(object)] <- TRUE
+	validcell[cell > 0 & cell <= ncell(object)] <- TRUE
 	return(validcell)
 }
 

@@ -27,7 +27,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 		
 		cols <- rep(rep(1:ncol(raster), each=xfact), times=nrow(raster)*yfact)
 		rows <- rep(1:nrow(raster), each=ncol(raster)*xfact*yfact)
-		cells <- cellFromRowcol(raster, rows, cols)
+		cells <- cellFromRowCol(raster, rows, cols)
 		outraster <- setValues(outraster, values(raster)[cells])
 		if (filename(outraster) != "") {writeRaster(outraster, overwrite=overwrite)}
 		

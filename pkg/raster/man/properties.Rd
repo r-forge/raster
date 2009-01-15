@@ -7,6 +7,7 @@
 \alias{nrow,BasicRaster-method}
 \alias{ncol,BasicRaster-method}
 \alias{ncells}
+\alias{ncell}
 \alias{xres}
 \alias{yres}
 \alias{resolution}
@@ -36,6 +37,7 @@ filename(object)
 ncol(x)
 nrow(x)
 ncells(object)
+ncell(object)
 xres(object)
 yres(object)
 resolution(object)

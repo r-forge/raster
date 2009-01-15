@@ -35,9 +35,9 @@ setMethod('asRasterLayer', signature(object='character',index='missing'),
 	function(object){
 		r <- newRaster()
 		if (object == 'runif') {
-			r <- setValues(r, runif(ncells(r)))
+			r <- setValues(r, runif(ncell(r)))
 		} else if (object == 'seq') {
-			r <- setValues(r, 1:ncells(r))
+			r <- setValues(r, 1:ncell(r))
 		}
 		return(r)
 	}

@@ -22,7 +22,7 @@
 \alias{[,RasterLayer-method}
 \alias{[<-,RasterLayer-method}
 \alias{[,RasterStack-method}
-\alias{[[,RasterLayer,ANY,missing-method}
+\alias{[[,RasterLayer,ANY,ANY-method}
 \alias{[[<-,RasterLayer,ANY,missing-method}
 
 \title{Classes for handling raster data }

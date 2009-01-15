@@ -13,8 +13,8 @@
 
 #Costumized (internal) functions can be created for each number of directions and for upper, middle and lower rows to optimize the code for row-level processing. 32 directions can be created if higher precision is needed.
 #adjraster <- function(raster, directions, outerMeridianConnect) {
-#	adjacency(raster, !is.na(cbind(1:ncells(raster),values(raster)))[,1], 1:ncells(raster), directions, outerMeridianConnect)
-#	v <- vector(length=ncells(raster))
+#	adjacency(raster, !is.na(cbind(1:ncell(raster),values(raster)))[,1], 1:ncell(raster), directions, outerMeridianConnect)
+#	v <- vector(length=ncell(raster))
 #	v[adj[,2]] <- 2
 #	v[adj[,1]] <- 1
 #	rs <- setValues(rs, v)
@@ -24,7 +24,7 @@
 adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConnect)
 {
 	nCols <- ncol(raster)
-	nCells <- ncells(raster)
+	nCells <- ncell(raster)
 	
 	left <- seq(nCols+1,(nCells-2*nCols+1),by=nCols) 
 	right <- seq(2*nCols,nCells-nCols,by=nCols)
@@ -244,7 +244,7 @@ adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConne
 adjBishop <- function(raster, fromCells, toCells, outerMeridianConnect)
 {
 	nCols <- ncol(raster)
-	nCells <- ncells(raster)
+	nCells <- ncell(raster)
 	
 	left <- seq(nCols+1,(nCells-2*nCols+1),by=nCols) 
 	right <- seq(2*nCols,nCells-nCols,by=nCols)

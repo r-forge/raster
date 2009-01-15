@@ -30,7 +30,7 @@ setRaster <- function(object, filename="", values=NA) {
 	raster <- newRaster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
 	raster <- setFilename(raster, filename)
 	
-	if ( length(values) != 1 | ( length(values) == 1 & ncells(raster) == 1) ) {
+	if ( length(values) != 1 | ( length(values) == 1 & ncell(raster) == 1) ) {
 		raster <- setValues(raster, values)
 	}
 	return(raster)

@@ -26,7 +26,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
 			stop('second argument should be a single number')
 		}
-		rs <- setRaster(e1, values=callGeneric(.getRasterValues(e1), rep(e2, ncells(e1)) ) )
+		rs <- setRaster(e1, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )
 		rs <- setDatatype(rs, datatype='integer', datasize=2)
 		return(rs)
 	}
@@ -37,7 +37,7 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
 			stop('first argument should be a single number')
 		}
-		rs <- setRaster(e2, values=callGeneric(.getRasterValues(e2), rep(e1, ncells(e2)) ) ) 
+		rs <- setRaster(e2, values=callGeneric(.getRasterValues(e2), rep(e1, ncell(e2)) ) ) 
 		rs <- setDatatype(rs, datatype='integer', datasize=2)
 		return(rs)
 	}
@@ -82,8 +82,8 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 	if ( (class(y) == 'RasterLayer' | class(y) == 'RasterStack' | class(y) == 'RasterBrick') & compare(c(x, y)) ) {			
 		return(.getRasterValues(y))
 	} else if (is.atomic(y)) {
-		return(rep(y, ncells(x)))
-	} else if (length(y)==ncells(x)) {
+		return(rep(y, ncell(x)))
+	} else if (length(y)==ncell(x)) {
 		return(y)
 	} else {
 		stop(paste("I do not understand argument",i + 1)) 

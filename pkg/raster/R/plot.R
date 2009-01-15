@@ -21,7 +21,7 @@ setMethod("plot", signature(x='Raster', y='numeric'),
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
 	function(x, y, maxdim=1000, cex=0.1, ...)  {
 		comp <- compare(c(x, y), bb=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
-		nc <- ncells(x)
+		nc <- ncell(x)
 		x <- readSkip(x, maxdim=maxdim)
 		y <- readSkip(y, maxdim=maxdim)
 		if (length(x) < nc) {
@@ -39,11 +39,11 @@ setMethod('hist', signature(x='Raster'),
 		# TO DO: make a function that does this by block and combines  all data into a single histogram
 
 				x <- asRasterLayer(x, layer)
-				if (ncells(x) <= maxsamp) {
+				if (ncell(x) <= maxsamp) {
 					values <- na.omit(values(readAll(x)))
 				} else {
 					values <- readRandom(x, maxsamp)
-					msg <- paste(round(100 * maxsamp / ncells(x)), "% of the raster cells were used", sep="")
+					msg <- paste(round(100 * maxsamp / ncell(x)), "% of the raster cells were used", sep="")
 					if (maxsamp > length(values)) {
 						msg <- paste(msg, " (of which ", 100 - round(100 * length(values) / maxsamp ), "% were NA)", sep="")
 					}

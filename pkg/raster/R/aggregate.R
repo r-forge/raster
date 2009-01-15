@@ -42,8 +42,8 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 	
 	if (dataContent(raster) == 'all') {	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(raster)], times=nrow(raster))
-		rows <- rep(1:rsteps, each=ncol(raster) * yfact)[1:ncells(raster)]
-		cells <- cellFromRowcol(raster, rows, cols)
+		rows <- rep(1:rsteps, each=ncol(raster) * yfact)[1:ncell(raster)]
+		cells <- cellFromRowCol(raster, rows, cols)
 		
 		if (rm.NA) { outraster <- setValues(outraster, as.vector(tapply(values(raster), cells, function(x){fun(na.omit(x))}))) 
 		} else {outraster <- setValues(outraster, as.vector(tapply(values(raster), cells, fun))) }
@@ -68,7 +68,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 				theserows <- startrow * rows
 			}	
 			raster <- readRows(raster, startrow = startrow, nrows = nrows)
-			cells <- cellFromRowcol(raster, theserows, cols)
+			cells <- cellFromRowCol(raster, theserows, cols)
 			
 			if (rm.NA) { vals <- tapply(values(raster), cells, function(x){fun(na.omit(x))} ) 
 			} else { vals <- tapply(values(raster), cells, fun) }

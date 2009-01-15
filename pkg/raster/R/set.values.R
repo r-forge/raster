@@ -16,14 +16,14 @@ setValues <- function(raster, values, rownr=-1) {
 	if (length(values) == 0) {	stop('length(values==0). If this is intended then use clearValues(raster)') }
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {stop('data must be values')}
 	rownr <- round(rownr)
-	if (length(values) == ncells(raster)) { 
+	if (length(values) == ncell(raster)) { 
 		if (rownr > 0) {
 			stop("if setting all values, rownr must be < 1")
 		}
 		raster@data@values <- values
 		raster@data@content <- 'all'
 		raster@data@source <- 'ram'
-		raster@data@indices <- c(1, ncells(raster))
+		raster@data@indices <- c(1, ncell(raster))
 		raster <- setMinMax(raster)
 		return(raster)	
 	} else if (length(values) == ncol(raster)) {
@@ -32,12 +32,12 @@ setValues <- function(raster, values, rownr=-1) {
 		}
 		raster@data@values <- values
 		raster@data@content <- 'row' 
-		firstcell <- cellFromRowcol(raster, rownr=rownr, colnr=1)
-		lastcell <- cellFromRowcol(raster, rownr=rownr, colnr=ncol(raster))
+		firstcell <- cellFromRowCol(raster, rownr=rownr, colnr=1)
+		lastcell <- cellFromRowCol(raster, rownr=rownr, colnr=ncol(raster))
 		raster@data@indices <- c(firstcell, lastcell)
 		return(raster)
 	} else {
-		stop("length(values) is not equal to ncells(raster) or ncol(raster)") 
+		stop("length(values) is not equal to ncell(raster) or ncol(raster)") 
 	}
 }	
 	
@@ -60,7 +60,7 @@ makeSparse <- function(raster) {
 	if ( dataContent(raster) == 'sparse') {return(raster)
 	} else {
 		if ( dataContent(raster) == 'all') {
-			vals <- seq(1:ncells(raster))
+			vals <- seq(1:ncell(raster))
 			vals <- cbind(vals, values(raster))
 			vals <- as.vector(na.omit(vals))
 			raster <- setValuesSparse(raster, sparsevalues=vals[,2], cellnumbers=vals[,1])

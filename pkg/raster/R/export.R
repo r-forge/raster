@@ -100,8 +100,8 @@ writeAscii <- function(raster, filename, overwrite=FALSE) {
 		cat("NODATA_value", .nodatavalue(raster), "\n", file = thefile)
 		close(thefile) #close connection
 		
-    } else if ( dataIndices(raster)[2] > ncells(raster)) {
-		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncells(raster)))
+    } else if ( dataIndices(raster)[2] > ncell(raster)) {
+		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 	}
 
 	
@@ -116,7 +116,7 @@ writeAscii <- function(raster, filename, overwrite=FALSE) {
 							sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
     }
 	
-	if ( dataIndices(raster)[2] == ncells(raster)) {
+	if ( dataIndices(raster)[2] == ncell(raster)) {
 		return(rasterFromFile(filename))
 	} else {
 		return("writing in progress")

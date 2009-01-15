@@ -11,7 +11,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput
 	if (ForceIntOutput) {setDatatype(outraster, 'integer') }
 
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
-		n <- ncells(raster)
+		n <- ncell(raster)
 		outraster <- setValues(outraster, fun(n)) 
 		if (filename != "") {	
 			outraster <- writeRaster(outraster, overwrite=overwrite) 

@@ -17,7 +17,7 @@ valuesRow <- function(raster, rownr) {
 	if (dataContent(raster) == 'sparse') {return (.valuesRow.sparse(raster, rownr)) 
 	} else if (dataContent(raster) != 'all') {stop('cannot do. Need all data')
 	} else {
-		startcell <- cellFromRowcol(raster, rownr, 1)
+		startcell <- cellFromRowCol(raster, rownr, 1)
 		endcell <- startcell+ncol(raster)-1
 		return(values(raster)[startcell:endcell])
 	}	
@@ -26,7 +26,7 @@ valuesRow <- function(raster, rownr) {
 
 .valuesRow.sparse <- function(raster, rownr, explode=TRUE) {
 	if (dataContent(raster) != 'sparse') {stop('cannot do. Need sparse')}
-	startcell <- cellFromRowcol(raster, rownr, 1)
+	startcell <- cellFromRowCol(raster, rownr, 1)
 	endcell <- startcell+ncol(raster)-1
 	d <- cbind(dataIndices(raster), values(raster))
 	d <- d[d[,1] >= startcell & d[,1] <= endcell, ] 

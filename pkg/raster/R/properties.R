@@ -38,8 +38,14 @@ filename <- function(object) {
 }
 
 ncells <- function(object) {
+	warning("'ncells' is obsolete. Use 'ncell' instead")
 	return(return( as.numeric(nrow(object)) * ncol(object )))
 }
+
+ncell <- function(object) {
+	return(return( as.numeric(nrow(object)) * ncol(object )))
+}
+
 
 xmin <- function(object) {
 	object <- getBbox(object)

@@ -32,8 +32,8 @@
 			blockdata <- c(blockdata, values(raster))
 		}	
 	}	
-	startcell <- cellFromRowcol(raster, startrow, startcol)
-	endcell <- cellFromRowcol(raster, endrow, (startcol+ncolumns-1))
+	startcell <- cellFromRowCol(raster, startrow, startcol)
+	endcell <- cellFromRowCol(raster, endrow, (startcol+ncolumns-1))
 	raster <- setValuesBlock(raster, blockdata, startcell, endcell)
 	return(raster)
 }
@@ -69,7 +69,7 @@
 			seek(con, ((rownr-1) * ncol(raster) + (startcol-1)) * raster@file@datasize)
 			result <- readBin(con, what=dtype, n = ncolumns, size = raster@file@datasize, endian = raster@file@byteorder) }	
 		else {	
-			result <- readBin(con, what=dtype, n = ncells(raster), size = raster@file@datasize, endian = raster@file@byteorder) 
+			result <- readBin(con, what=dtype, n = ncell(raster), size = raster@file@datasize, endian = raster@file@byteorder) 
 		}
 		close(con)
 		result[is.nan(result)] <- NA
@@ -95,14 +95,14 @@
 	} 
 	raster@data@values <- as.vector(result)
 	if (rownr < 0) {
-		raster@data@indices <- c(1, ncells(raster))
+		raster@data@indices <- c(1, ncell(raster))
 		raster@data@content <- "all"
 		raster <- setMinMax(raster)
 	} else if (startcol==1 & ncolumns==(ncol(raster)-startcol+1)) {
-		raster@data@indices <- c(cellFromRowcol(raster, rownr, startcol), cellFromRowcol(raster, rownr, endcol))
+		raster@data@indices <- c(cellFromRowCol(raster, rownr, startcol), cellFromRowCol(raster, rownr, endcol))
 		raster@data@content <- "row"
 	} else {
-		raster@data@indices <- c(cellFromRowcol(raster, rownr, startcol), cellFromRowcol(raster, rownr, endcol))
+		raster@data@indices <- c(cellFromRowCol(raster, rownr, startcol), cellFromRowCol(raster, rownr, endcol))
 		raster@data@content <- "block"
 	}	
 	
@@ -123,9 +123,9 @@ readRandom <- function(raster, n=500, na.rm = TRUE) {
 		}
 	} else {
 		if (dataSource(raster) == 'disk') {
-			if (ncells(raster) <= n) {
+			if (ncell(raster) <= n) {
 				raster <- readAll(raster)
-				values <- cbind(1:ncells(raster), values(raster))
+				values <- cbind(1:ncell(raster), values(raster))
 				if (na.rm) { values <- na.omit(values) }
 			} else {	
 				if (na.rm) {
@@ -133,7 +133,7 @@ readRandom <- function(raster, n=500, na.rm = TRUE) {
 				} else {
 					N <- 2 * n 
 				}	
-				cells <- unique(as.integer(round(runif(N) * ncells(raster) + 0.5)))
+				cells <- unique(as.integer(round(runif(N) * ncell(raster) + 0.5)))
 				cells <- cells[cells > 0]
 				values <- cellValues(raster, cells)
 				if (na.rm) {
@@ -222,7 +222,7 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 #read data on the raster for cell numbers
 .rasterReadCells <- function(raster, cells) {
 	uniquecells <- na.omit(unique(cells[order(cells)]))
-	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncells(raster))]
+	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncell(raster))]
 	res <- cbind(cells, NA)
 	if (length(uniquecells) > 0) {
 		if (dataContent(raster) == 'all') {
@@ -234,10 +234,9 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 				vals <- .readCellsRaster(raster, uniquecells)
 			}	
 		} else { 
-			vals <- vector(length=length(uniquecells))
-			vals[] <- NA
+			vals <- cbind(uniquecells, NA)
 		}	
-		if (length(vals) == 1) {
+		if (length(vals) == 2) {
 			res[res[,1]==vals[1],2] <- vals[2] 
 		} else {
 			for (i in 1:length(vals[,1])) {

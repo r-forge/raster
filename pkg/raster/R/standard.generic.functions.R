@@ -35,7 +35,7 @@ setMethod('summary', signature(object='RasterStackBrick'),
 
 setMethod('summary', signature(object='RasterLayer'), 
 	function(object, ...) {
-		cat ("Cells: " , ncells(object), '\n')
+		cat ("Cells: " , ncell(object), '\n')
 		if ( dataContent(object) == "all") {
 			cat("NAs  : ", sum(is.na(values(object))), "\n")
 			summary(values(object))

@@ -5,6 +5,7 @@
 \alias{plot,RasterLayer,RasterLayer-method}
 \alias{plot,RasterStack,numeric-method}
 \alias{plot,RasterStack,missing-method}
+\alias{click}
 
 \title{ Map a raster layer }
 \description{
@@ -12,6 +13,7 @@
 }
 \usage{
 map(object, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)
+click(object, n=1, xy=FALSE, type = "n", ...)
 }
 
 \arguments{
@@ -24,7 +26,11 @@ map(object, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, ad
   \item{axes}{see "?image"}
   \item{xlab}{see "?image"}
   \item{ylab}{see "?image"}
-  \item{...}{Any argument that can be passed to image.plot(fields) and to image(graphics)} 
+  \item{...}{For plot/map: Any argument that can be passed to image.plot(fields) and to image(graphics)} 
+  
+  \item{n}{number of clicks on the map}
+  \item{xy}{show xy coordinates}
+  \item{type}{see under ?locator}
  }
 \details{
   If \code{subsample=FALSE}, then \code{maxdim} is ingored. Subsampled maps are made by skipping rows and columns. This is always 

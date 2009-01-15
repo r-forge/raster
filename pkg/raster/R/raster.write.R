@@ -116,7 +116,7 @@ writeRaster <- function(raster, overwrite=FALSE) {
 #	raster@data@values[is.na(raster@data@values)] <-  raster@file@nodatavalue
 	writeBin(as.vector(raster@data@values), raster@filecon, size = raster@file@datasize)
 	
-	if (dataIndices(raster)[2] == ncells(raster)) {
+	if (dataIndices(raster)[2] == ncell(raster)) {
 	# LAST  ROW
 		.writeRasterHdr(raster) 
 		close(raster@filecon)
@@ -125,8 +125,8 @@ writeRaster <- function(raster, overwrite=FALSE) {
 		raster@data@content <- 'nodata'
 		raster@data@values <- vector(length=0)
 	}		
-	if (dataIndices(raster)[2] > ncells(raster)) {
-		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncells(raster)))
+	if (dataIndices(raster)[2] > ncell(raster)) {
+		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 	}
 	return(raster)	
 }

@@ -5,7 +5,15 @@
 # Licence GPL v3
 
 
-Overlay <- function(raster1, raster2, fun=function(x,y){return(x+y)}, filename="", overwrite=FALSE) {
+
+setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
+	function(x, y, fun=function(x,y){return(x+y)}, filename="", overwrite=FALSE, ...){ 
+		return(.Overlay(x, y, fun, filename, overwrite) )
+	}
+)
+
+
+.Overlay <- function(raster1, raster2, fun=function(x,y){return(x+y)}, filename="", overwrite=FALSE) {
 	if (class(raster1) != 'RasterLayer' | class(raster2) != 'RasterLayer') {
 		stop('first two arguments should be objects of class "RasterLayer"')
 	}
