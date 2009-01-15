@@ -20,8 +20,8 @@
 \alias{summary,RasterLayer-method}
 \alias{summary,RasterStackBrick-method}
 \alias{[,RasterLayer-method}
+\alias{[<-,RasterLayer-method}
 \alias{[,RasterStack-method}
-\alias{[<-,RasterLayer,ANY,missing-method}
 \alias{[[,RasterLayer,ANY,missing-method}
 \alias{[[<-,RasterLayer,ANY,missing-method}
 

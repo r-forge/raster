@@ -17,10 +17,43 @@
 	return( setRowCol(x, nrows=value) )
 }	
 
-setReplaceMethod("[", c("RasterLayer", "ANY", "missing", "ANY"), 
+
+setMethod("[", "RasterLayer",
+	function(x,i,j,...,drop=FALSE) {
+		if  (!missing(j)) {	stop("incorrect number of dimensions") }
+		if (dataContent(x) == 'nodata') {
+			if (ncells(x) < 1000000) {
+				if (dataSource(x) == 'disk') {
+					x <- readAll(x)
+				} else {
+					stop('no data associated with this RasterLayer object')
+				}
+			} else {
+				stop('Large raster, no data in memory, use readAll() first')
+			}	
+		}
+		return(values(x)[i]) 
+	}
+)
+
+
+setReplaceMethod("[", "RasterLayer",  
 	function(x, i, j, value) {
-# if ...
+		if  (!missing(j)) {	stop("incorrect number of dimensions") }
+		if (dataContent(x) == 'nodata') {
+			if (ncells(x) < 1000000) {
+				if (dataSource(x) == 'disk') {
+					x <- readAll(x)
+				} else {
+					stop('no data associated with this RasterLayer object')
+				}
+			} else {
+				stop('Large raster, no data in memory, use readAll() first')
+			}	
+		}
 		x@data@values[i] <- value
+		x <- setFilename(x, "")
+		x@data@source <- 'ram'
 		return(x)
 	}
 )
@@ -30,18 +63,6 @@ setMethod("[", "RasterStack",
 	function(x,i,j,layer,...,drop=FALSE) {
 		if  (!missing(layer)) {	stop("incorrect number of dimensions") }
 		if  (missing(j)) {	return(values(x)[i, ]) 
-		} else {
-			v <- valuesRow(x,j)
-			return(v[i])
-		}
-	}
-)
-
-
-setMethod("[", "RasterLayer",
-	function(x,i,j,layer,...,drop=FALSE) {
-		if  (!missing(layer)) {	stop("incorrect number of dimensions") }
-		if  (missing(j)) {	return(values(x)[i]) 
 		} else {
 			v <- valuesRow(x,j)
 			return(v[i])
