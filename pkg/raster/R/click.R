@@ -7,7 +7,6 @@
 # Licence GPL v3
 
 
-
 click <- function(object, n=1, xy=FALSE, type = "n", ...) {
 	loc <- locator(n)
 	x <- loc$x
@@ -17,16 +16,16 @@ click <- function(object, n=1, xy=FALSE, type = "n", ...) {
 		if (dataSource(object) != 'disk') {
 			stop('no data associated with this RasterLayer object')
 		} else {
-			return(xyValues(object, xyCoords))
+			value <- xyValues(object, xyCoords)
 		}	
 	} else {
 		cell <- cellFromXY(object, xyCoords)
 		value <- values(object)[cell]
-		if (xy) { 
-			return(cbind(xyCoords, value)) 
-		} else {
-			return(value)
-		}
 	}	
+	if (xy) { 
+		return(cbind(xyCoords, value)) 
+	} else {
+		return(value)
+	}
 }
 
