@@ -129,9 +129,18 @@ cellFromBbox <- function(object, bbox) {
 	endrow <- rowFromY(object, ymin(bbox))
 	startcol <- colFromX(object, xmin(bbox))
 	endcol <- colFromX(object, xmax(bbox))
-	cols <- rep(startcol:endcol, times=(endrow - startrow))
-	rows <- rep(startrow:endrow, each=(endcol - startcol))
-	cells <- cellFromRowCol(object, rows, cols)
+
+#	cols <- rep(startcol:endcol, times=(endrow - startrow))
+#	rows <- rep(startrow:endrow, each=(endcol - startcol))
+#	cells <- cellFromRowCol(object, rows, cols)
+
+	# RH: ouch. Use Apply instead:
+	cells <- vector("integer", length=0)
+	for (i in startrow:endrow) {
+		firstcell <- (i-1) * ncol(object) + startcol
+		lastcell <- (i-1) * ncol(object) + endcol
+		cells <- c(cells, c(firstcell:lastcell))
+	}
 	return(cells)
 }
 
