@@ -136,10 +136,10 @@ cellFromBbox <- function(object, bbox) {
 
 	# RH: ouch. Use Apply instead:
 	cells <- vector("integer", length=0)
-	for (i in startrow:endrow) {
-		firstcell <- (i-1) * ncol(object) + startcol
-		lastcell <- (i-1) * ncol(object) + endcol
-		cells <- c(cells, c(firstcell:lastcell))
+	for (r in startrow:endrow) {
+		firstcell <- cellFromRowCol(object, r, startcol)
+		lastcell <- cellFromRowCol(object, r, endcol)
+		cells <- c(cells, firstcell:lastcell)
 	}
 	return(cells)
 }
