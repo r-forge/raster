@@ -11,20 +11,9 @@ if (!isGeneric("isLatLon")) {
 }	
 
 setMethod('isLatLon', signature(object='Raster'), 
-# copied from the SP package (slightly adapted)
-#author:
-# ...
+# from the SP package (slightly adapted)
 	function(object){
-		p4str <- projection(object)
-		if (is.na(p4str) || nchar(p4str) == 0) {
-			return(as.logical(NA))
-		} 
-		res <- grep("longlat", p4str, fixed = TRUE)
-		if (length(res) == 0) {
-			return(FALSE)
-		} else {
-			return(TRUE)
-		}
+		return(	!is.projected(object) )
     }
 )
 
@@ -137,7 +126,13 @@ projection <- function(object, asText=TRUE) {
 
 origin <- function(object) {
 	x <- xmin(object) - xres(object)*(round(xmin(object) / xres(object)))
+	if ( x < 0 & abs(x) < 0.5 * xres(object)) {
+		x <- x + xres(object)
+	}
 	y <- ymax(object) - yres(object)*(round(ymax(object) / yres(object)))
+	if ( y < 0 & abs(y) < 0.5 * yres(object)) {
+		y <- y + yres(object)
+	}
 	return(c(x, y))
 }
 

@@ -67,7 +67,7 @@
 
 
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("RasterLayer", ...)}.
+Objects can be created by calls of the form \code{new("RasterLayer")}, but you should normally use functions such as newRaster() and rasterFromFile().
 }
 
 \section{Slots}{

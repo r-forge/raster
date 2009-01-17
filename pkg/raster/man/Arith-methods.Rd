@@ -6,7 +6,7 @@
 \alias{Arith,RasterLayer,RasterLayer-method}
 \title{Methods for arithmic function for RasterLayer objects}
 \description{
-  Standard arithmic functions for computations with RasterLayer objects and numeric values
+  Standard arithmic functions for computations with RasterLayer objects and numeric values 
 }
 \section{Note}{
  The RasterLayer objects must have either all data in memory or on disk. If the data do not fit into memory you should use the overlay() function instead.

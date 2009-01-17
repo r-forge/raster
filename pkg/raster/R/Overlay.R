@@ -4,11 +4,20 @@
 # Version 0,1
 # Licence GPL v3
 
+setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
+	function(x, y, ...){ 
+		return(Overlay(x, y, ...) )
+	}
+)
 
-Overlay <- function(raster1, raster2, ..., fun=function(x,y){return(x+y)}, filename="", overwrite=FALSE) {
-#	if (class(raster1) != 'RasterLayer' | class(raster2) != 'RasterLayer') {
-#		stop('first two arguments should be objects of class "RasterLayer"')}
-	rasters <- c(raster1, raster2)
+
+Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE){ 
+
+	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
+	if (missing(filename)) { filename <- "" }
+	if (missing(overwrite)) { overwrite <- FALSE }
+	
+	rasters <- c(x, y)
 	obs <- list(...)
 	if (isTRUE(length(obs) > 0)) {
 		for (i in 1:length(obs)) {
@@ -17,14 +26,14 @@ Overlay <- function(raster1, raster2, ..., fun=function(x,y){return(x+y)}, filen
 			} 
 		}
 	}
-	if (length(rasters) > 6) {stop("sorry, this function cannot take more than 5 RasterLayers at a time")}
+	if (length(rasters) > 6) {stop("sorry, this function cannot take more than 6 RasterLayers at a time")}
 	
 	for (i in 2:length(rasters)) {
-		if (!compare(c(raster1, rasters[i]))) { 
+		if (!compare(c(x, rasters[i]))) { 
 			stop('Extent and/or resolution of rasters do not match') 
 		}	
 	}
-	outraster <- setRaster(raster1)
+	outraster <- setRaster(x)
 	outraster <- setFilename(outraster, filename)
 
 	inram <- TRUE
@@ -33,7 +42,7 @@ Overlay <- function(raster1, raster2, ..., fun=function(x,y){return(x+y)}, filen
 		if (dataContent(rasters[[i]]) != 'all') {inram <- FALSE} 
 		if (dataSource(rasters[[i]]) != 'disk') {ondisk <- FALSE} 		
 	}	
-		
+	
 
 	if ( inram ) {
 	# there has to be a smarter way then this!
@@ -50,9 +59,18 @@ Overlay <- function(raster1, raster2, ..., fun=function(x,y){return(x+y)}, filen
 		}
 		
 		outraster <- setValues(outraster, vals)
-		if (filename(outraster) != "") { writeRaster(outraster, overwrite=overwrite) }
-	} else if ( ondisk ) {
-		v <- vector(length=0)
+		if (filename(outraster) != "") { 
+			writeRaster(outraster, overwrite=overwrite) 
+		}
+		
+	} else {
+		if (filename(outraster) == "") {
+#			v <- vector(length=0)
+			v  <- vector(length=ncell(outraster))
+			endcell <- 0
+			inccol <- ncol(outraster) - 1
+		}	
+		
 		for (r in 1:nrow(outraster)) {
 			for (i in 1:length(rasters)) {
 				if (dataSource(rasters[[i]]) == 'ram') {
@@ -73,7 +91,10 @@ Overlay <- function(raster1, raster2, ..., fun=function(x,y){return(x+y)}, filen
 				vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]), values(rasters[[4]]), values(rasters[[5]]), values(rasters[[6]]) )
 			}
 			if (filename(outraster) == "") {
-				v <- c(v, vals)
+#				v <- c(v, vals)
+				startcell <- endcell + 1
+				endcell <- startcell + inccol
+				v[startcell:endcell] <- vals
 			} else {
 				outraster <- setValues(outraster, vals, r)
 				outraster <- writeRaster(outraster, overwrite=overwrite)
