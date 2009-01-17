@@ -45,15 +45,16 @@ setReplaceMethod("[", "RasterLayer",
 	function(x, i, j, value) {
 		if  (!missing(j)) {	stop("incorrect number of dimensions") }
 # what about data rows ?		
-		if (dataContent(x) != 'nodata') {
+		if (dataContent(x) == 'nodata') {
 			if (ncell(x) < 1000000) {
 				if (dataSource(x) == 'disk') {
 					x <- readAll(x)
 				} else {
-					stop('no data associated with this RasterLayer object')
+					x <- setValues(x, vector(length=ncell(x)), v)
+					x@data@values[] <- NA
 				}
 			} else {
-				stop('Large raster, no data in memory, use readAll() first')
+				stop('Large raster with no data in memory, use readAll() first')
 			}	
 		}
 		x@data@values[i] <- value
