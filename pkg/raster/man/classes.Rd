@@ -60,7 +60,7 @@
 
 
 \arguments{
-  \item{x}{ AbsractRaster object }
+  \item{x}{ AbstractRaster object }
   \item{raster}{ RasterLayer object }
   \item{...}{ additional arguments for the generic functions }
 }
@@ -78,7 +78,7 @@ Objects can be created by calls of the form \code{new("RasterLayer", ...)}.
 	\item{\code{history}:}{Object of class \code{"character"}} 
     \item{\code{ncols}:}{Object of class \code{"integer"} number of columns }
     \item{\code{nrows}:}{Object of class \code{"integer"} number of rows }
-    \item{\code{bbox}:}{Object of class \code{"BoundingBox"} minimum and maximum x and y coordiantes }
+    \item{\code{bbox}:}{Object of class \code{"BoundingBox"} minimum and maximum x and y coordinates }
     \item{\code{crs}:}{Object of class \code{"CRS"} }
   }
 }
