@@ -14,8 +14,6 @@ trim <- function(astring) {
 
 
 fileName <- function(filename) {
-# Author: Robert Hijmans
-# Version 1; Date: 1-Sep-2008; License: GPL3
     filename <- gsub("\\\\", "/", filename)
 	if (filename == "") {return(filename)
 	} else {
@@ -35,8 +33,6 @@ filePath <- function(filename) {
 
    
 fileExtension <- function(filename) {
-# Author: Robert Hijmans
-# Version 1; Date: 1-Sep-2008; License: GPL3
 	lfn <- nchar(filename)
 	extstart <- -1
     for (i in lfn : 2) {
@@ -54,8 +50,6 @@ fileExtension <- function(filename) {
 
 
 setFileExtension <- function(filename, newextension="") {
-# Author: Robert Hijmans
-# Version 1; Date: 1-Sep-2008; License: GPL3
 	lfn <- nchar(filename)
 	newextension <- trim(newextension)
 	if (newextension != "" & substr(newextension, 1, 1) != ".") {
