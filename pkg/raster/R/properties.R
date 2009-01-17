@@ -126,13 +126,7 @@ projection <- function(object, asText=TRUE) {
 
 origin <- function(object) {
 	x <- xmin(object) - xres(object)*(round(xmin(object) / xres(object)))
-	if ( x < 0 & abs(x) < 0.5 * xres(object)) {
-		x <- x + xres(object)
-	}
 	y <- ymax(object) - yres(object)*(round(ymax(object) / yres(object)))
-	if ( y < 0 & abs(y) < 0.5 * yres(object)) {
-		y <- y + yres(object)
-	}
 	return(c(x, y))
 }
 

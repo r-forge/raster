@@ -52,11 +52,14 @@ compare <- function(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FAL
 		}
 # Can also check orig through bb & rowcol, but orig is useful for e.g. Merge(raster, raster)
 		if (orig) {
-			if (!(isTRUE(all.equal(origin(objects[[1]]), origin(objects[[i]]), tolerance=tolerance, scale=minres)))) {
+			dif1 <- origin(objects[[1]]) - origin(objects[[i]])
+			dif2 <- abs(origin(objects[[1]])) - origin(objects[[i]])
+			dif3 <- pmin(dif1, dif2)
+			if (!(isTRUE(all.equal(dif3, c(0,0), tolerance=tolerance, scale=minres)))) {
 				result <- F
 				if (stopiffalse) { stop('different origin') }
 				if (showwarning) { warning('different origin') }
-			}	
+			}
 		}
 	}
 	return(result)
