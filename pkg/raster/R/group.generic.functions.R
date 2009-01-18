@@ -5,12 +5,18 @@
 # Licence GPL v3
 
 
+# for very large rasters, use 
+#  filename <- tempfile() 
+
+
+
 setMethod('==', signature(e1='BasicRaster', e2='BasicRaster'),
 	function(e1,e2){
 		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
 		return(cond)
 	}
 )	
+
 
 
 setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),

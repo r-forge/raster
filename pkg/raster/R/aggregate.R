@@ -5,7 +5,7 @@
 # Version 0,7
 # Licence GPL v3
 
-Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, ForceIntOutput = FALSE, filename="", overwrite=FALSE)  {
+Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, ForceIntOutput = FALSE)  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }

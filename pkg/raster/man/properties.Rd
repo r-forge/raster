@@ -24,7 +24,9 @@
 \alias{layers}
 \alias{band}
 \alias{nbands}
- 
+\alias{dataType} 
+\alias{dataSize} 
+
   
 \title{RasterLayer properties}
 \description{
@@ -48,6 +50,8 @@ ymax(object)
 projection(object, asText=TRUE)
 isLatLon(object)
 origin(object)
+dataSize(object)
+dataType(object)
 nlayers(object)
 layers(object)
 band(object)

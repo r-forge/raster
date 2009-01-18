@@ -3,9 +3,6 @@
 \alias{writeRaster}
 \alias{writeAscii}
 \alias{import}
-\alias{export}
-\alias{writeHeader}
-\alias{writeWorldfile}
 
 \title{ Write raster data to a file }
 \description{
@@ -17,26 +14,17 @@
 writeRaster(raster, overwrite=FALSE)
 writeAscii(raster, filename, overwrite=FALSE)
 import(raster, filename="", overwrite=FALSE)
-export(raster, filename="", filetype='ascii', keepGRD=TRUE, overwrite=FALSE)
-writeHeader(raster, type) 
-writeWorldfile(raster, extension=".wld") 
 }
 
 \arguments{
   \item{raster}{ RasterLayer object }
   \item{overwrite}{ Logical. If \code{TRUE} existing files are overwritten }
   \item{filename}{ The file resulting from import or export }
-  \item{filetype}{ The type of file to export to ('ascii' or 'bil')}
-  \item{keepGRD}{ Logical. If \code{FALSE} the existing raster file (internal format) will not be kept after exporting; only applied to other formats that can use the same binary format. }
-  \item{type}{ Type of header file: 'BIL', 'ENVI', 'ErdasRaw', 'raster' }
-  \item{extension}{ extension of header file. Only implemented for worldfile. }
 }
 
 \details{
 	data in a \code{RasterLayer} object is written to a file. Small datasets can be loaded into memory manipulated, 
 	and saved to disk again. For large datasets, you can read and write by row. 
-	writeHeader writes an ENVI, or BIL header (.hdr) file; or an Erdas Raw (.raw) header file. This (hopefully) allows for reading the binary data ("raster.gri") in other programs such as ENVI ArcMap.
-	if format = "worldfile", the function writes an ESRI "world" file, that is sometimes used to georeference images.
 }
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
@@ -77,8 +65,6 @@ writeWorldfile(raster, extension=".wld")
  }
 
 rsimport <- import(rs, filename="imported", overwrite=TRUE)
-rsexport <- export(rsimport, filename="exported", filetype='ascii', overwrite=TRUE)
-writeHeader(rsexport, type="ENVI") 
 
 }
 

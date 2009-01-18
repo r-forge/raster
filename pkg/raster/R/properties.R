@@ -157,6 +157,15 @@ dataSource <- function(object) {
 	return(object@data@source)
 }
 
+dataType <- function(object) {
+	return(object@file@datatype)
+}
+
+
+dataSize <- function(object) {
+	return(object@file@datasize)
+}
+
 .driver <- function(object) {
 	return(object@file@driver)
 }	
