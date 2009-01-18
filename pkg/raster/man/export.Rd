@@ -1,4 +1,4 @@
-\name{write}
+\name{export}
 
 \alias{export}
 \alias{exportGDAL}
@@ -12,8 +12,8 @@
   Or create header files associated with other formats for use in different software (use ENVI or ErdasRaw for ArcGIS).
 }
 \usage{
-export(raster, filename="", filetype='ascii', keepGRD=TRUE, overwrite=FALSE)
-exportGDAL <- function(raster, driver, filename, overwrite=FALSE)
+export(raster, filename="", filetype="ascii", keepGRD=TRUE, overwrite=FALSE)
+exportGDAL(raster, filename, gdalfiletype="GTiff", overwrite=FALSE, ForceIntOutput = FALSE)
 writeHeader(raster, type) 
 writeWorldfile(raster, extension=".wld") 
 }
@@ -23,7 +23,8 @@ writeWorldfile(raster, extension=".wld")
   \item{overwrite}{ Logical. If \code{TRUE} existing files are overwritten }
   \item{filename}{ The file resulting from import or export }
   \item{filetype}{ The type of file to export to ('ascii' or 'bil')}
-  \item{driver}{ GDAL driver that can create raster datasets (see below for list)}
+  \item{gdalfiletype}{ GDAL file type (driver) name. See below for list of supported file types }
+  \item{ForceIntOutput}{save as integer}
   \item{keepGRD}{ Logical. If \code{FALSE} the existing raster file (internal format) will not be kept after exporting; only applied to other formats that can use the same binary format. }
   \item{type}{ Type of header file: 'BIL', 'ENVI', 'ErdasRaw', 'raster' }
   \item{extension}{ extension of header file. Only implemented for worldfile. }

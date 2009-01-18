@@ -1,6 +1,6 @@
 importFrom("methods", Arith, Compare, Logic, Math)
 importFrom("graphics", hist, plot)
-importFrom("sp", Spatial, SpatialPixels, SpatialPixelsDataFrame, SpatialGrid, SpatialGridDataFrame, overlay)
+importFrom("sp", bbox, overlay, Spatial, SpatialPixels, SpatialPixelsDataFrame, SpatialGrid, SpatialGridDataFrame)
 exportClasses(BoundingBox, BasicRaster, Raster, RasterLayer, RasterBrick, RasterStack)
-exportMethods(show, summary, plot, hist, ncol, nrow, dim)
+exportMethods(show, summary, plot, hist, ncol, nrow, dim, overlay, bbox)
 exportPattern("^[^\\.]")
