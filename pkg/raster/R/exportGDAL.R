@@ -47,6 +47,7 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 	} else { dataformat <- 'Float32' }
 
 	driver = new("GDALDriver", gdalfiletype)
+	
     if (!is.null(options) && !is.character(options)) { stop("options not character") }
     transient = new("GDALTransientDataset", driver = driver, rows = nrow(raster), cols = ncol(raster), bands = nbands, type = dataformat, options = options, handle = NULL)
  
