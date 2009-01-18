@@ -4,6 +4,9 @@
 # Version 0,1
 # Licence GPL v3
 
+closeRaster <- function(raster) {
+#	if handle = gdal then gdalclose the handle
+}
 
 newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
 	bb <- newBbox(xmn, xmx, ymn, ymx)
