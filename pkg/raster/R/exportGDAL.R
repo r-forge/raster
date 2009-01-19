@@ -37,8 +37,8 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 
 #.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
 # this needs to get fancier; depending on object and the abilties of the drivers
-	dataformat <- 'Int32'
-	if (dataType(raster) == 'integer' | !ForceIntOutput) {
+	if (dataType(raster) == 'integer' | ForceIntOutput) {
+		dataformat <- 'Int32'
 		if (raster@data@haveminmax) {
 			if (minValue(raster) > -32768 & maxValue(raster) <= 32767) {
 				dataformat <- 'Int16'
@@ -61,7 +61,11 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 
 		if (dataContent(raster)=='all') {
 #			if (!is.na(mvFlag)) vals[is.na(vals)] = mvFlag
-			x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
+# This would work, but could potentially lead to memory problems (making a copy of the values before writing)
+#			x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
+			for (r in 1:nrow(raster)) {
+				x <- putRasterData(transient, valuesRow(raster, r), band, c((r-1), 0)) 
+			}	
 		} else {
 			if (dataSource(raster)=='ram') {
 				stop("No data on disk, and not all values in memory. Cannot write the file")
@@ -85,7 +89,7 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 	outras <- rasterFromFile(filename)
 	outras@data@min <- raster@data@min
 	outras@data@max <- raster@data@max
-	if (!is.na((outras@data@min))) {	outras@data@haveminmax <- TRUE }
+	if (!is.na((outras@data@min))) { outras@data@haveminmax <- TRUE }
 	
 	return(outras)
 }

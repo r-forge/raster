@@ -4,9 +4,18 @@
 # Version 0,1
 # Licence GPL v3
 
-closeRaster <- function(raster) {
+
+closeHandle <- function(raster) {
 #	if handle = gdal then gdalclose the handle
+	if (.driver(raster) == "gdal") {
+		closeDataset(raster@file@gdalhandle[[1]])
+		raster@file@gdalhandle[[1]]	 <- list()
+	} else {
+		cr <- try(close(raster@filecon), silent = T)
+	}
+	return(raster)
 }
+
 
 newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
 	bb <- newBbox(xmn, xmx, ymn, ymx)
