@@ -18,13 +18,11 @@
 }
 
 
-exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE, ForceIntOutput = FALSE ) {
-	mvFlag = NA
-	options = NULL
+.getGDALtransient <- function(raster, filename, gdalfiletype, mvFlag, options, overwrite, ForceIntOutput)  {
 	.isSupportedGDALdriver(gdalfiletype)
 	
-# this is a RasterLayer hence:
-    nbands = 1
+# this is a RasterLayer hence nbands = 1:
+    nbands = nlayers(raster)
 # but we keep this for later (stack, brick)
 
 	if (file.exists(filename)) {
@@ -56,6 +54,17 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
     p4s <- projection(raster)
     .Call("RGDAL_SetProject", transient, p4s, PACKAGE = "rgdal")
 	
+	return(transient)
+}
+
+
+
+exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE, ForceIntOutput = FALSE ) {
+	mvFlag = NA
+	options = NULL
+	nbands = nlayers(raster)
+	
+	transient <- .getGDALtransient(raster, filename, gdalfiletype, mvFlag, options, overwrite, ForceIntOutput)
 	
     for (band in 1:nbands) {
 
@@ -65,15 +74,15 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 #			x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
 			for (r in 1:nrow(raster)) {
 				x <- putRasterData(transient, valuesRow(raster, r), band, c((r-1), 0)) 
-			}	
+			}
 		} else {
 			if (dataSource(raster)=='ram') {
 				stop("No data on disk, and not all values in memory. Cannot write the file")
 			}
 			for (r in 1:nrow(raster)) {
 				x <- putRasterData(transient, values(readRow(raster, r)), band, c((r-1), 0)) 
-			}	
-		}	
+			}
+		}
 
 #        if (!is.na(mvFlag)) {
 #            transient_b <- getRasterBand(dataset = transient, band = band)
@@ -92,5 +101,38 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 	if (!is.na((outras@data@min))) { outras@data@haveminmax <- TRUE }
 	
 	return(outras)
+}
+
+
+writeGDALrow <- function(raster, filename, gdalfiletype = "GTiff", rownr, overwrite=FALSE, ForceIntOutput = FALSE ) {
+	if (rownr == 1) {
+		mvFlag = NA
+		options = NULL
+		transient <- .getGDALtransient(raster, filename, gdalfiletype, mvFlag, options, overwrite, ForceIntOutput)
+		attr(raster, "transient") <- transient
+	}	
+	
+    for (band in 1:nlayers(raster)) {
+		x <- putRasterData(raster@transient, values(raster, rownr), band, c((rownr-1), 0)) 
+	}	
+
+#        if (!is.na(mvFlag)) {
+#            transient_b <- getRasterBand(dataset = transient, band = band)
+#            .Call("RGDAL_SetNoDataValue", transient_b, as.double(mvFlag), PACKAGE = "rgdal")
+#       }
+    
+	if (rownr == nrow(raster)) {
+		saveDataset(raster@transient, filename)
+		GDAL.close(raster@transient) 
+#  do NOT do this, it removes the driver for future use!!! ????	
+#	GDAL.close(driverobj) 
+		outras <- rasterFromFile(filename)
+		outras@data@min <- raster@data@min
+		outras@data@max <- raster@data@max
+		if (!is.na((outras@data@min))) { outras@data@haveminmax <- TRUE }
+		return(outras)
+	} else {
+		return(raster)
+	}
 }
 
