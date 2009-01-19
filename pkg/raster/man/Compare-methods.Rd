@@ -16,8 +16,8 @@
 
 \examples{
 r1 <- newRaster()
-r1 <- setValues(r1, round(10 * runif(ncells(r1))))
-r2 <- setValues(r1, round(10 * runif(ncells(r1))))
+r1 <- setValues(r1, round(10 * runif(ncell(r1))))
+r2 <- setValues(r1, round(10 * runif(ncell(r1))))
 as(r1, "BasicRaster") == as(r2, "BasicRaster")
 r3 <- r1 > r2
 

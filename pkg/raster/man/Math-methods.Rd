@@ -16,7 +16,7 @@
 
 \examples{
 r1 <- newRaster()
-r1 <- (setValues(r1, runif(ncells(r1))) - 0.5 ) * 10
+r1 <- (setValues(r1, runif(ncell(r1))) - 0.5 ) * 10
 r2 <- abs(r1)
 r3 <- sqrt(r1)
 }

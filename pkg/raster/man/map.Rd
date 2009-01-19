@@ -48,7 +48,7 @@ click(object, n=1, xy=FALSE, type = "n", ...)
 
 \examples{ 
 	rs <- newRaster()
-	rs <- setValues(rs, runif(ncells(rs)))
+	rs <- setValues(rs, runif(ncell(rs)))
 	map(rs)
 	rsa <- Aggregate(rs, fact=10, fun=max)
 	map(rsa)

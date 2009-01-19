@@ -43,10 +43,10 @@ raster cell value(s)
 \examples{
 #using a new default raster (1 degree global)
 r <- newRaster()
-r <- setValues(r, 1:ncells(r))
+r <- setValues(r, 1:ncell(r))
 minValue(r)
 maxValue(r)
-r <- setValues(r, round(100 * runif(ncells(r)) + 0.5))
+r <- setValues(r, round(100 * runif(ncell(r)) + 0.5))
 minValue(r)
 maxValue(r)
 

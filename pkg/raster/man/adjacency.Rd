@@ -32,14 +32,14 @@ For one-cell bishop moves use adjBishop (special cases).
 
 \examples{
 	rs <- newRaster(nrows=10, ncols=10)
-	adj <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), directions=4, outerMeridianConnect = TRUE) 
-	v <- vector(length=ncells(rs))
+	adj <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), directions=4, outerMeridianConnect = TRUE) 
+	v <- vector(length=ncell(rs))
 	v[adj[,2]] <- 2
 	v[adj[,1]] <- 1
 	rs <- setValues(rs, v)
 	plot(rs)
 
-	adjbis <- adjBishop(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncells(rs)), outerMeridianConnect = TRUE) 
+	adjbis <- adjBishop(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), outerMeridianConnect = TRUE) 
 }
 
 \keyword{spatial}

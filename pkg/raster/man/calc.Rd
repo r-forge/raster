@@ -58,7 +58,7 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
  set1function <- function(x){rep(1, x)}
  r <- init(r, fun=set1function)
 # "manually" 
- r <- setValues(r, rep(1, ncells(r)))
+ r <- setValues(r, rep(1, ncell(r)))
  
 # random values (see ?runif )
  r <- init(r, fun=runif)

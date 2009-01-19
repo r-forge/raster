@@ -18,7 +18,7 @@
 
 \examples{
 r1 <- newRaster()
-r1 <- setValues(r1, runif(ncells(r1)))
+r1 <- setValues(r1, runif(ncell(r1)))
 r2 <- 2 * r1 * r1
 r3 <- sqrt(r1) * 5
 r4 <- max(r1, r2, r3)

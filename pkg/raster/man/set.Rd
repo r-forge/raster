@@ -69,7 +69,7 @@ Use it when creating new RasterLayer objects from existing objects.
 	rs <- setProjection(rs, "+proj=longlat +datum=WGS84")
 	rs <- setDatatype(rs, datatype="integer", datasize=4)
 	rs <- setDatatype(rs, datatype="numeric", datasize=8)
-	vals <- 1:ncells(rs)
+	vals <- 1:ncell(rs)
 	rs <- setValues(rs, vals)
 	rs <- clearValues(rs)
 	rowvals <- 1:ncol(rs)

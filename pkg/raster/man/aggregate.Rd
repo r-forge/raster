@@ -36,7 +36,7 @@ disaggregate(raster, fact=2, filename="", overwrite=FALSE)
 
 \examples{
 	r <- newRaster()
-	r <- setValues(r, runif(ncells(r)))
+	r <- setValues(r, runif(ncell(r)))
 	ra <- Aggregate(r, fact=10, fun=max)
 	rd <- disaggregate(ra, 3)
 }

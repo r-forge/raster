@@ -39,7 +39,7 @@ raster cell value(s)
 \examples{
 #using a new default raster (1 degree global)
 r <- newRaster()
-r <- setValues(r, 1:ncells(r))
+r <- setValues(r, 1:ncell(r))
 cellValues(r, c(1, 10, 100))
 xy <- cbind(1:20, 20:1)
 xyValues(r, xy)

@@ -45,7 +45,7 @@ asSpGrid(object, type='grid')
 
 \examples{ 
 	rs <- newRaster()
-	rs <- setValues(rs, 1:ncells(rs))
+	rs <- setValues(rs, 1:ncell(rs))
 	sp <- asSpGrid(rs)
 	rs2 <- asRasterLayer(sp) 
 }

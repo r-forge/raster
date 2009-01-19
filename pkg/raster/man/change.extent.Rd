@@ -36,7 +36,7 @@ Merge(rasters, tolerance=0.05, filename="", overwrite=FALSE)
 
 \examples{
 	rs <- newRaster()
-	rs <- setValues(rs, runif(ncells(rs)))
+	rs <- setValues(rs, runif(ncell(rs)))
 #	map(rsa)
 	bb1 <- newBbox(-180, -150, 60, 90)
 	rsc1 <- crop(rs, bb1)	

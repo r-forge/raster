@@ -67,7 +67,7 @@ validRows(object, rownr)
 \examples{
 #using a new default raster (1 degree global)
 rs <- newRaster()
-ncells(rs)
+ncell(rs)
 colFromCell(rs, 10000)
 rowFromCell(rs, 10000)
 colFromX(rs, 0.5)
@@ -76,13 +76,13 @@ cellFromXY(rs, c(0.5, 0.5))
 xFromCol(rs, c(1, 120, 180))
 yFromRow(rs, 90)
 xyFromCell(rs, 10000)
-xyFromCell(rs, c(0, 1, 32581, ncells(rs), ncells(rs)+1))
+xyFromCell(rs, c(0, 1, 32581, ncell(rs), ncell(rs)+1))
 
 #using a file from disk
 rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
 rs
 cellFromXY(rs, c(180000, 330000))
 #xy for corners of grid:
-xyFromCell(rs, c(1, ncol(rs), nrow(rs), ncells(rs)))
+xyFromCell(rs, c(1, ncol(rs), nrow(rs), ncell(rs)))
 }
 \keyword{spatial}
