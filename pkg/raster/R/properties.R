@@ -11,11 +11,24 @@ if (!isGeneric("isLatLon")) {
 }	
 
 setMethod('isLatLon', signature(object='Raster'), 
-# from the SP package (slightly adapted)
+# copied from the SP package (slightly adapted)
+#author:
+# ...
 	function(object){
-		return(	!is.projected(object) )
+		p4str <- projection(object)
+		if (is.na(p4str) || nchar(p4str) == 0) {
+			return(as.logical(NA))
+		} 
+		res <- grep("longlat", p4str, fixed = TRUE)
+		if (length(res) == 0) {
+			return(FALSE)
+		} else {
+			return(TRUE)
+		}
     }
 )
+
+
 
 
 
@@ -70,13 +83,24 @@ resolution <- function(object) {
 	return(c(x, y))
 }
 
-nlayers <- function(object) {
-	if (class(object) == "RasterStack" | class(object) == "RasterBrick") {
-		return(object@data@nlayers)
-	} else {
-		return(1)
-	}	
-}
+
+if (!isGeneric("nlayers")) {
+	setGeneric("nlayers", function(object)
+		standardGeneric("nlayers"))
+}	
+
+setMethod('nlayers', signature(object='Raster'), 
+	function(object){
+		return(1) 
+    }
+)
+
+setMethod('nlayers', signature(object='RasterStackBrick'), 
+	function(object){
+		return(object@data@nlayers) 
+    }
+)
+
 
 layers <- function(object) {
 	if (class(object) == "RasterLayer") {
