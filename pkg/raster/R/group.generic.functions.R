@@ -9,6 +9,74 @@
 #  filename <- tempfile() 
 
 
+.CanProcessInMemory <- function(raster, n=2, datasize=16) {
+#	memalloc <- n * ncell(raster) * 8
+#	memavailable <- memory.limit()-memory.size()
+	maxalloc <- 10^8
+	if ( (ncell(raster) * n * datasize) > maxalloc ) { 
+		return( FALSE )
+	} else { 
+		return( TRUE ) 
+	}
+}
+
+
+.getRasterValues <- function(x) {
+# need to take care of 'spase'
+	if (dataContent(x) != 'all') {
+		if (class(x) == "RasterLayer") {
+			if (dataSource(x) == 'ram') {
+				stop('no data on disk or in memory')
+			} else x <- readAll(x)	
+		} else {
+			x <- readAll(x)
+		}
+	}
+	return(values(x))
+}	
+
+.getRowValues <- function(x, r) {
+# need to take care of 'spase'
+	if (dataContent(x) == 'all') {
+		return(valuesRow(x, r))
+	} else {	
+		if (dataSource(x) == 'disk') {
+			return(values(readRow(x, r)))
+		} else { 
+			stop('data not on disk or in memory')
+		} 
+	}	
+}	
+
+
+.getLogicalRowValues <- function(x, r) {
+# need to take care of 'spase'
+	v <- .getRowValues(x, r)
+	v[v<0] <- 0
+	v[v>0] <- 1
+	return(v)
+}	
+
+
+.getLogicalValues <- function(x) {
+	v <- .getRasterValues(x)
+	v[v<0] <- 0
+	v[v>0] <- 1
+	return(v)
+}
+
+.getAllTypeOfValues <- function(x, y, i) {
+	if ( (class(y) == 'RasterLayer' | class(y) == 'RasterStack' | class(y) == 'RasterBrick') & compare(c(x, y)) ) {			
+		return(.getRasterValues(y))
+	} else if (is.atomic(y)) {
+		return(rep(y, ncell(x)))
+	} else if (length(y)==ncell(x)) {
+		return(y)
+	} else {
+		stop(paste("I do not understand argument",i + 1)) 
+	}	
+}
+
 
 setMethod('==', signature(e1='BasicRaster', e2='BasicRaster'),
 	function(e1,e2){
@@ -63,39 +131,6 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 
 
 
-.getRasterValues <- function(x) {
-# need to take care of 'spase'
-	if (dataContent(x) != 'all') {
-		if (class(x) == "RasterLayer") {
-			if (dataSource(x) == 'ram') {
-				stop('no data on disk or in memory')
-			} else x <- readAll(x)	
-		} else {
-			x <- readAll(x)
-		}
-	}
-	return(values(x))
-}	
-
-.getLogicalValues <- function(x) {
-	v <- .getRasterValues(x)
-	v[v<0] <- 0
-	v[v>0] <- 1
-	return(v)
-}
-
-.getAllTypeOfValues <- function(x, y, i) {
-	if ( (class(y) == 'RasterLayer' | class(y) == 'RasterStack' | class(y) == 'RasterBrick') & compare(c(x, y)) ) {			
-		return(.getRasterValues(y))
-	} else if (is.atomic(y)) {
-		return(rep(y, ncell(x)))
-	} else if (length(y)==ncell(x)) {
-		return(y)
-	} else {
-		stop(paste("I do not understand argument",i + 1)) 
-	}	
-}
-
 setMethod("[", "RasterLayer",
 	function(x, i, j, ..., drop = TRUE) {
 		if (!missing(drop)) { stop("drop is ignored. It is always set to FALSE") }
@@ -110,15 +145,35 @@ setMethod("[", "RasterLayer",
 
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
-		return(setRaster(x, values=callGeneric(.getRasterValues(x))))
+		if (.CanProcessInMemory(x, 1)) {
+			raster <- setRaster(x, values=callGeneric(.getRasterValues(x)))
+		} else {
+			raster <- setRaster(x, filename=tempfile())
+			for (r in 1:nrow(x)) {
+				raster <- setValues(raster, callGeneric( .getRowValues(x, r) ), r)
+				raster <- writeRaster(raster)
+			}
+		}
+		return(raster)
 	}
 )
+
+
 
 setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if ( compare(c(e1, e2)) ) {
-			return(setRaster(e1, values=callGeneric(.getLogicalValues(e1), .getLogicalValues(e2))))
-		}
+			if (.CanProcessInMemory(e1, 2)) {
+				raster <- setRaster(e1, values=callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
+			} else {
+				raster <- setRaster(e1, filename=tempfile())
+				for (r in 1:nrow(e1)) {
+					raster <- setValues(raster, callGeneric( .getLogicalRowValues(e1, r), .getLogicalRowValues(e2, r) ), r)
+					raster <- writeRaster(raster)
+				}
+			}	
+			return(raster)
+		}	
 	}
 )
 
@@ -126,8 +181,17 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 	
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
-		if (compare(c(e1, e2))) {
-			return(setRaster(e1, values=callGeneric(.getRasterValues(e1), .getRasterValues(e2))))
+		if ( compare(c(e1, e2)) ) {
+			if (.CanProcessInMemory(e1, 2)) {
+				raster <- setRaster(e1, values=callGeneric(.getRasterValues(e1), .getRasterValues(e2)))
+			} else {
+				raster <- setRaster(e1, filename=tempfile())
+				for (r in 1:nrow(e1)) {
+					raster <- setValues(raster, callGeneric( .getRowValues(e1, r), .getRowValues(e2, r) ), r)
+					raster <- writeRaster(raster)
+				}
+			}	
+			return(raster)
 		}	
 	}
 )
