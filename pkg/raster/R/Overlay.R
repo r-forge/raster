@@ -23,10 +23,18 @@ Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE){
 		for (i in 1:length(obs)) {
 			if (extends(class(obs[[i]]), "RasterLayer")) {
 				rasters <- c(rasters, obs[[i]])
-			} 
+			} else {
+				stop("only RasterLayer objects allowed as ... arguments.")
+			}
 		}
 	}
 	if (length(rasters) > 6) {stop("sorry, this function cannot take more than 6 RasterLayers at a time")}
+	
+	f <- formals(fun)
+	if (length(f) != length(rasters)) {
+		stop(paste("Function/data mismatch. You provided a function with", length(f), "arguments. While passing", length(rasters), "RasterLayer objects."))
+	}
+
 	
 	for (i in 2:length(rasters)) {
 		if (!compare(c(x, rasters[i]))) { 
@@ -43,9 +51,11 @@ Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE){
 		if (dataSource(rasters[[i]]) != 'disk') {ondisk <- FALSE} 		
 	}	
 	
-
+	
 	if ( inram ) {
 	# there has to be a smarter way then this!
+	# perhaps via    as.function(alist( )) ??
+	
 		if (length(rasters) == 2) {
 			vals <- fun( values(rasters[[1]]), values(rasters[[2]]) )
 		} else if (length(rasters) == 3) {
