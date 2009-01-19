@@ -95,7 +95,13 @@ setMethod('nlayers', signature(object='Raster'),
     }
 )
 
-setMethod('nlayers', signature(object='RasterStackBrick'), 
+setMethod('nlayers', signature(object='RasterStack'), 
+	function(object){
+		return(object@data@nlayers) 
+    }
+)
+
+setMethod('nlayers', signature(object='RasterBrick'), 
 	function(object){
 		return(object@data@nlayers) 
     }
