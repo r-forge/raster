@@ -70,12 +70,11 @@ resolution <- function(object) {
 	return(c(x, y))
 }
 
-
 nlayers <- function(object) {
-	if (class(object) == "RasterLayer") {
-		return(1)
-	} else {
+	if (class(object) == "RasterStack" | class(object) == "RasterBrick") {
 		return(object@data@nlayers)
+	} else {
+		return(1)
 	}	
 }
 
