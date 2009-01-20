@@ -48,7 +48,7 @@ setFilename <- function(object, filename) {
 		shortname <- fileName(filename)
 		shortname <- setFileExtension(shortname, "")
 		shortname <- gsub(" ", "_", shortname)
-		if (object@file@nbands > 1) { shortname <- paste(shortname, "_", object@file@band) } 
+		if (nbands(object) > 1) { shortname <- paste(shortname, "_", band(object)) } 
 		object@file@shortname <- shortname
 		object@file@gdalhandle <- list()
 	}	

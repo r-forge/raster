@@ -1,5 +1,6 @@
 \name{properties}
 \alias{filename}
+\alias{filename<-}
 \alias{ncol}
 \alias{nrow}
 \alias{ncol<-}
@@ -21,6 +22,9 @@
 \alias{projection<-}
 \alias{origin}
 \alias{nlayers}
+\alias{nlayers,Raster-method}
+\alias{nlayers,RasterBrick-method}
+\alias{nlayers,RasterStack-method}
 \alias{layers}
 \alias{band}
 \alias{nbands}

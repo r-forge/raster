@@ -17,16 +17,32 @@
 }
  
  
-writeRaster <- function(raster, overwrite=FALSE) {
-	if (dataContent(raster) == 'row' ) {
-		raster <- .writeRasterRow(raster, overwrite)
-	} else if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
-		stop('First use setValues()') 
+writeRaster <- function(raster, format='raster', overwrite=FALSE) {
+	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
+		stop('First use setValues()')
+	}
+
+	if (format=='raster') {
+		if (dataContent(raster) == 'row' ) {
+			raster <- .writeRasterRow(raster, overwrite)
+		} else {
+			raster <- .writeRasterAll(raster, overwrite)
+		}  
+	} else if (format=='ascii') {
+		raster <- .writeAscii(raster, overwrite)
 	} else {
-		raster <- .writeRasterAll(raster, overwrite)
-	}  
+		mvFlag = NA
+		options = NULL
+		ForceIntOutput = FALSE
+		if (dataContent(raster) == 'row' ) {
+			raster <- .writeGDALrow(raster, format, overwrite, ForceIntOutput, mvFlag, options)
+		} else {
+			raster <- .writeGDALall(raster, format, overwrite, ForceIntOutput, mvFlag, options)
+		}  
+	}
 	return(raster)
-}
+}	
+
 
 
 
@@ -202,10 +218,4 @@ writeRaster <- function(raster, overwrite=FALSE) {
 	close(thefile)
 }
 
-
-#
-#write.gdal <- function(gdata, filename, filetype = "GTiff", gdata) {
-#   datatype <- "Float32"
-#   writeGDAL(gdata, filename, drivername = filetype, type = datatype, mvFlag = NA, options=NULL)
-#}   
 

@@ -4,6 +4,10 @@
 # Version 0,8
 # Licence GPL v3
 
+'filename<-' <- function(x, value) {
+	return( setFilename(x, value) )
+}
+
 
 'projection<-' <- function(x, value) {
 	return( setProjection(x, value) )
