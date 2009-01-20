@@ -32,7 +32,7 @@ xFromCol <- function(object, colnr) {
 	
 rowFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	cell <- as.integer(round(cell))
+	cell <- round(cell)
 	cell[cell < 1 | cell > ncell(object)] <- NA
 	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
     return(rownr)
@@ -41,7 +41,7 @@ rowFromCell <- function(object, cell) {
 
 colFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	cell <- as.integer(round(cell))
+	cell <- round(cell)
 	cell[cell < 1 | cell > ncell(object)] <- NA	
 	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
 	colnr <- as.integer(cell - ((rownr-1) * ncol(object)))

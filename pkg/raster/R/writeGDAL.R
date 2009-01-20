@@ -123,6 +123,9 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 .writeGDALrow <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options ) {
 	
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
+	if (rownr %in%  c(1, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000, 40000, 50000, 100000)) {
+		print( paste("writing row", rownr, "at:", format(Sys.time(), "%H:%M:%S")))
+	}
 	if ( rownr == 1) {
 		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options)
 		attr(raster, "transient") <- transient
