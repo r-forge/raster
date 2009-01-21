@@ -89,6 +89,12 @@ if (!isGeneric("nlayers")) {
 		standardGeneric("nlayers"))
 }	
 
+setMethod('nlayers', signature(object='BasicRaster'), 
+	function(object){
+		return(0) 
+    }
+)
+
 setMethod('nlayers', signature(object='Raster'), 
 	function(object){
 		return(1) 
