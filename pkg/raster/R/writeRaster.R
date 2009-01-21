@@ -6,18 +6,29 @@
 
 
  
-.setFileExtensionValues <- function(fname) {
-	fname <- setFileExtension(fname, ".gri")
-	return(fname)
+rasterFormats <- function() {
+	gd <- gdalDrivers()
+	gd <- as.matrix(subset(gd, gd[,3] == T))
+	short <- c("raster", "ascii", as.vector(gd[,1]))
+	long <- c("raster package format", "Arc ascii", as.vector(gd[,2]))
+	m <- cbind(short, long)
+	colnames(m) <- c("name", "long_name")
+	return(m)
 }
- 
-.setFileExtensionHeader <- function(fname) {
-	fname <- setFileExtension(fname, ".grd")
-	return(fname)
+
+
+.isSupportedGDALFormat <- function(dname) {
+	gd <- gdalDrivers()
+	gd <- as.matrix(subset(gd, gd[,3] == T))
+	res <- dname %in% gd
+	if (!res) { stop(paste(dname, "is not a supported file format. See rasterFormats()" ) ) }
+	return(res)
 }
+
  
  
 writeRaster <- function(raster, format='raster', overwrite=FALSE) {
+	
 	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
 		stop('First use setValues()')
 	}
@@ -30,14 +41,12 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 		}  
 	} else if (format=='ascii') {
 		raster <- .writeAscii(raster, overwrite)
-	} else {
-		mvFlag = NA
-		options = NULL
-		ForceIntOutput = FALSE
+	} else { 
+		.isSupportedGDALFormat(format)
 		if (dataContent(raster) == 'row' ) {
-			raster <- .writeGDALrow(raster, format, overwrite, ForceIntOutput, mvFlag, options)
+			raster <- .writeGDALrow(raster, format, overwrite, ForceIntOutput=FALSE, mvFlag=NA, options=NULL)
 		} else {
-			raster <- .writeGDALall(raster, format, overwrite, ForceIntOutput, mvFlag, options)
+			raster <- .writeGDALall(raster, format, overwrite, ForceIntOutput=FALSE, mvFlag=NA, options=NULL)
 		}  
 	}
 	return(raster)
@@ -45,6 +54,18 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 
 
 
+
+
+.setFileExtensionValues <- function(fname) {
+	fname <- setFileExtension(fname, ".gri")
+	return(fname)
+}
+ 
+.setFileExtensionHeader <- function(fname) {
+	fname <- setFileExtension(fname, ".grd")
+	return(fname)
+}
+ 
 
 .writeRasterAll <- function(raster, overwrite=FALSE) {
 	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))

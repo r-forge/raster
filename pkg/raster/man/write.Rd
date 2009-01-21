@@ -1,6 +1,7 @@
 \name{write}
 
 \alias{writeRaster}
+\alias{rasterFormats}
 
 \title{Write raster data to a file}
 
@@ -11,6 +12,7 @@
 
 \usage{
   writeRaster(raster, format='raster', overwrite=FALSE)
+  rasterFormats()
 }
 
 \arguments{
@@ -23,42 +25,21 @@
 	Values in a \code{RasterLayer} object are written to a file. Relatively small datasets can be loaded into memory, manipulated, and saved to disk in their entirety. 
 	Large datasets can be read and written row by row. 
 	When writing by row, you must write all rows, and you must write them in sequence. Start at row=1, and end at row=nrow(raster). You cannot overwrite a single row in an existing raster file.
-	
+	rasterFormats returns a matrix of the file formats (the "drivers") that are supported.
 
-Supported GDAL drivers are:
-	\item{Driver}{Long name}
-	\item{ADRG}{ARC Digitized Raster Graphics}
-	\item{BMP}{MS Windows Device Independent Bitmap}
-	\item{BT}{VTP .bt (Binary Terrain) 1.3 Format}
+Supported formats include 
+	\item{Format}{Long name}
+	\item{raster}{'Native' raster package format}
+	\item{ascii}{Arc Ascii format}
+	\item{ENVI}{ENVI .hdr Labelled}
 	\item{EHdr}{ESRI .hdr Labelled}
-
-	ESRI .hdr Labelled
-	ELAS			ELAS
-	
-	ENVI			ENVI .hdr Labelled
-	
-	ERS				ERMapper .ers Labelled
-	
-	GSBG			Golden Software Binary Grid (.grd)
-	
-	GTiff  - GeoTiff
-	HFA    - Erdas Imagine Images (.img)
-	IDA				Image Data and Analysis
-	ILWIS			ILWIS Raster Map
-	INGR			Intergraph Raster
-	Leveller		Leveller heightfield
-	MEM				In Memory Raster
-	MFF				Vexcel MFF Raster
-	MFF2			Vexcel MFF2 (HKV) Raster
-	NITF			National Imagery Transmission Format
-	PAux			PCI .aux Labelled
-	PCIDSK			PCIDSK Database File
-	PNM				Portable Pixmap Format (netpbm)
-	RMF				Raster Matrix Format
-	RST				Idrisi Raster A.1
-	SGI				SGI	Image File Format 1.0
-	Terragen		Terragen heightfield
-	VRT				Virtual	Raster
+	\item{ERS}{ERMapper .ers Labelled}
+	\item{GTiff}{GeoTiff}
+	\item{HFA}{Erdas Imagine Images (.img)}
+	\item{ILWIS}{ILWIS Raster Map}
+	\item{PAux}{PCI .aux Labelled}
+	\item{PCIDSK}{PCIDSK Database File}
+	\item{RST}{Idrisi Raster A.1}
 }
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}

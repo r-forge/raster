@@ -38,16 +38,9 @@ export <- function(raster, filename="", filetype="ascii", keepGRD=TRUE, overwrit
 	} else if (filetype == "bil") {
 		.exportToBil(raster, filename=filename, keepGRD=keepGRD, overwrite=overwrite) 
 
-	} else if (filetype == "tif") {
-		if (dataContent(raster) != "all") {
-			raster <- readAll(raster)
-		}
-		spgrid <- asSpGrid(raster)	
-		filename <- setFileExtension(filename, ".tif")
-		writeGDAL(spgrid, filename)
 
 	} else {
-		stop("filetype not yet supported (sorry..., more coming ...)")
+		stop("filetype not supported")
 	}
 	
 	return(rasterFromFile(filename))

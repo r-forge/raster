@@ -10,16 +10,9 @@
 # based on  create2GDAL and saveDataset from the rgdal package
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
-.isSupportedGDALdriver <- function(dname) {
-	gdrivers <- c("ADRG", "BMP", "BT", "EHdr", "ELAS", "ENVI", "ERS", "GSBG", "GTiff", "HFA", "IDA", "ILWIS", "INGR", "Leveller", "MEM", "MFF", "MFF2", "NITF", "PAux", "PCIDSK", "PNM", "RMF", "RST", "SGI", "Terragen", "VRT")
-	res <- dname %in% gdrivers
-	if (!res) { stop(paste(dname,"is not a supported GDAL file format. Choose from: \n    ADRG, BMP, BT, EHdr, ELAS, ENVI, ERS, GSBG, GTiff, HFA, IDA, ILWIS,\n    INGR, Leveller, MEM, MFF, MFF2, NITF, PAux, PCIDSK, PNM, RMF, RST, SGI, Terragen, VRT" ) ) }
-	return(res)
-}
-
 
 .getGDALtransient <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag,  options)  {
-	.isSupportedGDALdriver(gdalfiletype)
+#	.isSupportedFormat(gdalfiletype)
 	
 # this is a RasterLayer hence nbands = 1:
     nbands = nlayers(raster)
@@ -161,6 +154,12 @@ exportGDAL <- function(raster, filename, gdalfiletype = "GTiff", overwrite=FALSE
 	return(raster)
 }
 
+
+# ALTERNATIVE
+#.writeGDALall <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options) {
+#	spgrid <- asSpGrid(raster)	
+#	writeGDAL(spgrid, filename(raster))
+#}
 
 .writeGDALall <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options) {
 	
