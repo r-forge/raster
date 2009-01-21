@@ -25,7 +25,7 @@ You can also use bbox(object) to get a sp type bbox (a 2 x 2 matrix), but such a
 \usage{
 getBbox(object)
 newBbox(xmn, xmx, ymn, ymx)
-setBbox(object, bndbox, keepres=FALSE)
+setBbox(object, bndbox, keepres=FALSE, snap=FALSE)
 changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) 
 }
 
@@ -37,6 +37,7 @@ changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = y
   \item{object}{A Raster* object}
   \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
   \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
+  \item{snap}{Adjust the bounding box so that the new raster is aligned with the old raster }
 }
   
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}

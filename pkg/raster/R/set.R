@@ -17,6 +17,18 @@ setRowCol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 	return(raster)
 }
 
+setRes <- function(object, xres, yres=xres) {
+	object <- clearValues(object)
+	bb <- getBbox(object)
+	nc <- (bb@xmax - bb@xmin) / xres
+	nr <- (bb@ymax - bb@ymin) / yres
+	bb@xmax <- bb@xmin + nc * xres
+	bb@ymin <- bb@ymax - nr * yres
+	object <- setBbox(object, bb, snap=FALSE)
+	object <- setRowCol(object, nr, nc)
+	return(object)
+}
+
 setRaster <- function(object, filename="", values=NA) {
 	if (class(object) == 'RasterStack') { object <- asRasterLayer(object, 1) }
 	if (class(object) == 'RasterBrick') { object <- asRasterLayer(object, 1) }

@@ -82,14 +82,17 @@ stackAddRasters <- function(rstack, rasters) {
 		stop("rstack should be a RasterStack object") 
 	}
 	for (i in 1 : length(rasters)) { 
-		if (length(rasters) == 1) { raster <- rasters 
-		} else { raster <- rasters[[i]] }
+		if (length(rasters) == 1) { 
+			raster <- rasters 
+		} else { 
+			raster <- rasters[[i]] 
+		}
 		
 		addraster <- TRUE
 		i <- nlayers(rstack) + 1
 		if (i == 1) {
 			rstack <- setRowCol(rstack, nrow(raster), ncol(raster))
-			rstack <- setBbox(rstack, raster)
+			rstack <- setBbox(rstack, raster, snap=FALSE)
 			rstack <- setProjection(rstack, projection(raster))
 		} else {
 			if (!compare(c(rstack, raster))) { 

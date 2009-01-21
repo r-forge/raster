@@ -51,6 +51,11 @@ clearValues <- function(object) {
 	} else {
 		object@data@values <- matrix(NA,0,0)
 	}
+	if (class(object) == 'RasterLayer') {
+		object@data@min <- NA
+		object@data@max <- NA
+		object@data@haveminmax <- FALSE
+	}
 	return(object)
 }
 
