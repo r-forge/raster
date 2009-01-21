@@ -1,80 +1,3 @@
-
-import <- function(raster, filename="", overwrite=FALSE) {
-# check extension
-	if (.driver(raster) == "raster") {
-		stop("file is a raster format file, it cannot be imported")
-	}	
-	filename <- trim(filename)
-	if (filename == "") { 
-		filename <- .setFileExtensionHeader(filename(raster))
-	} else {
-		filename <- .setFileExtensionHeader(filename)
-	}
-	
-	rsout <- setRaster(raster, filename=filename)
-	for (r in 1:nrow(raster)) {
-		raster <- readRow(raster, r)
-		rsout <- setValues(rsout, values(raster), r)
-		rsout <- writeRaster(rsout, overwrite=overwrite)
-	}
-	rsout <- clearValues(rsout)
-	return(rsout)
-}
-
-
-export <- function(raster, filename="", filetype="ascii", keepGRD=TRUE, overwrite=FALSE) {
-	filename <- trim(filename)
-	if (filename == "") { 
-		filename <- filename(raster) 
-	}
-	if (filetype == "ascii") {
-		filename <- setFileExtension(filename, ".asc")
-		outras <- setRaster(raster, filename)
-		for (r in 1:nrow(raster)) {
-			outras <- setValues(outras, values(readRow(raster, r)), r)
-			.writeAscii(outras, overwrite=overwrite) 
-		}
-
-	} else if (filetype == "bil") {
-		.exportToBil(raster, filename=filename, keepGRD=keepGRD, overwrite=overwrite) 
-
-
-	} else {
-		stop("filetype not supported")
-	}
-	
-	return(rasterFromFile(filename))
-}
-
-
-
-.exportToBil <- function(raster, filename="", keepGRD=TRUE, overwrite=FALSE) {
-	sourcefile <- .setFileExtensionValues(filename(raster))
-	targetfile <- setFileExtension(filename(raster), ".bil")
-	if (keepGRD) {
-		if (file.exists(targetfile)) { 
-			if (!(overwrite)) { 
-				stop(paste("File exists:", targetfile, " Use overwrite=TRUE, if you want to overwrite it"))
-			}
-		}	
-		file.copy(from=sourcefile, to=targetfile, overwrite=overwrite)
-	} else {
-		if (file.exists(targetfile)) { 
-			if (overwrite) { 
-				file.remove(targetfile) 
-			} else {
-				stop(paste("File exists:", targetfile, " Use overwrite=TRUE, if you want to overwrite it"))
-			}
-		}	
-		file.rename(from=sourcefile, to=targetfile)
-	}
-	.writeBilHdr(raster)
-	if (!(keepGRD)) { file.remove(filename(raster)) }
-	return(rasterFromFile(targetfile))
-}
-
-
-
  
 writeHeader <- function(raster, type) {
 	type <- toupper(type)
@@ -172,11 +95,11 @@ writeHeader <- function(raster, type) {
 	cat("MaxValue=",  maxValue(raster), "\n", file = thefile)
 	close(thefile)	
 	
-	writeWorldfile(raster, ".rww")	
+	worldFile(raster, ".rww")	
  }
  
 
-writeWorldfile <- function(raster, extension=".wld") {
+worldFile <- function(raster, extension=".wld") {
 	hdrfile <- setFileExtension(filename(raster), extension)
 	thefile <- file(hdrfile, "w")  
 	cat(xres(raster), "\n", file = thefile)

@@ -115,58 +115,64 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 	return(raster)
 }
  
+ ..startWriting <- function(raster, overwrite) {
+	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+	if (filename(raster) == "") {
+		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
+	}
+	if (!overwrite & file.exists(filename(raster))) {
+		stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+	}
+	raster@file@name <- .setFileExtensionHeader(filename(raster))
+	binraster <- .setFileExtensionValues(filename(raster))
+	attr(raster, "filecon") <- file(binraster, "wb")
+	raster@data@min <- 3e34
+	raster@data@max <- -3e34
+	raster@data@haveminmax <- FALSE
+	raster@file@driver <- 'raster'
+	raster@file@gdalhandle <- list()
+	return(raster)
+}
+
+..stopWriting <- function(raster) {
+	.writeRasterHdr(raster) 
+	close(raster@filecon)
+	raster@data@haveminmax <- TRUE
+	raster@data@source <- 'disk'
+	raster@data@content <- 'nodata'
+	raster@data@values <- vector(length=0)
+	return(raster)
+}		
  
  
 .writeRasterRow <- function(raster, overwrite=FALSE) {
-	if (dataContent(raster) != 'row') { stop('raster does not contain a row') }
-	
-	if (dataIndices(raster)[1] == 1) {
- 	#  FIRST  ROW
-		raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
-		if (filename(raster) == "") {
-			stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
-		}
-		if (!overwrite & file.exists(filename(raster))) {
-			stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
-		}
-		raster@file@name <- .setFileExtensionHeader(filename(raster))
-		binraster <- .setFileExtensionValues(filename(raster))
-		attr(raster, "filecon") <- file(binraster, "wb")
-		raster@data@min <- 3e34
-		raster@data@max <- -3e34
-		raster@data@haveminmax <- FALSE
-		raster@file@driver <- 'raster'
-		raster@file@gdalhandle <- list()
-	}	
-
-	if (raster@file@datatype == "integer") { raster@data@values <- as.integer(round(raster@data@values))  }
-	if (class(values(raster)) == "integer" & raster@file@datatype == "numeric") { raster@data@values  <- as.numeric(values(raster)) }
+	if (dataContent(raster) != 'row') { 
+		stop('raster does not contain a row') 
+	}
+	if (raster@file@datatype == "integer") { 
+		raster@data@values <- as.integer(round(raster@data@values))  
+	}
+	if (class(values(raster)) == "integer" & raster@file@datatype == "numeric") { 
+		raster@data@values  <- as.numeric(values(raster)) 
+	}
+	if (dataIndices(raster)[1] == 1) { 
+		raster <- ..startWriting(raster, overwrite)
+ 	} 
 	
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
-	rsd <- na.omit(raster@data@values) # min and max values
-	if (length(rsd) > 0) {
-		raster@data@min <- min(raster@data@min, min(rsd))
-		raster@data@max <- max(raster@data@max, max(rsd))
-	}	
 
-#	raster@data@values[is.na(raster@data@values)] <-  raster@file@nodatavalue
-	writeBin(as.vector(raster@data@values), raster@filecon, size = raster@file@datasize)
+	writeBin(raster@data@values, raster@filecon, size = raster@file@datasize)
 	
-	if (dataIndices(raster)[2] == ncell(raster)) {
-	# LAST  ROW
-		.writeRasterHdr(raster) 
-		close(raster@filecon)
-		raster@data@haveminmax <- TRUE
-		raster@data@source <- 'disk'
-		raster@data@content <- 'nodata'
-		raster@data@values <- vector(length=0)
-	}		
-	if (dataIndices(raster)[2] > ncell(raster)) {
-		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
+	if (dataIndices(raster)[2] >= ncell(raster)) {
+		raster <- ..stopWriting(raster)
+		if (dataIndices(raster)[2] > ncell(raster)) {
+			warning(paste('You have written beyond the end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
+		}
 	}
 	return(raster)	
 }
+
 
 
 .writeSparse <- function(raster, overwrite=FALSE) {
