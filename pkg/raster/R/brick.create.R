@@ -22,3 +22,31 @@ brickFromStack <- function(stack) {
 brickFromFile <- function(filename, values=FALSE) {
 	stop("not implemented yet")
 }
+
+setGeneric("makeBrick", function(object, ...) standardGeneric("makeBrick"))
+
+setMethod('makeBrick', signature(object='RasterLayer'), function(object, ...)
+	{ 
+		RLlist <- list(...)
+		if (dataContent(object) != 'all'){stop("rasterBricks can only be created from RasterLayers with all data in memory")}
+		for (i in seq(along=object))
+		{
+			if (as(RLlist[[i]],"BasicRaster") != as(RLlist[[i]],"BasicRaster")){stop("RasterLayer objects are not equal in extent, resolution and/or projection")}
+			if (class(RLlist[[i]]) != "RasterLayer"){stop("function only implemented for objects of same class")}
+			if (dataContent(RLlist[[i]]) != 'all'){stop("rasterBricks can only be created when all RasterLayer data are in memory")}
+		}
+		datavalues <- matrix(nrow=ncell(object),ncol=1+length(RLlist))
+		datavalues[,1] <- values(object)
+		for (j in seq(along=object))
+		{
+			datavalues[,j+1] <- values(RLlist[[j]])		
+		}
+		brick <- new("RasterBrick", bbox = getBbox(object), crs=projection(object, asText = FALSE), ncols = ncol(object), nrows = nrow(object))
+		brick@data@values <- datavalues
+		brick@data@nlayers <- as.integer(1+length(RLlist))
+		brick@data@content <- "all"
+		return(brick)
+	}
+)
+
+#makeBrick should also be defined for signature Bbox, RasterStack, and even filename  could be considered.
