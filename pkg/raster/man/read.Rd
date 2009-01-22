@@ -14,8 +14,6 @@
 \alias{readRows}
 \alias{readPartOfRow}
 \alias{readBlock}
-\alias{readRandom}
-\alias{readSkip}
 
 
 \title{Read values from disk}
@@ -30,23 +28,15 @@ readRow(object, rownr)
 readRows(object, startrow, nrows = 3)
 readPartOfRow(object, rownr,  startcol=1, ncolumns=(ncol(object)-startcol+1)) 
 readBlock(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1)) 
-readSkip(raster, maxdim=500, bndbox=NA, asRaster=FALSE)
-readRandom(raster, n=500, na.rm = TRUE)
 }
 
 \arguments{
   \item{object}{a Raster* object}
-  \item{raster}{a RasterLayer object}
   \item{rownr}{the row number of the row to read  (between 1 and nrows(raster))}
   \item{startrow}{the frist row to read  (>= 1 & <= nrows(raster))}
   \item{nrows}{the number of the rows to read (>= 1 & <= nrows(raster))}
   \item{startcol}{first column of the block ( (>= 1 & <= nrows(raster))}
   \item{ncolumns}{number of columns to read on this each row ( (>= 1 & <= ncols(raster) & > firstcol)}
-  \item{maxdim}{sets the density for regular sampling}  
-  \item{bndbox}{sets a bouding box within the raster, for regular sampling within that box}  
-  \item{asRaster}{Logical. If \code{TRUE}, a rasterLayer is returned, rather then the sampled values}  
-  \item{n}{size of random sample}  
-  \item{na.rm}{Logical. If \code{TRUE} NA values are removed from random sample}  
 }
 
 
