@@ -146,7 +146,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	raster@file@nodatavalue <- nodataval
 	
 	inidatatype <- trim(inidatatype)
-	if (substr(inidatatype, 1, 3) == "ForceIntOutput") { datatp="integer"
+	if (substr(inidatatype, 1, 3) == "INT") { datatp="integer"
 	} else { datatp="numeric" }
 	datasz <- as.integer(substr(inidatatype, 4, 4))
 	raster <- setDatatype(raster, datatype=datatp, datasize=datasz)

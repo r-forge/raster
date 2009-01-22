@@ -31,7 +31,7 @@ rowFromY(object, y)
 cellFromXY(object, xy)
 xFromCol(object, colnr)
 yFromRow(object, rownr)
-xyFromCell(object, cell, asSpatialPoints, projstring)
+xyFromCell(object, cell, asSpatialPoints=FALSE)
 cxyFromBbox(object, bbox)
 validCells(object, cell) 
 validCols(object, colnr) 
@@ -48,7 +48,6 @@ validRows(object, rownr)
   \item{rownr}{row number(s)}
   \item{bbox}{A boundinBox object (or an object that can be coerced to a BoundingBox object)}
   \item{asSpatialPoints}{return a SpatialPoints object (sp package) instead of a matrix}
-  \item{projstring}{PROJ4 format character string to set projection for SpatialPoints object}
 }
   
 \details{

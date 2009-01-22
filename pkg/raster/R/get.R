@@ -106,7 +106,7 @@ rowFromY <- function ( object, y )	{
 }	
 	
 
-xyFromCell <- function(object, cell, asSpatialPoints=FALSE, projstring="") {
+xyFromCell <- function(object, cell, asSpatialPoints=FALSE) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cell <- round(cell)
 	xy <- matrix(data = NA, ncol=2, nrow=length(cell))
@@ -116,7 +116,7 @@ xyFromCell <- function(object, cell, asSpatialPoints=FALSE, projstring="") {
 	xy[,2] <- yFromRow(object, rownr) 		
 	colnames(xy) <- c("x", "y")
 	if (asSpatialPoints) {
-		xy <- SpatialPoints(xy, newCRS(projstring))
+		xy <- SpatialPoints(xy, projection(object, asText=FALSE))
 	}
 	return(xy)
 }  
