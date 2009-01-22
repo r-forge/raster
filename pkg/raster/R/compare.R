@@ -54,8 +54,9 @@ compare <- function(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FAL
 		if (orig) {
 			dif1 <- origin(objects[[1]]) - origin(objects[[i]])
 			dif2 <- abs(origin(objects[[1]])) - origin(objects[[i]])
-			dif3 <- pmin(dif1, dif2)
-			if (!(isTRUE(all.equal(dif3, c(0,0), tolerance=tolerance, scale=minres)))) {
+			dif3 <- abs(origin(objects[[i]])) - origin(objects[[1]])
+			dif4 <- pmin(dif1, dif2, dif3)
+			if (!(isTRUE(all.equal(dif4, c(0,0), tolerance=tolerance, scale=minres)))) {
 				result <- F
 				if (stopiffalse) { stop('different origin') }
 				if (showwarning) { warning('different origin') }
