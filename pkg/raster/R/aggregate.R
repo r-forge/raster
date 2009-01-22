@@ -78,7 +78,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 				v <- c(v, vals)
 			} else {
 				outraster <- setValues(outraster, vals, r)
-				outraster <- writeRaster(outraster, overwrite)
+				outraster <- writeRaster(outraster, overwrite=overwrite)
 			}
 		} 
 		if (filename(outraster) == "") { 

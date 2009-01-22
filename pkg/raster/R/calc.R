@@ -60,7 +60,7 @@ mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=
 			object <- readRow(object, r)
 			vals <- apply(values(object), 1, fun)
 			outraster <- setValues(outraster, vals, r) 
-			outraster <- writeRaster(outraster, overwrite)
+			outraster <- writeRaster(outraster, overwrite=overwrite)
 		}
 	}		
 	return(outraster)

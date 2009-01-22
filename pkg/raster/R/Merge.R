@@ -78,7 +78,7 @@ Merge <- function(rasters, tolerance=0.05, filename="", overwrite=FALSE) {
 		}
 		if (filename(outraster) != '') {
 			outraster <- setValues(outraster, rd, r)
-			outraster <- writeRaster(outraster, overwrite)
+			outraster <- writeRaster(outraster, overwrite=overwrite)
 		} else {
 			v <- c(v, rd)
 		}

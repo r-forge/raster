@@ -35,12 +35,12 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 
 	if (format=='raster') {
 		if (dataContent(raster) == 'row' ) {
-			raster <- .writeRasterRow(raster, overwrite)
+			raster <- .writeRasterRow(raster, overwrite=overwrite)
 		} else {
-			raster <- .writeRasterAll(raster, overwrite)
+			raster <- .writeRasterAll(raster, overwrite=overwrite)
 		}  
 	} else if (format=='ascii') {
-		raster <- .writeAscii(raster, overwrite)
+		raster <- .writeAscii(raster, overwrite=overwrite)
 	} else { 
 		.isSupportedGDALFormat(format)
 		if (dataContent(raster) == 'row' ) {
@@ -104,7 +104,7 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 	}
 
 	if (raster@data@content == 'sparse') { 
-		raster <- .writeSparse(raster, overwrite) 
+		raster <- .writeSparse(raster, overwrite=overwrite) 
 	} else {
 		binraster <- .setFileExtensionValues(filename(raster))
 		con <- file(binraster, "wb")
@@ -156,7 +156,7 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 		raster@data@values  <- as.numeric(values(raster)) 
 	}
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- ..startWriting(raster, overwrite)
+		raster <- ..startWriting(raster, overwrite=overwrite)
  	} 
 	
 	raster@data@values[is.nan(raster@data@values)] <- NA

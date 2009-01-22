@@ -44,7 +44,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE) {
 				v <- c(v, values(raster))
 			} else {
 				outraster <- setValues(outraster, values(raster), rownr)
-				outraster <- writeRaster(outraster, overwrite)
+				outraster <- writeRaster(outraster, overwrite=overwrite)
 			}	
 			rownr <- rownr + 1
 		} 
