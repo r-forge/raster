@@ -1,7 +1,7 @@
 \name{write}
 
 \alias{writeRaster}
-\alias{rasterFormats}
+\alias{rasterWriteFormats}
 
 \title{Write raster data to a file}
 
@@ -12,7 +12,7 @@
 
 \usage{
   writeRaster(raster, format='raster', overwrite=FALSE)
-  rasterFormats()
+  rasterWriteFormats()
 }
 
 \arguments{
@@ -25,21 +25,36 @@
 	Values in a \code{RasterLayer} object are written to a file. Relatively small datasets can be loaded into memory, manipulated, and saved to disk in their entirety. 
 	Large datasets can be read and written row by row. 
 	When writing by row, you must write all rows, and you must write them in sequence. Start at row=1, and end at row=nrow(raster). You cannot overwrite a single row in an existing raster file.
-	rasterFormats returns a matrix of the file formats (the "drivers") that are supported.
+	rasterWriteFormats returns a matrix of the file formats (the "drivers") that are supported.
 
 Supported formats include 
-	\item{Format}{Long name}
-	\item{raster}{'Native' raster package format}
-	\item{ascii}{Arc Ascii format}
-	\item{ENVI}{ENVI .hdr Labelled}
-	\item{EHdr}{ESRI .hdr Labelled}
-	\item{ERS}{ERMapper .ers Labelled}
-	\item{GTiff}{GeoTiff}
-	\item{HFA}{Erdas Imagine Images (.img)}
-	\item{ILWIS}{ILWIS Raster Map}
-	\item{PAux}{PCI .aux Labelled}
-	\item{PCIDSK}{PCIDSK Database File}
-	\item{RST}{Idrisi Raster A.1}
+Format
+	Long name
+
+raster
+	'Native' raster package format
+	
+ascii
+	Arc Ascii format
+	
+	ENVI        ENVI .hdr Labelled
+	
+	EHdr        ESRI .hdr Labelled
+	
+	ERS         ERMapper .ers Labelled
+	
+	GTiff       GeoTiff
+	
+	HFAErdas    Imagine Images (.img)
+	
+	ILWIS       ILWIS Raster Map
+	
+	PAux        PCI .aux Labelled
+	
+	PCIDSK      PCIDSK Database File
+	
+	RST         Idrisi Raster A.1
+	
 }
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}

@@ -8,14 +8,25 @@
 
 #if (!isGeneric("setValues")) {
 #	setGeneric("setValues", function(object, values, rownr)
-#		standardGeneric("xyValues"))   }	
+#		standardGeneric("setValues"))   }	
 
 	
 setValues <- function(raster, values, rownr=-1) {
 	if (!is.vector(values)) {stop('values must be a vector')}
-	if (length(values) == 0) {	stop('length(values==0). If this is intended then use clearValues(raster)') }
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {stop('data must be values')}
+	
 	rownr <- round(rownr)
+
+	if (length(values) == 0) {	
+		return(clearValues(raster)) 
+	}
+	if (length(values) == 1) {	
+		if (rownr > 0) { 
+			values <- rep(values, ncol(raster))
+		} else {
+			values <- rep(values, ncell(raster))
+		}
+	}
 	if (length(values) == ncell(raster)) { 
 		if (rownr > 0) {
 			stop("if setting all values, rownr must be < 1")
@@ -44,18 +55,13 @@ setValues <- function(raster, values, rownr=-1) {
 
 
 clearValues <- function(object) {
-	object@data@content <- 'nodata'
-	object@data@indices <- ""
 	if (class(object) == 'RasterLayer') {
-		object@data@values <- vector()
+		object <- setRaster(object)
 	} else {
 		object@data@values <- matrix(NA,0,0)
 	}
-	if (class(object) == 'RasterLayer') {
-		object@data@min <- NA
-		object@data@max <- NA
-		object@data@haveminmax <- FALSE
-	}
+	object@data@content <- 'nodata'
+	object@data@indices <- ""
 	return(object)
 }
 

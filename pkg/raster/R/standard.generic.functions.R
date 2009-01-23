@@ -33,15 +33,42 @@ setMethod('summary', signature(object='RasterStackBrick'),
 	}
 )	
 
-setMethod('summary', signature(object='RasterLayer'), 
-	function(object, ...) {
-		cat ("Cells: " , ncell(object), '\n')
-		if ( dataContent(object) == "all") {
-			cat("NAs  : ", sum(is.na(values(object))), "\n")
-			summary(values(object))
+
+
+setClass('RasterLayerSummary',
+	representation (
+		ncell = 'numeric',
+		dataContent = 'character',
+		NAs = 'numeric',
+		values = 'matrix'
+	)
+)
+	
+setMethod('show', signature(object='RasterLayerSummary'), 	
+	function(object) {
+		cat ("Cells: " , object@ncell, "\n")
+		if ( object@dataContent == "all") {
+			cat("NAs  : ", object@NAs, "\n")
+			cat("\nValues")
+			tab <- as.table(object@values) 
+			colnames(tab) <- ""
+			print(tab)
 		} else {
 			cat("values not in memory\n")
 		}
+	}	
+)
+	
+setMethod('summary', signature(object='RasterLayer'), 
+	function(object, ...) {
+		sumobj <- new("RasterLayerSummary")
+		sumobj@ncell <- ncell(object)
+		sumobj@dataContent <- dataContent(object) 
+		if ( sumobj@dataContent == "all") {
+			sumobj@NAs <- sum(is.na(values(object)))
+			sumobj@values <- as.matrix( summary(values(object)) )
+		} 
+		return(sumobj)
 	}	
 )
 

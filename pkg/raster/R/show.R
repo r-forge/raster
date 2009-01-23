@@ -48,9 +48,14 @@ setMethod ('show' , 'RasterLayer',
 		if (object@data@haveminmax) {
 			cat('min value   :' , minValue(object), '\n')
 			cat('max value   :' , maxValue(object), '\n')
-		} else { #if (object@data@source == 'disk')  {
-			cat('min value   : NA \n')
-			cat('max value   : NA \n')
+		} else { 
+			if (object@data@source == 'disk')  {
+				cat('min value   : ? \n')
+				cat('max value   : ? \n')
+			} else {
+				cat('min value   :  \n')
+				cat('max value   :  \n')		
+			}
 		}
 		cat('projection  :' , projection(object, TRUE), '\n')
 		cat('xmin        :' , xmin(object), '\n')

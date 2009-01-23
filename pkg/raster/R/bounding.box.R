@@ -86,9 +86,29 @@ setMethod('getBbox', signature(object='vector'),
 )
 
 
+bbIndices <- function(object, bndbox) {
+	srow <- rowFromY(object, bndbox@ymax)
+	if (trunc((ymin(object) - bndbox@ymin)/yres(object)) == (ymin(object) - bndbox@ymin)/yres(object)) { 
+		bndbox@ymin <- bndbox@ymin + 0.5 * yres(object) 
+	}
+	erow <- rowFromY(object, bndbox@ymin)
+	scol <- colFromX(object, bndbox@xmin)
+	if (trunc((xmax(object) - bndbox@xmax)/xres(object)) == (xmax(object) - bndbox@xmax)/xres(object)) { 
+		bndbox@xmax <- bndbox@xmax - 0.5 * xres(object) 
+	}
+	ecol <- colFromX(object, bndbox@xmax)
+	cell <- cellFromRowCol(object, srow, scol):cellFromRowCol(object, srow, ecol)
+	if (erow > srow) {
+	# ouch, vectorize, please
+		for (r in (srow+1):erow) {
+			cell2 <- cellFromRowCol(object, r, scol):cellFromRowCol(object, r, ecol)
+			cell <- c(cell, cell2)
+		}
+	}
+	return(cell)
+}
+
 setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
-	xrs <- xres(object)
-	yrs <- yres(object)
 	oldbb <- getBbox(object)
 	bb <- getBbox(bndbox)
 	
@@ -115,18 +135,31 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 		if (abs(bb@ymax - mn) > abs(bb@ymax - mx)) { bb@ymax <- mx } else { bb@ymax <- mn }
 	}
 	
-	object@bbox <- bb
+	newobj <- clearValues(object)
+	newobj@bbox <- bb
+	
 	if (keepres) {
-		nc <- as.integer(round( (xmax(object) - xmin(object)) / xrs ))
+		xrs <- xres(object)
+		yrs <- yres(object)
+		nc <- as.integer(round( (xmax(newobj) - xmin(newobj)) / xrs ))
 		if (nc < 1) { stop( "xmin and xmax are less than one cell apart" ) 
-		} else { object@ncols <- nc }
-		nr <- as.integer(round( (ymax(object) - ymin(object)) / xrs ) )
+		} else { newobj@ncols <- nc }
+		nr <- as.integer(round( (ymax(newobj) - ymin(newobj)) / xrs ) )
 		if (nr < 1) { stop( "ymin and ymax are less than one cell apart" )
-		} else { object@nrows <- nr }
-		object@bbox@xmax <- object@bbox@xmin + ncol(object) * xrs
-		object@bbox@ymax <- object@bbox@ymin + nrow(object) * yrs
+		} else { newobj@nrows <- nr }
+		newobj@bbox@xmax <- newobj@bbox@xmin + ncol(newobj) * xrs
+		newobj@bbox@ymax <- newobj@bbox@ymin + nrow(newobj) * yrs
+		
+		if (dataContent(object) == 'all') {
+			indices <- bbIndices(object, bb)
+			newobj <- setValues(newobj, values(object)[indices])
+		}
+	} else if (ncol(object)==ncol(newobj) & nrow(object)==nrow(newobj)) {
+		if (dataContent(object) == 'all') {
+			newobj <- setValues(newobj, values(object))
+		}
 	}
-	return(object)
+	return(newobj)
 }
 
 
