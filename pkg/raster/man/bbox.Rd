@@ -10,7 +10,7 @@
 \alias{newBbox}
 \alias{setBbox}
 \alias{changeBbox}
-
+\alias{cellsFromBbox}
   
 \title{Bounding box functions}
 \description{
@@ -27,6 +27,7 @@ getBbox(object)
 newBbox(xmn, xmx, ymn, ymx)
 setBbox(object, bndbox, keepres=FALSE, snap=FALSE)
 changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) 
+cellsFromBbox(object, bndbox)
 }
 
 \arguments{

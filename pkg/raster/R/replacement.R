@@ -48,6 +48,9 @@ setMethod("[", "RasterLayer",
 setReplaceMethod("[", "RasterLayer",  
 	function(x, i, j, value) {
 		if  (!missing(j)) {	stop("incorrect number of dimensions") }
+		if (class(i) == "RasterLayer") {
+			i <- as.logical( .getRasterValues(i) ) 
+		}
 # what about data rows ?		
 		if (dataContent(x) == 'nodata') {
 			if (ncell(x) < 1000000) {

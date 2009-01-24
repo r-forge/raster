@@ -86,7 +86,8 @@ setMethod('getBbox', signature(object='vector'),
 )
 
 
-bbIndices <- function(object, bndbox) {
+cellsFromBbox <- function(object, bndbox) {
+	bndbox <- getBbox(bndbox)
 	srow <- rowFromY(object, bndbox@ymax)
 	if (trunc((ymin(object) - bndbox@ymin)/yres(object)) == (ymin(object) - bndbox@ymin)/yres(object)) { 
 		bndbox@ymin <- bndbox@ymin + 0.5 * yres(object) 
@@ -151,7 +152,7 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 		newobj@bbox@ymax <- newobj@bbox@ymin + nrow(newobj) * yrs
 		
 		if (dataContent(object) == 'all') {
-			indices <- bbIndices(object, bb)
+			indices <- cellsFromBbox(object, bb)
 			newobj <- setValues(newobj, values(object)[indices])
 		}
 	} else if (ncol(object)==ncol(newobj) & nrow(object)==nrow(newobj)) {
