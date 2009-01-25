@@ -24,7 +24,6 @@
 \alias{nlayers}
 \alias{nlayers,BasicRaster-method}
 \alias{nlayers,Raster-method}
-\alias{nlayers,RasterBrick-method}
 \alias{nlayers,RasterStack-method}
 \alias{layers}
 \alias{band}

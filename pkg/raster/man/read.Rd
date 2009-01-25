@@ -17,7 +17,7 @@
 
 
 \title{Read values from disk}
-\description{Read values from a raster file associated with a RasterLayer, RasterStack or RasterBrick object into memory.
+\description{Read values from a raster file associated with a RasterLayer or RasterStack object into memory.
 You can either read all the data (memory permitting), or read data by row, part of row, block, by cellnumber, or for (x,y) coordinates. Data can be read from 'native raster' binary files, as well as for other formats that are supported by the rgdal package.
 }
 

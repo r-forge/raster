@@ -67,7 +67,7 @@
 }
 
 .getAllTypeOfValues <- function(x, y, i) {
-	if ( (class(y) == 'RasterLayer' | class(y) == 'RasterStack' | class(y) == 'RasterBrick') & compare(c(x, y)) ) {			
+	if ( extends(class(y), "Raster") & compare(c(x, y)) ) {			
 		return(.getRasterValues(y))
 	} else if (is.atomic(y)) {
 		return(rep(y, ncell(x)))

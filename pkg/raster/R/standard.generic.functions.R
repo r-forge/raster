@@ -19,7 +19,7 @@ setMethod('ncol', signature(x='BasicRaster'),
 
 
 
-setMethod('summary', signature(object='RasterStackBrick'), 
+setMethod('summary', signature(object='RasterStack'), 
 	function(object, ...) {
 		if (dataContent(object) == 'all') {
 			for (n in 1:nlayers(object)) {

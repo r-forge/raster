@@ -9,7 +9,7 @@
 \description{
   values returns cell values for a Raster* object (typically after read* has been used). 
   valuesRow returns values for a row of values in the case that all values are in memory (if they are on disk, use readRow() and values())
-  minValue and maxValue return the extreme data values for a RasterLayer (or layer in a RasterStack or Brick)
+  minValue and maxValue return the extreme data values for a RasterLayer (or layer in a RasterStack)
 }
 
 \usage{
@@ -25,7 +25,7 @@ maxValue(object, layer=1)
   \item{format}{use \code{vector} to get the data as a single vector or \code{matrix} to get them as a matrix}
   \item{names}{If TRUE, row and col names are provided}
   \item{rownr}{The rownumber for which values are returned}
-  \item{layer}{layer number (for RasterStack and RasterBrick objects}
+  \item{layer}{layer number (for RasterStack objects}
 }
   
 

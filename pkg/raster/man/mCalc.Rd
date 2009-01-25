@@ -3,7 +3,7 @@
 
 \title{ multiple layers calculate }
 \description{
-  Calculate values for a new raster, from multiple existing RasterLayers (RasterStack or RasterBrick)
+  Calculate values for a new raster from the layers in a RasterStack
 }
 
 \usage{
@@ -11,7 +11,7 @@ mCalc(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
 }
 
 \arguments{
-  \item{object}{ a RasterStack or RasterBrick object }
+  \item{object}{ a RasterStack object }
   \item{fun}{ the function to be applied }
   \item{filename}{ output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot }
   \item{overwrite}{ logical to indicate whether an existing output file should be overwritten }

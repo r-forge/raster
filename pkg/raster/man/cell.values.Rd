@@ -12,7 +12,7 @@
 \title{Get raster properties}
 \description{
   cellValues and xyValues return a vector of values for specified cells or xy coordiates
-  minValue and maxValue return the extreme data values for a RasterLayer (or layer in a RasterStack or Brick)
+  minValue and maxValue return the extreme data values for a RasterLayer (or layer in a RasterStack)
 }
 
 \usage{

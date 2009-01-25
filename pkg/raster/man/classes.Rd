@@ -7,18 +7,16 @@
 \alias{Raster-class}
 \alias{RasterLayer-class}
 \alias{RasterStack-class}
-\alias{RasterBrick-class}
 \alias{show,BoundingBox-method}
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
-\alias{show,RasterBrick-method}
 \alias{hist,Raster-method}
 \alias{plot,Raster,missing-method}
 \alias{plot,Raster,numeric-method}
 \alias{dim,BasicRaster-method}
 \alias{summary,RasterLayer-method}
-\alias{summary,RasterStackBrick-method}
+\alias{summary,RasterStack-method}
 \alias{[,RasterLayer-method}
 \alias{[<-,RasterLayer-method}
 \alias{[,RasterStack-method}
@@ -26,23 +24,22 @@
 \alias{[[<-,RasterLayer,ANY,missing-method}
 
 \title{Classes for handling raster data }
-\description{ \code{RasterLayer}, \code{RasterStack}, and \code{RasterBrick} (Raster* in short) are all classes for handling spatial raster (grid) data.
+\description{ \code{RasterLayer}, \code{RasterStack} (Raster* in short) are all classes for handling spatial raster (grid) data.
 
  RasterLayer represents a single layer raster.
- RasterStack represents a collection of RasterLayers with the same extent and resolution. 
- RasterBrick represents a single multi-layer raster.
+ RasterStack represents a collection of RasterLayers with the same extent and resolution; for example a multi-band remote sensing image. 
  
- The difference between a RasterStack is that it typically points to several seperate data files on disk, whereas a RasterBrick points to a single file on disk. (But both can also not point to any file at all)
+ The difference between a RasterStack is that it typically points to several seperate data files on disk, but it could also point to different bands from a single file (or not not point to any file at all)
  
  Apart from with the normal new(" ") method, objects can be created with the following functions (among others)
- newRaster(), RasterFromFile(), newBrick(), BrickFromFile(), StackFromFile(), StackFromRasters(), StackFromFiles()
+ newRaster(), RasterFromFile(), StackFromFile(), StackFromRasters(), StackFromFiles()
  
- RasterLayer and RasterBrick objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package: asRasterLayer(), asRasterBrick()
+ RasterLayer and RasterStack objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package: asRasterLayer(), asRasterStack()
  Vice versa, Raster* objects can be coerced into a sp type oject with asSpGrid(). You can also use SetAs() 
  
  generic methods implemented for these classes are: 
  \code{summary}, \code{show}, \code{dim}, \code{hist}, \code{plot} (with a single object as argument, and in the case of hist and plot, with additional ... parameters)
- \code{plot} can also be supplied with an additional numeric argument indicating the layer in a RasterStack or RasterBrick object that should be plotted (mapped)
+ \code{plot} can also be supplied with an additional numeric argument indicating the layer in a RasterStack object that should be plotted (mapped)
  \code{plot} can also be supplied with the two RasterLayer objects, creating a scatter plot (if they have matching extent and resolution)
  \code{[} is implemented for RasterLayer. It is equivalent to setValues() 
  
@@ -52,7 +49,7 @@
  In case you really want a Raster object, rather than one of its decendants, to work with you can easily create your own class that is the same (but not virtual) with a command like this:
 \code{setClass ('BasicRaster', contains = 'Raster')}
  Raster includes the \code{BoundingBox} class that is not virtual (e.g. see newBbox() )
- RasterLayer includes the classes \code{RasterFile} and \code{SingleLayerData}, whereas RasterStack and RasterBrick contain \code{RasterFile} and \code{MultipleLayerData}
+ RasterLayer includes the classes \code{RasterFile} and \code{SingleLayerData}, whereas RasterStack contains \code{RasterFile} and \code{MultipleLayerData}
  These classes are not further described here, because users should not need to directly access the slots in these classes. There are functions for that. Using these functions
  is much safer because a change in one slot should often affect the values in other slots. The 'setter' functions such as setValues take care of that. 
 

@@ -151,26 +151,6 @@ setClass('MultipleRasterData',
 )
 
 
-setClass ('RasterBrick',
-	contains = 'Raster',
-	representation (
-		data = 'MultipleRasterData',
-		title = 'character',
-		file = 'RasterFile',
-		sparse = 'logical',
-		history = 'vector'
-		),
-	prototype (
-		sparse = FALSE,
-		history = vector(mode='character')
-		),
-	validity = function(object)
-	{
-	}
-)
-	
-
-
 
 	
 setClass ('RasterStack',
@@ -195,6 +175,3 @@ setClass ('RasterStack',
 
 
 
-setClassUnion("RasterStackBrick", c("RasterStack", "RasterBrick"))
-
-#setClassUnion("SpatialPixelsGrid", c("SpatialPixels", "SpatialGrid"))

@@ -3,17 +3,15 @@ setAs('RasterLayer', 'SpatialGridDataFrame',
 	function(from){ return(asSpGrid (from)) }
 )
 
-setAs('SpatialGridDataFrame', 'RasterBrick',
-	function(from){ return(asRasterBrick (from)) }
+
+setAs('SpatialGridDataFrame', 'RasterStack',
+	function(from){ return(asRasterStack (from)) }
 )
 
 setAs('SpatialGridDataFrame', 'RasterLayer', 
 	function(from){ return(asRasterLayer (from)) }
 )
 
-setAs('RasterBrick', 'RasterLayer', 
-	function(from){ return(asRasterLayer (from)) }
-)
 
 setAs('RasterStack', 'RasterLayer', 
 	function(from){ return(asRasterLayer (from)) }
@@ -61,7 +59,7 @@ setMethod('asRasterLayer', signature(object='RasterLayer', index='numeric'),
 	}
 )
 
-setMethod('asRasterLayer', signature(object='RasterStackBrick', index='numeric'), 
+setMethod('asRasterLayer', signature(object='RasterStack', index='numeric'), 
 	function(object, index){
 		rs <- newRaster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
 		if (dataContent(object) == 'all') {
@@ -109,11 +107,11 @@ setMethod('asRasterLayer', signature(object='SpatialGridDataFrame', index='numer
 )
 
 
-asRasterBrick <- function(spgrid) {
-	brick <- newBrick()
-	brick <- setBbox(brick, getBbox(spgrid))
-	brick <- setProjection(brick, spgrid@proj4string)
-	brick <- setRowCol(brick, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
+asRasterStack <- function(spgrid) {
+	stk <- new("RasterStack")
+	stk <- setBbox(stk, getBbox(spgrid))
+	stk <- setProjection(stk, spgrid@proj4string)
+	stk <- setRowCol(stk, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
 
 	if (class(spgrid)=='SpatialPixels') {
 		# do noting, there is no data
@@ -121,16 +119,16 @@ asRasterBrick <- function(spgrid) {
 	} else if (class(spgrid)=='SpatialPixelsDataFrame') {
 		cells <- spgrid@grid.index
 		if (length(cells)==0) {
-			cells <- cellFromXY(brick, spgrid@coords)
+			cells <- cellFromXY(stk, spgrid@coords)
 		}
 		vals <- as.matrix(spgrid@data)
-		brick <- setValuesSparse(brick, cells, vals)
+		stk <- setValuesSparse(stk, cells, vals)
 	} else if ( class(spgrid)=='SpatialGrid' ) {
 		# do nothing, there is no data
 	} else if (class(spgrid)=='SpatialGridDataFrame' ) {
-		brick <- setValues(brick, as.matrix(spgrid@data))
+		stk <- setValues(stk, as.matrix(spgrid@data))
 	}
-	return(brick)
+	return(stk)
 }
 
 

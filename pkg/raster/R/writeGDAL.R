@@ -16,7 +16,7 @@
 	
 # this is a RasterLayer hence nbands = 1:
     nbands = nlayers(raster)
-# but we keep this for later (stack, brick)
+# but we keep this for later (RatserStack)
 
 	raster <- setFilename(raster, trim(filename(raster)))
 	if (filename(raster) == "") {	stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')	}

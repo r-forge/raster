@@ -30,8 +30,8 @@ setRes <- function(object, xres, yres=xres) {
 }
 
 setRaster <- function(object, filename="", values=NA) {
+
 	if (class(object) == 'RasterStack') { object <- asRasterLayer(object, 1) }
-	if (class(object) == 'RasterBrick') { object <- asRasterLayer(object, 1) }
 	if (class(object) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
 
 	filename <- trim(filename)

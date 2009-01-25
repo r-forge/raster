@@ -107,18 +107,11 @@ setMethod('nlayers', signature(object='RasterStack'),
     }
 )
 
-setMethod('nlayers', signature(object='RasterBrick'), 
-	function(object){
-		return(object@data@nlayers) 
-    }
-)
 
 
 layers <- function(object) {
 	if (class(object) == "RasterLayer") {
 		return(filename(object))
-	} else 	if (class(object) == "RasterBrick") {
-		return(paste(filename(object), "with", nlayers(object), "layers"))
 	} else if (class(object) == "RasterStack") {
 		l <- vector('character')
 		for (i in 1:nlayers(object)) {
@@ -130,10 +123,10 @@ layers <- function(object) {
 
 
 band <- function(object) {
-	if (class(object) == "RasterBrick") {
-		return(-1)
-	} else {
+	if (class(object) == "RasterLayer") {
 		return(object@file@band)
+	} else {
+		stop("only implemented for RasterLayer objects")
 	}	
 }
 
