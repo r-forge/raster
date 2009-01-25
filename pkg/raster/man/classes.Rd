@@ -11,6 +11,7 @@
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
+\alias{show,RasterLayerSummary-method}
 \alias{hist,Raster-method}
 \alias{plot,Raster,missing-method}
 \alias{plot,Raster,numeric-method}
