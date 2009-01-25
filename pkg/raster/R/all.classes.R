@@ -20,8 +20,7 @@ setClass('BoundingBox',
 		ymin = 0,
 		ymax = 1
 	),
-	validity = function(object)
-	{
+	validity = function(object)	{
 		c1 <- (object@xmin <= object@xmax)
 		c2 <- (object@ymin <= object@ymax)
 		return(c1 & c2)
@@ -41,8 +40,7 @@ setClass ('BasicRaster',
 		nrows= as.integer(1),
 		crs = CRS(as.character(NA))
 	),
-	validity = function(object)
-	{
+	validity = function(object) {
 		c1 <- (object@ncols > 0)
 		c2 <- (object@nrows > 0)
 		return(c1 & c2)
@@ -83,8 +81,7 @@ setClass('RasterFile',
 		band = as.integer(1),
 		bandorder = 'BIL'
 	),
-	validity = function(object)
-	{
+	validity = function(object) {
 	}
 )	
 
@@ -94,24 +91,23 @@ setClass('SingleLayerData',
 		values='vector', 
 		content='character', #nodata, all, row, block, sparse
 		indices = 'vector',
-		colnames = 'character',
+		colname = 'character',
 		haveminmax = 'logical',
-		min = 'vector',
-		max = 'vector',
+		min = 'numeric',
+		max = 'numeric',
 		source='character' # ram, disk
 		),
 	prototype (	
 		values=vector(),
 		content='nodata', 
 		indices = vector(mode='numeric'),
-		colnames = '',
+		colname = '',
 		haveminmax = FALSE,
-		min = numeric(0),
-		max = numeric(0),
+		min = Inf,
+		max = -Inf,
 		source='ram'
 	),	
-	validity = function(object)
-	{
+	validity = function(object) {
 	}
 )
 
@@ -136,17 +132,22 @@ setClass('MultipleRasterData',
 		content='character', #nodata, all, row, block, sparse
 		indices = 'vector',
 		colnames = 'vector',
-		nlayers='integer'
+		nlayers='integer',
+		haveminmax = 'logical',
+		min = 'numeric',
+		max = 'numeric'
 		),
 	prototype (	
 		values=matrix(NA,0,0),
 		content='nodata', 
 		indices =vector(mode='numeric'),
 		colnames =vector(mode='character'),
-		nlayers=as.integer(0)
+		nlayers=as.integer(0),
+		haveminmax = FALSE,
+		min = Inf,
+		max = -Inf
 	),	
-	validity = function(object)
-	{
+	validity = function(object) {
 	}
 )
 
@@ -157,21 +158,17 @@ setClass ('RasterStack',
 	contains = 'Raster',
 	representation (
 	    filename ='character',
-		rasters ='list',
+		layers ='list',
 		data = 'MultipleRasterData'	
 		),
 	prototype (
 		filename='',
-		rasters = list()
+		layers = list()
 		),
-	validity = function(object)
-	{
-		cond1 <- length(object@rasters) == object@data@nlayers
-		#cond2 <- Are the rasters equal in dimensions etc.? The exact implementation will depend on the format of the raster@data slot (list, array, vector)
-		cond <- cond1 #& cond2
+	validity = function(object) {
+		cond1 <- length(object@layers) == object@data@nlayers
+		cond <- cond1
 		return(cond)
 	}
 )
-
-
 

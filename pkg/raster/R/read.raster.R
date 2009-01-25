@@ -298,7 +298,7 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 
 .stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
 	for (i in seq(nlayers(rstack))) {
-		raster <- readPartOfRow(rstack@rasters[[i]], rownumber, startcol, ncolumns)
+		raster <- readPartOfRow(rstack@layers[[i]], rownumber, startcol, ncolumns)
 		if ( i == 1 )  {
 			rstack@data@values <- as.matrix(values(raster))
 			rstack@data@content <- dataContent(raster)
@@ -313,21 +313,17 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 
 .stackReadCells <- function(object, cells) {
 		for (i in seq(nlayers(object))) {
-			v <- .rasterReadCells(object@rasters[[i]], cells)
+			v <- .rasterReadCells(object@layers[[i]], cells)
 			if (i == 1) {
 				result <- v
 			} else {
 				result <- cbind(result, v)
-	#			colnames(result)[length(result[1,])] <- rstack@rasters[[i]]@file@shortname
+	#			colnames(result)[length(result[1,])] <- rstack@layers[[i]]@file@shortname
 			}
 		}
 		if (!(is.null(dim(result)))) {
 			for (i in seq(nlayers(object))) {
-				label <- object@rasters[[i]]@file@shortname
-				if (nchar(label) == "") { 
-					label <- paste("raster_", i, sep="") 
-				}
-				colnames(result)[i] <- label
+				colnames(result) <- object@data@colnames
 			}
 		}	
 		return(result)

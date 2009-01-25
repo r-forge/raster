@@ -4,8 +4,7 @@
 # Version 0.8
 # Licence GPL v3
 
-.cs <- function(a,b)
-{
+.cs <- function(a,b) {
 	aRep <- rep(a,times=length(b))
 	out <- cbind(aRep,as.integer(aRep+rep(b,each=length(a))),deparse.level=0)
 	return(out)
@@ -21,8 +20,10 @@
 #	return(raster)
 #}
 
-adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConnect)
-{
+adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConnect) {
+
+	if (directions=="Bishop") { return(.adjBishop(raster, fromCells, toCells, outerMeridianConnect)) }
+
 	nCols <- ncol(raster)
 	nCells <- ncell(raster)
 	
@@ -241,8 +242,9 @@ adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConne
 	return(fromto)
 }
 
-adjBishop <- function(raster, fromCells, toCells, outerMeridianConnect)
-{
+
+
+.adjBishop <- function(raster, fromCells, toCells, outerMeridianConnect)  {
 	nCols <- ncol(raster)
 	nCells <- ncell(raster)
 	

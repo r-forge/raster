@@ -48,7 +48,7 @@ mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=
 		stop("function 'fun' returns more than one value") 
 	}
 
-	outraster <- setRaster(object@rasters[[1]], filename)
+	outraster <- setRaster(object@layers[[1]], filename)
 	if (filename(outraster)=="") {
 		object <- readAll(object)
 		outraster <- setValues(outraster, apply(values(object), 1, fun)) 

@@ -55,13 +55,13 @@ setValues <- function(raster, values, rownr=-1) {
 
 
 clearValues <- function(object) {
-	if (class(object) == 'RasterLayer') {
-		object <- setRaster(object)
-	} else {
-		object@data@values <- matrix(NA,0,0)
-	}
 	object@data@content <- 'nodata'
-	object@data@indices <- ""
+	object@data@indices = vector(mode='numeric')
+	if (class(object) == 'RasterStack') {
+		object@data@values <- matrix(NA,0,0)
+	} else {
+		object@data@values <- vector()
+	}
 	return(object)
 }
 

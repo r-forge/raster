@@ -1,21 +1,19 @@
 \name{adjacency}
 \alias{adjacency}
-\alias{adjBishop}
 
 \title{adjacency}
 \description{
-	calculate adjacent cells on a grid
+	Identify cells that are adjacent to a set of cells on a grid
 }
 \usage{
 adjacency(raster, fromCells, toCells, directions, outerMeridianConnect) 
-adjBishop(raster, fromCells, toCells, outerMeridianConnect)
 }
 
 \arguments{
   \item{raster}{an object of the Raster family}
   \item{fromCells}{a vector of cell numbers for which adjacent cells should be calculated}
   \item{toCells}{a vector of cell numbers from which adjacent cells are selected}
-  \item{directions}{in how many direction cells should be connected: 4, 8 or 16.}
+  \item{directions}{in how many direction cells should be connected: 4, 8 or 16; or Bishop}
   \item{outerMeridianConnect}{logical value indicating whether the outer columns of the raster should be connected as a cylinder}
 }
 
@@ -39,7 +37,7 @@ For one-cell bishop moves use adjBishop (special cases).
 	rs <- setValues(rs, v)
 	plot(rs)
 
-	adjbis <- adjBishop(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), outerMeridianConnect = TRUE) 
+	adjbis <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), direction='Bishop', outerMeridianConnect = TRUE) 
 }
 
 \keyword{spatial}

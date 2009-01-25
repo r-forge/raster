@@ -32,7 +32,7 @@ rasterWriteFormats <- function() {
 writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 	
 	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
-		stop('First use setValues()')
+		stop('No data available for writing. First use setValues()')
 	}
 
 	if (format=='raster') {
@@ -54,4 +54,9 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 	return(raster)
 }	
 
-
+writeStack <- function(rstack, overwrite=FALSE) {
+	stop("not available yet")
+	for (i in 1:nlayers(rstack)) {
+	
+	}
+}

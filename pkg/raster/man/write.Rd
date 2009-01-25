@@ -1,6 +1,7 @@
 \name{write}
 
 \alias{writeRaster}
+\alias{writeStack}
 \alias{rasterWriteFormats}
 
 \title{Write raster data to a file}
@@ -13,12 +14,14 @@
 \usage{
   writeRaster(raster, format='raster', overwrite=FALSE)
   rasterWriteFormats()
+  writeStack(rstack, overwrite=FALSE)
 }
 
 \arguments{
   \item{raster}{RasterLayer object}
   \item{format}{either 'raster', 'ascii' or a supported GDAL 'driver' name}
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
+  \item{rstack}{RasterStack object} 
 }
 
 \details{

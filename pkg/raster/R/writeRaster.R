@@ -75,8 +75,8 @@
 	raster@file@name <- .setFileExtensionHeader(filename(raster))
 	binraster <- .setFileExtensionValues(filename(raster))
 	attr(raster, "filecon") <- file(binraster, "wb")
-	raster@data@min <- 3e34
-	raster@data@max <- -3e34
+	raster@data@min <- Inf
+	raster@data@max <- -Inf
 	raster@data@haveminmax <- FALSE
 	raster@file@driver <- 'raster'
 	raster@file@gdalhandle <- list()
