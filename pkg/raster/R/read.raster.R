@@ -300,16 +300,15 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 	for (i in seq(nlayers(rstack))) {
 		raster <- readPartOfRow(rstack@layers[[i]], rownumber, startcol, ncolumns)
 		if ( i == 1 )  {
-			rstack@data@values <- as.matrix(values(raster))
+			rstack@data@values <- matrix(nrow=length(values(raster)), ncol=nlayers(rstack)) 
 			rstack@data@content <- dataContent(raster)
 			rstack@data@indices <- dataIndices(raster)
 		}
-		else {
-			rstack@data@values <- cbind(rstack@data@values, values(raster)) 
-		}	   
+		rstack@data@values[,i] <- values(raster)
 	}
 	return(rstack)
 }
+
 
 .stackReadCells <- function(object, cells) {
 		for (i in seq(nlayers(object))) {
