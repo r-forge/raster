@@ -14,7 +14,7 @@ Use these functions to set name and datatype properties of a RasterLayer object.
 }
 
 \usage{
-setProjection(object, projstring, adjustBbox=FALSE)
+setProjection(object, projstring)
 setFilename(object, filename)
 setRaster(object, filename="", values=NA)
 setDatatype(raster, datatype, datasize)
@@ -36,7 +36,6 @@ setMinMax(raster, readfromdisk=FALSE)
   \item{yres}{ the new y resolution}  
   \item{projstring}{a character string describing a projection and datum in PROJ4 format }
   \item{readfromdisk}{Logical. If \code{TRUE} then data are read from disk (if available) to determine the min and max value}
-  \item{adjustBbox}{}
 }
 
 \details{

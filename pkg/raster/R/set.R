@@ -18,13 +18,15 @@ setRowCol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
 }
 
 setRes <- function(object, xres, yres=xres) {
-	object <- clearValues(object)
+	if (extends(class(object), "Raster")) {
+		object <- clearValues(object)
+	}
 	bb <- getBbox(object)
-	nc <- (bb@xmax - bb@xmin) / xres
-	nr <- (bb@ymax - bb@ymin) / yres
+	nc <- round( (bb@xmax - bb@xmin) / xres )
+	nr <- round( (bb@ymax - bb@ymin) / yres )
 	bb@xmax <- bb@xmin + nc * xres
 	bb@ymin <- bb@ymax - nr * yres
-	object <- setBbox(object, bb, snap=FALSE)
+	object	<- setBbox(object, bb)
 	object <- setRowCol(object, nr, nc)
 	return(object)
 }
@@ -69,38 +71,8 @@ setFilename <- function(object, filename) {
 
 
 
-.xyBbox <- function(object) {
-	b <- getBbox(object)
-	xy <- c(b@xmin, b@ymax)
-	xy <- rbind(xy, c(b@xmax, b@ymax))
-	xy <- rbind(xy, c(b@xmin, b@ymin))
-	xy <- rbind(xy, c(b@xmax, b@ymin))
-	colnames(xy) <- c("x", "y")
-	rownames(xy)[1] <- ""
-	return(xy)
-}
 
-
-setProjection <- function(object, projstring, adjustBbox=FALSE) {
-	if (adjustBbox) {
-		b <- .xyBbox(object)
-		if (isLatLon(object)) {
-			p <- project(b, projstring, inv=FALSE)
-		} else {
-			b <- project(b, projection(object), inv=TRUE)
-			if (isLatLon(projstring)) {
-				p <- b
-			} else {
-				p <- project(b, projstring, inv=FALSE)
-			}
-		}
-		xmin <- min(p[,1])
-		xmax <- max(p[,1])
-		ymin <- min(p[,2])
-		ymax <- max(p[,2])	
-		bb <- newBbox(xmin, xmax, ymin, ymax)
-		object <- setBbox(object, bb)
-	}
+setProjection <- function(object, projstring) {
 	if (class(projstring)=="CRS") {
 		object@crs <- projstring
 	} else {	

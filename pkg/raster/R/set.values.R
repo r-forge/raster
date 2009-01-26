@@ -55,6 +55,9 @@ setValues <- function(raster, values, rownr=-1) {
 
 
 clearValues <- function(object) {
+	if (class(object) == "BasicRaster") {
+		return(object)
+	}
 	object@data@content <- 'nodata'
 	object@data@indices = vector(mode='numeric')
 	if (class(object) == 'RasterStack') {

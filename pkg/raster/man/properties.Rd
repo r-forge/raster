@@ -19,6 +19,8 @@
 \alias{projection}
 \alias{isLatLon}
 \alias{isLatLon,Raster-method}
+\alias{isLatLon,CRS-method}
+\alias{isLatLon,character-method}
 \alias{projection<-}
 \alias{origin}
 \alias{nlayers}

@@ -112,6 +112,7 @@ cellsFromBbox <- function(object, bndbox) {
 setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 	oldbb <- getBbox(object)
 	bb <- getBbox(bndbox)
+	newobj <- clearValues(object)
 	
 	if (snap) {
 		bb@xmin <- max(bb@xmin, oldbb@xmin)
@@ -135,8 +136,7 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 		mx <- yFromRow(object, row) + 0.5 * yres(object)
 		if (abs(bb@ymax - mn) > abs(bb@ymax - mx)) { bb@ymax <- mx } else { bb@ymax <- mn }
 	}
-	
-	newobj <- clearValues(object)
+
 	newobj@bbox <- bb
 	
 	if (keepres) {
@@ -155,9 +155,11 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 			indices <- cellsFromBbox(object, bb)
 			newobj <- setValues(newobj, values(object)[indices])
 		}
-	} else if (ncol(object)==ncol(newobj) & nrow(object)==nrow(newobj)) {
-		if (dataContent(object) == 'all') {
-			newobj <- setValues(newobj, values(object))
+	} else if (class(object) != "BasicRaster") {
+		if (ncol(object)==ncol(newobj) & nrow(object)==nrow(newobj))  {
+			if (dataContent(object) == 'all') {
+				newobj <- setValues(newobj, values(object))
+			}	
 		}
 	}
 	return(newobj)

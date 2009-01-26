@@ -93,8 +93,8 @@ setClass('SingleLayerData',
 		indices = 'vector',
 		colname = 'character',
 		haveminmax = 'logical',
-		min = 'numeric',
-		max = 'numeric',
+		min = 'vector',
+		max = 'vector',
 		source='character' # ram, disk
 		),
 	prototype (	
@@ -103,8 +103,8 @@ setClass('SingleLayerData',
 		indices = vector(mode='numeric'),
 		colname = '',
 		haveminmax = FALSE,
-		min = Inf,
-		max = -Inf,
+		min = c(Inf),
+		max = c(-Inf),
 		source='ram'
 	),	
 	validity = function(object) {
@@ -134,8 +134,8 @@ setClass('MultipleRasterData',
 		colnames = 'vector',
 		nlayers='integer',
 		haveminmax = 'logical',
-		min = 'numeric',
-		max = 'numeric'
+		min = 'vector',
+		max = 'vector'
 		),
 	prototype (	
 		values=matrix(NA,0,0),
@@ -144,8 +144,8 @@ setClass('MultipleRasterData',
 		colnames =vector(mode='character'),
 		nlayers=as.integer(0),
 		haveminmax = FALSE,
-		min = Inf,
-		max = -Inf
+		min = c(Inf),
+		max = c(-Inf)
 	),	
 	validity = function(object) {
 	}

@@ -174,14 +174,19 @@ nbands <- function(object) {
 }
 
 projection <- function(object, asText=TRUE) {
+	if (extends(class(object), "BasicRaster")) { object <- object@crs 
+	} else if (extends(class(object), "Spatial")) { object <- object@proj4string 
+	} else if (class(object) == 'character') {return(object)
+	} else if (class(object) != "CRS") { stop(paste('cannot use this object of class', class(object))) }
+	
 	if (asText) {
-		if (is.na(object@crs@projargs)) { 
+		if (is.na(object@projargs)) { 
 			return("NA") 
 		} else {
-			return(trim(object@crs@projargs))
+			return(trim(object@projargs))
 		}	
 	} else {
-		return(object@crs)
+		return(object)
 	}
 }
 

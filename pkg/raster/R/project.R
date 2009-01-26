@@ -1,41 +1,65 @@
-
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
-# Date :  June 2008
-# Version 0,1
+# Date :  January 2009
+# Version 0.8
 # Licence GPL v3
 
-.xyProj <- function(xy, inProj, outProj) {
-	if (!isLatLon(inProj)) {
-		xy <- project(xy, inProj, inv=TRUE)
+
+
+projectBbox <- function(object, projstring) {
+	b <- getBbox(object)
+	projstring <- projection(projstring)
+	xy <- rbind(c(b@xmin, b@ymax), c(b@xmax, b@ymax), c(b@xmin, b@ymin), c(b@xmax, b@ymin))
+
+	if (isLatLon(projstring)) {
+		p <- project(xy, projstring, inv=FALSE)
+	} else {
+		b <- project(xy, projection(object), inv=TRUE)
+		p <- project(xy, projstring, inv=FALSE)
 	}
-	xyproj <- project(xy, outProj, inv=FALSE)		
-	return(xyproj)
+	xmin <- min(p[,1])
+	xmax <- max(p[,1])
+	ymin <- min(p[,2])
+	ymax <- max(p[,2])	
+	bb <- newBbox(xmin, xmax, ymin, ymax)
+	obj <- setBbox(object, bb)
+	obj <- setProjection(obj, projstring)
+	return(obj)
 }
 
-projectRaster <- function(fromRaster, toRaster, method="nngb", overwrite=FALSE) {
+
+projectRaster <- function(from, to, method="nngb", overwrite=FALSE) {
 # do the bounding boxes overlap at all? 
 # get .innerbox first?
 # are the projs not NA and valid and not the same?
-warning("this function has not been tested yet. Not at all")
-	rowCells <- 1:ncol(toRaster)
-	inMemory <- filename(toRaster) == ""
+	rowCells <- 1:ncol(to)
+	inMemory <- filename(to) == ""
 	v <- vector(length=0)
-	for (r in 1:nrow(toRaster)) {
-		cells <- rowCells + (r-1) * ncol(toRaster)
-		xy <- xyFromCell(toRaster, cells)
-		projxy <- .xyProj(xy, projection(toRaster), projection(fromRaster))
-		vals <- xyValues(fromRaster, projxy)
+	for (r in 1:nrow(to)) {
+		cells <- rowCells + (r-1) * ncol(to)
+		xy <- xyFromCell(to, cells)
+		if (isLatLon(from)) {
+			unProjXY <- project(xy, projection(to), inv=TRUE )
+		} else {
+			unProjXY <- project(xy, projection(from), inv=FALSE )
+			if (!isLatLon(to)) {
+				unProjXY <- project(unProjXY, projection(to), inv=TRUE )
+			}
+		}
+		vals <- xyValues(from, unProjXY)
 		if (inMemory) {
 			v <- c(v, vals)
 		} else {
-			toRaster <- setValues(toRaster, vals, r)
-			toRaster <- writeRaster(toRaster, overwrite=overwrite)
+			to <- setValues(to, vals, r)
+			to <- writeRaster(to, overwrite=overwrite)
 		}
 	}
 	if (inMemory) {
-		toRaster <- setValues(toRaster, v) 
+		to <- setValues(to, v) 
+		if (filename(to) != "") {
+			to <- writeRaster(to, overwrite=overwrite)
+		}
 	}
-	return(toRaster)
+	return(to)
 }
 
