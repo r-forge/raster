@@ -68,7 +68,39 @@ setFilename <- function(object, filename) {
 }
 
 
-setProjection <- function(object, projstring) {
+
+.xyBbox <- function(object) {
+	b <- getBbox(object)
+	xy <- c(b@xmin, b@ymax)
+	xy <- rbind(xy, c(b@xmax, b@ymax))
+	xy <- rbind(xy, c(b@xmin, b@ymin))
+	xy <- rbind(xy, c(b@xmax, b@ymin))
+	colnames(xy) <- c("x", "y")
+	rownames(xy)[1] <- ""
+	return(xy)
+}
+
+
+setProjection <- function(object, projstring, adjustBbox=FALSE) {
+	if (adjustBbox) {
+		b <- .xyBbox(object)
+		if (isLatLon(object)) {
+			p <- project(b, projstring, inv=FALSE)
+		} else {
+			b <- project(b, projection(object), inv=TRUE)
+			if (isLatLon(projstring)) {
+				p <- b
+			} else {
+				p <- project(b, projstring, inv=FALSE)
+			}
+		}
+		xmin <- min(p[,1])
+		xmax <- max(p[,1])
+		ymin <- min(p[,2])
+		ymax <- max(p[,2])	
+		bb <- newBbox(xmin, xmax, ymin, ymax)
+		object <- setBbox(object, bb)
+	}
 	if (class(projstring)=="CRS") {
 		object@crs <- projstring
 	} else {	

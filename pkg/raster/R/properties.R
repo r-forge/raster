@@ -28,7 +28,42 @@ setMethod('isLatLon', signature(object='Raster'),
     }
 )
 
+setMethod('isLatLon', signature(object='character'), 
+# copied from the SP package (slightly adapted)
+#author:
+# ...
+	function(object){
+		res <- grep("longlat", object, fixed = TRUE)
+		if (length(res) == 0) {
+			return(FALSE)
+		} else {
+			return(TRUE)
+		}
+    }
+)
 
+
+setMethod('isLatLon', signature(object='CRS'), 
+# copied from the SP package (slightly adapted)
+#author:
+# ...
+	function(object){
+		if (is.na(object@projargs)) { 
+			p4str <- "NA"
+		} else {
+			p4str <- trim(object@projargs)
+		}	
+		if (is.na(p4str) || nchar(p4str) == 0) {
+			return(as.logical(NA))
+		} 
+		res <- grep("longlat", p4str, fixed = TRUE)
+		if (length(res) == 0) {
+			return(FALSE)
+		} else {
+			return(TRUE)
+		}
+    }
+)
 
 
 
@@ -143,7 +178,7 @@ projection <- function(object, asText=TRUE) {
 		if (is.na(object@crs@projargs)) { 
 			return("NA") 
 		} else {
-			return(object@crs@projargs)
+			return(trim(object@crs@projargs))
 		}	
 	} else {
 		return(object@crs)
