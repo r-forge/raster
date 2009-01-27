@@ -1,6 +1,7 @@
 \name{distance-methods}
 \docType{methods}
 \alias{distance-methods}
+\alias{distance}
 \alias{distance,RasterLayer-method}
 \title{ Calculate distance}
 \description{
@@ -13,11 +14,9 @@
 }}
 \examples{
 r1 <- newRaster(ncol=36,nrow=18)
-data <- rep(NA, times=ncell(r1))
-data[345:355] <- 1
-r1 <- setValues(r1,data)
-distmap <- distance(r1)
-map(distmap)
+r1[345:355] <- 1
+distmap <- distance(r1) 
+#plot(distmap)
 }
 \keyword{methods}
 \keyword{spatial}

@@ -60,8 +60,7 @@ setReplaceMethod("[", "RasterLayer",
 				if (dataSource(x) == 'disk') {
 					x <- readAll(x)
 				} else {
-					x <- setValues(x, vector(length=ncell(x)), v)
-					x@data@values[] <- NA
+					x <- setValues(x, rep(NA, times=ncell(x)))
 				}
 			} else {
 				stop('Large raster with no data in memory, use readAll() first')
@@ -70,6 +69,7 @@ setReplaceMethod("[", "RasterLayer",
 		x@data@values[i] <- value
 		x@data@source <- 'ram'
 		x <- setFilename(x, "")
+		x <- setMinMax(x)
 		return(x)
 	}
 )
