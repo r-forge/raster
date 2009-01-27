@@ -19,7 +19,7 @@ adjacency(raster, fromCells, toCells, directions)
 \details{
 Cell numbers start with 1 in the upperleft corner and increase from left to right and from top to bottom.
 Number of directions: 4 connects cells with one-cell rook moves, 8 with one-cell queen moves, and 16 with knight and one-cell queen moves.
-For one-cell bishop moves use adjBishop (special cases).
+Bishop connects cells with one-cell diagonal moves (special cases).
 }
 
 \value{
