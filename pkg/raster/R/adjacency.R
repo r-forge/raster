@@ -20,7 +20,16 @@
 #	return(raster)
 #}
 
-adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConnect) {
+adjacency <- function(raster, fromCells, toCells, directions) {
+
+	outerMeridianConnect <- FALSE
+	if (isLatLon(raster)) {
+		tolerance <- 0.1
+		scale <- xres(raster)
+		if (all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale) & all.equal(xmax(raster), 180, tolerance=tolerance, scale=scale)) {
+			outerMeridianConnect <- TRUE
+		}
+	}
 
 	if (directions=="Bishop") { return(.adjBishop(raster, fromCells, toCells, outerMeridianConnect)) }
 
