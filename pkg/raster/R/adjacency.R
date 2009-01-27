@@ -251,8 +251,6 @@ adjacency <- function(raster, fromCells, toCells, directions) {
 	return(fromto)
 }
 
-
-
 .adjBishop <- function(raster, fromCells, toCells, outerMeridianConnect)  {
 	nCols <- ncol(raster)
 	nCells <- ncell(raster)
