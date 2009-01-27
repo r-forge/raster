@@ -186,7 +186,7 @@ adjacency <- function(raster, fromCells, toCells, directions, outerMeridianConne
 		upperleftUnderFromToKnight <- .cs(fromCellUpperleftUnder, knight[c(4,6,8)])
 		upperrightLeftFromToKnight <- .cs(fromCellUpperrightLeft, knight[c(5,7,8)])
 		lowerleftUpFromToKnight <- .cs(fromCellLowerleftUp, knight[c(2,4,6)])
-		lowerrightUpFromToKnight <- .cs(fromCellLowerright, knight[c(1,3,5)])
+		lowerrightUpFromToKnight <- .cs(fromCellLowerrightUp, knight[c(1,3,5)])
 		upperleftRightFromToKnight <- .cs(fromCellUpperleftRight, knight[6:8])
 		upperrightUnderFromToKnight <- .cs(fromCellUpperrightUnder, knight[c(3,5,7)])
 		lowerleftRightFromToKnight <- .cs(fromCellLowerleftRight, knight[c(1,2,4)])
