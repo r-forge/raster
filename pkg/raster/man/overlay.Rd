@@ -8,7 +8,7 @@
 }
 
 \usage{
-	Overlay(x, y, ..., fun, filename="", overwrite=FALSE) 
+	Overlay(x, y, ..., fun, filename="", overwrite=FALSE, asInt=FALSE) 
 }
 
 \arguments{
@@ -18,6 +18,7 @@
   \item{fun}{ the function to be appliepd. This should be a function that takes two numbers as an argument }
   \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
   \item{overwrite}{logical. If \code{TRUE}, existing files will be overwritten}
+  \item{asInt}{logical. If \code{TRUE} the values will be rounded and stored as integer}
 }
 
 \details{

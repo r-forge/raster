@@ -12,12 +12,12 @@
   Calculate values for a new raster, from scratch or based on a single existing raster
 }
 \usage{
-calc(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
-isNA(raster, value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
-setNA(raster, operator = "<=", value = 0, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
-init(raster, fun=runif, filename="", overwrite=FALSE, ForceIntOutput = FALSE) 
-neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, ForceIntOutput=FALSE) 
-reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
+calc(raster, fun=sqrt, filename="", overwrite=FALSE, asInt=FALSE)
+isNA(raster, value = 0, filename="", overwrite=FALSE, asInt = FALSE)
+setNA(raster, operator = "<=", value = 0, filename="", overwrite=FALSE, asInt = FALSE)
+init(raster, fun=runif, filename="", overwrite=FALSE, asInt = FALSE) 
+neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, asInt=FALSE) 
+reclass(raster, rclmat, filename="", overwrite=FALSE, asInt = FALSE)
 }
 
 \arguments{
@@ -28,7 +28,7 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, ForceIntOutput = FALSE)
   \item{rclmat}{Matrix for reclassifcation. (see below)}
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
   \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{ForceIntOutput}{logical. If \code{TRUE}, output will be integer values}
+  \item{asInt}{logical. If \code{TRUE}, output will be integer values}
   \item{ngb}{Neighborhood size. Expressed in number of cells in a single direction. I.e. 3 refers to 2 cells at each side of the focal cell. Queen's case, 8 cells in total}
   \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
 }

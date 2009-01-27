@@ -11,7 +11,7 @@
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
 
-.getGDALtransient <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag,  options)  {
+.getGDALtransient <- function(raster, gdalfiletype, overwrite, asInt, mvFlag,  options)  {
 #	.isSupportedFormat(gdalfiletype)
 	
 # this is a RasterLayer hence nbands = 1:
@@ -31,7 +31,7 @@
 
 #.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
 # this needs to get fancier; depending on object and the abilties of the drivers
-	if (dataType(raster) == 'integer' | ForceIntOutput) {
+	if (dataType(raster) == 'integer' | asInt) {
 		dataformat <- 'Int32'
 		if (raster@data@haveminmax) {
 			if (minValue(raster) > -32768 & maxValue(raster) <= 32767) {
@@ -54,14 +54,14 @@
 }
 
 
-.writeGDALrow <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options ) {
+.writeGDALrow <- function(raster, gdalfiletype, overwrite, asInt, mvFlag, options ) {
 	
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if (rownr %in%  c(1, 10, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000, 40000, 50000, 100000)) {
 		print( paste("writing row", rownr, "at:", format(Sys.time(), "%H:%M:%S")))
 	}
 	if ( rownr == 1) {
-		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options)
+		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, asInt, mvFlag, options)
 		attr(raster, "transient") <- transient
 		raster@file@driver <- 'gdal'
 		raster@file@gdalhandle <- list()
@@ -84,14 +84,14 @@
 
 
 # ALTERNATIVE
-#.writeGDALall <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options) {
+#.writeGDALall <- function(raster, gdalfiletype, overwrite, asInt, mvFlag, options) {
 #	spgrid <- asSpGrid(raster)	
 #	writeGDAL(spgrid, filename(raster))
 #}
 
-.writeGDALall <- function(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options) {
+.writeGDALall <- function(raster, gdalfiletype, overwrite, asInt, mvFlag, options) {
 	
-	transient <- .getGDALtransient(raster, gdalfiletype, overwrite, ForceIntOutput, mvFlag, options)
+	transient <- .getGDALtransient(raster, gdalfiletype, overwrite, asInt, mvFlag, options)
     for (band in 1:nlayers(raster)) {
 		x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
 	}	

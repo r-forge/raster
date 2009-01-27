@@ -7,7 +7,7 @@
 	(Dis)aggregated a raster to create a new raster 
 }
 \usage{
-Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, ForceIntOutput = FALSE) 
+Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE) 
 disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
 }
 
@@ -18,7 +18,7 @@ disaggregate(raster, fact=2, filename="", overwrite=FALSE)
   \item{fact}{degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details}
   \item{expand}{if \code{expand == TRUE} grids will get larger if \code{factor} if the number of the division of the columns or rows with factor does not return an integer}
   \item{rm.NA}{if \code{rm.NA == TRUE}, remove NA cells from calculations}
-  \item{ForceIntOutput}{logical. If \code{TRUE} the values will be rounded and stored as integer}
+  \item{asInt}{logical. If \code{TRUE} the values will be rounded and stored as integer}
   \item{overwrite}{if TRUE, "filename" will be overwritten if it exists}
 }
 

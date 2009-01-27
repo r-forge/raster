@@ -11,7 +11,7 @@ setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'),
 )
 
 
-Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE){ 
+Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE, asInt = FALSE){ 
 
 	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
 	if (missing(filename)) { filename <- "" }
@@ -43,6 +43,7 @@ Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE){
 	}
 	outraster <- setRaster(x)
 	outraster <- setFilename(outraster, filename)
+	if (asInt) { outraster <- setDatatype(outraster, 'integer') }
 
 	inram <- TRUE
 	ondisk <- TRUE

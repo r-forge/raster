@@ -5,13 +5,13 @@
 # Licence GPL v3
 
 
-calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
+calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, asInt=FALSE) {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
 	filename <- trim(filename)
 	outraster <- setRaster(raster, filename)
-	if (ForceIntOutput) {setDatatype(outraster, 'integer')}
+	if (asInt) {setDatatype(outraster, 'integer')}
 	
 	if (!(dataContent(raster) == 'all' | dataContent(raster) == 'sparse' | dataSource(raster) == 'disk')) {
 		stop('raster has no data on disk, nor a complete set of raster values in memory')
@@ -43,7 +43,7 @@ calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, ForceIntOutput=
 
 
 
-mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=FALSE) {
+mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, asInt=FALSE) {
 	if (length(fun(seq(1:5))) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
@@ -53,7 +53,7 @@ mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=
 		object <- readAll(object)
 		outraster <- setValues(outraster, apply(values(object), 1, fun)) 
 	} else {
-		if (ForceIntOutput) { 
+		if (asInt) { 
 			outraster <- setDatatype(outraster, "integer") 
 		}
 		for (r in 1:nrow(object)) {

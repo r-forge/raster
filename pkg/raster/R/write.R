@@ -46,9 +46,9 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 	} else { 
 		.isSupportedGDALFormat(format)
 		if (dataContent(raster) == 'row' ) {
-			raster <- .writeGDALrow(raster, format, overwrite, ForceIntOutput=FALSE, mvFlag=NA, options=NULL)
+			raster <- .writeGDALrow(raster, format, overwrite, asInt=FALSE, mvFlag=NA, options=NULL)
 		} else {
-			raster <- .writeGDALall(raster, format, overwrite, ForceIntOutput=FALSE, mvFlag=NA, options=NULL)
+			raster <- .writeGDALall(raster, format, overwrite, asInt=FALSE, mvFlag=NA, options=NULL)
 		}  
 	}
 	return(raster)

@@ -28,6 +28,9 @@
 	return(values(r)[cells])
 }
 
+
+
+
 setMethod("[", "RasterLayer",
 	function(x,i,j,...,drop=FALSE) {
 		if (!missing(j)) { stop("incorrect number of dimensions") }

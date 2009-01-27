@@ -5,7 +5,7 @@
 # Version 0,7
 # Licence GPL v3
 
-Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, ForceIntOutput = FALSE)  {
+Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE)  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -34,11 +34,7 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 	outraster <- setBbox(outraster, bndbox, keepres=F)
 	outraster <- setRowCol(outraster, nrows=rsteps, ncols=csteps) 
 	
-	if (ForceIntOutput) { 
-		outraster <- setDatatype(outraster, 'integer')
-	} else { 
-		outraster <- setDatatype(outraster, 'numeric') 
-	}
+	if (asInt) { outraster <- setDatatype(outraster, 'integer') }
 	
 	if (dataContent(raster) == 'all') {	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(raster)], times=nrow(raster))

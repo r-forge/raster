@@ -7,7 +7,7 @@
 }
 
 \usage{
-mCalc(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
+mCalc(object, fun=sum, filename="", overwrite=FALSE, asInt=FALSE)
 }
 
 \arguments{
@@ -15,7 +15,7 @@ mCalc(object, fun=sum, filename="", overwrite=FALSE, ForceIntOutput=FALSE)
   \item{fun}{ the function to be applied }
   \item{filename}{ output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot }
   \item{overwrite}{ logical to indicate whether an existing output file should be overwritten }
-  \item{ForceIntOutput}{ logical. If \code{TRUE}, output will be integer values }
+  \item{asInt}{ logical. If \code{TRUE}, output will be integer values }
 }
 
 \details{

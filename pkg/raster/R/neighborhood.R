@@ -41,7 +41,7 @@
 }
 	
 
-neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, ForceIntOutput=FALSE) {
+neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, asInt=FALSE) {
 	ngb <- round(ngb)
 	if ((ngb / 2) == floor(ngb/2)) { stop("only odd neighborhoods are supported") }
 	if (ngb == 1) { stop("ngb should be 3 or larger")  } 
@@ -49,7 +49,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	
 	filename <- trim(filename)
 	ngbgrid <- setRaster(raster, filename)
-	if (ForceIntOutput) {setDatatype(ngbgrid, 'integer') }
+	if (asInt) {setDatatype(ngbgrid, 'integer') }
 
 # first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	ngbdata1 <- array(data = NA, dim = c(ngb, ncol(raster)))

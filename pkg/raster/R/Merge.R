@@ -46,7 +46,15 @@ Merge <- function(rasters, tolerance=0.05, filename="", overwrite=FALSE) {
 	outraster <- setRaster(rasters[[1]], filename)
 #	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2])
 	outraster <- setBbox(outraster, bb, keepres=TRUE, snap=FALSE)
-
+	
+	isint <- TRUE
+	for (i in 1:length(rasters)) {
+		if (rasters[[i]]@file@datatype != 'integer') {
+			isInt <- FALSE
+		}
+	}
+	if (isInt) { outraster <- setDatatype(outraster, 'integer') }
+	
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
 	for (i in 1:length(rasters)) {
 		xy1 <- xyFromCell(rasters[[i]], 1) # first row/col on old raster[[i]]
