@@ -1,6 +1,6 @@
 \name{rasterstack.create}
-\alias{stack}
-\alias{stack,RasterLayer-method}
+\alias{makeStack}
+\alias{makeStack,RasterLayer-method}
 \alias{stackFromFiles}
 \alias{stackFromRasters}
 \alias{addFiles}
@@ -18,7 +18,7 @@
 \usage{
 stackOpen(stackfile)
 stackSave(rstack)
-stack(x, ...)
+makeStack(x, ...)
 stackFromFiles(rasterfiles, bands= rep(1, length(rasterfiles)))
 addFiles(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
 addRasters(rstack, rasters) 

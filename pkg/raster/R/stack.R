@@ -18,7 +18,7 @@ stackSave <- function(rstack) {
 	for (i in 1:length(rstack@layers)) {
 		fname <- trim(filename(rstack@layers[[i]]))
 		if (trim(fname) == "") {
-			stop("cannot save a Stack that has Layers without filenames. Use writeStack instead.")
+			stop("cannot save a RasterStack that has Layers without filenames. Use writeStack instead.")
 		}	
 		cat(fname, "\t", band(rstack@layers[[i]]),"\n", file=thefile)
 	}
@@ -36,13 +36,13 @@ stackFromFiles <- function(rasterfiles, bands= rep(1, length(rasterfiles))) {
 
 
 
-if (!isGeneric("stack")) {
-	setGeneric("stack", function(x, ...)
-		standardGeneric("stack"))
+if (!isGeneric("makeStack")) {
+	setGeneric("makeStack", function(x, ...)
+		standardGeneric("makeStack"))
 }	
 
 
-setMethod("stack", signature(x='RasterLayer'), 
+setMethod("makeStack", signature(x='RasterLayer'), 
 function(x, ...) {
 	rlist <- c(x, list(...))
 	for (i in 1:length(rlist)) {
@@ -81,7 +81,7 @@ addRasters <- function(rstack, rasters) {
 	for (i in 1 : length(rasters)) { 
 		raster <- rasters[[i]] 
 		if (dataContent(raster) != 'all' & dataSource(raster) == 'ram') {
-			stop("Cannot add a memory based raster without values to a stack")
+			stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
 		}
 		nl <- rstack@data@nlayers + 1
 		rstack@data@nlayers <- as.integer(nl)
@@ -102,7 +102,7 @@ addRasters <- function(rstack, rasters) {
 				raster <- clearValues(raster)
 			} else {
 				if (dataSource(raster) == 'ram' & dataContent(raster) != "all") {
-					stop("adding memory based raster to stack, withouth adding values")
+					stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
 				}
 			}
 		} else {
