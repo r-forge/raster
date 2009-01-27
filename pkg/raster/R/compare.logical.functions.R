@@ -46,11 +46,11 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		}
 		if (.CanProcessInMemory(e1, 2)) {
 			raster <- setRaster(e1)
-			raster <- setDatatype(raster, datatype='integer', datasize=2)
+			raster <- setDatatype(raster, datatype='logical', datasize=2)
 			raster <- setValues(raster, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
 			raster <- setRaster(e1, filename=tempfile())
-			raster <- setDatatype(raster, datatype='integer', datasize=2)
+			raster <- setDatatype(raster, datatype='logical', datasize=2)
 			rowrep <- rep(e2, ncol(e1))
 			for (r in 1:nrow(e1)) {
 				raster <- setValues(raster, callGeneric( .getRowValues(e1, r), rowrep ), r)
@@ -68,11 +68,11 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 		}
 		if (.CanProcessInMemory(e2, 2)) {
 			raster <- setRaster(e2)
-			raster <- setDatatype(raster, datatype='integer', datasize=2)
+			raster <- setDatatype(raster, datatype='logical', datasize=2)
 			raster <- setValues(raster, callGeneric(.getRasterValues(e2), rep(e1, ncell(e2)) ) )
 		} else {
 			raster <- setRaster(e2, filename=tempfile())
-			raster <- setDatatype(raster, datatype='integer', datasize=2)
+			raster <- setDatatype(raster, datatype='logical', datasize=2)
 			rowrep <- rep(e1, ncol(e2))
 			for (r in 1:nrow(e2)) {
 				raster <- setValues(raster, callGeneric( .getRowValues(e2, r), rowrep ), r)
@@ -91,11 +91,11 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 		}	
 		if (.CanProcessInMemory(e1, 2)) {
 			raster <- setRaster(e1) 
-			raster <- setDatatype(raster, datatype='integer', datasize=2)
+			raster <- setDatatype(raster, datatype='logical', datasize=2)
 			raster <- setValues(raster, callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) 
 		} else {
 			raster <- setRaster(e1, filename=tempfile())
-			raster <- setDatatype(raster, datatype='integer', datasize=2)
+			raster <- setDatatype(raster, datatype='logical', datasize=2)
 			for (r in 1:nrow(e1)) {
 				raster <- setValues(raster, callGeneric( .getRowValues(e1, r), .getRowValues(e2, r) ), r)
 				raster <- writeRaster(raster)
@@ -114,11 +114,11 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 		if ( compare(c(e1, e2)) ) {
 			if (.CanProcessInMemory(e1, 2)) {
 				raster <- setRaster(e1)
-				raster <- setDatatype(raster, datatype='integer', datasize=2)
+				raster <- setDatatype(raster, datatype='logical', datasize=2)
 				raster <- setValues(raster, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
 			} else {
 				raster <- setRaster(e1, filename=tempfile())
-				raster <- setDatatype(raster, datatype='integer', datasize=2)	
+				raster <- setDatatype(raster, datatype='logical', datasize=2)	
 				for (r in 1:nrow(e1)) {
 					raster <- setValues(raster, callGeneric( .getLogicalRowValues(e1, r), .getLogicalRowValues(e2, r) ), r)
 					raster <- writeRaster(raster)
@@ -134,7 +134,7 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 setMethod("is.na", signature(x='RasterLayer'),
 	function(x) {
 		raster <- setRaster(x)
-		raster <- setDatatype(raster, datatype='integer', datasize=2)
+		raster <- setDatatype(raster, datatype='logical', datasize=2)
 		return(setValues(raster, is.na(.getRasterValues(x))))
 	}
 )	
@@ -142,7 +142,7 @@ setMethod("is.na", signature(x='RasterLayer'),
 setMethod("is.nan", signature(x='RasterLayer'),
 	function(x) {
 		raster <- setRaster(x)
-		raster <- setDatatype(raster, datatype='integer', datasize=2)
+		raster <- setDatatype(raster, datatype='logical', datasize=2)
 		return(setValues(raster, is.nan(.getRasterValues(x))))
 	}
 )	
@@ -150,7 +150,7 @@ setMethod("is.nan", signature(x='RasterLayer'),
 setMethod("is.infinite", signature(x='RasterLayer'),
 	function(x) {
 		raster <- setRaster(x)
-		raster <- setDatatype(raster, datatype='integer', datasize=2)
+		raster <- setDatatype(raster, datatype='logical', datasize=2)
 		return(setValues(raster, values=is.infinite(.getRasterValues(x))))
 	}
 )	
@@ -158,7 +158,7 @@ setMethod("is.infinite", signature(x='RasterLayer'),
 setMethod("is.finite", signature(x='RasterLayer'),
 	function(x) {
 		raster <- setRaster(x)
-		raster <- setDatatype(raster, datatype='integer', datasize=2)
+		raster <- setDatatype(raster, datatype='logical', datasize=2)
 		return(setValues(raster, values=is.finite(.getRasterValues(x))))
 	}
 )	

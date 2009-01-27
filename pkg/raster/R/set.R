@@ -134,13 +134,17 @@ setMinMax <- function(raster, readfromdisk=FALSE) {
 	} else {
 		vals <- na.omit(values(raster)) # min and max values
 		if (length(vals) > 0) {
-			raster@data@min <-  min(vals)
+			raster@data@min <- min(vals)
 			raster@data@max <- max(vals)
 		} else {
 			raster@data@min <- NA
 			raster@data@max <- NA
 		}
-	}	
+	}
+#	if (raster@file@datatype == 'logical') {
+#		raster@data@min <- as.logical(min(raster@data@min))
+#		raster@data@max <- as.logical(max(raster@data@max))
+#	}
 	raster@data@haveminmax <- TRUE
 	return(raster)
 }
@@ -192,13 +196,11 @@ setDatatype <- function(raster, datatype, datasize=4) {
 		} else {
 			stop("invalid datasize for this datatype") 
 		}
-#	} else if ( datatype == 'logical' ) {
-#		raster@file@datatype <- datatype 
-#		raster@data@min <- round(minValue(raster))
-#		raster@data@max <- round(maxValue(raster))
-#		raster@file@datasize <- as.integer(2)
-#		raster@file@nodatavalue <- -32768
-#		raster@file@datanotation <- "LOGICAL"
+	} else if ( datatype == 'logical' ) {
+		raster@file@datatype <- datatype 
+		raster@file@datasize <- as.integer(1)
+		raster@file@nodatavalue <- -126
+		raster@file@datanotation <- "LOGICAL"
 	} else {
 		stop("unknown datatype")
 	} 

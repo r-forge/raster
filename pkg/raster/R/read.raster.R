@@ -60,10 +60,12 @@
 			stop(paste(filename(raster)," does not exist"))
 		}
 		con <- file(rastergri, "rb")
-		if (raster@file@datatype == "integer") { 
-			dtype <- integer()
+		if (raster@file@datatype == "ascii") {
+			stop("this type of ascii raster is not supported yet")
+		} else if (raster@file@datatype == "integer" | raster@file@datatype == "logical" ) { 
+			dtype <- "integer"
 		} else { 
-			dtype <- numeric() 
+			dtype <- "numeric" 
 		}
 		if (rownr > 0) {
 			seek(con, ((rownr-1) * ncol(raster) + (startcol-1)) * raster@file@datasize)
@@ -74,6 +76,9 @@
 		close(con)
 		result[is.nan(result)] <- NA
 		result[result <=  (0.999 * .nodatavalue(raster)) ] <- NA 
+		if (raster@file@datatype == 'logical') {
+			result <- as.logical(result)
+		}
 	}
 	else { #use GDAL  
 		if (is.na(raster@file@band)) { result <- NA }

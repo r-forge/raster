@@ -34,16 +34,22 @@
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
 			raster <- setDatatype(raster, 'integer', datasize=2)
 			raster@data@values <- as.integer(round(values(raster)))
+			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)						
 		} else if (xmin(raster) > -2147483647 & xmax(raster) < 2147483648 ) {
 			raster <- setDatatype(raster, 'integer', datasize=4)
 			raster@data@values <- as.integer(round(values(raster)))
+			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)			
 		} else if (xmin(raster) > -(2^63/2) & xmax(raster) < (2^64/2)) {
 			raster <- setDatatype(raster, 'integer', datasize=8)
 			raster@data@values <- as.integer(round(values(raster)))
+			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)			
 		} else {
 			raster <- setDatatype(raster, 'numeric', datasize=8)
 			raster@data@values <- as.numeric(values(raster))
 		}
+	} else if ( raster@file@datatype =='logical') {
+		raster@data@values <- as.integer(values(raster))
+		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	} else {
 		if (xmin(raster) < -3.4E38 | xmax(raster) > 3.4E38) {
 			raster <- setDatatype(raster, 'numeric', 8)
@@ -52,15 +58,24 @@
 		}	
 	}
 
+
+
 	if (raster@data@content == 'sparse') { 
 		raster <- .writeSparse(raster, overwrite=overwrite) 
 	} else {
 		binraster <- .setFileExtensionValues(filename(raster))
 		con <- file(binraster, "wb")
+		print(raster@file@datasize)
 		writeBin( values(raster), con, size = raster@file@datasize) 
 		close(con)
 		.writeRasterHdr(raster) 
 	}	
+	
+	# put logical values back to T/F
+	if ( raster@file@datatype =='logical') {
+		raster@data@values <- as.logical(values(raster))
+	}
+	
 	return(raster)
 }
  
@@ -98,19 +113,27 @@
 	if (dataContent(raster) != 'row') { 
 		stop('raster does not contain a row') 
 	}
+	
+	
 	if (raster@file@datatype == "integer") { 
 		raster@data@values <- as.integer(round(raster@data@values))  
 	}
 	if (class(values(raster)) == "integer" & raster@file@datatype == "numeric") { 
 		raster@data@values  <- as.numeric(values(raster)) 
 	}
+	if ( raster@file@datatype =='logical') {
+	# values should be written as 0 / 1 ( integers)
+		raster@data@values <- as.integer(values(raster))
+	}
+		
+	
 	if (dataIndices(raster)[1] == 1) { 
 		raster <- ..startWriting(raster, overwrite=overwrite)
  	} 
 	
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
-
+	
 	writeBin(raster@data@values, raster@filecon, size = raster@file@datasize)
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
@@ -176,9 +199,13 @@
 		datatype <- "ASC" 
 	} else if (raster@file@datatype == 'integer') {  
 		datatype <- "INT"  
+	} else if (raster@file@datatype == 'logical') {  
+		datatype <- "LOG" 
 	} else { 
 		datatype <- "FLT" 
 	}
+	
+	
 	if (datatype != "ASC") {
 		datatype <- paste(datatype, raster@file@datasize, "BYTES", sep="")
 		cat("DataType=",  datatype, "\n", file = thefile)

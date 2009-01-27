@@ -36,9 +36,9 @@ rasterFromBbox <- function(bndbox, nrows=1, ncols=1, projstring="") {
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	fileext <- toupper(fileExtension(filename)) 
 	if (fileext == ".RASTER" | fileext == ".GRD") {
-		raster <- .rasterFromFileBinary(filename, band) 
+		raster <- .rasterFromFile(filename, band) 
 	} else {
-		raster <- .rasterFromFileGDAL(filename, band) 
+		raster <- .rasterFromGDAL(filename, band) 
 	}
 	if (values) {
 		raster <- readAll(raster)
@@ -46,7 +46,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	return(raster)
 }	
 	
-.rasterFromFileGDAL <- function(filename, band) {	
+.rasterFromGDAL <- function(filename, band) {	
 	gdalinfo <- GDALinfo(filename)
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
@@ -101,7 +101,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 
 
 
-.rasterFromFileBinary <- function(filename, band=1) {
+.rasterFromFile <- function(filename, band=1) {
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
 
@@ -111,6 +111,8 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	bandorder <- "BSQ"
 	ncellvals <- -9
 	projstring <- ""
+	minval <- NA
+	maxval <- NA
 	
 	for (i in 1:length(ini[,1])) {
 		if (ini[i,2] == "MINX") {xn <- as.numeric(ini[i,3])} 
@@ -147,6 +149,8 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	
 	inidatatype <- trim(inidatatype)
 	if (substr(inidatatype, 1, 3) == "INT") { datatp="integer"
+	} else if (substr(inidatatype, 1, 3) == "LOG") { datatp="logical"
+	} else if (substr(inidatatype, 1, 3) == "ASC") { datatp="ascii"
 	} else { datatp="numeric" }
 	datasz <- as.integer(substr(inidatatype, 4, 4))
 	raster <- setDatatype(raster, datatype=datatp, datasize=datasz)
