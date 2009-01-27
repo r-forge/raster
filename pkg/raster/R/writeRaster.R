@@ -58,14 +58,11 @@
 		}	
 	}
 
-
-
 	if (raster@data@content == 'sparse') { 
 		raster <- .writeSparse(raster, overwrite=overwrite) 
 	} else {
 		binraster <- .setFileExtensionValues(filename(raster))
 		con <- file(binraster, "wb")
-		print(raster@file@datasize)
 		writeBin( values(raster), con, size = raster@file@datasize) 
 		close(con)
 		.writeRasterHdr(raster) 
@@ -73,6 +70,7 @@
 	
 	# put logical values back to T/F
 	if ( raster@file@datatype =='logical') {
+		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 		raster@data@values <- as.logical(values(raster))
 	}
 	
@@ -110,31 +108,25 @@
  
  
 .writeRasterRow <- function(raster, overwrite=FALSE) {
-	if (dataContent(raster) != 'row') { 
-		stop('raster does not contain a row') 
-	}
+#	if (dataContent(raster) != 'row') { 
+#		stop('raster does not contain a row') 
+#	}
 	
-	
-	if (raster@file@datatype == "integer") { 
-		raster@data@values <- as.integer(round(raster@data@values))  
+	raster@data@values[is.nan(raster@data@values)] <- NA
+	raster@data@values[is.infinite(raster@data@values)] <- NA
+
+	if (raster@file@datatype == "integer" |  raster@file@datatype =='logical' ) { 
+		values <- as.integer(round(raster@data@values))  
+		values[is.na(values)] <- as.integer(raster@file@nodatavalue)		
+	} else { 
+		values  <- as.numeric(raster@data@values) 
 	}
-	if (class(values(raster)) == "integer" & raster@file@datatype == "numeric") { 
-		raster@data@values  <- as.numeric(values(raster)) 
-	}
-	if ( raster@file@datatype =='logical') {
-	# values should be written as 0 / 1 ( integers)
-		raster@data@values <- as.integer(values(raster))
-	}
-		
-	
+
 	if (dataIndices(raster)[1] == 1) { 
 		raster <- ..startWriting(raster, overwrite=overwrite)
  	} 
 	
-	raster@data@values[is.nan(raster@data@values)] <- NA
-	raster@data@values[is.infinite(raster@data@values)] <- NA
-	
-	writeBin(raster@data@values, raster@filecon, size = raster@file@datasize)
+	writeBin(values, raster@filecon, size = raster@file@datasize)
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
 		raster <- ..stopWriting(raster)

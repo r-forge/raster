@@ -142,8 +142,8 @@ setMinMax <- function(raster, readfromdisk=FALSE) {
 		}
 	}
 #	if (raster@file@datatype == 'logical') {
-#		raster@data@min <- as.logical(min(raster@data@min))
-#		raster@data@max <- as.logical(max(raster@data@max))
+#		raster@data@min <- as.logical(raster@data@min)
+#		raster@data@max <- as.logical(raster@data@max)
 #	}
 	raster@data@haveminmax <- TRUE
 	return(raster)
