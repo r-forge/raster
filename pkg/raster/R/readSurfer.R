@@ -17,6 +17,7 @@
 	m <- matrix(v, nrow=r@rows, ncol=r@ncol, byrow=T)
 	m <- m[nrow(m):1, ] 
 	r <- setValues(r, as.vector(t(m)))
+	r@file@driver <- "surfer"
 	return(r)
 }
 

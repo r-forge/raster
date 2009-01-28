@@ -61,13 +61,14 @@ setMethod('asRasterLayer', signature(object='RasterLayer', index='numeric'),
 
 setMethod('asRasterLayer', signature(object='RasterStack', index='numeric'), 
 	function(object, index){
-		rs <- newRaster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
-		if (dataContent(object) == 'all') {
-			dindex <- max(1, min(nlayers(object), index))
-			if (dindex != index) { warning(paste("index was changed to", dindex))}
-			rs <- setValues(rs, as.matrix(values(object))[,dindex])
-		}
-		return(rs)
+		dindex <- max(1, min(nlayers(object), index))
+		if (dindex != index) { warning(paste("index was changed to", dindex))}
+		rs <- object@layers[[dindex]]
+#		rs <- newRaster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
+#		if (dataContent(object) == 'all') {
+#			rs <- setValues(rs, as.matrix(values(object))[,dindex])
+#		}
+#		return(rs)
 	}
 )
 

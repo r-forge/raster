@@ -161,16 +161,12 @@ band <- function(object) {
 	if (class(object) == "RasterLayer") {
 		return(object@file@band)
 	} else {
-		stop("only implemented for RasterLayer objects")
-	}	
+		stop(paste("not implemented for:", class(object), "objects"))
+	}
 }
 
 nbands <- function(object) {
-	if (class(object) == "RasterLayer") {
-		return(1)
-	} else {
-		return(object@file@nbands)
-	}	
+	return(object@file@nbands)
 }
 
 projection <- function(object, asText=TRUE) {
