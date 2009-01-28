@@ -64,11 +64,10 @@ setMethod('asRasterLayer', signature(object='RasterStack', index='numeric'),
 		dindex <- max(1, min(nlayers(object), index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
 		rs <- object@layers[[dindex]]
-#		rs <- newRaster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
-#		if (dataContent(object) == 'all') {
-#			rs <- setValues(rs, as.matrix(values(object))[,dindex])
-#		}
-#		return(rs)
+		if (dataContent(object) == 'all') {
+			rs <- setValues(rs, values(object)[,dindex])
+		}
+		return(rs)
 	}
 )
 

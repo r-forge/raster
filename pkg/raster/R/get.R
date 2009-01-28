@@ -66,7 +66,7 @@ cellFromXY <- function(object, xy) {
 		colnr <- colFromX(object, x[i]) - 1
 		rownr <- rowFromY(object, y[i]) - 1
 		if ((!is.na(colnr)) & (!is.na(rownr))) {
-			cell[i] <- as.integer((rownr * ncol(object) + colnr) + 1)
+			cell[i] <- rownr * ncol(object) + colnr + 1
 		}
 	}
 	return(cell)
@@ -87,7 +87,7 @@ colFromX <- function ( object, x )	{
 	colnr <- (trunc((x - xmin(object)) / xres(object))) + 1 
 	colnr[x == xmax(object)] <- ncol(object)
 	colnr[x < xmin(object) | x > xmax(object) ] <- NA
-	return(colnr) 
+	return(as.vector(colnr))
 }
 	
 	
