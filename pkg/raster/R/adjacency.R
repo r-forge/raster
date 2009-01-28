@@ -26,7 +26,7 @@ adjacency <- function(raster, fromCells, toCells, directions) {
 	if (isLatLon(raster)) {
 		tolerance <- 0.1
 		scale <- xres(raster)
-		if (all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale) & all.equal(xmax(raster), 180, tolerance=tolerance, scale=scale)) {
+		if (isTRUE(all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale)) & isTRUE(all.equal(xmax(raster), 180, tolerance=tolerance, scale=scale))) {
 			outerMeridianConnect <- TRUE
 		}
 	}
