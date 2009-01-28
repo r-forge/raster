@@ -4,10 +4,11 @@
 
 \title{ Transform polygons to a raster }
 \description{
-  xxx
+  Two implementations of a polygon to raster conversion (#2 should be slowest in most cases)
 }
 \usage{
 polygonsToRaster(sppoly, raster, field=0, filename="", overwrite=FALSE) 
+polygonsToRaster2(sppoly, raster, field=0, filename="", overwrite=FALSE) 
 }
 
 \arguments{
