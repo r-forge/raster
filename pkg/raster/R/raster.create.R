@@ -35,7 +35,7 @@ rasterFromBbox <- function(bndbox, nrows=1, ncols=1, projstring="") {
 
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	fileext <- toupper(fileExtension(filename)) 
-	if (fileext == ".RASTER" | fileext == ".GRD") {
+	if (fileext == ".GRD") {
 		raster <- .rasterFromFile(filename, band) 
 	} else {
 		raster <- .rasterFromGDAL(filename, band) 
@@ -102,6 +102,10 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 
 
 .rasterFromFile <- function(filename, band=1) {
+	if (!file.exists( .setFileExtensionValues(filename)) ){
+		warning("no '.gri' file. Assuming this is a Surfer file")
+		return(.readSurfer6(filename))
+	}	
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
 

@@ -111,20 +111,24 @@
 #	if (dataContent(raster) != 'row') { 
 #		stop('raster does not contain a row') 
 #	}
-	
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
-
+	
 	if (raster@file@datatype == "integer" |  raster@file@datatype =='logical' ) { 
 		values <- as.integer(round(raster@data@values))  
 		values[is.na(values)] <- as.integer(raster@file@nodatavalue)		
 	} else { 
 		values  <- as.numeric(raster@data@values) 
 	}
-
 	if (dataIndices(raster)[1] == 1) { 
 		raster <- ..startWriting(raster, overwrite=overwrite)
  	} 
+	
+	rsd <- na.omit(raster@data@values) # min and max values
+	if (length(rsd) > 0) {
+		raster@data@min <- min(raster@data@min, min(rsd))
+		raster@data@max <- max(raster@data@max, max(rsd))
+	}	
 	
 	writeBin(values, raster@filecon, size = raster@file@datasize)
 	
