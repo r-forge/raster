@@ -149,7 +149,8 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 
 
 polygonsToRaster2 <- function(sppoly, raster, field=0, filename="", overwrite=FALSE) {
-# should be slower except when  polygons very detailed and raster las ow resolution
+#  This is based on sampling by points. Should be slower except when  polygons very detailed and raster las ow resolution
+# but it could be optimized using the bounding boxes ofindividual polygons.
 
 # check if bbox of raster and sppoly overlap
 	filename <- trim(filename)
