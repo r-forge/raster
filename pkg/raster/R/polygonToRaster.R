@@ -150,7 +150,7 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 
 polygonsToRaster2 <- function(sppoly, raster, field=0, filename="", overwrite=FALSE) {
 #  This is based on sampling by points. Should be slower except when  polygons very detailed and raster las ow resolution
-# but it could be optimized using the bounding boxes ofindividual polygons.
+# but it could be optimized further
 
 # check if bbox of raster and sppoly overlap
 	filename <- trim(filename)
@@ -176,14 +176,22 @@ polygonsToRaster2 <- function(sppoly, raster, field=0, filename="", overwrite=FA
 	v <- vector(length=0)
 	rowcol <- cbind(0, 1:ncol(raster))
 
+	firstrow <- rowFromY(raster, spbb[2,2])
+	lastrow <- rowFromY(raster, spbb[2,1])
+	
 	for (r in 1:nrow(raster)) {
-		rowcol[,1] <- r
-		sppoints <- xyFromCell(raster, cellFromRowCol(raster, rowcol[,1], rowcol[,2]), TRUE)
-		over <- overlay(sppoints, sppoly)
-		if (filename == "") {
-			v <- c(v, over)
+		if (r < firstrow | r > lastrow) {
+			vals <- rep(NA, times=ncol(raster))
 		} else {
-			raster <- setValues(raster, putvals[over], r)
+			rowcol[,1] <- r
+			sppoints <- xyFromCell(raster, cellFromRowCol(raster, rowcol[,1], rowcol[,2]), TRUE)
+			over <- overlay(sppoints, sppoly)
+			vals <- putvals[over]
+		}
+		if (filename == "") {
+			v <- c(v, vals)
+		} else {
+			raster <- setValues(raster, vals, r)
 			raster <- writeRaster(raster)
 		}
 	}

@@ -1,6 +1,7 @@
 \name{polygons to raster}
 
 \alias{polygonsToRaster}
+\alias{polygonsToRaster2}
 
 \title{ Transform polygons to a raster }
 \description{
