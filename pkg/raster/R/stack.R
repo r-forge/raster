@@ -156,7 +156,7 @@ addRasters <- function(rstack, rasters) {
 }	
 
 
-stackRemove <- function(rstack, indices) {
+dropLayer <- function(rstack, indices) {
 	indices <- sort(indices, decreasing=TRUE)
 	for (i in 1:length(indices)) {
 		index <- -1 * indices[i]

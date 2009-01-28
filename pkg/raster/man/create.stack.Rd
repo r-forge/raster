@@ -5,29 +5,24 @@
 \alias{stackFromRasters}
 \alias{addFiles}
 \alias{addRasters}
-\alias{stackRemove}
-\alias{stackSave}
-\alias{stackOpen}
+\alias{dropLayer}
 
 \title{ Create or change a new stack }
 \description{
   A raster stack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects, or from raster files.
-  You can add raster to or remove raster from a rasterstack. You can also save a stack to a file, to recreate it later.  
+  You can add raster to or remove raster from a rasterstack. 
 }
 
 \usage{
-stackOpen(stackfile)
-stackSave(rstack)
 makeStack(x, ...)
 stackFromFiles(rasterfiles, bands= rep(1, length(rasterfiles)))
 addFiles(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
 addRasters(rstack, rasters) 
-stackRemove(rstack, indices) 
+dropLayer(rstack, indices) 
 }
 
 \arguments{
-  \item{stackfile}{ Filename for the stack (to save it on disk) }
-  \item{rstack}{ a RasterStack object }
+   \item{rstack}{ a RasterStack object }
   \item{x}{a RasterLayer object}
   \item{...}{additional RasterLayer objects (or filenames) }
   \item{rasterfiles}{ Filename(s) of (a) raster dataset(s) }
@@ -37,7 +32,8 @@ stackRemove(rstack, indices)
 }
 \details{
   When a  stack is saved to a file, only pointers (filenames) to raster datasets are saved, not the data. If the name or location of a raster file changes, the stack becomes invalid.
-  rasters contained in a stack can be accessed like this stack@rasters[[index]] where index is between 1 and stack@nrasters.  
+  In stackFromFiles, use index=-1 to add all bands of a single file to the RasterStack
+
 }
 \value{
   a stack object
@@ -54,12 +50,7 @@ stackRemove(rstack, indices)
   rs <- rasterFromFile(rasterfile)
   st <- addRasters(st, c(rs, rs))
   st
-  st <- stackRemove(st, c(3, 5))
+  st <- dropLayer(st, c(3, 5))
   nlayers(st)
-  st <- setFilename(st, "mystack")
-  st <- stackSave(st)
-# note that setFilename adds an extension .stk to a stackfile  
-  st2 <- stackOpen("mystack.stk")
-  st2
 }
 \keyword{ spatial }
