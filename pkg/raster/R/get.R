@@ -48,13 +48,11 @@ colFromCell <- function(object, cell) {
     return(colnr)
 }
 
-
-	
 cellFromXY <- function(object, xy) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	if (class(xy) == 'SpatialPoints' | class(xy) == 'SpatialPointsDataFrame') {
-		x <- xy@points[,1]
-		y <- xy@points[,2]
+		x <- coordinates(xy)[,1]
+		y <- coordinates(xy)[,2]
 	} else if (is.null(dim(xy))) { 
 		x <- xy[1]
 		y <- xy[2] 
@@ -73,9 +71,6 @@ cellFromXY <- function(object, xy) {
 	}
 	return(cell)
 }
-
-
-
 
 cellFromRowCol <- function(object, rownr, colnr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
