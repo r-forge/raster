@@ -1,4 +1,18 @@
 
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# International Rice Research Institute
+# Date :  June 2008
+# Version 0,1
+# Licence GPL v3
+
+
+
+#if (!isGeneric("values")) {
+#	setGeneric("values", function(object, ...)
+#		standardGeneric("values"))
+#}	
+
+#setMethod('values', signature(object='Raster'), 
 values <- function(object, format='vector', names=FALSE) {
 	if (dataContent(object)=="nodata") {stop("first read some data (e.g., readAll()") }
 	if (format=='matrix') { 
@@ -9,6 +23,7 @@ values <- function(object, format='vector', names=FALSE) {
 		return(object@data@values) 
 	}
 }
+#)
 
 
 

@@ -153,12 +153,15 @@ asSpGrid <- function(object, type='grid')  {
 	if (type=='pixel') {
 		object <- makeSparse(object)
 		pts <- SpatialPoints(xyFromCell(object,  dataIndices(object)))
-		sp <- SpatialPixelsDataFrame(points=pts, data=as.data.frame(values(object)), proj4string=projection(object, FALSE)) 	
+		data <- values(object)
+		data <- as.data.frame(data)
+		sp <- SpatialPixelsDataFrame(points=pts, data=data, proj4string=projection(object, FALSE)) 	
 		
 	} else if (type=='grid') {
 		if ( dataContent(object) == 'all') {
-			values <- as.data.frame(values(object))
-			sp <- SpatialGridDataFrame(grd, proj4string=projection(object, FALSE), data=values)
+			data <- values(object)
+			data <- as.data.frame(data)
+			sp <- SpatialGridDataFrame(grd, proj4string=projection(object, FALSE), data=data)
 		} else { 
 			sp  <- SpatialGrid(grd, proj4string=projection(object, FALSE))
 		}	
