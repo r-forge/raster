@@ -6,53 +6,122 @@
 
 
 
-#if (!isGeneric("setValues")) {
-#	setGeneric("setValues", function(object, values, rownr)
-#		standardGeneric("setValues"))   }	
+if (!isGeneric('setValues')) {
+	setGeneric('setValues', function(object, values, rownr=-1, layer=-1)
+		standardGeneric('setValues')) 
+	}	
 
-	
-setValues <- function(raster, values, rownr=-1) {
+
+		
+setMethod('setValues', signature(object='RasterLayer'), 
+  
+  function(object, values, rownr=-1,  layer=-1) {
+  
 	if (!is.vector(values)) {stop('values must be a vector')}
-	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {stop('data must be values')}
+	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
+		stop('values must be numeric, integer or logical.')	}
 	
-	rownr <- round(rownr)
 
-	if (length(values) == 0) {	
-		return(clearValues(raster)) 
-	}
 	if (length(values) == 1) {	
 		if (rownr > 0) { 
-			values <- rep(values, ncol(raster))
+			values <- rep(values, ncol(object))
 		} else {
-			values <- rep(values, ncell(raster))
+			values <- rep(values, ncell(object))
 		}
 	}
-	if (length(values) == ncell(raster)) { 
+
+	if (length(values) == ncell(object)) { 
 		if (rownr > 0) {
 			stop("if setting all values, rownr must be < 1")
 		}
-		raster@data@values <- values
-		raster@data@content <- 'all'
-		raster@data@source <- 'ram'
-		raster@data@indices <- c(1, ncell(raster))
-		raster <- setMinMax(raster)
-		return(raster)	
-	} else if (length(values) == ncol(raster)) {
-		if (rownr < 1 | rownr > nrow(raster)) {
+		object@data@values <- values
+		object@data@content <- 'all'
+		object@data@source <- 'ram'
+		object@data@indices <- c(1, ncell(object))
+		object <- setMinMax(object)
+		return(object)	
+	} else if (length(values) == ncol(object)) {
+		rownr <- round(rownr)
+		if (rownr < 1 | rownr > nrow(object)) {
 			stop(paste("rownumber out of bounds:", rownr))
 		}
-		raster@data@values <- values
-		raster@data@content <- 'row' 
-		firstcell <- cellFromRowCol(raster, rownr=rownr, colnr=1)
-		lastcell <- cellFromRowCol(raster, rownr=rownr, colnr=ncol(raster))
-		raster@data@indices <- c(firstcell, lastcell)
-		return(raster)
+		object@data@values <- values
+		object@data@content <- 'row' 
+		firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
+		lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
+		object@data@indices <- c(firstcell, lastcell)
+		return(object)
 	} else {
-		stop("length(values) is not equal to ncell(raster) or ncol(raster)") 
+		stop("length(values) is not equal to ncell(object) or ncol(object)") 
 	}
-}	
+ }
+)
 	
 
+
+setMethod('setValues', signature(object='RasterStack'), 
+  function(object, values, rownr=-1, layer=-1) {
+	if (!(is.vector(values) | is.matrix(values))) {
+		stop('values must be a vector or a matrix')
+	}
+	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
+		stop('values must be numeric, integer or logical.')	
+	}
+	rownr <- round(rownr)
+	
+	if (is.matrix(values)) {
+		if (ncol(values) == nlayers(object)) {
+			object@data@values <- values
+			if (nrow(values) == 1) {
+				object@data@content <= 'all'
+				object@data@indices <- c(1, ncell(object))
+			} else if (nrow(values) == nrow(object)) {
+				object@data@content <= 'row'
+				firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
+				lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
+				object@data@indices <- c(firstcell, lastcell)				
+			} else {
+				stop('either set all data or a single row')
+			}
+		} else if (ncol(values) == 1) {
+			values <- as.vector(values)
+		} else {
+			stop('either set values for all layers or for a single layer')
+		}
+	}
+	
+	if (is.vector(values)) {
+		layer <- round(layer)
+		if (layer < 1) { 
+			print(class(object))
+			stop('specify layer')	}
+		if (layer > nlayers(object)) {stop('layer number too high')}
+		
+		
+		if (length(values) == ncell(object)) { 
+			if (rownr > 0) {
+				stop("if setting all values, rownr must be < 1")
+			}
+			if (dataContent(object) != 'all') { 
+				stop(" you can only setValues with these values if the dataContent = 'all'") }
+			object@data@values[,layer] <- values
+	#		object <- setMinMax(object)
+		} else if (length(values) == ncol(object)) {
+			if (rownr < 1 | rownr > nrow(object)) {
+				stop(paste("rownumber out of bounds:", rownr))
+			}
+			object@data@values <- values
+			object@data@content <- 'row' 
+			firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
+			lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
+			object@data@indices <- c(firstcell, lastcell)
+		}
+	} else {
+		stop("length(values) is not equal to ncell(object) or ncol(object)") 
+	}
+ }
+)
+	
 
 clearValues <- function(object) {
 	if (class(object) == "BasicRaster") {
