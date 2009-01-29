@@ -19,16 +19,27 @@ closeHandle <- function(raster) {
 
 newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
 	bb <- newBbox(xmn, xmx, ymn, ymx)
-	return(rasterFromBbox(bb, nrows=nrows, ncols=ncols, projstring))
+	rs <- rasterFromBbox(bb, nrows=nrows, ncols=ncols)
+	rs <- setProjection(rs, projstring)
+	return(rs)
 }
 
-rasterFromBbox <- function(bndbox, nrows=1, ncols=1, projstring="") {
+
+
+#if (!isGeneric("values")) {
+#	setGeneric("values", function(object, ...)
+#		standardGeneric("values"))
+#}	
+
+#setMethod('values', signature(object='Raster'), 
+rasterFromBbox <- function(bndbox, nrows=1, ncols=1) {
+	crs <- newCRS('NA')
+	try(crs <- projection(bndbox, asText=F), silent = T)
 	bndbox <- getBbox(bndbox)
 	nr = as.integer(round(nrows))
 	nc = as.integer(round(ncols))
 	if (nc < 1) { stop("ncols should be > 0") }
 	if (nr < 1) { stop("nrows should be > 0") }
-	crs <- newCRS(projstring)
 	raster <- new("RasterLayer", bbox = bndbox, crs=crs, ncols = nc, nrows = nr )
 	return(raster) 
 }

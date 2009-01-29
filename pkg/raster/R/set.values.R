@@ -81,7 +81,7 @@ makeSparse <- function(raster) {
 			return(raster)
 		} else { 
 			# as above, but by reading data from disk, row by row
-			stop('not implemented yet, use readAll() first' )
+			stop('not implemented yet for objects with no data in memory, use readAll() first' )
 		}	
 	}
 }

@@ -12,7 +12,7 @@
 }
 \usage{
 	newRaster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
-	rasterFromBbox(bndbox, nrows = 1, ncols = 1, projstring="")
+	rasterFromBbox(bndbox, nrows = 1, ncols = 1)
 	rasterFromFile(filename, values=FALSE, band=1)
 	closeHandle(raster)
 }
