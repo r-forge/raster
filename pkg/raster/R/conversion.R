@@ -1,17 +1,33 @@
 
-setAs('RasterLayer', 'SpatialGridDataFrame', 
-	function(from){ return(asSpGrid (from)) }
-)
-
 
 setAs('SpatialGridDataFrame', 'RasterStack',
 	function(from){ return(asRasterStack (from)) }
 )
-
+setAs('SpatialPixelsDataFrame', 'RasterStack', 
+	function(from){ return(asRasterStack (from)) }
+)
+	
 setAs('SpatialGridDataFrame', 'RasterLayer', 
 	function(from){ return(asRasterLayer (from)) }
 )
 
+setAs('SpatialGrid', 'RasterLayer', 
+	function(from){ return(asRasterLayer (from)) }
+)
+
+setAs('SpatialPixelsDataFrame', 'RasterLayer', 
+	function(from){ return(asRasterLayer (from)) }
+)
+
+setAs('SpatialPixels', 'RasterLayer', 
+	function(from){ return(asRasterLayer (from)) }
+)
+
+
+
+setAs('RasterLayer', 'SpatialGridDataFrame', 
+	function(from){ return(asSpGrid (from)) }
+)
 
 setAs('RasterStack', 'RasterLayer', 
 	function(from){ return(asRasterLayer (from)) }
@@ -61,11 +77,17 @@ setMethod('asRasterLayer', signature(object='RasterLayer', index='numeric'),
 
 setMethod('asRasterLayer', signature(object='RasterStack', index='numeric'), 
 	function(object, index){
-		dindex <- max(1, min(nlayers(object), index))
-		if (dindex != index) { warning(paste("index was changed to", dindex))}
-		rs <- object@layers[[dindex]]
-		if (dataContent(object) == 'all') {
-			rs <- setValues(rs, values(object)[,dindex])
+		if (nlayers(object) > 0) {
+			dindex <- max(1, min(nlayers(object), index))
+			if (dindex != index) { warning(paste("index was changed to", dindex))}
+			rs <- object@layers[[dindex]]
+			if (dataContent(object) == 'all') {
+				rs <- setValues(rs, values(object)[,dindex])
+			}
+		} else {
+			rs <- new("RasterLayer")
+			rs <- setBbox(rs, getBbox(object))
+			rs <- setRowCol(rs, nrow(object), ncol(object))
 		}
 		return(rs)
 	}
@@ -119,21 +141,28 @@ asRasterStack <- function(spgrid) {
 	stk <- setBbox(stk, getBbox(spgrid))
 	stk <- setProjection(stk, spgrid@proj4string)
 	stk <- setRowCol(stk, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
-
+	
 	if (class(spgrid)=='SpatialPixels') {
 		# do noting, there is no data
 		# we could store the indices, but then we would have a sparse raster with no data (or with NAs). That goes against our definition of sparse (all NAs have been removed)
+		stop('cannot make a RasterStack from a SpatialPixels object. Make a RasterLayer instead')		
 	} else if (class(spgrid)=='SpatialPixelsDataFrame') {
-		cells <- spgrid@grid.index
-		if (length(cells)==0) {
-			cells <- cellFromXY(stk, spgrid@coords)
+		spgrid <- as(spgrid, 'SpatialGridDataFrame')
+		rs <- as(stk, 'RasterLayer')
+		stk <- setValues(stk, as.matrix(spgrid@data))
+		for (i in 1:ncol(spgrid@data)) {
+			stk@layers[i] <- rs
 		}
-		vals <- as.matrix(spgrid@data)
-		stk <- setValuesSparse(stk, cells, vals)
 	} else if ( class(spgrid)=='SpatialGrid' ) {
 		# do nothing, there is no data
+		stop('cannot make a RasterStack from a SpatialGrid object. Make a RasterLayer instead')
 	} else if (class(spgrid)=='SpatialGridDataFrame' ) {
 		stk <- setValues(stk, as.matrix(spgrid@data))
+		rs <- as(stk, 'RasterLayer')
+		stk <- setValues(stk, as.matrix(spgrid@data))
+		for (i in 1:ncol(spgrid@data)) {
+			stk@layers[i] <- rs
+		}		
 	}
 	return(stk)
 }
