@@ -28,7 +28,6 @@ Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE, asInt = FALSE)
 			}
 		}
 	}
-	if (length(rasters) > 6) {stop("sorry, this function cannot take more than 6 RasterLayers at a time")}
 	
 	f <- formals(fun)
 	if (length(f) != length(rasters)) {
@@ -46,28 +45,19 @@ Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE, asInt = FALSE)
 	if (asInt) { outraster <- setDatatype(outraster, 'integer') }
 
 	inram <- TRUE
-	ondisk <- TRUE
 	for (i in 1:length(rasters)) {
 		if (dataContent(rasters[[i]]) != 'all') {inram <- FALSE} 
-		if (dataSource(rasters[[i]]) != 'disk') {ondisk <- FALSE} 		
 	}	
 	
 	
 	if ( inram ) {
-	# there has to be a smarter way then this!
-	# perhaps via    as.function(alist( )) ??
-	
-		if (length(rasters) == 2) {
-			vals <- fun( values(rasters[[1]]), values(rasters[[2]]) )
-		} else if (length(rasters) == 3) {
-			vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]) )
-		} else if (length(rasters) == 4) {
-			vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]), values(rasters[[4]]) )
-		} else if (length(rasters) == 5) {
-			vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]), values(rasters[[4]]), values(rasters[[5]]) )
-		} else if (length(rasters) == 6) {
-			vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]), values(rasters[[4]]), values(rasters[[5]]), values(rasters[[6]]) )
+		
+		vallist <- list()
+		for (i in 1:length(rasters)) {
+			vallist[[i]] <- values(rasters[[i]])
+			clearValues(rasters[[i]])
 		}
+		vals <- do.call(fun, vallist)
 		
 		outraster <- setValues(outraster, vals)
 		if (filename(outraster) != "") { 
@@ -90,17 +80,14 @@ Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE, asInt = FALSE)
 					rasters[i] <- readRow(rasters[[i]], r)
 				}	
 			}	
-			if (length(rasters) == 2) {
-				vals <- fun( values(rasters[[1]]), values(rasters[[2]]) )
-			} else if (length(rasters) == 3) {
-				vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]) )
-			} else if (length(rasters) == 4) {
-				vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]), values(rasters[[4]]) )
-			} else if (length(rasters) == 5) {
-				vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]), values(rasters[[4]]), values(rasters[[5]]) )
-			} else if (length(rasters) == 6) {
-				vals <- fun( values(rasters[[1]]), values(rasters[[2]]), values(rasters[[3]]), values(rasters[[4]]), values(rasters[[5]]), values(rasters[[6]]) )
+			
+			
+			for (i in 1:length(rasters)) {
+				vallist[[i]] <- values(rasters[[i]])
+				clearValues(rasters[[i]])
 			}
+			vals <- do.call(fun, vallist)
+			
 			if (filename(outraster) == "") {
 #				v <- c(v, vals)
 				startcell <- endcell + 1

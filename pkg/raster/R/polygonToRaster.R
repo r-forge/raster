@@ -32,10 +32,8 @@
 	if ((ua >= 0 & ua <= 1) & (ub >= 0 & ub <= 1) ) {
         x <- x1 + ua * (x2 - x1)
         y <- y1 + ua * (y2 - y1) 
-        outx <- x1 + (ua * (x2 - x1))
-        outy <- y1 + (ua * (y2 - y1))
 #		print("C")
-		return(c(outx, outy))
+		return(c(x, y))
 	} else {
 #		print("D")
 		return(NA)
@@ -104,8 +102,10 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 	}
 	raster <- setDatatype(raster, class(putvals[1]))
 		
-	
+	adj <- 0.49 * xres(raster)
 	v <- vector(length=0)
+	rxmn <- xmin(raster) + 0.1 * xres(raster)
+	rxmx <- xmax(raster) - 0.1 * xres(raster)
 	for (r in 1:nrow(raster)) {
 		rv <- rep(NA, ncol(raster))
 		ly <- yFromRow(raster, r)
@@ -124,10 +124,22 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 						mypoly <- sppoly@polygons[[i]]@Polygons[[j]]@coords
 						intersection <- .overlayLinePolygon(myline, mypoly)
 						if (nrow(intersection) > 0) {
-							cols <- sort(colFromX(raster, intersection[,1]))
+							x <- sort(intersection[,1])
 							for (k in 1:round(nrow(intersection)/2)) {
-								l <- (k * 2) - 1
-								rv[cols[l]:cols[l+1]] <- putvals[i]
+								l <- (k * 2) - 1		
+								x1 <- x[l]
+								x2 <- x[l+1]
+								if (x1 > rxmx) { next }
+								if (x2 < rxmn) { next }
+								# adjust to skip first cell if the center is not covered by this polygon
+								x1a <- x1 + adj
+								x2a <- x2 - adj
+								x1a <- max(rxmn, x1a)
+								x2a <- min(rxmx, x2a)
+								col1 <- colFromX(raster, x1a)
+								col2 <- colFromX(raster, x2a)
+								if (is.na(col1) | is.na(col2) | col1 > col2) {	next }
+								rv[col1:col2] <- putvals[i]
 							}	
 						}
 					}	
@@ -137,7 +149,7 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 		if (filename == "") {
 			v <- c(v, rv)
 		} else {
-			raster <- setValues(raster, rv, r)
+			raster <- setValues(raster, values=rv, rownr=r)
 			raster <- writeRaster(raster)
 		}
 	}

@@ -86,13 +86,20 @@ setMethod('asRasterLayer', signature(object='SpatialPixels', index='numeric'),
 setMethod('asRasterLayer', signature(object='SpatialPixelsDataFrame', index='numeric'), 
 	function(object, index){
 		raster <- asRasterLayer(as(object, "SpatialPixels"))
-		cells <- object@grid.index
-		if (length(cells)==0) {
-			cells <- cellFromXY(raster, object@coords)
-		}
 		dindex <- max(1, min(dim(object@data)[2], index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
-		raster <- setValuesSparse(raster, cells, object@data[[dindex]])
+		sparse <- FALSE
+		if (!sparse) {
+			object <- as(object, 'SpatialGridDataFrame')
+			raster <- setValues(raster, object@data[[dindex]])
+		} else {
+			cells <- object@grid.index
+			if (length(cells)==0) {
+				cells <- cellFromXY(raster, object@coords)
+			}
+			raster <- setValuesSparse(raster, cells, object@data[[dindex]])
+		}
+		return(raster)
 	}
 )	
 
