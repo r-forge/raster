@@ -5,7 +5,7 @@
 
 \title{ Transform polygons to a raster }
 \description{
-  Two implementations of a polygon to raster conversion (#2 should be slowest in most cases)
+  Two implementations of a polygon to raster conversion (number 2 should be slowest in most cases)
 }
 \usage{
 polygonsToRaster(sppoly, raster, field=0, filename="", overwrite=FALSE) 
@@ -39,7 +39,6 @@ r <- newRaster()
 r <- polygonsToRaster(polys, r)
 #plot(r)
 #plot(polys, add=T)
-
 }
 
 \keyword{ spatial }
