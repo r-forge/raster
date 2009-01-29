@@ -49,10 +49,14 @@ In the current version we are developing the basic functions (nearly complete). 
 </br>
 Currently all code is written in R, for is clarity, and ease of adapation. However, in some future version we would like to also implement C functions to speed up processing of very large datasets. The package is build around a number of S4 classes of which the RasterLayer and RasterStack classes are the most important. Many generic methods are implemented for RasterLayers (arithmic, logical, plot, hist, ...)
 </br>
-The raster package is used in a number of other packages, including <a href="http://gdistance.r-forge.r-project.org/">gdistance</a> for matrix based (cost, resistance) distance calculations; and RemoteSensing and geodata (both currently part of the <a href="http://r-forge.r-project.org/R/?group_id=249">Rgis</a> project.
+The raster package is used in a number of other packages, including <a href="http://gdistance.r-forge.r-project.org/">gdistance</a> for matrix based (cost, resistance) distance calculations; and RemoteSensing and geodata (both currently part of the <a href="http://r-forge.r-project.org/R/?group_id=249">Rgis</a> project).
 </br>
 One of the main reasons for developing this package is that we would like to build a bridge to - the powerful statistics and modeling of - R for the "GIS" community. Our perspective is that standard GIS is too map-centric, and that proper data-analysis needs tools that are more model and data centric. 
 </br>
+We welcome your feedback and suggestions.
+</br>
+For more information on spatial data analysis with R seen the <a href="http://cran.r-project.org/web/views/Spatial.html">CRAN task view</a> on that subject.
+
 </p>
 
 <p>Go to the <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>development pages</strong></a> to download the package, to report bugs, ask for features, and more. </p>
