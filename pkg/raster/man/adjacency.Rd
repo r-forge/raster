@@ -34,8 +34,8 @@ The function connects the outer meridians if the raster is in a geographic (latl
 	
 	#Visualize the outcome in a raster
 	v <- vector(length=ncell(rs))
+	v[c(1,30,55,72,100)] <- 1
 	v[adj[,2]] <- 2
-	v[adj[,1]] <- 1
 	rs <- setValues(rs, v)
 	plot(rs)
 
