@@ -10,7 +10,7 @@
 \usage{
 projectRaster(from, to, method="nngb", overwrite=FALSE)
 projectBbox(object, projstring)
-makeProj(projection='longlat', ..., ellipsoid="", datum="WGS84", asText=TRUE) 
+makeProj(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE) 
 }
 
 \arguments{
@@ -24,13 +24,23 @@ makeProj(projection='longlat', ..., ellipsoid="", datum="WGS84", asText=TRUE)
   \item{...}{parameters for the projection}  
   \item{ellipsoid}{}
   \item{datum}{}  
-  \item{asText}{logical. If \{code}{FALSE}, an object of class 'CRS' will be returned.}  
+  \item{asText}{logical. If \code{FALSE}, an object of class 'CRS' will be returned.}  
 }
 
 \details{
- first create projected bbox (in BasicRaster object). Then project. 
+ First create projected bbox (in BasicRaster object). Then project. 
+ 
  makeProj is a helper function to create a valid PROJ.4 string or CRS object. 
- See projInfo('proj'), projInfo('ellps'), and projInfo('datum') for valud choices
+ 
+ See projInfo('proj'), projInfo('ellps'), and projInfo('datum') for valud choices. Specify either an ellipsoid, or a datum (datum is ignored if ellipsoid != "")
+ 
+ Many projections take additioanl paramters to the projection name (e.g. lon_0, x_0, y_0). Supply these in the '...'. 
+ 
+ You can consult this webpage: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for your projection.
+ 
+ 
+ Projection is performed using the PROJ.4 library accesed through the rgdal package 
+ 
 }
 
 \value{
