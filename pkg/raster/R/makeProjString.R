@@ -20,8 +20,10 @@ makeProj <- function(projection='longlat', ..., ellipsoid="", datum="WGS84", asT
 		projname <- as.vector(prj[which(prj[,1]==projection), 2])
 	}
 	pargs <- list(...)
-	for (i in 1:length(pargs)) {
-		pstr <- paste(pstr, ' +', pargs[[i]], sep="")
+	if ( length(pargs) > 0 ) {
+		for (i in 1:length(pargs)) {
+			pstr <- paste(pstr, ' +', pargs[[i]], sep="")
+		}
 	}
 	if (ellipsoid != "") {
 		if (!(ellipsoid %in% ell[,1])) { 
@@ -52,6 +54,6 @@ makeProj <- function(projection='longlat', ..., ellipsoid="", datum="WGS84", asT
 	}
 }
 
- #newprj2 <- makeProj("lcc", "lat_1=48", "lat_2=33", "lon_0=-100", asText=T)
+ newprj2 <- makeProj("lcc", "lat_1=48", "lat_2=33", "lon_0=-100", asText=T)
 
 
