@@ -27,14 +27,43 @@ values <- function(object, format='vector', names=FALSE) {
 
 
 valuesRow <- function(raster, rownr) {
-	if (!(validRows(raster, rownr))) {stop(paste(rownr,'is not a valid rownumber')) }
-	if (dataContent(raster) == 'sparse') {return (.valuesRow.sparse(raster, rownr)) 
-	} else if (dataContent(raster) != 'all') {stop('cannot do. Need all data')
-	} else {
+	if (dataContent(raster) == 'nodata') {
+		stop('no values in memory. First read or set values')
+	}
+	if (!(validRows(raster, rownr))) {
+		stop(paste(rownr,'is not a valid rownumber')) 
+	}
+	if (dataContent(raster) == 'sparse') {
+		return (.valuesRow.sparse(raster, rownr)) 
+	} else if (dataContent(raster) == 'row') {
+		startcell <- cellFromRowCol(raster, rownr, 1)
+		endcell <- startcell+ncol(raster)-1
+		if (dataIndices(raster) == c(startcell, endcell)) {
+			return(values(raster))
+		} else {
+			stop('this row is not in memory. First use readRow() or readAll')		
+		}
+	} else if (dataContent(raster) == 'block') {
+		firstcol <- colFromCell(raster, dataIndices(raster)[1])
+		lastcol <- colFromCell(raster, dataIndices(raster)[2])
+		if (firstcol != 1 | lastcol != ncol(raster)) {
+			stop('the block data in this raster does not have complete rows')
+		}
+		firstrow <- rowFromCell(raster, dataIndices(raster)[1])
+		lastrow <- rowFromCell(raster, dataIndices(raster)[2])
+		if (rownr < firstrow | rownr > lastrow) {
+			stop('this row is not in memory. First use readRow() or readAll')		
+		}
+		startcell <- ((rownr - firstrow) * ncol(raster) + 1) 
+		endcell <- startcell + ncol(raster) - 1
+		return(values(raster)[startcell:endcell])
+	} else if (dataContent(raster) == 'all'){
 		startcell <- cellFromRowCol(raster, rownr, 1)
 		endcell <- startcell+ncol(raster)-1
 		return(values(raster)[startcell:endcell])
-	}	
+	} else {
+		stop('something is wrong with the RasterLayer dataContent')
+	}
 }
 
 

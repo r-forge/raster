@@ -6,37 +6,35 @@
 
 
 .intersectSegments <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
-#From LISP code by Paul Reiners
+# Translated by RH from LISP code by Paul Reiners
 # http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/linesegments.lisp
-# From algorithm by Paul Bourke given here: http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+# Which was tranlated from the algorithm by Paul Bourke given here: http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
     denom  <-  ((y4 - y3) * (x2 - x1)) - ((x4 - x3) * (y2 - y1))
     ua_num  <- ((x4 - x3) *(y1 - y3)) - ((y4 - y3) * (x1 - x3))
     ub_num  <- ((x2 - x1) *(y1 - y3)) - ((y2 - y1) * (x1 - x3))
 # If the denominator and numerator for the equations for ua and ub are 0 then the two lines are coincident.
     if ( denom == 0 & ua_num == 0 & ub_num == 0) {
-#		print("A")
 #		return(c(x1, y1))
 		xmin <- max(x1, x3)
 		if (xmin==x1) {ymin <- y1} else {ymin <- y3}
 		xmax <- min(x2, x4)
 		if (xmax==x2) {ymax <- y2} else {ymax <- y4}
-		return(rbind(c(xmin, ymin), c(xmax, ymax)))
+# RH: for coincident line (segments) returning two intersections : start and end
+		return(rbind(c(xmin, ymin),
+					 c(xmax, ymax)))
 	}	
 # If the denominator for the equations for ua and ub is 0 then the two lines are parallel.
     if (denom == 0) {
-#		print("B")
-		return(NA)
+		return(c(NA, NA))
 	}
  	ua <- ua_num / denom
     ub <- ub_num / denom
 	if ((ua >= 0 & ua <= 1) & (ub >= 0 & ub <= 1) ) {
         x <- x1 + ua * (x2 - x1)
         y <- y1 + ua * (y2 - y1) 
-#		print("C")
 		return(c(x, y))
 	} else {
-#		print("D")
-		return(NA)
+		return(c(NA, NA))
 	}
 }
 
@@ -52,12 +50,12 @@
 		for (i in 2:length(poly[,1])) {
 			#compute intersection
 			xy <- .intersectSegments(poly[i,1], poly[i,2], poly[i-1,1], poly[i-1,2], line[1,1], line[1,2], line[2,1], line[2,2] )
-			if (length(xy) > 1) {
+			if (!is.na(xy[1])) {
 				resxy <- rbind(resxy, xy)
 			}
 		}
 		xy <- .intersectSegments(poly[1,1], poly[1,2], poly[length(poly[,1]),1], poly[length(poly[,1]),2], line[1,1], line[1,2], line[2,1], line[2,2] )
-		if (length(xy) > 1) {
+		if (!is.na(xy[1])) {
 			resxy <- rbind(resxy, xy)
 		}
 		return(resxy)
@@ -66,9 +64,15 @@
 
 
 
-polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FALSE) {
+polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
 # check if bbox of raster and sppoly overlap
 	filename <- trim(filename)
+	if (updateRaster) {
+		oldraster <- raster 
+		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
+			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
+		}
+	}
 	raster <- setRaster(raster, filename)
 
 	spbb <- bbox(sppoly)
@@ -146,6 +150,21 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 				}
 			}
 		}	
+		if (updateRaster) {
+			oldvals <- values(readRow(oldraster, r))
+			if (updateValue == "all") {
+				ind <- which(!is.na(rv))
+			} else if (updateValue == "zero") {
+				ind <- which(oldvals==0 & !is.na(rv))
+			} else if (updateValue == "NA") {
+				ind <- which(is.na(oldvals))
+			} else {
+				ind <- which(!is.na(oldvals) & !is.na(rv))
+			}
+			oldvals[ind] <- rv[ind]
+			rv <- oldvals
+		}
+
 		if (filename == "") {
 			v <- c(v, rv)
 		} else {

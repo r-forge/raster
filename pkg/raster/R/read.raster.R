@@ -42,7 +42,7 @@
 #read part of a single row
 .rasterRead <- function(raster, rownr,  startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
 	rownr <- round(rownr)
-	if (rownr == 0) { stop("rownr == 0. It should be between 1 and nrow(raster), or -1 for all rows") }
+	if (rownr == 0) { stop("rownr == 0. It should be between 1 and nrow(raster), or < 0 for all rows") }
 	if (rownr > nrow(raster)) { stop("rownr too high") }
 	if (startcol < 1) { stop("startcol < 1") }
 	if (startcol > ncol(raster)) { stop("startcol > ncol(raster)") }
@@ -53,8 +53,13 @@
 		endcol <- ncol(raster) 
 		ncolumns <- ncol(raster) - startcol + 1  
 	}
-
-	if (.driver(raster) == 'raster') {
+	
+	if (dataSource(raster)=='ram') {
+	
+		result <- valuesRow(raster, rownr)[startcol:endcol]
+	
+	} else 	if (.driver(raster) == 'raster') {
+	
 		rastergri <- .setFileExtensionValues(filename(raster))
 		if (!file.exists( filename(raster))) { 
 			stop(paste(filename(raster)," does not exist"))
@@ -83,9 +88,6 @@
 	else { #use GDAL  
 		if (is.na(raster@file@band)) { result <- NA }
 		else {
-			if (rownr > nrow(raster)) {
-				stop("rownr too high")
-			}
 			if (rownr <= 0) {
 				offs <- c(0, 0) 
 				reg <- c(nrow(raster), ncol(raster)) #	reg <- dim(raster@file@gdalhandle[[1]])
@@ -98,6 +100,7 @@
 		result <- getRasterData(raster@file@gdalhandle[[1]], offset=offs, region.dim=reg, band = raster@file@band)
 		if (!is.vector(result)) { result <- as.vector(result) }
 	} 
+	
 	raster@data@values <- as.vector(result)
 	if (rownr < 0) {
 		raster@data@indices <- c(1, ncell(raster))
