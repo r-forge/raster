@@ -174,7 +174,8 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	} else if (substr(inidatatype, 1, 3) == "ASC") { datatp="ascii"
 	} else { datatp="numeric" }
 	datasz <- as.integer(substr(inidatatype, 4, 4))
-	raster <- setDatatype(raster, datatype=datatp, datasize=datasz)
+	dsign <- substr(inidatatype, 5, 1)
+	raster <- setDatatype(raster, datatype=datatp, datasize=datasz, signed=dsign)
 	if ((byteorder == "little") | (byteorder == "big")) { raster@file@byteorder <- byteorder } 	
 	raster@file@nbands <- as.integer(nbands)
 	raster@file@band <- as.integer(band)

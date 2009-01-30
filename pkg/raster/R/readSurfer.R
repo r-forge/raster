@@ -3,8 +3,8 @@
 	con <- file(filename, "rb")
 	id <- readBin(con, "characater", n=1, size=4)
 	r <- raster()
-	r@ncols <- readBin(con, "int", n=4, size=2)
-	r@rows <- readBin(con, "int", n=4, size=2)
+	r@ncols <- readBin(con, "int", n=1, size=2)
+	r@rows <- readBin(con, "int", n=1, size=2)
 	r@bbox@xmin <- readBin(con, "double", n=1, size=8)
 	r@bbox@xmax <- readBin(con, "double", n=1, size=8)
 	r@bbox@ymin <- readBin(con, "double", n=1, size=8)
@@ -16,7 +16,8 @@
 	close(con)
 	m <- matrix(v, nrow=r@rows, ncol=r@ncol, byrow=T)
 	m <- m[nrow(m):1, ] 
-	r <- setValues(r, as.vector(t(m)))
+	r@data@values <- as.vector(t(m))
+	r@data@source <- 'disk'
 	r@file@driver <- "surfer"
 	return(r)
 }

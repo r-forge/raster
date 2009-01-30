@@ -7,8 +7,8 @@
 # Licence GPL v3
 
 
-click <- function(object, n=1, xy=FALSE, type = "n", ...) {
-	loc <- locator(n)
+click <- function(object, n=1, xy=FALSE, type="n", ...) {
+	loc <- locator(n, type, ...)
 	x <- loc$x
 	y <- loc$y
 	xyCoords <- cbind(x, y)

@@ -25,16 +25,19 @@
 		nrows <- endrow - startrow + 1
 	}
 	raster <- .rasterRead(raster, startrow, startcol, ncolumns)
-	blockdata <- values(raster)
+	blockvalues <- values(raster)
 	if (nrows > 1) {
 		for (r in (startrow+1):endrow) {
 			raster <- .rasterRead(raster, r,  startcol, ncolumns)
-			blockdata <- c(blockdata, values(raster))
+			blockvalues <- c(blockvalues, values(raster))
 		}	
 	}	
-	startcell <- cellFromRowCol(raster, startrow, startcol)
-	endcell <- cellFromRowCol(raster, endrow, (startcol+ncolumns-1))
-	raster <- setValuesBlock(raster, blockdata, startcell, endcell)
+	raster@data@values <- blockvalues
+	raster@data@content <- 'block' 
+	firstcell <- cellFromRowCol(raster, startrow, startcol)
+	lastcell <- cellFromRowCol(raster, endrow, (startcol+ncolumns-1))
+	raster@data@indices <- c(firstcell, lastcell)
+
 	return(raster)
 }
 
@@ -55,9 +58,7 @@
 	}
 	
 	if (dataSource(raster)=='ram') {
-	
 		result <- valuesRow(raster, rownr)[startcol:endcol]
-	
 	} else 	if (.driver(raster) == 'raster') {
 	
 		rastergri <- .setFileExtensionValues(filename(raster))
@@ -74,13 +75,17 @@
 		}
 		if (rownr > 0) {
 			seek(con, ((rownr-1) * ncol(raster) + (startcol-1)) * raster@file@datasize)
-			result <- readBin(con, what=dtype, n = ncolumns, size = raster@file@datasize, endian = raster@file@byteorder) }	
+			result <- readBin(con, what=dtype, n=ncolumns, size=raster@file@datasize, signed=raster@file@datasigned, endian=raster@file@byteorder) }	
 		else {	
-			result <- readBin(con, what=dtype, n = ncell(raster), size = raster@file@datasize, endian = raster@file@byteorder) 
+			result <- readBin(con, what=dtype, n=ncell(raster), size=raster@file@datasize, signed=raster@file@datasigned, endian=raster@file@byteorder) 
 		}
 		close(con)
 		result[is.nan(result)] <- NA
-		result[result <=  (0.999 * .nodatavalue(raster)) ] <- NA 
+		if (dtype == 'numeric') {
+			result[result <=  (0.999 * .nodatavalue(raster)) ] <- NA 	
+		} else {
+			result[result == raster@file@nodatavalue ] <- NA 			
+		}
 		if (raster@file@datatype == 'logical') {
 			result <- as.logical(result)
 		}
@@ -204,7 +209,7 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
 		bndbox <- changeBbox(raster, xmx=xmx, ymn=ymn)
 		outras <- setBbox(outras, bndbox, keepres=F)
-		outras <- setValues(outras, dd)
+		outras@data@values <- dd
 	}
 	if (asRaster) {
 		return(outras)

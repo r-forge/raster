@@ -1,13 +1,12 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
-# Date :  June 2008
-# Version 0,8
+# Date :  January 2009
+# Version 0.8
 # Licence GPL v3
 
 'filename<-' <- function(x, value) {
 	return( setFilename(x, value) )
 }
-
 
 'projection<-' <- function(x, value) {
 	return( setProjection(x, value) )
@@ -22,12 +21,13 @@
 }	
 
 
+
+
 .getColValues <- function(r, colnr) {
 	firstcol <- 1:nrow(r) * ncol(r) - ncol(r) 
 	cells <- colnr + firstcol 
 	return(values(r)[cells])
 }
-
 
 
 
@@ -50,7 +50,18 @@ setMethod("[", "RasterLayer",
 
 setReplaceMethod("[", "RasterLayer",  
 	function(x, i, j, value) {
-		if  (!missing(j)) {	stop("incorrect number of dimensions") }
+		if  (!missing(j)) {	
+			stop("incorrect number of dimensions") 
+		}
+		if  (missing(i)) {	
+			if (length(value) == ncell(x)) {
+				return(setValues(x, value))
+			} else if (length(value) == 1) {
+				return( setValues(x, rep(value, times=ncell(x))) )
+			} else {
+				stop('length of replacement values should be 1 or ncell')
+			}
+		}
 		if (class(i) == "RasterLayer") {
 			i <- as.logical( .getRasterValues(i) ) 
 		}
@@ -91,14 +102,41 @@ setMethod("[[", c("RasterLayer","ANY","ANY"),
 			}	
 		}
 		return( matrix(values(x), nrow(x), ncol(x), byrow=T)[i,j] )
-	
-#		if (missing(i)) { rows <- 1:nrow(x) } else { rows <- i }
-#		if (missing(j)) { cols <- 1:ncol(x) } else { cols <- j }
-		# ugly R code
-#		cells <- cellFromRowcol(rep(rows[1], length(cols)), cols)
-#		for (a in 2:rows) { cells <- c(cells, cells + (a - 1) * ncol(x)) }
-#		vals <- values(x)[cells]
-#		return( matrix(vals, length(rows), lenght(cols), byrow=T) )
+	}
+)
+
+
+setReplaceMethod("[[", "RasterLayer",  
+	function(x, i, j, value) {
+		if (!missing(i)) {
+			if (class(i) == "RasterLayer") {
+				i <- as.logical( .getRasterValues(i) ) 
+			}
+		}
+		if (!missing(j)) {
+			if (class(j) == "RasterLayer") {
+				j <- as.logical( .getRasterValues(i) ) 
+			}
+		}
+		
+		if (dataContent(x) == 'nodata') {
+			if (ncell(x) < 1000000) {
+				if (dataSource(x) == 'disk') {
+					x <- readAll(x)
+				} else {
+					x <- setValues(x, rep(NA, times=ncell(x)))
+				}
+			} else {
+				stop('Large raster with no data in memory, use readAll() first')
+			}	
+		}
+		v <- matrix(values(x), nrow(x), ncol(x), byrow=T)
+		x <- clearValues(x)
+		v[i,j] <- value
+		x <- setValues(x, as.vector(t(v)))
+		x <- setFilename(x, "")
+		x <- setMinMax(x)
+		return(x)
 	}
 )
 

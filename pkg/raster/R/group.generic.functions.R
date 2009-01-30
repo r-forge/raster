@@ -9,7 +9,7 @@
 #	memalloc <- n * ncell(raster) * 8
 #	memavailable <- memory.limit()-memory.size()
 # For now something simplistic :
-	maxalloc <- 10^8
+	maxalloc <- 10^7
 	if ( (ncell(raster) * n * datasize) > maxalloc ) { 
 		return( FALSE )
 	} else { 

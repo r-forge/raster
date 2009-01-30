@@ -6,6 +6,22 @@
 
 
 
+newCRS <- function(projstring) {
+	projstring <- trim(projstring)
+	if (is.na(projstring) | nchar(projstring) < 3) { 
+		projs <- (CRS(as.character(NA)))
+	} else {
+		projs <- try(CRS(projstring), silent = T)
+		if (class(projs) == "try-error") { 
+			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
+			projs <- CRS(as.character(NA))
+		}
+	}
+	return(projs)
+}
+
+
+
 makeProj <- function(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE) {
 	prj <- projInfo("proj")
 	ell <- projInfo("ellps")

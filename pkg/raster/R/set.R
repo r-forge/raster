@@ -82,21 +82,6 @@ setProjection <- function(object, projstring) {
 }
 
 
-newCRS <- function(projstring) {
-	projstring <- trim(projstring)
-	if (is.na(projstring) | nchar(projstring) < 3) { 
-		projs <- (CRS(as.character(NA)))
-	} else {
-		projs <- try(CRS(projstring), silent = T)
-		if (class(projs) == "try-error") { 
-			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
-			projs <- CRS(as.character(NA))
-		}
-	}
-	return(projs)
-}
-
-
 
 roundCoords <- function(object, digits=0) {
 	digits <- max(0, digits)
@@ -146,64 +131,6 @@ setMinMax <- function(raster, readfromdisk=FALSE) {
 #		raster@data@max <- as.logical(raster@data@max)
 #	}
 	raster@data@haveminmax <- TRUE
-	return(raster)
-}
-
-
-setDatatype <- function(raster, datatype, datasize=4) {
-#  signed"  should become variable
-	signed <- TRUE 
-	if (datatype == "numeric") {
-		raster@file@datatype <- datatype 
-		if (dataContent(raster) != 'nodata') { 
-			raster@data@values <- as.numeric(values(raster))
-		}
-		if (datasize == 4) {
-			raster@file@datasize <- as.integer(4)
-			raster@file@nodatavalue <- -3.4E38
-			raster@file@datanotation <- "FLT4S"
-		} else if (datasize == 8) {
-			raster@file@datasize <- as.integer(8)
-			raster@file@nodatavalue <-  -1.7E308
-			raster@file@datanotation <- "FLT8S"
-		} else { 
-			stop("invalid datasize for this datatype") 
-		}
-	} else if (datatype == "integer") {
-		raster@file@datatype <- datatype 
-		raster@data@min <- round(minValue(raster))
-		raster@data@max <- round(maxValue(raster))
-		if (dataContent(raster) != 'nodata') { 
-			raster@data@values <- as.integer(round(values(raster)))
-		}
-		if (datasize == 4) {
-			raster@file@datasize <- as.integer(4)
-			raster@file@nodatavalue <- -2147483647
-			raster@file@datanotation <- "INT4S"
-		} else if (datasize == 2) {
-			raster@file@datasize <- as.integer(2)
-			raster@file@nodatavalue <- -32768
-			raster@file@datanotation <- "INT2S"
-		} else if (datasize == 1) {
-			raster@file@datasize <- as.integer(1)
-			raster@file@nodatavalue <- -1
-			raster@file@datanotation <- "INT1U"
-			warning("binary files of single byte do not have NA values on disk")
-		} else if (datasize == 8) {
-			raster@file@datasize <- as.integer(8)
-			raster@file@nodatavalue <- -2^63
-			raster@file@datanotation <- "INT8S"
-		} else {
-			stop("invalid datasize for this datatype") 
-		}
-	} else if ( datatype == 'logical' ) {
-		raster@file@datatype <- datatype 
-		raster@file@datasize <- as.integer(1)
-		raster@file@nodatavalue <- -126
-		raster@file@datanotation <- "LOGICAL"
-	} else {
-		stop("unknown datatype")
-	} 
 	return(raster)
 }
 

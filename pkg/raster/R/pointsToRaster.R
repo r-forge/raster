@@ -1,7 +1,20 @@
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# International Rice Research Institute
+# Date :  January 2009
+# Version 0.8
+# Licence GPL v3
+
 
 pointsToRaster <- function(raster, xy, values, fun=length, filename="", overwrite=FALSE) {
-	if (class(xy) != 'matrix') {stop('xy must be a matrix')}
-	if (length(values) != length(xy[,1])) {stop('values must be a vector of length=length(xy[,1])')}
+# make this an argument ?  so that you can use e.g.  background=0 
+	background=NA
+
+	if (class(xy) != 'matrix') {
+		stop('xy must be a matrix')
+	}
+	if (length(values) != length(xy[,1])) {
+		stop('values must be a vector of length=length(xy[,1])')
+	}
 	
 	rs <- setRaster(raster, filename)
 	cells <- cellFromXY(rs, xy)
@@ -10,15 +23,14 @@ pointsToRaster <- function(raster, xy, values, fun=length, filename="", overwrit
 	xyarc <- cbind(xy, values, rows, cols)
 	urows <- unique(rows)
 	urows <- urows[order(urows)]
-	d <- vector(length=ncol(rs))
-	d[] <- NA
-	dna <- d
+	dna <- vector(length=ncol(rs))
+	dna[] <- background
 	v <- vector(length=0)	
 	for (r in 1:rs@nrows) {
 		if (r %in% urows) {
 			ss <- subset(xyarc, xyarc[,4] == r)
 			ucols <- unique(ss[,5])
-			ucols <- ucols[order(ucols)]
+#			ucols <- ucols[order(ucols)]
 			d <- dna
 			for (c in 1:length(ucols)) {
 				sss <- subset(ss, ss[,5] == ucols[c] )
@@ -44,3 +56,5 @@ pointsToRaster <- function(raster, xy, values, fun=length, filename="", overwrit
 	}
 	return(rs)
 }
+
+
