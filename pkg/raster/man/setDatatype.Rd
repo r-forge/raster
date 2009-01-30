@@ -1,4 +1,4 @@
-\name{set}
+\name{set data tyoe}
 \alias{setDatatype}
 
 \title{ Set data type }
@@ -21,9 +21,12 @@ setDatatype(raster, datatype, datasize=4, signed=TRUE)
 \details{
 While you can access the slots of the object directly, you would do that at your own peril because the value of one raster property can affect values in other properties, and changing slot values may thus break the integrity of the objects. Using slots directly may also lead to code to break in the future if underlying class definitions change. 
 
+
+The following datatype/size/signed combinations are available.
+
 datatype, size, signed: range of possible values
 
-'boolean', 1: FALSE (0) to TRUE (1)
+'logical', 1: FALSE (0) to TRUE (1)
 
 'integer', 1, signed: -127 to 127
 
@@ -41,8 +44,13 @@ datatype, size, signed: range of possible values
 
 'integer', 8, unsigned: 0 to 18,446,744,073,709,551,614
 
+'numeric', 4, signed:
+
+'numeric', 8, signed:
 
 
+For all integer types, except the single byte types, the lowest (signed) or highest (unsigned) value is used to store NA. Single byte files do not have an NA.
+Logical values are stored as signed single byte integers, they do have an NA value (-127)
 }
 
 \value{
@@ -51,16 +59,15 @@ datatype, size, signed: range of possible values
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	r <- raster()
-# 2 byte signed integer between -32,768 to +32,767
-	r <- setDatatype(r, datatype="integer", datasize=2)
-# 2 byte unsigned integer between 0 to +65,535
-	r <- setDatatype(r, datatype="integer", datasize=2, signed=FALSE)
+r <- raster()
+# 2 byte signed integer
+r <- setDatatype(r, datatype="integer", datasize=2)
+# 2 byte unsigned integer
+r <- setDatatype(r, datatype="integer", datasize=2, signed=FALSE)
 # very large integers
-	r <- setDatatype(r, datatype="numeric", datasize=8)
-# save byte values between 0 and 255	
-	r <- setDatatype(r, datatype="integer", datasize=1, signed=FALSE)
-	
+r <- setDatatype(r, datatype="numeric", datasize=8)
+# single byte values
+r <- setDatatype(r, datatype="integer", datasize=1, signed=FALSE)
 }
 
 \keyword{ spatial }

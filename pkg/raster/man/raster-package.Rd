@@ -13,7 +13,7 @@ This packages provides classes and functions to manipulate spatial data in 'rast
 Package: \tab raster\cr
 Type: \tab Package\cr
 Version: \tab 0.8\cr
-Date: \tab 2009-01-11\cr
+Date: \tab 2009-01-30\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }

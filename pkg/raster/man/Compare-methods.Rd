@@ -6,9 +6,10 @@
 
 \title{ Methods to compare Raster* objects}
 \description{
- These methods compare the location and resolution of Raster*(i.e. their bounding boxes, projection, and rows and columns. They do not compare the values associated with the objects; nor if they are of the same class (but they must be decendants from Raster' 
- The following methods have been implemented: for BasicRaster returning a single logical value \code{TRUE} or \code{FALSE}
- and the folliwing for RasterLayer: "==", "!=", ">", "<",  "<=", ">=", returning a logical (Boolean) RasterLayer
+ These methods compare the location and resolution of Raster* objects. That is, they compare their bounding boxes, projection, and rows and columns. 
+ For BasicRaster objects you can use "==" and "!=", the values returned is a single logical value \code{TRUE} or \code{FALSE}
+ For RasterLayer objects, they also compare the values associated with the objects, and the result is a logical (Boolean) RasterLayer object.
+ The following methods have been implemented for RasterLayer objects: "==", "!=", ">", "<",  "<=", ">="
 }
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
