@@ -26,7 +26,7 @@ resample(from, to, method="nngb", overwrite=FALSE)
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
 \examples{
-r1 <- newRaster()
+r1 <- raster()
 
 }
 

@@ -34,13 +34,11 @@ makeProj(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE)
  
  See projInfo('proj'), projInfo('ellps'), and projInfo('datum') for valud choices. Specify either an ellipsoid, or a datum (datum is ignored if ellipsoid != "")
  
- Many projections take additioanl paramters to the projection name (e.g. lon_0, x_0, y_0). Supply these in the '...'. 
+ Many projections take additioanl paramters to the projection name (see the example below). Supply these after the projection argument. 
  
  You can consult this webpage: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for your projection.
  
- 
- Projection is performed using the PROJ.4 library accesed through the rgdal package 
- 
+ Projection is performed using the PROJ.4 library accesed through the rgdal package.  Also see ?CRS
 }
 
 \value{
@@ -50,7 +48,7 @@ makeProj(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE)
 
 \examples{
 # create a new (not projected) RasterLayer with cellnumbers as values
-r <- newRaster(-110, -90, 40, 60, ncols=40, nrows=30)
+r <- raster(-110, -90, 40, 60, ncols=40, nrows=30)
 r <- setValues(r, 1:ncell(r))
 # proj.4 projection description
 newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100"

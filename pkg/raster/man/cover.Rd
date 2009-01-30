@@ -26,7 +26,7 @@
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{
-	r <- newRaster()
+	r <- raster()
 	r1 <- init(r)
 	r2 <- init(r)
 	r3 <- setNA(r2, value=0.5)

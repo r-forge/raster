@@ -35,7 +35,7 @@ Merge(rasters, tolerance=0.05, filename="", overwrite=FALSE)
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
 \examples{
-	rs <- newRaster()
+	rs <- raster()
 	rs <- setValues(rs, runif(ncell(rs)))
 #	map(rsa)
 	bb1 <- newBbox(-180, -150, 60, 90)

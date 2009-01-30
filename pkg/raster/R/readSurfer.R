@@ -2,7 +2,7 @@
 .readSurfer6 <- function(filename) {
 	con <- file(filename, "rb")
 	id <- readBin(con, "characater", n=1, size=4)
-	r <- newRaster()
+	r <- raster()
 	r@ncols <- readBin(con, "int", n=4, size=2)
 	r@rows <- readBin(con, "int", n=4, size=2)
 	r@bbox@xmin <- readBin(con, "double", n=1, size=8)

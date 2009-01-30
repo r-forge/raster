@@ -35,7 +35,7 @@
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{
-	r <- newRaster()
+	r <- raster()
 	r1 <- init(r)
 	r2 <- init(r)
 	r3 <- Overlay(r1, r2, fun=function(x,y){return(x+y)})

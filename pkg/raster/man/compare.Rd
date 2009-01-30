@@ -25,7 +25,7 @@ compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, toleranc
   
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
-	r1 <- newRaster()
+	r1 <- raster()
 	r2 <- r1
 	compare(c(r1, r2))
 	r3 <- setRowCol(r1, 10)

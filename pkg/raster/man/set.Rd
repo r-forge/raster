@@ -49,7 +49,7 @@ Use it when creating new RasterLayer objects from existing objects.
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	r <- newRaster()
+	r <- raster()
 	r <- setFilename(r, "c:/test.grd")
 	r <- setRowCol(r, nrows=18, ncols=36) 
 	r <- setRes(r, xres=1/120) 

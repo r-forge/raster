@@ -43,7 +43,7 @@ cellsFromBbox(object, bndbox)
   
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
-	rs <- newRaster()
+	rs <- raster()
 	bb <- newBbox(-10, 10, -20, 20)
 	rs <- setBbox(rs, bb, keepres=TRUE)
 	rs <- changeBbox(rs, ymx = 90)

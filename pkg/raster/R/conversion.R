@@ -42,12 +42,12 @@ if (!isGeneric("asRasterLayer")) {
 }	
 setMethod('asRasterLayer', signature(object='missing',index='missing'), 
 	function(object){
-		return(newRaster())
+		return(raster())
 	}
 )
 setMethod('asRasterLayer', signature(object='character',index='missing'), 
 	function(object){
-		r <- newRaster()
+		r <- raster()
 		if (object == 'runif') {
 			r <- setValues(r, runif(ncell(r)))
 		} else if (object == 'seq') {
@@ -97,7 +97,7 @@ setMethod('asRasterLayer', signature(object='RasterStack', index='numeric'),
 
 setMethod('asRasterLayer', signature(object='SpatialPixels', index='numeric'), 
 	function(object, index){
-		raster <- newRaster()
+		raster <- raster()
 		raster <- setBbox(raster, getBbox(object))
 		raster <- setProjection(raster, object@proj4string)
 		raster <- setRowCol(raster, object@grid@cells.dim[2], object@grid@cells.dim[1])

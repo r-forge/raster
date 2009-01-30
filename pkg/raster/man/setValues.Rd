@@ -45,7 +45,7 @@ makeSparse(raster)
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	rs <- newRaster()
+	rs <- raster()
 	vals <- 1:ncell(rs)
 	rs <- setValues(rs, vals)
 	rs <- clearValues(rs)

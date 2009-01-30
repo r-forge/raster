@@ -44,7 +44,7 @@ asSpGrid(object, type='grid')
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	rs <- newRaster()
+	rs <- raster()
 	rs <- setValues(rs, 1:ncell(rs))
 	sp <- asSpGrid(rs)
 	rs2 <- asRasterLayer(sp) 

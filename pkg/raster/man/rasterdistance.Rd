@@ -19,7 +19,7 @@
 \item{raster = "RasterLayer"}{ ~~describe this method here }
 }}
 \examples{
-r1 <- newRaster(ncol=36,nrow=18)
+r1 <- raster(ncol=36,nrow=18)
 r1[345:355] <- 1
 distmap <- distance(r1) 
 #plot(distmap)

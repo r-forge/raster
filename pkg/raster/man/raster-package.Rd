@@ -1,6 +1,5 @@
 \name{raster-package}
 \alias{raster-package}
-\alias{raster}
 \docType{package}
 \title{
 Analysis and modeling of geographic (spatial) raster data.

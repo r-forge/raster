@@ -42,7 +42,7 @@ raster cell value(s)
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
-r <- newRaster()
+r <- raster()
 r <- setValues(r, 1:ncell(r))
 minValue(r)
 maxValue(r)

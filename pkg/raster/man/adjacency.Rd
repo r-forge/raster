@@ -29,7 +29,7 @@ The function connects the outer meridians if the raster is in a geographic (latl
 \author{Jacob van Etten \email{jacobvanetten@yahoo.com}}
 
 \examples{
-	rs <- newRaster(nrows=10, ncols=10)
+	rs <- raster(nrows=10, ncols=10)
 	adj <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), directions=4) 
 	
 	#Visualize the outcome in a raster

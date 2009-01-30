@@ -47,7 +47,7 @@ click(object, n=1, xy=FALSE, type = "n", ...)
 \author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
 
 \examples{ 
-	rs <- newRaster()
+	rs <- raster()
 	rs <- setValues(rs, runif(ncell(rs)))
 	map(rs)
 	rsa <- Aggregate(rs, fact=10, fun=max)

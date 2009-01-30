@@ -36,7 +36,7 @@ cds2 <- rbind(c(80,20), c(140,60), c(160,0), c(140,-55), c(80,20))
 cds3 <- rbind(c(-180,-20), c(-140,-60), c(-60,-20), c(-140,55), c(-180,-20))
 
 polys <- SpatialPolygons(list(Polygons(list(Polygon(cds1)), 1), Polygons(list(Polygon(cds2)), 2), Polygons(list(Polygon(cds3)), 3) ))
-r <- newRaster()
+r <- raster()
 r <- polygonsToRaster(polys, r)
 #plot(r)
 #plot(polys, add=T)

@@ -65,7 +65,7 @@ validRows(object, rownr)
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
-rs <- newRaster()
+rs <- raster()
 ncell(rs)
 colFromCell(rs, 10000)
 rowFromCell(rs, 10000)

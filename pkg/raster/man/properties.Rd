@@ -84,7 +84,7 @@ nbands(object)
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
-rs <- newRaster()
+rs <- raster()
 ncell(rs)
 ncol(rs)
 nrow(rs)

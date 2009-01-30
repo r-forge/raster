@@ -35,7 +35,7 @@ disaggregate(raster, fact=2, filename="", overwrite=FALSE)
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
 \examples{
-	r <- newRaster()
+	r <- raster()
 	r <- setValues(r, runif(ncell(r)))
 	ra <- Aggregate(r, fact=10, fun=max)
 	rd <- disaggregate(ra, 3)

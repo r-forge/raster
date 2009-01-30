@@ -31,7 +31,7 @@ mCalc(object, fun=sum, filename="", overwrite=FALSE, asInt=FALSE)
 
 \examples{
 
- r <- newRaster(ncols=36, nrows=18)
+ r <- raster(ncols=36, nrows=18)
  
 # two ways to set all value to 1 
 #1, with a function

@@ -27,7 +27,7 @@ dataSource(object)
 \author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
 \examples{
 #using a new default raster (1 degree global)
-rs <- newRaster()
+rs <- raster()
 dataContent(rs)
 dataIndices(rs)
 rs <- setValues(rs, 1:ncell(rs))

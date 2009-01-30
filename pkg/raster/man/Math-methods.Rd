@@ -15,7 +15,7 @@
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
 \examples{
-r1 <- newRaster()
+r1 <- raster()
 r1 <- (setValues(r1, runif(ncell(r1))) - 0.5 ) * 10
 r2 <- abs(r1)
 r3 <- sqrt(r1)

@@ -33,7 +33,7 @@
  The difference between a RasterStack is that it typically points to several seperate data files on disk, but it could also point to different bands from a single file (or not not point to any file at all)
  
  Apart from with the normal new(" ") method, objects can be created with the following functions (among others)
- newRaster(), RasterFromFile(), StackFromFile(), StackFromRasters(), StackFromFiles()
+ raster(), RasterFromFile(), StackFromFile(), StackFromRasters(), StackFromFiles()
  
  RasterLayer and RasterStack objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package: asRasterLayer(), asRasterStack()
  Vice versa, Raster* objects can be coerced into a sp type oject with asSpGrid(). You can also use SetAs() 
@@ -65,7 +65,7 @@
 
 
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("RasterLayer")}, but you should normally use functions such as newRaster() and rasterFromFile().
+Objects can be created by calls of the form \code{new("RasterLayer")}, but you should normally use functions such as raster() and rasterFromFile().
 }
 
 \section{Slots}{

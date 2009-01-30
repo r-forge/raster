@@ -1,4 +1,5 @@
-\name{raster}
+\name{new RasterLayer}
+\alias{raster}
 \alias{newRaster}
 \alias{rasterFromBbox}
 \alias{rasterFromFile}
@@ -9,9 +10,12 @@
   These functions create new RasterLayer objects, either from scratch or from file.
   The created object does not contain any cell (pixel) values, it only has the parameters that describe it.
   See read* and values() for access to the values
+  
+  newRaster has been replaced by raster, and will be removed soon. 
 }
 \usage{
-	newRaster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
+	raster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
+	newRaster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")	
 	rasterFromBbox(bndbox, nrows = 1, ncols = 1)
 	rasterFromFile(filename, values=FALSE, band=1)
 	closeHandle(raster)
@@ -44,7 +48,7 @@
 
 \seealso{  \code{\link[gdal]{rgdal}} }
 \examples{
-  r1 <- newRaster(nrows=1080, ncols=2160)
+  r1 <- raster(nrows=1080, ncols=2160)
   r1
   r2 <- rasterFromFile(system.file("external/test.ag", package="sp"))
   r2
