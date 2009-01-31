@@ -2,7 +2,7 @@
 
 \alias{linesToRaster}
 
-\title{ Transform polygons to a raster }
+\title{ Transfer lines to a RasterLayer }
 \description{
   Lines to raster conversion
 }
