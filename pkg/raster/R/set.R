@@ -41,13 +41,13 @@ setRaster <- function(object, filename="", values=NA) {
 		stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
 	}
 
-	raster <- raster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
-	raster <- setFilename(raster, filename)
+	r <- raster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
+	r <- setFilename(r, filename)
 	
-	if ( length(values) != 1 | ( length(values) == 1 & ncell(raster) == 1) ) {
-		raster <- setValues(raster, values)
+	if ( length(values) != 1 | ( length(values) == 1 & ncell(r) == 1) ) {
+		r <- setValues(r, values)
 	}
-	return(raster)
+	return(r)
 }
 
 setFilename <- function(object, filename) {

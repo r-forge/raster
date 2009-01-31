@@ -39,7 +39,7 @@
 }
 
 
-.overlayLinePolygon <- function(line, poly) {
+.intersectLinePolygon <- function(line, poly) {
 # for a simple line (connecting 2 points) and a single poly
 	resxy <- matrix(NA, ncol=2, nrow=0)
 	if (min(poly[,2]) > max(line[,2]) | max(poly[,2]) < min(line[,2])) {
@@ -60,7 +60,7 @@
 
 
 
-polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
+polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
 	filename <- trim(filename)
 	if (updateRaster) {
 		oldraster <- raster 
@@ -70,24 +70,24 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 	}
 	raster <- setRaster(raster, filename)
 
-# check if bbox of raster and sppoly overlap
-	spbb <- bbox(sppoly)
+# check if bbox of raster and spPolys overlap
+	spbb <- bbox(spPolys)
 	rsbb <- bbox(raster)
 	if (spbb[1,1] > rsbb[1,2] | spbb[2,1] > rsbb[2,2]) {
 		stop('polygon and raster have no overlapping areas')
 	}
-	npol <- length(sppoly@polygons)
+	npol <- length(spPolys@polygons)
 	info <- matrix(NA, nrow=npol, ncol=3)
 	for (i in 1:npol) {
 #		holes <- sapply(rings, function(y) slot(y, "hole"))
 #		areas <- sapply(rings, function(x) slot(x, "area"))
 
-		info[i,1] <- length(sppoly@polygons[[i]]@Polygons)
+		info[i,1] <- length(spPolys@polygons[[i]]@Polygons)
 		miny <- NULL
 		maxy <- NULL
 		for (j in 1:info[i,1]) {
-			miny <- min(miny, min(sppoly@polygons[[i]]@Polygons[[j]]@coords[,2]))
-			maxy <- max(maxy, max(sppoly@polygons[[i]]@Polygons[[j]]@coords[,2]))
+			miny <- min(miny, min(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2]))
+			maxy <- max(maxy, max(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2]))
 		}
 		info[i,2] <- miny
 		info[i,3] <- maxy
@@ -95,10 +95,10 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
 
-	if (class(sppoly) == 'SpatialPolygons' | field == 0) {
+	if (class(spPolys) == 'SpatialPolygons' | field == 0) {
 		putvals <- as.integer(1:npol)
 	} else {
-		putvals <- as.vector(sppoly@data[,field])
+		putvals <- as.vector(spPolys@data[,field])
 		if (class(putvals) == 'character') {
 			stop('selected field is charater type')
 		}
@@ -123,12 +123,12 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 				# do nothing
 			} else {
 				for (j in 1:info[i,1]) {
-					if ( max ( sppoly@polygons[[i]]@Polygons[[j]]@coords[,2] ) < ly  |  min( sppoly@polygons[[i]]@Polygons[[j]]@coords[,2] ) > ly ) {
+					if ( max ( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) < ly  |  min( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) > ly ) {
 						# do nothing
 					} else {
-						mypoly <- sppoly@polygons[[i]]@Polygons[[j]]@coords
+						mypoly <- spPolys@polygons[[i]]@Polygons[[j]]@coords
 
-						intersection <- .overlayLinePolygon(myline, mypoly)
+						intersection <- .intersectLinePolygon(myline, mypoly)
 						if (nrow(intersection) > 0) {
 							x <- sort(intersection[,1])
 							for (k in 1:round(nrow(intersection)/2)) {
@@ -146,7 +146,7 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 								col2 <- colFromX(raster, x2a)
 								if (is.na(col1) | is.na(col2) | col1 > col2) {	next }
 
-								if ( sppoly@polygons[[i]]@Polygons[[j]]@hole ) {
+								if ( spPolys@polygons[[i]]@Polygons[[j]]@hole ) {
 									holes[col1:col2] <- TRUE
 								} else {
 									rv[col1:col2] <- putvals[i]
@@ -188,24 +188,24 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 }
 
 
-polygonsToRaster2 <- function(sppoly, raster, field=0, filename="", overwrite=FALSE) {
+polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", overwrite=FALSE) {
 #  This is based on sampling by points. Should be slower except when  polygons very detailed and raster las ow resolution
 # but it could be optimized further
 
-# check if bbox of raster and sppoly overlap
+# check if bbox of raster and spPolys overlap
 	filename <- trim(filename)
 	raster <- setRaster(raster, filename)
 
-	spbb <- bbox(sppoly)
+	spbb <- bbox(spPolys)
 	rsbb <- bbox(raster)
 	if (spbb[1,1] > rsbb[1,2] | spbb[2,1] > rsbb[2,2]) {
 		stop('polygon and raster have no overlapping areas')
 	}
 
-	if (class(sppoly) == 'SpatialPolygons' | field == 0) {
-		putvals <- as.integer(1:length(sppoly@polygons))
+	if (class(spPolys) == 'SpatialPolygons' | field == 0) {
+		putvals <- as.integer(1:length(spPolys@polygons))
 	} else {
-		putvals <- as.vector(sppoly@data[,field])
+		putvals <- as.vector(spPolys@data[,field])
 		if (class(putvals) == 'character') {
 			stop('selected field is charater type')
 		}
@@ -225,7 +225,7 @@ polygonsToRaster2 <- function(sppoly, raster, field=0, filename="", overwrite=FA
 		} else {
 			rowcol[,1] <- r
 			sppoints <- xyFromCell(raster, cellFromRowCol(raster, rowcol[,1], rowcol[,2]), TRUE)
-			over <- overlay(sppoints, sppoly)
+			over <- overlay(sppoints, spPolys)
 			vals <- putvals[over]
 		}
 		if (filename == "") {

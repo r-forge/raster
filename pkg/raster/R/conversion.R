@@ -97,11 +97,11 @@ setMethod('asRasterLayer', signature(object='RasterStack', index='numeric'),
 
 setMethod('asRasterLayer', signature(object='SpatialPixels', index='numeric'), 
 	function(object, index){
-		raster <- raster()
-		raster <- setBbox(raster, getBbox(object))
-		raster <- setProjection(raster, object@proj4string)
-		raster <- setRowCol(raster, object@grid@cells.dim[2], object@grid@cells.dim[1])
-		return(raster)
+		r <- raster()
+		r <- setBbox(r, getBbox(object))
+		r <- setProjection(r, object@proj4string)
+		r <- setRowCol(r, object@grid@cells.dim[2], object@grid@cells.dim[1])
+		return(r)
 	}
 )
 
