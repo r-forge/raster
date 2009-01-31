@@ -21,49 +21,74 @@
 }
 
 
-.getCols <- function(rs, rownr, segment, line1, line2) {
-# for a simple line (connecting 2 points) and a single poly
-	rows <- .specialRowFromY(rs, segment[,2])
-	if ((rows[1] > rownr & rows[2] > rownr) | (rows[1] < rownr & rows[2] < rownr)) { return(NA) }
-	cols <- .specialColFromX(rs,segment[,1])
-	rowcol <- cbind(rows, cols)[order(cols),]
-	if (rowcol[1,2] == rowcol[2,2]) {
-		return(rowcol[1,2]:rowcol[2,2])
-	} else {
-		if (rowcol[1,1] == rownr  ) {
-			if (rowcol[2,1] < rownr) {
-				xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
-			} else {
-				xy <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
-			}
-			xy <- t(as.matrix(xy))
-			cols <- c(rowcol[1,2], colFromX(rs, xy[,1]))
-			col1 <- min(cols)
-			col2 <- max(cols)
-		} else if (rowcol[2,1] == rownr) {
-			if (rowcol[1,1] < rownr) {
-				xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
-			} else {
-				xy <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
-			}		
-			xy <- t(as.matrix(xy))
-			cols <- c(rowcol[2,2], colFromX(rs, xy[,1]))
-			col1 <- min(cols)
-			col2 <- max(cols)
-		} else {
-			xy1 <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
-			xy2 <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
-			xy <- rbind(xy1, xy2)
-			cols <-colFromX(rs, xy[,1])
-			col1 <- min(cols)
-			col2 <- max(cols)
-		}
-		return(col1:col2)
+
+.getCols <- function(rs, rownr, aline, line1, line2) {
+	minx <- xmin(rs)
+	maxx <- xmax(rs)
+	resxy <- matrix(NA, ncol=2, nrow=0)
+	miny <- min(line1[,2], line2[,2])
+	maxy <- max(line1[,2], line2[,2])
+	xyxy <- cbind(aline[1:(length(aline[,1])-1),], aline[-1,])
+    xyxy <- subset(xyxy, !( (xyxy[,2] > maxy & xyxy[,4] > maxy ) | (xyxy[,2] < miny & xyxy[,4] < miny)) )
+	if (length(xyxy) < 1) { 
+		return(resxy) 
 	}
-}	
+	res <- vector(length=0)
+	for (i in 1:length(xyxy[,1])) {	
+		rows <- .specialRowFromY(rs, c(xyxy[i,2], xyxy[i,4]) )
+		if ((rows[1] > rownr & rows[2] > rownr) | (rows[1] < rownr & rows[2] < rownr)) { 
+			next
+		}
+		cols <- .specialColFromX(rs, c(xyxy[i,1], xyxy[i,3]))
+		rowcol <- cbind(rows, cols)[order(cols),]
+		if (rowcol[1,1] == rowcol[2,1]) {
+			res <- c(res, (rowcol[1,2]:rowcol[2,2]))
+		} else {
+			if (rowcol[1,1] == rownr  ) {
+				if (rowcol[2,1] < rownr) {
+					xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
+				} else {
+					xy <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
+				}
+				xy <- t(as.matrix(xy))
+				cols <- c(rowcol[1,2], colFromX(rs, xy[,1]))
+				col1 <- min(cols)
+				col2 <- max(cols)
+				if (is.na(col1) | is.na(col2)) {print("A"); print(rowcol); print(xy); print(xyxy[i,])}
+				res <- c(res, col1:col2)
+			} else if (rowcol[2,1] == rownr) {
+				if (rowcol[1,1] < rownr) {
+					xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4] )
+				} else {
+					xy <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4] )
+				}
+				if (is.na(xy[1])) { next }
+				xy <- t(as.matrix(xy))
+				cols <- c(rowcol[2,2], colFromX(rs, xy[,1]))
+				col1 <- min(cols)
+				col2 <- max(cols)
+				if (is.na(col1) | is.na(col2)) {print("B"); print(xy)}
+				res <- c(res, col1:col2)
+			} else {
+				xy1 <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
+				xy2 <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
+				if (is.na(xy1[1])) { next }
+				if (is.na(xy2[1])) { next }
+				xy <- rbind(xy1, xy2)
+				cols <-colFromX(rs, xy[,1])
+				col1 <- min(cols)
+				col2 <- max(cols)
+				if (is.na(col1) | is.na(col2)) {print("C"); print(xy)}
+				res <- c(res, col1:col2)
+			}
+		}
+	}
+	return(res)
+}
 
 
 linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
+
 	filename <- trim(filename)
 	if (updateRaster) {
 		oldraster <- raster 
@@ -72,6 +97,15 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 		}
 	}
 	raster <- setRaster(raster, filename)
+	if (class(spLines) == 'SpatialPolygons') {
+		spLines <- as(spLines, "SpatialLines")
+	}
+	if (class(spLines) == 'SpatialPolygonsDataFrame') {
+		spLines <- as(spLines, "SpatialLinesDataFrame")
+	}
+	if (!(class(spLines) == 'SpatialLines' | class(spLines) == 'SpatialLinesDataFrame')) {
+		stop('spLines should be a SpatialLines* object')
+	}
 
 # check if bbox of raster and spLines overlap
 	spbb <- bbox(spLines)
@@ -122,19 +156,16 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 		lly <- ly - 0.51 * yres(raster)
 		for (i in 1:nline) {
 			if (info[i,2] > uly | info[i,3] < lly) {
-				# do nothing
+				#  line object is outside of row,  do nothing
 			} else {
 				for (j in 1:info[i,1]) {
 					if ( max ( spLines@lines[[i]]@Lines[[j]]@coords[,2] ) < lly  |  min( spLines@lines[[i]]@Lines[[j]]@coords[,2] ) > uly ) {
-						# do nothing
+						#  line part entirely outside of row. do nothing
 					} else {
 						aline <- spLines@lines[[i]]@Lines[[j]]@coords
-						for (k in 1:(nrow(aline)-1) ) {
-							segment <- aline[k:(k+1),]
-							colnrs <- .getCols(raster, r, segment, line1, line2)
-							if ( length(colnrs) > 0 ) {				
-								rv[colnrs] <- putvals[i]
-							}
+						colnrs <- .getCols(raster, r, aline, line1, line2)
+						if ( length(colnrs) > 0 ) {				
+							rv[colnrs] <- putvals[i]
 						}
 					}
 				}
