@@ -16,8 +16,8 @@ polygonsToRaster2(spPolys, raster, field=0, filename="", overwrite=FALSE)
   \item{spPolys}{ a SpatialPolygons or a SpatialPolygonsDataFrame object }
   \item{raster}{ RasterLayer  }
   \item{field}{ The index of the column in the SpatialPolygonsDataFrame to be transfered to the RasterLayer }
-  \item{filename}{  }
-  \item{overwrite}{  }
+  \item{filename}{ output filename }
+  \item{overwrite}{ logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either 'all', 'NA', '!NA', or 'zero' } 
 }
@@ -28,7 +28,7 @@ polygonsToRaster2(spPolys, raster, field=0, filename="", overwrite=FALSE)
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
-\seealso{ \code{\link[rgdal]{rgdal}} }
+\seealso{ \code{\link[raster]{lines to raster}} }
 \examples{ 
 
 cds1 <- rbind(c(-50,0), c(0,60), c(40,5), c(15,-45), c(-10,-25), c(-50,0))
@@ -48,8 +48,8 @@ addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
 addpoly@data[1,1] <- 10
 r2 <- polygonsToRaster(addpoly, r, field=1, updateRaster=TRUE, updateValue="NA")
 plot(r2)
-plot(polys, border="blue", lwd=2, add=TRUE)
-plot(addpoly, add=TRUE, border="red", lwd=2)
+#plot(polys, border="blue", lwd=2, add=TRUE)
+#plot(addpoly, add=TRUE, border="red", lwd=2)
 
 }
 

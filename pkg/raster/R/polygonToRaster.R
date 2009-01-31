@@ -40,22 +40,21 @@
 
 
 .intersectLinePolygon <- function(line, poly) {
-# for a simple line (connecting 2 points) and a single poly
 	resxy <- matrix(NA, ncol=2, nrow=0)
-	if (min(poly[,2]) > max(line[,2]) | max(poly[,2]) < min(line[,2])) {
-		return(resxy)
-	} else if (min(poly[,1]) > max(line[,1]) | max(poly[,1]) < min(line[,1])) {
-		return(resxy)
-	} else {
-		for (i in 2:length(poly[,1])) {
-#compute intersection, the last one is not necessary as the the first point and last point coincide.
-			xy <- .intersectSegments(poly[i,1], poly[i,2], poly[i-1,1], poly[i-1,2], line[1,1], line[1,2], line[2,1], line[2,2] )
-			if (!is.na(xy[1])) {
-				resxy <- rbind(resxy, xy)
-			}
-		}
-		return(resxy)
+	miny <- min(line[,2])
+	maxy <- max(line[,2])
+	xyxy <- cbind(poly, rbind(poly[-1,], poly[1,]))
+    xyxy <- subset(xyxy, !( (xyxy[,2] > maxy & xyxy[,4] > maxy ) | (xyxy[,2] < miny & xyxy[,4] < miny)) )
+	if (length(xyxy) < 1) { 
+		return(resxy) 
 	}
+	for (i in 1:length(xyxy[,1])) {
+		xy <- .intersectSegments(xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4], line[1,1], line[1,2], line[2,1], line[2,2] )
+		if (!is.na(xy[1])) {
+			resxy <- rbind(resxy, xy)
+		}
+	}
+	return(resxy)
 }
 
 
@@ -105,7 +104,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 	}
 	raster <- setDatatype(raster, class(putvals[1]))
 		
-	adj <- 0.49 * xres(raster)
+	adj <- 0.5 * xres(raster)
 	v <- vector(length=0)
 	rxmn <- xmin(raster) + 0.1 * xres(raster)
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
@@ -116,19 +115,18 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 		ly <- yFromRow(raster, r)
 		myline <- rbind(c(lxmin,ly), c(lxmax,ly))
 		
-		uly <- ly + 0.01 * yres(raster)
-		lly <- ly - 0.01 * yres(raster)
 		for (i in 1:npol) {
-			if (info[i,2] > uly | info[i,3] < lly) {
-				# do nothing
+		
+			if (info[i,2] > ly | info[i,3] < ly) {
+				# entire polygon above or below row. do nothing
 			} else {
 				for (j in 1:info[i,1]) {
 					if ( max ( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) < ly  |  min( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) > ly ) {
-						# do nothing
+						# polygon part above or below row. do nothing
 					} else {
 						mypoly <- spPolys@polygons[[i]]@Polygons[[j]]@coords
-
 						intersection <- .intersectLinePolygon(myline, mypoly)
+
 						if (nrow(intersection) > 0) {
 							x <- sort(intersection[,1])
 							for (k in 1:round(nrow(intersection)/2)) {
@@ -140,11 +138,11 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 								# adjust to skip first cell if the center is not covered by this polygon
 								x1a <- x1 + adj
 								x2a <- x2 - adj
-								x1a <- max(rxmn, x1a)
-								x2a <- min(rxmx, x2a)
+								x1a <- min(rxmx, max(rxmn, x1a))
+								x2a <- min(rxmx, max(rxmn, x2a))
 								col1 <- colFromX(raster, x1a)
 								col2 <- colFromX(raster, x2a)
-								if (is.na(col1) | is.na(col2) | col1 > col2) {	next }
+								if (col1 > col2) { next }
 
 								if ( spPolys@polygons[[i]]@Polygons[[j]]@hole ) {
 									holes[col1:col2] <- TRUE
@@ -191,6 +189,8 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", overwrite=FALSE) {
 #  This is based on sampling by points. Should be slower except when  polygons very detailed and raster las ow resolution
 # but it could be optimized further
+
+# this version does not deal with polygon holes 
 
 # check if bbox of raster and spPolys overlap
 	filename <- trim(filename)

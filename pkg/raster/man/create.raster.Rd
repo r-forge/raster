@@ -16,7 +16,7 @@
 \usage{
 	raster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
 	newRaster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")	
-	rasterFromBbox(bndbox, nrows = 1, ncols = 1)
+	rasterFromBbox(bndbox, nrows = 10, ncols = 10, nudge=TRUE)
 	rasterFromFile(filename, values=FALSE, band=1)
 	closeHandle(raster)
 }
@@ -30,6 +30,7 @@
   \item{ymx}{ maximum y coordinate of raster (top border) }
   \item{nrows}{ number of rows on raster }
   \item{ncols}{ number of columns on raster }
+  \item{nudge}{logical. If \code{TRUE}, the boundingbox is nudged outwards (to the next integer) }
   \item{projstring}{ PROJ4 type description of a map projection}
   \item{bndbox}{bounding box used to crop a raster. Any object that is or has a bounding box (see below) }
   \item{values}{logical. If \code{TRUE}, RasterLayer values will be read into memory with 'readAll()'}

@@ -30,23 +30,28 @@ raster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, pro
 	return(rs)
 }
 
-
-
 #if (!isGeneric("values")) {
 #	setGeneric("values", function(object, ...)
 #		standardGeneric("values"))
 #}	
 
 #setMethod('values', signature(object='Raster'), 
-rasterFromBbox <- function(bndbox, nrows=1, ncols=1) {
+
+rasterFromBbox <- function(bndbox, nrows=10, ncols=10, nudge=TRUE) {
 	crs <- newCRS('NA')
 	try(crs <- projection(bndbox, asText=F), silent = T)
-	bndbox <- getBbox(bndbox)
+	bb <- getBbox(bndbox)
+	if (nudge) {
+		bb@xmin <- floor(bb@xmin)
+		bb@ymin <- floor(bb@ymin)
+		bb@xmax <- ceiling(bb@xmax)
+		bb@ymax <- ceiling(bb@ymax)
+	}
 	nr = as.integer(round(nrows))
 	nc = as.integer(round(ncols))
 	if (nc < 1) { stop("ncols should be > 0") }
 	if (nr < 1) { stop("nrows should be > 0") }
-	raster <- new("RasterLayer", bbox = bndbox, crs=crs, ncols = nc, nrows = nr )
+	raster <- new("RasterLayer", bbox = bb, crs=crs, ncols = nc, nrows = nr )
 	return(raster) 
 }
 

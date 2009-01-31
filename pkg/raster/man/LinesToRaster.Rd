@@ -13,7 +13,7 @@ linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRast
 \arguments{
   \item{spLines}{ a SpatialLines or a SpatialLinesDataFrame object (sp package)}
   \item{raster}{ a RasterLayer object}
-  \item{field}{ The index of the column in the SpatialPolygonsDataFrame to be transfered to the RasterLayer }
+  \item{field}{ The index of the column in the SpatialLinesDataFrame to be transfered to the RasterLayer }
   \item{filename}{ output filename }
   \item{overwrite}{ logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
