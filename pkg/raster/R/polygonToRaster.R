@@ -40,7 +40,7 @@
 
 
 .overlayLinePolygon <- function(line, poly) {
-# for a simple line (connecting 2 points)
+# for a simple line (connecting 2 points) and a single poly
 	resxy <- matrix(NA, ncol=2, nrow=0)
 	if (min(poly[,2]) > max(line[,2]) | max(poly[,2]) < min(line[,2])) {
 		return(resxy)
@@ -48,15 +48,11 @@
 		return(resxy)
 	} else {
 		for (i in 2:length(poly[,1])) {
-			#compute intersection
+#compute intersection, the last one is not necessary as the the first point and last point coincide.
 			xy <- .intersectSegments(poly[i,1], poly[i,2], poly[i-1,1], poly[i-1,2], line[1,1], line[1,2], line[2,1], line[2,2] )
 			if (!is.na(xy[1])) {
 				resxy <- rbind(resxy, xy)
 			}
-		}
-		xy <- .intersectSegments(poly[1,1], poly[1,2], poly[length(poly[,1]),1], poly[length(poly[,1]),2], line[1,1], line[1,2], line[2,1], line[2,2] )
-		if (!is.na(xy[1])) {
-			resxy <- rbind(resxy, xy)
 		}
 		return(resxy)
 	}
@@ -65,7 +61,6 @@
 
 
 polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
-# check if bbox of raster and sppoly overlap
 	filename <- trim(filename)
 	if (updateRaster) {
 		oldraster <- raster 
@@ -75,6 +70,7 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 	}
 	raster <- setRaster(raster, filename)
 
+# check if bbox of raster and sppoly overlap
 	spbb <- bbox(sppoly)
 	rsbb <- bbox(raster)
 	if (spbb[1,1] > rsbb[1,2] | spbb[2,1] > rsbb[2,2]) {
@@ -83,6 +79,9 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 	npol <- length(sppoly@polygons)
 	info <- matrix(NA, nrow=npol, ncol=3)
 	for (i in 1:npol) {
+#		holes <- sapply(rings, function(y) slot(y, "hole"))
+#		areas <- sapply(rings, function(x) slot(x, "area"))
+
 		info[i,1] <- length(sppoly@polygons[[i]]@Polygons)
 		miny <- NULL
 		maxy <- NULL
@@ -112,6 +111,8 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 	for (r in 1:nrow(raster)) {
 		rv <- rep(NA, ncol(raster))
+		holes <- rep(FALSE, ncol(raster))
+		
 		ly <- yFromRow(raster, r)
 		myline <- rbind(c(lxmin,ly), c(lxmax,ly))
 		
@@ -126,6 +127,7 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 						# do nothing
 					} else {
 						mypoly <- sppoly@polygons[[i]]@Polygons[[j]]@coords
+
 						intersection <- .overlayLinePolygon(myline, mypoly)
 						if (nrow(intersection) > 0) {
 							x <- sort(intersection[,1])
@@ -143,13 +145,20 @@ polygonsToRaster <- function(sppoly, raster, field=0, filename="", overwrite=FAL
 								col1 <- colFromX(raster, x1a)
 								col2 <- colFromX(raster, x2a)
 								if (is.na(col1) | is.na(col2) | col1 > col2) {	next }
-								rv[col1:col2] <- putvals[i]
+
+								if ( sppoly@polygons[[i]]@Polygons[[j]]@hole ) {
+									holes[col1:col2] <- TRUE
+								} else {
+									rv[col1:col2] <- putvals[i]
+								}
 							}	
 						}
 					}	
 				}
 			}
 		}	
+		rv[holes] <- NA
+		
 		if (updateRaster) {
 			oldvals <- values(readRow(oldraster, r))
 			if (updateValue == "all") {
