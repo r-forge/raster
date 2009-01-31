@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
-# Date :  June 2008
-# Version 0,1
+# Date :  January 2009
+# Version 0.8
 # Licence GPL v3
 
 .specialRowFromY <- function(object, y) {
@@ -21,33 +21,35 @@
 }
 
 
-getCols <- function(rs, rownr, segment, line1, line2) {
+.getCols <- function(rs, rownr, segment, line1, line2) {
 # for a simple line (connecting 2 points) and a single poly
 	rows <- .specialRowFromY(rs, segment[,2])
-	if (rows[1] > rownr & rows[2] > rownr | rows[1] < rownr & rows[2] < rownr) { return(NA) }
+	if ((rows[1] > rownr & rows[2] > rownr) | (rows[1] < rownr & rows[2] < rownr)) { return(NA) }
 	cols <- .specialColFromX(rs,segment[,1])
 	rowcol <- cbind(rows, cols)[order(cols),]
-	if (rows[1] == rows[2]) {
+	if (rowcol[1,2] == rowcol[2,2]) {
 		return(rowcol[1,2]:rowcol[2,2])
 	} else {
-		if (rowcol[1,1] == rownr) {
-			col1 <- rowcol[1,2]
+		if (rowcol[1,1] == rownr  ) {
 			if (rowcol[2,1] < rownr) {
 				xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
 			} else {
 				xy <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
 			}
 			xy <- t(as.matrix(xy))
-			col2 <- max(colFromX(rs, xy[,1]))
+			cols <- c(rowcol[1,2], colFromX(rs, xy[,1]))
+			col1 <- min(cols)
+			col2 <- max(cols)
 		} else if (rowcol[2,1] == rownr) {
-			col1 <- rowcol[2,2]
 			if (rowcol[1,1] < rownr) {
 				xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
 			} else {
 				xy <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
 			}		
 			xy <- t(as.matrix(xy))
-			col2 <- max(colFromX(rs, xy[,1]))
+			cols <- c(rowcol[2,2], colFromX(rs, xy[,1]))
+			col1 <- min(cols)
+			col2 <- max(cols)
 		} else {
 			xy1 <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
 			xy2 <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], segment[1,1], segment[1,2], segment[2,1], segment[2,2]  )
@@ -59,9 +61,6 @@ getCols <- function(rs, rownr, segment, line1, line2) {
 		return(col1:col2)
 	}
 }	
-
-
-		
 
 
 linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
@@ -119,26 +118,28 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 		line1 <- rbind(c(lxmin, ly + 0.5*yres(raster)), c(lxmax,ly + 0.5*yres(raster)))
 		line2 <- rbind(c(lxmin, ly - 0.5*yres(raster)), c(lxmax,ly - 0.5*yres(raster)))
 		
-		uly <- ly + 0.01 * yres(raster)
-		lly <- ly - 0.01 * yres(raster)
+		uly <- ly + 0.51 * yres(raster)
+		lly <- ly - 0.51 * yres(raster)
 		for (i in 1:nline) {
 			if (info[i,2] > uly | info[i,3] < lly) {
 				# do nothing
 			} else {
 				for (j in 1:info[i,1]) {
-					if ( max ( spLines@lines[[i]]@Lines[[j]]@coords[,2] ) < ly  |  min( spLines@lines[[i]]@Lines[[j]]@coords[,2] ) > ly ) {
+					if ( max ( spLines@lines[[i]]@Lines[[j]]@coords[,2] ) < lly  |  min( spLines@lines[[i]]@Lines[[j]]@coords[,2] ) > uly ) {
 						# do nothing
 					} else {
-						segment <- spLines@lines[[i]]@Lines[[j]]@coords
-						colnrs <- getCols(raster, r, segment, line1, line2)
-						if ( length(colnrs) > 0 ) {
-							rv[colnrs] <- putvals[i]
+						aline <- spLines@lines[[i]]@Lines[[j]]@coords
+						for (k in 1:(nrow(aline)-1) ) {
+							segment <- aline[k:(k+1),]
+							colnrs <- .getCols(raster, r, segment, line1, line2)
+							if ( length(colnrs) > 0 ) {				
+								rv[colnrs] <- putvals[i]
+							}
 						}
-					}	
+					}
 				}
 			}
-		}	
-		
+		}
 		if (updateRaster) {
 			oldvals <- values(readRow(oldraster, r))
 			if (updateValue == "all") {
