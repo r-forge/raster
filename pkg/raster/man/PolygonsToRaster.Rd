@@ -37,7 +37,7 @@ cds3 <- rbind(c(-180,-20), c(-140,-60), c(-60,-20), c(-140,55), c(-180,-20))
 hole <- rbind(c(-150,-20), c(-100,-10), c(-110,20), c(-150,-20))
 
 polys <- SpatialPolygons(list(Polygons(list(Polygon(cds1)), 1), Polygons(list(Polygon(cds2)), 2), Polygons(list(Polygon(cds3)), 3), Polygons(list(Polygon(hole)), 4) ))
-polys@polygons[[4]]@Polygons[[1]]@hole <- T
+polys@polygons[[4]]@Polygons[[1]]@hole <- TRUE
 r <- raster()
 r <- polygonsToRaster(polys, r)
 #plot(r)
@@ -48,8 +48,8 @@ addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
 addpoly@data[1,1] <- 10
 r2 <- polygonsToRaster(addpoly, r, field=1, updateRaster=TRUE, updateValue="NA")
 plot(r2)
-plot(polys, border="blue", lwd=2, add=T)
-plot(addpoly, add=T, border="red", lwd=2)
+plot(polys, border="blue", lwd=2, add=TRUE)
+plot(addpoly, add=TRUE, border="red", lwd=2)
 
 }
 
