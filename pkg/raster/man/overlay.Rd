@@ -1,6 +1,6 @@
 \name{overlay}
 \alias{overlay,RasterLayer,RasterLayer-method}
-\alias{Overlay}
+\alias{overlay}
 
 \title{ Raster overlay calculation }
 \description{
@@ -8,7 +8,7 @@
 }
 
 \usage{
-	Overlay(x, y, ..., fun, filename="", overwrite=FALSE, asInt=FALSE) 
+	overlay(x, y, ..., fun, filename="", overwrite=FALSE, asInt=FALSE) 
 }
 
 \arguments{
@@ -38,15 +38,15 @@
 	r <- raster()
 	r1 <- init(r)
 	r2 <- init(r)
-	r3 <- Overlay(r1, r2, fun=function(x,y){return(x+y)})
+	r3 <- overlay(r1, r2, fun=function(x,y){return(x+y)})
 
 # long version for multiplication
-	r4 <- Overlay(r1, r2, fun=function(x,y){return(x*y)} )
+	r4 <- overlay(r1, r2, fun=function(x,y){return(x*y)} )
 # short function doing the same, if values can be loaded into ram memory
 	r5 <- r1 * r2
 
 # multiplication with more than two layers (make sure the number of RasterLayers matches the arguments of 'fun'
-	r6 <- Overlay(r1, r2, r3, r4, fun=function(a,b,c,d){return(a*b+c*d)} )	
+	r6 <- overlay(r1, r2, r3, r4, fun=function(a,b,c,d){return(a*b+c*d)} )	
 }	
 
 \keyword{ spatial }

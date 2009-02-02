@@ -48,7 +48,8 @@ makeProj <- function(projection='longlat', ..., ellipsoid="", datum="", asText=T
 			pstr <- paste(pstr, " +ellps=", ellipsoid, sep="")
 #			ellipname <- ell[which(ell[,1]==ellipsoid), 2]
 		}
-	} else if (datum != "") {
+	}
+	if (datum != "") {
 		if (!(datum %in% dat[,1])) { 
 			stop("unknown datum. See projInfo('datum')") 
 		} else {
@@ -57,16 +58,11 @@ makeProj <- function(projection='longlat', ..., ellipsoid="", datum="", asText=T
 		}
 	}
 	cat("Projection: ", projname[1], "\n")
-	
 	crs <- newCRS(pstr)
-		
 	if (asText) { 
 		return(trim(crs@projargs))
 	} else {
 		return(crs)
 	}
 }
-
-# newprj2 <- makeProj("lcc", "lat_1=48", "lat_2=33", "lon_0=-100", asText=T)
-
 

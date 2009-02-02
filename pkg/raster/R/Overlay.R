@@ -4,14 +4,10 @@
 # Version 0,1
 # Licence GPL v3
 
+
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, ...){ 
-		return(Overlay(x, y, ...) )
-	}
-)
+function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){ 
 
-
-Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE, asInt = FALSE){ 
 
 	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
 	if (missing(filename)) { filename <- "" }
@@ -104,4 +100,4 @@ Overlay <- function(x, y, ..., fun, filename="", overwrite=FALSE, asInt = FALSE)
 	} 
 	return(outraster)
 }
-
+)

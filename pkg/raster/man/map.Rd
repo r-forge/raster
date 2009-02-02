@@ -50,7 +50,7 @@ click(object, n=1, xy=FALSE, type = "n", ...)
 	rs <- raster()
 	rs <- setValues(rs, runif(ncell(rs)))
 	map(rs)
-	rsa <- Aggregate(rs, fact=10, fun=max)
+	rsa <- aggregate(rs, fact=10, fun=max)
 	map(rsa)
  }
 

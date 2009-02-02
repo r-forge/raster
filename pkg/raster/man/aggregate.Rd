@@ -1,20 +1,21 @@
 \name{aggregate}
-\alias{Aggregate}
+\alias{aggregate,RasterLayer-method}
+alias{aggregate}
 \alias{disaggregate}
 
 \title{Change raster database}
 \description{
-	(Dis)aggregated a raster to create a new raster 
+	(Dis)aggregate a raster to create a new raster 
 }
 \usage{
-Aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE) 
+aggregate(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE) 
 disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
 }
 
 \arguments{
   \item{raster}{a RasterLayer object}
   \item{filename}{output filename for a new raster}
-  \item{fun}{function used to Aggregate values. It should return one number. E.g. mean or max}
+  \item{fun}{function used to aggregate values. It should return one number. E.g. mean or max}
   \item{fact}{degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details}
   \item{expand}{if \code{expand == TRUE} grids will get larger if \code{factor} if the number of the division of the columns or rows with factor does not return an integer}
   \item{rm.NA}{if \code{rm.NA == TRUE}, remove NA cells from calculations}
@@ -37,7 +38,7 @@ disaggregate(raster, fact=2, filename="", overwrite=FALSE)
 \examples{
 	r <- raster()
 	r <- setValues(r, runif(ncell(r)))
-	ra <- Aggregate(r, fact=10, fun=max)
+	ra <- aggregate(r, fact=10, fun=max)
 	rd <- disaggregate(ra, 3)
 }
 

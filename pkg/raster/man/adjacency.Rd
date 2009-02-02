@@ -13,7 +13,7 @@ adjacency(raster, fromCells, toCells, directions)
   \item{raster}{an object of the Raster family}
   \item{fromCells}{a vector of cell numbers for which adjacent cells should be calculated}
   \item{toCells}{a vector of cell numbers from which adjacent cells are selected}
-  \item{directions}{in how many direction cells should be connected: 4, 8 or 16; or Bishop}
+  \item{directions}{in how many direction cells should be connected: 4, 8 or 16; or "Bishop"}
 }
 
 \details{
@@ -29,17 +29,16 @@ The function connects the outer meridians if the raster is in a geographic (latl
 \author{Jacob van Etten \email{jacobvanetten@yahoo.com}}
 
 \examples{
-	rs <- raster(nrows=10, ncols=10)
-	adj <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), directions=4) 
+rs <- raster(nrows=10, ncols=10)
+adj <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), directions=4) 
 	
-	#Visualize the outcome in a raster
-	v <- vector(length=ncell(rs))
-	v[c(1,30,55,72,100)] <- 1
-	v[adj[,2]] <- 2
-	rs <- setValues(rs, v)
-	plot(rs)
+#put the result in a RasterLayer
+v <- vector(length=ncell(rs))
+v[c(1,30,55,72,100)] <- 1
+v[adj[,2]] <- 2
+rs <- setValues(rs, v)
+plot(rs)
 
-	adjbis <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), direction='Bishop') 
 }
 
 \keyword{spatial}

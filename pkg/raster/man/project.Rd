@@ -16,9 +16,9 @@ makeProj(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE)
 \arguments{
   \item{from}{a RasterLayer object}
   \item{to}{a BasicRaster object (or any Raster* object}
-  \item{method}{}
-  \item{overwrite}{}
-  \item{object}{}
+  \item{method}{character. Only 'nngb', or neirest neighbor, has been implmented sofar}
+  \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}
+  \item{object}{BoundingBox or Raster* object}
   \item{projstring}{}
   \item{projection}{}
   \item{...}{parameters for the projection}  
@@ -52,17 +52,19 @@ r <- raster(-110, -90, 40, 60, ncols=40, nrows=30)
 r <- setValues(r, 1:ncell(r))
 # proj.4 projection description
 newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100"
+# for debugging R-Forge...
+ drop(read.dcf(file=system.file("DESCRIPTION", package="rgdal"), fields=c("Version","Date")))
 # this is equivalent to
-#newproj2 <- makeProj("lcc", "lat_1=48", "lat_2=33", "lon_0=-100", ellp="WGS84", datum="")
+newproj2 <- makeProj("lcc", "lat_1=48", "lat_2=33", "lon_0=-100", ellps="WGS84", datum="")
 
 # create a new RasterLayer with a BoundingBox with the new projection
-#projras <- projectBbox(r, newproj)
+projras <- projectBbox(r, newproj)
 # Adjust the cell size 
-#projras <- setRes(projras, 100000)
+projras <- setRes(projras, 100000)
 # project the values of RasterLayer 'r' to the new RasterLayer 'projras'
-#projras <- projectRaster(r, projras)
+projras <- projectRaster(r, projras)
 # inverse projection, back to the properties of 'r'
-#inverse <- projectRaster(projras, r)
+inverse <- projectRaster(projras, r)
 
 }
 

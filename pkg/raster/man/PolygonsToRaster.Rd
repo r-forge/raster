@@ -3,9 +3,9 @@
 \alias{polygonsToRaster}
 \alias{polygonsToRaster2}
 
-\title{ Transform polygons to a raster }
+\title{ Polygons to raster conversion}
 \description{
-  Two implementations of a polygon to raster conversion (number 2 should be slowest in most cases)
+Two algorithms for polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID are transferred. Holes in polygons are recognized by polygonsToRaster, but not by polygonsToRaster2.
 }
 \usage{
 polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") 
@@ -23,14 +23,14 @@ polygonsToRaster2(spPolys, raster, field=0, filename="", overwrite=FALSE)
 }
 
 \details{
-	For SpatialPolygons, the 'field' argument is ignored. The polygon index is tranferred.
+For SpatialPolygons, the 'field' argument is ignored. The polygon index is tranferred.
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{lines to raster}} }
+\seealso{ \code{\link[raster]{linesToRaster}}, \code{\link[raster]{pointsToRaster}}}
+
 \examples{ 
-
 cds1 <- rbind(c(-50,0), c(0,60), c(40,5), c(15,-45), c(-10,-25), c(-50,0))
 cds2 <- rbind(c(80,20), c(140,60), c(160,0), c(140,-55), c(80,20))
 cds3 <- rbind(c(-180,-20), c(-140,-60), c(-60,-20), c(-140,55), c(-180,-20))
@@ -47,10 +47,9 @@ addpoly <- SpatialPolygons(list(Polygons(list(Polygon(cds4)), 1)))
 addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
 addpoly@data[1,1] <- 10
 r2 <- polygonsToRaster(addpoly, r, field=1, updateRaster=TRUE, updateValue="NA")
-plot(r2)
+#plot(r2)
 #plot(polys, border="blue", lwd=2, add=TRUE)
 #plot(addpoly, add=TRUE, border="red", lwd=2)
-
 }
 
 \keyword{ spatial }

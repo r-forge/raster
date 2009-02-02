@@ -5,7 +5,16 @@
 # Version 0,7
 # Licence GPL v3
 
-Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE)  {
+
+
+if (!isGeneric("aggregate")) {
+	setGeneric("aggregate", function(x, ...)
+		standardGeneric("aggregate"))
+}	
+
+
+setMethod('aggregate', signature(x='RasterLayer'), 
+function(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE, ...)  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -20,67 +29,68 @@ Aggregate <- function(raster, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE,
 	}
 
 	if (expand) {
-		rsteps <- as.integer(ceiling(nrow(raster)/yfact))
-		csteps <- as.integer(ceiling(ncol(raster)/xfact))
+		rsteps <- as.integer(ceiling(nrow(x)/yfact))
+		csteps <- as.integer(ceiling(ncol(x)/xfact))
 	} else 	{
-		rsteps <- as.integer(floor(nrow(raster)/yfact))
-		csteps <- as.integer(floor(ncol(raster)/xfact))
+		rsteps <- as.integer(floor(nrow(x)/yfact))
+		csteps <- as.integer(floor(ncol(x)/xfact))
 	}
-	ymn <- ymax(raster) - rsteps * yfact * yres(raster)
-	xmx <- xmin(raster) + csteps * xfact * xres(raster)
-		
-	outraster <- setRaster(raster, filename)
-	bndbox <- newBbox(xmin(raster), xmx, ymn, ymax(raster))
-	outraster <- setBbox(outraster, bndbox, keepres=F)
-	outraster <- setRowCol(outraster, nrows=rsteps, ncols=csteps) 
 	
-	if (asInt) { outraster <- setDatatype(outraster, 'integer') }
-	
-	if (dataContent(raster) == 'all') {	
-		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(raster)], times=nrow(raster))
-		rows <- rep(1:rsteps, each=ncol(raster) * yfact)[1:ncell(raster)]
-		cells <- cellFromRowCol(raster, rows, cols)
+	ymn <- ymax(x) - rsteps * yfact * yres(x)
+	xmx <- xmin(x) + csteps * xfact * xres(x)
 		
-		if (rm.NA) { outraster <- setValues(outraster, as.vector(tapply(values(raster), cells, function(x){fun(na.omit(x))}))) 
-		} else {outraster <- setValues(outraster, as.vector(tapply(values(raster), cells, fun))) }
+	outRaster <- setRaster(x, filename)
+	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
+	outRaster <- setBbox(outRaster, bndbox, keepres=F)
+	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
+	
+	if (asInt) { outRaster <- setDatatype(outRaster, 'integer') }
+	
+	if (dataContent(x) == 'all') {	
+		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(x)], times=nrow(x))
+		rows <- rep(1:rsteps, each=ncol(x) * yfact)[1:ncell(x)]
+		cells <- cellFromRowCol(x, rows, cols)
+		
+		if (rm.NA) { outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, function(x){fun(na.omit(x))}))) 
+		} else {outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) }
 
-		if (filename(outraster) != "") {writeRaster(outraster, overwrite=overwrite)}
+		if (filename(outRaster) != "") {writex(outRaster, overwrite=overwrite)}
 		
-	} else if ( dataSource(raster) == 'disk') { 
+	} else if ( dataSource(x) == 'disk') { 
 	
-		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(raster)], times=yfact)
-		rows <- rep(1, each=(ncol(raster) * yfact))
+		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
+		rows <- rep(1, each=(ncol(x) * yfact))
 		v <- vector(length=0)
 		for (r in 1:rsteps) 
 		{
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
-				endrow <- min(nrow(raster), startrow + yfact - 1)
+				endrow <- min(nrow(x), startrow + yfact - 1)
 				nrows <- endrow - startrow + 1
-				theserows <- (startrow * rows)[1:(ncol(raster)*nrows)]
-				cols <- cols[1:(ncol(raster)*nrows)]
+				theserows <- (startrow * rows)[1:(ncol(x)*nrows)]
+				cols <- cols[1:(ncol(x)*nrows)]
 			} else {
 				nrows = yfact
 				theserows <- startrow * rows
 			}	
-			raster <- readRows(raster, startrow = startrow, nrows = nrows)
-			cells <- cellFromRowCol(raster, theserows, cols)
+			x <- readRows(x, startrow = startrow, nrows = nrows)
+			cells <- cellFromRowCol(x, theserows, cols)
 			
-			if (rm.NA) { vals <- tapply(values(raster), cells, function(x){fun(na.omit(x))} ) 
-			} else { vals <- tapply(values(raster), cells, fun) }
+			if (rm.NA) { vals <- tapply(values(x), cells, function(x){fun(na.omit(x))} ) 
+			} else { vals <- tapply(values(x), cells, fun) }
 			vals <- as.vector(vals)
 
-			if (filename(outraster) == "") {
+			if (filename(outRaster) == "") {
 				v <- c(v, vals)
 			} else {
-				outraster <- setValues(outraster, vals, r)
-				outraster <- writeRaster(outraster, overwrite=overwrite)
+				outRaster <- setValues(outRaster, vals, r)
+				outRaster <- writex(outRaster, overwrite=overwrite)
 			}
 		} 
-		if (filename(outraster) == "") { 
-			outraster <- setValues(outraster, v) 
+		if (filename(outRaster) == "") { 
+			outRaster <- setValues(outRaster, v) 
 		}
 	}
-	return(outraster)
+	return(outRaster)
 }
-
+)

@@ -26,9 +26,9 @@ linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRast
 
 \author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
 
-\seealso{ \code{\link[rgdal]{rgdal}} }
-\examples{
+\seealso{ \code{\link[raster]{linesToRaster}}, \code{\link[raster]{pointsToRaster}}}
 
+\examples{
 cds1 <- rbind(c(-50,0), c(0,60), c(40,5), c(15,-45), c(-10,-25))
 cds2 <- rbind(c(80,20), c(140,60), c(160,0), c(140,-55))
 cds3 <- rbind(c(-180,-20), c(-140,-60), c(-60,-20), c(-140,55))
@@ -39,7 +39,6 @@ r <- raster(ncols=90, nrows=45)
 r <- linesToRaster(lines, r)
 plot(r)
 plot(lines, add=TRUE)
-
 }
 
 \keyword{ spatial }

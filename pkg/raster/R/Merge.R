@@ -3,7 +3,7 @@
 # International Rice Research Institute
 #contact: r.hijmans@gmail.com
 # Date : October 2008
-# Version 0.7
+# Version 0.8
 # Licence GPL v3
 
 
@@ -40,7 +40,27 @@
 
 
 
-Merge <- function(rasters, tolerance=0.05, filename="", overwrite=FALSE) {
+if (!isGeneric("merge")) {
+	setGeneric("merge", function(x, y, ...)
+		standardGeneric("merge"))
+}	
+
+
+setMethod('merge', signature(x='RasterLayer', y='RasterLayer'), 
+function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE ){ 
+	
+	rasters <- list(...)
+	if (length(rasters) > 0) {
+		for (i in 1:length(rasters)) {
+			if (class(rasters[[i]]) != 'RasterLayer') {
+				print(class(rasters[[i]]))
+				stop('only supply RasterLayer objects as ... arguments')
+			}
+		}
+	}
+	rasters <- c(x, y, rasters)
+	
+			
 	compare(rasters, bb=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
 	bb <- .outerBox(rasters)
 	outraster <- setRaster(rasters[[1]], filename)
@@ -94,3 +114,6 @@ Merge <- function(rasters, tolerance=0.05, filename="", overwrite=FALSE) {
 	if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
 	return(outraster)
 }
+)
+
+
