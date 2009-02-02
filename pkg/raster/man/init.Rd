@@ -1,13 +1,13 @@
-\name{calculate}
+\name{initialize}
 
-\alias{calc}
+\alias{init}
 
-\title{RasterLayer calculate}
+\title{Intitialize values of a RasterLayer}
 \description{
-  Calculate values for a new raster, from scratch or based on a single existing raster
+  Set values for a new raster (from scratch)
 }
 \usage{
-calc(raster, fun=sqrt, filename="", overwrite=FALSE, asInt=FALSE)
+init(raster, fun=runif, filename="", overwrite=FALSE, asInt = FALSE) 
 }
 
 \arguments{
@@ -19,7 +19,7 @@ calc(raster, fun=sqrt, filename="", overwrite=FALSE, asInt=FALSE)
 }
 
 \details{
-Use \code{calc} to calculate values for a new raster using a function (\code{fun}) that takes a single number as an argument (and retruns a single number). E.g. to add, multiply or divide a number (cell value) by a constant.
+\code{init} sets a value without reference to existing values. E.g. initialize with a single, sequential, or random number.
 	
 If the input RasterLayer object has all values in memory (e.g. after readAll(raster)), the function will also return the new values in memory. If a filename is provided, the values will also be saved to that file. 
 If the values are not in memory the new values will be written to file. 
@@ -33,21 +33,17 @@ A new RasterLayer object (in the R environment), and in some cases the side effe
 \examples{
 
 r <- raster(ncols=36, nrows=18)
-r[] <- 1:ncell(r)
-
-
-# multiply values with 10
-fun <- function(x) { x * 10 }
-rc <- calc(r, fun)
-
-# set values below 100 to NA. 
-fun <- function(x) { x[x<100] <- NA; return(x) }
-rc <- calc(r, fun)
-
-# set NA values to -9999
-fun <- function(x) { x[is.na(x)] <- -9999; return(x)} 
-rc <- calc(rc, fun)
+ 
+# there are different ways to set all values to 1 
+# with a function (this will work for very large files if a file name is supplied)
+ set1function <- function(x){rep(1, x)}
+ r <- init(r, fun=set1function, filename='test.grd')
+# "manually", if all the values can be kept in memory.
+ r <- setValues(r, rep(1, ncell(r)))
+# or  
+ r[] <- rep(1, ncell(r))
  
 }
 
 \keyword{spatial}
+

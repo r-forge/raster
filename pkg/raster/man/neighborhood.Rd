@@ -1,30 +1,30 @@
-\name{calculate}
+\name{neighborhood}
 
-\alias{calc}
+\alias{neighborhood}
 
 \title{RasterLayer calculate}
 \description{
-  Calculate values for a new raster, from scratch or based on a single existing raster
+Neighborhood calculations
 }
 \usage{
-calc(raster, fun=sqrt, filename="", overwrite=FALSE, asInt=FALSE)
+neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, asInt=FALSE) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{fun}{The function to be applied}
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
+  \item{ngb}{Neighborhood size. Expressed in number of cells in a single direction. I.e. 3 refers to 2 cells at each side of the focal cell. Queen's case, 8 cells in total}
+  \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
   \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
   \item{asInt}{logical. If \code{TRUE}, output will be integer values}
 }
 
 \details{
-Use \code{calc} to calculate values for a new raster using a function (\code{fun}) that takes a single number as an argument (and retruns a single number). E.g. to add, multiply or divide a number (cell value) by a constant.
-	
+\code{neighborhood} computes a neighborhood value. I.e. a value computed with function 'fun', for all cells in the square neigborhood (of size ngb * ngb) around each cell 
 If the input RasterLayer object has all values in memory (e.g. after readAll(raster)), the function will also return the new values in memory. If a filename is provided, the values will also be saved to that file. 
 If the values are not in memory the new values will be written to file. 
-}
-
+	}
 \value{
 A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
 }
@@ -33,21 +33,8 @@ A new RasterLayer object (in the R environment), and in some cases the side effe
 \examples{
 
 r <- raster(ncols=36, nrows=18)
-r[] <- 1:ncell(r)
-
-
-# multiply values with 10
-fun <- function(x) { x * 10 }
-rc <- calc(r, fun)
-
-# set values below 100 to NA. 
-fun <- function(x) { x[x<100] <- NA; return(x) }
-rc <- calc(r, fun)
-
-# set NA values to -9999
-fun <- function(x) { x[is.na(x)] <- -9999; return(x)} 
-rc <- calc(rc, fun)
+r[] <- runif(ncell(r)) 
+ngb <- neighborhood(r, fun=sum) 
  
 }
-
 \keyword{spatial}

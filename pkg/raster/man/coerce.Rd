@@ -8,21 +8,18 @@
 \alias{asRasterLayer,SpatialPixels,numeric-method}
 \alias{asRasterLayer,SpatialPixelsDataFrame,numeric-method}
 \alias{asRasterLayer,SpatialGridDataFrame,numeric-method}
-
 \alias{asRasterLayer}
-\alias{asRasterStack}
 \alias{asSpGrid}
 
 \title{ Coercion of Raster*, SpatialGrid and SpatialPixels* objects. }
 
 \description{  
-	Functions to coerce a Raster* objects into an sp SpatialGridDataFrame object and 
-	to coerce a RasterLayer or RasterStack object from a sp SpatialPixels* or SpatialGrid* object
+Functions to coerce a Raster* objects into an sp SpatialGridDataFrame object and 
+to coerce a RasterLayer or RasterStack object from a sp SpatialPixels* or SpatialGrid* object
 }
 
 \usage{
 asRasterLayer(object, index) 
-asRasterStack(spgrid) 
 asSpGrid(object, type='grid') 
 }
 
@@ -36,6 +33,13 @@ asSpGrid(object, type='grid')
 \details{
  if \code{type} is 'pixel' a SpatialPixel* object is returned. If the RasterLayer object has data a SpatialPixelDataFrame will be returned.
  if \code{type} is 'grid' a SpatialGrid* object is returned. If the RasterLayer object has data a SpatialGridDataFrame will be returned.
+ 
+ In most cases you can also coerce objects using setAs, except that you cannot change the default 'index' (variable) and the first variable (column of the data frame of a Spatial* object) is used.
+ 
+ e.g.: setAs(aSpatialPixelsDataFrame, "RasterStack") or setAs(aRasterLayer, "SpatialGridDataFrame")
+ 
+)
+ 
 }
 
 \value{

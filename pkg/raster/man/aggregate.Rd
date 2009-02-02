@@ -4,7 +4,7 @@
 
 \title{Aggregate}
 \description{
-	aggregate a raster to create a new raster with a lower resolution
+	Aggregate a RasterLayer to create a new raster with a lower resolution.
 }
 \usage{
 aggregate(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE) 
@@ -22,7 +22,7 @@ aggregate(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", ove
 }
 
 \details{
- In aggregation \code{fact = 2} will result in a grid with 2 x 2 = 4 times fewer cells, while in disaggregation 4 times more cells will be created.
+ In aggregation \code{fact = 2} will result in a grid with 2 x 2 = 4 times fewer cells.
 }
 
 \value{

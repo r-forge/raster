@@ -4,6 +4,7 @@
 \alias{Arith,numeric,RasterLayer-method}
 \alias{Arith,RasterLayer,numeric-method}
 \alias{Arith,RasterLayer,RasterLayer-method}
+
 \title{Methods for arithmic function for RasterLayer objects}
 \description{
   Standard arithmic functions for computations with RasterLayer objects and numeric values 

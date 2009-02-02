@@ -19,7 +19,7 @@ newBbox creates a new bounding box (as in the "Spatial" object from the SP packa
 setBbox sets the bounding box of a Raster* object
 changeBbox changes the bounding box of a Raster* object
 
-You can also use bbox(object) to get a sp type bbox (a 2 x 2 matrix), but such an object cannot be used as a bounding box in this package.
+You can also use bbox(object) to get a sp type bbox (a 2 x 2 matrix), but such an object cannot be used with the other functon described here as it returns a matrix, and not a BoundingBox object.
 }
 
 \usage{
@@ -41,12 +41,12 @@ cellsFromBbox(object, bndbox)
   \item{snap}{Adjust the bounding box so that the new raster is aligned with the old raster }
 }
   
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 \examples{
-	rs <- raster()
-	bb <- newBbox(-10, 10, -20, 20)
-	rs <- setBbox(rs, bb, keepres=TRUE)
-	rs <- changeBbox(rs, ymx = 90)
+r <- raster()
+bb <- newBbox(-10, 10, -20, 20)
+r <- setBbox(r, bb, keepres=TRUE)
+r <- changeBbox(r, xmn=xmin(r)+1, xmx=xmax(r)+1)
 }
 
 \keyword{spatial}

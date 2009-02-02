@@ -1,4 +1,5 @@
 \name{overlay}
+\alias{overlay}
 \alias{overlay,RasterLayer,RasterLayer-method}
 
 \title{ Raster overlay calculation }

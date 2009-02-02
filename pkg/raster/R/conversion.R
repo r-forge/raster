@@ -1,11 +1,13 @@
+# R code for changing rasters (spatial data)
+# Authors: Robert J. Hijmans
+# International Rice Research Institute
+#contact: r.hijmans@gmail.com
+# Date : October 2008
+# Version 0.8
+# Licence GPL v3
 
 
-setAs('SpatialGridDataFrame', 'RasterStack',
-	function(from){ return(asRasterStack (from)) }
-)
-setAs('SpatialPixelsDataFrame', 'RasterStack', 
-	function(from){ return(asRasterStack (from)) }
-)
+
 	
 setAs('SpatialGridDataFrame', 'RasterLayer', 
 	function(from){ return(asRasterLayer (from)) }
@@ -136,27 +138,35 @@ setMethod('asRasterLayer', signature(object='SpatialGridDataFrame', index='numer
 )
 
 
-asRasterStack <- function(spgrid) {
+
+
+setAs('SpatialGrid', 'RasterStack',
+	function(from){ return(asRasterStack (from)) }
+)
+
+setAs('SpatialGridDataFrame', 'RasterStack',
+	function(from){ return(asRasterStack (from)) }
+)
+
+setAs('SpatialPixelsDataFrame', 'RasterStack', 
+	function(from){ return(asRasterStack (from)) }
+)
+
+setAs('SpatialPixels', 'RasterStack', 
+	function(from){ return(asRasterStack (from)) }
+)
+
+
+.asRasterStack <- function(spgrid) {
 	stk <- new("RasterStack")
 	stk <- setBbox(stk, getBbox(spgrid))
 	stk <- setProjection(stk, spgrid@proj4string)
 	stk <- setRowCol(stk, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
 	
-	if (class(spgrid)=='SpatialPixels') {
-		# do noting, there is no data
-		# we could store the indices, but then we would have a sparse raster with no data (or with NAs). That goes against our definition of sparse (all NAs have been removed)
-		stop('cannot make a RasterStack from a SpatialPixels object. Make a RasterLayer instead')		
-	} else if (class(spgrid)=='SpatialPixelsDataFrame') {
+	if (class(spgrid)=='SpatialPixelsDataFrame') {
 		spgrid <- as(spgrid, 'SpatialGridDataFrame')
-		rs <- as(stk, 'RasterLayer')
-		stk <- setValues(stk, as.matrix(spgrid@data))
-		for (i in 1:ncol(spgrid@data)) {
-			stk@layers[i] <- rs
-		}
-	} else if ( class(spgrid)=='SpatialGrid' ) {
-		# do nothing, there is no data
-		stop('cannot make a RasterStack from a SpatialGrid object. Make a RasterLayer instead')
-	} else if (class(spgrid)=='SpatialGridDataFrame' ) {
+	}
+	if (class(spgrid)=='SpatialGridDataFrame' ) {
 		stk <- setValues(stk, as.matrix(spgrid@data))
 		rs <- as(stk, 'RasterLayer')
 		stk <- setValues(stk, as.matrix(spgrid@data))
