@@ -7,14 +7,8 @@
 
 
 
-if (!isGeneric("aggregate")) {
-	setGeneric("aggregate", function(x, ...)
-		standardGeneric("aggregate"))
-}	
-
-
 setMethod('aggregate', signature(x='RasterLayer'), 
-function(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE, ...)  {
+function(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE)  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }

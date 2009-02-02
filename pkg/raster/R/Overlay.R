@@ -5,9 +5,15 @@
 # Licence GPL v3
 
 
+
+if (!isGeneric("overlay")) {
+	setGeneric("overlay", function(x, y, ..., fun, filename, overwrite, asInt)
+		standardGeneric("overlay"))
+}	
+
+
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){ 
-
 
 	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
 	if (missing(filename)) { filename <- "" }
