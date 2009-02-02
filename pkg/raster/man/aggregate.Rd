@@ -1,6 +1,6 @@
 \name{aggregate}
 \alias{aggregate,RasterLayer-method}
-alias{aggregate}
+\alias{aggregate}
 \alias{disaggregate}
 
 \title{Change raster database}
