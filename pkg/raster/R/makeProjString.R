@@ -22,7 +22,7 @@ newCRS <- function(projstring) {
 
 
 
-makeProj <- function(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE) {
+.makeProj <- function(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE) {
 	prj <- projInfo("proj")
 	ell <- projInfo("ellps")
 	dat <- projInfo("datum")

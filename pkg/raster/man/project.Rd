@@ -10,7 +10,6 @@
 \usage{
 projectRaster(from, to, method="nngb", overwrite=FALSE)
 projectBbox(object, projstring)
-makeProj(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE) 
 }
 
 \arguments{
@@ -20,23 +19,15 @@ makeProj(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE)
   \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}
   \item{object}{BoundingBox or Raster* object}
   \item{projstring}{}
-  \item{projection}{}
-  \item{...}{parameters for the projection}  
-  \item{ellipsoid}{}
-  \item{datum}{}  
-  \item{asText}{logical. If \code{FALSE}, an object of class 'CRS' will be returned.}  
 }
 
 \details{
  First create projected bbox (in BasicRaster object). Then project. 
  
- makeProj is a helper function to create a valid PROJ.4 string or CRS object. 
  
- See projInfo('proj'), projInfo('ellps'), and projInfo('datum') for valud choices. Specify either an ellipsoid, or a datum (datum is ignored if ellipsoid != "")
+ See projInfo('proj'), projInfo('ellps'), and projInfo('datum') for options for valid PROj.4 strings. 
  
- Many projections take additioanl paramters to the projection name (see the example below). Supply these after the projection argument. 
- 
- You can consult this webpage: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for your projection.
+ You can consult this webpage: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for projections.
  
  Projection is performed using the PROJ.4 library accesed through the rgdal package.  Also see ?CRS
 }
@@ -54,8 +45,6 @@ r <- setValues(r, 1:ncell(r))
 newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100"
 # for debugging R-Forge...
  drop(read.dcf(file=system.file("DESCRIPTION", package="rgdal"), fields=c("Version","Date")))
-# this is equivalent to
-newproj2 <- makeProj("lcc", "lat_1=48", "lat_2=33", "lon_0=-100", ellps="WGS84", datum="")
 
 # create a new RasterLayer with a BoundingBox with the new projection
 projras <- projectBbox(r, newproj)
