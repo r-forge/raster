@@ -1,33 +1,24 @@
 \name{Coercion}
-\alias{asRasterLayer,missing,missing-method}
-\alias{asRasterLayer,character,missing-method}
-\alias{asRasterLayer,Raster,missing-method}
-\alias{asRasterLayer,RasterLayer,numeric-method}
-\alias{asRasterLayer,RasterStack,numeric-method}
-\alias{asRasterLayer,SpatialPixels,missing-method}
-\alias{asRasterLayer,SpatialPixels,numeric-method}
-\alias{asRasterLayer,SpatialPixelsDataFrame,numeric-method}
-\alias{asRasterLayer,SpatialGridDataFrame,numeric-method}
+\alias{asRasterLayer,RasterStack-method}
+\alias{asRasterLayer,SpatialPixelsDataFrame-method}
+\alias{asRasterLayer,SpatialGridDataFrame-method}
 \alias{asRasterLayer}
-\alias{asSpGrid}
 
-\title{ Coercion of Raster*, SpatialGrid and SpatialPixels* objects. }
+\title{ Coercion of SpatialGridDataFrame and SpatialPixelsDataFrame objects to a RasterLayer. }
 
 \description{  
-Functions to coerce a Raster* objects into an sp SpatialGridDataFrame object and 
-to coerce a RasterLayer or RasterStack object from a sp SpatialPixels* or SpatialGrid* object
+Functions to coerce a SpatialGridDataFrame, SpatialPixelsDataFrame, and RasterStack objects to a RasterLayer object. 
+You can use as( , ) for these coercions (see examples), and for many other coercions between sp and raster objects, but asRasterLayer allows for indicating which variable should be passed to the RasterLayer object.
+RasterLayer objects only have a single variable, whereas a RasterStack and the Spatial* objects can have multiple variables.
 }
 
 \usage{
-asRasterLayer(object, index) 
-asSpGrid(object, type='grid') 
+asRasterLayer(object, index=1) 
 }
 
 \arguments{
   \item{object}{ a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{spgrid}{ a sp raster type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{index}{integer values >= 1 indicating the layer in the RasterStack, or the column in the sp object dataframe to take the values from}
-  \item{type}{character. Indicating what type of sp object to return. Should be 'pixel' or 'grid'.}
+  \item{index}{integer >= 1 indicating the layer in the RasterStack, or the column in the sp object dataframe to take the values from}
 }
 
 \details{
@@ -36,22 +27,28 @@ asSpGrid(object, type='grid')
  
  In most cases you can also coerce objects using setAs, except that you cannot change the default 'index' (variable) and the first variable (column of the data frame of a Spatial* object) is used.
  
- e.g.: setAs(aSpatialPixelsDataFrame, "RasterStack") or setAs(aRasterLayer, "SpatialGridDataFrame")
- 
-)
- 
+ e.g.: as(aSpatialPixelsDataFrame, "RasterStack") or as(aRasterLayer, "SpatialGridDataFrame")
 }
 
 \value{
-	a Raster or a sp object
+a RasterLayer object
 }
-\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+\author{ Robert J. Hijmans}
+
+\seealso{ \code{\link[raster]{RasterLayer-class}}, \code{\link[sp]{SpatialGridDataFrame-class}}, \code{\link[methods]{as}}}
 
 \examples{ 
-	rs <- raster()
-	rs <- setValues(rs, 1:ncell(rs))
-	sp <- asSpGrid(rs)
-	rs2 <- asRasterLayer(sp) 
+r1 <- raster(ncols=90, nrows=45)
+r1 <- setValues(r1, 1:ncell(r1))
+r2 <- setValues(r1, 1:ncell(r1))
+stk <- makeStack(r1, r2)
+sp <- as(stk, 'SpatialGridDataFrame')
+r3 <- asRasterLayer(sp, 2) 
+as(r2, 'BasicRaster') == as(r3, 'BasicRaster')
+sum(values(r2) == values(r3)) == ncell(r2)
+r4 <- asRasterLayer(stk, 1)
+sp <- as(r4, 'SpatialPixels')
+sp <- as(r4, 'SpatialGridDataFrame')
 }
 
 \keyword{ spatial }

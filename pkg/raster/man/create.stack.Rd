@@ -7,9 +7,9 @@
 \alias{addRasters}
 \alias{dropLayer}
 
-\title{ Create or change a new stack }
+\title{ Create or change a new RasterStack }
 \description{
-  A raster stack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects, or from raster files.
+  A RasterStack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects, or from raster files.
   You can add raster to or remove raster from a rasterstack. 
 }
 
@@ -31,16 +31,17 @@ dropLayer(rstack, indices)
   \item{indices}{ the indices of the raster(s) to remove from a RasterStack }
 }
 \details{
-  When a  stack is saved to a file, only pointers (filenames) to raster datasets are saved, not the data. If the name or location of a raster file changes, the stack becomes invalid.
+  When a  RasterStack is saved to a file, only pointers (filenames) to raster datasets are saved, not the data. If the name or location of a raster file changes, the RasterStack becomes invalid.
   In stackFromFiles, use index=-1 to add all bands of a single file to the RasterStack
 
 }
 \value{
-  a stack object
+  a RasterStack object
 }
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
-\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
+\seealso{ \code{\link[raster]{raster}}, \code{\link[raster]{rasterFromFile}}}
+
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
   st <- stackFromFiles(rasterfile)

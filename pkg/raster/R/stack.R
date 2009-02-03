@@ -35,6 +35,28 @@ stackFromFiles <- function(rasterfiles, bands= rep(1, length(rasterfiles))) {
 }
 
 
+#if (!isGeneric("stack")) {
+#	setGeneric("stack", function(x, ...)
+#		standardGeneric("stack"))
+#}	
+
+
+#setMethod("stack", signature(x='RasterLayer'), 
+#function(x, ...) {
+#	rlist <- c(x, list(...))
+#	for (i in 1:length(rlist)) {
+#		if (is.character(rlist[[i]])) {
+#			rlist[i] <- rasterFromFile(rlist[[i]])
+#		} else {
+#			if (class(rlist[[i]]) != "RasterLayer") {
+#				stop("Arguments should be RasterLayer objects or filenames")
+#			}
+#		}	
+#	}
+#	return(addRasters(new("RasterStack"), rlist))
+#} )
+
+
 
 if (!isGeneric("makeStack")) {
 	setGeneric("makeStack", function(x, ...)

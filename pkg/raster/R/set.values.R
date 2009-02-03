@@ -145,7 +145,7 @@ makeSparse <- function(raster) {
 		if ( dataContent(raster) == 'all') {
 			vals <- seq(1:ncell(raster))
 			vals <- cbind(vals, values(raster))
-			vals <- as.vector(na.omit(vals))
+			vals <- na.omit(vals)
 			raster <- setValuesSparse(raster, sparsevalues=vals[,2], cellnumbers=vals[,1])
 			return(raster)
 		} else { 

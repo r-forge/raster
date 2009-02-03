@@ -1,4 +1,4 @@
-\name{RasterLayer-class}
+\name{classes}
 \docType{class}
 
 

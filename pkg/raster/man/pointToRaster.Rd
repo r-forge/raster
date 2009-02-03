@@ -29,6 +29,8 @@ If you want a yes/no result, you can use fun=function(x){if(lenght(x)>0 {r<-1} e
 }
 \author{Robert J. Hijmans}
 
+\seealso{ \code{\link[raster]{linesToRaster}}, \code{\link[raster]{polygonsToRaster}}}
+
 \examples{
 r <- raster(ncols=36, nrows=18)
 n <- 1000
