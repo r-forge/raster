@@ -176,7 +176,7 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 
 changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) {
 	bb <- newBbox(xmn, xmx, ymn, ymx) 
-	if (class(bb) == 'BoundingBox') { 
+	if (class(object) == 'BoundingBox') { 
 		return(bb)
 	}
 	object <- setBbox(object, bb, keepres=keepres) 

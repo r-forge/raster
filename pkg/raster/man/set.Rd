@@ -3,7 +3,10 @@
 \alias{setFilename}
 \alias{setProjection}
 \alias{setRowCol}
+\alias{ncol<-}
+\alias{nrow<-}
 \alias{setRes}
+\alias{resolution<-}
 \alias{setMinMax}
 
 \title{ Set properties of a RasterLayer object }
@@ -38,6 +41,7 @@ setMinMax(raster, readfromdisk=FALSE)
 setRaster copies the parameters of a RasterLayer object to a new object, but does not copy the filename nor the data associated with the original raster. 
 Use it when creating new RasterLayer objects from existing objects.
 
+
 While you could access the slots of the object directly, you would do that at your own peril because the value of one raster property can affect values in other properties, and changing slot values may thus break the integrity of the objects. Using slots directly may also lead to code to break in the future if underlying class definitions change. 
 }
 
@@ -47,11 +51,19 @@ While you could access the slots of the object directly, you would do that at yo
 \author{ Robert J. Hijmans }
 
 \examples{ 
-	r <- raster()
-	r <- setFilename(r, "c:/test.grd")
-	r <- setRowCol(r, nrows=18, ncols=36) 
-	r <- setRes(r, xres=1/120) 
-	r <- setProjection(r, "+proj=longlat +datum=WGS84")
+r <- raster()
+r <- setRowCol(r, nrows=18, ncols=36) 
+# equivalent to
+nrow(r) <- 18
+ncol(r) <- 36
+r <- setRes(r, xres=1/120) 
+# equivalent to
+resolution(r) <- 1/120
+# set yres diffrently
+resolution(r) <- c(1/120, 1/60)
+r <- setProjection(r, "+proj=longlat +datum=WGS84")
+r <- setFilename(r, "c:/test.grd")
+	
 }
 
 \keyword{ spatial }

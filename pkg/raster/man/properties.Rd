@@ -3,11 +3,8 @@
 \alias{filename<-}
 \alias{ncol}
 \alias{nrow}
-\alias{ncol<-}
-\alias{nrow<-}
 \alias{nrow,BasicRaster-method}
 \alias{ncol,BasicRaster-method}
-\alias{ncells}
 \alias{ncell}
 \alias{xres}
 \alias{yres}
@@ -27,7 +24,8 @@
 \alias{nlayers,BasicRaster-method}
 \alias{nlayers,Raster-method}
 \alias{nlayers,RasterStack-method}
-\alias{layers}
+\alias{nlayers,Spatial-method}
+\alias{layerNames}
 \alias{band}
 \alias{nbands}
 \alias{dataType} 
@@ -59,7 +57,7 @@ origin(object)
 dataSize(object)
 dataType(object)
 nlayers(object)
-layers(object)
+layerNames(object)
 band(object)
 nbands(object)
 }
@@ -69,7 +67,6 @@ nbands(object)
   \item{x}{Raster* object}
   \item{asText}{logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned}
 }
-  
 
 \note{
   Some of these functions simply take the values from the data slots in the RasterLayer or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
@@ -84,21 +81,21 @@ nbands(object)
 \author{Robert J. Hijmans }
 \examples{
 #using a new default raster (1 degree global)
-rs <- raster()
-ncell(rs)
-ncol(rs)
-nrow(rs)
-ncell(rs)
-xres(rs)
-yres(rs)
-resolution(rs)
-xmin(rs)
-xmax(rs)
-ymin(rs)
-ymax(rs)
-projection(rs)
-origin(rs)
-nbands(rs)
-band(rs)
+r <- raster()
+ncell(r)
+ncol(r)
+nrow(r)
+ncell(r)
+xres(r)
+yres(r)
+resolution(r)
+xmin(r)
+xmax(r)
+ymin(r)
+ymax(r)
+projection(r)
+origin(r)
+nbands(r)
+band(r)
 }
 \keyword{spatial}

@@ -13,12 +13,12 @@ RasterLayer objects only have a single variable, whereas a RasterStack and the S
 }
 
 \usage{
-asRasterLayer(object, index=1) 
+asRasterLayer(object, index) 
 }
 
 \arguments{
   \item{object}{ a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{index}{integer >= 1 indicating the layer in the RasterStack, or the column in the sp object dataframe to take the values from}
+  \item{index}{integer (between 1 and nlayers(object) indicating the layer in the RasterStack, or the column in the sp object dataframe to take the values from}
 }
 
 \details{

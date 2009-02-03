@@ -20,7 +20,29 @@
 	return( setRowCol(x, nrows=value) )
 }	
 
+'resolution<-' <- function(x, value) {
+	if (length(value) == 1) {
+		return( setRes(x, xres=value, yres=value) )
+	} else {
+		return( setRes(x, xres=value[1], yres=value[2]) )
+	}
+}
 
+'xmin<-' <- function(x, value) {
+	return(changeBbox(x, xmn=value))
+}
+
+'xmax<-' <- function(x, value) {
+	return(changeBbox(x, xmx=value))
+}
+
+'ymin<-' <- function(x, value) {
+	return(changeBbox(x, ymn=value))
+}
+
+'ymax<-' <- function(x, value) {
+	return(changeBbox(x, ymx=value))
+}
 
 
 .getColValues <- function(r, colnr) {

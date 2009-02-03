@@ -80,6 +80,7 @@ ncells <- function(object) {
 }
 
 ncell <- function(object) {
+# return numeric to avoid integer overflow
 	return(return( as.numeric(nrow(object)) * ncol(object )))
 }
 
@@ -113,9 +114,7 @@ yres <- function(object) {
 }
 
 resolution <- function(object) {
-	x <- xres(object)
-	y <- yres(object)
-	return(c(x, y))
+	return(c(xres(object), yres(object)))
 }
 
 
@@ -142,9 +141,18 @@ setMethod('nlayers', signature(object='RasterStack'),
     }
 )
 
+setMethod('nlayers', signature(object='Spatial'), 
+	function(object){
+		if ( class(object)=='SpatialPixelsDataFrame' |  class(object)=='SpatialGridDataFrame' ) { 
+			return( dim(object@data)[2] ) 
+		} else {
+			return( 0 )
+		}
+    }
+)
 
 
-layers <- function(object) {
+layerNames <- function(object) {
 	if (class(object) == "RasterLayer") {
 		return(filename(object))
 	} else if (class(object) == "RasterStack") {
@@ -166,7 +174,11 @@ band <- function(object) {
 }
 
 nbands <- function(object) {
-	return(object@file@nbands)
+	if (class(object) == "RasterLayer") {
+		return(object@file@nbands)
+	} else {
+		stop(paste("not implemented for:", class(object), "objects"))
+	}	
 }
 
 projection <- function(object, asText=TRUE) {

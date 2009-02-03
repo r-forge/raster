@@ -11,6 +11,11 @@
 \alias{setBbox}
 \alias{changeBbox}
 \alias{cellsFromBbox}
+
+\alias{xmin<-}
+\alias{xmax<-}
+\alias{ymin<-}
+\alias{ymax<-}
   
 \title{Bounding box functions}
 \description{
@@ -47,6 +52,9 @@ r <- raster()
 bb <- newBbox(-10, 10, -20, 20)
 r <- setBbox(r, bb, keepres=TRUE)
 r <- changeBbox(r, xmn=xmin(r)+1, xmx=xmax(r)+1)
+# change BoundingBox coordinates one by one
+xmin(r) <- -30
+ymax(r) <- 60
 }
 
 \keyword{spatial}

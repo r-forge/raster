@@ -109,7 +109,7 @@ if (!isGeneric("asRasterLayer")) {
 
 
 setMethod('asRasterLayer', signature(object='RasterStack'), 
-	function(object, index=1){
+	function(object, index){
 		if (nlayers(object) > 0) {
 			dindex <- max(1, min(nlayers(object), index))
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
@@ -129,7 +129,7 @@ setMethod('asRasterLayer', signature(object='RasterStack'),
 
 
 setMethod('asRasterLayer', signature(object='SpatialPixelsDataFrame'), 
-	function(object, index=1){
+	function(object, index){
 		r <- raster()
 		r <- setBbox(r, getBbox(object))
 		r <- setProjection(r, object@proj4string)
@@ -155,7 +155,7 @@ setMethod('asRasterLayer', signature(object='SpatialPixelsDataFrame'),
 
 
 setMethod('asRasterLayer', signature(object='SpatialGridDataFrame'), 
-	function(object, index=1){
+	function(object, index){
 		r <- raster()
 		r <- setBbox(r, getBbox(object))
 		r <- setProjection(r, object@proj4string)
