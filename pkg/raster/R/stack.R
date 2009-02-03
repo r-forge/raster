@@ -132,8 +132,7 @@ addRasters <- function(rstack, rasters) {
 			}
 			rstack@data@colnames[1] <- cname
 			if (dataContent(raster) == 'all') {
-				rstack@data@values <- matrix(nrow=ncell(rstack), ncol=length(rasters))
-				rstack@data@values[,1] <- values(raster)
+				rstack@data@values <- as.matrix(values(raster))
 				rstack@data@content <- 'all'
 				raster <- clearValues(raster)
 			} else {
@@ -162,7 +161,7 @@ addRasters <- function(rstack, rasters) {
 				if (dataContent(raster) != 'all') {
 					raster <- readAll(raster)
 				} 
-				rstack@data@values[,nl] <- values(raster)
+				rstack@data@values <- cbind(rstack@data@values, values(raster))
 				raster <- clearValues(raster)
 			} else {
 				if (dataSource(raster)=='disk') {

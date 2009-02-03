@@ -6,7 +6,7 @@
   Convert points to a RasterLayer object
 }
 \usage{
-pointsToRaster(raster, xy, values, fun=length, filename="", overwrite=FALSE)
+pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, filename="", overwrite=FALSE)
 }
 
 \arguments{

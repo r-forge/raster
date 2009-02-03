@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 
-pointsToRaster <- function(raster, xy, values, fun=length, filename="", overwrite=FALSE) {
+pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length, filename="", overwrite=FALSE) {
 # make this an argument ?  so that you can use e.g.  background=0 
 	background=NA
 
