@@ -15,6 +15,7 @@ newBbox <- function(xmn, xmx, ymn, ymx) {
 	bb@xmax <- xmx
 	bb@ymin <- ymn
 	bb@ymax <- ymx
+	validObject(bb)
 	return(bb)
 }
 
@@ -86,8 +87,14 @@ setMethod('getBbox', signature(object='vector'),
 )
 
 
+
+
+
+
 cellsFromBbox <- function(object, bndbox) {
 	bndbox <- getBbox(bndbox)
+#	bndbox@xmax - 0.01 * xres(object)
+#	bndbox@ymin - 0.01 * yres(object)
 	srow <- rowFromY(object, bndbox@ymax)
 	if (trunc((ymin(object) - bndbox@ymin)/yres(object)) == (ymin(object) - bndbox@ymin)/yres(object)) { 
 		bndbox@ymin <- bndbox@ymin + 0.5 * yres(object) 
@@ -169,6 +176,9 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 
 changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) {
 	bb <- newBbox(xmn, xmx, ymn, ymx) 
+	if (class(bb) == 'BoundingBox') { 
+		return(bb)
+	}
 	object <- setBbox(object, bb, keepres=keepres) 
 	return(object)
 }

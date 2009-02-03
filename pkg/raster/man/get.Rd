@@ -2,7 +2,6 @@
 \alias{colFromCell}
 \alias{rowFromCell}
 \alias{cellFromRowCol}
-\alias{cellFromBbox}
 \alias{colFromX}
 \alias{rowFromY}
 \alias{cellFromXY}
@@ -25,7 +24,6 @@ These functions get the column, row, or cell number of a Raster* object for a x 
 colFromCell(object, cell)
 rowFromCell(object, cell)
 cellFromRowCol(object, rownr, colnr)
-cellFromBbox(object, bbox)
 colFromX(object, x)
 rowFromY(object, y)
 cellFromXY(object, xy)

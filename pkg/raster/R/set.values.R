@@ -134,6 +134,9 @@ clearValues <- function(object) {
 	} else {
 		object@data@values <- vector()
 	}
+	object@data@min <- Inf
+	object@data@max <- -Inf	
+	object@data@haveminmax <- FALSE
 	return(object)
 }
 

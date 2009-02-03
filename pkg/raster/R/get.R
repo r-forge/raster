@@ -117,28 +117,6 @@ xyFromCell <- function(object, cell, asSpatialPoints=FALSE) {
 }  
 	
 
-cellFromBbox <- function(object, bbox) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	bbox <- getBbox(bbox)
-	startrow <- rowFromY(object, ymax(bbox))
-	endrow <- rowFromY(object, ymin(bbox))
-	startcol <- colFromX(object, xmin(bbox))
-	endcol <- colFromX(object, xmax(bbox))
-
-#	cols <- rep(startcol:endcol, times=(endrow - startrow))
-#	rows <- rep(startrow:endrow, each=(endcol - startcol))
-#	cells <- cellFromRowCol(object, rows, cols)
-
-	# RH: ouch. Use Apply instead:
-	cells <- vector("integer", length=0)
-	for (r in startrow:endrow) {
-		firstcell <- cellFromRowCol(object, r, startcol)
-		lastcell <- cellFromRowCol(object, r, endcol)
-		cells <- c(cells, firstcell:lastcell)
-	}
-	return(cells)
-}
-
 	
 cxyFromBbox <- function(object, bbox) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
