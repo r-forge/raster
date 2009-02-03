@@ -23,7 +23,7 @@ distanceGreatcircle(point1, point2, r = 6378137)
 \value{
   Distance in meters (great circle distance) or map-units (typically meters)
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 
 
 \examples{

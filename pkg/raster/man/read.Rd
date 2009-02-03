@@ -42,7 +42,7 @@ readBlock(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol
 
 \note{After read* the values are accessible with the "values(object)" function}
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \examples{
 

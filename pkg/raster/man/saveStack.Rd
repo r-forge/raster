@@ -25,7 +25,7 @@ stackSave(rstack)
 \value{
   a RasterStack object
 }
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \seealso{ \code{\link[raster]{raster}}, \code{\link[raster]{rasterFromFile}}}
 

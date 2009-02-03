@@ -39,7 +39,7 @@ maxValue(object, layer=1)
 raster cell value(s)
 }
 
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 \examples{
 #using a new default raster (1 degree global)
 r <- raster()

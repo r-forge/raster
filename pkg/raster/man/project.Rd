@@ -44,7 +44,7 @@ makeProj(projection='longlat', ..., ellipsoid="", datum="", asText=TRUE)
 \value{
   a new RasterLayer object (in the R environment), with, in some cases, the side-effect of the raster values written to disk 
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \examples{
 # create a new (not projected) RasterLayer with cellnumbers as values

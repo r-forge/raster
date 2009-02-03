@@ -44,7 +44,7 @@ While you could access the slots of the object directly, you would do that at yo
 \value{
 	a Raster* object
 }
-\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+\author{ Robert J. Hijmans }
 
 \examples{ 
 	r <- raster()

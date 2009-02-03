@@ -81,7 +81,7 @@ nbands(object)
   matrix(x,y) of pairs of coordinates 
   matrix(cell, x, y) of cellnumbers and x and y coordinates
 }
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 \examples{
 #using a new default raster (1 degree global)
 rs <- raster()

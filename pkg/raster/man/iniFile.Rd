@@ -16,6 +16,6 @@ readIniFile(filename)
   readIniFile reads "ini-files". I.e. text file databases that are orginized in [sections] and "name = value" pairs.
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \keyword{file}

@@ -12,7 +12,7 @@
 \section{Note}{
  The RasterLayer objects must have either all data in memory or on disk. If the data do not fit into memory you should use the overlay() function instead.
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \examples{
 r1 <- raster(ncols=10, nrows=10)

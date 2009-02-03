@@ -45,7 +45,7 @@
 \value{
   RasterLayer object
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \seealso{  \code{\link[gdal]{rgdal}} }
 \examples{

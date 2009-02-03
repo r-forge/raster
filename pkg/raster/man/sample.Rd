@@ -24,7 +24,7 @@ readRandom(raster, n=500, na.rm = TRUE)
 }
 
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \examples{
  rs <- rasterFromFile(system.file("external/test.ag", package="sp"))

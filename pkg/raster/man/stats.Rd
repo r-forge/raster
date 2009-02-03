@@ -23,7 +23,7 @@ CV(x, na.rm = TRUE, singlevalueaszero=TRUE)
   and CV returns NA if singlevaluecvzero=FALSE. However, the default is that cv=0 in this case.
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \examples{
 	data <- c(0,1,2,3,3,3,3,4,4,4,5,5,6,7,7,8,9,NA)

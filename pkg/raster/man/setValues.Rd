@@ -42,7 +42,7 @@ makeSparse(raster)
 \value{
 	a Raster* object
 }
-\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+\author{ Robert J. Hijmans }
 
 \examples{ 
 	rs <- raster()

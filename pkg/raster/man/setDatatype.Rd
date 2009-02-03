@@ -56,7 +56,7 @@ Logical values are stored as signed single byte integers, they do have an NA val
 \value{
 	a Raster* object
 }
-\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+\author{ Robert J. Hijmans }
 
 \examples{ 
 r <- raster()

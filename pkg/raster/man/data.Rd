@@ -24,7 +24,8 @@ dataSource(object)
 	dataSource returns one of the following: ram, disk
 }
 
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
+
 \examples{
 #using a new default raster (1 degree global)
 rs <- raster()

@@ -44,7 +44,7 @@ click(object, n=1, xy=FALSE, type = "n", ...)
 }
 
 
-\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+\author{ Robert J. Hijmans }
 
 \examples{ 
 	rs <- raster()

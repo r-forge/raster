@@ -32,7 +32,7 @@
 \value{
   a new RasterLayer object (if a filename is provided, a file on disk) 
 }
-\author{ Robert J. Hijmans \email{r.hijmans@gmail.com} }
+\author{ Robert J. Hijmans }
 
 \examples{
 	r <- raster()

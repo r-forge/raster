@@ -12,7 +12,7 @@
  The following methods have been implemented for RasterLayer objects: "==", "!=", ">", "<",  "<=", ">="
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 
 
 \examples{

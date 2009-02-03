@@ -35,7 +35,7 @@ a RasterLayer object
 }
 \author{ Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{RasterLayer-class}}, \code{\link[sp]{SpatialGridDataFrame-class}}, \code{\link[methods]{as}}}
+\seealso{ \code{\link[raster]{classes}}, \code{\link[sp]{SpatialGridDataFrame-class}}, \code{\link[methods]{as}}}
 
 \examples{ 
 r1 <- raster(ncols=90, nrows=45)

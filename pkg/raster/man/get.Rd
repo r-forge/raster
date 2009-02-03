@@ -62,7 +62,7 @@ validRows(object, rownr)
   matrix(cell, x, y) of cellnumbers and x and y coordinates
   TRUE of FALSE for valid*
 }
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 \examples{
 #using a new default raster (1 degree global)
 rs <- raster()

@@ -28,7 +28,7 @@ aggregate(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", ove
 \value{
 A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \examples{
 	r <- raster()

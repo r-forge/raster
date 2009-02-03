@@ -23,7 +23,7 @@ Fact can be a single integer or two integers c(x,y), in which case the first one
 \value{
 A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \examples{
 r <- raster(ncols=10, nrows=10)

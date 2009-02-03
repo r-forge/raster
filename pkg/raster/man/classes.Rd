@@ -90,7 +90,7 @@ Objects can be created by calls of the form \code{new("RasterLayer")}, but you s
     \item{dim}{\code{signature(object = "Raster")}: returns dimensions (ncol, nrow, and nlayers) of Raster* object}
  	 }
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \keyword{classes}
 \keyword{spatial}

@@ -26,7 +26,7 @@ trim(astring)
   A file extension, filename or path.  
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 
 \examples{
 	fn <- "  c:/temp folder/filename.extension  "

@@ -24,7 +24,7 @@ linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRast
 	For SpatialLines, the 'field' argument is ignored. The line index is used
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 
 \seealso{ \code{\link[raster]{linesToRaster}}, \code{\link[raster]{pointsToRaster}}}
 

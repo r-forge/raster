@@ -23,7 +23,7 @@ resample(from, to, method="nngb", overwrite=FALSE)
 \value{
   a new RasterLayer object (in the R environment), with, in some cases, the side-effect of the raster values written to disk 
 }
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 
 \examples{
 r1 <- raster()

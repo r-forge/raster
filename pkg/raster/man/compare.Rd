@@ -23,7 +23,7 @@ compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, toleranc
   \item{showwarning}{logical. If \code{TRUE}, an warning will be given if objects are not the same. Only relevant when \code{stopiffalse} is \code{TRUE}}
  }
   
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 \examples{
 	r1 <- raster()
 	r2 <- r1

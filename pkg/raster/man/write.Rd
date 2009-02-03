@@ -60,7 +60,7 @@ ascii
 	
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \seealso{ \code{\link[rgdal]{rgdal}} }
 \examples{ 

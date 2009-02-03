@@ -20,7 +20,7 @@ newCRS(projstring)
   \item{projstring}{ a PROJ4 type character string describing projection and datum}
  }
   
-\author{Robert J. Hijmans  \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 \examples{
 	crsproj <- newCRS("+proj=longlat +datum=WGS84")
 	bb <- newBbox(-179.999999,  180.000011, -60, 60)

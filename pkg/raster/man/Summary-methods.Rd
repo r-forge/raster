@@ -14,7 +14,7 @@
 }
 
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans }
 
 \examples{
 r1 <- raster()

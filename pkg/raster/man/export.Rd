@@ -24,7 +24,7 @@ worldFile(raster, extension=".wld")
 	if format = "worldfile", the function writes an ESRI "world" file, that is sometimes used to georeference images.	
 }
 
-\author{Robert J. Hijmans \email{r.hijmans@gmail.com}}
+\author{Robert J. Hijmans}
 
 \seealso{ \code{\link[rgdal]{rgdal}} }
 \examples{ 
