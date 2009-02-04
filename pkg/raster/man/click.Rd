@@ -12,6 +12,7 @@ clickBbox(show = TRUE, col = "red")
 }
 
 \arguments{
+  \item{object}{A RasterLayer}
   \item{n}{number of clicks on the map}
   \item{xy}{show xy coordinates}
   \item{type}{see under ?locator}
