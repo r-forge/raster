@@ -128,6 +128,49 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 )
 
 
+if (!isGeneric("median")) {
+	setGeneric("median", function(x, na.rm=FALSE)
+		standardGeneric("median"))
+}
+
+
+setMethod('median', signature(x='Raster'), 
+	function(x, na.rm=FALSE){
+		if (dataContent(x) == 'all') {
+			return(median(values(x), na.rm=na.rm))
+		} else {
+# needs to be improved for large files. Make frequency table row by row.....
+			return(median(values(readAll(x)), na.rm=na.rm))
+		}
+	}
+)
+
+
+
+
+
+if (!isGeneric("rmedian")) {
+	setGeneric("rmedian", function(x, ..., na.rm=FALSE)
+		standardGeneric("rmedian"))
+}
+
+setMethod('rmedian', signature(x='Raster'), 
+	function(x, ..., na.rm=FALSE){
+		obs <- list(...)
+		if (length(obs) == 0) {
+			return(setRaster(x, values=apply(as.matrix(.getRasterValues(x)), 1, median, na.rm=na.rm)))
+		} else {
+			stk <- stack(c(x,obs))
+			v <- vector()
+			for (r in 1:nrow(stk)) {
+				v <- c(v, apply(values(readRow(stk, r)), 1, median, na.rm=na.rm)) 
+			}
+			return(setRaster(x, values=v))
+		}
+	}
+)
+
+
 
 setMethod("max", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){

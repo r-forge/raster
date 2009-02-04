@@ -1,6 +1,8 @@
 \name{rasterstack.create}
-\alias{makeStack}
-\alias{makeStack,RasterLayer-method}
+\alias{stack}
+\alias{stack,RasterLayer-method}
+\alias{stack,character-method}
+\alias{stack,list-method}
 \alias{stackFromFiles}
 \alias{stackFromRasters}
 \alias{addFiles}
@@ -14,7 +16,7 @@
 }
 
 \usage{
-makeStack(x, ...)
+stack(x, ...)
 stackFromFiles(rasterfiles, bands= rep(1, length(rasterfiles)))
 addFiles(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
 addRasters(rstack, rasters) 
@@ -22,11 +24,11 @@ dropLayer(rstack, indices)
 }
 
 \arguments{
-   \item{rstack}{ a RasterStack object }
-  \item{x}{a RasterLayer object}
-  \item{...}{additional RasterLayer objects (or filenames) }
+  \item{x}{a RasterLayer, character (raster filename), or list (of RasterLayers and/or filenames) object}
   \item{rasterfiles}{ Filename(s) of (a) raster dataset(s) }
   \item{bands}{ A vector or list of bands of raster data files (default values = 1)}
+  \item{rstack}{ a RasterStack object }
+  \item{...}{additional RasterLayer objects (or filenames) }
   \item{rasters}{ RasterLayer object(s) }
   \item{indices}{ the indices of the raster(s) to remove from a RasterStack }
 }
