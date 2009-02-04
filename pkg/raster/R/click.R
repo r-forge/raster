@@ -6,13 +6,18 @@
 # Version 0.8
 # Licence GPL v3
 
-clickBbox <- function(show=TRUE, border="red") {
+BboxToPolygon <- function(bbox) {
+	p <- rbind(c(bbox@xmin, bbox@ymin), c(bbox@xmin, bbox@ymax), c(bbox@xmax, bbox@ymax), c(bbox@xmax, bbox@ymin), c(bbox@xmin, bbox@ymin) )
+	pol <- SpatialPolygons(list(Polygons(list(Polygon(p)), 1)))
+	return(pol)
+}
+
+clickBbox <- function(show=TRUE, col="red") {
 	loc <- locator(n=2, type="p")
 	bb <- newBbox(min(loc$x), max(loc$x), min(loc$y), max(loc$y))
 	if (show) {
 		p <- rbind(c(bb@xmin, bb@ymin), c(bb@xmin, bb@ymax), c(bb@xmax, bb@ymax), c(bb@xmax, bb@ymin), c(bb@xmin, bb@ymin) )
-		pol <- SpatialPolygons(list(Polygons(list(Polygon(p)), 1)))
-		plot(pol, add=TRUE, border=border)
+		lines(p, col=col)
 	}
 	return(bb)
 }

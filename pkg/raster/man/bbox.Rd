@@ -47,6 +47,9 @@ cellsFromBbox(object, bndbox)
 }
   
 \author{Robert J. Hijmans}
+
+\seealso{ \code{\link[raster]{clickBbox}} }
+
 \examples{
 r <- raster()
 bb <- newBbox(-10, 10, -20, 20)
