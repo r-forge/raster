@@ -29,9 +29,14 @@ projectBbox <- function(object, projstring) {
 
 
 projectRaster <- function(from, to, method="nngb", overwrite=FALSE) {
+
 # do the bounding boxes overlap at all? 
+
 # get .innerbox first?
+
 # are the projs not NA and valid and not the same?
+
+	validObject(to)
 	rowCells <- 1:ncol(to)
 	inMemory <- filename(to) == ""
 	v <- vector(length=0)

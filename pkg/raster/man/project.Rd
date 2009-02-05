@@ -1,7 +1,6 @@
 \name{project}
 \alias{projectRaster}
 \alias{projectBbox}
-\alias{makeProj}
 
 \title{Change the projection of a RasterLayer}
 \description{
@@ -23,19 +22,21 @@ projectBbox(object, projstring)
 
 \details{
  First create projected bbox (in BasicRaster object). Then project. 
- 
- 
- See projInfo('proj'), projInfo('ellps'), and projInfo('datum') for options for valid PROj.4 strings. 
+  
+ See \code{projInfo('proj')}, \code{projInfo('ellps')}, and \code{projInfo('datum')} for options for valid PROJ.4 strings. 
  
  You can consult this webpage: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for projections.
  
- Projection is performed using the PROJ.4 library accesed through the rgdal package.  Also see ?CRS
+ Projection is performed using the PROJ.4 library accesed through the rgdal package. Also see \code{?CRS}
 }
 
 \value{
-  a new RasterLayer object (in the R environment), with, in some cases, the side-effect of the raster values written to disk 
+  a new RasterLayer object (in the R environment), with, in some cases, the side-effect of a raster file written to disk 
 }
+
 \author{Robert J. Hijmans}
+
+\seealso{ \code{\link[rgdal]{CRS}}, \code{\link[rgdal]{projInfo}}}
 
 \examples{
 # create a new (not projected) RasterLayer with cellnumbers as values

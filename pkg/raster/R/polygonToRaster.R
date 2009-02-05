@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
-# Date :  June 2008
-# Version 0,1
+# Date :  January2008
+# Version 0.8
 # Licence GPL v3
 
 
@@ -59,7 +59,7 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
+polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=0) {
 	filename <- trim(filename)
 	if (updateRaster) {
 		oldraster <- raster 
@@ -78,9 +78,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 	npol <- length(spPolys@polygons)
 	info <- matrix(NA, nrow=npol, ncol=3)
 	for (i in 1:npol) {
-#		holes <- sapply(rings, function(y) slot(y, "hole"))
-#		areas <- sapply(rings, function(x) slot(x, "area"))
-
 		info[i,1] <- length(spPolys@polygons[[i]]@Polygons)
 		miny <- NULL
 		maxy <- NULL
@@ -109,6 +106,10 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 	rxmn <- xmin(raster) + 0.1 * xres(raster)
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 	for (r in 1:nrow(raster)) {
+		if (r %in% trackRows) {
+			print(paste('row', r, '---', nrow(raster)+1-r, " rows to go"))
+		}
+		
 		rv <- rep(NA, ncol(raster))
 		holes <- rep(FALSE, ncol(raster))
 		

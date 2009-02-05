@@ -22,8 +22,13 @@ setClass('BoundingBox',
 	),
 	validity = function(object)	{
 		c1 <- (object@xmin <= object@xmax)
+		if (!c1) { stop('xmin > xmax') }
 		c2 <- (object@ymin <= object@ymax)
-		return(c1 & c2)
+		if (!c2) { stop('ymin > ymax') }
+		v <- c(object@xmin, object@xmax, object@ymin, object@ymax)
+		c3 <- all(!is.infinite(v))
+		if (!c3) { stop('infinite in BoundingBox') }		
+		return(c1 & c2 & c3)
 	}
 )
 
@@ -41,8 +46,11 @@ setClass ('BasicRaster',
 		crs = CRS(as.character(NA))
 	),
 	validity = function(object) {
+		validObject(getBbox(object))
 		c1 <- (object@ncols > 0)
+		if (!c1) { stop('ncols < 1') }
 		c2 <- (object@nrows > 0)
+		if (!c2) { stop('nrows < 1') }		
 		return(c1 & c2)
 	}
 )
@@ -83,7 +91,7 @@ setClass('RasterFile',
 	),
 	validity = function(object) {
 	}
-)	
+)
 
 
 setClass('SingleLayerData', 
