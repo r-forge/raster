@@ -133,6 +133,12 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 								l <- (k * 2) - 1		
 								x1 <- x[l]
 								x2 <- x[l+1]
+								if (is.na(x2)) { 
+									txt <- paste('something funny at row:', r, 'polygon:',j)
+									print(txt)
+									warning(txt)
+									x2 <- x1 
+								}
 								if (x1 > rxmx) { next }
 								if (x2 < rxmn) { next }
 								# adjust to skip first cell if the center is not covered by this polygon

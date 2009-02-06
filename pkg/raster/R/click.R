@@ -34,7 +34,11 @@ click <- function(object, n=1, xy=FALSE, type="n", ...) {
 		}	
 	} else {
 		cell <- cellFromXY(object, xyCoords)
-		value <- values(object)[cell]
+		if (class(object) == 'RasterStack') {
+			value <- values(object)[cell,]
+		} else {
+			value <- values(object)[cell]
+		}
 	}	
 	if (xy) { 
 		return(cbind(xyCoords, value)) 
