@@ -6,12 +6,6 @@
 # Version 0.8
 # Licence GPL v3
 
-BboxToPolygon <- function(bbox) {
-	bbox <- getBbox(bbox)
-	p <- rbind(c(bbox@xmin, bbox@ymin), c(bbox@xmin, bbox@ymax), c(bbox@xmax, bbox@ymax), c(bbox@xmax, bbox@ymin), c(bbox@xmin, bbox@ymin) )
-	pol <- SpatialPolygons(list(Polygons(list(Polygon(p)), 1)))
-	return(pol)
-}
 
 clickBbox <- function(show=TRUE, col="red") {
 	loc <- locator(n=2, type="p")

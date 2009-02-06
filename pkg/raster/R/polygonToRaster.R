@@ -59,8 +59,10 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=0) {
+polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=c(1,2,3,5,10*1:9,100*1:10)) {
 	filename <- trim(filename)
+	starttime <- proc.time()
+
 	if (updateRaster) {
 		oldraster <- raster 
 		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
@@ -106,9 +108,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 	rxmn <- xmin(raster) + 0.1 * xres(raster)
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 	for (r in 1:nrow(raster)) {
-		if (r %in% trackRows) {
-			print(paste('row', r, '---', nrow(raster)+1-r, " rows to go"))
-		}
 		
 		rv <- rep(NA, ncol(raster))
 		holes <- rep(FALSE, ncol(raster))
@@ -177,12 +176,23 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 			v <- c(v, rv)
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
-			raster <- writeRaster(raster)
+			raster <- writeRaster(raster, overwrite=overwrite)
 		}
+		
+		if (r %in% trackRows) {
+			elapsed <- (proc.time() - starttime)[3]
+			tpr <- round((elapsed /r), digits=2)
+			print(paste('row', r, '--', tpr, 'seconds/row --', nrow(raster)+1-r, " rows to go"))
+		}		
+
 	}
 	if (filename == "") {
 		raster <- setValues(raster, v)
 	}
+	
+	elapsed <- (proc.time() - starttime)[3]
+	tpr <- round((elapsed /r), digits=2)
+	print(paste('finished in ', round(elapsed/60, digits=1), 'minutes, at', tpr, 'seconds/row'))
 	return(raster)
 }
 
@@ -233,7 +243,7 @@ polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", overwrite=F
 			v <- c(v, vals)
 		} else {
 			raster <- setValues(raster, vals, r)
-			raster <- writeRaster(raster)
+			raster <- writeRaster(raster, overwrite=overwrite)
 		}
 	}
 	if (filename == "") {

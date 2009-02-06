@@ -48,7 +48,7 @@ function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FA
 		if (rm.NA) { outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, function(x){fun(na.omit(x))}))) 
 		} else {outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) }
 
-		if (filename(outRaster) != "") {writex(outRaster, overwrite=overwrite)}
+		if (filename(outRaster) != "") {writeRaster(outRaster, overwrite=overwrite)}
 		
 	} else if ( dataSource(x) == 'disk') { 
 	
@@ -78,7 +78,7 @@ function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FA
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writex(outRaster, overwrite=overwrite)
+				outRaster <- writeRaster(outRaster, overwrite=overwrite)
 			}
 		} 
 		if (filename(outRaster) == "") { 

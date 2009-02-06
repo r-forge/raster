@@ -8,6 +8,13 @@
 
 
 
+polygonFromBbox <- function(bndbox) {
+	bb <- getBbox(bndbox)
+	p <- rbind(c(bb@xmin, bb@ymin), c(bb@xmin, bb@ymax), c(bb@xmax, bb@ymax), c(bb@xmax, bb@ymin), c(bb@xmin, bb@ymin) )
+	pol <- SpatialPolygons(list(Polygons(list(Polygon(p)), 1)))
+	return(pol)
+}
+
 
 newBbox <- function(xmn, xmx, ymn, ymx) {
 	bb <- new('BoundingBox')
