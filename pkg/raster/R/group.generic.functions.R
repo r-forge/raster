@@ -6,11 +6,8 @@
 
 
 .CanProcessInMemory <- function(raster, n=2, datasize=16) {
-#	memalloc <- n * ncell(raster) * 8
-#	memavailable <- memory.limit()-memory.size()
-# For now something simplistic :
-	maxalloc <- 10^7
-	if ( (ncell(raster) * n * datasize) > maxalloc ) { 
+	memneed <- 1.1 * n * ncell(raster) * datasize / 1048576
+	if (memneed > memory.size(max = T)) {
 		return( FALSE )
 	} else { 
 		return( TRUE ) 

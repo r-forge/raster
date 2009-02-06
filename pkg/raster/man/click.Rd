@@ -12,22 +12,17 @@ clickBbox(show = TRUE, col = "red")
 }
 
 \arguments{
-  \item{object}{A RasterLayer}
+  \item{object}{RasterLayer or RasterStack object}
   \item{n}{number of clicks on the map}
   \item{xy}{show xy coordinates}
-  \item{type}{see under ?locator}
+  \item{type}{One of "n", "p", "l" or "o". If "p" or "o" the points are plotted; if "l" or "o" they are joined by lines. See ?locator}
+  \item{...}{additional graphics parameters used if type != "n" for plotting the locations. See ?locator}   
   \item{show}{logical. If \code{TRUE}, the bounding box will be drawn on the map}  
   \item{col}{the color of the bounding box lines}    
  }
  
-\details{
-forthcoming
-}
-
 
 \author{ Robert J. Hijmans }
 
-\examples{ 
- }
 
 \keyword{ spatial }

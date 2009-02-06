@@ -31,6 +31,7 @@
 	rasterWriteFormats returns a matrix of the file formats (the "drivers") that are supported.
 
 Supported formats include 
+
 Format
 	Long name
 
@@ -40,7 +41,7 @@ raster
 ascii
 	Arc Ascii format
 	
-	ENVI        ENVI .hdr Labelled
+\item{ENVI}{ENVI .hdr Labelled}
 	
 	EHdr        ESRI .hdr Labelled
 	
