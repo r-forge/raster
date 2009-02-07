@@ -26,7 +26,7 @@ worldFile(raster, extension=".wld")
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[rgdal]{rgdal}} }
+\seealso{ \code{\link[rgdal]{writeGDAL}} }
 \examples{ 
 
 rs <- rasterFromFile(system.file("external/test.ag", package="sp"))

@@ -19,7 +19,7 @@
 
 \arguments{
   \item{raster}{RasterLayer object}
-  \item{format}{either 'raster', 'ascii' or a supported GDAL 'driver' name}
+  \item{format}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
   \item{rstack}{RasterStack object} 
 }
@@ -33,76 +33,75 @@
 Supported formats include:
 
 \tabular{rll}{
-	\tab Format \tab Long name \cr
-    \tab raster \tab 'Native' raster package format \cr
-    \tab ascii  \tab ESRI Ascii \cr
-    \tab ENVI   \tab ENVI .hdr Labelled \cr
-    \tab EHdr   \tab ESRI .hdr Labelled \cr
-    \tab ERS  \tab ERMapper .ers Labelled \cr
-    \tab GTiff  \tab GeoTiff \cr
-    \tab HFAErdas  \tab Imagine Images (.img) \cr
-    \tab ILWIS   \tab ILWIS Raster Map \cr
-    \tab PAux   \tab PCI .aux Labelled \cr
-    \tab PCIDSK   \tab PCIDSK Database File \cr
-    \tab RST  \tab  Idrisi Raster A.1
+	\tab \code{\bold{format}} \tab \bold{Long name} \cr
+    \tab \code{raster} \tab 'Native' raster package format \cr
+    \tab \code{ascii}  \tab ESRI Ascii \cr
+    \tab \code{ENVI}   \tab ENVI .hdr Labelled \cr
+    \tab \code{EHdr}   \tab ESRI .hdr Labelled \cr
+    \tab \code{ERS}  \tab ERMapper .ers Labelled \cr
+    \tab \code{GTiff}  \tab GeoTiff \cr
+    \tab \code{HFAErdas}  \tab Imagine Images (.img) \cr
+    \tab \code{ILWIS}   \tab ILWIS Raster Map \cr
+    \tab \code{PAux}   \tab PCI .aux Labelled \cr
+    \tab \code{PCIDSK}   \tab PCIDSK Database File \cr
+    \tab \code{RST}  \tab  Idrisi Raster A.1
 }
 
 }
-
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[rgdal]{writeGDAL}} }
+\seealso{ \code{\link[rgdal]{readGDAL}} }  
 
 \examples{ 
- rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
  
 #read all data
- rs <- readAll(rs)
+rs <- readAll(rs)
 
 # write all to a new binary file
- rs <- setFilename(rs, "binall.grd")
- rs <- writeRaster(rs, overwrite=TRUE)
+rs <- setFilename(rs, "binall.grd")
+rs <- writeRaster(rs, overwrite=TRUE)
 
 # write all to a new ERDAS .img file
- rs <- setFilename(rs, "binall.img")
- rs <- writeRaster(rs, format="HFA", overwrite=TRUE)
+rs <- setFilename(rs, "binall.img")
+rs <- writeRaster(rs, format="HFA", overwrite=TRUE)
 
  
 # write all to integer binary file
- rs <- setFilename(rs, "binallint.grd")
- rs <- setDatatype(rs, "integer")
- rs <- writeRaster(rs, overwrite=TRUE)
+rs <- setFilename(rs, "binallint.grd")
+rs <- setDatatype(rs, "integer")
+rs <- writeRaster(rs, overwrite=TRUE)
  
 # write all to ascii file
- rs <- setFilename(rs, "ascall.asc")
- rs <- writeRaster(rs, format='ascii', overwrite=TRUE)
+rs <- setFilename(rs, "ascall.asc")
+rs <- writeRaster(rs, format='ascii', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
- rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
- ascras <- setRaster(rs, filename="ascrow.asc")
- for (r in 1:nrow(rs)) {
+rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+ascras <- setRaster(rs, filename="ascrow.asc")
+for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	v <- values(rs) * 10
 	ascras <- setValues(ascras, v, r)
 	ascras <- writeRaster(ascras, format='ascii', overwrite=TRUE) 
- }
+}
 	
 # read and write row by row; write to binary file
- binras <- setRaster(rs, "binbyrow")
- for (r in 1:nrow(rs)) {
+binras <- setRaster(rs, "binbyrow")
+for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	binras <- setValues(binras, values(rs), r)
 	binras <- writeRaster(binras, overwrite=TRUE) 
- }
+}
 
 # read and write row by row; write to GeoTiff binary file
- binras <- setRaster(rs, "binbyrow")
- for (r in 1:nrow(rs)) {
+binras <- setRaster(rs, "binbyrow")
+for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	binras <- setValues(binras, values(rs), r)
 	binras <- writeRaster(binras, format="GTiff", overwrite=TRUE) 
- }
+}
   
  
 }
