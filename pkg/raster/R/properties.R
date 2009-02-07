@@ -74,11 +74,6 @@ filename <- function(object) {
 	return(object@file@name)
 }
 
-ncells <- function(object) {
-	warning("'ncells' is obsolete. Use 'ncell' instead")
-	return(return( as.numeric(nrow(object)) * ncol(object )))
-}
-
 ncell <- function(object) {
 # return numeric to avoid integer overflow
 	return(return( as.numeric(nrow(object)) * ncol(object )))

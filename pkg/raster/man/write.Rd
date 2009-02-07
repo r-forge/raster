@@ -30,42 +30,31 @@
 	When writing by row, you must write all rows, and you must write them in sequence. Start at row=1, and end at row=nrow(raster). You cannot overwrite a single row in an existing raster file.
 	rasterWriteFormats returns a matrix of the file formats (the "drivers") that are supported.
 
-Supported formats include 
+Supported formats include:
 
-Format
-	Long name
-
-raster
-	'Native' raster package format
-	
-ascii
-	Arc Ascii format
-	
-\item{ENVI}{ENVI .hdr Labelled}
-	
-	EHdr        ESRI .hdr Labelled
-	
-	ERS         ERMapper .ers Labelled
-	
-	GTiff       GeoTiff
-	
-	HFAErdas    Imagine Images (.img)
-	
-	ILWIS       ILWIS Raster Map
-	
-	PAux        PCI .aux Labelled
-	
-	PCIDSK      PCIDSK Database File
-	
-	RST         Idrisi Raster A.1
-	
+\tabular{rll}{
+	\tab Format \tab Long name \cr
+    \tab raster \tab 'Native' raster package format \cr
+    \tab ascii  \tab ESRI Ascii \cr
+    \tab ENVI   \tab ENVI .hdr Labelled \cr
+    \tab EHdr   \tab ESRI .hdr Labelled \cr
+    \tab ERS  \tab ERMapper .ers Labelled \cr
+    \tab GTiff  \tab GeoTiff \cr
+    \tab HFAErdas  \tab Imagine Images (.img) \cr
+    \tab ILWIS   \tab ILWIS Raster Map \cr
+    \tab PAux   \tab PCI .aux Labelled \cr
+    \tab PCIDSK   \tab PCIDSK Database File \cr
+    \tab RST  \tab  Idrisi Raster A.1
 }
+
+}
+
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[rgdal]{rgdal}} }
-\examples{ 
+\seealso{ \code{\link[rgdal]{writeGDAL}} }
 
+\examples{ 
  rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
  
 #read all data

@@ -1,15 +1,9 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,1
+# Version 0.8
 # Licence GPL v3
 
-
-
-if (!isGeneric("overlay")) {
-	setGeneric("overlay", function(x, y, ..., fun, filename, overwrite, asInt)
-		standardGeneric("overlay"))
-}	
 
 
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
@@ -31,19 +25,9 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 		}
 	}
 	
-	f <- formals(fun)
-	if (length(f) != length(rasters)) {
-		stop(paste("Function/data mismatch. You provided a function with", length(f), "arguments. While passing", length(rasters), "RasterLayer objects."))
-	}
+	compare(c(x, rasters))
 
-	
-	for (i in 2:length(rasters)) {
-		if (!compare(c(x, rasters[i]))) { 
-			stop('Extent and/or resolution of rasters do not match') 
-		}	
-	}
-	outraster <- setRaster(x)
-	outraster <- setFilename(outraster, filename)
+	outraster <- setRaster(x, filename)
 	if (asInt) { outraster <- setDatatype(outraster, 'integer') }
 
 	inram <- TRUE
@@ -51,9 +35,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 		if (dataContent(rasters[[i]]) != 'all') {inram <- FALSE} 
 	}	
 	
-	
 	if ( inram ) {
-		
 		vallist <- list()
 		for (i in 1:length(rasters)) {
 			vallist[[i]] <- values(rasters[[i]])
@@ -83,10 +65,9 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 				}	
 			}	
 			
-			
 			for (i in 1:length(rasters)) {
 				vallist[[i]] <- values(rasters[[i]])
-				clearValues(rasters[[i]])
+			#	clearValues(rasters[[i]])
 			}
 			vals <- do.call(fun, vallist)
 			
@@ -107,3 +88,4 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 	return(outraster)
 }
 )
+
