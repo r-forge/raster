@@ -35,8 +35,9 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 		if (dataContent(rasters[[i]]) != 'all') {inram <- FALSE} 
 	}	
 	
+	vallist <- list()
+
 	if ( inram ) {
-		vallist <- list()
 		for (i in 1:length(rasters)) {
 			vallist[[i]] <- values(rasters[[i]])
 			clearValues(rasters[[i]])
