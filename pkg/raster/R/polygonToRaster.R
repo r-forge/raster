@@ -108,7 +108,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 	rxmn <- xmin(raster) + 0.1 * xres(raster)
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 	for (r in 1:nrow(raster)) {
-		
 		rv <- rep(NA, ncol(raster))
 		holes <- rep(FALSE, ncol(raster))
 		
@@ -124,36 +123,49 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 					if ( max ( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) < ly  |  min( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) > ly ) {
 						# polygon part above or below row. do nothing
 					} else {
-						mypoly <- spPolys@polygons[[i]]@Polygons[[j]]@coords
-						intersection <- .intersectLinePolygon(myline, mypoly)
-
+						mypoly <- spPolys@polygons[[i]]@Polygons[[j]]
+						intersection <- .intersectLinePolygon(myline, mypoly@coords)
+						
 						if (nrow(intersection) > 0) {
-							x <- sort(intersection[,1])
-							for (k in 1:round(nrow(intersection)/2)) {
-								l <- (k * 2) - 1		
-								x1 <- x[l]
-								x2 <- x[l+1]
-								if (is.na(x2)) { 
-									txt <- paste('something funny at row:', r, 'polygon:',j)
-									print(txt)
-									warning(txt)
-									x2 <- x1 
-								}
-								if (x1 > rxmx) { next }
-								if (x2 < rxmn) { next }
-								# adjust to skip first cell if the center is not covered by this polygon
-								x1a <- x1 + adj
-								x2a <- x2 - adj
-								x1a <- min(rxmx, max(rxmn, x1a))
-								x2a <- min(rxmx, max(rxmn, x2a))
-								col1 <- colFromX(raster, x1a)
-								col2 <- colFromX(raster, x2a)
-								if (col1 > col2) { next }
-
+							if ( sum(intersection[-length(intersection)] == intersection[-1]) > 0 ) {
+#								line1 <- myline
+#								line2 <- myline
+#								line1[,2] <-  myline[,2] + 0.1 * yres(raster)
+#								line2[,2] <-  myline[,2] - 0.1 * yres(raster)			
+								spPnts <- xyFromCell(raster, cellFromRowCol(raster, rep(r, ncol(raster)), 1:ncol(raster)), TRUE)
+								spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
+								over <- overlay(spPnts, spPol)
 								if ( spPolys@polygons[[i]]@Polygons[[j]]@hole ) {
-									holes[col1:col2] <- TRUE
+									holes[over] <- TRUE
 								} else {
-									rv[col1:col2] <- putvals[i]
+									rv[over] <- putvals[i]
+								}
+							} else {
+								x <- sort(intersection[,1])
+								for (k in 1:round(nrow(intersection)/2)) {
+									l <- (k * 2) - 1		
+									x1 <- x[l]
+									x2 <- x[l+1]
+									if (is.na(x2)) { 
+										txt <- paste('something funny at row:', r, 'polygon:',j)
+										error(txt)
+									}
+									if (x1 > rxmx) { next }
+									if (x2 < rxmn) { next }
+								# adjust to skip first cell if the center is not covered by this polygon
+									x1a <- x1 + adj
+									x2a <- x2 - adj
+									x1a <- min(rxmx, max(rxmn, x1a))
+									x2a <- min(rxmx, max(rxmn, x2a))
+									col1 <- colFromX(raster, x1a)
+									col2 <- colFromX(raster, x2a)
+									if (col1 > col2) { next }
+								
+									if ( spPolys@polygons[[i]]@Polygons[[j]]@hole ) {
+										holes[col1:col2] <- TRUE
+									} else {
+										rv[col1:col2] <- putvals[i]							
+									}
 								}
 							}	
 						}
