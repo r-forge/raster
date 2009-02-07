@@ -134,3 +134,7 @@ setMinMax <- function(raster, readfromdisk=FALSE) {
 	return(raster)
 }
 
+setNAvalue <- function(raster, value) {
+	raster@file@nodatavalue <- value
+	return(raster)
+}

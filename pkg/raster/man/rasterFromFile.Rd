@@ -18,7 +18,7 @@ rasterFromFile(filename, values=FALSE, band=1)
 
 \details{
  Supported file types are the 'native' raster package format and those that can be read via rgdal. See ?readGDAL help for supported file types.
- \n  See read* and values() for access to the values. 
+ See read* and values() for access to the values. 
 }
 
 \value{
