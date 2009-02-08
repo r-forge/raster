@@ -1,7 +1,7 @@
-\name{ point to raster conversion}
+\name{point to raster conversion}
 \alias{pointsToRaster}
 
-\title{ Point to raster diversity functions }
+\title{ Point to raster conversion }
 \description{
   Convert points to a RasterLayer object
 }

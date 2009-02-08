@@ -191,22 +191,8 @@
 	cat("yres=", yres(raster), "\n", file = thefile)
 	cat("projection=", projection(raster), "\n", file = thefile)
 	cat("[data]", "\n", file = thefile)
-	if (raster@file@datatype == 'ascii') {  
-		datatype <- "ASC" 
-	} else if (raster@file@datatype == 'integer') {  
-		datatype <- "INT"  
-	} else if (raster@file@datatype == 'logical') {  
-		datatype <- "LOG" 
-	} else { 
-		datatype <- "FLT" 
-	}
-	
-	
-	if (datatype != "ASC") {
-		datatype <- paste(datatype, raster@file@datasize, "BYTES", sep="")
-		cat("DataType=",  datatype, "\n", file = thefile)
-		cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)
-	}	
+	cat("DataType=",  raster@file@datanotation, "\n", file = thefile)
+	cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)
 	cat("nbands=",  nbands(raster), "\n", file = thefile)
 	cat("bandOrder=",  raster@file@bandorder, "\n", file = thefile)
 	cat("minValue=",  minValue(raster), "\n", file = thefile)

@@ -2,9 +2,9 @@
 
 \alias{linesToRaster}
 
-\title{ Transfer lines to a RasterLayer }
+\title{Transfer lines to a RasterLayer }
 \description{
-  Lines to raster conversion
+  Lines to raster conversion. Lines are raserized.
 }
 \usage{
 linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") 

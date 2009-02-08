@@ -203,20 +203,22 @@ readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 				dd <- c(dd, values(raster)[cols])
 			}	
 		}	
+	}
+	if (asRaster) {
 		outras <- setRaster(raster)
 		outras <- setRowCol(outras, nr, nc)
 		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
 		bndbox <- changeBbox(raster, xmx=xmx, ymn=ymn)
 		outras <- setBbox(outras, bndbox, keepres=F)
-		outras@data@values <- dd
-	}
-	if (asRaster) {
+		outras <- setValues(outras, dd)
 		return(outras)
 	} else {
-		return(values(outras))
+		return(dd)
 	}	
 }
+
+
 
 #.readrandom
 #			if (length(na.omit(values(x))) > maxcell) {

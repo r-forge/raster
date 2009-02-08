@@ -97,7 +97,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 		nsubpol <- length(spPolys@polygons[[i]]@Polygons)
 		for (j in 1:nsubpol) {
 			cnt <- cnt + 1
-			if (cnt > dim(polinfo)[1]) { rbind(polinfo, addpol)  }
+			if (cnt > dim(polinfo)[1]) { 
+				polinfo <- rbind(polinfo, addpol)  
+			}
 			polinfo[cnt, 1] <- cnt
 			polinfo[cnt, 2] <- min(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2])
 			polinfo[cnt, 3] <- max(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2])
@@ -112,6 +114,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 		}
 	}
 	
+	print(paste('Found', npol, 'regions and ', cnt, 'polygons'))
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
 #	polinfo <- polinfo[order(polinfo[,1]),]
 	
