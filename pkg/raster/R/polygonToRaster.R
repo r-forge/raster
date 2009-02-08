@@ -153,7 +153,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 						} else {
 							rv[over] <- subpol[i,4] 
 						}
-						print(paste('single node detected on row:', r))
+						print(paste('exit node intersection on row:', r))
 					} else {
 						for (k in 1:round(nrow(intersection)/2)) {
 							l <- (k * 2) - 1		

@@ -12,8 +12,18 @@ writeHeader <- function(raster, type) {
 	} else {
 		stop("This format is not supported")
 	}
+	.writeStx(raster)
  }
  
+ 
+.writeStx <- function(raster) {
+	if (raster@data@haveminmax) {
+		stxfile <- setFileExtension(filename(raster), ".stx")
+		thefile <- file(stxfile, "w")  # open an txt file connectionis
+		cat(1, " ", minValue(raster), " ", maxValue(raster), "\n", file = thefile)
+		close(thefile)
+	}	
+}
  
  
 .writeBilHdr <- function(raster) {

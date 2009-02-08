@@ -77,7 +77,7 @@
 		rasterout@data@haveminmax <- raster@data@haveminmax
 		rasterout@data@min <- raster@data@min
 		rasterout@data@max <- raster@data@max
-		
+		.writeStx(rasterout) 
 	}
 	return(raster)
 }
@@ -101,6 +101,8 @@
 #       }
 	saveDataset(transient, filename(raster) )
 	GDAL.close(transient) 
+	.writeStx(raster) 
+
 	tempras <- rasterFromFile(filename(raster) )
 	raster@file@gdalhandle <- tempras@file@gdalhandle
 	return(raster)
