@@ -17,7 +17,7 @@ projectBbox(object, projstring)
   \item{method}{character. Only 'nngb', or neirest neighbor, has been implmented sofar}
   \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}
   \item{object}{BoundingBox or Raster* object}
-  \item{projstring}{}
+  \item{projstring}{a character string describing a projection and datum in PROJ4 format }
 }
 
 \details{
@@ -25,7 +25,7 @@ projectBbox(object, projstring)
   
  See \code{projInfo('proj')}, \code{projInfo('ellps')}, and \code{projInfo('datum')} for options for valid PROJ.4 strings. 
  
- You can consult this webpage: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for projections.
+ You can consult this page: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for projections.
  
  Projection is performed using the PROJ.4 library accesed through the rgdal package. Also see \code{?CRS}
 }
