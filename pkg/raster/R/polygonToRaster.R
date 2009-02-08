@@ -59,6 +59,7 @@
 
 
 
+
 polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=0) {
 	filename <- trim(filename)
 	starttime <- proc.time()
@@ -78,21 +79,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 		stop('polygon and raster have no overlapping areas')
 	}
 	npol <- length(spPolys@polygons)
-	info <- matrix(NA, nrow=npol, ncol=3)
-	for (i in 1:npol) {
-		info[i,1] <- length(spPolys@polygons[[i]]@Polygons)
-		miny <- NULL
-		maxy <- NULL
-		for (j in 1:info[i,1]) {
-			miny <- min(miny, min(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2]))
-			maxy <- max(maxy, max(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2]))
-		}
-		info[i,2] <- miny
-		info[i,3] <- maxy
-	}
-	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
-	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
-
 	if (class(spPolys) == 'SpatialPolygons' | field == 0) {
 		putvals <- as.integer(1:npol)
 	} else {
@@ -102,78 +88,98 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 		}
 	}
 	raster <- setDatatype(raster, class(putvals[1]))
+
+	polinfo <- matrix(NA, nrow=npol * 2, ncol=6)
+	addpol <- matrix(NA, nrow=500, ncol=6)
+	pollist <- list()
+	cnt <- 0
+	for (i in 1:npol) {
+		nsubpol <- length(spPolys@polygons[[i]]@Polygons)
+		for (j in 1:nsubpol) {
+			cnt <- cnt + 1
+			if (cnt > dim(polinfo)[1]) { rbind(polinfo, addpol)  }
+			polinfo[cnt, 1] <- cnt
+			polinfo[cnt, 2] <- min(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2])
+			polinfo[cnt, 3] <- max(spPolys@polygons[[i]]@Polygons[[j]]@coords[,2])
+			polinfo[cnt, 4] <- putvals[i]
+			if ( spPolys@polygons[[i]]@Polygons[[j]]@hole ) {
+				polinfo[cnt, 5] <- 1
+			} else {
+				polinfo[cnt, 5] <- 0
+			}
+			polinfo[cnt, 6] <- i
+			pollist[cnt] <- spPolys@polygons[[i]]@Polygons[[j]]
+		}
+	}
+	
+	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
+#	polinfo <- polinfo[order(polinfo[,1]),]
+	
+	rm(spPolys)
+
+	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
+	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
 		
 	adj <- 0.5 * xres(raster)
 	v <- vector(length=0)
-	rxmn <- xmin(raster) + 0.1 * xres(raster)
-	rxmx <- xmax(raster) - 0.1 * xres(raster)
+	rxmn <- xmin(raster) 
+	rxmx <- xmax(raster) 
+	rv1 <- rep(NA, ncol(raster))
+	holes1 <- rep(FALSE, ncol(raster))
+
 	for (r in 1:nrow(raster)) {
-		rv <- rep(NA, ncol(raster))
-		holes <- rep(FALSE, ncol(raster))
-		
+		rv <- rv1
+		holes <- holes1
 		ly <- yFromRow(raster, r)
 		myline <- rbind(c(lxmin,ly), c(lxmax,ly))
 		
-		for (i in 1:npol) {
-		
-			if (info[i,2] > ly | info[i,3] < ly) {
-				# entire polygon above or below row. do nothing
-			} else {
-				for (j in 1:info[i,1]) {
-					if ( max ( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) < ly  |  min( spPolys@polygons[[i]]@Polygons[[j]]@coords[,2] ) > ly ) {
-						# polygon part above or below row. do nothing
-					} else {
-						mypoly <- spPolys@polygons[[i]]@Polygons[[j]]
-						intersection <- .intersectLinePolygon(myline, mypoly@coords)
-						x <- sort(intersection[,1])
-						
-						if (length(x) > 0) {
-							if ( sum(x[-length(x)] == x[-1]) > 0 ) {
-#								line1 <- myline
-#								line2 <- myline
-#								line1[,2] <-  myline[,2] + 0.1 * yres(raster)
-#								line2[,2] <-  myline[,2] - 0.1 * yres(raster)			
-								spPnts <- xyFromCell(raster, cellFromRowCol(raster, rep(r, ncol(raster)), 1:ncol(raster)), TRUE)
-								spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
-								over <- overlay(spPnts, spPol)
-								if ( spPolys@polygons[[i]]@Polygons[[j]]@hole ) {
-									holes[over] <- TRUE
-								} else {
-									rv[over] <- putvals[i]
-								}
-							} else {
-								x <- sort(intersection[,1])
-								for (k in 1:round(nrow(intersection)/2)) {
-									l <- (k * 2) - 1		
-									x1 <- x[l]
-									x2 <- x[l+1]
-									if (is.na(x2)) { 
-										txt <- paste('something funny at row:', r, 'polygon:',j)
-										error(txt)
-									}
-									if (x1 > rxmx) { next }
-									if (x2 < rxmn) { next }
-								# adjust to skip first cell if the center is not covered by this polygon
-									x1a <- x1 + adj
-									x2a <- x2 - adj
-									x1a <- min(rxmx, max(rxmn, x1a))
-									x2a <- min(rxmx, max(rxmn, x2a))
-									col1 <- colFromX(raster, x1a)
-									col2 <- colFromX(raster, x2a)
-									if (col1 > col2) { next }
-								
-									if ( spPolys@polygons[[i]]@Polygons[[j]]@hole ) {
-										holes[col1:col2] <- TRUE
-									} else {
-										rv[col1:col2] <- putvals[i]							
-									}
-								}
-							}	
+		subpol <- subset(polinfo, !(polinfo[,2] > ly | polinfo[,3] < ly), drop=FALSE)
+		if (length(subpol[,1]) > 0) { 		
+			for (i in 1:length(subpol[,1])) {
+				mypoly <- pollist[[subpol[i,1]]]
+				intersection <- .intersectLinePolygon(myline, mypoly@coords)
+				x <- sort(intersection[,1])
+				if (length(x) > 0) {
+					if ( sum(x[-length(x)] == x[-1]) > 0 ) {
+					# single node intersection going out of polygon ....
+						spPnts <- xyFromCell(raster, cellFromRowCol(raster, rep(r, ncol(raster)), 1:ncol(raster)), TRUE)
+						spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
+						over <- overlay(spPnts, spPol)
+						if ( subpol[i, 4] == 1 ) {
+							holes[over] <- TRUE
+						} else {
+							rv[over] <- subpol[i,4] 
 						}
-					}	
+						print(paste('single node detected on row:', r))
+					} else {
+						for (k in 1:round(nrow(intersection)/2)) {
+							l <- (k * 2) - 1		
+							x1 <- x[l]
+							x2 <- x[l+1]
+							if (is.na(x2)) { 
+								txt <- paste('something funny at row:', r, 'polygon:',j)
+								stop(txt)
+							}
+							if (x1 > rxmx) { next }
+							if (x2 < rxmn) { next }
+							# adjust to skip first cell if the center is not covered by this polygon
+							x1a <- x1 + adj
+							x2a <- x2 - adj
+							x1a <- min(rxmx, max(rxmn, x1a))
+							x2a <- min(rxmx, max(rxmn, x2a))
+							col1 <- colFromX(raster, x1a)
+							col2 <- colFromX(raster, x2a)
+							if (col1 > col2) { next }
+							if ( subpol[i, 5] == 1 ) {
+								holes[col1:col2] <- TRUE
+							} else {
+								rv[col1:col2] <- subpol[i,4]
+							}
+						}
+					}
 				}
 			}
-		}	
+		}
 		rv[holes] <- NA
 		
 		if (updateRaster) {
@@ -216,7 +222,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 }
 
 
-polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", overwrite=FALSE) {
+.polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", overwrite=FALSE) {
 #  This is based on sampling by points. Should be slower except when  polygons very detailed and raster las ow resolution
 # but it could be optimized further
 

@@ -1,15 +1,13 @@
 \name{polygons to raster}
 
 \alias{polygonsToRaster}
-\alias{polygonsToRaster2}
 
 \title{ Polygons to raster conversion}
 \description{
-Two algorithms for polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID are transferred. Holes in polygons are recognized by polygonsToRaster, but not by polygonsToRaster2.
+Two algorithms for polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID is transferred. Holes in polygons are recognized by polygonsToRaster, but not by polygonsToRaster2.
 }
 \usage{
 polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=0) 
-polygonsToRaster2(spPolys, raster, field=0, filename="", overwrite=FALSE) 
 }
 
 \arguments{
