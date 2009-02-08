@@ -60,7 +60,7 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=0) {
+polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) {
 	filename <- trim(filename)
 	starttime <- proc.time()
 
