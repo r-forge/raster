@@ -125,9 +125,10 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 					} else {
 						mypoly <- spPolys@polygons[[i]]@Polygons[[j]]
 						intersection <- .intersectLinePolygon(myline, mypoly@coords)
+						x <- sort(intersection[,1])
 						
-						if (nrow(intersection) > 0) {
-							if ( sum(intersection[-length(intersection)] == intersection[-1]) > 0 ) {
+						if (length(x) > 0) {
+							if ( sum(x[-length(x)] == x[-1]) > 0 ) {
 #								line1 <- myline
 #								line2 <- myline
 #								line1[,2] <-  myline[,2] + 0.1 * yres(raster)
