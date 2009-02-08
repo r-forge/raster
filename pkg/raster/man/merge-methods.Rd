@@ -14,7 +14,6 @@ Merge RasterLayers to form a new RasterLayer with a larger spatial extent
 This is a method for the generic function in Package `base'
 
 }
-}
 
 \section{Methods}{
 \describe{
@@ -49,6 +48,6 @@ rm <- merge(r1, r2)
 
 \keyword{methods}
 \keyword{spatial}
-}
+
 
 

@@ -6,7 +6,7 @@
 
 \description{Aggregate a RasterLayer to create a new raster with a lower resolution. 
   \code{aggregate} is a generic function described in the package `stats'.}
-}
+
 \section{Methods}{
 \describe{
 \code{aggregate(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE) }
