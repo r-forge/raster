@@ -8,11 +8,18 @@
 
 setMethod(round, signature(x='RasterLayer'), 
 	function (x, digits = 0) {
+		digits <- max(0, digits)
 		if (.CanProcessInMemory(x, 1)) {
-			return(setValues(x, round(values(x), digits)))
+			x <- setValues(x, round(values(x), digits))
+			if (digits == 0) {
+				x <- setDatatype(x, 'integer')
+			}
+			return(x)
 		} else {
 			raster <- setRaster(x, filename=tempfile())
-			raster <- setDatatype(raster, datatype='logical', datasize=2)
+			if (digits == 0) {
+				x <- setDatatype(x, 'integer')
+			}
 			for (r in 1:nrow(x)) {
 				raster <- setValues(raster, round(.getRowValues(x, r), digits), r)
 				raster <- writeRaster(raster)
@@ -26,10 +33,12 @@ setMethod(round, signature(x='RasterLayer'),
 setMethod(trunc, signature(x='RasterLayer'), 
 	function (x) {
 		if (.CanProcessInMemory(x, 1)) {
-			return(setValues(x, trunc(values(x))))
+			x <- setValues(x, trunc(values(x)))
+			x <- setDatatype(x, 'integer')
+			return(x)
 		} else {
 			raster <- setRaster(x, filename=tempfile())
-			raster <- setDatatype(raster, datatype='logical', datasize=2)
+			raster <- setDatatype(raster, 'integer')
 			for (r in 1:nrow(x)) {
 				raster <- setValues(raster, trunc(.getRowValues(x, r)), r)
 				raster <- writeRaster(raster)
@@ -44,10 +53,12 @@ setMethod(trunc, signature(x='RasterLayer'),
 setMethod(ceiling, signature(x='RasterLayer'), 
 	function (x) {
 		if (.CanProcessInMemory(x)) {
-			return(setValues(x, ceiling(values(x))))
+			x <- setValues(x, ceiling(values(x)))
+			x <- setDatatype(x, 'integer')
+			return(x)
 		} else {
 			raster <- setRaster(x, filename=tempfile())
-			raster <- setDatatype(raster, datatype='logical', datasize=2)
+			raster <- setDatatype(raster, 'integer')
 			for (r in 1:nrow(x)) {
 				raster <- setValues(raster, ceiling(.getRowValues(x, r)), r)
 				raster <- writeRaster(raster)
@@ -61,10 +72,12 @@ setMethod(ceiling, signature(x='RasterLayer'),
 setMethod(floor, signature(x='RasterLayer'), 
 	function (x) {
 		if (.CanProcessInMemory(x)) {
-			return(setValues(x, floor(values(x))))
+			x <- setValues(x, floor(values(x)))
+			x <- setDatatype(x, 'integer')
+			return(x)
 		} else {
 			raster <- setRaster(x, filename=tempfile())
-			raster <- setDatatype(raster, datatype='logical', datasize=2)
+			raster <- setDatatype(raster, 'integer')
 			for (r in 1:nrow(x)) {
 				raster <- setValues(raster, floor(.getRowValues(x, r)), r)
 				raster <- writeRaster(raster)
