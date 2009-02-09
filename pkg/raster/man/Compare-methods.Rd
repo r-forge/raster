@@ -20,7 +20,7 @@ r1 <- raster()
 r1 <- setValues(r1, round(10 * runif(ncell(r1))))
 r2 <- setValues(r1, round(10 * runif(ncell(r1))))
 as(r1, "BasicRaster") == as(r2, "BasicRaster")
-r3 <- r1 > r2
+r3 <- r1 == r2
 
 b <- newBbox(0, 360, 0, 180)
 r4 <- setBbox(r2, b)

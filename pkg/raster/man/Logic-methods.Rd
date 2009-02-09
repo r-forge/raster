@@ -6,14 +6,19 @@
 \alias{is.nan,RasterLayer-method}
 \alias{is.finite,RasterLayer-method}
 \alias{is.infinite,RasterLayer-method}
+\alias{!,RasterLayer-method}
+
 
 \title{ Methods for logical functions for RasterLayers' }
 \description{
-	The following boolean operators are available: '&', '|'
-	These are also available (with object being a RasterLayer, and the result a RasterLayer with logical values:
-	is.na(object) 
-	is.nan(object)
-	is.finite(object)
+The following boolean operators are available: '&', '|', and '!'
+With r being a RasterLayer, and the result a RasterLayer with logical values:
+	r <- r < 3 | r < 6
+	r <- !r
+These are also available :
+	is.na(r) 
+	is.nan(r)
+	is.finite(r)
 	is.infinite(object)
 }
 

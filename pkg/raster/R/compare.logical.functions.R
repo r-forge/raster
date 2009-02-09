@@ -22,12 +22,14 @@
 }
 
 
+
 setMethod('==', signature(e1='BasicRaster', e2='BasicRaster'),
 	function(e1,e2){
 		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.05, stopiffalse=FALSE) 
 		return(cond)
 	}
 )	
+
 
 
 
@@ -60,6 +62,25 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		return(raster)
 	}
 )	
+
+
+
+setMethod('!', signature(x='RasterLayer'),
+	function(x){
+		if (.CanProcessInMemory(x, 1)) {
+			return(setValues(x, !values(x)))
+		} else {
+			raster <- setRaster(x, filename=tempfile())
+			raster <- setDatatype(raster, datatype='logical', datasize=2)
+			for (r in 1:nrow(x)) {
+				raster <- setValues(raster, !.getRowValues(x, r), r)
+				raster <- writeRaster(raster)
+			}
+			return(raster)		
+		}
+	}
+)	
+
 
 setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 	function(e1,e2){
