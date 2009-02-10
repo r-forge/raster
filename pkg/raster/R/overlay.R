@@ -20,7 +20,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 			if (extends(class(obs[[i]]), "RasterLayer")) {
 				rasters <- c(rasters, obs[[i]])
 			} else {
-				stop("only RasterLayer objects allowed as ... arguments.")
+				stop(paste("only RasterLayer objects allowed as ... arguments. Problem:", obs[[i]]))
 			}
 		}
 	}
