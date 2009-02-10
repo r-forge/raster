@@ -16,6 +16,7 @@
 crop <- function(raster, bndbox, filename="", overwrite=FALSE) {
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
 	bb <- bbIntersect(c(raster, bndbox))
+	bb <- snapBbox(bb, raster)
 	outraster <- setRaster(raster, filename)
 	outraster <- setBbox(outraster, bb, keepres=T)
 	

@@ -7,6 +7,7 @@
 # Licence GPL v3
 
 
+
 clickBbox <- function(show=TRUE, col="red") {
 	loc <- locator(n=2, type="p")
 	bb <- newBbox(min(loc$x), max(loc$x), min(loc$y), max(loc$y))
@@ -20,9 +21,7 @@ clickBbox <- function(show=TRUE, col="red") {
 
 click <- function(object, n=1, xy=FALSE, type="n", ...) {
 	loc <- locator(n, type, ...)
-	x <- loc$x
-	y <- loc$y
-	xyCoords <- cbind(x, y)
+	xyCoords <- cbind(loc$x, loc$y)
 	if (missing(object)) {
 		return(cbind(xyCoords))
 	}
@@ -46,4 +45,3 @@ click <- function(object, n=1, xy=FALSE, type="n", ...) {
 		return(value)
 	}
 }
-
