@@ -18,7 +18,7 @@ cover <- function(x, y, filename="", overwrite=TRUE) {
 		rm(y)
 		outRaster <- setValues(outRaster, values(x))
 		if (filename(outRaster) != "") { 
-			writeRaster(outRaster, overwrite=overwrite) 
+			outraster <- writeRaster(outRaster, overwrite=overwrite) 
 		}
 	} else {
 		if (dataContent(x) == 'nodata'  &  dataSource(x) == 'ram' ) {

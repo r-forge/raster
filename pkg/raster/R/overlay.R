@@ -46,7 +46,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 		
 		outraster <- setValues(outraster, vals)
 		if (filename(outraster) != "") { 
-			writeRaster(outraster, overwrite=overwrite) 
+			outraster <- writeRaster(outraster, overwrite=overwrite) 
 		}
 		
 	} else {
