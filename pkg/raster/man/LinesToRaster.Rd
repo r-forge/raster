@@ -38,8 +38,8 @@ lines <- SpatialLines(list(Lines(list(Line(cds1)), "1"), Lines(list(Line(cds2)),
 
 r <- raster(ncols=90, nrows=45)
 r <- linesToRaster(lines, r)
-plot(r)
-plot(lines, add=TRUE)
+#plot(r)
+#plot(lines, add=TRUE)
 }
 
 \keyword{ spatial }

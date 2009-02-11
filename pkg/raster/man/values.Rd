@@ -13,7 +13,7 @@
 }
 
 \usage{
-values(object, format='vector', names=FALSE)
+values(object, format='', names=FALSE)
 valuesRow(raster, rownr)
 minValue(object, layer=1)
 maxValue(object, layer=1)
@@ -22,7 +22,7 @@ maxValue(object, layer=1)
 \arguments{
   \item{raster}{RasterLayer or RasterStack object}
   \item{object}{RasterLayer or RasterStack object}
-  \item{format}{use \code{vector} to get the data as a single vector or \code{matrix} to get them as a matrix}
+  \item{format}{specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack, and a vector for a RasterLayer}
   \item{names}{If TRUE, row and col names are provided}
   \item{rownr}{The rownumber for which values are returned}
   \item{layer}{layer number (for RasterStack objects}

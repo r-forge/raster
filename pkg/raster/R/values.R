@@ -5,24 +5,50 @@
 # Licence GPL v3
 
 
-
-#if (!isGeneric("values")) {
-#	setGeneric("values", function(object, ...)
-#		standardGeneric("values"))
-#}	
-
-#setMethod('values', signature(object='Raster'), 
-values <- function(object, format='vector', names=FALSE) {
-	if (dataContent(object)=="nodata") {stop("first read some data (e.g., readAll()") }
-	if (format=='matrix') { 
-		return(.values.as.matrix(object, names)) 
-	} else if (format=='dataframe') { 
-		return(.values.as.dataframe(object)) 
+values <- function(object, format='', names=FALSE) {
+	format <- trim(format)
+	if (class(object) == 'RasterLayer') {
+		if (format=='') {format <- 'vector'}
+		return(.rasterValues(object, format, names=names))
 	} else {
-		return(object@data@values) 
+		if (format=='') {format <- 'matrix'}
+		return(.stackValues(object, format, names=names))	
 	}
 }
-#)
+
+
+.rasterValues <- function(x, format='vector', names=FALSE) {
+	if (dataContent(x)=="nodata") {
+		stop("first read some data (e.g., readAll()") 
+	}
+	if (format=='matrix') { 
+		return(.values.as.matrix(x, names)) 
+	} else if (format=='dataframe') { 
+		return(.values.as.dataframe(x)) 
+	} else {
+		return(x@data@values) 
+	}
+}
+
+
+.stackValues <- function(x, format='matrix', names=FALSE) {
+		if (dataContent(x)=="nodata") {
+			stop("first read some data (e.g., readAll()") 
+		}
+		vals <- x@data@values
+		if (names) {
+			colnames(vals) <- x@data@colnames
+		} 
+		if (format == 'dataframe') {
+			vals <- as.data.frame(vals)
+		}
+		if (format == 'vector') {
+			vals <- as.vector(vals)
+		}
+		return(vals)
+}
+
+
 
 
 
