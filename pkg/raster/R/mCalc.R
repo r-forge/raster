@@ -5,26 +5,30 @@
 # Licence GPL v3
 
 
-mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, asInt=FALSE) {
+mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 	if (length(fun(seq(1:5))) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
-
-	outraster <- setRaster(object@layers[[1]], filename)
-	if (filename(outraster)=="") {
-		object <- readAll(object)
-		outraster <- setValues(outraster, apply(values(object), 1, fun)) 
-	} else {
-		if (asInt) { 
-			outraster <- setDatatype(outraster, "INT4S") 
-		}
-		for (r in 1:nrow(object)) {
-			object <- readRow(object, r)
-			vals <- apply(values(object), 1, fun)
+	filename <- trim(filename)
+	outraster <- setRaster(object, filename)
+	outraster <- setDatatype(outraster, datatype) 
+	v <- vector()
+	for (r in 1:nrow(object)) {
+		object <- readRow(object, r)
+		vals <- apply(values(object), 1, fun)
+		if (filename != "") {
 			outraster <- setValues(outraster, vals, r) 
-			outraster <- writeRaster(outraster, overwrite=overwrite)
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+		} else {
+			v <- c(v, vals)
 		}
-	}		
+		if (r %in% track) {
+			cat('row', r)
+		}
+	}	
+	if (filename == "") {
+		outraster <- setValues(outraster, v) 
+	}
 	return(outraster)
 }
 

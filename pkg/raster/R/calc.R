@@ -5,6 +5,8 @@
 # Licence GPL v3
 
 
+
+
 calc <- function(raster, fun=sqrt, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S') {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
