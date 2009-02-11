@@ -3,7 +3,8 @@
 
 ...isNA <- function(raster, value=0, filename="", overwrite=FALSE, asInt=FALSE) {
 	fun <- function(x) { x[is.na(x)] <- value; return(x)} 
-	raster <- calc(raster, fun, filename, overwrite=overwrite, asInt=asInt)
+	if (asInt) { datatype <- 'INT4S' } else { datatype <- 'FLT4S' }
+	raster <- calc(raster, fun, filename, overwrite=overwrite, datatype )
 	return(raster) 
 }
 
@@ -16,6 +17,7 @@
 	} else if (operator == "==") { fun <- function(x) { x[x==value] <- NA; return(x)}
 	} else if (operator == "!=") { fun <- function(x) { x[x!=value] <- NA; return(x)}
 	}
-	return(calc(raster, fun, filename, overwrite=overwrite, asInt=asInt))
+	if (asInt) { datatype <- 'INT4S' } else { datatype <- 'FLT4S' }
+	return(calc(raster, fun, filename, overwrite=overwrite, datatype))
 }
 

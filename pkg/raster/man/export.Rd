@@ -32,7 +32,7 @@ worldFile(raster, extension=".wld")
 rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
 rs <- readAll(rs)
 rs <- setFilename(rs, 'export.grd')
-rs <- writeRaster(rs, format='raster')
+rs <- writeRaster(rs)
 writeHeader(rs, type="ENVI") 
 
 }

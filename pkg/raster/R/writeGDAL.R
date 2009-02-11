@@ -11,7 +11,39 @@
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
 
-.getGDALtransient <- function(raster, gdalfiletype, overwrite, asInt, mvFlag,  options)  {
+#.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', '
+# what are these?  CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
+# this needs to get fancier; depending on object and the abilties of the drivers
+
+.getGdalDType <- function(dtype) {
+	if (!(dtype %in% c('LOGICAL', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S'))) {
+		stop('not a valid data type')
+	}
+	type <- substr(dtype,1,3)
+	size <- as.numeric(substr(dtype,4,4)) * 8
+	if (type == 'LOG') {
+		return('Byte')
+	}
+	if (type == 'INT') { 
+		type <- 'Int' 
+		if (size == 64) {
+			size <- 32
+			warning('8 byte integer values not supported by rgdal, changed to 4 byte integer values')
+		}
+		if (size == 8) {
+			return('Byte')
+		} else if (substr(dtype,5,5) == 'U') {
+			type <- paste('U', type, sep='')
+		}
+	} else { 
+		type <- 'Float' 
+	}
+	return(paste(type, size, sep=''))
+}
+
+
+
+.getGDALtransient <- function(raster, gdalfiletype, overwrite, mvFlag,  options)  {
 #	.isSupportedFormat(gdalfiletype)
 	
 # this is a RasterLayer hence nbands = 1:
@@ -19,7 +51,9 @@
 # but we keep this for later (RatserStack)
 
 	raster <- setFilename(raster, trim(filename(raster)))
-	if (filename(raster) == "") {	stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')	}
+	if (filename(raster) == "") {	
+		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')	
+	}
 
 	if (file.exists( filename(raster) )) {
 		if (!overwrite) {
@@ -31,14 +65,7 @@
 
 #.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
 # this needs to get fancier; depending on object and the abilties of the drivers
-	if (dataType(raster) == 'integer' | asInt) {
-		dataformat <- 'Int32'
-		if (raster@data@haveminmax) {
-			if (minValue(raster) > -32768 & maxValue(raster) <= 32767) {
-				dataformat <- 'Int16'
-			} # also check for the need for INT64
-		}
-	} else { dataformat <- 'Float32' }
+	dataformat <- .getGdalDType(dtype <- raster@file@datanotation)
 
 	driver = new("GDALDriver", gdalfiletype)
 	
@@ -54,14 +81,14 @@
 }
 
 
-.writeGDALrow <- function(raster, gdalfiletype, overwrite, asInt, mvFlag, options ) {
+.writeGDALrow <- function(raster, gdalfiletype, overwrite, mvFlag, options ) {
 	
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if (rownr %in%  c(1, 10, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000, 40000, 50000, 100000)) {
 		print( paste("writing row", rownr, "at:", format(Sys.time(), "%H:%M:%S")))
 	}
 	if ( rownr == 1) {
-		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, asInt, mvFlag, options)
+		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, mvFlag, options)
 		attr(raster, "transient") <- transient
 		raster@file@driver <- 'gdal'
 		raster@file@gdalhandle <- list()
@@ -74,6 +101,7 @@
 		GDAL.close(raster@transient) 
 		rasterout <- rasterFromFile(filename(raster))
 
+		rasterout@data@source <- 'disk'
 		rasterout@data@haveminmax <- raster@data@haveminmax
 		rasterout@data@min <- raster@data@min
 		rasterout@data@max <- raster@data@max
@@ -89,9 +117,9 @@
 #	writeGDAL(spgrid, filename(raster))
 #}
 
-.writeGDALall <- function(raster, gdalfiletype, overwrite, asInt, mvFlag, options) {
+.writeGDALall <- function(raster, gdalfiletype, overwrite, mvFlag, options) {
 	
-	transient <- .getGDALtransient(raster, gdalfiletype, overwrite, asInt, mvFlag, options)
+	transient <- .getGDALtransient(raster, gdalfiletype, overwrite, mvFlag, options)
     for (band in 1:nlayers(raster)) {
 		x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
 	}	
@@ -104,7 +132,9 @@
 	.writeStx(raster) 
 
 	tempras <- rasterFromFile(filename(raster) )
+	raster@file@driver <- 'gdal'
 	raster@file@gdalhandle <- tempras@file@gdalhandle
+	raster@data@source <- 'disk'
 	return(raster)
 }
 

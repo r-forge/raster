@@ -19,10 +19,10 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, asInt=FALSE)  
 	
 	outraster <- setRaster(raster, filename)
 	if (asInt) { 
-		outraster <- setDatatype(outraster, "integer") 
+		outraster <- setDatatype(outraster, "INT4S") 
 		res <- vector(mode = "integer", length = ncol(raster))
 	} else { 
-		outraster <- setDatatype(outraster, "numeric") 
+		outraster <- setDatatype(outraster, "FLT4S") 
 		res <- vector(mode = "numeric", length = ncol(raster))
 	}
 	

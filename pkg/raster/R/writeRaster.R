@@ -32,29 +32,29 @@
 
 	if ( raster@file@datatype =='integer') {
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
-			raster <- setDatatype(raster, 'integer', datasize=2)
+			raster <- setDatatype(raster, 'INT2S')
 			raster@data@values <- as.integer(round(values(raster)))
 			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)						
 		} else if (xmin(raster) > -2147483647 & xmax(raster) < 2147483648 ) {
-			raster <- setDatatype(raster, 'integer', datasize=4)
+			raster <- setDatatype(raster, 'INT4S')
 			raster@data@values <- as.integer(round(values(raster)))
 			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)			
 		} else if (xmin(raster) > -(2^63/2) & xmax(raster) < (2^64/2)) {
-			raster <- setDatatype(raster, 'integer', datasize=8)
+			raster <- setDatatype(raster, 'INT8S')
 			raster@data@values <- as.integer(round(values(raster)))
 			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)			
 		} else {
-			raster <- setDatatype(raster, 'numeric', datasize=8)
+			raster <- setDatatype(raster, 'FLT8S')
 			raster@data@values <- as.numeric(values(raster))
 		}
-	} else if ( raster@file@datatype =='logical') {
+	} else if ( raster@file@datatype =='LOGICAL') {
 		raster@data@values <- as.integer(values(raster))
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	} else {
 		if (xmin(raster) < -3.4E38 | xmax(raster) > 3.4E38) {
-			raster <- setDatatype(raster, 'numeric', 8)
+			raster <- setDatatype(raster, 'FLT8S')
 		} else {
-			raster <- setDatatype(raster, 'numeric', 4)
+			raster <- setDatatype(raster, 'FLT4S')
 		}	
 	}
 
@@ -77,7 +77,10 @@
 	return(raster)
 }
  
- ..startWriting <- function(raster, overwrite) {
+ 
+
+ 
+ .startRowWriting <- function(raster, overwrite) {
 	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
 	if (filename(raster) == "") {
 		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
@@ -96,7 +99,7 @@
 	return(raster)
 }
 
-..stopWriting <- function(raster) {
+.stopRowWriting <- function(raster) {
 	.writeRasterHdr(raster) 
 	close(raster@filecon)
 	raster@data@haveminmax <- TRUE
@@ -121,7 +124,7 @@
 		values  <- as.numeric(raster@data@values) 
 	}
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- ..startWriting(raster, overwrite=overwrite)
+		raster <- .startRowWriting(raster, overwrite=overwrite)
  	} 
 	
 	rsd <- na.omit(raster@data@values) # min and max values
@@ -133,7 +136,7 @@
 	writeBin(values, raster@filecon, size = raster@file@datasize)
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
-		raster <- ..stopWriting(raster)
+		raster <- .stopRowWriting(raster)
 		if (dataIndices(raster)[2] > ncell(raster)) {
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 		}
@@ -157,7 +160,7 @@
 		raster@data@values <- as.integer(values(raster)) 
 	}
 	if (class(values(raster))=='integer') {
-		raster <- setDatatype(raster, 'integer')
+		raster <- setDatatype(raster, 'INT4S')
 	}	
 	raster <- setMinMax(raster)
 

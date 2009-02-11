@@ -7,7 +7,7 @@
 Two algorithms for polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID is transferred. Holes in polygons are recognized by polygonsToRaster, but not by polygonsToRaster2.
 }
 \usage{
-polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) 
+polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", datatype='FLT4S', trackRows=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) 
 }
 
 \arguments{
@@ -18,6 +18,7 @@ polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateR
   \item{overwrite}{ logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either 'all', 'NA', '!NA', or 'zero' } 
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
   \item{trackRows}{vector of row numbers for which the function will report that they have been processed. To track progress on very large files }
 }
 

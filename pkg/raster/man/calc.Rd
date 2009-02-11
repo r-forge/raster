@@ -7,7 +7,7 @@
   Calculate values for a new raster, from scratch or based on a single existing raster
 }
 \usage{
-calc(raster, fun=sqrt, filename="", overwrite=FALSE, asInt=FALSE)
+calc(raster, fun=sqrt, filename='', overwrite=FALSE, filetype='raster', datatype='FLT4S')
 }
 
 \arguments{
@@ -15,7 +15,8 @@ calc(raster, fun=sqrt, filename="", overwrite=FALSE, asInt=FALSE)
   \item{fun}{The function to be applied}
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
   \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{asInt}{logical. If \code{TRUE}, output will be integer values}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
 }
 
 \details{

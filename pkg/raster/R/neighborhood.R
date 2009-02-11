@@ -49,7 +49,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	
 	filename <- trim(filename)
 	ngbgrid <- setRaster(raster, filename)
-	if (asInt) {setDatatype(ngbgrid, 'integer') }
+	if (asInt) {setDatatype(ngbgrid, 'INT4S') }
 
 # first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	ngbdata1 <- array(data = NA, dim = c(ngb, ncol(raster)))

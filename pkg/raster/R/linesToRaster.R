@@ -87,7 +87,7 @@
 }
 
 
-linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") {
+linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", datatype='FLT4S') {
 
 	filename <- trim(filename)
 	if (updateRaster) {
@@ -97,6 +97,9 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 		}
 	}
 	raster <- setRaster(raster, filename)
+	raster <- setDatatype(raster, datatype)
+
+	
 	if (class(spLines) == 'SpatialPolygons') {
 		spLines <- as(spLines, "SpatialLines")
 	}
@@ -140,7 +143,6 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 			stop('selected field is charater type')
 		}
 	}
-	raster <- setDatatype(raster, class(putvals[1]))
 		
 	v <- vector(length=0)
 	rxmn <- xmin(raster) + 0.1 * xres(raster)

@@ -2,13 +2,13 @@
 # International Rice Research Institute
 #contact: r.hijmans@gmail.com
 # Date : October 2008
-# Version 0,7
+# Version 0.8
 # Licence GPL v3
 
 
 
 setMethod('aggregate', signature(x='RasterLayer'), 
-function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FALSE, asInt = FALSE)  {
+function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S')  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -34,21 +34,25 @@ function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FA
 	xmx <- xmin(x) + csteps * xfact * xres(x)
 		
 	outRaster <- setRaster(x, filename)
+	outRaster <- setDatatype(outRaster, datatype)
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setBbox(outRaster, bndbox, keepres=F)
 	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
-	
-	if (asInt) { outRaster <- setDatatype(outRaster, 'integer') }
 	
 	if (dataContent(x) == 'all') {	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(x)], times=nrow(x))
 		rows <- rep(1:rsteps, each=ncol(x) * yfact)[1:ncell(x)]
 		cells <- cellFromRowCol(x, rows, cols)
 		
-		if (rm.NA) { outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, function(x){fun(na.omit(x))}))) 
-		} else {outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) }
+		if (rm.NA) { 
+			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, function(x){fun(na.omit(x))}))) 
+		} else {
+			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
+		}
 
-		if (filename(outRaster) != "") {writeRaster(outRaster, overwrite=overwrite)}
+		if (filename(outRaster) != "") {
+			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+		}
 		
 	} else if ( dataSource(x) == 'disk') { 
 	
@@ -78,7 +82,7 @@ function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FA
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writeRaster(outRaster, overwrite=overwrite)
+				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 			}
 		} 
 		if (filename(outRaster) == "") { 
@@ -88,3 +92,4 @@ function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FA
 	return(outRaster)
 }
 )
+

@@ -12,14 +12,14 @@
 }
 
 \usage{
-  writeRaster(raster, format='raster', overwrite=FALSE)
+  writeRaster(raster, filetype='raster', overwrite=FALSE)
   rasterWriteFormats()
   writeStack(rstack, overwrite=FALSE)
 }
 
 \arguments{
   \item{raster}{RasterLayer object}
-  \item{format}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
+  \item{filetype}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
   \item{rstack}{RasterStack object} 
 }
@@ -65,17 +65,17 @@ rs <- writeRaster(rs, overwrite=TRUE)
 
 # write all to a new ERDAS .img file
 rs <- setFilename(rs, "binall.img")
-rs <- writeRaster(rs, format="HFA", overwrite=TRUE)
+rs <- writeRaster(rs, filetype="HFA", overwrite=TRUE)
 
  
 # write all to integer binary file
 rs <- setFilename(rs, "binallint.grd")
-rs <- setDatatype(rs, "integer")
+rs <- setDatatype(rs, "INT4S")
 rs <- writeRaster(rs, overwrite=TRUE)
  
 # write all to ascii file
 rs <- setFilename(rs, "ascall.asc")
-rs <- writeRaster(rs, format='ascii', overwrite=TRUE)
+rs <- writeRaster(rs, filetype='ascii', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
 rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
@@ -84,7 +84,7 @@ for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	v <- values(rs) * 10
 	ascras <- setValues(ascras, v, r)
-	ascras <- writeRaster(ascras, format='ascii', overwrite=TRUE) 
+	ascras <- writeRaster(ascras, filetype='ascii', overwrite=TRUE) 
 }
 	
 # read and write row by row; write to binary file
@@ -100,7 +100,7 @@ binras <- setRaster(rs, "binbyrow")
 for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	binras <- setValues(binras, values(rs), r)
-	binras <- writeRaster(binras, format="GTiff", overwrite=TRUE) 
+	binras <- writeRaster(binras, filetype="GTiff", overwrite=TRUE) 
 }
   
  

@@ -8,6 +8,7 @@
 \alias{setRes}
 \alias{resolution<-}
 \alias{setMinMax}
+\alias{setNAvalue}
 
 \title{ Set properties of a RasterLayer object }
 
@@ -22,6 +23,7 @@ setRaster(object, filename="", values=NA)
 setRowCol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
 setRes(object, xres, yres=xres)
 setMinMax(raster, readfromdisk=FALSE)
+setNAvalue(raster, value)
 }
 
 \arguments{
@@ -35,6 +37,7 @@ setMinMax(raster, readfromdisk=FALSE)
   \item{yres}{ the new y resolution}  
   \item{projstring}{a character string describing a projection and datum in PROJ4 format }
   \item{readfromdisk}{Logical. If \code{TRUE} then data are read from disk (if available) to determine the min and max value}
+  \item{value}{the value to be interpreted as NA; set this before reading the values from the file. Integer values are matched exactely; for decimal values files any value <= the value will be interpreted as NA}  
 }
 
 \details{

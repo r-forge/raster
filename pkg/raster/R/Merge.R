@@ -36,11 +36,11 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE ){
 	
 	isint <- TRUE
 	for (i in 1:length(rasters)) {
-		if (rasters[[i]]@file@datatype != 'integer') {
+		if (rasters[[i]]@file@datatype != 'INT4S') {
 			isInt <- FALSE
 		}
 	}
-	if (isInt) { outraster <- setDatatype(outraster, 'integer') }
+	if (isInt) { outraster <- setDatatype(outraster, 'INT4S') }
 	
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
 	for (i in 1:length(rasters)) {

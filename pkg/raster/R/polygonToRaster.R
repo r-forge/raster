@@ -60,7 +60,7 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", trackRows=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) {
+polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", datatype='FLT4S', trackRows=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) {
 	filename <- trim(filename)
 	starttime <- proc.time()
 
@@ -71,6 +71,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 		}
 	}
 	raster <- setRaster(raster, filename)
+	raster <- setDatatype(raster, datatype)
 
 # check if bbox of raster and spPolys overlap
 	spbb <- bbox(spPolys)
@@ -87,7 +88,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 			stop('selected field is charater type')
 		}
 	}
-	raster <- setDatatype(raster, class(putvals[1]))
 
 	polinfo <- matrix(NA, nrow=npol * 2, ncol=6)
 	addpol <- matrix(NA, nrow=500, ncol=6)
@@ -225,7 +225,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 }
 
 
-.polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", overwrite=FALSE) {
+.polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", datatype='FLT4S', overwrite=FALSE) {
 #  This is based on sampling by points. Should be slower except when  polygons very detailed and raster las ow resolution
 # but it could be optimized further
 
@@ -234,6 +234,8 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 # check if bbox of raster and spPolys overlap
 	filename <- trim(filename)
 	raster <- setRaster(raster, filename)
+	raster <- setDatatype(raster, datatype)
+	
 
 	spbb <- bbox(spPolys)
 	rsbb <- bbox(raster)
@@ -249,8 +251,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 			stop('selected field is charater type')
 		}
 	}
-	raster <- setDatatype(raster, class(putvals[1]))
-		
+	
 	
 	v <- vector(length=0)
 	rowcol <- cbind(0, 1:ncol(raster))

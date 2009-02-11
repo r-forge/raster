@@ -7,7 +7,7 @@
   Lines to raster conversion. Lines are raserized.
 }
 \usage{
-linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA") 
+linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", datatype='FLT4S') 
 }
 
 \arguments{
@@ -17,6 +17,7 @@ linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRast
   \item{filename}{ output filename }
   \item{overwrite}{ logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either 'all', 'NA', '!NA', or 'zero' } 
 }
 

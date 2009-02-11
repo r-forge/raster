@@ -9,7 +9,7 @@
 
 \section{Methods}{
 \describe{
-\code{aggregate(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, asInt = FALSE) }
+\code{aggregate(x, fact = 2, fun = mean, expand = TRUE, rm.NA = TRUE, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S') }
 
 
 \item{x}{ a RasterLayer object}
@@ -18,7 +18,8 @@
   \item{fact}{degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details}
   \item{expand}{if \code{expand == TRUE} grids will get larger if \code{factor} if the number of the division of the columns or rows with factor does not return an integer}
   \item{rm.NA}{if \code{rm.NA == TRUE}, remove NA cells from calculations}
-  \item{asInt}{logical. If \code{TRUE} the values will be rounded and stored as integer}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
   \item{overwrite}{if TRUE, "filename" will be overwritten if it exists}
 }
 }

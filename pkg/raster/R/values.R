@@ -30,6 +30,13 @@ valuesRow <- function(raster, rownr) {
 	if (dataContent(raster) == 'nodata') {
 		stop('no values in memory. First read or set values')
 	}
+	if (rownr < 0) {
+		if (dataContent(raster) == 'all') {
+			return(raster)
+		} else {
+			stop('cannot get these values')
+		}
+	}
 	if (!(validRows(raster, rownr))) {
 		stop(paste(rownr,'is not a valid rownumber')) 
 	}

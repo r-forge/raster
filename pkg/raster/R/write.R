@@ -29,26 +29,26 @@ rasterWriteFormats <- function() {
 
  
  
-writeRaster <- function(raster, format='raster', overwrite=FALSE) {
+writeRaster <- function(raster, filetype='raster', overwrite=FALSE) {
 	
 	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
 		stop('No data available for writing. First use setValues()')
 	}
-
-	if (format=='raster') {
+	
+	if (filetype=='raster') {
 		if (dataContent(raster) == 'row' ) {
 			raster <- .writeRasterRow(raster, overwrite=overwrite)
 		} else {
 			raster <- .writeRasterAll(raster, overwrite=overwrite)
 		}  
-	} else if (format=='ascii') {
+	} else if (filetype=='ascii') {
 		raster <- .writeAscii(raster, overwrite=overwrite)
 	} else { 
-		.isSupportedGDALFormat(format)
+		.isSupportedGDALFormat(filetype)
 		if (dataContent(raster) == 'row' ) {
-			raster <- .writeGDALrow(raster, format, overwrite, asInt=FALSE, mvFlag=NA, options=NULL)
+			raster <- .writeGDALrow(raster, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
 		} else {
-			raster <- .writeGDALall(raster, format, overwrite, asInt=FALSE, mvFlag=NA, options=NULL)
+			raster <- .writeGDALall(raster, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
 		}  
 	}
 	return(raster)
@@ -57,6 +57,6 @@ writeRaster <- function(raster, format='raster', overwrite=FALSE) {
 writeStack <- function(rstack, overwrite=FALSE) {
 	stop("not available yet")
 	for (i in 1:nlayers(rstack)) {
-	
+		
 	}
 }

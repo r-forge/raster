@@ -97,7 +97,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 
 	raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projstring="")
 	raster <- setFilename(raster, filename)
-	raster <- setDatatype(raster, "numeric")
+	raster <- setDatatype(raster, "FLT4S")
 	
 
 	raster@file@driver <- 'gdal' 
@@ -173,15 +173,8 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 	raster@data@haveminmax <- TRUE
 	raster@file@nodatavalue <- nodataval
 	
-	inidatatype <- trim(inidatatype)
-	if (substr(inidatatype, 1, 3) == "INT") { datatp="integer"
-	} else if (substr(inidatatype, 1, 3) == "LOG") { datatp="logical"
-	} else if (substr(inidatatype, 1, 3) == "ASC") { datatp="ascii"
-	} else { datatp="numeric" }
-	datasz <- as.integer(substr(inidatatype, 4, 4))
-	dsign <- substr(inidatatype, 5, 1)
-	if (dsign == 'U') {signed <- FALSE} else {signed <- TRUE}
-	raster <- setDatatype(raster, datatype=datatp, datasize=datasz, signed=signed)
+	raster <- setDatatype(raster, inidatatype)
+
 	if ((byteorder == "little") | (byteorder == "big")) { raster@file@byteorder <- byteorder } 	
 	raster@file@nbands <- as.integer(nbands)
 	raster@file@band <- as.integer(band)

@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,8
+# Version 0.8
 # Licence GPL v3
 
 
@@ -122,41 +122,8 @@ setMethod('setValues', signature(object='RasterStack'),
  }
 )
 	
-
-clearValues <- function(object) {
-	if (class(object) == "BasicRaster") {
-		return(object)
-	}
-	object@data@content <- 'nodata'
-	object@data@indices = vector(mode='numeric')
-	if (class(object) == 'RasterStack') {
-		object@data@values <- matrix(NA,0,0)
-	} else {
-		object@data@values <- vector()
-	}
-	object@data@min <- Inf
-	object@data@max <- -Inf	
-	object@data@haveminmax <- FALSE
-	return(object)
-}
-
-
-
-makeSparse <- function(raster) {
-	if ( dataContent(raster) == 'sparse') {return(raster)
-	} else {
-		if ( dataContent(raster) == 'all') {
-			vals <- seq(1:ncell(raster))
-			vals <- cbind(vals, values(raster))
-			vals <- na.omit(vals)
-			raster <- setValuesSparse(raster, sparsevalues=vals[,2], cellnumbers=vals[,1])
-			return(raster)
-		} else { 
-			# as above, but by reading data from disk, row by row
-			stop('not implemented yet for objects with no data in memory, use readAll() first' )
-		}	
-	}
-}
+	
+	
 
 setValuesSparse <- function(raster, sparsevalues, cellnumbers) {
 	if (!(isTRUE(length(cellnumbers) == (length(sparsevalues))))) {
@@ -169,6 +136,8 @@ setValuesSparse <- function(raster, sparsevalues, cellnumbers) {
 	raster <- setMinMax(raster)
 	return(raster)
 }
+
+
 
 setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {
 	if (!is.vector(blockvalues)) {	stop('values must be a vector') }
@@ -189,4 +158,4 @@ setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {
 	raster@data@indices <- c(firstcell, lastcell)
 	return(raster)
 }
-
+	

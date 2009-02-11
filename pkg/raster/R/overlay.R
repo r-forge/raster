@@ -28,7 +28,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 	compare(c(x, rasters))
 
 	outraster <- setRaster(x, filename)
-	if (asInt) { outraster <- setDatatype(outraster, 'integer') }
+	if (asInt) { outraster <- setDatatype(outraster, 'INT4S') }
 
 	inram <- TRUE
 	for (i in 1:length(rasters)) {
