@@ -21,6 +21,10 @@ clickBbox(show = TRUE, col = "red")
   \item{col}{the color of the bounding box lines}    
  }
  
+\value{
+click: the value of \code{object} at the point clicked on; and the coordinates if \code{xy==TRUE}.
+clickBbox: a BoundingBox object
+} 
 
 \author{ Robert J. Hijmans }
 

@@ -1,4 +1,4 @@
-\name{box}
+\name{BoundingBox}
 \alias{getBbox}
 \alias{getBbox,BoundingBox-method}
 \alias{getBbox,BasicRaster-method}
@@ -10,8 +10,6 @@
 \alias{newBbox}
 \alias{setBbox}
 \alias{changeBbox}
-\alias{cellsFromBbox}
-\alias{polygonFromBbox}
 
 \alias{xmin<-}
 \alias{xmax<-}
@@ -24,17 +22,13 @@ getBbox extracts a bounding box from a Raster* or Spatial* object (or from a Bou
 newBbox creates a new bounding box (as in the "Spatial" object from the SP package)
 setBbox sets the bounding box of a Raster* object
 changeBbox changes the bounding box of a Raster* object
-polygonFromBbox creates a SpatialPolygon object from a BoundingBox object (or a Raster*) object
-You can also use bbox(object) to get a sp type bbox (a 2 x 2 matrix), but such an object cannot be used with the other functon described here as it returns a matrix, and not a BoundingBox object.
 }
 
 \usage{
-getBbox(object)
 newBbox(xmn, xmx, ymn, ymx)
+getBbox(object)
 setBbox(object, bndbox, keepres=FALSE, snap=FALSE)
 changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) 
-cellsFromBbox(object, bndbox)
-polygonFromBbox(bndbox)
 }
 
 \arguments{
@@ -46,6 +40,10 @@ polygonFromBbox(bndbox)
   \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
   \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
   \item{snap}{Adjust the bounding box so that the new raster is aligned with the old raster }
+}
+ 
+\value{
+in most cases a BoundingBox object
 }
   
 \author{Robert J. Hijmans}

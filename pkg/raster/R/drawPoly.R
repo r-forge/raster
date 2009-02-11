@@ -7,25 +7,38 @@
 # Licence GPL v3
 
 
-drawPoly <- function(col='red') {
+drawPoly <- function(sp=TRUE, col='red') {
 	xy <- locator(n=10000, type="l", col=col)
 	xy <- cbind(xy$x, xy$y)
 	xy <- rbind(xy, xy[1,])
 	lines(xy[(length(xy[,1])-1):length(xy[,1]),], col=col)
-	return( SpatialPolygons(list(Polygons(list(Polygon(xy)), 1))) )
+	if (sp) {
+		return( SpatialPolygons(list(Polygons(list(Polygon(xy)), 1))) )
+	} else {
+		return(xy)
+	}
+	
 }
 
 
-drawLine <- function(col='red') {
+drawLine <- function(sp=TRUE, col='red') {
 	xy <- locator(n=10000, type="l", col=col)
 	xy <- cbind(xy$x, xy$y)
-	return( SpatialLines(list(Lines(list(Line(xy)), "1"))) )
+	if (sp) {
+		return( SpatialLines(list(Lines(list(Line(xy)), "1"))) )
+	} else {
+		return(xy)
+	}
 }
 
 
-polygonFromBbox <- function(bndbox) {
+polygonFromBbox <- function(bndbox, sp=TRUE) {
 	bb <- getBbox(bndbox)
 	p <- rbind(c(bb@xmin, bb@ymin), c(bb@xmin, bb@ymax), c(bb@xmax, bb@ymax), c(bb@xmax, bb@ymin), c(bb@xmin, bb@ymin) )
-	return( SpatialPolygons(list(Polygons(list(Polygon(p)), 1))) )
+	if (sp) {
+		return( SpatialPolygons(list(Polygons(list(Polygon(p)), 1))) )
+	} else {
+		return(p)
+	}
 }
 
