@@ -10,25 +10,24 @@ mCalc <- function(object, fun=sum, filename="", overwrite=FALSE, filetype='raste
 		stop("function 'fun' returns more than one value") 
 	}
 	filename <- trim(filename)
-	outraster <- setRaster(object, filename)
-	outraster <- setDatatype(outraster, datatype) 
-	v <- vector()
-	for (r in 1:nrow(object)) {
-		object <- readRow(object, r)
-		vals <- apply(values(object), 1, fun)
+	outraster <- setRaster(object@layers[[1]], filename)
+	outraster <- setDatatype(outraster, datatype)
+	if (dataContent(object) == "all") {
+		outraster <- setValues(outraster, apply(values(object), 1, fun)) 
 		if (filename != "") {
+			outRaster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+		}
+	} else {
+		for (r in 1:nrow(object)) {
+			object <- readRow(object, r)
+			vals <- apply(values(object), 1, fun)
 			outraster <- setValues(outraster, vals, r) 
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
-		} else {
-			v <- c(v, vals)
+			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+			if (r %in% track) {
+				cat('row', r)
+			}
 		}
-		if (r %in% track) {
-			cat('row', r)
-		}
-	}	
-	if (filename == "") {
-		outraster <- setValues(outraster, v) 
-	}
+	}		
 	return(outraster)
 }
 

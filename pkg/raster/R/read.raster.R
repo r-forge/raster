@@ -203,7 +203,7 @@
 
 .stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
 	for (i in seq(nlayers(rstack))) {
-		raster <- readPartOfRow(rstack@layers[[i]], rownumber, startcol, ncolumns)
+		raster <- .rasterRead(rstack@layers[[i]], rownumber, startcol, ncolumns)
 		if ( i == 1 )  {
 			rstack@data@values <- matrix(nrow=length(values(raster)), ncol=nlayers(rstack)) 
 			rstack@data@content <- dataContent(raster)
