@@ -4,8 +4,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
-
 if (!isGeneric("calc")) {
 	setGeneric("calc", function(x, fun, ...)
 		standardGeneric("calc"))
@@ -36,7 +34,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 		}
 	} else if (dataSource(x) == 'disk') {
 		if (!.CanProcessInMemory(x, 1) & filename == '') {
-			filename=tempfile()
+			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 		}
 		v <- vector(length=0)

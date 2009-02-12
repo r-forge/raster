@@ -5,22 +5,14 @@
 # Licence GPL v3
 
 
-
-setMethod('overlay', signature(x='RasterStack', y='missing'), 
-function(x, y, fun=sum, filename="", overwrite=FALSE, asInt = FALSE, ...){ 
-
-	warning('not implemented yet')
-}
-)
-
-
-
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
-function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){ 
+function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
 
 	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
 	if (missing(filename)) { filename <- "" }
 	if (missing(overwrite)) { overwrite <- FALSE }
+	if (missing(datatype)) {datatype='FLT4S'}
+	if (missing(track)) {track=-1}
 	
 	rasters <- c(x, y)
 	obs <- list(...)
@@ -37,7 +29,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 	compare(c(x, rasters))
 
 	outraster <- setRaster(x, filename)
-	if (asInt) { outraster <- setDatatype(outraster, 'INT4S') }
+	outraster <- setDatatype(outraster, datatype) 
 
 	inram <- TRUE
 	for (i in 1:length(rasters)) {
@@ -55,17 +47,22 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 		
 		outraster <- setValues(outraster, vals)
 		if (filename(outraster) != "") { 
-			outraster <- writeRaster(outraster, overwrite=overwrite) 
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
 		}
 		
 	} else {
 		if (filename(outraster) == "") {
-#			v <- vector(length=0)
-			v  <- vector(length=ncell(outraster))
-			endcell <- 0
-			inccol <- ncol(outraster) - 1
+			if (!.CanProcessInMemory(outraster, 1)) {
+				filename <- tempfile()
+				outraster <- setFilename(outraster, filename )
+			} else {
+				v  <- vector(length=ncell(outraster))
+				endcell <- 0
+				inccol <- ncol(outraster) - 1
+			}
 		}	
-		
+		starttime <- proc.time()
+
 		for (r in 1:nrow(outraster)) {
 			for (i in 1:length(rasters)) {
 				if (dataSource(rasters[[i]]) == 'ram') {
@@ -90,6 +87,14 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){
 				outraster <- setValues(outraster, vals, r)
 				outraster <- writeRaster(outraster, overwrite=overwrite)
 			}	
+			
+			if (r %in% track) {
+				elapsed <- (proc.time() - starttime)[3]
+				tpr <- elapsed /r
+				ttg <- round(tpr/60 * (nrow(x) - r), digits=1)
+				cat('row', r, '-', ttg, 'minutes to go\n')
+			}
+			
 		}
 		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 
