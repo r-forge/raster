@@ -84,9 +84,9 @@
 .writeGDALrow <- function(raster, gdalfiletype, overwrite, mvFlag, options ) {
 	
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
-	if (rownr %in%  c(1, 10, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000, 40000, 50000, 100000)) {
-		print( paste("writing row", rownr, "at:", format(Sys.time(), "%H:%M:%S")))
-	}
+#	if (rownr %in%  c(1, 10, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000, 40000, 50000, 100000)) {
+#		print( paste("writing row", rownr, "at:", format(Sys.time(), "%H:%M:%S")))
+#	}
 	if ( rownr == 1) {
 		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, mvFlag, options)
 		attr(raster, "transient") <- transient

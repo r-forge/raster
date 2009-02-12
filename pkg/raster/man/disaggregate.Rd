@@ -6,7 +6,7 @@
 Disaggregate a raster to create a new raster 
 }
 \usage{
-disaggregate(raster, fact=2, filename="", overwrite=FALSE) 
+disaggregate(raster, fact=2, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
 }
 
 \arguments{
@@ -14,6 +14,9 @@ disaggregate(raster, fact=2, filename="", overwrite=FALSE)
   \item{filename}{output filename for a new raster}
   \item{fact}{degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details}
   \item{overwrite}{if TRUE, "filename" will be overwritten if it exists}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}   
 }
 
 \details{

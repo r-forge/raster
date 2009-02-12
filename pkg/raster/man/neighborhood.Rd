@@ -7,17 +7,19 @@
 Neighborhood calculations
 }
 \usage{
-neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, asInt=FALSE) 
+neighborhood(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{fun}{The function to be applied}
-  \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
+  \item{filename}{Output filename for a new raster}
   \item{ngb}{Neighborhood size. Expressed in number of cells in a single direction. I.e. 3 refers to 2 cells at each side of the focal cell. Queen's case, 8 cells in total}
   \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
   \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{asInt}{logical. If \code{TRUE}, output will be integer values}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}   
 }
 
 \details{

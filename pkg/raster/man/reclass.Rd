@@ -7,7 +7,7 @@
 Reclassify values of a RasterLayer
 }
 \usage{
-reclass(raster, rclmat, filename="", overwrite=FALSE, asInt = FALSE)
+reclass(raster, rclmat, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
 }
 
 \arguments{
@@ -15,7 +15,9 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, asInt = FALSE)
   \item{rclmat}{Matrix for reclassifcation. (see below)}
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
   \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{asInt}{logical. If \code{TRUE}, output will be integer values}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}   
 }
 
 \details{

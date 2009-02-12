@@ -6,15 +6,8 @@
 # Licence GPL v3
 
 
-
-if (!isGeneric("merge")) {
-	setGeneric("merge", function(x, y, ...)
-		standardGeneric("merge"))
-}	
-
-
 setMethod('merge', signature(x='RasterLayer', y='RasterLayer'), 
-function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE ){ 
+function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster', track=-1 ){ 
 	
 	rasters <- list(...)
 	if (length(rasters) > 0) {
@@ -33,14 +26,16 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE ){
 	outraster <- setRaster(rasters[[1]], filename)
 #	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2])
 	outraster <- setBbox(outraster, bb, keepres=TRUE, snap=FALSE)
-	
+
 	isint <- TRUE
 	for (i in 1:length(rasters)) {
-		if (rasters[[i]]@file@datatype != 'INT4S') {
+		if (rasters[[i]]@file@datatype != 'integer') {
 			isInt <- FALSE
 		}
 	}
-	if (isInt) { outraster <- setDatatype(outraster, 'INT4S') }
+	if (isInt) { 
+		outraster <- setDatatype(outraster, 'INT4S') 
+	}
 	
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
 	for (i in 1:length(rasters)) {
@@ -73,12 +68,14 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE ){
 		}
 		if (filename(outraster) != '') {
 			outraster <- setValues(outraster, rd, r)
-			outraster <- writeRaster(outraster, overwrite=overwrite)
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		} else {
 			v <- c(v, rd)
 		}
 	}
-	if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
+	if (filename(outraster) == '') { 
+		outraster <- setValues(outraster, v) 
+	}
 	return(outraster)
 }
 )

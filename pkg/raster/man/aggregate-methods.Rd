@@ -13,14 +13,15 @@
 
 
 \item{x}{ a RasterLayer object}
-\item{filename}{output filename for a new raster}
   \item{fun}{function used to aggregate values. It should return one number. E.g. mean or max}
   \item{fact}{degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details}
   \item{expand}{if \code{expand == TRUE} grids will get larger if \code{factor} if the number of the division of the columns or rows with factor does not return an integer}
   \item{rm.NA}{if \code{rm.NA == TRUE}, remove NA cells from calculations}
+  \item{filename}{output filename}
+  \item{overwrite}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
   \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
-  \item{overwrite}{if TRUE, "filename" will be overwritten if it exists}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}   
 }
 }
 

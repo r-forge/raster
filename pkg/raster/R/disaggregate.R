@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
+disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -21,6 +21,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 	}
 	
 	outraster <- setRaster(raster, filename)
+	outraster <- setDatatype(outraster, datatype)
 	outraster <- setRowCol(outraster, nrow(raster) * yfact, ncol(raster) * xfact) 
 
 	if ( dataContent(raster)=='all') {
@@ -29,9 +30,12 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 		rows <- rep(1:nrow(raster), each=ncol(raster)*xfact*yfact)
 		cells <- cellFromRowCol(raster, rows, cols)
 		outraster <- setValues(outraster, values(raster)[cells])
-		if (filename(outraster) != "") {writeRaster(outraster, overwrite=overwrite)}
+		if (filename(outraster) != "") {
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+		}
 		
 	} else if ( dataSource(raster) == 'disk') { 
+		starttime <- proc.time()
 
 		v <- vector(length=0)
 		cols <- rep(1:ncol(raster), each=xfact)
@@ -43,11 +47,20 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE) {
 					v <- c(v, values(raster)[cols])
 				} else {
 					outraster <- setValues(outraster, values(raster)[cols], (r-1) * xfact + i)
-					outraster <- writeRaster(outraster, overwrite=overwrite)
+					outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 				}	
 			}	
 		}
-		if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
+		if (filename(outraster) == '') { 
+			outraster <- setValues(outraster, v) 
+		}
+
+		if (r %in% track) {
+			elapsed <- (proc.time() - starttime)[3]
+			tpr <- elapsed /r
+			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+			cat('row', r, '-', ttg, 'minutes to go\n')
+		}
 	} 
 	return(outraster)
 }

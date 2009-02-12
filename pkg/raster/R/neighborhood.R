@@ -41,7 +41,7 @@
 }
 	
 
-neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, asInt=FALSE) {
+neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 	ngb <- round(ngb)
 	if ((ngb / 2) == floor(ngb/2)) { stop("only odd neighborhoods are supported") }
 	if (ngb == 1) { stop("ngb should be 3 or larger")  } 
@@ -49,7 +49,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	
 	filename <- trim(filename)
 	ngbgrid <- setRaster(raster, filename)
-	if (asInt) {setDatatype(ngbgrid, 'INT4S') }
+	ngbgrid <- setDatatype(ngbgrid, datatype) 
 
 # first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	ngbdata1 <- array(data = NA, dim = c(ngb, ncol(raster)))
@@ -58,6 +58,8 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	rr <- 1
 	v <- vector(length=0)
 	for (r in 1:nrow(raster)) {
+		starttime <- proc.time()
+
 		if (dataContent(raster)=='all') {
 			rowdata <- valuesRow(raster, r)
 		} else {	
@@ -68,12 +70,20 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 			ngbvals <- .calc.ngb(ngbdata, ngb, fun, keepdata)
 			if (filename != "") {
 				ngbgrid <- setValues(ngbgrid, ngbvals, rr)
-				ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite)
+				ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)
 			} else {
 				v <- c(v, ngbvals)
 			}
 			rr <- rr + 1
 		}
+
+		if (r %in% track) {
+			elapsed <- (proc.time() - starttime)[3]
+			tpr <- elapsed /r
+			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+			cat('row', r, '-', ttg, 'minutes to go\n')
+		}
+
 	}
 	
 	ngbdata1 <- array(data = NA, dim = c(ngb, raster@ncols))
@@ -82,7 +92,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 		ngbvals <- .calc.ngb(ngbdata, ngb, fun, keepdata)
 		if (filename != "") {
 			ngbgrid <- setValues(ngbgrid, ngbvals, rr)
-			ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite)
+			ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)
 		} else {
 			v <- c(v, ngbvals)
 		}

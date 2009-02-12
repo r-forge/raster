@@ -6,7 +6,7 @@
 crop returns a subset of the input RasterLayer as specified by a the supplied bounding box (or object that has a bounding box). Areas in the bounding box outside of the intput RasterLayer are ignored. 
 }
 \usage{
-crop(raster, bndbox, filename="", overwrite=FALSE) 
+crop(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', track=-1) 
 }
 
 \arguments{
@@ -14,6 +14,8 @@ crop(raster, bndbox, filename="", overwrite=FALSE)
   \item{bndbox}{BoundingBox object, or any object that is or has a bounding box (see below)}
   \item{filename}{character. Output filename for a new raster}
   \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}  
 }
 
 \details{
@@ -27,7 +29,7 @@ A new RasterLayer object (in the R environment), and in some cases the side effe
 \author{Robert J. Hijmans}
 
 \seealso{ 
-\code{\link[raster]{expand}}, \code{\link[raster]{Merge}}
+\code{\link[raster]{expand}}, \code{\link[raster]{merge}}
 }
 
 \examples{

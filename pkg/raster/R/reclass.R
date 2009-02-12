@@ -4,7 +4,7 @@
 # Version 0,6
 # Licence GPL v3
 
-reclass <- function(raster, rclmat, filename="", overwrite=FALSE, asInt=FALSE)  {
+reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)  {
 	if (class(raster) != 'RasterLayer' ) {
 		stop('first two arguments should be objects of class "RasterLayer"')
 	}
@@ -18,13 +18,9 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, asInt=FALSE)  
 	print(rclmat)
 	
 	outraster <- setRaster(raster, filename)
-	if (asInt) { 
-		outraster <- setDatatype(outraster, "INT4S") 
-		res <- vector(mode = "integer", length = ncol(raster))
-	} else { 
-		outraster <- setDatatype(outraster, "FLT4S") 
-		res <- vector(mode = "numeric", length = ncol(raster))
-	}
+	outraster <- setDatatype(outraster, datatype) 
+
+	res <- vector(length = ncol(raster))
 	
 	if ( dataContent(raster) == 'all' |  dataContent(raster) == 'sparse') {
 		res <- values(raster)
@@ -42,10 +38,11 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, asInt=FALSE)  
 			outraster <- setValues(outraster, res,  dataIndices(raster)) 
 		}
 		if (filename(outraster) != "" ) {
-			outraster <- writeRaster(outraster, overwrite=overwrite) 
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
 		}
 		
 	} else {
+		starttime <- proc.time()
 		for (r in 1:nrow(raster)) {
 			raster <- readRow(raster, r)
 			res <- values(raster)
@@ -57,8 +54,14 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, asInt=FALSE)  
 				}
 			}	
 			outraster <- setValues(outraster, res, r)
-			outraster <- writeRaster(outraster, overwrite=overwrite)
-		}	
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+		}
+		if (r %in% track) {
+			elapsed <- (proc.time() - starttime)[3]
+			tpr <- elapsed /r
+			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+			cat('row', r, '-', ttg, 'minutes to go\n')
+		}
 	}	
 	return(outraster)
 }

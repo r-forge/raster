@@ -8,7 +8,7 @@
 
 
 setMethod('aggregate', signature(x='RasterLayer'), 
-function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S')  {
+function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)  {
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -55,12 +55,12 @@ function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FA
 		}
 		
 	} else if ( dataSource(x) == 'disk') { 
-	
+		starttime <- proc.time()
+
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
 		rows <- rep(1, each=(ncol(x) * yfact))
 		v <- vector(length=0)
-		for (r in 1:rsteps) 
-		{
+		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
 				endrow <- min(nrow(x), startrow + yfact - 1)
@@ -84,6 +84,13 @@ function(x, fact=2, fun=mean, expand=TRUE, rm.NA=TRUE, filename="", overwrite=FA
 				outRaster <- setValues(outRaster, vals, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 			}
+			
+			if (r %in% track) {
+				elapsed <- (proc.time() - starttime)[3]
+				tpr <- elapsed /r
+				ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+				cat('row', r, '-', ttg, 'minutes to go\n')
+			}			
 		} 
 		if (filename(outRaster) == "") { 
 			outRaster <- setValues(outRaster, v) 

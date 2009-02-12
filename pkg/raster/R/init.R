@@ -5,10 +5,10 @@
 # Licence GPL v3
 
 
-init <- function(raster, fun=runif, filename="", overwrite=FALSE, asInt=FALSE) {
+init <- function(raster, fun=runif, filename="", overwrite=FALSE, datatype = 'FLT4S', filetype='raster', track=-1) {
 	filename <- trim(filename)
 	outraster <- setRaster(raster, filename)
-	if (asInt) {setDatatype(outraster, 'integer') }
+	outraster <- setDatatype(raster, datatype)
 
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
 		n <- ncell(raster)
@@ -18,6 +18,7 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, asInt=FALSE) {
 		}
 		
 	} else if (dataSource(raster) == 'disk') {
+		starttime <- proc.time()
 		n <- length(ncol(raster))
 		v <- vector(length=0)
 
@@ -26,9 +27,15 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, asInt=FALSE) {
 				v <- c(v, fun(n))
 			} else {			
 				outraster <- setValues(outraster, fun(n), r) 
-				outraster <- writeRaster(outraster, overwrite=overwrite)
+				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
-		}	
+			if (r %in% track) {
+				elapsed <- (proc.time() - starttime)[3]
+				tpr <- elapsed /r
+				ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+				cat('row', r, '-', ttg, 'minutes to go\n')
+			}
+		}
 		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 
 		}

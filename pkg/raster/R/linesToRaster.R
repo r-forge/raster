@@ -87,7 +87,7 @@
 }
 
 
-linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", datatype='FLT4S') {
+linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", filetype='raster', datatype='FLT4S', track=-1) {
 
 	filename <- trim(filename)
 	if (updateRaster) {
@@ -148,6 +148,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 	rxmn <- xmin(raster) + 0.1 * xres(raster)
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 	for (r in 1:nrow(raster)) {
+		starttime <- proc.time()
 		rv <- rep(NA, ncol(raster))
 		
 		ly <- yFromRow(raster, r)
@@ -192,8 +193,16 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 			v <- c(v, rv)
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
-			raster <- writeRaster(raster)
+			raster <- writeRaster(raster, filetype=filetype)
 		}
+		
+		if (r %in% track) {
+			elapsed <- (proc.time() - starttime)[3]
+			tpr <- elapsed /r
+			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+			cat('row', r, '-', ttg, 'minutes to go\n')
+		}
+
 	}
 	if (filename == "") {
 		raster <- setValues(raster, v)

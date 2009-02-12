@@ -43,6 +43,14 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				ttg <- round(tpr/60 * (nrow(x) - r), digits=1)
 				cat('row', r, '-', ttg, 'minutes to go\n')
 			}
+
+			if (r %in% track) {
+				elapsed <- (proc.time() - starttime)[3]
+				tpr <- elapsed /r
+				ttg <- round(tpr/60 * (nrow(x) - r), digits=1)
+				cat('row', r, '-', ttg, 'minutes to go\n')
+			}
+		
 		}
 		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 

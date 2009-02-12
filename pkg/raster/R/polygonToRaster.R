@@ -60,7 +60,7 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", datatype='FLT4S', trackRows=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) {
+polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", filetype='raster', datatype='FLT4S', track=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) {
 	filename <- trim(filename)
 	starttime <- proc.time()
 
@@ -153,16 +153,16 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 						} else {
 							rv[over] <- subpol[i,4] 
 						}
-						print(paste('exit node intersection on row:', r))
+						# print(paste('exit node intersection on row:', r))
 					} else {
 						for (k in 1:round(nrow(intersection)/2)) {
 							l <- (k * 2) - 1		
 							x1 <- x[l]
 							x2 <- x[l+1]
-							if (is.na(x2)) { 
-								txt <- paste('something funny at row:', r, 'polygon:',j)
-								stop(txt)
-							}
+							#if (is.na(x2)) { 
+							#	txt <- paste('something funny at row:', r, 'polygon:',j)
+							#	stop(txt)
+							#}
 							if (x1 > rxmx) { next }
 							if (x2 < rxmn) { next }
 							# adjust to skip first cell if the center is not covered by this polygon
@@ -204,10 +204,10 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 			v <- c(v, rv)
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
-			raster <- writeRaster(raster, overwrite=overwrite)
+			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
 		}
 		
-		if (r %in% trackRows) {
+		if (r %in% track) {
 			elapsed <- (proc.time() - starttime)[3]
 			tpr <- round((elapsed /r), digits=2)
 			print(paste('row', r, '--', tpr, 'seconds/row --', nrow(raster)+1-r, " rows to go"))

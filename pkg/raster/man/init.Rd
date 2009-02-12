@@ -7,15 +7,17 @@
   Set values for a new raster (from scratch)
 }
 \usage{
-init(raster, fun=runif, filename="", overwrite=FALSE, asInt = FALSE) 
+init(raster, fun=runif, filename="", overwrite=FALSE, datatype='FLT4S', filetype='raster', track=-1) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{fun}{The function to be applied}
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
-  \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{asInt}{logical. If \code{TRUE}, output will be integer values}
+  \item{overwrite}{Logical. if \code{TRUE}, the file will be overwritten if it exists}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}  
 }
 
 \details{
