@@ -35,6 +35,10 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if (dataSource(x) == 'disk') {
+		if (!.CanProcessInMemory(x, 1) & filename == '') {
+			filename=tempfile()
+			outraster <- setFilename(outraster, filename )
+		}
 		v <- vector(length=0)
 		starttime <- proc.time()
 		for (r in 1:nrow(x)) {
@@ -54,7 +58,9 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 			}
 			
 		}
-		if (filename(outraster) == "") { outraster <- setValues(outraster, v) }
+		if (filename(outraster) == "") { 
+			outraster <- setValues(outraster, v) 
+		}
 	}
 	return(outraster)
 }
