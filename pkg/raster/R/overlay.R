@@ -6,6 +6,15 @@
 
 
 
+setMethod('overlay', signature(x='RasterStack', y='missing'), 
+function(x, y, fun=sum, filename="", overwrite=FALSE, asInt = FALSE, ...){ 
+
+	warning('not implemented yet')
+}
+)
+
+
+
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, ..., fun=sum, filename="", overwrite=FALSE, asInt = FALSE){ 
 
