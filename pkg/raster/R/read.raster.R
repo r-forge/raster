@@ -80,7 +80,7 @@
 			result <- readBin(con, what=dtype, n=ncell(raster), size=raster@file@datasize, signed=raster@file@datasigned, endian=raster@file@byteorder) 
 		}
 		close(con)
-		result[is.nan(result)] <- NA
+#		result[is.nan(result)] <- NA
 		if (dtype == 'numeric') {
 			result[result <=  (0.999 * .nodatavalue(raster)) ] <- NA 	
 		} else {
@@ -103,7 +103,16 @@
 			}
 		}
 		result <- getRasterData(raster@file@gdalhandle[[1]], offset=offs, region.dim=reg, band = raster@file@band)
-		if (!is.vector(result)) { result <- as.vector(result) }
+		
+#		if (!is.vector(result)) {  result <- as.vector(result) 	}
+		
+		# if  setNAvalue() has been used.....
+		if (raster@file@nodatavalue < 0) {
+			result[result <= raster@file@nodatavalue ] <- NA 			
+		} else {
+			result[result == raster@file@nodatavalue ] <- NA 					
+		}
+	
 	} 
 	
 	raster@data@values <- as.vector(result)
