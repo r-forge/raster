@@ -43,7 +43,9 @@ projectBbox(object, projstring)
 r <- raster(-110, -90, 40, 60, ncols=40, nrows=30)
 r <- setValues(r, 1:ncell(r))
 # proj.4 projection description
-newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100"
+newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100 +ellps=WGS84"
+
+
 # for debugging R-Forge...
  drop(read.dcf(file=system.file("DESCRIPTION", package="rgdal"), fields=c("Version","Date")))
 
