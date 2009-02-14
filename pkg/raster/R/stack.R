@@ -6,7 +6,11 @@
 
 stackOpen <- function(stackfile) {
 	st <- read.table(stackfile, as.is=FALSE, strip.white=TRUE)
-	rst <- stackFromFiles(st[,1], st[,2])
+	if (dim(st)[2] > 1) {
+		rst <- stackFromFiles(st[,1], st[,2])
+	} else {
+		rst <- stackFromFiles(st[,1])
+	}
 	rst <- setFilename(rst, stackfile)
 	return(rst)
 }
