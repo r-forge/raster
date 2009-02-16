@@ -55,7 +55,7 @@ distance <-	function(object, filename="") {
 			outRaster <- setRaster(object, filename)
 			for(r in 1:nrows)
 			{
-				rowValues <- values(readRow(object, rownr = r))
+				rowValues <- valuesRow(readRow(object, rownr = r), rownr = r)
 				outRowValues <- rep(Inf,times=ncols)
 				outRowValues[is.na(rowValues)] <- 0
 				outRaster <- setValues(outRaster, outRowValues, r)
@@ -66,9 +66,9 @@ distance <-	function(object, filename="") {
 				while(remainingCells){
 					remainingCells <- FALSE
 					oldRowValues <- integer(0)
-					rowWindow <- values(readRow(outRaster, rownr=1))
+					rowWindow <- valuesRow(readRow(outRaster, rownr=1), rownr = 1)
 					for(r in 1:nrows){
-						if(r<nrows){rowWindow <- c(rowWindow,values(readRow(outRaster, rownr=r+1)))}
+						if(r<nrows-1){rowWindow <- c(rowWindow,valuesRow(readRow(outRaster, rownr=r+1), rownr=r+1))}
 						adj <- adjacency(fromCells=(((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols)), toCells=((r-1)*ncols+1):(r*ncols),directions=8)
 						coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
 						distance <- apply(coord,1,function(x){distanceGreatcircle(x[1:2],x[3:4])})
@@ -91,9 +91,9 @@ distance <-	function(object, filename="") {
 				while(remainingCells){
 					remainingCells <- FALSE
 					oldRowValues <- integer(0)
-					rowWindow <- values(readRow(outRaster, rownr=1))
+					rowWindow <- valuesRow(readRow(outRaster, rownr = 1), rownr = 1)
 					for(r in 1:nrows){
-						if(r<nrows){rowWindow <- c(rowWindow,values(readRow(outRaster, rownr=r+1)))}
+						if(r<nrows-1){rowWindow <- c(rowWindow,valuesRow(readRow(outRaster, rownr=r+1), rownr=r+1))}
 						fromCells <- (((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols))
 						toCells <- ((r-1)*ncols+1):(r*ncols)
 						adj1 <- adjacency(object,fromCells=fromCells,toCells=toCells,directions=4)
