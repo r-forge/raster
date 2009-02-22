@@ -30,7 +30,7 @@ e.g.:
  r <- raster(nrow=18, ncol=36)
  r[] <- round(10 * runif(ncell(r)))
  r[r>8] <- NA
- p <- rasterToPoints(r, fun=function(x){x>5})
+ p <- rasterToPoints(r, fun=function(x){x>6})
 #plot(r)
 #points(p)
 }

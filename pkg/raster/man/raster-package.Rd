@@ -13,7 +13,7 @@ This packages provides classes and functions to manipulate spatial data in 'rast
 Package: \tab raster\cr
 Type: \tab Package\cr
 Version: \tab 0.8\cr
-Date: \tab 2009-01-30\cr
+Date: \tab 2009-02-21\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
@@ -23,6 +23,7 @@ use datasources that are stored on disk without loading them into memory.
 }
 \author{
 Robert J. Hijmans and Jacob van Etten
+
 Maintainer: Robert J. Hijmans \email{r.hijmans@gmail.com}
 }
 \keyword{package}

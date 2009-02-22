@@ -52,7 +52,8 @@ distance <-	function(object, filename="") {
 		if( dataSource(object) =='disk'){ #to be tested
 		
 		# Fix error:  startRow has not been initialized.
-		
+			stop("currently only available for dataContent(raster)=='all'; use readAll")
+			
 			nrows <- nrow(object)
 			ncols <- ncol(object)
 			outRaster <- setRaster(object, filename)
