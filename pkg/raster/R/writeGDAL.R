@@ -16,7 +16,7 @@
 # this needs to get fancier; depending on object and the abilties of the drivers
 
 .getGdalDType <- function(dtype) {
-	if (!(dtype %in% c('LOGICAL', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S'))) {
+	if (!(dtype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S'))) {
 		stop('not a valid data type')
 	}
 	type <- substr(dtype,1,3)
@@ -65,7 +65,7 @@
 
 #.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
 # this needs to get fancier; depending on object and the abilties of the drivers
-	dataformat <- .getGdalDType(dtype <- raster@file@datanotation)
+	dataformat <- .getGdalDType(raster@file@datanotation)
 
 	driver = new("GDALDriver", gdalfiletype)
 	
@@ -92,6 +92,7 @@
 		attr(raster, "transient") <- transient
 		raster@file@driver <- 'gdal'
 		raster@file@gdalhandle <- list()
+		raster@data@source <- 'disk'		
 	}	
     for (band in 1:nlayers(raster)) {
 		x <- putRasterData(raster@transient, values(raster, rownr), band, c((rownr-1), 0)) 
@@ -100,12 +101,11 @@
 		saveDataset(raster@transient, filename(raster) )
 		GDAL.close(raster@transient) 
 		rasterout <- rasterFromFile(filename(raster))
-
-		rasterout@data@source <- 'disk'
 		rasterout@data@haveminmax <- raster@data@haveminmax
 		rasterout@data@min <- raster@data@min
 		rasterout@data@max <- raster@data@max
 		.writeStx(rasterout) 
+		return(rasterout)
 	}
 	return(raster)
 }
