@@ -5,15 +5,6 @@
 # Licence GPL v3
 
 
-.CanProcessInMemory <- function(raster, n=2, datasize=16) {
-	memneed <- 1.1 * n * ncell(raster) * datasize / 1048576
-	if (memneed > memory.size(max = T)) {
-		return( FALSE )
-	} else { 
-		return( TRUE ) 
-	}
-}
-
 
 .getRasterValues <- function(x) {
 # need to take care of 'spase'
