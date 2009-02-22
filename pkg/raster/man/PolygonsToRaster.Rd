@@ -4,7 +4,7 @@
 
 \title{ Polygons to raster conversion}
 \description{
-Two algorithms for polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID is transferred. Holes in polygons are recognized by polygonsToRaster, but not by polygonsToRaster2.
+Polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID is transferred. Holes in polygons are recognized if they are correctly specified.
 }
 \usage{
 polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA",  filetype='raster',  datatype='FLT4S', track=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) 
