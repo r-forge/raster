@@ -4,10 +4,11 @@
 \alias{max,Raster-method}
 \alias{min,Raster-method}
 \alias{range,Raster-method}
+\alias{mean,Raster-method}
 
 \title{ Summary methods for Raster* objects }
 \description{
- The following methods have been implemented: sum, max, min, range
+ The following methods have been implemented: sum, max, min, range and mean
  
  These methods compare layers and the result of these methods is always a single RasterLayer.
  For the extreme values within in a layer use maxValue() and minValue()

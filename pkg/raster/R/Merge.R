@@ -22,7 +22,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 	
 			
 	compare(rasters, bb=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
-	bb <- bbUnion(rasters)
+	bb <- unionBbox(rasters)
 	outraster <- setRaster(rasters[[1]], filename)
 #	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2])
 	outraster <- setBbox(outraster, bb, keepres=TRUE, snap=FALSE)

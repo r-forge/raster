@@ -7,41 +7,13 @@
 # Licence GPL v3
 
 
-
-snapBbox <- function(bb, object) {
-	oldbb <- getBbox(object)
-	bb@xmin <- max(bb@xmin, oldbb@xmin)
-	bb@xmax <- min(bb@xmax, oldbb@xmax)
-	bb@ymin <- max(bb@ymin, oldbb@ymin)
-	bb@ymax <- min(bb@ymax, oldbb@ymax)
-	col <- colFromX(object, bb@xmin)
-	mn <- xFromCol(object, col) - 0.5 * xres(object)
-	mx <- xFromCol(object, col) + 0.5 * xres(object)
-	if (abs(bb@xmin - mn) > abs(bb@xmin - mx)) { bb@xmin <- mx } else { bb@xmin <- mn }
-	col <- colFromX(object, bb@xmax)
-	mn <- xFromCol(object, col) - 0.5 * xres(object)
-	mx <- xFromCol(object, col) + 0.5 * xres(object)
-	if (abs(bb@xmax - mn) > abs(bb@xmax - mx)) { bb@xmax <- mx } else { bb@xmax <- mn }
-	row <- rowFromY(object, bb@ymin)
-	mn <- yFromRow(object, row) - 0.5 * yres(object)
-	mx <- yFromRow(object, row) + 0.5 * yres(object)
-	if (abs(bb@ymin - mn) > abs(bb@ymin - mx)) { bb@ymin <- mx } else { bb@ymin <- mn }
-	row <- rowFromY(object, bb@ymax)
-	mn <- yFromRow(object, row) - 0.5 * yres(object)
-	mx <- yFromRow(object, row) + 0.5 * yres(object)
-	if (abs(bb@ymax - mn) > abs(bb@ymax - mx)) { bb@ymax <- mx } else { bb@ymax <- mn }
-	return(bb)
-}
-
-
-
 setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 	oldbb <- getBbox(object)
 	bb <- getBbox(bndbox)
 	newobj <- clearValues(object)
 	
 	if (snap) {
-		bb <- snapBbox(bb, newobj)
+		bb <- alignBbox(bb, newobj)
 	}
 
 	newobj@bbox <- bb

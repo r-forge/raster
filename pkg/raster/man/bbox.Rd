@@ -10,6 +10,9 @@
 \alias{newBbox}
 \alias{setBbox}
 \alias{changeBbox}
+\alias{unionBbox}
+\alias{intersectBbox}
+\alias{alignBbox}
 
 \alias{xmin<-}
 \alias{xmax<-}
@@ -22,6 +25,9 @@ getBbox extracts a bounding box from a Raster* or Spatial* object (or from a Bou
 newBbox creates a new bounding box (as in the "Spatial" object from the SP package)
 setBbox sets the bounding box of a Raster* object
 changeBbox changes the bounding box of a Raster* object
+alignBbox aligns a bounding box with the cells of a Raster* object
+unionBbox returns the union of multiple bounding boxes
+intersectBbox returns the instersection of multiple bounding boxes
 }
 
 \usage{
@@ -29,6 +35,9 @@ newBbox(xmn, xmx, ymn, ymx)
 getBbox(object)
 setBbox(object, bndbox, keepres=FALSE, snap=FALSE)
 changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) 
+alignBbox(bndbox, object)
+unionBbox(x, ...)
+intersectBbox(x, ...)
 }
 
 \arguments{
@@ -40,6 +49,8 @@ changeBbox(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = y
   \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
   \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
   \item{snap}{Adjust the bounding box so that the new raster is aligned with the old raster }
+  \item{x}{A BoundingBox or Raster* object } 
+  \item{...}{ additional BoundingBox or Raster* objects } 
 }
  
 \value{

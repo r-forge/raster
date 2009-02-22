@@ -49,7 +49,10 @@ distance <-	function(object, filename="") {
 			outRaster <- setValues(outRaster, accDist)	
 			return(outRaster)
 		}
-		if(dataContent(object)=='nodata' & dataSource(object) =='disk'){ #to be tested
+		if( dataSource(object) =='disk'){ #to be tested
+		
+		# Fix error:  startRow has not been initialized.
+		
 			nrows <- nrow(object)
 			ncols <- ncol(object)
 			outRaster <- setRaster(object, filename)

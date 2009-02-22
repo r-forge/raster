@@ -6,6 +6,8 @@
 \alias{nrow,BasicRaster-method}
 \alias{ncol,BasicRaster-method}
 \alias{ncell}
+\alias{ncell,ANY-method}
+\alias{length,Raster-method}
 \alias{xres}
 \alias{yres}
 \alias{resolution}
@@ -32,10 +34,9 @@
 \alias{dataSize} 
 
   
-\title{RasterLayer properties}
+\title{Raster properties}
 \description{
-  get the column, row, or cell number of a Raster (or RasterStack) for a x and/or y coordinate or get the coordinates of the center of a raster-cell from a column, or cell number(s)
-  
+  Get properties of a RasterLayer or RasterStack  
 }
 
 \usage{

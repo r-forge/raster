@@ -4,16 +4,15 @@
 
 \title{ Raster to points conversion}
 \description{
-Raster to point conversion.
+Raster to point conversion. Cells with NA are not converted. A function can be used to select a subset of the raster cells (by their values).
 }
 \usage{
-rasterToPoints(raster, rm.na=TRUE, fun=NULL, asSpatialPoints=FALSE)
+rasterToPoints(raster, fun=NULL, asSpatialPoints=FALSE)
 }
 
 \arguments{
   \item{raster}{ a RasterLayer object }
-  \item{rm.na}{ if \code{TRUE}, cells with NA values will not be converted  }
-  \item{fun}{ function to select a subset of raster values}
+  \item{fun}{ function to select a subset of raster values }
   \item{asSpatialPoints}{if \code{TRUE}, the function returns a SpatialPointsDataFrame object }
 }
 

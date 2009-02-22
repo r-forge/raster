@@ -5,9 +5,10 @@
 # Version 0.8
 # Licence GPL v3
 
-bbUnion <- function(objects) {
+unionBbox <- function(x, ...) {
+	objects <- c(x, list(...))
 	if (length(objects) == 1) {
-		return(getBbox(objects))
+		return(getBbox(x))
 	}
 	bb <- getBbox(objects[[1]])
 	for (i in 2:length(objects)) {
@@ -20,9 +21,10 @@ bbUnion <- function(objects) {
 	return(bb)
 }
 
-bbIntersect <- function(objects) {
+intersectBbox <- function(x, ...) {
+	objects <- c(x, list(...))
 	if (length(objects) == 1) {
-		return(getBbox(objects))
+		return(getBbox(x))
 	}
 	bb <- getBbox(objects[[1]])
 	for (i in 2:length(objects)) {
