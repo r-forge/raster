@@ -103,11 +103,11 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
     function(e1, e2){ 
 		if (.CanProcessInMemory(e2, 2)) {
-			return(setRaster(e2, values=callGeneric(.getRasterValues(e2), e1)))
+			return(setRaster(e2, values=callGeneric(e1, .getRasterValues(e2))))
 		} else {
 			raster <- setRaster(e2, filename=tempfile())
 			for (r in 1:nrow(e2)) {
-				raster <- setValues(raster, callGeneric( .getRowValues(e2, r), e1) , r)
+				raster <- setValues(raster, callGeneric(e1, .getRowValues(e2, r)) , r)
 				raster <- writeRaster(raster)
 			}
 			return(raster)

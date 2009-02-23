@@ -41,6 +41,25 @@ setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 )	
 
 
+
+setMethod('!', signature(x='RasterLayer'),
+	function(x){
+		if (.CanProcessInMemory(x, 1)) {
+			return(setValues(x, !values(x)))
+		} else {
+			raster <- setRaster(x, filename=tempfile())
+			raster <- setDatatype(raster, 'LOGICAL')
+			for (r in 1:nrow(x)) {
+				raster <- setValues(raster, !.getRowValues(x, r), r)
+				raster <- writeRaster(raster)
+			}
+			return(raster)		
+		}
+	}
+)	
+
+
+
 setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 	function(e1,e2){
 		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
@@ -65,26 +84,9 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 
 
 
-setMethod('!', signature(x='RasterLayer'),
-	function(x){
-		if (.CanProcessInMemory(x, 1)) {
-			return(setValues(x, !values(x)))
-		} else {
-			raster <- setRaster(x, filename=tempfile())
-			raster <- setDatatype(raster, 'LOGICAL')
-			for (r in 1:nrow(x)) {
-				raster <- setValues(raster, !.getRowValues(x, r), r)
-				raster <- writeRaster(raster)
-			}
-			return(raster)		
-		}
-	}
-)	
-
-
 setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 	function(e1,e2){
-		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
+		if (!isTRUE(is.atomic(e1) & length(e1)==1)) {
 			stop('first argument should be a single number')
 		}
 		if (.CanProcessInMemory(e2, 2)) {
