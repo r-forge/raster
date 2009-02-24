@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,1
+# Version 0.8
 # Licence GPL v3
 
 
@@ -17,10 +17,12 @@
  
 
 .writeRasterAll <- function(raster, overwrite=FALSE) {
-	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+	filename(raster) <- trim(filename(raster))
 	if (filename(raster) == "") {
 		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
 	}
+	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -81,10 +83,13 @@
 
  
  .startRowWriting <- function(raster, overwrite) {
-	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+	filename(raster) <- trim(filename(raster))
 	if (filename(raster) == "") {
 		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
 	}
+	
+	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+	
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}

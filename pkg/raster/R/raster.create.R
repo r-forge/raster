@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date : June 2008
-# Version 0,1
+# Version 0.8
 # Licence GPL v3
 
 
@@ -57,7 +57,7 @@ rasterFromBbox <- function(bndbox, nrows=10, ncols=10, nudge=TRUE) {
 
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	fileext <- toupper(fileExtension(filename)) 
-	if (fileext == ".GRD") {
+	if ( fileext == ".GRD" | fileext == ".GRI" ) {
 		raster <- .rasterFromFile(filename, band) 
 	} else {
 		raster <- .rasterFromGDAL(filename, band) 

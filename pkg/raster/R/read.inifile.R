@@ -25,7 +25,7 @@
 readIniFile <- function(filename) {
     if (!file.exists(filename)) { stop(paste(filename, " does not exist")) }
 	
-	Lines <- readLines(filename)
+	Lines <- readLines(filename,  warn = FALSE)
 # ";" is the start of a comment .
 	strsplitcomment <- function(s) {.strSplitOnFirstToken(s, token=";")}
 	ini <- lapply(Lines, strsplitcomment) 
