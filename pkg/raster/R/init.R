@@ -6,14 +6,14 @@
 
 
 init <- function(raster, fun=runif, filename="", overwrite=FALSE, datatype = 'FLT4S', filetype='raster', track=-1) {
-	filename <- trim(filename)
-	outraster <- setRaster(raster, filename)
-	outraster <- setDatatype(raster, datatype)
 
+	outraster <- setRaster(raster, filename)
+	outraster <- setDatatype(outraster, datatype)
+	
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {
 		n <- ncell(raster)
 		outraster <- setValues(outraster, fun(n)) 
-		if (filename != "") {	
+		if (filename(outraster) != "") {	
 			outraster <- writeRaster(outraster, overwrite=overwrite) 
 		}
 		

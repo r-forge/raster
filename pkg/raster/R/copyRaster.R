@@ -6,7 +6,7 @@
 
 
 moveRasterFile <- function(raster, filename, overwrite=FALSE) {
-	r <- copyRaster(raster, filename, overwrite)
+	r <- copyRasterFile(raster, filename, overwrite)
 	f <- trim(filename(raster))
 	fileext <- toupper(fileExtension(f)) 
 	if (fileext == ".GRD") {
