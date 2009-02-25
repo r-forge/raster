@@ -6,6 +6,20 @@
 
 
 saveAs <- function(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE) {
+	
+	if (dataContent(raster) == 'all') {
+		raster <- setDatatype(raster, datatype)
+		filename(raster) <- filename
+		raster <- writeRaster(raster, filetype=filetype, overwrite=overwrite)
+		return(raster)
+	} 
+	
+	if ( trim(filename(raster)) == trim(filename) ) {
+		stop('filenames should be different')
+	}
+
+# if filetype and datatype are the same, then use copyRasterfile 
+
 	newr <- setRaster(raster, filename)
 	newr <- setDatatype(newr, datatype)
 	for (r in 1:nrow(newr)) {
