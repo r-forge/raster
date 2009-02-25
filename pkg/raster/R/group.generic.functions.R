@@ -59,6 +59,9 @@ setMethod("Math", signature(x='RasterLayer'),
 				raster <- setValues(raster, callGeneric( .getRowValues(x, r) ), r)
 				raster <- writeRaster(raster)
 			}
+			if (options('verbose')[[1]]) {
+				cat('values were written to:', filename(raster))
+			}
 		}
 		return(raster)
 	}
@@ -78,6 +81,9 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 					raster <- setValues(raster, callGeneric( as.numeric(.getRowValues(e1, r)), .getRowValues(e2, r) ), r)
 					raster <- writeRaster(raster)
 				}
+				if (options('verbose')[[1]]) {
+					cat('values were written to:', filename(raster))
+				}
 			}	
 			return(raster)
 		}	
@@ -95,6 +101,9 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 				raster <- setValues(raster, callGeneric( as.numeric(.getRowValues(e1, r)), e2) , r) 
 				raster <- writeRaster(raster)
 			}
+			if (options('verbose')[[1]]) {
+				cat('values were written to:', filename(raster))
+			}			
 			return(raster)
 		}		
 	}
@@ -109,6 +118,9 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			for (r in 1:nrow(e2)) {
 				raster <- setValues(raster, callGeneric(as.numeric(e1), .getRowValues(e2, r)) , r)
 				raster <- writeRaster(raster)
+			}
+			if (options('verbose')[[1]]) {
+				cat('values were written to:', filename(raster))
 			}
 			return(raster)
 		}		
