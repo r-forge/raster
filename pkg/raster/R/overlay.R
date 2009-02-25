@@ -85,7 +85,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', da
 				v[startcell:endcell] <- vals
 			} else {
 				outraster <- setValues(outraster, vals, r)
-				outraster <- writeRaster(outraster, overwrite=overwrite)
+				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
 			if (r %in% track) {

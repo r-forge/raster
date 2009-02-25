@@ -16,15 +16,14 @@ In stead of the overlay function you can also use normal artimic functions (*, /
 
 \section{Methods}{
 
-\code{overlay(x, y, ..., fun, filename="", overwrite=FALSE, asInt=FALSE)}
-
+\code{overlay(x, y, ..., fun, filename="", overwrite=FALSE,  filetype='raster', datatype='FLT4S')}
 
   \item{x, y}{RasterLayer objects}
   \item{...}{  additional RasterLayer objects and
   \item{fun}{ the function to be appliepd. This should be a function that takes two numbers as an argument }
   \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
   \item{overwrite}{logical. If \code{TRUE}, existing files will be overwritten}
-  \item{asInt}{logical. If \code{TRUE} the values will be rounded and stored as integer}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
 }
 }
 

@@ -5,6 +5,18 @@
 # Licence GPL v3
 
 
+saveAs <- function(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE) {
+	newr <- setRaster(raster, filename)
+	newr <- setDatatype(newr, datatype)
+	for (r in 1:nrow(newr)) {
+		raster <- readRow(raster, r)
+		newr <- setValues(newr, values(raster))
+		newr <- writeRaster(newr, filetype=filetype, overwrite=overwrite)
+	}
+	return(newr)
+}
+
+
 moveRasterFile <- function(raster, filename, overwrite=FALSE) {
 	r <- copyRasterFile(raster, filename, overwrite)
 	f <- trim(filename(raster))
