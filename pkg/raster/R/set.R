@@ -31,7 +31,7 @@ setRes <- function(object, xres, yres=xres) {
 	return(object)
 }
 
-setRaster <- function(object, filename="", values=NA) {
+setRaster <- function(object, filename="", values=NULL) {
 
 	if (class(object) == 'RasterStack') { object <- asRasterLayer(object, 1) }
 	if (class(object) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
@@ -44,7 +44,7 @@ setRaster <- function(object, filename="", values=NA) {
 	r <- raster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
 	r <- setFilename(r, filename)
 	
-	if ( length(values) != 1 | ( length(values) == 1 & ncell(r) == 1) ) {
+	if (!is.null(values)) {
 		r <- setValues(r, values)
 	}
 	return(r)
@@ -97,6 +97,14 @@ roundCoords <- function(object, digits=0) {
 	return(object)
 }
 
+nudgeCoords <- function(bb){
+	bb <- getBbox(bb)
+	bb@xmin <- floor(bb@xmin)
+	bb@ymin <- floor(bb@ymin)
+	bb@xmax <- ceiling(bb@xmax)
+	bb@ymax <- ceiling(bb@ymax)
+	return(bb)
+}
 
 	
 setMinMax <- function(raster, readfromdisk=FALSE) {

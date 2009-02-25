@@ -19,7 +19,7 @@ Use these functions to set certain properties of a RasterLayer object.
 \usage{
 setProjection(object, projstring)
 setFilename(object, filename)
-setRaster(object, filename="", values=NA)
+setRaster(object, filename="", values=NULL)
 setRowCol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
 setRes(object, xres, yres=xres)
 setMinMax(raster, readfromdisk=FALSE)
@@ -29,7 +29,7 @@ setNAvalue(raster, value)
 \arguments{
   \item{object}{A Raster* object }
   \item{raster}{ A \code{RasterLayer} object }
-  \item{values}{ Data values to associate with the RasterLayer object}
+  \item{values}{ Data values to associate with the RasterLayer object }
   \item{filename}{ filename, can be blank }
   \item{nrows}{ the new number of rows for the raster }
   \item{ncols}{ the new number of cols for the raster }  

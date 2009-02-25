@@ -10,7 +10,7 @@
 
 \usage{
 raster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
-rasterFromBbox(bndbox, nrows = 10, ncols = 10, nudge=TRUE)
+rasterFromBbox(bndbox, nrows = 10, ncols = 10)
 }
 
 \arguments{
@@ -20,7 +20,6 @@ rasterFromBbox(bndbox, nrows = 10, ncols = 10, nudge=TRUE)
   \item{ymx}{maximum y coordinate of raster (top border) }
   \item{nrows}{number of rows on raster }
   \item{ncols}{number of columns on raster }
-  \item{nudge}{logical. If \code{TRUE}, the boundingbox is nudged outwards (to the next integer) }
   \item{projstring}{PROJ4 type description of a map projection}
   \item{bndbox}{bounding box used to crop a raster. Any object that is a BoundingBox object or contains one (such as Raster* objects)}
 }
