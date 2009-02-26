@@ -26,11 +26,11 @@ click <- function(object, n=1, xy=FALSE, type="n", ...) {
 		return(cbind(xyCoords))
 	}
 	if (dataContent(object) != 'all') {
-		if (dataSource(object) != 'disk') {
-			stop('no data associated with this RasterLayer object')
-		} else {
-			value <- xyValues(object, xyCoords)
-		}	
+		#if (dataSource(object) != 'disk') {
+		#	stop('no data associated with this RasterLayer object')
+		#} else {
+		value <- xyValues(object, xyCoords)
+		#}	
 	} else {
 		cell <- cellFromXY(object, xyCoords)
 		if (class(object) == 'RasterStack') {
