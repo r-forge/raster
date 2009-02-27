@@ -13,7 +13,7 @@ trim <- function(astring) {
 }  
 
 
-fileName <- function(filename) {
+shortFileName <- function(filename) {
     filename <- gsub("\\\\", "/", filename)
 	if (filename == "") {return(filename)
 	} else {
@@ -26,7 +26,7 @@ fileName <- function(filename) {
    
 filePath <- function(filename) {
     filename <- gsub("\\\\", "/", filename)
-	file <- fileName(filename)
+	file <- shortFileName(filename)
 	path <- gsub(file, '', filename)
 	return(path)
 }   

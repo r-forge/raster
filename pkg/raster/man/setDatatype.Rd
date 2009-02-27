@@ -1,4 +1,5 @@
 \name{SetDatatype}
+\alias{datatype<-}
 \alias{setDatatype}
 
 \title{ Set data type of a RasterLayer}
@@ -64,6 +65,8 @@ Logical values are stored as signed single byte integers, they do have an NA val
 r <- raster()
 # 2 byte signed integer
 r <- setDatatype(r, "INT2S")
+# this is equivalent to 
+datatype(r) <- "INT2S"
 # 2 byte unsigned integer
 r <- setDatatype(r, "INT2U")
 # very large integers

@@ -51,7 +51,7 @@
 
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
-		if (.CanProcessInMemory(x, 1)) {
+		if (.CanProcessInMemory(x, 3)) {
 			raster <- setRaster(x, values=callGeneric(.getRasterValues(x)))
 		} else {
 			raster <- setRaster(x, filename=tempfile())
@@ -73,7 +73,7 @@ setMethod("Math", signature(x='RasterLayer'),
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if ( compare(c(e1, e2)) ) {
-			if (.CanProcessInMemory(e1, 3)) {
+			if (.CanProcessInMemory(e1, 4)) {
 				raster <- setRaster(e1, values=callGeneric( as.numeric(.getRasterValues(e1)), .getRasterValues(e2)))
 			} else {
 				raster <- setRaster(e1, filename=tempfile())
@@ -93,7 +93,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 
 setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
     function(e1, e2){ 
-		if (.CanProcessInMemory(e1, 2)) {
+		if (.CanProcessInMemory(e1, 3)) {
 			return(setRaster(e1, values=callGeneric(as.numeric(.getRasterValues(e1)), e2) ) )
 		} else {
 			raster <- setRaster(e1, filename=tempfile())
@@ -111,7 +111,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 
 setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
     function(e1, e2){ 
-		if (.CanProcessInMemory(e2, 2)) {
+		if (.CanProcessInMemory(e2, 3)) {
 			return(setRaster(e2, values=callGeneric(as.numeric(e1), .getRasterValues(e2))))
 		} else {
 			raster <- setRaster(e2, filename=tempfile())

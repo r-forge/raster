@@ -116,7 +116,7 @@ dataSource <- function(object) {
 }
 
 dataType <- function(object) {
-	return(object@file@datatype)
+	return(object@file@datanotation)
 }
 
 

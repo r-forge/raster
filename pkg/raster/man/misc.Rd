@@ -1,7 +1,7 @@
 \name{miscellanous}
 \alias{setFileExtension}
 \alias{fileExtension}
-\alias{fileName}
+\alias{shortFileName}
 \alias{filePath}
 \alias{trim}
 
@@ -12,12 +12,12 @@
 \usage{
 setFileExtension(filename, newextension)
 fileExtension(filename)
-fileName(filename)
+shortFileName(filename)
 filePath(filename)
 trim(astring)
 }
 \arguments{
-  \item{filename}{A filename with or without the path}
+  \item{filename}{A file name, with or without the path}
   \item{newextension}{A file extension, e.g., ".txt" }
   \item{astring}{A string that needs to be trimmed}
 }
@@ -33,7 +33,7 @@ trim(astring)
 	fn <- trim(fn)
 	fileExtension(fn)
 	setFileExtension(fn, ".txt")
-	fileName(fn)
+	shortFileName(fn)
 	filePath(fn)
 }
 \keyword{file}

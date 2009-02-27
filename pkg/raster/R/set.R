@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,6
+# Version 0.8
 # Licence GPL v3
 
 .addHistory <- function(raster, message) {
@@ -59,7 +59,7 @@ setFilename <- function(object, filename) {
 		object@file@name <- filename
 	}	
 	if (class(object)=='RasterLayer') {
-		shortname <- fileName(filename)
+		shortname <- shortFileName(filename)
 		shortname <- setFileExtension(shortname, "")
 		shortname <- gsub(" ", "_", shortname)
 		if (nbands(object) > 1) { shortname <- paste(shortname, "_", band(object)) } 

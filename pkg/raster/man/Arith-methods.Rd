@@ -17,7 +17,7 @@
 \examples{
 r1 <- raster(ncols=10, nrows=10)
 r1 <- setValues(r1, runif(ncell(r1)))
-r2 <- setValues(r1, 1:ncell(r1)) / ncell(r1)
+r2 <- setValues(r1, 1:ncell(r1) / ncell(r1) )
 r3 <- r1 * (r2 - 1 + r1^2 / r2)
 }
 

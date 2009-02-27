@@ -8,6 +8,10 @@
 	return( setFilename(x, value) )
 }
 
+'datatype<-' <- function(x, value) {
+	return( setDatatype(x, value) )
+}
+
 'projection<-' <- function(x, value) {
 	return( setProjection(x, value) )
 }

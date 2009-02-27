@@ -1,0 +1,56 @@
+\name{saveAs}
+
+\alias{saveAs}
+
+\title{Save a raster file to a different format}
+
+\description{
+  Save a raster file (on disk) to another format. 
+}
+
+\usage{
+  saveAs(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE)
+}
+
+\arguments{
+  \item{raster}{RasterLayer object}
+  \item{filename}{output filename}  
+  \item{filetype}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
+  \item{datatype}{output data type; see below}
+  \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
+}
+
+\details{
+
+Supported datatypes include:
+
+\tabular{rll}{
+	\tab \code{\bold{format}} \tab \bold{Long name} \cr
+    \tab \code{raster} \tab 'Native' raster package format \cr
+    \tab \code{ascii}  \tab ESRI Ascii \cr
+    \tab \code{ENVI}   \tab ENVI .hdr Labelled \cr
+    \tab \code{EHdr}   \tab ESRI .hdr Labelled \cr
+    \tab \code{ERS}  \tab ERMapper .ers Labelled \cr
+    \tab \code{GTiff}  \tab GeoTiff \cr
+    \tab \code{HFAErdas}  \tab Imagine Images (.img) \cr
+    \tab \code{ILWIS}   \tab ILWIS Raster Map \cr
+    \tab \code{PAux}   \tab PCI .aux Labelled \cr
+    \tab \code{PCIDSK}   \tab PCIDSK Database File \cr
+    \tab \code{RST}  \tab  Idrisi Raster A.1
+}
+
+see \code{rasterWriteFormats} for the complete list
+
+}
+
+\author{Robert J. Hijmans}
+
+\seealso{ \code{\link[raster]{writeRaster}} }  
+
+\examples{ 
+rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+rsa <- saveAs(rs, 'test.tif', filetype='GTiff')
+ 
+}
+
+\keyword{ spatial }
