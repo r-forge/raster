@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,8
+# Version 0.8
 # Licence GPL v3
 
 
@@ -37,14 +37,14 @@ setMethod ('show' , 'RasterLayer',
 	function(object) {
 		cat('class       :' , class(object), '\n')
 		cat('filename    :' , filename(object), '\n')
-		if (nbands(object) > 1) {
-			cat('band        :' , band(object), '\n')
-		}	
+		if (nbands(object) > 1) { cat('band        :' , band(object), '\n')	}	
 		cat('nrow        :' , nrow(object), '\n')
 		cat('ncol        :' , ncol(object), '\n')
 		cat('ncells      :' , ncell(object), '\n')
-		cat('data type   :' , object@file@datanotation, '\n')
-		cat('data content:' ,  dataContent(object), '\n')
+#		cat('data type   :' , object@file@datanotation, '\n')
+#		if (dataContent(object) == 'nodata') { cat('vals in mem : none', '\n')
+#		} else { cat('vals in mem :', dataContent(object) , '\n') }
+						
 		if (object@data@haveminmax) {
 			cat('min value   :' , minValue(object), '\n')
 			cat('max value   :' , maxValue(object), '\n')
@@ -70,7 +70,7 @@ setMethod ('show' , 'RasterLayer',
 
 
 setMethod ('show' , 'RasterStack',
-	function ( object ){
+	function ( object ) {
 		cat ('class       :' , class ( object ) , '\n')
 		cat ('filename    :' , filename(object), '\n')
 		cat ('nlayers     :' , nlayers(object), '\n')
@@ -78,7 +78,8 @@ setMethod ('show' , 'RasterStack',
 		cat ('ncol        :' , ncol(object), '\n')
 		cat ('ncells      :' , ncell(object), '\n')
 		cat ('projection  :' , projection(object, TRUE), '\n')
-		cat ('data content:' , dataContent(object), '\n')
+#		if (dataContent(object) == 'nodata') { cat('vals in mem : none', '\n')
+#		} else { cat('vals in mem :', dataContent(object) , '\n') }
 		cat ('xmin        :' , xmin(object), '\n')
 		cat ('xmax        :' , xmax(object), '\n')
 		cat ('ymin        :' , ymin(object), '\n')

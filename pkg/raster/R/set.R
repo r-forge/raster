@@ -97,7 +97,7 @@ roundCoords <- function(object, digits=0) {
 	return(object)
 }
 
-nudgeCoords <- function(bb){
+.nudgeCoords <- function(bb){
 	bb <- getBbox(bb)
 	bb@xmin <- floor(bb@xmin)
 	bb@ymin <- floor(bb@ymin)
