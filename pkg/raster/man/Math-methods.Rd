@@ -5,12 +5,16 @@
 
 \title{ Mathematical function for RasterLayer objects }
 \description{
-  The following standard mathematical functions can be used for computation with a single RasterLayer object
- "abs", "sign", "sqrt", "ceiling", "floor", "trunc", "cummax", "cummin", "cumprod", "cumsum", "log", "log10", "log2", "log1p", "acos", "acosh", "asin", "asinh", "atan", "atanh", "exp", "expm1", "cos", "cosh", "sin", "sinh", "tan", "tanh", "gamma", "lgamma", "digamma", "trigamma" 
+  Standard mathematical functions that can be used with a RasterLayer object as argument: 
+  \code{"abs", "sign", "sqrt", "ceiling", "floor", "trunc", "log", "log10", "log2", "log1p", "acos", "acosh", "asin", "asinh", "atan", "atanh", "exp", "expm1", "cos", "cosh", "sin", "sinh", "tan", "tanh"}. 
 }
 \section{Note}{
- The RasterLayer object must have either all data in memory or on disk. If the data do not into memory you should use the calc() function instead.
+ If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. 
+ If you want to set the filename (and perhaps filetype and datatype), use \code{\link[raster]{calc-methods}} instead of the Math-methods.
 }
+
+\seealso{ \code{\link[raster]{Arith-methods}}, \code{\link[raster]{overlay-methods}}, \code{\link[raster]{calc-methods}} }
+
 
 \author{Robert J. Hijmans}
 

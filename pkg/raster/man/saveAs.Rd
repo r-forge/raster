@@ -39,7 +39,7 @@ Supported datatypes include:
     \tab \code{RST}  \tab  Idrisi Raster A.1
 }
 
-see \code{rasterWriteFormats} for the complete list
+see \code{writeFormats} for the complete list
 
 }
 

@@ -2,19 +2,15 @@
 \docType{class}
 
 
-\alias{BoundingBox-class}
 \alias{BasicRaster-class}
 \alias{Raster-class}
 \alias{RasterLayer-class}
 \alias{RasterStack-class}
-\alias{show,BoundingBox-method}
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
 \alias{show,RasterLayerSummary-method}
 \alias{hist,Raster-method}
-\alias{plot,Raster,missing-method}
-\alias{plot,Raster,numeric-method}
 \alias{dim,BasicRaster-method}
 \alias{summary,RasterLayer-method}
 \alias{summary,RasterStack-method}
@@ -40,8 +36,6 @@
  
  generic methods implemented for these classes are: 
  \code{summary}, \code{show}, \code{dim}, \code{hist}, \code{plot} (with a single object as argument, and in the case of hist and plot, with additional ... parameters)
- \code{plot} can also be supplied with an additional numeric argument indicating the layer in a RasterStack object that should be plotted (mapped)
- \code{plot} can also be supplied with the two RasterLayer objects, creating a scatter plot (if they have matching extent and resolution)
  \code{[} is implemented for RasterLayer. It is equivalent to setValues() 
  
  These classes inherit from the \code{Raster}, which is a virtual class (objects cannot be created from it). However, many of the generic methods
@@ -85,8 +79,6 @@ Objects can be created by calls of the form \code{new("RasterLayer")}, but you s
     \item{show}{\code{signature(object = "Raster")}: displays information about the Raster* object }
     \item{summary}{\code{signature(object = "Raster")}: summary of Raster* values }
     \item{hist}{\code{signature(object = "RasterLayer")}: creates a histogram of the values of the RasterLayer object}
-    \item{plot}{\code{signature(object = "Raster")}: creates a plot (map) of raster values }
-    \item{plot}{\code{signature(object = "Raster", "numeric")}: creates a plot (map) of raster values. The second argument is the layer to be shown for multlayer objects }
     \item{dim}{\code{signature(object = "Raster")}: returns dimensions (ncol, nrow, and nlayers) of Raster* object}
  	 }
 }

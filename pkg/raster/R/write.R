@@ -8,7 +8,7 @@
 
 
 
-rasterWriteFormats <- function() {
+writeFormats <- function() {
 	gd <- gdalDrivers()
 	gd <- as.matrix(subset(gd, gd[,3] == T))
 	short <- c("raster", "ascii", as.vector(gd[,1]))
@@ -23,7 +23,7 @@ rasterWriteFormats <- function() {
 	gd <- gdalDrivers()
 	gd <- as.matrix(subset(gd, gd[,3] == T))
 	res <- dname %in% gd
-	if (!res) { stop(paste(dname, "is not a supported file format. See rasterWriteFormats()" ) ) }
+	if (!res) { stop(paste(dname, "is not a supported file format. See writeFormats()" ) ) }
 	return(res)
 }
 

@@ -17,10 +17,9 @@ closeHandle <- function(raster) {
 }
 
 
-newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
-	warning("'newRaster' is deprecated. Use 'raster' instead")
-	return(raster(xmn, xmx, ymn, ymx, nrows, ncols, projstring))
-}
+#newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
+#	warning("'newRaster' is deprecated. Use 'raster' instead")
+#	return(raster(xmn, xmx, ymn, ymx, nrows, ncols, projstring))  }
 
 
 raster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {

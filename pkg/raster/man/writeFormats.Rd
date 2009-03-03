@@ -1,34 +1,20 @@
-\name{write}
+\name{writeFormats}
 
-\alias{writeRaster}
-\alias{writeStack}
-\alias{rasterWriteFormats}
+\alias{writeFormats}
 
-\title{Write raster data to a file}
+\title{List supported file types for writing RasterLayer values to disk}
 
 \description{
-  Write raster values to a file. Either as binary ('raster') format, Ascii (ESRI Arc Ascii) format, and other GDAL supported formats. 
-  You can write an entire raster dataset at once, or by row.
+xxx
 }
 
 \usage{
-  writeRaster(raster, filetype='raster', overwrite=FALSE)
-  rasterWriteFormats()
-  writeStack(rstack, overwrite=FALSE)
+  writeFormats()
 }
 
-\arguments{
-  \item{raster}{RasterLayer object}
-  \item{filetype}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
-  \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
-  \item{rstack}{RasterStack object} 
-}
 
 \details{
-	Values in a \code{RasterLayer} object are written to a file. Relatively small datasets can be loaded into memory, manipulated, and saved to disk in their entirety. 
-	Large datasets can be read and written row by row. 
-	When writing by row, you must write all rows, and you must write them in sequence. Start at row=1, and end at row=nrow(raster). You cannot overwrite a single row in an existing raster file.
-	rasterWriteFormats returns a matrix of the file formats (the "drivers") that are supported.
+	writeFormats returns a matrix of the file formats (the "drivers") that are supported.
 
 Supported formats include:
 

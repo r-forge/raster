@@ -5,9 +5,7 @@
 # Licence GPL v3
 
 
-mCalc <- function(...) {
-	stop('mCalc has been replaced by generic function "calc"')
-}
+#mCalc <- function(...) { stop('mCalc has been replaced by generic function "calc"')}
 
 setMethod('calc', signature(x='RasterStack', fun='function'), 
 function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {

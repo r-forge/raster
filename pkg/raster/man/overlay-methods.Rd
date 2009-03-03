@@ -32,6 +32,9 @@ In stead of the overlay function you can also use normal artimic functions (*, /
 a new RasterLayer object (if a filename is provided, a file on disk)
 }
 
+\seealso{ \code{\link[raster]{Arith-methods}} }
+
+
 \author{
 Robert J. Hijmans 
 }

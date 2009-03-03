@@ -46,6 +46,11 @@ if \code{x = "RasterStack"}, \code{fun} should be a function that takes a one di
 \value{
 	a new RasterLayer 
 }
+
+
+\seealso{ \code{\link[raster]{Math-methods}} }
+
+
 \author{ Robert J. Hijmans}
 
 \examples{
