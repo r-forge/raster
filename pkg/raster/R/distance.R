@@ -84,7 +84,8 @@ distance <-	function(object, filename="") {
 						newValues <- pmin(transitionValues,rowWindow[index])
 						if(newValues != rowWindow[index]){remainingCells<-TRUE}
 						rowWindow[index] 
-						outRaster <- setValues(outRaster, rowValues, startRow)
+						# startRow is undefined
+						# outRaster <- setValues(outRaster, rowValues, startRow)
 						outRaster <- writeRaster(outRaster, overwrite=TRUE)
 						if(r>1){rowWindow <- rowWindow[-1:ncols]}
 					}
@@ -112,7 +113,8 @@ distance <-	function(object, filename="") {
 						newValues <- pmin(transitionValues,rowWindow[index])
 						if(newValues != rowWindow[index]){remainingCells<-TRUE}
 						rowWindow[index] 
-						outRaster <- setValues(outRaster, rowValues, startRow)
+						# startRow is undefined
+						#outRaster <- setValues(outRaster, rowValues, startRow)
 						outRaster <- writeRaster(outRaster, overwrite=TRUE)
 						if(r>1){rowWindow <- rowWindow[-1:ncols]}
 					}

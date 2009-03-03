@@ -1,4 +1,4 @@
-\name{box}
+\name{fromBbox}
 \alias{cellsFromBbox}
 \alias{polygonFromBbox}
 
@@ -22,12 +22,12 @@ polygonFromBbox(bndbox, sp=TRUE)
 }
 
 \value{
-in most cases a BoundingBox object
+a vector of cell numbers of a SpatialPolygons object
 }  
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{newBbox}} }
+\seealso{ \code{\link[raster]{newBbox}}, \code{\link[sp]{SpatialPolygons}} }
 
 \examples{
 r <- raster()

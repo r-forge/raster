@@ -5,15 +5,16 @@
 # Licence GPL v3
 
 
+
+setMethod('overlay', signature(x='RasterLayer', y='missing'), 
+function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
+	return(calc(x, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+}
+)
+
+
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
-
-	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
-	if (missing(filename)) { filename <- "" }
-	if (missing(overwrite)) { overwrite <- FALSE }
-	if (missing(datatype)) {datatype='FLT4S'}
-	if (missing(track)) {track=-1}
-	
 	rasters <- c(x, y)
 	obs <- list(...)
 	if (isTRUE(length(obs) > 0)) {
@@ -25,23 +26,38 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', da
 			}
 		}
 	}
-	
-	compare(c(x, rasters))
+	return(overlay(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+}
+)
 
-	outraster <- setRaster(x, filename)
+
+
+setMethod('overlay', signature(x='list', y='missing'), 
+function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
+	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
+	if (missing(filename)) { filename <- "" }
+	if (missing(overwrite)) { overwrite <- FALSE }
+	if (missing(datatype)) {datatype='FLT4S'}
+	if (missing(track)) {track=-1}
+	
+	compare(x)
+
+	outraster <- setRaster(x[[1]], filename)
 	outraster <- setDatatype(outraster, datatype) 
 
 	inram <- TRUE
-	for (i in 1:length(rasters)) {
-		if (dataContent(rasters[[i]]) != 'all') {inram <- FALSE} 
+	for (i in 1:length(x)) {
+		if (dataContent(x[[i]]) != 'all') {
+			inram <- FALSE
+		} 
 	}	
 	
 	vallist <- list()
 
 	if ( inram ) {
-		for (i in 1:length(rasters)) {
-			vallist[[i]] <- values(rasters[[i]])
-			clearValues(rasters[[i]])
+		for (i in 1:length(x)) {
+			vallist[[i]] <- values(x[[i]])
+			clearValues(x[[i]])
 		}
 		vals <- do.call(fun, vallist)
 		
@@ -64,16 +80,16 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', da
 		starttime <- proc.time()
 
 		for (r in 1:nrow(outraster)) {
-			for (i in 1:length(rasters)) {
-				if (dataSource(rasters[[i]]) == 'ram') {
-					rasters[i] <- valuesRow(rasters[[i]], r)
+			for (i in 1:length(x)) {
+				if (dataSource(x[[i]]) == 'ram') {
+					x[i] <- valuesRow(x[[i]], r)
 				} else {	
-					rasters[i] <- readRow(rasters[[i]], r)
+					x[i] <- readRow(x[[i]], r)
 				}	
 			}	
 			
-			for (i in 1:length(rasters)) {
-				vallist[[i]] <- values(rasters[[i]])
+			for (i in 1:length(x)) {
+				vallist[[i]] <- values(x[[i]])
 			#	clearValues(rasters[[i]])
 			}
 			vals <- do.call(fun, vallist)
@@ -101,6 +117,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', da
 		}
 	} 
 	return(outraster)
+
+	
 }
 )
-

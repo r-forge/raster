@@ -25,9 +25,9 @@ asRasterLayer(object, index)
  if \code{type} is 'pixel' a SpatialPixel* object is returned. If the RasterLayer object has data a SpatialPixelDataFrame will be returned.
  if \code{type} is 'grid' a SpatialGrid* object is returned. If the RasterLayer object has data a SpatialGridDataFrame will be returned.
  
- In most cases you can also coerce objects using setAs, except that you cannot change the default 'index' (variable) and the first variable (column of the data frame of a Spatial* object) is used.
+ In most cases you can also coerce objects using \code{as}, except that you cannot change the default 'index' (variable) and the first variable (column of the data frame of a Spatial* object) is used.
  
- e.g.: as(aSpatialPixelsDataFrame, "RasterStack") or as(aRasterLayer, "SpatialGridDataFrame")
+ e.g.: \code{as(aSpatialPixelsDataFrame, "RasterStack")} or \code{as(aRasterLayer, "SpatialGridDataFrame")}
 }
 
 \value{
@@ -35,7 +35,7 @@ a RasterLayer object
 }
 \author{ Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{classes}}, \code{\link[sp]{SpatialGridDataFrame-class}}, \code{\link[methods]{as}}}
+\seealso{ \code{\link[raster]{RasterLayer-class}}, \code{\link[sp]{SpatialGridDataFrame-class}}, \code{\link[methods]{as}}}
 
 \examples{ 
 r1 <- raster(ncols=90, nrows=45)

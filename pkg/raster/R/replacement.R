@@ -4,56 +4,6 @@
 # Version 0.8
 # Licence GPL v3
 
-'filename<-' <- function(x, value) {
-	return( setFilename(x, value) )
-}
-
-'datatype<-' <- function(x, value) {
-	return( setDatatype(x, value) )
-}
-
-'projection<-' <- function(x, value) {
-	return( setProjection(x, value) )
-}
-
-'ncol<-' <- function(x, value) {
-	return( setRowCol(x, ncols=value) )
-}	
-
-'nrow<-' <- function(x, value) {
-	return( setRowCol(x, nrows=value) )
-}	
-
-'resolution<-' <- function(x, value) {
-	if (length(value) == 1) {
-		return( setRes(x, xres=value, yres=value) )
-	} else {
-		return( setRes(x, xres=value[1], yres=value[2]) )
-	}
-}
-
-'xmin<-' <- function(x, value) {
-	return(changeBbox(x, xmn=value))
-}
-
-'xmax<-' <- function(x, value) {
-	return(changeBbox(x, xmx=value))
-}
-
-'ymin<-' <- function(x, value) {
-	return(changeBbox(x, ymn=value))
-}
-
-'ymax<-' <- function(x, value) {
-	return(changeBbox(x, ymx=value))
-}
-
-
-.getColValues <- function(r, colnr) {
-	firstcol <- 1:nrow(r) * ncol(r) - ncol(r) 
-	cells <- colnr + firstcol 
-	return(values(r)[cells])
-}
 
 
 
@@ -61,15 +11,19 @@ setMethod("[", "RasterLayer",
 	function(x,i,j,...,drop=FALSE) {
 		if (!missing(j)) { stop("incorrect number of dimensions") }
 # consider row, sparse....		
-		if (dataContent(x) != 'all') {
-			if (dataSource(x) != 'disk') {
-				stop('no data associated with this RasterLayer object')
+		if (missing(i)) { 
+			if (dataContent(x) == 'all') {
+				return(values(x)) 
 			} else {
-				return(cellValues(x, i))
+				if (dataSource(x) != 'disk') {
+					stop('no data associated with this RasterLayer object')
+				} else {
+					return(values(readAll(x)))
+				}	
 			}	
 		} else {
-			return(values(x)[i]) 
-		}	
+			return(cellValues(x, i))
+		}
 	}
 )
 
@@ -110,6 +64,13 @@ setReplaceMethod("[", "RasterLayer",
 		return(x)
 	}
 )
+
+
+
+#.getColValues <- function(r, colnr) {
+#	firstcol <- 1:nrow(r) * ncol(r) - ncol(r) 
+#	cells <- colnr + firstcol 
+#	return(values(r)[cells]) }
 
 
 setMethod("[[", c("RasterLayer","ANY","ANY"),

@@ -1,53 +1,16 @@
 \name{classes}
 \docType{class}
 
-
-\alias{BasicRaster-class}
-\alias{Raster-class}
-\alias{RasterLayer-class}
-\alias{RasterStack-class}
-\alias{show,BasicRaster-method}
-\alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
-\alias{show,RasterLayerSummary-method}
 \alias{hist,Raster-method}
 \alias{dim,BasicRaster-method}
 \alias{summary,RasterLayer-method}
+\alias{show,RasterLayerSummary-method}
 \alias{summary,RasterStack-method}
-\alias{[,RasterLayer-method}
-\alias{[<-,RasterLayer-method}
-\alias{[,RasterStack-method}
-\alias{[[,RasterLayer,ANY,ANY-method}
-\alias{[[<-,RasterLayer,ANY,ANY-method}
 
-\title{Classes for handling raster data }
-\description{ \code{RasterLayer}, \code{RasterStack} (Raster* in short) are all classes for handling spatial raster (grid) data.
-
- RasterLayer represents a single layer raster.
- RasterStack represents a collection of RasterLayers with the same extent and resolution; for example a multi-band remote sensing image. 
- 
- The difference between a RasterStack is that it typically points to several seperate data files on disk, but it could also point to different bands from a single file (or not not point to any file at all)
- 
- Apart from with the normal new(" ") method, objects can be created with the following functions (among others)
- raster(), RasterFromFile(), StackFromFile(), StackFromRasters(), StackFromFiles()
- 
- RasterLayer and RasterStack objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package: asRasterLayer(), asRasterStack()
- Vice versa, Raster* objects can be coerced into a sp type oject with asSpGrid(). You can also use SetAs() 
- 
- generic methods implemented for these classes are: 
- \code{summary}, \code{show}, \code{dim}, \code{hist}, \code{plot} (with a single object as argument, and in the case of hist and plot, with additional ... parameters)
- \code{[} is implemented for RasterLayer. It is equivalent to setValues() 
- 
- These classes inherit from the \code{Raster}, which is a virtual class (objects cannot be created from it). However, many of the generic methods
- in this package are implemented for the Raster class so that they can be used with the other three classes.
-
- In case you really want a Raster object, rather than one of its decendants, to work with you can easily create your own class that is the same (but not virtual) with a command like this:
-\code{setClass ('BasicRaster', contains = 'Raster')}
- Raster includes the \code{BoundingBox} class that is not virtual (e.g. see newBbox() )
- RasterLayer includes the classes \code{RasterFile} and \code{SingleLayerData}, whereas RasterStack contains \code{RasterFile} and \code{MultipleLayerData}
- These classes are not further described here, because users should not need to directly access the slots in these classes. There are functions for that. Using these functions
- is much safer because a change in one slot should often affect the values in other slots. The 'setter' functions such as setValues take care of that. 
-
+\title{Replace methods }
+\description{ 
+   to be moved ....
  }
 
 

@@ -1,0 +1,29 @@
+# Author: Robert J. Hijmans
+# International Rice Research Institute. Philippines
+# contact: r.hijmans@gmail.com
+# Date : November 2008
+# Version 0.8
+# Licence GPL v3
+
+
+###   cellValues   ###
+
+if (!isGeneric("cellValues")) {
+	setGeneric("cellValues", function(x, cells)
+		standardGeneric("cellValues"))
+}
+
+	
+setMethod("cellValues", signature(x='RasterLayer', cells='vector'), 
+	function(x, cells) { 
+		return(.rasterReadCells(x, cells))
+	}
+)
+
+
+setMethod("cellValues", signature(x='RasterStack', cells='vector'), 
+	function(x, cells) { 
+		return(.stackReadCells(x, cells))
+	}
+)
+

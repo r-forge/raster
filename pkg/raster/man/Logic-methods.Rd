@@ -11,15 +11,30 @@
 
 \title{ Methods for logical functions for RasterLayers' }
 \description{
-The following boolean operators are available: '&', '|', and '!'
-With r being a RasterLayer, and the result a RasterLayer with logical values:
-	r <- r < 3 | r < 6
-	r <- !r
-These are also available :
-	is.na(r) 
-	is.nan(r)
-	is.finite(r)
-	is.infinite(object)
+The following logical (boolean) operators are available for computations with RasterLayer objects: \code{"&", "|", and "!"}
+These functions are also available with a RasterLayer argument: \code{is.na}, \code{is.nan}, \code{is.finite}, \code{is.infinite}
+}
+
+\value{
+A RasterLayer object with logical (\code{TRUE/FALSE} values)
+}
+
+
+\section{Note}{
+ If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. 
+ If you want to set the filename (and perhaps filetype and datatype), use \code{\link[raster]{calc-methods}} instead.
+}
+
+\seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay-methods}}, \code{\link[raster]{calc-methods}} }
+
+
+\author{Robert J. Hijmans}
+
+\examples{
+r <- raster(ncols=10, nrows=10)
+r[] <- runif(ncell(r)) * 10
+r <- r < 3 | r < 6
+r <- !r
 }
 
 \keyword{methods}

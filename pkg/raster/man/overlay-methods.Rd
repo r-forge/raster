@@ -1,9 +1,17 @@
 \name{overlay}
 \docType{methods}
+
 \alias{overlay}
 \alias{overlay,RasterLayer,RasterLayer-method}
-\title{ method for function overlay in the raster package}
+\alias{overlay,RasterLayer,missing-method}
+\alias{overlay,list,missing-method}
+
+\alias{overlay,RasterStack,missing-method}
+
+\title{Overlay RasterLayers}
+
 \description{
+
 Calculate values for a new RasterLayer object, based on two or more existing and RasterLayers of the same extent and resolution. 
 overlay is a generic functon used in the sp and raster packages. This help file describes its use in the raster package. 
 
@@ -11,7 +19,6 @@ You should supply a function \code{fun} to set the way that the RasterLayers are
 For example, if you merge two RasterLayers you could use multiply: \code{fun=function(x,y){return(x*y)}} percentage: \code{fun=function(x,y){return(100 * x / y)}}. 
 The default function \code{sum} always works because its first argument is \code{...}
 
-In stead of the overlay function you can also use normal artimic functions (*, /, +, -) with RasterLayer objects (see examples) 
 }
 
 \section{Methods}{
@@ -27,9 +34,12 @@ In stead of the overlay function you can also use normal artimic functions (*, /
 }
 }
 
+\details{
+In stead of the overlay function you can also use normal artimic functions such as *, /, +, - with RasterLayer objects (see examples), but then you cannot specifiy an output filename, filetype or datatype. 
+}
 
 \value{
-a new RasterLayer object (if a filename is provided, a file on disk)
+a new RasterLayer object (and in some cases, if a filename is provided or the output values cannot be stored in memory, the side effect of a file on disk)
 }
 
 \seealso{ \code{\link[raster]{Arith-methods}} }
