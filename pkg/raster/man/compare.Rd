@@ -1,10 +1,11 @@
-\name{utilities}
-\alias{compare}
+\name{compare}
 
+\alias{compare}
   
-\title{ Compare rasters }
+\title{ Compare RasterLayer objects }
+
 \description{
-  compare evaluates whether a list of rasters has the same origin, resolution, number of rows and columns, and projection (or a subset thereof).
+  compare evaluates whether a list of rasters has the same origin, resolution, number of rows and columns, and projection (or a subset of these comparisons).
 }
 
 \usage{
@@ -24,6 +25,7 @@ compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, toleranc
  }
   
 \author{Robert J. Hijmans}
+
 \examples{
 	r1 <- raster()
 	r2 <- r1
@@ -33,5 +35,6 @@ compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, toleranc
 	compare(c(r1, r3), stopiffalse=FALSE)
 	compare(c(r1, r3), rowcol=FALSE)
 }
+
 \keyword{ spatial }
 

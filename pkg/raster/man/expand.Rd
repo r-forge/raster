@@ -1,19 +1,26 @@
 \name{expand}
+
 \alias{expand}
 
-\title{Expand the extent of a RasterLayer}
+\title{expand}
+
 \description{
-expand returns an elarged RasterLayer. The new RasterLayer has the extreme minimum and maximum coordinates of the input RasterLayer and BoundingBox object. Thus, all of the cells of the original raster are inlcluded.
+Expand returns an RasterLayer with a larger spatial extent. 
+The output RasterLayer has the extreme minimum and maximum coordinates of the input RasterLayer and input BoundingBox arguments. 
+Thus, all of the cells of the original raster are included.
 }
+
 \usage{
-expand(raster, bndbox, filename="", overwrite=FALSE)
+expand(raster, bndbox, filename=NULL, filetype='raster', overwrite=FALSE, track=-1)
 }
 
 \arguments{
   \item{raster}{a RasterLayer object}
   \item{bndbox}{BoundingBox object, or any object that is or has a bounding box (see below)}
-  \item{filename}{character. Output filename for a new raster}
-  \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}
+  \item{filename}{filename for the output RasterLayer}
+  \item{overwrite}{if TRUE, "filename" will be overwritten if it exists}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}
 }
 
 \details{
@@ -22,11 +29,12 @@ expand(raster, bndbox, filename="", overwrite=FALSE)
 }
 
 \value{
-A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
+A new RasterLayer object, and in some cases the side effect of a new file on disk.
 }
+
 \author{Robert J. Hijmans}
 
-\seealso{\code{\link[raster]{crop}}, \code{\link[raster]{Merge}}}
+\seealso{\code{\link[raster]{crop}}, \code{\link[raster]{merge}}}
 
 
 \examples{

@@ -19,32 +19,49 @@ if (!isGeneric("stack")) {
 		standardGeneric("stack"))
 }	
 
-setMethod("stack", signature(x='RasterLayer'), 
-function(x, ...) {
+setMethod("stack", signature(x='Raster'), 
+function(x, ..., bands=NULL) {
 	rlist <- c(x, list(...))
-	return(stack(rlist))	
+	return(stack(rlist, bands))	
 } )
 
 
+
 setMethod("stack", signature(x='character'), 
-function(x, ...) {
+function(x, ..., bands=NULL) {
 	rlist <- c(x, list(...))
-	return(stack(rlist))
+	return(stack(rlist, bands))
 } )
 
 
 setMethod("stack", signature(x='list'), 
-function(x) {
+function(x, bands=NULL) {
+	j <- 0
+	r <- list()
 	for (i in 1:length(x)) {
+		j <- j + 1
 		if (is.character(x[[i]])) {
-			x[i] <- rasterFromFile(x[[i]])
-		} else {
-			if (class(x[[i]]) != "RasterLayer") {
-				stop("Arguments should be RasterLayer objects or filenames")
+			if (is.null(bands)) {
+				r[j] <- rasterFromFile(x[[i]])
+			} else {
+				if (bands[[i]] < 1) {
+					r[j] <- rasterFromFile(x[[i]], 1)
+					bds <- nbands(r)
+					if (bds > 1) {
+						for (b in 2:bds) {
+							j <- j + 1
+							r[j] <- rasterFromFile(x[[i]], b)
+						}
+					}
+				}
 			}
+		} else if (extends(class(x[[i]]), "Raster")) {
+			r[j] <- x[[i]]
+		} else {
+			stop("Arguments should be Raster* objects or filenames")
 		}	
 	}
-	return(addRasters(new("RasterStack"), x))
+	return(addRasters(new("RasterStack"), r))
 } )
 
 

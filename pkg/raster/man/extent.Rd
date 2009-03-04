@@ -4,6 +4,8 @@
 \alias{xmax}
 \alias{ymin}
 \alias{ymax}
+\alias{origin}
+
 \alias{projection}
 \alias{isLatLon}
 \alias{isLatLon,Raster-method}
@@ -22,6 +24,7 @@ xmin(object)
 xmax(object)
 ymin(object)
 ymax(object)
+origin(object)
 projection(object, asText=TRUE)
 isLatLon(object)
 }

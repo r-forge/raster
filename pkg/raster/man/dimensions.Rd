@@ -11,7 +11,6 @@
 \alias{xres}
 \alias{yres}
 \alias{resolution}
-\alias{origin}
 \alias{nlayers}
 \alias{nlayers,BasicRaster-method}
 \alias{nlayers,Raster-method}
@@ -22,8 +21,9 @@
 \alias{nbands}
   
 \title{Dimensions}
+
 \description{
-  Get dimensions of a Raster* object
+  Get dimension properties of a Raster* object
 }
 
 \usage{
@@ -33,7 +33,6 @@ ncell(x)
 xres(object)
 yres(object)
 resolution(object)
-origin(object)
 nlayers(object)
 layerNames(object)
 band(object)

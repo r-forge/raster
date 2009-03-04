@@ -4,12 +4,11 @@
 # Version 0.8
 # Licence GPL v3
 
-
-
 if (!isGeneric("unstack")) {
 	setGeneric("unstack", function(x, ...)
 		standardGeneric("unstack"))
 }	
+
 
 setMethod("unstack", signature(x='RasterStack'), 
 function(x) {

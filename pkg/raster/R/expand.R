@@ -7,7 +7,9 @@
 # Licence GPL v3
 
 
-expand <- function(raster, bndbox, filename="", overwrite=FALSE) {
+expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=FALSE, track=-1)  {
+	if (is.null(filename)) { filename <- "" }
+	
 	bndbox <- getBbox(bndbox)
 	res <- resolution(raster)
 # snap points to pixel boundaries
@@ -38,14 +40,21 @@ expand <- function(raster, bndbox, filename="", overwrite=FALSE) {
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 			outraster <- setValues(outraster, d)
-			if (filename(outraster) != "") {writeRaster(outraster, overwrite=overwrite)}
+			if (filename(outraster) != "") {writeRaster(outraster, filetype=filetype, overwrite=overwrite)}
 		}
 
 	} else if ( dataSource(raster) == 'disk' ) { 
-
+		if (!.CanProcessInMemory(x, 2) && filename == '') {
+			filename <- tempfile()
+			outraster <- setFilename(outraster, filename )
+			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
+		}
+		starttime <- proc.time()
+	
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
 		for (r in 1:nrow(raster)) {
+		
 			raster <- readRow(raster, r)
 			vals <- values(raster)
 			d[] <- NA
@@ -54,12 +63,22 @@ expand <- function(raster, bndbox, filename="", overwrite=FALSE) {
 
 			if (filename(outraster) != '') {
 				outraster <- setValues(outraster, d, r)
-				outraster <- writeRaster(outraster, overwrite=overwrite)
+				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			} else {
 				v <- c(v, d)
 			}
+
+			if (r %in% track) {
+				elapsed <- (proc.time() - starttime)[3]
+				tpr <- elapsed /r
+				ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+				cat('row', r, '-', ttg, 'minutes to go\n')
+			}			
+
 		}
-		if (filename(outraster) == '') { outraster <- setValues(outraster, v) }
+		if (filename(outraster) == '') { 
+			outraster <- setValues(outraster, v) 
+		}
 	} 
 	return(outraster)
 }

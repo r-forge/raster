@@ -38,8 +38,9 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 		if (!.CanProcessInMemory(x, 2) && filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
-			if (options('verbose')[[1]]) { cat('writing values to:', filename(raster))	}						
+			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
+		starttime <- proc.time()
 		
 		v <- vector(length=0)
 		for (r in 1:nrow(outRaster)) {
@@ -53,6 +54,14 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 				outRaster <- setValues(outRaster, vals, r)
 				outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 			}
+			
+			if (r %in% track) {
+				elapsed <- (proc.time() - starttime)[3]
+				tpr <- elapsed /r
+				ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+				cat('row', r, '-', ttg, 'minutes to go\n')
+			}			
+			
 		}
 		if (filename(outRaster) == "") {
 			outRaster <- setValues(outRaster, v)

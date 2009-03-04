@@ -62,10 +62,10 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		if (!.CanProcessInMemory(x, 2) && filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
-			if (options('verbose')[[1]]) { cat('values were written to:', filename(raster))	}						
+			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
-		
 		starttime <- proc.time()
+		
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
 		rows <- rep(1, each=(ncol(x) * yfact))
 		v <- vector(length=0)
