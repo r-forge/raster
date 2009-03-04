@@ -1,9 +1,12 @@
-\name{RasterLayer from file}
+\name{rasterFromFile}
+
 \alias{rasterFromFile}
 
-\title{Create a new RasterLayer object }
+\title{RasterLayer from file}
+
 \description{
-  Create a new RasterLayer object from a file. The created object does normally not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
+  Create a new RasterLayer object from a file. The created object does normally not contain any cell (pixel) values, 
+  it only has the parameters that describe the RasterLayer.
 }
 
 \usage{

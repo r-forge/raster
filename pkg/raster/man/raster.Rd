@@ -1,4 +1,5 @@
-\name{new RasterLayer}
+\name{raster}
+
 \alias{raster}
 \alias{rasterFromBbox}
 
