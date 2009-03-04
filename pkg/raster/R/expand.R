@@ -44,7 +44,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 		}
 
 	} else if ( dataSource(raster) == 'disk' ) { 
-		if (!.CanProcessInMemory(x, 2) && filename == '') {
+		if (!.CanProcessInMemory(outraster, 2) && filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
