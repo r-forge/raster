@@ -9,6 +9,8 @@
 \alias{plot,Raster,missing-method}
 \alias{plot,Raster,numeric-method}
 \alias{plot,RasterLayer,RasterLayer-method}
+\alias{hist,Raster-method}
+
 
 \title{Methods for Function plot in Package `raster'}
 
@@ -23,6 +25,7 @@
 \section{Methods}{
 \describe{
 
+Methods for function \code{plot}
 
 \item{x = "Raster", y = "missing"}{creates a plot of raster values; see \code{\link[raster]{map}}  }
 
@@ -32,7 +35,11 @@
 
 \item{x = "BoundingBox", y = "ANY"}{ plot a BoundingBox object }
 
+Methods for function \code{hist}
+\item{x = "RasterLayer"}{ histogram for RasterLayer }
+
 }}
+
 \keyword{methods}
 \keyword{spatial}
 

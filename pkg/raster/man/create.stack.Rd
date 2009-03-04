@@ -1,4 +1,4 @@
-\name{rasterstack.create}
+\name{stack}
 \alias{stack}
 \alias{stack,RasterLayer-method}
 \alias{stack,character-method}
@@ -9,7 +9,8 @@
 \alias{addRasters}
 \alias{dropLayer}
 
-\title{ Create or change a new RasterStack }
+\title{ Create or change a RasterStack }
+
 \description{
   A RasterStack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects, or from raster files.
   You can add raster to or remove raster from a rasterstack. 

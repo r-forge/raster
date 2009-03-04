@@ -1,61 +1,91 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Authors: Robert J. Hijmans, r.hijmans@gmail.com 
 # International Rice Research Institute
-# Date :  June 2008
-# Version 0,8
+# Date :  January 2009
+# Version 0.8
 # Licence GPL v3
 
 
+.summaryRasters <- function(rasters, fun, funname, na.rm) {
 
-setMethod('summary', signature(object='RasterStack'), 
-	function(object, ...) {
-		if (dataContent(object) == 'all') {
-			for (n in 1:nlayers(object)) {
-				cat("layer ", n, "\n")
-				cat("NAs  : ", sum(is.na(values(object)[,n])), "\n")
-				summary(values(object)[,n])
+	if (!.CanProcessInMemory(rasters[[1]], 2)) {
+		filename <- tempfile()
+		raster <- setRaster(rasters[[1]], filename)
+	} else {
+		filename <- ""
+		raster <- setRaster(rasters[[1]])
+		v <- vector(length=0)
+	}
+
+	m <- matrix(NA, nrow=ncol(rasters[[1]]), ncol=length(rasters))
+	for (r in 1:nrow(rasters[[1]])) {
+		m[] <- NA
+		for (i in 1:length(rasters)) {
+			if (is.atomic(rasters[[i]])) {
+				m[,i] <- rasters[[i]]
+			} else {
+				m[,i] <- .getRowValues(rasters[[i]], r)
 			}
+		}
+		if (funname == 'any' || funname == 'all') {
+			m[m != 0] <- 1
+		}
+
+		vv <- apply(m, 1, fun, na.rm=na.rm)
+
+		if (funname == 'range') {
+			vv <- vv[2,] - vv[1,]
+		}
+
+		if (filename == "") {
+			v <- c(v, vv)
 		} else {
-			cat("values not in memory\n")
+			raster <- setValues(raster, vv, r)
+			raster <- writeRaster(raster)
 		}
 	}
-)	
+	if (filename == "") {
+		raster <- setValues(raster, v)
+	}
+	return(raster)
+}
 
 
 
-setClass('RasterLayerSummary',
-	representation (
-		ncell = 'numeric',
-		dataContent = 'character',
-		NAs = 'numeric',
-		values = 'matrix'
-	)
-)
-	
-setMethod('show', signature(object='RasterLayerSummary'), 	
-	function(object) {
-		cat ("Cells: " , object@ncell, "\n")
-		if ( object@dataContent == "all") {
-			cat("NAs  : ", object@NAs, "\n")
-			cat("\nValues")
-			tab <- as.table(object@values) 
-			colnames(tab) <- ""
-			print(tab)
-		} else {
-			cat("values not in memory\n")
+setMethod("Summary", signature(x='RasterLayer'),
+	function(x, ..., na.rm=FALSE){
+
+		rasters <- list(...)
+		if (length(rasters)==0) { return(x) }
+
+		for (i in 1:length(rasters)) {
+			if (class(rasters[[i]]) == 'RasterStack') {
+				r <- rasters[[i]]
+				rasters <- rasters[-i]
+				rasters <- c(rasters, unstack(r))
+				rm(r)
+			}
 		}
-	}	
+		rasters <- c(x, rasters)
+		rm(x)
+
+		fun <- sys.call(sys.parent())[[1]]
+		funname <- as.character(sys.call(sys.parent())[[1]])
+		
+		return( .summaryRasters(rasters, fun, funname, na.rm) )
+	}
 )
 	
-setMethod('summary', signature(object='RasterLayer'), 
-	function(object, ...) {
-		sumobj <- new("RasterLayerSummary")
-		sumobj@ncell <- ncell(object)
-		sumobj@dataContent <- dataContent(object) 
-		if ( sumobj@dataContent == "all") {
-			sumobj@NAs <- sum(is.na(values(object)))
-			sumobj@values <- as.matrix( summary(values(object)) )
-		} 
-		return(sumobj)
-	}	
+
+
+setMethod("Summary", signature(x='RasterStack'),
+	function(x, ..., na.rm=FALSE){
+		
+		x1 <- asRasterLayer(x, 1)
+		x <- dropLayer(x, 1)
+		
+		return( callGeneric(x1, x, ..., na.rm=na.rm))
+	}
 )
+
+
 

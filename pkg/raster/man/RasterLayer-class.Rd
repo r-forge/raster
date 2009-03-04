@@ -9,6 +9,8 @@
 
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
+\alias{show,RasterStack-method}
+
 
 \title{ Raster* classes}
 

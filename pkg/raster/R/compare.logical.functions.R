@@ -8,16 +8,14 @@
 .getLogicalRowValues <- function(x, r) {
 # need to take care of 'spase'
 	v <- .getRowValues(x, r)
-	v[v<0] <- 0
-	v[v>0] <- 1
+	v[v!=0] <- 1
 	return(v)
 }	
 
 
 .getLogicalValues <- function(x) {
 	v <- .getRasterValues(x)
-	v[v<0] <- 0
-	v[v>0] <- 1
+	v[v!=0] <- 1
 	return(v)
 }
 
@@ -44,7 +42,7 @@ setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 
 setMethod('!', signature(x='RasterLayer'),
 	function(x){
-		if (.CanProcessInMemory(x, 1)) {
+		if (.CanProcessInMemory(x, 2)) {
 			return(setValues(x, !values(x)))
 		} else {
 			raster <- setRaster(x, filename=tempfile())
@@ -65,7 +63,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
 			stop('second argument should be a single number')
 		}
-		if (.CanProcessInMemory(e1, 2)) {
+		if (.CanProcessInMemory(e1, 3)) {
 			raster <- setRaster(e1)
 			raster <- setDatatype(raster, datatype='LOGICAL')
 			raster <- setValues(raster, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )			
@@ -89,7 +87,7 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 		if (!isTRUE(is.atomic(e1) & length(e1)==1)) {
 			stop('first argument should be a single number')
 		}
-		if (.CanProcessInMemory(e2, 2)) {
+		if (.CanProcessInMemory(e2, 3)) {
 			raster <- setRaster(e2)
 			raster <- setDatatype(raster, 'LOGICAL')
 			raster <- setValues(raster, callGeneric(.getRasterValues(e2), rep(e1, ncell(e2)) ) )
@@ -112,7 +110,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 		if (!cond) {
 			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See compare()")
 		}	
-		if (.CanProcessInMemory(e1, 2)) {
+		if (.CanProcessInMemory(e1, 3)) {
 			raster <- setRaster(e1) 
 			raster <- setDatatype(raster, 'LOGICAL')
 			raster <- setValues(raster, callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) 
@@ -135,7 +133,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if ( compare(c(e1, e2)) ) {
-			if (.CanProcessInMemory(e1, 2)) {
+			if (.CanProcessInMemory(e1, 3)) {
 				raster <- setRaster(e1)
 				raster <- setDatatype(raster, 'LOGICAL')
 				raster <- setValues(raster, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
@@ -152,37 +150,4 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 	}
 )
 
-
-
-setMethod("is.na", signature(x='RasterLayer'),
-	function(x) {
-		raster <- setRaster(x)
-		raster <- setDatatype(raster, 'LOGICAL')
-		return(setValues(raster, is.na(.getRasterValues(x))))
-	}
-)	
-
-setMethod("is.nan", signature(x='RasterLayer'),
-	function(x) {
-		raster <- setRaster(x)
-		raster <- setDatatype(raster, 'LOGICAL')
-		return(setValues(raster, is.nan(.getRasterValues(x))))
-	}
-)	
-
-setMethod("is.infinite", signature(x='RasterLayer'),
-	function(x) {
-		raster <- setRaster(x)
-		raster <- setDatatype(raster, 'LOGICAL')
-		return(setValues(raster, values=is.infinite(.getRasterValues(x))))
-	}
-)	
-
-setMethod("is.finite", signature(x='RasterLayer'),
-	function(x) {
-		raster <- setRaster(x)
-		raster <- setDatatype(raster, 'LOGICAL')
-		return(setValues(raster, values=is.finite(.getRasterValues(x))))
-	}
-)	
 

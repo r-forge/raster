@@ -89,11 +89,19 @@ valuesRow <- function(raster, rownr) {
 		}
 		startcell <- ((rownr - firstrow) * ncol(raster) + 1) 
 		endcell <- startcell + ncol(raster) - 1
-		return(values(raster)[startcell:endcell])
+		if (class(raster) == 'RasterStack') {
+			return(values(raster)[startcell:endcell,])
+		} else {	
+			return(values(raster)[startcell:endcell])
+		}
 	} else if (dataContent(raster) == 'all'){
 		startcell <- cellFromRowCol(raster, rownr, 1)
 		endcell <- startcell+ncol(raster)-1
-		return(values(raster)[startcell:endcell])
+		if (class(raster) == 'RasterStack') {
+			return(values(raster)[startcell:endcell,])
+		} else {	
+			return(values(raster)[startcell:endcell])
+		}
 	} else {
 		stop('something is wrong with the RasterLayer dataContent')
 	}

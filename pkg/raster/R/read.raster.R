@@ -211,15 +211,20 @@
 
 
 .stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
+	if (dataSource(rstack) == 'ram') {
+		if (rownumber > 0) {
+			warning('all values are in memory; no point in using read')
+		}
+		return(rstack)
+	}
+	rstack@data@values <- matrix(nrow=length(values(raster)), ncol=nlayers(rstack)) 
+
 	for (i in seq(nlayers(rstack))) {
 		raster <- .rasterRead(rstack@layers[[i]], rownumber, startcol, ncolumns)
-		if ( i == 1 )  {
-			rstack@data@values <- matrix(nrow=length(values(raster)), ncol=nlayers(rstack)) 
-			rstack@data@content <- dataContent(raster)
-			rstack@data@indices <- dataIndices(raster)
-		}
 		rstack@data@values[,i] <- values(raster)
 	}
+	rstack@data@content <- dataContent(raster)
+	rstack@data@indices <- dataIndices(raster)
 	return(rstack)
 }
 
