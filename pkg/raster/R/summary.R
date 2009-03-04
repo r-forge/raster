@@ -17,6 +17,14 @@
 	}
 
 	m <- matrix(NA, nrow=ncol(rasters[[1]]), ncol=length(rasters))
+	
+	for (i in 2:length(rasters)) {
+		if (extends(class(rasters[[i]]), "Raster")) {
+			compare(c(rasters[[1]], rasters[[i]]))
+		}
+	}
+
+	
 	for (r in 1:nrow(rasters[[1]])) {
 		m[] <- NA
 		for (i in 1:length(rasters)) {

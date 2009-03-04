@@ -1,7 +1,10 @@
 \name{aggregate}
+
 \docType{methods}
+
 \alias{aggregate}
 \alias{aggregate,RasterLayer-method}
+
 \title{Aggregate}
 
 \description{

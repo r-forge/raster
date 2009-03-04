@@ -59,7 +59,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
-		if (!.CanProcessInMemory(x, 1) && filename == '') {
+		if (!.CanProcessInMemory(x, 2) && filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 			if (options('verbose')[[1]]) { cat('values were written to:', filename(raster))	}						

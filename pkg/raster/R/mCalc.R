@@ -22,7 +22,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 		}
 	} else {
 		starttime <- proc.time()
-		if (!.CanProcessInMemory(x, 1) & filename == '') {
+		if (!.CanProcessInMemory(x, 2) & filename == '') {
 			filename=tempfile()
 			outraster <- setFilename(outraster, filename )
 		}

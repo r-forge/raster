@@ -5,20 +5,27 @@
 # Licence GPL v3
 
 
-cover <- function(x, y, filename="", overwrite=TRUE) {
-	if (class(x) != 'RasterLayer' | class(y) != 'RasterLayer') {
-		stop('first two arguments should be objects of class "RasterLayer"')
-	}
-	if (!compare(c(x, y))) { 
-		stop('rasters do not match') 
-	}
+if (!isGeneric("cover")) {
+	setGeneric("cover", function(x,y,...)
+		standardGeneric("cover"))
+}	
+
+setMethod('cover', signature(x='RasterLayer', y='RasterLayer'), 
+	function(x, y, filename="", overwrite=TRUE, filetype='raster', datatype=dataType(x), track=-1) {
+	
+	compare(c(x, y))
+	
 	outRaster <- setRaster(x, filename)
+	outRaster <- setDatatype(outRaster, datatype)
+	
+	# need to check the datatype. if x = INT and y = FLT, result should be FLT?
+	
 	if ( dataContent(x) == 'all' & dataContent(y) == 'all') {
 		x@data@values[is.na(x@data@values)] <- values(y)[is.na(x@data@values)]
 		rm(y)
 		outRaster <- setValues(outRaster, values(x))
 		if (filename(outRaster) != "") { 
-			outraster <- writeRaster(outRaster, overwrite=overwrite) 
+			outraster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite) 
 		}
 	} else {
 		if (dataContent(x) == 'nodata'  &  dataSource(x) == 'ram' ) {
@@ -27,6 +34,13 @@ cover <- function(x, y, filename="", overwrite=TRUE) {
 		if (dataContent(y) == 'nodata'  &  dataSource(y) == 'ram' ) {
 			stop('values for y are not available')
 		}
+		
+		if (!.CanProcessInMemory(x, 2) && filename == '') {
+			filename <- tempfile()
+			outraster <- setFilename(outraster, filename )
+			if (options('verbose')[[1]]) { cat('writing values to:', filename(raster))	}						
+		}
+		
 		v <- vector(length=0)
 		for (r in 1:nrow(outRaster)) {
 			x <- readRow(x, r)
@@ -37,7 +51,7 @@ cover <- function(x, y, filename="", overwrite=TRUE) {
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writeRaster(outRaster, overwrite=overwrite)
+				outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 			}
 		}
 		if (filename(outRaster) == "") {
@@ -46,4 +60,4 @@ cover <- function(x, y, filename="", overwrite=TRUE) {
 	}
 	return(outRaster)
 }
-
+)
