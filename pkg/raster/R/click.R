@@ -8,16 +8,6 @@
 
 
 
-clickBbox <- function(show=TRUE, col="red") {
-	loc <- locator(n=2, type="p")
-	bb <- newBbox(min(loc$x), max(loc$x), min(loc$y), max(loc$y))
-	if (show) {
-		p <- rbind(c(bb@xmin, bb@ymin), c(bb@xmin, bb@ymax), c(bb@xmax, bb@ymax), c(bb@xmax, bb@ymin), c(bb@xmin, bb@ymin) )
-		lines(p, col=col)
-	}
-	return(bb)
-}
-
 
 click <- function(object, n=1, xy=FALSE, type="n", ...) {
 	loc <- locator(n, type, ...)

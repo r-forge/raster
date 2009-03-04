@@ -5,9 +5,18 @@
 # Licence GPL v3
 
 
+setGeneric("median", function(x, ..., na.rm=FALSE)
+	standardGeneric("median"))
 
 
-setMethod("mean", signature(x='Raster'),
+setMethod('median', signature(x='ANY'), 
+	function(x, na.rm=FALSE){
+		return(stats::median(x, na.rm=na.rm))
+	}
+)
+
+
+setMethod("median", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
 
 		rasters <- list(...)
@@ -17,18 +26,21 @@ setMethod("mean", signature(x='Raster'),
 				return(x) 
 			}
 		}
+
 		rasters <- c(x, rasters)
 		rm(x)
 
 		for (i in 1:length(rasters)) {
 			if (class(rasters[[i]]) == 'RasterStack') {
 				r <- rasters[[i]]
-				rasters <- c(rasters[-i], unstack(r))
+				rasters <- rasters[-i]
+				rasters <- c(rasters, unstack(r))
 				rm(r)
 			}
 		}
 
-		return( .summaryRasters(rasters, mean, 'mean', na.rm=na.rm) )
+		return( .summaryRasters(rasters, stats::median, 'median', na.rm=na.rm) )
 	}
 )
+
 

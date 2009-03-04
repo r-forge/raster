@@ -1,24 +1,26 @@
 \name{Coercion}
+
 \alias{asRasterLayer,RasterStack-method}
 \alias{asRasterLayer,SpatialPixelsDataFrame-method}
 \alias{asRasterLayer,SpatialGridDataFrame-method}
 \alias{asRasterLayer}
 
-\title{ Coercion of SpatialGridDataFrame and SpatialPixelsDataFrame objects to a RasterLayer. }
+\title{ Coercion to RasterLayer }
 
 \description{  
 Functions to coerce a SpatialGridDataFrame, SpatialPixelsDataFrame, and RasterStack objects to a RasterLayer object. 
-You can use as( , ) for these coercions (see examples), and for many other coercions between sp and raster objects, but asRasterLayer allows for indicating which variable should be passed to the RasterLayer object.
+You can use \code{as( , )} for this type of coercion (see examples), and for many other coercions between sp and raster objects, 
+but asRasterLayer allows for indicating which variable should be passed to the RasterLayer object.
 RasterLayer objects only have a single variable, whereas a RasterStack and the Spatial* objects can have multiple variables.
 }
 
 \usage{
-asRasterLayer(object, index) 
+asRasterLayer(x, index) 
 }
 
 \arguments{
-  \item{object}{ a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
-  \item{index}{integer (between 1 and nlayers(object) indicating the layer in the RasterStack, or the column in the sp object dataframe to take the values from}
+  \item{x}{ a Raster* type object (SpatialPixel, SpatialPixelDataFrame , SpatialGrid, or SpatialGridDataFrame }
+  \item{index}{integer (between 1 and \code{nlayers(x)} indicating the layer in the RasterStack, or the column in the sp object dataframe to take the values from}
 }
 
 \details{

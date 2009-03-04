@@ -1,14 +1,18 @@
 \name{click}
 \alias{click}
-\alias{clickBbox}
 
-\title{ Click on map }
+\title{ Click }
 \description{
-  Click on a map to get values, coordinates or a bounding box
+  Click on a plot (map) to get values of a Raster* object at a location; and optionally the coordinates for the location. 
+  Multiple locations can be clicked on by specifying \code{n=}. 
 }
 \usage{
 click(object, n=1, xy=FALSE, type = "n", ...)
-clickBbox(show = TRUE, col = "red") 
+}
+
+\note{
+  The plot only provides the coordinates (xy pair), the values are read from the Raster* object that is passed as an argument.
+  Thus you can extract values for a Raster* object that is not plotted, as long as it shares the coordinate system (CRS) with the layer that is plotted.
 }
 
 \arguments{
@@ -17,13 +21,10 @@ clickBbox(show = TRUE, col = "red")
   \item{xy}{show xy coordinates}
   \item{type}{One of "n", "p", "l" or "o". If "p" or "o" the points are plotted; if "l" or "o" they are joined by lines. See ?locator}
   \item{...}{additional graphics parameters used if type != "n" for plotting the locations. See ?locator}   
-  \item{show}{logical. If \code{TRUE}, the bounding box will be drawn on the map}  
-  \item{col}{the color of the bounding box lines}    
  }
  
 \value{
-click: the value of \code{object} at the point clicked on; and the coordinates if \code{xy==TRUE}.
-clickBbox: a BoundingBox object
+The value(s) of \code{object} at the point(s) clicked on; and the coordinates if \code{xy==TRUE}.
 } 
 
 \author{ Robert J. Hijmans }

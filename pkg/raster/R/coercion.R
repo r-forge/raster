@@ -103,24 +103,24 @@ setAs('SpatialPixelsDataFrame', 'RasterStack',
 
 
 if (!isGeneric("asRasterLayer")) {
-	setGeneric("asRasterLayer", function(object, index)
+	setGeneric("asRasterLayer", function(x, index)
 		standardGeneric("asRasterLayer"))
 }	
 
 
-setMethod('asRasterLayer', signature(object='RasterStack'), 
-	function(object, index){
-		if (nlayers(object) > 0) {
-			dindex <- max(1, min(nlayers(object), index))
+setMethod('asRasterLayer', signature(x='RasterStack'), 
+	function(x, index){
+		if (nlayers(x) > 0) {
+			dindex <- max(1, min(nlayers(x), index))
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
-			rs <- object@layers[[dindex]]
-			if (dataContent(object) == 'all') {
-				rs <- setValues(rs, values(object)[,dindex])
+			rs <- x@layers[[dindex]]
+			if (dataContent(x) == 'all') {
+				rs <- setValues(rs, values(x)[,dindex])
 			}
 		} else {
 			rs <- new("RasterLayer")
-			rs <- setBbox(rs, getBbox(object))
-			rs <- setRowCol(rs, nrow(object), ncol(object))
+			rs <- setBbox(rs, getBbox(x))
+			rs <- setRowCol(rs, nrow(x), ncol(x))
 		}
 		return(rs)
 	}
@@ -128,25 +128,25 @@ setMethod('asRasterLayer', signature(object='RasterStack'),
 
 
 
-setMethod('asRasterLayer', signature(object='SpatialPixelsDataFrame'), 
-	function(object, index){
+setMethod('asRasterLayer', signature(x='SpatialPixelsDataFrame'), 
+	function(x, index){
 		r <- raster()
-		r <- setBbox(r, getBbox(object))
-		r <- setProjection(r, object@proj4string)
-		r <- setRowCol(r, object@grid@cells.dim[2], object@grid@cells.dim[1])
-		dindex <- max(1, min(dim(object@data)[2], index))
+		r <- setBbox(r, getBbox(x))
+		r <- setProjection(r, x@proj4string)
+		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
+		dindex <- max(1, min(dim(x@data)[2], index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
 # to become an option, but currently support for sparse is too .....  sparse	
 		sparse <- FALSE
 		if (!sparse) {
-				object <- as(object, 'SpatialGridDataFrame')
-				r <- setValues(r, object@data[[dindex]])
+				x <- as(x, 'SpatialGridDataFrame')
+				r <- setValues(r, x@data[[dindex]])
 		} else {
-				cells <- object@grid.index
+				cells <- x@grid.index
 				if (length(cells)==0) {
-					cells <- cellFromXY(r, object@coords)
+					cells <- cellFromXY(r, x@coords)
 				}
-				r <- setValuesSparse(r, cells, object@data[[dindex]])
+				r <- setValuesSparse(r, cells, x@data[[dindex]])
 		}
 		return(r)
 	}
@@ -154,15 +154,15 @@ setMethod('asRasterLayer', signature(object='SpatialPixelsDataFrame'),
 
 
 
-setMethod('asRasterLayer', signature(object='SpatialGridDataFrame'), 
-	function(object, index){
+setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'), 
+	function(x, index){
 		r <- raster()
-		r <- setBbox(r, getBbox(object))
-		r <- setProjection(r, object@proj4string)
-		r <- setRowCol(r, object@grid@cells.dim[2], object@grid@cells.dim[1])
-		dindex <- max(1, min(dim(object@data)[2], index))
+		r <- setBbox(r, getBbox(x))
+		r <- setProjection(r, x@proj4string)
+		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
+		dindex <- max(1, min(dim(x@data)[2], index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
-		r <- setValues(r, object@data[[dindex]])
+		r <- setValues(r, x@data[[dindex]])
 		return(r)
 	}	
 )

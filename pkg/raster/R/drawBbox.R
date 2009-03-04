@@ -1,0 +1,19 @@
+# R function for the raster package
+# Author: Robert J. Hijmans
+# International Rice Research Institute. Philippines
+# contact: r.hijmans@gmail.com
+# Date : January 2009
+# Version 0.8
+# Licence GPL v3
+
+
+
+drawBbox <- function(show=TRUE, col="red") {
+	loc <- locator(n=2, type="p")
+	bb <- newBbox(min(loc$x), max(loc$x), min(loc$y), max(loc$y))
+	if (show) {
+		p <- rbind(c(bb@xmin, bb@ymin), c(bb@xmin, bb@ymax), c(bb@xmax, bb@ymax), c(bb@xmax, bb@ymin), c(bb@xmin, bb@ymin) )
+		lines(p, col=col)
+	}
+	return(bb)
+}

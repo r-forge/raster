@@ -51,12 +51,18 @@
 
 
 
-setMethod("Summary", signature(x='RasterLayer'),
+setMethod("Summary", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
 
 		rasters <- list(...)
-		if (length(rasters)==0) { return(x) }
-
+		if (class(x) == 'RasterLayer') {
+			if (length(rasters)==0) { 
+				return(x) 
+			}
+		}
+		rasters <- c(x, rasters)
+		rm(x)
+		
 		for (i in 1:length(rasters)) {
 			if (class(rasters[[i]]) == 'RasterStack') {
 				r <- rasters[[i]]
@@ -65,8 +71,6 @@ setMethod("Summary", signature(x='RasterLayer'),
 				rm(r)
 			}
 		}
-		rasters <- c(x, rasters)
-		rm(x)
 
 		fun <- sys.call(sys.parent())[[1]]
 		funname <- as.character(sys.call(sys.parent())[[1]])
@@ -74,18 +78,5 @@ setMethod("Summary", signature(x='RasterLayer'),
 		return( .summaryRasters(rasters, fun, funname, na.rm) )
 	}
 )
-	
-
-
-setMethod("Summary", signature(x='RasterStack'),
-	function(x, ..., na.rm=FALSE){
-		
-		x1 <- asRasterLayer(x, 1)
-		x <- dropLayer(x, 1)
-		
-		return( callGeneric(x1, x, ..., na.rm=na.rm))
-	}
-)
-
 
 

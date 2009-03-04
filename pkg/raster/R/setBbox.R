@@ -24,7 +24,7 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 		nc <- as.integer(round( (xmax(newobj) - xmin(newobj)) / xrs ))
 		if (nc < 1) { stop( "xmin and xmax are less than one cell apart" ) 
 		} else { newobj@ncols <- nc }
-		nr <- as.integer(round( (ymax(newobj) - ymin(newobj)) / xrs ) )
+		nr <- as.integer(round( (ymax(newobj) - ymin(newobj)) / yrs ) )
 		if (nr < 1) { stop( "ymin and ymax are less than one cell apart" )
 		} else { newobj@nrows <- nr }
 		newobj@bbox@xmax <- newobj@bbox@xmin + ncol(newobj) * xrs

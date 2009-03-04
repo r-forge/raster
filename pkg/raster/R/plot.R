@@ -1,8 +1,9 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,8
+# Version 0.8
 # Licence GPL v3
+
 
 .bboxmatrix <- function(x) {
 	xy <- matrix(NA, nrow=5, ncol=2)
@@ -26,20 +27,6 @@ setMethod("plot", signature(x='BoundingBox', y='ANY'),
 		if (class(y) == 'BoundingBox') {
 			lines(y)
 		}
-	}
-)	
-
-
-if (!isGeneric("lines")) {
-	setGeneric("lines", function(x, ...)
-		standardGeneric("lines"))
-}
-
-setMethod("lines", signature(x='BoundingBox'), 
-	function(x, ...)  {
-		xy <- .bboxmatrix(x)
-		xy[5,] <- xy[1,]
-		lines(xy, ...)
 	}
 )	
 

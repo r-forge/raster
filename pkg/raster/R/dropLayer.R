@@ -4,8 +4,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
-
 dropLayer <- function(rstack, indices) {
 	indices <- sort(indices, decreasing=TRUE)
 	for (i in 1:length(indices)) {

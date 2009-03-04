@@ -1,25 +1,30 @@
 \name{Summary}
 \docType{methods}
-\alias{Summary-methods}
-\alias{Summary,RasterLayer-method}
-\alias{Summary,RasterStack-method}
+
+\alias{Summary,Raster-method}
 \alias{mean,Raster-method}
-\alias{mean,RasterStack-method}
+\alias{median}
+\alias{median,ANY-method}
+\alias{median,Raster-method}
 
 \title{ Summary methods }
 
 \description{
  The following summary methods are available for Raster* objects:
- \code{mean, max, min, range, prod, sum, any, all}
+ 
+ \code{mean, median, max, min, range, prod, sum, any, all}
 }
-
-
 
 \note{
  These methods compare layers and the result of these methods is always a single RasterLayer. 
- The generic functin \code{range} returns 2 values (the minimum and maximum value of a vector). The Raster* implementations returns a single values (the range)
  
- For the extreme values within in a layer use maxValue() and minValue()
+ You can mix RasterLayer, RasterStack objects and single numeric or logical values. 
+ However, because generic functions are used, the appropriate method is chosen based on the first argument: '\code{x}'. 
+ This means that if \code{r} is a RasterLayer object, \code{mean(r, 5)} will work, but \code{mean(5, r)} will not work.
+ 
+ The generic function \code{range} returns 2 values (the minimum and maximum value of a vector). The Raster* implementations returns a single values (the range)
+ 
+ For the extreme values within in a layer use \code{maxValue} and \code{minValue}
 }
 
 \value{a RasterLayer}
@@ -40,3 +45,4 @@ r <- mean(s)
 
 \keyword{methods}
 \keyword{spatial}
+
