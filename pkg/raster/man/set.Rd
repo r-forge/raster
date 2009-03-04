@@ -1,6 +1,7 @@
 \name{set}
 \alias{setRaster}
 \alias{setFilename}
+\alias{filename<-}
 \alias{setProjection}
 \alias{setRowCol}
 \alias{ncol<-}

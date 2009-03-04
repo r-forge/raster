@@ -44,7 +44,7 @@ A new value is computed for the resulting cells according to a user specified fu
 }
 
 \value{
-A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
+A new RasterLayer object, and in some cases the side effect of a new file on disk.
 }
 
 
