@@ -1,24 +1,29 @@
 \name{raster-package}
 \alias{raster-package}
 \docType{package}
-\title{
-Analysis and modeling of geographic (spatial) raster data.
-}
-\description{
-This packages provides classes and functions to manipulate spatial data in 'raster' (also called 'grid') form. 
 
+\title{
+Analysis and modeling of raster data.
 }
+
+\description{
+This packages provides classes and functions to manipulate geographic (spatial) data in 'raster' form.
+Raster data divides the world in cells (rectangles; pixels) of equal size (in units of the projection). 
+Such data are also referred to as 'grid' data.
+
+The package should be particularly useful when using very large datasets that can not be loaded into the computer's memory. Functions will
+work correctly, because they will read, process, and write blocks of data, without loading all values into memory. 
+}
+
 \details{
 \tabular{ll}{
 Package: \tab raster\cr
 Type: \tab Package\cr
 Version: \tab 0.8\cr
-Date: \tab 2009-02-21\cr
+Date: \tab 2009-03-5\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
-This package should be particularly useful when using rather large datasets, as it can
-use datasources that are stored on disk without loading them into memory. 
 
 }
 \author{

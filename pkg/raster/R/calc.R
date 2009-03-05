@@ -33,7 +33,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if (dataSource(x) == 'disk') {
-		if (!.CanProcessInMemory(x, 2) & filename == '') {
+		if (!.CanProcessInMemory(x, 3) & filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 		}

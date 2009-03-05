@@ -42,7 +42,7 @@ setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 
 setMethod('!', signature(x='RasterLayer'),
 	function(x){
-		if (.CanProcessInMemory(x, 2)) {
+		if (.CanProcessInMemory(x, 3)) {
 			return(setValues(x, !values(x)))
 		} else {
 			raster <- setRaster(x, filename=tempfile())

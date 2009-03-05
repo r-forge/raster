@@ -35,7 +35,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 			stop('values for y are not available')
 		}
 		
-		if (!.CanProcessInMemory(x, 2) && filename == '') {
+		if (!.CanProcessInMemory(x, 4) && filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						

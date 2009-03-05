@@ -8,12 +8,24 @@
 \title{Aggregate}
 
 \description{
-Aggregate a RasterLayer to create a new raster with a lower resolution (larger cells). Aggregation groups rectangular areas of RasterLayer cells to create a new RaterLayer with larger cells. 
+Aggregate a RasterLayer to create a new raster with a lower resolution (larger cells). Aggregation groups rectangular areas of RasterLayer cells to create a new RasterLayer with larger cells. 
 A new value is computed for the resulting cells according to a user specified function (default value = \code{mean}). 
+}
+
+\usage{
+aggregate(x, ...) 
+}
+
+
+\arguments{
+  \item{x}{A RasterLayer object}
+  \item{...}{Additional arguments. See below, under Methods}  
 }
 
 \section{Methods}{
 \describe{
+A full call to the aggregate method is:
+
 \code{aggregate(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) }
  
   \item{\code{x}}{a RasterLayer object}

@@ -36,7 +36,7 @@ setMethod("Math", signature(x='RasterLayer'),
 setMethod("Math2", signature(x='RasterLayer'), 
 	function (x, digits=0) {
 		digits <- max(0, digits)
-		if (.CanProcessInMemory(x, 1)) {
+		if (.CanProcessInMemory(x, 3)) {
 			x <- setValues(x, callGeneric(values(x), digits))
 			if (digits == 0) {
 				x <- setDatatype(x, 'INT4S')

@@ -6,7 +6,7 @@
 
 
 
-readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
+sampleSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 	if (!(is.na(bndbox))) { 
 		rcut <- crop(raster, bndbox) 
 		warning('bndbox option has not been implemented yet')

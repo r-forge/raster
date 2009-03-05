@@ -52,7 +52,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 	}
 	else {
 		if (subsample) {
-			object <- readSkip(object, maxdim=maxdim, asRaster=TRUE)
+			object <- sampleSkip(object, maxdim=maxdim, asRaster=TRUE)
 		} else {
 			object <- readAll(object)
 		}

@@ -1,11 +1,13 @@
 \name{crop}
 \alias{crop}
 
-\title{Crop a RasterLayer}
+\title{Crop}
+
 \description{
-crop returns a subset of the input RasterLayer as specified by a bounding box (or object that has a bounding box). 
+crop returns a geographic subset of the input RasterLayer as specified by a bounding box (or object that has a bounding box). 
 Areas in the bounding box outside of the intput RasterLayer are ignored, and the BoundingBox is aligned to the cells of the input RasterLayer. 
 }
+
 \usage{
 crop(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', track=-1) 
 }

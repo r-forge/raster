@@ -68,7 +68,7 @@ function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatyp
 		
 	} else {
 		if (filename(outraster) == "") {
-			if (!.CanProcessInMemory(outraster, 2)) {
+			if (!.CanProcessInMemory(outraster, 4)) {
 				filename <- tempfile()
 				outraster <- setFilename(outraster, filename )
 			} else {

@@ -1,7 +1,7 @@
 \name{Sample}
 
-\alias{readRandom}
-\alias{readSkip}
+\alias{sampleRandom}
+\alias{sampleSkip}
 
 \title{Sample values of a RasterLayer}
 
@@ -10,8 +10,8 @@ read a sample from a RasterLayer, either systematic or random
 }
 
 \usage{
-readSkip(raster, maxdim=500, bndbox=NA, asRaster=FALSE)
-readRandom(raster, n=500, na.rm = TRUE)
+sampleSkip(raster, maxdim=500, bndbox=NA, asRaster=FALSE)
+sampleRandom(raster, n=500, na.rm = TRUE)
 }
 
 \arguments{
@@ -27,7 +27,8 @@ readRandom(raster, n=500, na.rm = TRUE)
 \author{Robert J. Hijmans}
 
 \examples{
- rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+ r <- rasterFromFile(system.file("external/test.ag", package="sp"))
+ v <- sampleSkip(r, 10)
 }
 
 \keyword{spatial}

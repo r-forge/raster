@@ -36,11 +36,11 @@ addRasters <- function(rstack, rasters) {
 	if (class(rstack) != "RasterStack") { 
 		stop("rstack should be a RasterStack object") 
 	}
-	if (length(rasters) == 1 & class(rasters) == 'RasterLayer') {
+	if (class(rasters) == 'RasterLayer') {
 		rasters <- list(rasters)
 	}
 
-	for (i in 1 : length(rasters)) { 
+	for (i in 1:length(rasters)) { 
 		raster <- rasters[[i]]
 
 		if (dataContent(raster) != 'all' & dataSource(raster) == 'ram') {

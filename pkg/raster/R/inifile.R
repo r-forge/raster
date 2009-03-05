@@ -5,11 +5,6 @@
 # Version 0.8
 # Licence GPL v3
 
-# Read inifile into a matrix of 'section', 'name', value' 
-# this function allows for using inistrings that have "=" in the value
-# e.g. "projection = +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
-
-
 readIniFile <- function(filename) {
 
 	strSplitOnFirstToken <- function(s, token="=") {

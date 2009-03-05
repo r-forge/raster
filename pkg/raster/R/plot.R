@@ -48,8 +48,8 @@ setMethod("plot", signature(x='RasterLayer', y='RasterLayer'),
 	function(x, y, maxdim=1000, cex=0.1, ...)  {
 		comp <- compare(c(x, y), bb=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
 		nc <- ncell(x)
-		x <- readSkip(x, maxdim=maxdim)
-		y <- readSkip(y, maxdim=maxdim)
+		x <- sampleSkip(x, maxdim=maxdim)
+		y <- sampleSkip(y, maxdim=maxdim)
 		if (length(x) < nc) {
 			warning(paste('plot used a sample of ', round(100*length(x)/nc), "% of the cells", sep=""))
 		}
@@ -68,7 +68,7 @@ setMethod('hist', signature(x='Raster'),
 				if (ncell(x) <= maxsamp) {
 					values <- na.omit(values(readAll(x)))
 				} else {
-					values <- readRandom(x, maxsamp)
+					values <- sampleRandom(x, maxsamp)
 					msg <- paste(round(100 * maxsamp / ncell(x)), "% of the raster cells were used", sep="")
 					if (maxsamp > length(values)) {
 						msg <- paste(msg, " (of which ", 100 - round(100 * length(values) / maxsamp ), "% were NA)", sep="")

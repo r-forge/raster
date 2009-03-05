@@ -8,7 +8,7 @@
 
 #sample while reading and return matrix (for plotting )
 
-readRandom <- function(raster, n=500, na.rm = TRUE) {
+sampleRandom <- function(raster, n=500, na.rm = TRUE) {
 	if (dataContent(raster) == 'all') {
 		values <- values(raster)
 		if (na.rm) { values <- na.omit(values) }
@@ -46,7 +46,7 @@ readRandom <- function(raster, n=500, na.rm = TRUE) {
 
 
 
-readSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
+sampleSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 	if (!(is.na(bndbox))) { 
 		rcut <- crop(raster, bndbox) 
 		warning('bndbox option has not been implemented yet')
