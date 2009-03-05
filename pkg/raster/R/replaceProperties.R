@@ -34,18 +34,18 @@
 }
 
 'xmin<-' <- function(x, value) {
-	return(changeBbox(x, xmn=value))
+	return(changeExtent(x, xmn=value))
 }
 
 'xmax<-' <- function(x, value) {
-	return(changeBbox(x, xmx=value))
+	return(changeExtent(x, xmx=value))
 }
 
 'ymin<-' <- function(x, value) {
-	return(changeBbox(x, ymn=value))
+	return(changeExtent(x, ymn=value))
 }
 
 'ymax<-' <- function(x, value) {
-	return(changeBbox(x, ymx=value))
+	return(changeExtent(x, ymx=value))
 }
 

@@ -22,7 +22,7 @@ projectBbox <- function(object, projstring) {
 	ymin <- min(p[,2])
 	ymax <- max(p[,2])	
 	bb <- newBbox(xmin, xmax, ymin, ymax)
-	obj <- setBbox(object, bb)
+	obj <- setExtent(object, bb)
 	obj <- setProjection(obj, projstring)
 	return(obj)
 }

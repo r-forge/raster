@@ -7,10 +7,11 @@
 # Licence GPL v3
 
 
-setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
-	oldbb <- getBbox(object)
+setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
+
+	oldbb <- getBbox(x)
 	bb <- getBbox(bndbox)
-	newobj <- clearValues(object)
+	newobj <- clearValues(x)
 	
 	if (snap) {
 		bb <- alignBbox(bb, newobj)
@@ -19,8 +20,8 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 	newobj@bbox <- bb
 	
 	if (keepres) {
-		xrs <- xres(object)
-		yrs <- yres(object)
+		xrs <- xres(x)
+		yrs <- yres(x)
 		nc <- as.integer(round( (xmax(newobj) - xmin(newobj)) / xrs ))
 		if (nc < 1) { stop( "xmin and xmax are less than one cell apart" ) 
 		} else { newobj@ncols <- nc }
@@ -30,14 +31,14 @@ setBbox <- function(object, bndbox, keepres=FALSE, snap=FALSE) {
 		newobj@bbox@xmax <- newobj@bbox@xmin + ncol(newobj) * xrs
 		newobj@bbox@ymax <- newobj@bbox@ymin + nrow(newobj) * yrs
 		
-		if (dataContent(object) == 'all') {
-			indices <- cellsFromBbox(object, bb)
-			newobj <- setValues(newobj, values(object)[indices])
+		if (dataContent(x) == 'all') {
+			indices <- cellsFromBbox(x, bb)
+			newobj <- setValues(newobj, values(x)[indices])
 		}
-	} else if (class(object) != "BasicRaster") {
-		if (ncol(object)==ncol(newobj) & nrow(object)==nrow(newobj))  {
-			if (dataContent(object) == 'all') {
-				newobj <- setValues(newobj, values(object))
+	} else if (class(x) != "BasicRaster") {
+		if (ncol(x)==ncol(newobj) & nrow(x)==nrow(newobj))  {
+			if (dataContent(x) == 'all') {
+				newobj <- setValues(newobj, values(x))
 			}	
 		}
 	}

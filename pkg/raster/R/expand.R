@@ -26,7 +26,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 	
 	outraster <- setRaster(raster, filename)
 	bndbox <- newBbox(xmn, xmx, ymn, ymx)
-	outraster <- setBbox(outraster, bndbox, keepres=T)
+	outraster <- setExtent(outraster, bndbox, keepres=T)
 
 	startrow <- rowFromY(outraster, ymax(raster))
 	startcol <- colFromX(outraster, xmin(raster))

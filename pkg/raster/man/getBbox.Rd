@@ -1,4 +1,4 @@
-\name{getBoundingBox}
+\name{getBBox}
 
 \alias{getBbox}
 \alias{getBbox,BoundingBox-method}

@@ -13,7 +13,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 	bb <- intersectBbox(c(raster, bndbox))
 	bb <- alignBbox(bb, raster)
 	outraster <- setRaster(raster, filename)
-	outraster <- setBbox(outraster, bb, keepres=T)
+	outraster <- setExtent(outraster, bb, keepres=T)
 	
 	if (dataContent(raster) == 'all')  {
 		first_start_cell <- cellFromXY(raster, c(xmin(outraster) + 0.5 * xres(raster), ymax(outraster) - 0.5 * yres(raster) ))	

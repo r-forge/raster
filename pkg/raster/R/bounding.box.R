@@ -8,17 +8,6 @@
 
 
 
-
-changeBbox <- function(object, xmn=xmin(object), xmx=xmax(object), ymn=ymin(object), ymx = ymax(object), keepres=FALSE) {
-	bb <- newBbox(xmn, xmx, ymn, ymx) 
-	if (class(object) == 'BoundingBox') { 
-		return(bb)
-	}
-	object <- setBbox(object, bb, keepres=keepres) 
-	return(object)
-}
-
-
 newBbox <- function(xmn, xmx, ymn, ymx) {
 	bb <- new('BoundingBox')
 	bb@xmin <- xmn

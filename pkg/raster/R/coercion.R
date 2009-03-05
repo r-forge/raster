@@ -119,7 +119,7 @@ setMethod('asRasterLayer', signature(x='RasterStack'),
 			}
 		} else {
 			rs <- new("RasterLayer")
-			rs <- setBbox(rs, getBbox(x))
+			rs <- setExtent(rs, getBbox(x))
 			rs <- setRowCol(rs, nrow(x), ncol(x))
 		}
 		return(rs)
@@ -131,7 +131,7 @@ setMethod('asRasterLayer', signature(x='RasterStack'),
 setMethod('asRasterLayer', signature(x='SpatialPixelsDataFrame'), 
 	function(x, index){
 		r <- raster()
-		r <- setBbox(r, getBbox(x))
+		r <- setExtent(r, getBbox(x))
 		r <- setProjection(r, x@proj4string)
 		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
 		dindex <- max(1, min(dim(x@data)[2], index))
@@ -157,7 +157,7 @@ setMethod('asRasterLayer', signature(x='SpatialPixelsDataFrame'),
 setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'), 
 	function(x, index){
 		r <- raster()
-		r <- setBbox(r, getBbox(x))
+		r <- setExtent(r, getBbox(x))
 		r <- setProjection(r, x@proj4string)
 		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
 		dindex <- max(1, min(dim(x@data)[2], index))
@@ -172,7 +172,7 @@ setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'),
 
 .asRasterStack <- function(spgrid) {
 	stk <- new("RasterStack")
-	stk <- setBbox(stk, getBbox(spgrid))
+	stk <- setExtent(stk, getBbox(spgrid))
 	stk <- setProjection(stk, spgrid@proj4string)
 	stk <- setRowCol(stk, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
 	

@@ -41,7 +41,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	outRaster <- setRaster(x, filename)
 	outRaster <- setDatatype(outRaster, datatype)
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
-	outRaster <- setBbox(outRaster, bndbox, keepres=F)
+	outRaster <- setExtent(outRaster, bndbox, keepres=F)
 	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
 	
 	if (dataContent(x) == 'all') {	

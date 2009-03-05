@@ -12,10 +12,14 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 	if ( is.null(dim(rclmat)) ) { 
 		rclmat <- matrix(rclmat, ncol=3, byrow=TRUE) 
 	} else if ( dim(rclmat)[2] == 1 ) { 
-		rclmat <- matrix(rclmat, ncol=3, byrow=TRUE) }
+		rclmat <- matrix(rclmat, ncol=3, byrow=TRUE) 
+	}
 	if ( dim(rclmat)[2] != 3 ) { stop('rclmat must have 3 columns') }
 	colnames(rclmat) <- c("From", "To", "Becomes")	
-	print(rclmat)
+	
+	if (options('verbose')[[1]]) {
+		print(rclmat)
+	}
 	
 	outraster <- setRaster(raster, filename)
 	outraster <- setDatatype(outraster, datatype) 

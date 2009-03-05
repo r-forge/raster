@@ -52,7 +52,7 @@ addRasters <- function(rstack, rasters) {
 				rstack <- raster
 			} else {
 				rstack <- setRowCol(rstack, nrow(raster), ncol(raster))
-				rstack <- setBbox(rstack, raster, snap=FALSE)
+				rstack <- setExtent(rstack, raster, snap=FALSE)
 				rstack <- setProjection(rstack, projection(raster))
 
 				nl <- rstack@data@nlayers + nlayers(raster)

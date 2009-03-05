@@ -26,7 +26,7 @@ setRes <- function(object, xres, yres=xres) {
 	nr <- round( (bb@ymax - bb@ymin) / yres )
 	bb@xmax <- bb@xmin + nc * xres
 	bb@ymin <- bb@ymax - nr * yres
-	object	<- setBbox(object, bb)
+	object	<- setExtent(object, bb)
 	object <- setRowCol(object, nr, nc)
 	return(object)
 }
@@ -93,7 +93,7 @@ roundCoords <- function(object, digits=0) {
 	if (class(object) == 'BoundingBox') {
 		return(b)
 	}
-	object <- setBbox(object, b)
+	object <- setExtent(object, b)
 	return(object)
 }
 

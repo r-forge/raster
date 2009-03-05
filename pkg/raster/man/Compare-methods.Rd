@@ -23,7 +23,7 @@ as(r1, "BasicRaster") == as(r2, "BasicRaster")
 r3 <- r1 == r2
 
 b <- newBbox(0, 360, 0, 180)
-r4 <- setBbox(r2, b)
+r4 <- setExtent(r2, b)
 as(r2, "BasicRaster") != as(r4, "BasicRaster")
 # The following would give an error. You cannot compare RasterLayer object that do not have the same BasicRaster properties.
 #r3 <- r1 > r4
