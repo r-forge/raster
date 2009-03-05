@@ -55,7 +55,7 @@ r <- rasterFromFile(system.file("external/test.ag", package="sp"))
 minValue(r)
 maxValue(r)
 
-r1 <- setMinMax(r, TRUE)
+r1 <- setMinMax(r)
 # now they are known:
 minValue(r1)
 maxValue(r1)

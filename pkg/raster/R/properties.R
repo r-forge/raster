@@ -90,8 +90,11 @@ origin <- function(object) {
 
 
 minValue <- function(object, layer=1) {
-	if (layer < 1) { return(NA)
-	} else return(object@data@min[layer])
+	if (layer < 1) { 
+		return(NA)
+	} else {
+		return(object@data@min[layer])
+	}
 }
 
 

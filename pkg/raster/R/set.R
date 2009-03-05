@@ -106,41 +106,6 @@ roundCoords <- function(object, digits=0) {
 	return(bb)
 }
 
-	
-setMinMax <- function(raster, readfromdisk=FALSE) {
-	if (dataContent(raster) != 'all' & dataContent(raster) != 'sparse') {
-		if (readfromdisk) {
-			raster@data@min <- 3e34
-			raster@data@max <- -3e34
-			for (r in 1:nrow(raster)) {
-				raster <- readRow(raster, r)
-				rsd <- na.omit(values(raster)) # min and max values
-				if (length(rsd) > 0) {
-					raster@data@min <- min(minValue(raster), min(rsd))
-					raster@data@max <- max(maxValue(raster), max(rsd))
-				}	
-			}
-			raster <- clearValues(raster)
-		} else {
-			stop('no data in memory, and readfromdisk=FALSE')
-		}	
-	} else {
-		vals <- na.omit(values(raster)) # min and max values
-		if (length(vals) > 0) {
-			raster@data@min <- min(vals)
-			raster@data@max <- max(vals)
-		} else {
-			raster@data@min <- NA
-			raster@data@max <- NA
-		}
-	}
-#	if (raster@file@datatype == 'logical') {
-#		raster@data@min <- as.logical(raster@data@min)
-#		raster@data@max <- as.logical(raster@data@max)
-#	}
-	raster@data@haveminmax <- TRUE
-	return(raster)
-}
 
 setNAvalue <- function(raster, value) {
 	raster@file@nodatavalue <- value
