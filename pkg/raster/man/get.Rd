@@ -2,6 +2,8 @@
 \alias{colFromCell}
 \alias{rowFromCell}
 \alias{cellFromRowCol}
+\alias{cellsFromRow}
+\alias{cellsFromCol}
 \alias{colFromX}
 \alias{rowFromY}
 \alias{cellFromXY}
@@ -24,6 +26,8 @@ These functions get the column, row, or cell number of a Raster* object for a x 
 colFromCell(object, cell)
 rowFromCell(object, cell)
 cellFromRowCol(object, rownr, colnr)
+cellsFromRow(object, rownr)
+cellsFromCol(object, colnr)
 colFromX(object, x)
 rowFromY(object, y)
 cellFromXY(object, xy)
@@ -42,9 +46,9 @@ validRows(object, rownr)
   \item{x}{x coordinate(s)}
   \item{y}{y coordinate(s)}
   \item{xy}{matrix of x and y coordinates, or a SpatialPoints or SpatialPointsDataFrame object}
-  \item{colnr}{column number(s)}
-  \item{rownr}{row number(s)}
-  \item{bbox}{A boundinBox object (or an object that can be coerced to a BoundingBox object)}
+  \item{colnr}{column number; or vector of column numbers}
+  \item{rownr}{row number; or vector of row numbers}
+  \item{bbox}{A BoundingBox object (or an object that can be coerced to a BoundingBox object)}
   \item{asSpatialPoints}{return a SpatialPoints object (sp package) instead of a matrix}
 }
   

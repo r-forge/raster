@@ -4,12 +4,18 @@
 # Version 0.8
 # Licence GPL v3
 
-
-cells <- function(x, ...) {
+cellStats <- function(x, ..., na.rm=TRUE) {
 	funs <- list(...)
 	if (length(funs) == 0) {
-		return(NULL)
+		stop('you must provide a function as argument')
 	}
+	
+	for(i in seq(along=funs)) {
+		if (class(funs[[i]]) != 'function') {
+			stop('only functions are allowed as ... arguments')
+		}
+	}
+	
 	res <- list()
 	if (dataContent(x) != 'all') {
 		if (dataSource(x) == 'ram') {
@@ -21,10 +27,15 @@ cells <- function(x, ...) {
 	}
 	if (dataContent(x) == 'all') {
 		for(i in seq(along=funs)) {
-			res[i] <- funs[[i]](x@data@values)
+			if (na.rm) {
+				res[i] <- funs[[i]](na.omit(x@data@values))
+			} else {
+				res[i] <- funs[[i]](x@data@values)
+			}
 		}
 	} else {
 		stop('sorry, only implemented for rasters that can be loaded into memory')
 	}
+	return(unlist(res))
 }
 	

@@ -1,34 +1,45 @@
 \name{stats}
-\alias{Mode}
-\alias{CV}
 
-\title{Miscellaneous statistical functions}
+\alias{modal}
+\alias{modal,ANY-method}
+\alias{modal,Raster-method}
+
+
+\alias{cv}
+\alias{cv,ANY-method}
+\alias{cv,Raster-method}
+
+\title{mode and coefficien of variation}
+
 \description{
   Miscellanous statistical functions: mode and coefficient of variation
 }
+
 \usage{
-Mode(x, ties='random', na.rm = TRUE)
-CV(x, na.rm = TRUE, singlevalueaszero=TRUE)
+modal(x, ..., ties='random', na.rm = FALSE)
+cv(x, ..., aszero=FALSE, na.rm = FALSE)
 }
+
 \arguments{
-  \item{x}{A vector of numbers (typically integers for mode)}
+  \item{x}{A vector of numbers (typically integers for modal)}
+  \item{...}{additional (vectors of) numbers}
   \item{ties}{character. Indicates how to treat ties. Either 'random', 'lowest', 'highest', or 'NA'}
   \item{na.rm}{Remove (ignore) NA values}
-  \item{singlevalueaszero}{If \code{TRUE} a zero is returned (rather than an NA) if the mode of single value is computed}
+  \item{aszero}{logical. If \code{TRUE}, a zero is returned (rather than an NA) if the cv of single value is computed}
 }
 
 \value{
   Mode returns the modal (most frequent) value of a vector of values, ties are broken at random
-  CV returns the coefficient of variation (expressed as a percentage). If there is only a single value, sd = NA
-  and CV returns NA if singlevaluecvzero=FALSE. However, the default is that cv=0 in this case.
+  cv returns the coefficient of variation (expressed as a percentage). If there is only a single value, \code{sd} is \code{NA}
+  and \code{cv} returns \code{NA} if \code{aszero=FALSE} (the default). However, if (\code{aszero=TRUE}), \code{cv} returns \code{0}.
 }
 
 \author{Robert J. Hijmans}
 
 \examples{
-	data <- c(0,1,2,3,3,3,3,4,4,4,5,5,6,7,7,8,9,NA)
-	Mode(data)
-	CV(data)
+data <- c(0,1,2,3,3,3,3,4,4,4,5,5,6,7,7,8,9,NA)
+#modal(data)
+#cv(data)
 }
-\keyword{univar}
 
+\keyword{univar}

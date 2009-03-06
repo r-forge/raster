@@ -6,42 +6,62 @@
 
 
 
-
-setMethod("[", "RasterLayer",
-	function(x,i,j,...,drop=FALSE) {
-		if (!missing(j)) { stop("incorrect number of dimensions") }
-# consider row, sparse....		
-		if (missing(i)) { 
-			if (dataContent(x) == 'all') {
-				return(values(x)) 
+setMethod("[", c("RasterLayer","ANY", "ANY"),
+	function(x,i,j,...,drop=TRUE) {
+		if (dataContent(x) != 'all') {
+			if (dataSource(x) != 'disk') {
+				stop('no data associated with this RasterLayer object')
 			} else {
-				if (dataSource(x) != 'disk') {
-					stop('no data associated with this RasterLayer object')
-				} else {
-					return(values(readAll(x)))
-				}	
-			}	
+				if (.CanProcessInMemory(x, 1)) {
+					x <- readAll(x)
+				}
+			}
+		}
+		
+		argsn <- nargs() - length(list(...)) - !missing(drop)
+		if (dataContent(x) == 'all') {
+			if ( missing(j) && argsn == 2) {
+				callNextMethod( matrix(values(x), nrow(x), ncol(x), byrow=T), i=i, drop=drop )
+			} else {
+				callNextMethod( matrix(values(x), nrow(x), ncol(x), byrow=T), i=i, j=j, drop=drop )
+			}
 		} else {
-			return(cellValues(x, i))
+			if ( missing(j) ) {
+				if ( argsn == 2 ) {
+					return(cellValues(x, i))
+				} else {
+					cells <- cellsFromRow(x, i)
+					return(cellValues(x, cells))
+				} 
+			} else if (missing(i)) {
+				cells <- cellsFromCol(x, j)
+				return(cellValues(x, cells))
+			} else {
+		# bound to fail in most cases:
+				cells <- cellFromRowCol(x, i, j)
+				return(cellValues(x, cells))
+			}
 		}
 	}
 )
 
 
-setReplaceMethod("[", "RasterLayer",  
+
+
+setReplaceMethod("[", c("RasterLayer","missing", "missing"),
 	function(x, i, j, value) {
-		if  (!missing(j)) {	
-			stop("incorrect number of dimensions") 
+		if (length(value) == ncell(x)) {
+			return(setValues(x, value))
+		} else if (length(value) == 1) {
+			return( setValues(x, rep(value, times=ncell(x))) )
+		} else {
+			stop('length of replacement values should be 1 or ncell')
 		}
-		if  (missing(i)) {	
-			if (length(value) == ncell(x)) {
-				return(setValues(x, value))
-			} else if (length(value) == 1) {
-				return( setValues(x, rep(value, times=ncell(x))) )
-			} else {
-				stop('length of replacement values should be 1 or ncell')
-			}
-		}
+	}
+)
+
+setReplaceMethod("[", c("RasterLayer","ANY", "missing"),
+	function(x, i, j, value) {
 		if (class(i) == "RasterLayer") {
 			i <- as.logical( .getRasterValues(i) ) 
 		}
@@ -65,32 +85,6 @@ setReplaceMethod("[", "RasterLayer",
 	}
 )
 
-
-
-#.getColValues <- function(r, colnr) {
-#	firstcol <- 1:nrow(r) * ncol(r) - ncol(r) 
-#	cells <- colnr + firstcol 
-#	return(values(r)[cells]) }
-
-
-setMethod("[[", c("RasterLayer","ANY","ANY"),
-# i = row
-# j = col
-	function(x,i,j,...,drop=FALSE) {
-		if (dataContent(x) == 'nodata') {
-			if (ncell(x) < 1000000) {
-				if (dataSource(x) == 'disk') {
-					x <- readAll(x)
-				} else {
-					stop('no data associated with this RasterLayer object')
-				}
-			} else {
-				stop('Large raster, no data in memory, use readAll() first')
-			}	
-		}
-		return( matrix(values(x), nrow(x), ncol(x), byrow=T)[i,j] )
-	}
-)
 
 
 setReplaceMethod("[[", "RasterLayer",  

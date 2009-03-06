@@ -11,13 +11,20 @@
 \description{
  These methods return values of a RasterLayer or RasterStack for the cells that correspond to the provided xy coordinates (n*2 matrix or SpatialPoints object)
 }
+
+\usage{xyValues(raster, xyCoords)}
+
+\arguments{
+\item{raster}{RasterLayer or RasterStack object}
+\item{xyCoords}{xy coordinates (see below, under Methods}
+}
+
 \section{Methods}{
 \describe{
-\code{xyValues(x, xyCoords)}
-
-\item{code{x}}{RasterLayer or RasterStack object}
-\item{code{xyCoords}}{Either a n*2 matrix, first column has the x values, and the second column has the y values; or a SpatialPoints* object.}
-}}
+\code{xyCoords} can be a  \code{n*2} matrix or dataframe with the first column having the x values, and the second column has the y values.
+It can also be a SpatialPoints* object.
+}
+}
 
 
 \value{
@@ -27,7 +34,6 @@ a vector of cell values for a RasterLayer or or a matrix of values for a RasterS
 \seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{readRow}}, \code{\link[raster]{readAll}}, \code{\link[sp]{SpatialPoints}}  }
 
 \author{Robert J. Hijmans }
-
 
 \examples{
 #using a new default raster (1 degree global)

@@ -39,6 +39,21 @@ rowFromCell <- function(object, cell) {
 }
 
 
+cellsFromRow <- function(object, rownr) {
+	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	cols <- rep(1:ncol(object), times=length(rownr))
+	rows <- rep(rownr, each=length(cols))
+	return(cellFromRowCol(object, rows, cols))
+}
+
+cellsFromCol <- function(object, colnr) {
+	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	rows <- rep(1:nrow(object), times=length(colnr))
+	cols <- rep(colnr, each=nrow(object))
+	return(cellFromRowCol(object, rows, cols))
+}
+
+
 colFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cell <- round(cell)
