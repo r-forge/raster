@@ -63,7 +63,7 @@ valuesRow <- function(raster, rownr) {
 			stop('cannot get these values')
 		}
 	}
-	if (!(validRows(raster, rownr))) {
+	if (!(validRow(raster, rownr))) {
 		stop(paste(rownr,'is not a valid rownumber')) 
 	}
 	if (dataContent(raster) == 'sparse') {

@@ -4,14 +4,15 @@
 \alias{rasterFromBbox}
 
 \title{Create a new RasterLayer object }
+
 \description{
   These functions create new RasterLayer objects
   The created object does normally not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
 }
 
 \usage{
-raster(xmn = -180, xmx = 180, ymn = -90, ymx = 90, nrows = 180, ncols = 360, projstring = "+proj=longlat +datum=WGS84")
-rasterFromBbox(bndbox, nrows = 10, ncols = 10)
+raster(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projstring="+proj=longlat +datum=WGS84")
+rasterFromBbox(bndbox, nrows=10, ncols=10)
 }
 
 \arguments{
@@ -35,6 +36,7 @@ RasterLayer object
 \author{Robert J. Hijmans}
 
 \seealso{ \code{\link[raster]{setValues},  \link[raster]{init}, \link[raster]{newBbox},  \link[raster]{stack}} }
+
 \examples{
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
 r2 <- rasterFromBbox(r1)

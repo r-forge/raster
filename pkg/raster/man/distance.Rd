@@ -2,10 +2,13 @@
 \docType{methods}
 \alias{distance-methods}
 \alias{distance}
+
 \alias{distance,RasterLayer-method}
-\title{ Calculate distance from geographic features in a raster}
+
+\title{distance to raster cells}
+
 \description{
- The function calculates the distance from the non-NA cells of the RasterLayer.
+ The function calculates the distance to cells of a RasterLayer that are not \code{NA}.
  
  The distance is in meters if the RasterLayer is in a geographic (latlon) projection and in map units when not projected.
  
@@ -13,6 +16,7 @@
  
  For more options (directions, cost-distance) see the gdistance package.
 }
+
 \section{Methods}{
 \describe{
 

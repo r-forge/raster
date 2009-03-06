@@ -70,10 +70,8 @@ Classes \code{RasterLayer} and \code{RasterStack} extend class \code{"\linkS4cla
 \section{Methods}{
   \describe{
     \item{!}{\code{signature(x = "RasterLayer")}: ... }
-    \item{[}{\code{signature(x = "RasterLayer")}: ... }
-    \item{[[}{\code{signature(x = "RasterLayer", i = "ANY", j = "ANY")}: ... }
-    \item{[[<-}{\code{signature(x = "RasterLayer", i = "ANY", j = "ANY")}: ... }
-    \item{[<-}{\code{signature(x = "RasterLayer")}: ... }
+    \item{[}{\code{signature(x = "RasterLayer", i = "ANY", j = "ANY")}: ... }
+    \item{[<-}{\code{signature(x = "RasterLayer", i = "ANY", j = "ANY")}: ... }
     \item{aggregate}{\code{signature(x = "RasterLayer")}: ... }
     \item{calc}{\code{signature(x = "RasterLayer", fun = "function")}: ... }
     \item{cellValues}{\code{signature(object = "RasterLayer", cells = "vector")}: ... }

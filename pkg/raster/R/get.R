@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  October 2008
-# Version 0,2
+# Version 0.8
 # Licence GPL v3
 
 
@@ -12,23 +12,6 @@
 		return(FALSE)
 	}	
 }
-
-yFromRow <- function(object, rownr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	rownr <- round(rownr)
-	rownr[rownr < 1 | rownr > nrow(object)] <- NA
-	y <- ymax(object) - ((rownr-0.5) * yres(object))
-	#hello
-	return(y) }	
-	
-	
-xFromCol <- function(object, colnr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	colnr <- round(colnr)
-	colnr[colnr < 1 | colnr > ncol(object)] <- NA
-	x <- xmin(object) + (colnr - 0.5) * xres(object) 
-	return(x) }  
-
 	
 rowFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
@@ -39,20 +22,25 @@ rowFromCell <- function(object, cell) {
 }
 
 
-cellsFromRow <- function(object, rownr) {
+cellFromRow <- function(object, rownr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	cols <- rep(1:ncol(object), times=length(rownr))
 	rows <- rep(rownr, each=length(cols))
 	return(cellFromRowCol(object, rows, cols))
 }
 
-cellsFromCol <- function(object, colnr) {
+cellFromCol <- function(object, colnr) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
 	rows <- rep(1:nrow(object), times=length(colnr))
 	cols <- rep(colnr, each=nrow(object))
 	return(cellFromRowCol(object, rows, cols))
 }
 
+cellFromRowColCombine <- function(object, rownr, colnr) {
+	rows <- cellFromRow(object, rownr)
+	cols <- cellFromCol(object, colnr)
+	return(intersect(rows, cols))
+}
 
 colFromCell <- function(object, cell) {
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
@@ -61,30 +49,6 @@ colFromCell <- function(object, cell) {
 	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
 	colnr <- as.integer(cell - ((rownr-1) * ncol(object)))
     return(colnr)
-}
-
-cellFromXY <- function(object, xy) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	if (class(xy) == 'SpatialPoints' | class(xy) == 'SpatialPointsDataFrame') {
-		x <- coordinates(xy)[,1]
-		y <- coordinates(xy)[,2]
-	} else if (is.null(dim(xy))) { 
-		x <- xy[1]
-		y <- xy[2] 
-	} else { 
-		x <- xy[,1]
-		y <- xy[,2] 
-	}
-	cell <- vector(mode = "integer", length = length(x))
-	cell[] <- NA
-	for (i in seq(length(x))) {
-		colnr <- colFromX(object, x[i]) - 1
-		rownr <- rowFromY(object, y[i]) - 1
-		if ((!is.na(colnr)) & (!is.na(rownr))) {
-			cell[i] <- rownr * ncol(object) + colnr + 1
-		}
-	}
-	return(cell)
 }
 
 cellFromRowCol <- function(object, rownr, colnr) {
@@ -96,73 +60,3 @@ cellFromRowCol <- function(object, rownr, colnr) {
 	return((rownr-1) * ncol(object) + colnr)
 }
 
-colFromX <- function ( object, x )	{
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	if (class(x) == 'SpatialPoints' | class(x) == 'SpatialPointsDataFrame') {	x <- x@points[,1] }
-	colnr <- (trunc((x - xmin(object)) / xres(object))) + 1 
-	colnr[x == xmax(object)] <- ncol(object)
-	colnr[x < xmin(object) | x > xmax(object) ] <- NA
-	return(as.vector(colnr))
-}
-	
-	
-rowFromY <- function ( object, y )	{
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	if (class(y) == 'SpatialPoints' | class(y) == 'SpatialPointsDataFrame') {	y <- y@points[,2] }
-	rownr <- 1 + (trunc((ymax(object) - y) / yres(object)))
-	rownr[y == ymin(object) ] <- nrow(object) 
-	rownr[y > ymax(object) | y < ymin(object)] <- NA
-	return(rownr)
-}	
-	
-
-xyFromCell <- function(object, cell, asSpatialPoints=FALSE) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	cell <- round(cell)
-	xy <- matrix(data = NA, ncol=2, nrow=length(cell))
-	colnr <- colFromCell(object, cell)
-	rownr <- rowFromCell(object, cell)
-	xy[,1] <- xFromCol(object, colnr)
-	xy[,2] <- yFromRow(object, rownr) 		
-	colnames(xy) <- c("x", "y")
-	if (asSpatialPoints) {
-		xy <- SpatialPoints(xy, projection(object, asText=FALSE))
-	}
-	return(xy)
-}  
-	
-
-	
-cxyFromBbox <- function(object, bbox) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	bbox <- getBbox(bbox)
-	cells <- cellsFromBbox(object, bbox)
-	cxy <- cbind(cells, xyFromCell(object, cells))
-	colnames(cxy) <- c("cell", "x", "y")
-	return(cxy)
-}
-
-
-validCells <- function(object, cell) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	cell <- round(cell)
-	validcell <- vector(length=length(cell))
-	validcell[cell > 0 & cell <= ncell(object)] <- TRUE
-	return(validcell)
-}
-
-validRows <- function(object, rownr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	rownr <- round(rownr)
-	validrows <- vector(length=length(rownr))
-	validrows[rownr > 0 & rownr <= nrow(object)] <- TRUE
-	return(validrows)
-}
-
-validCols <- function(object, colnr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
-	colnr <- round(colnr)
-	validcols <- vector(length=length(colnr))
-	validcols[colnr > 0 & colnr <= nrow(object)] <- TRUE
-	return(validcols)
-}

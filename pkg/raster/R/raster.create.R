@@ -22,7 +22,7 @@ closeHandle <- function(raster) {
 #	return(raster(xmn, xmx, ymn, ymx, nrows, ncols, projstring))  }
 
 
-raster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
+raster <- function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projstring="+proj=longlat +datum=WGS84") {
 	bb <- newBbox(xmn, xmx, ymn, ymx)
 	rs <- rasterFromBbox(bb, nrows=nrows, ncols=ncols)
 	rs <- setProjection(rs, projstring)
