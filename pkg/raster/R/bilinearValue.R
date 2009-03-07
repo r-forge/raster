@@ -12,16 +12,15 @@
 	cellsXY <- xyFromCell(raster, cells)
 
 	pos <- matrix(-1, ncol=ncol(xy), nrow=nrow(xy))
-	pos[xy[,1] > cellsXY[,1]] <- 1
-	pos[xy[,2] < cellsXY[,2]] <- 1
+	pos[ xy[,1] > cellsXY[,1] ] <- 1
+	pos[ xy[,2] < cellsXY[,2] ] <- 1
 
 	poscol <- col + pos[,1]
 	poscol[poscol==0] <- 2
-	poscol[poscol==nrow(raster)+1] <- nrow(raster) - 1
+	poscol[poscol==ncol(raster)+1] <- ncol(raster) - 1
 	posrow <- row + pos[,2]
 	posrow[posrow==0] <- 2
-	posrow[posrow==ncol(raster)+1] <- ncol(raster) - 1
-	
+	posrow[posrow==nrow(raster)+1] <- nrow(raster) - 1
 	
 	four <- matrix(ncol=4, nrow=nrow(xy))
 	four[,1] <- cells
