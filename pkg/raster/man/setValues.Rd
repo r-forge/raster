@@ -36,11 +36,9 @@ makeSparse(raster)
   \item{cellnumbers}{ the cell numbers corresponding to the sparse data }
 }
 
-\details{
-}
 
 \value{
-	a Raster* object
+a Raster* object
 }
 \author{ Robert J. Hijmans }
 

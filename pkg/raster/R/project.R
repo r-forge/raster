@@ -4,6 +4,7 @@
 # Version 0.8
 # Licence GPL v3
 
+	
 
 
 projectBbox <- function(object, projstring) {
@@ -11,12 +12,15 @@ projectBbox <- function(object, projstring) {
 	projstring <- projection(projstring)
 	xy <- rbind(c(b@xmin, b@ymax), c(b@xmax, b@ymax), c(b@xmin, b@ymin), c(b@xmax, b@ymin))
 
-	if (isLatLon(projstring)) {
+	if (isLatLon(object)) {
 		p <- project(xy, projstring, inv=FALSE)
 	} else {
-		b <- project(xy, projection(object), inv=TRUE)
-		p <- project(xy, projstring, inv=FALSE)
-	}
+		p <- project(xy, projection(object), inv=TRUE)
+		if (!isLatLon(projstring)) {
+			p <- project(p, projstring, inv=FALSE)
+		}
+	} 
+
 	xmin <- min(p[,1])
 	xmax <- max(p[,1])
 	ymin <- min(p[,2])
@@ -28,18 +32,35 @@ projectBbox <- function(object, projstring) {
 }
 
 
-projectRaster <- function(from, to, method="nngb", overwrite=FALSE) {
-
-# do the bounding boxes overlap at all? 
-
-# get .innerbox first?
-
-# are the projs not NA and valid and not the same?
-
+projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
 	validObject(to)
+	validObject(projection(from, asText=F))
+	validObject(projection(to, asText=F))
+	if  (projection(from) == "NA") {stop("input projection is NA")}
+	if  (projection(to) == "NA") {stop("output projection is NA")}
+	
+	pbb <- projectBbox(to, projection(from))
+	bb <- intersectBbox(pbb, from)
+	validObject(bb)
+
+
+	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
+	if (is.null(filename)){filename <- ""}
+	to <- setRaster(to, filename)
+	to <- setDatatype(to, datatype)
+
 	rowCells <- 1:ncol(to)
 	inMemory <- filename(to) == ""
 	v <- vector(length=0)
+
+	if (!.CanProcessInMemory(to, 1) && filename(to) == '') {
+		filename <- tempfile()
+		to <- setFilename(to, filename )
+		if (options('verbose')[[1]]) { cat('writing raster to:', filename(to))	}
+	}
+	starttime <- proc.time()
+
+
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)
@@ -51,6 +72,13 @@ projectRaster <- function(from, to, method="nngb", overwrite=FALSE) {
 				unProjXY <- project(unProjXY, projection(to), inv=TRUE )
 			}
 		}
+		
+		if (method=='ngb') {
+			vals <- xyValues(from, xy)
+		} else {
+			vals <- bilinearValue(from, xy)
+		}
+		
 		vals <- xyValues(from, unProjXY)
 		if (inMemory) {
 			v <- c(v, vals)
@@ -58,6 +86,13 @@ projectRaster <- function(from, to, method="nngb", overwrite=FALSE) {
 			to <- setValues(to, vals, r)
 			to <- writeRaster(to, overwrite=overwrite)
 		}
+		
+		if (r %in% track) {
+			elapsed <- (proc.time() - starttime)[3]
+			tpr <- elapsed /r
+			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+			cat('row', r, '-', ttg, 'minutes to go\n')
+		}		
 	}
 	if (inMemory) {
 		to <- setValues(to, v) 

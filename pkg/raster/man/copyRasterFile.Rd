@@ -6,7 +6,7 @@
 \title{move or copy a raster file}
 
 \description{
-  Move or copy a raster file to a different location (filename). 
+Move or copy a raster file to a different location (filename). 
 }
 
 \usage{
@@ -20,8 +20,6 @@
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
 }
 
-\details{
-}
 
 \value{
 a RasterLayer

@@ -20,7 +20,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 		to <- setFilename(to, filename )
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(to))	}
 	}
-	if (filename(to) == "") { inMemory <- TRUE} else { inMemory <- FALSE }
+	inMemory <- filename(to) == ""
 
 	v <- vector(length=0)
 	rowCells <- 1:ncol(to)

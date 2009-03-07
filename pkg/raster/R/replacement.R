@@ -33,6 +33,8 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 				stop('raster too large.')
 			}	
 		}
+		i <- subset(i, (i <= ncell(x)))
+		i <- subset(i, (i >= 1))
 		x@data@values[i] <- value
 		x@data@source <- 'ram'
 		x <- setFilename(x, "")

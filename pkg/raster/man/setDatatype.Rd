@@ -1,11 +1,12 @@
-\name{SetDatatype}
+\name{setDatatype}
 \alias{datatype<-}
 \alias{setDatatype}
 
-\title{ Set data type of a RasterLayer}
+\title{ Set data type }
 
 \description{
 Use these functions to set the datatype properties of a RasterLayer object. The datatype determines how values are written to disk. 
+It does not affect the way they are stored in memory.
 }
 
 \usage{
@@ -27,32 +28,23 @@ Datatypes are described by 5 characters. The first three indicate whether the va
 
 The following datatypes are available.
 
-datatype, size, signed: range of possible values
+\tabular{rll}{
+\bold{datatype \tab min \tab max} \cr
+LOG1S \tab  FALSE (0)\tab TRUE (1) \cr
+INT1S \tab -127 \tab  127\cr
+INT1U \tab 0 \tab  255\cr
+INT2S \tab -32,767\tab  32,767\cr
+INT2U \tab  0 \tab  65,534\cr
+INT4S \tab  -2,147,483,647 \tab  2,147,483,647\cr
+INT4U \tab  0 \tab  4,294,967,294\cr
+INT8S \tab  -9,223,372,036,854,775,807 \tab  9,223,372,036,854,775,807\cr
+INT4U \tab  0 \tab  18,446,744,073,709,551,614\cr
+FLT4S \tab  -3.4E38 \tab  3.4E38\cr
+FLT8S \tab   -1.7E308 \tab   1.7E308\cr
+}
 
-'LOG1S', FALSE (0) to TRUE (1)
-
-'INT1S: -127 to 127
-
-'INT1U': 0 to 255
-
-'INT2S': -32,767 to 32,767
-
-'INT2U': 0 to 65,534
-
-'INT4S': -2,147,483,647 to 2,147,483,647
-
-'INT4U': 0 to 4,294,967,294
-
-'INT8S': -9,223,372,036,854,775,807 to 9,223,372,036,854,775,807
-
-'INT4U': 0 to 18,446,744,073,709,551,614
-
-'FLT4S': -3.4E38 to 3.4E38
-
-'FLT8S':  -1.7E308 to  1.7E308
-
-
-For all integer types, except the single byte types, the lowest (signed) or highest (unsigned) value is used to store NA. Single byte files do not have an NA.
+For all integer types, except the single byte types, the lowest (signed) or highest (unsigned) value is used to store NA. 
+Single byte files do not have NA values.
 Logical values are stored as signed single byte integers, they do have an NA value (-127)
 }
 

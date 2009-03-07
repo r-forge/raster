@@ -3,6 +3,7 @@
 \alias{setFilename}
 \alias{filename<-}
 \alias{setProjection}
+\alias{projection<-}
 \alias{setRowCol}
 \alias{ncol<-}
 \alias{nrow<-}
@@ -11,7 +12,7 @@
 \alias{setMinMax}
 \alias{setNAvalue}
 
-\title{ Set properties of a RasterLayer object }
+\title{ Set properties of a RasterLayer }
 
 \description{
 Use these functions to set certain properties of a RasterLayer object. 
@@ -49,8 +50,11 @@ While you could access the slots of the object directly, you would do that at yo
 }
 
 \value{
-	a Raster* object
+a Raster* object
 }
+
+\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{dimensions}}  }
+
 \author{ Robert J. Hijmans }
 
 \examples{ 
