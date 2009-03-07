@@ -17,7 +17,10 @@
  These methods return values of a RasterLayer or RasterStack for the cells that correspond to the provided xy coordinates (n*2 matrix or SpatialPoints object)
 }
 
-\usage{xyValues(raster, xyCoords)}
+\usage{
+xyValues(raster, xyCoords)
+bilinearValue(raster, xyCoords)
+}
 
 \arguments{
 \item{raster}{RasterLayer or RasterStack object}

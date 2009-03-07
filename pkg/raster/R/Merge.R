@@ -47,6 +47,16 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 	}
 	
 	v <- vector(length=0)
+	
+	if (!.CanProcessInMemory(x, 2) && filename == '') {
+		filename <- tempfile()
+		outraster <- setFilename(outraster, filename )
+		if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
+	}
+	starttime <- proc.time()
+
+	
+	
 	for (r in 1:nrow(outraster)) {
 		rd <- as.vector(matrix(NA, nrow=1, ncol=ncol(outraster))) 
 		for (i in length(rasters):1) {  #reverse order so that the first raster covers the second etc.
@@ -66,12 +76,21 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 				rd[d[,1]] <- d[,2]
 			}		
 		}
+		
 		if (filename(outraster) != '') {
 			outraster <- setValues(outraster, rd, r)
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		} else {
 			v <- c(v, rd)
 		}
+
+		if (r %in% track) {
+			elapsed <- (proc.time() - starttime)[3]
+			tpr <- elapsed /r
+			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
+			cat('row', r, '-', ttg, 'minutes to go\n')
+		}			
+		
 	}
 	if (filename(outraster) == '') { 
 		outraster <- setValues(outraster, v) 

@@ -1,11 +1,11 @@
 \name{utilities}
 \alias{roundCoords}
 \alias{newCRS}
-
   
-\title{ Utility functions }
+\title{helper functions }
+
 \description{
-  roundCoords rounds the coordinates to a number of digits specified. 
+  roundCoords rounds the coordinates of the BoundingBox of a Raster* to a number of digits specified. 
   newCRS is a helper function to create a CRS map projection object.
 }
 

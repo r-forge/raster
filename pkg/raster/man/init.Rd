@@ -2,10 +2,12 @@
 
 \alias{init}
 
-\title{Intitialize values of a RasterLayer}
+\title{Intitialize}
+
 \description{
-  Set values for a new raster (from scratch)
+Set values for a new raster (from scratch)
 }
+
 \usage{
 init(raster, fun=runif, filename="", overwrite=FALSE, datatype='FLT4S', filetype='raster', track=-1) 
 }
@@ -28,8 +30,9 @@ If the values are not in memory the new values will be written to file.
 }
 
 \value{
-A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
+A new RasterLayer object, and, in some cases, the side effect of a new file on disk.
 }
+
 \author{Robert J. Hijmans}
 
 \examples{

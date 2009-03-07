@@ -6,16 +6,21 @@
 \alias{cellValues,RasterStack,vector-method}
 
 \title{ values for cells }
+
 \description{
- These methods return values of a RasterLayer or RasterStack for specified cells )
+These methods return values of a RasterLayer or RasterStack for specified cells )
 }
+
+\usage{cellValues(x, cells)}
+
+\arguments{
+ \item{x}{RasterLayer or RasterStack object}
+ \item{cells}{vector of cell numbers, cell numbers should be between 1 and ncells(x)}
+}
+
 \section{Methods}{
 \describe{
-\code{cellValues(x, cells)}
-
-\item{code{x}}{RasterLayer or RasterStack object}
-\item{code{cells}}{vector of cell numbers, cell numbers should be between 1 and ncells(x)}
-
+ ---
 }}
 
 
@@ -23,7 +28,7 @@
 a vector of cell values for a RasterLayer or or a matrix of values for a RasterStack
 }
 
-\seealso{ \code{\link[raster]{xyValues}}, \code{\link[raster]{readRow}}, \code{\link[raster]{readAll}} }
+\seealso{ \code{\link[raster]{xyValues}}, \code{\link[raster]{read}} }
 
 
 \author{Robert J. Hijmans }

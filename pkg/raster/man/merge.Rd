@@ -1,38 +1,58 @@
 \name{merge}
 
 \docType{methods}
+
 \alias{merge}
 \alias{merge,RasterLayer,RasterLayer-method}
+
 \title{ 
 Merge RasterLayers
-
 }
 
 \description{
 Merge RasterLayers to form a new RasterLayer with a larger spatial extent
-
-This is a method for the generic function in Package `base'
-
 }
+
+\usage{
+merge(x, y, ...) 
+}
+
+\arguments{
+  \item{x}{A RasterLayer object}
+  \item{y}{A RasterLayer object}
+  \item{...}{Additional RasterLayers and other arguments. See below, under Methods}  
+}
+
 
 \section{Methods}{
 \describe{
-\code{merge(x, y, ..., tolerance=0.05, filename="", overwrite=FALSE) }
+A full call to the merge method is:
+
+\code{merge(x, y, ..., tolerance=0.05, filename="", overwrite=FALSE, filetype='raster', track=-1 ) }
 
 \item{x,y}{"RasterLayer"}{
-  \item{...}{additional RasterLayer objects}
-  \item{tolerance}{difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal}
-  \item{filename}{output filename for a new raster}
-  \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}
-}} }
+  \item{\code{x}}{A RasterLayer object}
+  \item{\code{y}}{A RasterLayer object}
+  \item{\code{...}}{additional RasterLayer objects}
+  \item{\code{tolerance}}{difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal}
+  \item{\code{filename}}{character. output filename}
+  \item{\code{overwrite}}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
+  \item{\code{filetype}}{character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{rasterFormats}}}
+  \item{\code{datatype}}{character. output data type; see \code{\link[raster]{setDatatype}}}
+  \item{\code{track}}{vector of row numbers for which the function will report that they have been processed}   
+}  
+  
+}} 
 
 \details{
-The RasterLayer objects must have the same origin and resolution. In areas where the RasterLayers overlap, the values of the RasterLayer that is first in the sequence will be retained. 
+The RasterLayer objects must have the same origin and resolution. 
+In areas where the RasterLayers overlap, the values of the RasterLayer that is first in the sequence of arguments will be retained. 
 }
 
 \value{
-A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
+A new RasterLayer object, and in some cases, the side effect of a new file on disk.
 }
+
 \author{Robert J. Hijmans}
 
 \seealso{ \code{\link[raster]{crop}}, \code{\link[raster]{expand}}}
