@@ -55,13 +55,11 @@ A full call to the aggregate method is:
  The function \code{fun} should take multiple numbers, and return a single number. For example \code{mean}, \code{min} or \code{max}. 
  
  If no filename is specified, and the resulting RasterLayer is too large to hold in memory, it is saved to a temporary file.  
- 
 }
 
 \value{
 A new RasterLayer object, and in some cases the side effect of a new file on disk.
 }
-
 
 \seealso{ \code{\link[raster]{disaggregate}} }
 

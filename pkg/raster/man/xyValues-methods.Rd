@@ -6,6 +6,11 @@
 \alias{xyValues,RasterStack,matrix-method}
 \alias{xyValues,RasterLayer,SpatialPoints-method}
 \alias{xyValues,RasterStack,SpatialPoints-method}
+
+\alias{bilinearValue}
+\alias{bilinearValue,RasterLayer,matrix-method}
+
+
 \title{ values at xy coordinates }
 
 \description{
@@ -23,6 +28,8 @@
 \describe{
 \code{xyCoords} can be a  \code{n*2} matrix or dataframe with the first column having the x values, and the second column has the y values.
 It can also be a SpatialPoints* object.
+
+
 }
 }
 

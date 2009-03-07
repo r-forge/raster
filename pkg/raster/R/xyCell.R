@@ -34,17 +34,12 @@ cellFromXY <- function(object, xy) {
 		x <- xy[,1]
 		y <- xy[,2] 
 	}
-	cell <- vector(mode = "integer", length = length(x))
-	cell[] <- NA
-	for (i in seq(length(x))) {
-		colnr <- colFromX(object, x[i]) - 1
-		rownr <- rowFromY(object, y[i]) - 1
-		if ((!is.na(colnr)) & (!is.na(rownr))) {
-			cell[i] <- rownr * ncol(object) + colnr + 1
-		}
-	}
+	rownr <- rowFromY(object, y) - 1
+	colnr <- colFromX(object, x)
+	cell <- rownr * ncol(object) + colnr
 	return(cell)
 }
+
 
 colFromX <- function ( object, x )	{
 	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }

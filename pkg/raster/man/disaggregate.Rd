@@ -31,6 +31,9 @@ If no filename is specified, and the resulting RasterLayer is too large to hold 
 \value{
 A new RasterLayer object, and in some cases the side effect of a new file on disk.
 }
+
+\seealso{ \code{\link[raster]{aggregate}} }
+
 \author{Robert J. Hijmans}
 
 \examples{
