@@ -25,7 +25,7 @@ A RasterLayer object with logical (\code{TRUE/FALSE} values)
  If you want to set the filename (and perhaps filetype and datatype), use \code{\link[raster]{calc-methods}} instead.
 }
 
-\seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay-methods}}, \code{\link[raster]{calc-methods}} }
+\seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay}}, \code{\link[raster]{calc}} }
 
 
 \author{Robert J. Hijmans}

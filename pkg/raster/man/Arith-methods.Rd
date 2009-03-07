@@ -17,10 +17,11 @@
 
 \section{Note}{
  If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. 
- If you want to set the filename (and perhaps filetype and datatype), use \code{\link[raster]{overlay-methods}} or \code{\link[raster]{calc-methods}} instead of the Arith-methods.
+ If you want to set the filename (and perhaps filetype and datatype), use \code{\link[raster]{overlay}} 
+ or \code{\link[raster]{calc}} instead of the Arith-methods.
 }
 
-\seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay-methods}}, \code{\link[raster]{calc-methods}} }
+\seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay}}, \code{\link[raster]{calc}} }
 
 
 \author{Robert J. Hijmans}
