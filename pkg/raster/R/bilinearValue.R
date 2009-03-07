@@ -1,3 +1,9 @@
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# International Rice Research Institute
+# Date :  March  2009
+# Version 0.8
+# Licence GPL v3
+
 
 .fourCellsFromXY <- function(raster, xy) {
 	cells <- cellFromXY(raster, xy)
@@ -8,23 +14,32 @@
 	pos <- matrix(-1, ncol=ncol(xy), nrow=nrow(xy))
 	pos[xy[,1] > cellsXY[,1]] <- 1
 	pos[xy[,2] < cellsXY[,2]] <- 1
+
+	poscol <- col + pos[,1]
+	poscol[poscol==0] <- 2
+	poscol[poscol==nrow(raster)+1] <- nrow(raster) - 1
+	posrow <- row + pos[,2]
+	posrow[posrow==0] <- 2
+	posrow[posrow==ncol(raster)+1] <- ncol(raster) - 1
+	
 	
 	four <- matrix(ncol=4, nrow=nrow(xy))
 	four[,1] <- cells
-	four[,2] <- cellFromRowCol(raster, row + pos[,2], col)
-	four[,3] <- cellFromRowCol(raster, row + pos[,2], col + pos[,1])
-	four[,4] <- cellFromRowCol(raster, row, col + pos[,1])
+	four[,2] <- cellFromRowCol(raster, posrow, col)
+	four[,3] <- cellFromRowCol(raster, posrow, poscol)
+	four[,4] <- cellFromRowCol(raster, row, poscol)
 		
-	four[is.na(four)] <- rep(four[,1], 4)[is.na(four)]
+	#four[is.na(four)] <- rep(four[,1], 4)[is.na(four)]
 	return(four)
 }
 
 
 .bilinear <- function(x,y, x1,x2,y1,y2, q11,q12,q21,q22) {
 	div <- (x2-x1)*(y2-y1)
-	if (all(div>0)) {
+	if (all(div > 0)) {
 		return( (q11/div)*(x2-x)*(y2-y) + (q21/div)*(x-x1)*(y2-y) + (q12/div)*(x2-x)*(y-y1) + (q22/div)*(x-x1)*(y-y1) )
 	} else {
+		print('it happend')
 		bil <- vector(length=length(div))
 		bil[div>0] <- (q11/div)*(x2-x)*(y2-y) + (q21/div)*(x-x1)*(y2-y) + (q12/div)*(x2-x)*(y-y1) + (q22/div)*(x-x1)*(y-y1) 
 		bil[(x1==x2 && y1==y2)] <- q11
