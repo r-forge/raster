@@ -1,10 +1,13 @@
 \name{adjacency}
+
 \alias{adjacency}
 
 \title{adjacency}
+
 \description{
 	Identify cells that are adjacent to a set of cells on a grid
 }
+
 \usage{
 adjacency(raster, fromCells, toCells, directions) 
 }
@@ -20,24 +23,26 @@ adjacency(raster, fromCells, toCells, directions)
 Cell numbers start with 1 in the upperleft corner and increase from left to right and from top to bottom.
 Number of directions: 4 connects cells with one-cell rook moves, 8 with one-cell queen moves, and 16 with knight and one-cell queen moves.
 Bishop connects cells with one-cell diagonal moves (special cases).
-The function connects the outer meridians if the raster is in a geographic (latlon) projection and longitudes between -180 and 180 degrees are covered.
+The function connects the outer meridians if the raster is not projeced (in a geographic (lat/lon) "projection") and there is 
+data at longitudes -180 and 180 degrees.
 }
 
 \value{
   a two column matrix with each row containing a pair of adjacent cells. 
 }
+
 \author{Jacob van Etten \email{jacobvanetten@yahoo.com}}
 
 \examples{
-rs <- raster(nrows=10, ncols=10)
-adj <- adjacency(raster = rs, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(rs)), directions=4) 
+r <- raster(nrows=10, ncols=10)
+adj <- adjacency(raster=r, fromCells = c(1,30,55,72,100), toCells = c(1:ncell(r)), directions=4) 
 	
 #put the result in a RasterLayer
-v <- vector(length=ncell(rs))
+v <- vector(length=ncell(r))
 v[c(1,30,55,72,100)] <- 1
 v[adj[,2]] <- 2
-rs <- setValues(rs, v)
-plot(rs)
+r <- setValues(r, v)
+#plot(r)
 
 }
 

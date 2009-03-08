@@ -1,12 +1,14 @@
-\name{header files}
+\name{headerFiles}
 
 \alias{writeHeader}
 \alias{worldFile}
 
-\title{ Write raster data to a file }
+\title{Header files}
+
 \description{
-  Or create header files associated with other formats for use in different software (use ENVI or ErdasRaw for ArcGIS).
+Write header files to use together with raster binary files in different software.
 }
+
 \usage{
 writeHeader(raster, type) 
 worldFile(raster, extension=".wld") 
@@ -19,21 +21,25 @@ worldFile(raster, extension=".wld")
 }
 
 \details{
-	You can use writeRaster to save a existing file in another format. But if you have a file in a 'raster' format (or similar), you can also only export a header file, and use the data file that already exists.
-	writeHeader writes an ENVI, or BIL header (.hdr) file; or an Erdas Raw (.raw) header file. This (hopefully) allows for reading the binary data ("raster.gri") in other programs such as ENVI ArcMap.
-	if format = "worldfile", the function writes an ESRI "world" file, that is sometimes used to georeference images.	
+You can use saveAs to save a existing file in another format. But if you have a file in a 'raster' format (or similar), 
+you can also only export a header file, and use the data file that already exists.\
+writeHeader writes an ENVI, or BIL header (.hdr) file; or an Erdas Raw (.raw) header file. This (hopefully) allows for 
+reading the binary data ("raster.gri") in other programs such as ENVI or ArcMap.
+
+A "worldfile", is an ESRI "world" file, that is sometimes used to georeference images.	
 }
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[rgdal]{writeGDAL}} }
+\seealso{ \code{\link[raster]{saveAs}}, \code{\link[raster]{writeRaster}}, \code{\link[rgdal]{writeGDAL}} }
+
 \examples{ 
 
-rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
-rs <- readAll(rs)
-rs <- setFilename(rs, 'export.grd')
-rs <- writeRaster(rs)
-writeHeader(rs, type="ENVI") 
+r <- rasterFromFile(system.file("external/test.ag", package="sp"))
+r <- readAll(r)
+r <- setFilename(r, 'export.grd')
+r <- writeRaster(r)
+writeHeader(r, type="ENVI") 
 
 }
 

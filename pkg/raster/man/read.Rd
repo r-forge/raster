@@ -17,8 +17,12 @@
 
 
 \title{Read values from disk}
-\description{Read values from a raster file associated with a RasterLayer or RasterStack object into memory.
-You can either read all the data (memory permitting), or read data by row, part of row, block, by cellnumber, or for (x,y) coordinates. Data can be read from 'native raster' binary files, as well as for other formats that are supported by the rgdal package.
+
+\description{
+Read values from a raster file associated with a RasterLayer or RasterStack object into memory.
+You can either read all the data (memory permitting), or read data by row, part of row, block, by cellnumber, 
+or for (x,y) coordinates. Data can be read from 'native raster' binary files, as well as for other formats 
+that are supported by the rgdal package.
 }
 
 
@@ -41,6 +45,8 @@ readBlock(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol
 
 
 \note{After read* the values are accessible with the "values(object)" function}
+
+\seealso{ \code{\link[raster]{writeRaster}}, \code{\link[raster]{xyValues}} }
 
 \author{Robert J. Hijmans}
 
