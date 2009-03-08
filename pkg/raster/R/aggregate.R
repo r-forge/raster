@@ -59,7 +59,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
-		if (!.CanProcessInMemory(x, 3) && filename == '') {
+		if (!canProcessInMemory(x, 3) && filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
@@ -97,12 +97,8 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype, datatype=datatype)
 			}
 			
-			if (r %in% track) {
-				elapsed <- (proc.time() - starttime)[3]
-				tpr <- elapsed /r
-				ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
-				cat('row', r, '-', ttg, 'minutes to go\n')
-			}			
+			if (r %in% track) { .showTrack(r, track, starttime) }
+			
 		} 
 		if (filename(outRaster) == "") { 
 			outRaster <- setValues(outRaster, v) 

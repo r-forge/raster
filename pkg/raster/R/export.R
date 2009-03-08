@@ -32,15 +32,24 @@ writeHeader <- function(raster, type) {
 	cat("NROWS ",  nrow(raster), "\n", file = thefile)
 	cat("NCOLS ",  ncol(raster), "\n", file = thefile)
 	cat("NBANDS ",  nbands(raster), "\n", file = thefile)
-	cat("NBITS ",  raster@file@datasize * 8, "\n", file = thefile)
+	cat("NBITS ",  dataSize(raster@file@datanotation) * 8, "\n", file = thefile)
 	if (.Platform$endian == "little") { btorder <- "I" 
 	} else { btorder <- "M" }
 	cat("BYTEORDER ", btorder, "\n", file = thefile)
 	
 #  PIXELTYPE should work for Gdal, and perhpas ArcGIS, see:
 # http://lists.osgeo.org/pipermail/gdal-dev/2006-October/010416.html	
-	if (raster@file@datatype == 'integer') { pixtype <- "SIGNEDINT"
-	} else { pixtype <- "FLOAT" }
+
+	dtype <- .shortDataType(raster@file@datanotation)
+	if (dtype == 'INT' | dtype == 'LOG' ) { 
+		if (dataSigned(raster@file@datanotation)) {
+			pixtype <- "SIGNEDINT"
+		} else {
+			pixtype <- "INT"
+		}
+	} else { 
+		pixtype <- "FLOAT" 
+	}
 	cat("PIXELTYPE ", pixtype, "\n", file = thefile)	
 	cat("LAYOUT ", "BIL", "\n", file = thefile)
     cat("SKIPBYTES 0\n", file = thefile)
@@ -48,7 +57,7 @@ writeHeader <- function(raster, type) {
     cat("ULYMAP", ymax(raster) - 0.5 * yres(raster), "\n", file = thefile) 
 	cat("XDIM", xres(raster), "\n", file = thefile)
 	cat("YDIM", yres(raster), "\n", file = thefile)
-	browbytes <- round(ncol(raster) * raster@file@datasize)
+	browbytes <- round(ncol(raster) * dataSize(raster@file@datanotation) )
 	cat("BANDROWBYTES ", browbytes, "\n", file = thefile)
 	cat("TOTALROWBYTES ", browbytes *  nbands(raster), "\n", file = thefile)
 	cat("BANDGAPBYTES  0", "\n", file = thefile)
@@ -78,9 +87,12 @@ writeHeader <- function(raster, type) {
 	cat("WIDTH ",  ncol(raster), "\n", file = thefile)
 	cat("NUM_LAYERS ",  nbands(raster), "\n", file = thefile)
 
-	if (raster@file@datatype == 'integer') { dd <- "S"
-	} else { dd <- "F" }
-	nbits <- raster@file@datasize * 8 
+	if (.shortDataType(raster@file@datanotation) == 'INT') { 
+		dd <- "S"
+	} else { 
+		dd <- "F" 
+	}
+	nbits <- dataSize(raster@file@datanotation) * 8 
     dtype <- paste(dd, nbits, sep="")
 	cat("DATA_TYPE ",  dtype, "\n", file = thefile)
 #U1, U2, U4, U8, U16, U32
@@ -134,16 +146,17 @@ worldFile <- function(raster, extension=".wld") {
 	cat("bands = ", raster@file@nbands, "\n", file = thefile)		
 	cat("header offset = 0\n", file = thefile)		
 	cat("file type = ENVI Standard\n", file = thefile)		
-	if (raster@file@datatype == 'integer') {
-		if (raster@file@datasize == 1) { dtype <- 1
-		} else if (raster@file@datasize == 2) { dtype <- 2
-		} else if (raster@file@datasize == 4) { dtype <- 3
-		} else if (raster@file@datasize == 8) { dtype <- 14
+	dsize <- dataSize(raster@file@datanotation)
+	if (.shortDataType(raster@file@datanotation) == 'INT') {
+		if (dsize == 1) { dtype <- 1
+		} else if (dsize == 2) { dtype <- 2
+		} else if (dsize == 4) { dtype <- 3
+		} else if (dsize == 8) { dtype <- 14
 		} else { stop('what?')
 		}
 	} else {
-		if (raster@file@datasize == 4) { dtype <- 4
-		} else if (raster@file@datasize == 8) { dtype <- 5
+		if (dsize == 4) { dtype <- 4
+		} else if (dsize == 8) { dtype <- 5
 		} else { stop('what?')
 		}
 	}	

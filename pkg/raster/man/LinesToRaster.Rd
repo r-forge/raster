@@ -1,11 +1,13 @@
-\name{lines to raster}
+\name{linesToRaster}
 
 \alias{linesToRaster}
 
 \title{Transfer lines to a RasterLayer }
+
 \description{
   Lines to raster conversion. Lines are raserized.
 }
+
 \usage{
 linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", filetype='raster', datatype='FLT4S', track=-1) 
 }
@@ -24,12 +26,12 @@ linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRast
 }
 
 \details{
-	For SpatialLines, the 'field' argument is ignored. The line index is used
+For SpatialLines, the 'field' argument is ignored. The line index is used as attribute,
 }
 
 \author{Robert J. Hijmans }
 
-\seealso{ \code{\link[raster]{linesToRaster}}, \code{\link[raster]{pointsToRaster}}}
+\seealso{ \code{\link[raster]{polygonsToRaster}}, \code{\link[raster]{pointsToRaster}}}
 
 \examples{
 cds1 <- rbind(c(-50,0), c(0,60), c(40,5), c(15,-45), c(-10,-25))

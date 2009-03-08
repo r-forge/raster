@@ -51,13 +51,8 @@
 }
 
 
-if (!isGeneric("bilinearValue")) {
-	setGeneric("bilinearValue", function(raster, xyCoords)
-		standardGeneric("bilinearValue"))
-}	
 
-setMethod("bilinearValue", signature(raster='RasterLayer', xyCoords='matrix'), 
-function(raster, xyCoords) {
+.bilinearValue <- function(raster, xyCoords) {
 	four <- .fourCellsFromXY(raster, xyCoords)
 	xy4 <- matrix(xyFromCell(raster, as.vector(four)), ncol=8)
 	x1 <- apply(xy4[,1:4,drop=FALSE], 1, min)
@@ -69,6 +64,6 @@ function(raster, xyCoords) {
 	v <- matrix(cellValues(raster, cells), ncol=4)
 	return( .bilinear(xyCoords[,1], xyCoords[,2], x1, x2, y1, y2, v[,1], v[,2], v[,3], v[,4]) )
 }
-)
+
 
 

@@ -23,7 +23,7 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 		}
 # what about data rows ?		
 		if (dataContent(x) == 'nodata') {
-			if (.CanProcessInMemory(x, 2)) {
+			if (canProcessInMemory(x, 2)) {
 				if (dataSource(x) == 'disk') {
 					x <- readAll(x)
 				} else {

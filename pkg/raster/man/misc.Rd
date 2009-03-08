@@ -1,29 +1,35 @@
-\name{miscellanous}
+\name{fileFunctions}
+
 \alias{setFileExtension}
 \alias{fileExtension}
 \alias{shortFileName}
 \alias{filePath}
 \alias{trim}
 
-\title{Miscellaneous functions}
+\title{filename functions}
+
 \description{
-  Low level functions for file and string handling. Get or change file extension or extract the filename or path from a full name (path + filename). Trim a string of characters (remove the whitespace before or after the string).
+  Low level functions for file name handling. 
+  Get or change file extension or extract the filename or path from a full name (path + filename). 
+  use \code{trim} to remove the whitespace before or after a string of characters.
 }
+
 \usage{
 setFileExtension(filename, newextension)
 fileExtension(filename)
 shortFileName(filename)
 filePath(filename)
-trim(astring)
+trim(x)
 }
+
 \arguments{
-  \item{filename}{A file name, with or without the path}
+  \item{filename}{A filename, with or without the path}
   \item{newextension}{A file extension, e.g., ".txt" }
-  \item{astring}{A string that needs to be trimmed}
+  \item{x}{A character string (filename)}
 }
 
 \value{
-  A file extension, filename or path.  
+A file extension, filename or path.  
 }
 
 \author{Robert J. Hijmans }
@@ -36,4 +42,6 @@ trim(astring)
 	shortFileName(fn)
 	filePath(fn)
 }
+
 \keyword{file}
+

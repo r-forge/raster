@@ -44,12 +44,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 			}	
 			rownr <- rownr + 1
 
-			if (r %in% track) {
-				elapsed <- (proc.time() - starttime)[3]
-				tpr <- elapsed /rownr
-				ttg <- round(tpr/60 * (nrow(raster) - rownr), digits=1)
-				cat('row', rownr, '-', ttg, 'minutes to go\n')
-			}
+			if (r %in% track) { .showTrack(r, track, starttime) }
 		} 
 		if (filename(outraster) == '') { 
 			outraster <- setValues(outraster, v) 

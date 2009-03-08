@@ -1,10 +1,12 @@
 \name{map}
 \alias{map}
 
-\title{ Map a raster layer }
+\title{ Map }
+
 \description{
-  Make a map of a RasterLayer
+Plot the values of a RasterLayer
 }
+
 \usage{
 map(object, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)
 }

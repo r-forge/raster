@@ -32,7 +32,9 @@
 	raster@data@values[is.infinite(raster@data@values)] <- NA
 	raster <- setMinMax(raster)
 
-	if ( raster@file@datatype =='integer') {
+	dtype <- .shortDataType(raster@file@datanotation)
+	
+	if ( dtype =='INT') {
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
 			raster <- setDatatype(raster, 'INT2S')
 			raster@data@values <- as.integer(round(values(raster)))
@@ -49,7 +51,7 @@
 			raster <- setDatatype(raster, 'FLT8S')
 			raster@data@values <- as.numeric(values(raster))
 		}
-	} else if ( raster@file@datatype =='LOGICAL') {
+	} else if ( dtype =='LOGICAL') {
 		raster@data@values <- as.integer(values(raster))
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	} else {
@@ -65,13 +67,13 @@
 	} else {
 		binraster <- .setFileExtensionValues(filename(raster))
 		con <- file(binraster, "wb")
-		writeBin( values(raster), con, size = raster@file@datasize) 
+		writeBin( values(raster), con, size = dataSize(raster@file@datanotation) ) 
 		close(con)
 		.writeRasterHdr(raster) 
 	}	
 	
 	# put logical values back to T/F
-	if ( raster@file@datatype =='logical') {
+	if ( dtype =='logical') {
 		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 		raster@data@values <- as.logical(values(raster))
 	}
@@ -122,7 +124,8 @@
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
 	
-	if (raster@file@datatype == "integer" |  raster@file@datatype =='logical' ) { 
+	dtype <- .shortDataType(raster@file@datanotation)
+	if (dtype == "integer" |  dtype =='logical' ) { 
 		values <- as.integer(round(raster@data@values))  
 		values[is.na(values)] <- as.integer(raster@file@nodatavalue)		
 	} else { 
@@ -138,7 +141,7 @@
 		raster@data@max <- max(raster@data@max, max(rsd))
 	}	
 	
-	writeBin(values, raster@filecon, size = raster@file@datasize)
+	writeBin(values, raster@filecon, size = dataSize(raster@file@datanotation) )
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
 		raster <- .stopRowWriting(raster)
@@ -161,7 +164,9 @@
 	}
 
 	raster@data@values[is.nan(values(raster))] <- NA
-	if (raster@file@datatype == "integer") { 
+
+	dtype <- .shortDataType(raster@data@datanotation)
+	if (dtype == "integer") { 
 		raster@data@values <- as.integer(values(raster)) 
 	}
 	if (class(values(raster))=='integer') {
@@ -172,7 +177,7 @@
 	binraster <- .setFileExtensionValues(filename(raster))
 	con <- file(binraster, "wb")
 	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
-	writeBin( as.vector(values(raster)), con, size = raster@file@datasize) 
+	writeBin( as.vector(values(raster)), con, size = dataSize(raster@file@datanotation) ) 
 	close(con)
 
 	# add the 'sparse' key word to the hdr file!!!

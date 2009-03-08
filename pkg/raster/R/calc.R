@@ -33,7 +33,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if (dataSource(x) == 'disk') {
-		if (!.CanProcessInMemory(x, 3) & filename == '') {
+		if (!canProcessInMemory(x, 3) & filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 		}
@@ -48,12 +48,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}
 			
-			if (r %in% track) {
-				elapsed <- (proc.time() - starttime)[3]
-				tpr <- elapsed /r
-				ttg <- round(tpr/60 * (nrow(x) - r), digits=1)
-				cat('row', r, '-', ttg, 'minutes to go\n')
-			}
+		if (r %in% track) { .showTrack(r, track, starttime) }
 			
 		}
 		if (filename(outraster) == "") { 

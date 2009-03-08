@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 
-.CanProcessInMemory <- function(raster, n=4) {
+canProcessInMemory <- function(raster, n=4) {
 	gc()
 
 	if (ncell(raster) > 2147483647) {

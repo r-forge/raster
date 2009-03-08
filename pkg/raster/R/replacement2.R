@@ -17,7 +17,7 @@ function(x,i,j,...,drop=TRUE) {
 		if (dataSource(x) != 'disk') {
 			stop('no data associated with this RasterLayer object')
 		} else {
-			if (.CanProcessInMemory(x, 1)) {
+			if (canProcessInMemory(x, 1)) {
 				x <- readAll(x)
 			}
 		}

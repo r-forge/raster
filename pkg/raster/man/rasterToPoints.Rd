@@ -1,11 +1,13 @@
-\name{raster to points}
+\name{rasterToPoints}
 
 \alias{rasterToPoints}
 
 \title{ Raster to points conversion}
+
 \description{
 Raster to point conversion. Cells with NA are not converted. A function can be used to select a subset of the raster cells (by their values).
 }
+
 \usage{
 rasterToPoints(raster, fun=NULL, asSpatialPoints=FALSE)
 }
@@ -17,6 +19,7 @@ rasterToPoints(raster, fun=NULL, asSpatialPoints=FALSE)
 }
 
 \details{
+
 fun should be a simple function returning a logical value
 e.g.:
  fun=function(x){x==1}

@@ -29,12 +29,9 @@ init <- function(raster, fun=runif, filename="", overwrite=FALSE, datatype = 'FL
 				outraster <- setValues(outraster, fun(n), r) 
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
-			if (r %in% track) {
-				elapsed <- (proc.time() - starttime)[3]
-				tpr <- elapsed /r
-				ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
-				cat('row', r, '-', ttg, 'minutes to go\n')
-			}
+			
+			if (r %in% track) { .showTrack(r, track, starttime) }
+			
 		}
 		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 

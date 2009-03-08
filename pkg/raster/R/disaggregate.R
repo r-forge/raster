@@ -55,12 +55,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 			outraster <- setValues(outraster, v) 
 		}
 
-		if (r %in% track) {
-			elapsed <- (proc.time() - starttime)[3]
-			tpr <- elapsed /r
-			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
-			cat('row', r, '-', ttg, 'minutes to go\n')
-		}
+		if (r %in% track) { .showTrack(r, track, starttime) }
 	} 
 	return(outraster)
 }

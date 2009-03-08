@@ -53,7 +53,7 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 	inMemory <- filename(to) == ""
 	v <- vector(length=0)
 
-	if (!.CanProcessInMemory(to, 1) && filename(to) == '') {
+	if (!canProcessInMemory(to, 1) && filename(to) == '') {
 		filename <- tempfile()
 		to <- setFilename(to, filename )
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(to))	}
@@ -76,7 +76,7 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 		if (method=='ngb') {
 			vals <- xyValues(from, xy)
 		} else {
-			vals <- bilinearValue(from, xy)
+			vals <- xyValues(from, xy, method='bilinear')
 		}
 		
 		vals <- xyValues(from, unProjXY)
@@ -87,12 +87,8 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 			to <- writeRaster(to, overwrite=overwrite)
 		}
 		
-		if (r %in% track) {
-			elapsed <- (proc.time() - starttime)[3]
-			tpr <- elapsed /r
-			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
-			cat('row', r, '-', ttg, 'minutes to go\n')
-		}		
+		if (r %in% track) { .showTrack(r, track, starttime) }
+		
 	}
 	if (inMemory) {
 		to <- setValues(to, v) 

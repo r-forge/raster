@@ -60,7 +60,7 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", filetype='raster', datatype='FLT4S', track=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) {
+polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updateValue="NA", filename="", overwrite=FALSE,  filetype='raster', datatype='FLT4S', track=-1) {
 	filename <- trim(filename)
 	starttime <- proc.time()
 
@@ -207,11 +207,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, filename="", overwrite=FA
 			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
 		}
 		
-		if (r %in% track) {
-			elapsed <- (proc.time() - starttime)[3]
-			tpr <- round((elapsed /r), digits=2)
-			print(paste('row', r, '--', tpr, 'seconds/row --', nrow(raster)+1-r, " rows to go"))
-		}		
+		if (r %in% track) { .showTrack(r, track, starttime) }
 
 	}
 	if (filename == "") {

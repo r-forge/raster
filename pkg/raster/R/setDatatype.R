@@ -41,32 +41,25 @@ setDatatype <- function(raster, datatype) {
 	signed <- substr(datatype,1,3) != 'U'
 	
 	if (type == "FLT") {
-		raster@file@datatype <- 'numeric'
-		raster@file@datasigned <- TRUE
 		if (dataContent(raster) != 'nodata') { 
 			raster@data@values <- as.numeric(values(raster))
 		}
 		if (size == '4') {
 			raster@file@datanotation <- 'FLT4S'
-			raster@file@datasize <- as.integer(4)
 			raster@file@nodatavalue <- -3.4E38
 		} else if (size == '8') {
 			raster@file@datanotation <- 'FLT8S'
-			raster@file@datasize <- as.integer(8)
 			raster@file@nodatavalue <-  -1.7E308
 		} else { 
 			stop("invalid datasize for a FLT (should be 4 or 8)") 
 		}
 	} else if (type == "INT") {
-		raster@file@datatype <- 'integer'
-		raster@file@datasigned <- signed
 		raster@data@min <- round(minValue(raster))
 		raster@data@max <- round(maxValue(raster))
 		if (dataContent(raster) != 'nodata') { 
 			raster@data@values <- as.integer(round(values(raster)))
 		}
 		if (size == '4') {
-			raster@file@datasize <- as.integer(4)
 			if (signed) {
 				raster@file@datanotation <- 'INT4S'
 				raster@file@nodatavalue <- -2147483647
@@ -75,7 +68,6 @@ setDatatype <- function(raster, datatype) {
 				raster@file@nodatavalue <- 4294967295
 			}
 		} else if (size == '2') {
-			raster@file@datasize <- as.integer(2)
 			if (signed) {
 				raster@file@datanotation <- 'INT2S'
 				raster@file@nodatavalue <- -32768
@@ -84,7 +76,6 @@ setDatatype <- function(raster, datatype) {
 				raster@file@nodatavalue <- 65535
 			}
 		} else if (size == '1') {
-			raster@file@datasize <- as.integer(1)
 			# there is no nodata value for byte
 			raster@file@nodatavalue <- -9999
 			if (signed) {
@@ -94,7 +85,6 @@ setDatatype <- function(raster, datatype) {
 			}
 			warning("binary files of a single byte do not have NA values on disk")
 		} else if (size == '8') {
-			raster@file@datasize <- as.integer(8)
 			if (signed) {
 				raster@file@nodatavalue <- -9223372036854775808
 				raster@file@datanotation <- 'INT8S'							
@@ -106,9 +96,6 @@ setDatatype <- function(raster, datatype) {
 			stop("invalid datasize for this datatype") 
 		}
 	} else if ( type == 'LOG' ) {
-		raster@file@datatype <- 'logical'
-		raster@file@datasigned <- TRUE		
-		raster@file@datasize <- as.integer(1)
 		raster@file@nodatavalue <- -127
 		raster@file@datanotation <- 'LOG1S'
 	} else {

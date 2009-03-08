@@ -7,47 +7,48 @@
 
 
 if (!isGeneric("xyValues")) {
-	setGeneric("xyValues", function(raster, xyCoords)
+	setGeneric("xyValues", function(object, xyCoords, ...)
 		standardGeneric("xyValues"))
 }	
 	
-setMethod("xyValues", signature(raster='RasterLayer', xyCoords='matrix'), 
-	function(raster, xyCoords) { 
+setMethod("xyValues", signature(object='RasterLayer', xyCoords='matrix'), 
+	function(object, xyCoords, method='simple') { 
 		if (dim(xyCoords)[2] != 2) {
-			stop('xyCoords has wrong dimensions; there should be 2 columns only' )
+			stop('xyCoords has wrong dimensions; it should have 2 columns' )
 		}
-		cells <- cellFromXY(raster, xyCoords)
-		return(.rasterReadCells(raster, cells))
+		if (method=='bilinear') {
+			return(.bilinearValue(object, xyCoords))
+		} else {
+			cells <- cellFromXY(object, xyCoords)
+			return(.rasterReadCells(object, cells))
+		}
 	}	
 )	
 
 
-setMethod("xyValues", signature(raster='RasterStack', xyCoords='matrix'), 
-	function(raster, xyCoords) { 
+setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'), 
+	function(object, xyCoords, method='simple') { 
 		if (dim(xyCoords)[2] != 2) {
 			stop('xyCoords has wrong dimensions; there should be 2 columns only' )
 		}
-		cells <- cellFromXY(raster, xyCoords)
-		return(.stackReadCells(raster, cells))
+		return(.stackReadXT(object, cells, method))
 	}	
 )
 
 
 
-setMethod("xyValues", signature(raster='RasterLayer', xyCoords='SpatialPoints'), 
-	function(raster, xyCoords) { 
+setMethod("xyValues", signature(object='RasterLayer', xyCoords='SpatialPoints'), 
+	function(object, xyCoords, method='simple') { 
 		xyCoords <- coordinates(xyCoords)
-		cells <- cellFromXY(raster, xyCoords)
-		return(.rasterReadCells(raster, cells))
+		callNextMethod(object, xyCoords, method)
 	}	
 )
 
 
-setMethod("xyValues", signature(raster='RasterStack', xyCoords='SpatialPoints'), 
-	function(raster, xyCoords) { 
+setMethod("xyValues", signature(object='RasterStack', xyCoords='SpatialPoints'), 
+	function(object, xyCoords, method='simple') { 
 		xyCoords <- coordinates(xyCoords)
-		cells <- cellFromXY(raster, xyCoords)
-		return(.stackReadCells(raster, cells))
+		callNextMethod(object, xyCoords, method)
 	}	
 )
 

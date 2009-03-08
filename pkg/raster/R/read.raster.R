@@ -2,7 +2,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date : June 2008
-# Version 0,4
+# Version 0.8
 # Licence GPL v3
 
 
@@ -66,18 +66,21 @@
 			stop(paste(filename(raster)," does not exist"))
 		}
 		con <- file(rastergri, "rb")
-		if (raster@file@datatype == "ascii") {
-			stop("this type of ascii raster is not supported yet")
-		} else if (raster@file@datatype == "integer" | raster@file@datatype == "logical" ) { 
+		
+		dtype <- .shortDataType(raster@file@datanotation)
+		if (dtype == "INT" | dtype == "LOG" ) { 
 			dtype <- "integer"
-		} else { 
+		} else {
 			dtype <- "numeric" 
 		}
+		dsize <- dataSize(raster@file@datanotation)
+		dsign <- dataSigned(raster@file@datanotation)
+		
 		if (rownr > 0) {
-			seek(con, ((rownr-1) * ncol(raster) + (startcol-1)) * raster@file@datasize)
-			result <- readBin(con, what=dtype, n=ncolumns, size=raster@file@datasize, signed=raster@file@datasigned, endian=raster@file@byteorder) }	
+			seek(con, ((rownr-1) * ncol(raster) + (startcol-1)) * dsize)
+			result <- readBin(con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) }	
 		else {	
-			result <- readBin(con, what=dtype, n=ncell(raster), size=raster@file@datasize, signed=raster@file@datasigned, endian=raster@file@byteorder) 
+			result <- readBin(con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder) 
 		}
 		close(con)
 #		result[is.nan(result)] <- NA
@@ -86,7 +89,7 @@
 		} else {
 			result[result == raster@file@nodatavalue ] <- NA 			
 		}
-		if (raster@file@datatype == 'logical') {
+		if (dtype == 'logical') {
 			result <- as.logical(result)
 		}
 	}
@@ -199,50 +202,19 @@
 
 	res <- vector(length=length(cells))
 	res[] <- NA
+	dsize <- dataSize(raster@file@datanotation)
+	dtype <- .shortDataType(raster@file@datanotation)
 	for (i in 1:length(cells)) {
-		seek(con, (cells[i]-1) * raster@file@datasize)
-		if (raster@file@datatype == "integer") { dtype <- integer() } else { dtype <- numeric() }
-			res[i] <- readBin(con, what=dtype, n=1, size=raster@file@datasize, endian=raster@file@byteorder) 
+		seek(con, (cells[i]-1) * dsize)
+		if (dtype == "INT") { 
+			dtype <- integer
+		} else { 
+			dtype <- numeric
+		}
+		res[i] <- readBin(con, what=dtype, n=1, size=dsize, endian=raster@file@byteorder) 
 	}
 	close(con)
 	res[res <=  max(-3e+38, .nodatavalue(raster))] <- NA
 	return(cbind(cells,res))
 }
 
-
-.stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
-	if (dataSource(rstack) == 'ram') {
-		if (rownumber > 0) {
-			warning('all values are in memory; no point in using read')
-		}
-		return(rstack)
-	}
-	rstack@data@values <- matrix(nrow=length(values(raster)), ncol=nlayers(rstack)) 
-
-	for (i in seq(nlayers(rstack))) {
-		raster <- .rasterRead(rstack@layers[[i]], rownumber, startcol, ncolumns)
-		rstack@data@values[,i] <- values(raster)
-	}
-	rstack@data@content <- dataContent(raster)
-	rstack@data@indices <- dataIndices(raster)
-	return(rstack)
-}
-
-
-.stackReadCells <- function(object, cells) {
-		for (i in seq(nlayers(object))) {
-			v <- .rasterReadCells(object@layers[[i]], cells)
-			if (i == 1) {
-				result <- v
-			} else {
-				result <- cbind(result, v)
-	#			colnames(result)[length(result[1,])] <- rstack@layers[[i]]@file@shortname
-			}
-		}
-		if (!(is.null(dim(result)))) {
-			for (i in seq(nlayers(object))) {
-				colnames(result) <- object@data@colnames
-			}
-		}	
-		return(result)
-}

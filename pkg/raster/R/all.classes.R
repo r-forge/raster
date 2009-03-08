@@ -64,9 +64,9 @@ setClass('RasterFile',
 		shortname ='character', # short name
 		driver ='character', #gdal, raster
 		gdalhandle='list',
-		datatype ='character', #'numeric' or 'integer'
-		datasize ='integer',
-		datasigned='logical',
+#		datatype ='character', #'numeric' or 'integer'
+#		datasize ='integer',
+#		datasigned='logical',
 		datanotation='character',
 		byteorder ='character',
 		nodatavalue ='numeric', # on disk, in ram it is NA
@@ -79,9 +79,9 @@ setClass('RasterFile',
 		shortname ='',
 		driver = 'raster',
 		gdalhandle= list(),
-		datatype = 'numeric',
-		datasize = as.integer(4),
-		datasigned= TRUE,
+#		datatype = 'numeric',
+#		datasize = as.integer(4),
+#		datasigned= TRUE,
 		datanotation='FLT4S',
 		byteorder = .Platform$endian,
 		nodatavalue = -9999,
@@ -90,6 +90,8 @@ setClass('RasterFile',
 		bandorder = 'BIL'
 	),
 	validity = function(object) {
+		c1 <- datanotation %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S')
+		return(c1)
 	}
 )
 
@@ -119,6 +121,20 @@ setClass('SingleLayerData',
 	}
 )
 
+
+
+setClass ('RasterLegend',
+	representation (
+		type = 'character',
+		begin = 'vector',
+		end = 'vector',
+		color = 'vector'
+		),
+	prototype (
+		)
+	)
+	
+
 	
 setClass ('RasterLayer',
 	contains = 'Raster',
@@ -126,13 +142,15 @@ setClass ('RasterLayer',
 		title = 'character',
 		file = 'RasterFile',
 		data = 'SingleLayerData',
+		legend = 'RasterLegend',
 		history = 'vector'
 		),
 	prototype (
 		history = vector(mode='character')
 		)
 	)
-	
+
+
 
 setClass('MultipleRasterData', 
 	representation (

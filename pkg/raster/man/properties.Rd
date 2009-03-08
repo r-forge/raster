@@ -3,6 +3,7 @@
 \alias{filename}
 \alias{dataType} 
 \alias{dataSize} 
+\alias{dataSigned} 
 
   
 \title{Raster properties}
@@ -14,6 +15,7 @@
 \usage{
 filename(object)
 dataSize(object)
+dataSigned(object)
 dataType(object)
 }
 

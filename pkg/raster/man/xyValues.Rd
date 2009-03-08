@@ -7,10 +7,6 @@
 \alias{xyValues,RasterLayer,SpatialPoints-method}
 \alias{xyValues,RasterStack,SpatialPoints-method}
 
-\alias{bilinearValue}
-\alias{bilinearValue,RasterLayer,matrix-method}
-
-
 \title{ values at xy coordinates }
 
 \description{
@@ -18,20 +14,23 @@
 }
 
 \usage{
-xyValues(raster, xyCoords)
-bilinearValue(raster, xyCoords)
+xyValues(object, xyCoords, ...)
 }
 
 \arguments{
-\item{raster}{RasterLayer or RasterStack object}
+\item{object}{RasterLayer or RasterStack object}
 \item{xyCoords}{xy coordinates (see below, under Methods}
+\item{...}{additional arguments. See below}
+
 }
 
 \section{Methods}{
 \describe{
 \code{xyCoords} can be a  \code{n*2} matrix or dataframe with the first column having the x values, and the second column has the y values.
-It can also be a SpatialPoints* object.
+It can also be a \code{SpatialPoints*} object.
 
+if \code{raster} is a \code{RasterLayer} object, the additional argument \code{method='bilinear'} can be used. In the case, the returned values
+are interpolated from the (centers of the) four nearest raster cells.
 
 }
 }
@@ -51,6 +50,7 @@ r <- raster()
 r[] <- 1:ncell(r)
 xy <- cbind(0:36 * 10 - 180, 90)
 xyValues(r, xy)
+xyValues(r, xy, method='bilinear')
 }
 
 \keyword{methods}

@@ -13,40 +13,6 @@ filename <- function(object) {
 	return(object@file@name)
 }
 
-xmin <- function(object) {
-	object <- getBbox(object)
-	return(as.numeric(object@xmin))
-}
-
-xmax <- function(object) {
-	object <- getBbox(object)
-	return(as.numeric(object@xmax))
-}
-
-ymin <- function(object) {
-	object <- getBbox(object)
-	return(as.numeric( object@ymin))
-}
-
-ymax <- function(object) {
-	object <- getBbox(object)
-	return(as.numeric(object@ymax))
-}
-
-xres <- function(object) {
-	return ( as.numeric( (xmax(object) - xmin(object)) / ncol(object))  )
-}
-
-yres <- function(object) {
-	return (  as.numeric( (ymax(object) - ymin(object)) / nrow(object))  )
-}
-
-resolution <- function(object) {
-	return(c(xres(object), yres(object)))
-}
-
-
-
 band <- function(object) {
 	if (class(object) == "RasterLayer") {
 		return(object@file@band)
@@ -82,12 +48,6 @@ projection <- function(object, asText=TRUE) {
 
 
 
-origin <- function(object) {
-	x <- xmin(object) - xres(object)*(round(xmin(object) / xres(object)))
-	y <- ymax(object) - yres(object)*(round(ymax(object) / yres(object)))
-	return(c(x, y))
-}
-
 
 minValue <- function(object, layer=1) {
 	if (layer < 1) { 
@@ -105,27 +65,6 @@ maxValue <- function(object, layer=1) {
 	} else { return(object@data@max[layer]) }
 }
 
-
-dataContent <- function(object) {
-	return(object@data@content)
-}
-
-dataIndices <- function(object) {
-	return(object@data@indices)
-}
-
-dataSource <- function(object) {
-	return(object@data@source)
-}
-
-dataType <- function(object) {
-	return(object@file@datanotation)
-}
-
-
-dataSize <- function(object) {
-	return(object@file@datasize)
-}
 
 .driver <- function(object) {
 	return(object@file@driver)

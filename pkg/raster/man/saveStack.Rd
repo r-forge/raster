@@ -3,6 +3,7 @@
 \alias{stackOpen}
 
 \title{ Save or open a RasterStack file }
+
 \description{
   A RasterStack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects, or from raster files.
   These two functions allow you to save the references to raster files and recreate a rasterStack object later. The values are not saved, only the references to the files.
@@ -18,16 +19,17 @@ stackSave(rstack)
   \item{rstack}{ a RasterStack object }
 }
 \details{
-  When a RasterStack is saved to a file, only pointers (filenames) to raster datasets are saved, not the data. If the name or location of a raster file changes, the RasterStack becomes invalid.
-  In stackFromFiles, use index=-1 to add all bands of a single file to the RasterStack
+  When a RasterStack is saved to a file, only pointers (filenames) to raster datasets are saved, not the data. 
+  If the name or location of a raster file changes, the RasterStack becomes invalid.
 }
 
 \value{
   a RasterStack object
 }
+
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{raster}}, \code{\link[raster]{rasterFromFile}}}
+\seealso{ \code{\link[raster]{stack}}, \code{\link[raster]{changeStack}}}
 
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
@@ -39,3 +41,4 @@ stackSave(rstack)
   st2
 }
 \keyword{ spatial }
+

@@ -21,7 +21,7 @@ cellStats <- function(x, ..., na.rm=TRUE) {
 		if (dataSource(x) == 'ram') {
 			stop('no values associated with this RasterLayer')
 		}
-		if (.CanProcessInMemory(x, 2)) {
+		if (canProcessInMemory(x, 2)) {
 			x <- readAll(x)
 		}
 	}

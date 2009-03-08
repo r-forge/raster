@@ -44,7 +44,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 		}
 
 	} else if ( dataSource(raster) == 'disk' ) { 
-		if (!.CanProcessInMemory(outraster, 4) && filename == '') {
+		if (!canProcessInMemory(outraster, 4) && filename == '') {
 			filename <- tempfile()
 			outraster <- setFilename(outraster, filename )
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
@@ -68,12 +68,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 				v <- c(v, d)
 			}
 
-			if (r %in% track) {
-				elapsed <- (proc.time() - starttime)[3]
-				tpr <- elapsed /r
-				ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
-				cat('row', r, '-', ttg, 'minutes to go\n')
-			}			
+			if (r %in% track) { .showTrack(r, track, starttime) }
 
 		}
 		if (filename(outraster) == '') { 

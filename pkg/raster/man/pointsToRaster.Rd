@@ -5,17 +5,23 @@
 \description{
   Convert points to a RasterLayer object
 }
+
 \usage{
-pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, filename="", overwrite=FALSE)
+pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)
 }
 
 \arguments{
   \item{raster}{ a RasterLayer object }
   \item{xy}{ a matrix of x and y coordinates (in the same map reference system as the raster) }
-  \item{filename}{ output filename }
-  \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}  
   \item{values}{a vector of length xy[,1] with the values to be used}  
   \item{fun}{ the function to be applied}
+  \item{background}{the value to be applied to the cells in which no points fall (typically \code{NA} or \code{0})}
+  \item{filename}{ output filename }
+  \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}  
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{track}{vector of row numbers for which the function will report that they have been processed}    
+  
 }
 
 \details{

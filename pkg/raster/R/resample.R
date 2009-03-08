@@ -15,7 +15,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 	to <- setRaster(to, filename)
 	to <- setDatatype(to, datatype)
 	
-	if (!.CanProcessInMemory(to, 1) && filename(to) == '') {
+	if (!canProcessInMemory(to, 1) && filename(to) == '') {
 		filename <- tempfile()
 		to <- setFilename(to, filename )
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(to))	}
@@ -31,7 +31,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 		if (method=='ngb') {
 			vals <- xyValues(from, xy)
 		} else {
-			vals <- bilinearValue(from, xy)
+			vals <- xyValues(from, xy, method='bilinear')
 		}
 		if (inMemory) {
 			v <- c(v, vals)
@@ -39,12 +39,9 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 			to <- setValues(to, vals, r)
 			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
-		if (r %in% track) {
-			elapsed <- (proc.time() - starttime)[3]
-			tpr <- elapsed /r
-			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
-			cat('row', r, '-', ttg, 'minutes to go\n')
-		}
+
+		if (r %in% track) { .showTrack(r, track, starttime) }
+		
 	}
 	if (inMemory) {
 		to <- setValues(to, v) 

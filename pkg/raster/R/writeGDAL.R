@@ -6,7 +6,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
 # based on  create2GDAL and saveDataset from the rgdal package
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
@@ -14,13 +13,12 @@
 #.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', '
 # what are these?  CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
 # this needs to get fancier; depending on object and the abilties of the drivers
-
 .getGdalDType <- function(dtype) {
 	if (!(dtype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S'))) {
 		stop('not a valid data type')
 	}
-	type <- substr(dtype,1,3)
-	size <- as.numeric(substr(dtype,4,4)) * 8
+	type <- .shortDataType(dtype)
+	size <- dataSize(dtype) * 8
 	if (type == 'LOG') {
 		return('Byte')
 	}
@@ -32,7 +30,7 @@
 		}
 		if (size == 8) {
 			return('Byte')
-		} else if (substr(dtype,5,5) == 'U') {
+		} else if (dataSigned(dtype)) {
 			type <- paste('U', type, sep='')
 		}
 	} else { 

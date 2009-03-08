@@ -5,10 +5,9 @@
 # Licence GPL v3
 
 
-pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length, filename="", overwrite=FALSE) {
+pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 # make this an argument ?  so that you can use e.g.  background=0 
-	background=NA
-
+	
 	if (class(xy) != 'matrix') {
 		stop('xy must be a matrix')
 	}
@@ -17,6 +16,8 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 	}
 	
 	rs <- setRaster(raster, filename)
+	rs <- setDatatype(rs, datatype)
+	
 	cells <- cellFromXY(rs, xy)
 	rows <- rowFromCell(rs, cells)
 	cols <- colFromCell(rs, cells)
@@ -26,30 +27,29 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 	dna <- vector(length=ncol(rs))
 	dna[] <- background
 	v <- vector(length=0)	
+	
+	starttime <- proc.time()
+
 	for (r in 1:rs@nrows) {
+		d <- dna
 		if (r %in% urows) {
 			ss <- subset(xyarc, xyarc[,4] == r)
 			ucols <- unique(ss[,5])
 #			ucols <- ucols[order(ucols)]
-			d <- dna
 			for (c in 1:length(ucols)) {
 				sss <- subset(ss, ss[,5] == ucols[c] )
 				d[ucols[c]] <- fun(sss[,3])	
 			}
-			if (filename != "") {
-				rs <- setValues(rs, d, r)
-				rs <- writeRaster(rs)
-			} else {
-				v <- c(v, d)
-			}
+		}
+		if (filename != "") {
+			rs <- setValues(rs, d, r)
+			rs <- writeRaster(rs, overwrite=overwrite, filetype=filetype) 
 		} else {
-			if (filename != "") {
-				rs <- setValues(rs, dna, r)
-				rs <- writeRaster(rs, r) 
-			} else {
-				v <- c(v, dna)
-			}
-		} 
+			v <- c(v, d)
+		}
+
+		if (r %in% track) { .showTrack(r, track, starttime) }
+		
 	}	
 	if (filename == "") {
 		rs <- setValues(rs, v)

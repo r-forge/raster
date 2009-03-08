@@ -68,7 +68,7 @@ function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatyp
 		
 	} else {
 		if (filename(outraster) == "") {
-			if (!.CanProcessInMemory(outraster, 4)) {
+			if (!canProcessInMemory(outraster, 4)) {
 				filename <- tempfile()
 				outraster <- setFilename(outraster, filename )
 			} else {
@@ -104,12 +104,7 @@ function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatyp
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
-			if (r %in% track) {
-				elapsed <- (proc.time() - starttime)[3]
-				tpr <- elapsed /r
-				ttg <- round(tpr/60 * (nrow(x) - r), digits=1)
-				cat('row', r, '-', ttg, 'minutes to go\n')
-			}
+			if (r %in% track) { .showTrack(r, track, starttime) }
 			
 		}
 		if (filename(outraster) == "") { 

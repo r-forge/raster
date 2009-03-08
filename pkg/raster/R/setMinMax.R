@@ -1,4 +1,3 @@
-	
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
@@ -12,7 +11,7 @@ setMinMax <- function(raster) {
 		if (dataSource(raster) == 'ram') {
 			stop('no values associated with this RasterLayer')
 		}
-		if (.CanProcessInMemory(raster, 2)) {
+		if (canProcessInMemory(raster, 2)) {
 			raster <- readAll(raster)
 			clear <- TRUE
 		}
@@ -41,10 +40,12 @@ setMinMax <- function(raster) {
 		}
 		raster <- clearValues(raster)
 	}
-#	if (raster@file@datatype == 'logical') {
+	
+#	if (datatype == 'logical') {
 #		raster@data@min <- as.logical(raster@data@min)
 #		raster@data@max <- as.logical(raster@data@max)
 #	}
+
 	raster@data@haveminmax <- TRUE
 	return(raster)
 }

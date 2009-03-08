@@ -29,7 +29,8 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 
 	isint <- TRUE
 	for (i in 1:length(rasters)) {
-		if (rasters[[i]]@file@datatype != 'integer') {
+		dtype <- .shortDataType(rasters[[i]]@file@datanotation)
+		if (dtype != 'INT') {
 			isInt <- FALSE
 		}
 	}
@@ -48,7 +49,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 	
 	v <- vector(length=0)
 	
-	if (!.CanProcessInMemory(x, 2) && filename == '') {
+	if (!canProcessInMemory(x, 2) && filename == '') {
 		filename <- tempfile()
 		outraster <- setFilename(outraster, filename )
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
@@ -84,12 +85,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 			v <- c(v, rd)
 		}
 
-		if (r %in% track) {
-			elapsed <- (proc.time() - starttime)[3]
-			tpr <- elapsed /r
-			ttg <- round(tpr/60 * (nrow(raster) - r), digits=1)
-			cat('row', r, '-', ttg, 'minutes to go\n')
-		}			
+		if (r %in% track) { .showTrack(r, track, starttime) }
 		
 	}
 	if (filename(outraster) == '') { 

@@ -3,14 +3,14 @@
 # International Rice Research Institute
 # contact: r.hijmans@gmail.com
 # Date : October 2008
-# Version 0,8
+# Version 0.8
 # Licence GPL v3
 
 
-trim <- function(astring) {
+trim <- function(x) {
 	f <- function(s) {return( gsub('^[[:space:]]+', '',  gsub('[[:space:]]+$', '', s) ) )}
-	return(unlist(lapply(astring, f)))
-}  
+	return(unlist(lapply(x, f)))
+}
 
 
 shortFileName <- function(filename) {

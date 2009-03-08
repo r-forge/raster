@@ -1,13 +1,16 @@
-\name{polygons to raster}
+\name{polygonsToRaster}
 
 \alias{polygonsToRaster}
 
-\title{ Polygons to raster conversion}
+\title{Polygons to raster conversion}
+
 \description{
-Polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID is transferred. Holes in polygons are recognized if they are correctly specified.
+Polygon to raster conversion. The polygons are rasterized. Either values associated with each polygon, or a polygon ID is transferred. 
+Holes in polygons are recognized if they are correctly specified.
 }
+
 \usage{
-polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA",  filetype='raster',  datatype='FLT4S', track=c(100, 500, 1:(round(nrow(raster)/1000)) * 1000)) 
+polygonsToRaster(spPolys, raster, field=0, updateRaster=FALSE, updateValue="NA", filename="", overwrite=FALSE,  filetype='raster',  datatype='FLT4S', track=-1) 
 }
 
 \arguments{
@@ -17,7 +20,7 @@ polygonsToRaster(spPolys, raster, field=0, filename="", overwrite=FALSE, updateR
   \item{filename}{ output filename }
   \item{overwrite}{ logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
-  \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either 'all', 'NA', '!NA', or 'zero' } 
+  \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either \code{'all'}, \code{'NA'}, \code{'!NA'}, or \code{'zero'} } 
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
   \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed. To track progress on very large files }
@@ -54,3 +57,4 @@ r2 <- polygonsToRaster(addpoly, r, field=1, updateRaster=TRUE, updateValue="NA")
 }
 
 \keyword{ spatial }
+
