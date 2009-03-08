@@ -67,7 +67,8 @@
 	} else {
 		binraster <- .setFileExtensionValues(filename(raster))
 		con <- file(binraster, "wb")
-		writeBin( values(raster), con, size = dataSize(raster@file@datanotation) ) 
+		dsize <- dataSize(raster@file@datanotation)
+		writeBin( values(raster), con, size = dsize ) 
 		close(con)
 		.writeRasterHdr(raster) 
 	}	
@@ -97,7 +98,11 @@
 	}
 	raster@file@name <- .setFileExtensionHeader(filename(raster))
 	binraster <- .setFileExtensionValues(filename(raster))
-	attr(raster, "filecon") <- file(binraster, "wb")
+	
+	attr(raster@file, "con") <- file(binraster, "wb")
+	attr(raster@file, "dsize") <- dataSize(raster@file@datanotation)
+	attr(raster@file, "dtype") <- .shortDataType(raster@file@datanotation)
+	
 	raster@data@min <- Inf
 	raster@data@max <- -Inf
 	raster@data@haveminmax <- FALSE
@@ -108,7 +113,7 @@
 
 .stopRowWriting <- function(raster) {
 	.writeRasterHdr(raster) 
-	close(raster@filecon)
+	close(raster@file@con)
 	raster@data@haveminmax <- TRUE
 	raster@data@source <- 'disk'
 	raster@data@content <- 'nodata'
@@ -121,19 +126,19 @@
 #	if (dataContent(raster) != 'row') { 
 #		stop('raster does not contain a row') 
 #	}
-	raster@data@values[is.nan(raster@data@values)] <- NA
-	raster@data@values[is.infinite(raster@data@values)] <- NA
-	
-	dtype <- .shortDataType(raster@file@datanotation)
-	if (dtype == "integer" |  dtype =='logical' ) { 
-		values <- as.integer(round(raster@data@values))  
-		values[is.na(values)] <- as.integer(raster@file@nodatavalue)		
-	} else { 
-		values  <- as.numeric(raster@data@values) 
-	}
+
 	if (dataIndices(raster)[1] == 1) { 
 		raster <- .startRowWriting(raster, overwrite=overwrite)
  	} 
+
+	raster@data@values[is.nan(raster@data@values)] <- NA
+	raster@data@values[is.infinite(raster@data@values)] <- NA
+	if (raster@file@dtype == "INT" || raster@file@dtype =='LOG' ) { 
+		values <- as.integer(round(raster@data@values))  
+		values[is.na(values)] <- as.integer(raster@file@nodatavalue)		
+	} else { 
+		values  <- as.numeric( raster@data@values ) 
+	}
 	
 	rsd <- na.omit(raster@data@values) # min and max values
 	if (length(rsd) > 0) {
@@ -141,7 +146,7 @@
 		raster@data@max <- max(raster@data@max, max(rsd))
 	}	
 	
-	writeBin(values, raster@filecon, size = dataSize(raster@file@datanotation) )
+	writeBin(values, raster@file@con, size = raster@file@dsize )
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
 		raster <- .stopRowWriting(raster)
