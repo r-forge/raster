@@ -61,14 +61,19 @@
 		}
 	}	
 
-#.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
 # this needs to get fancier; depending on object and the abilties of the drivers
 	dataformat <- .getGdalDType(raster@file@datanotation)
-
 	driver = new("GDALDriver", gdalfiletype)
 	
-    if (!is.null(options) && !is.character(options)) { stop("options not character") }
-    transient = new("GDALTransientDataset", driver = driver, rows = nrow(raster), cols = ncol(raster), bands = nbands, type = dataformat, options = options, handle = NULL)
+    gdoptions <- NULL
+	
+#	GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
+#	typeNum <- match(gdalfiletype, GDALDataTypes, 1) - 1
+# 	my_tempfile <- tempfile()
+#	gdhandle <- .Call('RGDAL_CreateDataset', driver=driver, as.integer(c(ncol(raster), nrow(raster), nlayers(raster))), as.integer(typeNum), options=NULL, my_tempfile, PACKAGE="rgdal")
+#   transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=gdoptions, handle=gdhandle)
+
+    transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=gdoptions, handle=NULL)
  
 	gt <- c(xmin(raster), xres(raster), 0, ymax(raster), 0, -yres(raster))
     .Call("RGDAL_SetGeoTransform", transient, gt, PACKAGE = "rgdal")
