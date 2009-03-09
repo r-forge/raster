@@ -8,7 +8,7 @@
 
 setMethod('overlay', signature(x='RasterLayer', y='missing'), 
 function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
-	return(calc(x, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+	return(calc(x, fun=fun, filename=filename, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
 }
 )
 
