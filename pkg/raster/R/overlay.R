@@ -26,7 +26,7 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', da
 			}
 		}
 	}
-	return(overlay(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+	return(overlay(rasters, fun=fun, filename=filename, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
 }
 )
 
