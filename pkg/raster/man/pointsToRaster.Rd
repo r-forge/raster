@@ -28,7 +28,7 @@ pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background
 Each point is assinged to a grid cell. The value of a grid cell is determined by the values associated with the points and function fun.
 If you want the count of points in each grid cell, use the (default) \code{length} function. I.e. for each cell it computes the length of the vector of points.
 If you want the sum of the values, use \code{sum} for the sum.
-If you want a yes/no result, you can use fun=function(x){if(lenght(x)>0 {r<-1} else {r<-0}; return(r)}
+If you want a yes/no result, you can use "fun=function(x)\{if(lenght(x)>0 \{r<-1\} else \{r<-0\}; return(r)\}"
 }
 \value{
   a RasterLayer object

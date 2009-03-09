@@ -1,39 +1,38 @@
-\name{fromBbox}
+\name{cellsFromBbox}
+
 \alias{cellsFromBbox}
-\alias{polygonFromBbox}
 
 
-\title{Additional BoundingBox functions}
+\title{Cells from BoundingBox}
+
 \description{
 cellsFromBbox returns the cellnumbers or a RasterLayer within a BoundingBox (rectangular area).
-polygonFromBbox creates a SpatialPolygon object from a BoundingBox object (or a Raster*) object
-You can also use bbox(object) to get a sp type bbox (a 2 x 2 matrix), but such an object cannot be used with the other functon described here as it returns a matrix, and not a BoundingBox object.
 }
 
 \usage{
-cellsFromBbox(object, bndbox)
-polygonFromBbox(bndbox, sp=TRUE)
+cellsFromBbox(object, bndbox, expand=FALSE)
 }
 
 \arguments{
   \item{object}{A Raster* object}
   \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
-  \item{sp}{logical. If \code{TRUE}, the output will be a SpatialPolygons object (sp package). Otherwise a matrix of coordinates is returned}    
+  \item{expand}{Logical. If \code{TRUE}, \code{NA} is returned for (virtual) cells implied by \code{bndbox}, 
+      that are outside the RasterLayer (\code{object}). If \code{FALSE}, only cell numbers for the area where \code{object} and \code{bndbox}
+      overlap are returned (see \link[raster]{intersectBbox} }
 }
 
 \value{
-a vector of cell numbers of a SpatialPolygons object
+a vector of cell numbers 
 }  
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{newBbox}}, \code{\link[sp]{SpatialPolygons}} }
+\seealso{  \code{\link[raster]{polygonFromBbox}}, \code{\link[raster]{newBbox}}, \code{\link[sp]{SpatialPolygons}} }
 
 \examples{
 r <- raster()
 bb <- newBbox(-10, 10, -20, 20)
 cells <- cellsFromBbox(r, bb)
-pol <- polygonFromBbox(bb)
 }
 
 \keyword{spatial}

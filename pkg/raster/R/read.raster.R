@@ -206,10 +206,10 @@
 	dtype <- .shortDataType(raster@file@datanotation)
 	for (i in 1:length(cells)) {
 		seek(con, (cells[i]-1) * dsize)
-		if (dtype == "INT") { 
-			dtype <- integer
+		if (dtype == "FLT") { 
+			dtype <- "numeric"
 		} else { 
-			dtype <- numeric
+			dtype <- "integer"
 		}
 		res[i] <- readBin(con, what=dtype, n=1, size=dsize, endian=raster@file@byteorder) 
 	}

@@ -2,10 +2,12 @@
 \alias{click}
 
 \title{ Click }
+
 \description{
   Click on a plot (map) to get values of a Raster* object at a location; and optionally the coordinates for the location. 
   Multiple locations can be clicked on by specifying \code{n=}. 
 }
+
 \usage{
 click(object, n=1, xy=FALSE, type = "n", ...)
 }
@@ -27,7 +29,15 @@ click(object, n=1, xy=FALSE, type = "n", ...)
 The value(s) of \code{object} at the point(s) clicked on; and the coordinates if \code{xy==TRUE}.
 } 
 
+\seealso{ \code{\link[raster]{drawBbox}} }
+
 \author{ Robert J. Hijmans }
 
+\examples{
+ r <- rasterFromFile(system.file("external/test.ag", package="sp"))
+#plot(r)
+#click(r)
+#now click on the plot (map)
+}
 
 \keyword{ spatial }

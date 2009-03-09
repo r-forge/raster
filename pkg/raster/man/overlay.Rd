@@ -35,11 +35,13 @@ The default function \code{sum} always works because its first argument is \code
 }
 
 \details{
-In stead of the overlay function you can also use normal artimic functions such as *, /, +, - with RasterLayer objects (see examples), but then you cannot specifiy an output filename, filetype or datatype. 
+In stead of the overlay function you can also use normal artimic functions such as *, /, +, - with RasterLayer objects (see examples), 
+but then you cannot specifiy an output filename, filetype or datatype. 
 }
 
 \value{
-a new RasterLayer object (and in some cases, if a filename is provided or the output values cannot be stored in memory, the side effect of a file on disk)
+a new RasterLayer object and in some cases, if a filename is provided or the output values cannot be stored in memory, 
+the side effect of a file on disk
 }
 
 \seealso{ \code{\link[raster]{Arith-methods}} }

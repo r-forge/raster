@@ -1,4 +1,4 @@
-\name{getBBox}
+\name{getBbox}
 
 \alias{getBbox}
 \alias{getBbox,BoundingBox-method}
@@ -30,7 +30,7 @@ A BoundingBox object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{setBoungingBox}}, \code{\link[raster]{clickBbox}} }
+\seealso{ \code{\link[raster]{setBoungingBox}}, \code{\link[raster]{drawBbox}} }
 
 \examples{
 r <- raster()

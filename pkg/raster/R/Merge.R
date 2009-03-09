@@ -5,7 +5,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
 setMethod('merge', signature(x='RasterLayer', y='RasterLayer'), 
 function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster', track=-1 ){ 
 	
