@@ -10,12 +10,7 @@ cellStats <- function(x, ..., na.rm=TRUE) {
 		stop('you must provide a function as argument')
 	}
 	
-	for(i in seq(along=funs)) {
-		if (class(funs[[i]]) != 'function') {
-			stop('only functions are allowed as ... arguments')
-		}
-	}
-	
+
 	res <- list()
 	if (dataContent(x) != 'all') {
 		if (dataSource(x) == 'ram') {
