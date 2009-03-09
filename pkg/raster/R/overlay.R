@@ -8,7 +8,9 @@
 
 setMethod('overlay', signature(x='RasterLayer', y='missing'), 
 function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
+
 	return(calc(x, fun=fun, filename=filename, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+	
 }
 )
 
@@ -34,11 +36,6 @@ function(x, y, ..., fun=sum, filename="", overwrite=FALSE, filetype='raster', da
 
 setMethod('overlay', signature(x='list', y='missing'), 
 function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
-	if (missing(fun)) { stop("you must supply a function 'fun'. E.g., 'fun=function(x,y){return(x+y)}'") }
-	if (missing(filename)) { filename <- "" }
-	if (missing(overwrite)) { overwrite <- FALSE }
-	if (missing(datatype)) {datatype='FLT4S'}
-	if (missing(track)) {track=-1}
 	
 	compare(x)
 
@@ -73,8 +70,8 @@ function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatyp
 				outraster <- setFilename(outraster, filename )
 			} else {
 				v  <- vector(length=ncell(outraster))
-				endcell <- 0
-				inccol <- ncol(outraster) - 1
+				startcells <- cellFromCol(outraster, 1)
+				endcells <- cellFromCol(outraster, ncol(outraster))
 			}
 		}	
 		starttime <- proc.time()
@@ -96,9 +93,7 @@ function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatyp
 			
 			if (filename(outraster) == "") {
 #				v <- c(v, vals)
-				startcell <- endcell + 1
-				endcell <- startcell + inccol
-				v[startcell:endcell] <- vals
+				v[startcells[r]:endcells[r]] <- vals
 			} else {
 				outraster <- setValues(outraster, vals, r)
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
@@ -112,7 +107,5 @@ function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatyp
 		}
 	} 
 	return(outraster)
-
-	
 }
 )
