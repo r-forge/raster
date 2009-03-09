@@ -25,7 +25,7 @@
 Supported datatypes include:
 
 \tabular{rll}{
-	\tab \code{\bold{format}} \tab \bold{Long name} \cr
+	\tab \bold{Format} \tab \bold{Long name} \cr
     \tab \code{raster} \tab 'Native' raster package format \cr
     \tab \code{ascii}  \tab ESRI Ascii \cr
     \tab \code{ENVI}   \tab ENVI .hdr Labelled \cr
@@ -36,7 +36,7 @@ Supported datatypes include:
     \tab \code{ILWIS}   \tab ILWIS Raster Map \cr
     \tab \code{PAux}   \tab PCI .aux Labelled \cr
     \tab \code{PCIDSK}   \tab PCIDSK Database File \cr
-    \tab \code{RST}  \tab  Idrisi Raster A.1
+    \tab \code{RST}  \tab  Idrisi Raster A.1 \cr
 }
 
 see \code{writeFormats} for the complete list
