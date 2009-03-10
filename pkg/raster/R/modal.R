@@ -13,12 +13,12 @@ setGeneric("modal", function(x, ..., ties='random', na.rm=FALSE)
 setMethod('modal', signature(x='ANY'), 
 function(x, ..., ties='random', na.rm=FALSE) {
 #partly based on http://wiki.r-project.org/rwiki/doku.php?id=tips:stats-basic:modalvalue
-	if (!ties %in% c('lowest', 'highest', 'NA', 'random')) {
-		stop("ties should be: 'lowest', 'highest', 'NA', or 'random'")
-	}
-
-	x <- c(x, ...)
 	
+	if (!ties %in% c('lowest', 'highest', 'NA', 'random')) {
+		stop("the value of 'ties' should be 'lowest', 'highest', 'NA', or 'random'")
+	}
+	
+	x <- c(x, ...)
 	z <- x[!is.na(x)]
 	if (length(z) == 0) { return(NA) 
 	} else if (na.rm == FALSE & length(z) < length(x)) { 
@@ -27,12 +27,19 @@ function(x, ..., ties='random', na.rm=FALSE) {
 		return(z)
 	} else {
 		freq <- table(z)
-		w <- as.numeric(names(freq[max(freq)==freq]))
+		if (is.logical(z)){logic <- TRUE} else {logic <- FALSE}		
+		if (logic) {
+			w <- as.logical(names(freq[max(freq)==freq]))		
+		} else {
+			w <- as.numeric(names(freq[max(freq)==freq]))
+		}
 		if (length(w) > 1) {
 			if (ties == 'lowest') {
 				w <- min(w)
+				if (logic) { w <- as.logical(w) }
 			} else if (ties == 'highest') {
 				w <- max(w)
+				if (logic) { w <- as.logical(w) }
 			} else if (ties == 'NA') {
 				w <- NA
 			} else { # random
@@ -45,29 +52,4 @@ function(x, ..., ties='random', na.rm=FALSE) {
 }
 )
 
-
-
-
-setMethod("modal", signature(x='Raster'),
-	function(x, ..., ties='random', na.rm=FALSE){
-		rasters <- list(...)
-		if (class(x) == 'RasterLayer') {
-			if (length(rasters)==0) { 
-				return(x) 
-			}
-		}
-		rasters <- c(x, rasters)
-		rm(x)
-		for (i in 1:length(rasters)) {
-			if (class(rasters[[i]]) == 'RasterStack') {
-				r <- rasters[[i]]
-				rasters <- rasters[-i]
-				rasters <- c(rasters, unstack(r))
-				rm(r)
-			}
-		}
-		fun <- function(x){modal(x, ties=ties)}
-		return( .summaryRasters(rasters, fun, 'modal', na.rm=na.rm) )
-	}
-)
 
