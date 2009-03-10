@@ -7,7 +7,7 @@
 
 
 .stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
-	if (dataSource(rstack) == 'ram') {
+	if (dataContent(rstack) == 'all') {  
 		if (rownumber > 0) {
 			warning('all values are in memory; no point in using read')
 		}
