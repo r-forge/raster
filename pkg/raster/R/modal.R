@@ -11,7 +11,7 @@ setGeneric("modal", function(x, ..., ties='random', na.rm=FALSE)
 	
 	
 setMethod('modal', signature(x='ANY'), 
-function(x, ..., ties='random', na.rm=TRUE) {
+function(x, ..., ties='random', na.rm=FALSE) {
 #partly based on http://wiki.r-project.org/rwiki/doku.php?id=tips:stats-basic:modalvalue
 	if (!ties %in% c('lowest', 'highest', 'NA', 'random')) {
 		stop("ties should be: 'lowest', 'highest', 'NA', or 'random'")
