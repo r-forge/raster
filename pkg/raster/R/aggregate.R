@@ -55,7 +55,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
 		}
 		if (filename(outRaster) != "") {
-			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype, datatype=datatype)
+			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
@@ -94,7 +94,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype, datatype=datatype)
+				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 			}
 			
 			if (r %in% track) { .showTrack(r, track, starttime) }
