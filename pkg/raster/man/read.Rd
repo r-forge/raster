@@ -1,4 +1,4 @@
-\name{Read Raster* data}
+\name{read}
 
 \alias{readAll,RasterLayer-method}
 \alias{readAll,RasterStack-method}
@@ -15,14 +15,13 @@
 \alias{readPartOfRow}
 \alias{readBlock}
 
-
 \title{Read values from disk}
 
 \description{
 Read values from a raster file associated with a RasterLayer or RasterStack object into memory.
-You can either read all the data (memory permitting), or read data by row, part of row, block, by cellnumber, 
-or for (x,y) coordinates. Data can be read from 'native raster' binary files, as well as for other formats 
-that are supported by the rgdal package.
+You can either read all the data (memory permitting), or read data for a single or multiple rows, part of row, 
+or a block (rectangular area). Data can be read from 'native raster' binary files, as well as for other formats 
+that are supported by the rgdal package \code{\link[rgdal]{gdalDrivers()}}.
 }
 
 
@@ -33,6 +32,7 @@ readRows(object, startrow, nrows = 3)
 readPartOfRow(object, rownr,  startcol=1, ncolumns=(ncol(object)-startcol+1)) 
 readBlock(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol+1)) 
 }
+
 
 \arguments{
   \item{object}{a Raster* object}
@@ -46,7 +46,7 @@ readBlock(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol
 
 \note{After read* the values are accessible with the "values(object)" function}
 
-\seealso{ \code{\link[raster]{writeRaster}}, \code{\link[raster]{xyValues}} }
+\seealso{ \code{\link[raster]{xyValues}}, \code{\link[raster]{cellValues}}, \code{\link[raster]{writeRaster}}}
 
 \author{Robert J. Hijmans}
 
@@ -66,6 +66,10 @@ readBlock(object, startrow, nrows=3, startcol=1, ncolumns=(ncol(object)-startcol
 
 # read a block
   block <- readBlock(rs, startrow=50, nrows=5, startcol=30, ncolumns=10)
+  
+# read a row from a stack
+  st <- stack(rs, rs, rs)  
+  st <- readRow(st, 50)
 }
 
 \keyword{classes}

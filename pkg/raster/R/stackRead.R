@@ -13,14 +13,16 @@
 		}
 		return(rstack)
 	}
-	rstack@data@values <- matrix(nrow=length(values(raster)), ncol=nlayers(rstack)) 
 
 	for (i in seq(nlayers(rstack))) {
-		raster <- .rasterRead(rstack@layers[[i]], rownumber, startcol, ncolumns)
-		rstack@data@values[,i] <- values(raster)
+		r <- .rasterRead(rstack@layers[[i]], rownumber, startcol, ncolumns)
+		if (i==1) {
+			rstack@data@values <- matrix(nrow=length(values(r)), ncol=nlayers(rstack)) 
+			rstack@data@content <- dataContent(r)
+			rstack@data@indices <- dataIndices(r)
+		}
+		rstack@data@values[,i] <- values(r)
 	}
-	rstack@data@content <- dataContent(raster)
-	rstack@data@indices <- dataIndices(raster)
 	return(rstack)
 }
 

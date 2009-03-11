@@ -10,10 +10,12 @@ if (!isGeneric("calc")) {
 }	
 
 setMethod('calc', signature(x='RasterLayer', fun='function'), 
+
 function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
+	
 	filename <- trim(filename)
 	outraster <- setRaster(x, filename)
 	outraster <- setDatatype(outraster, datatype)

@@ -35,19 +35,18 @@
 
 .bilinear <- function(x,y, x1,x2,y1,y2, q11,q12,q21,q22) {
 	div <- (x2-x1)*(y2-y1)
-	if (all(div > 0)) {
-		return( (q11/div)*(x2-x)*(y2-y) + (q21/div)*(x-x1)*(y2-y) + (q12/div)*(x2-x)*(y-y1) + (q22/div)*(x-x1)*(y-y1) )
-	} else {
-		print('oops, it happend')
-		bil <- vector(length=length(div))
-		bil[div>0] <- (q11/div)*(x2-x)*(y2-y) + (q21/div)*(x-x1)*(y2-y) + (q12/div)*(x2-x)*(y-y1) + (q22/div)*(x-x1)*(y-y1) 
-		bil[(x1==x2 && y1==y2)] <- q11
-		div <- y2-y1
-		bil[(x1==x2 && y1!=y2)] <- (q11/div)*(y2-y) + (q12/div)*(y-y1)
-		div <- x2-x1
-		bil[(x1!=x2 && y1==y2)] <- (q11/div)*(x2-x) + (q21/div)*(x-x1) 
-	}
+	
+	bil <- ( (q11/div)*(x2-x)*(y2-y) + (q21/div)*(x-x1)*(y2-y) + (q12/div)*(x2-x)*(y-y1) + (q22/div)*(x-x1)*(y-y1) )
 	return(bil)
+	
+#		bil <- vector(length=length(div))
+#		bil[div>0] <- (q11/div)*(x2-x)*(y2-y) + (q21/div)*(x-x1)*(y2-y) + (q12/div)*(x2-x)*(y-y1) + (q22/div)*(x-x1)*(y-y1) 
+#		bil[(x1==x2 && y1==y2)] <- NA
+#		div <- y2-y1
+#		bil[(x1==x2 && y1!=y2)] <- (q11/div)*(y2-y) + (q12/div)*(y-y1)
+#		div <- x2-x1
+#		bil[(x1!=x2 && y1==y2)] <- (q11/div)*(x2-x) + (q21/div)*(x-x1) 
+
 }
 
 

@@ -9,7 +9,7 @@
 setGeneric("modal", function(x, ..., ties='random', na.rm=FALSE)
 	standardGeneric("modal"))
 	
-	
+
 setMethod('modal', signature(x='ANY'), 
 function(x, ..., ties='random', na.rm=FALSE) {
 #partly based on http://wiki.r-project.org/rwiki/doku.php?id=tips:stats-basic:modalvalue
@@ -27,19 +27,24 @@ function(x, ..., ties='random', na.rm=FALSE) {
 		return(z)
 	} else {
 		freq <- table(z)
-		if (is.logical(z)){logic <- TRUE} else {logic <- FALSE}		
-		if (logic) {
-			w <- as.logical(names(freq[max(freq)==freq]))		
+		if (is.numeric(z)){
+			w <- as.numeric(names(freq[max(freq)==freq]))		
+		} else if (is.logical(z)) {
+			w <- as.logical(freq[max(freq)==freq])
 		} else {
-			w <- as.numeric(names(freq[max(freq)==freq]))
+			w <- names(freq[max(freq)==freq])
 		}
 		if (length(w) > 1) {
 			if (ties == 'lowest') {
 				w <- min(w)
-				if (logic) { w <- as.logical(w) }
+				if (is.logical(z)) { 
+					w <- as.logical(w) 
+				}
 			} else if (ties == 'highest') {
 				w <- max(w)
-				if (logic) { w <- as.logical(w) }
+				if (is.logical(z)) {
+					w <- as.logical(w) 
+				}
 			} else if (ties == 'NA') {
 				w <- NA
 			} else { # random
@@ -51,5 +56,4 @@ function(x, ..., ties='random', na.rm=FALSE) {
 	}	
 }
 )
-
 

@@ -45,7 +45,7 @@ Supported file types include:
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[rgdal]{readGDAL}} }  
+\seealso{ writeFormats \code{\link[raster]{writeFormats}} }  
 
 \examples{ 
 rs <- rasterFromFile(system.file("external/test.ag", package="sp"))

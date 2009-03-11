@@ -8,10 +8,14 @@
 values <- function(object, format='', names=FALSE) {
 	format <- trim(format)
 	if (class(object) == 'RasterLayer') {
-		if (format=='') {format <- 'vector'}
+		if (format=='') {
+			format <- 'vector'
+		}
 		return(.rasterValues(object, format, names=names))
 	} else {
-		if (format=='') {format <- 'matrix'}
+		if (format=='') {
+			format <- 'matrix'
+		}
 		return(.stackValues(object, format, names=names))	
 	}
 }
