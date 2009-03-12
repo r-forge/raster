@@ -29,13 +29,15 @@ raster <- function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, pro
 	return(rs)
 }
 
-#if (!isGeneric("values")) {
-#	setGeneric("values", function(object, ...)
-#		standardGeneric("values"))
+#if (!isGeneric("raster")) {
+#	setGeneric("raster", function(x, ...)
+#		standardGeneric("raster"))
 #}	
 
-#setMethod('values', signature(object='Raster'), 
-
+#setMethod('raster', signature(x='Raster'), 
+#	function(x, ...) {
+#		return(setRaster(x))
+#}
 
 
 rasterFromBbox <- function(bndbox, nrows=10, ncols=10) {
@@ -54,7 +56,7 @@ rasterFromBbox <- function(bndbox, nrows=10, ncols=10) {
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	fileext <- toupper(fileExtension(filename)) 
 	if ( fileext == ".GRD" | fileext == ".GRI" ) {
-		raster <- .rasterFromFile(filename, band) 
+		raster <- .rasterFromRasterFile(filename, band) 
 	} else {
 		raster <- .rasterFromGDAL(filename, band) 
 	}
@@ -119,7 +121,7 @@ rasterFromFile <- function(filename, values=FALSE, band=1) {
 
 
 
-.rasterFromFile <- function(filename, band=1) {
+.rasterFromRasterFile <- function(filename, band=1) {
 	if (!file.exists( .setFileExtensionValues(filename)) ){
 		warning("no '.gri' file. Assuming this is a Surfer file")
 		return(.readSurfer6(filename))

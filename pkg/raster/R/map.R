@@ -18,7 +18,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 		if (i != index) { stop("index should be >= 1 and <=", nlayers(object), " =nlayers(object)") }
 		raster2 <- asRasterLayer(object, i)
 		if (dataContent(object) == 'all') {
-			raster2 <- setValues(raster2, values(object)[i,])
+			raster2 <- setValues(raster2, values(object)[,i])
 		}
 		object <- raster2
 	}

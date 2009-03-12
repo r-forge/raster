@@ -9,9 +9,9 @@
 stackOpen <- function(stackfile) {
 	st <- read.table(stackfile, as.is=FALSE, strip.white=TRUE)
 	if (dim(st)[2] > 1) {
-		rst <- stackFromFiles(st[,1], st[,2])
+		rst <- stackFromFiles(as.vector(st[,1]), as.vector(st[,2]))
 	} else {
-		rst <- stackFromFiles(st[,1])
+		rst <- stackFromFiles(as.vector(st[,1]))
 	}
 	rst <- setFilename(rst, stackfile)
 	return(rst)
