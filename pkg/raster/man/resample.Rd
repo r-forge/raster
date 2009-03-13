@@ -39,9 +39,9 @@ valid values for \code{method} are \code{'ngb'} (nearest neighbor) and \code{'bi
 
 
 \examples{
-r <- raster(4, 4)
+r <- raster(nrow=4, ncol=4)
 r[] <- 1:ncell(r)
-r2 <- raster(40, 40)
+r2 <- raster(nrow=40, ncol=40)
 s <- resample(r, r2, method='bilinear')
 #plot(r)
 #x11()

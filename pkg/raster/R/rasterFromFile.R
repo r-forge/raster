@@ -17,55 +17,6 @@ closeHandle <- function(raster) {
 }
 
 
-#newRaster <- function(xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
-#	warning("'newRaster' is deprecated. Use 'raster' instead")
-#	return(raster(xmn, xmx, ymn, ymx, nrows, ncols, projstring))  }
-
-
-raster <- function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projstring="+proj=longlat +datum=WGS84") {
-	bb <- newBbox(xmn, xmx, ymn, ymx)
-	rs <- rasterFromBbox(bb, nrows=nrows, ncols=ncols)
-	rs <- setProjection(rs, projstring)
-	return(rs)
-}
-
-#if (!isGeneric("raster")) {
-#	setGeneric("raster", function(x, ...)
-#		standardGeneric("raster"))
-#}	
-
-#setMethod('raster', signature(x='Raster'), 
-#	function(x, ...) {
-#		return(setRaster(x))
-#}
-
-
-rasterFromBbox <- function(bndbox, nrows=10, ncols=10) {
-	crs <- newCRS('NA')
-	try(crs <- projection(bndbox, asText=F), silent = T)
-	bb <- getBbox(bndbox)
-
-	nr = as.integer(round(nrows))
-	nc = as.integer(round(ncols))
-	if (nc < 1) { stop("ncols should be > 0") }
-	if (nr < 1) { stop("nrows should be > 0") }
-	raster <- new("RasterLayer", bbox = bb, crs=crs, ncols = nc, nrows = nr )
-	return(raster) 
-}
-
-rasterFromFile <- function(filename, values=FALSE, band=1) {
-	fileext <- toupper(fileExtension(filename)) 
-	if ( fileext == ".GRD" | fileext == ".GRI" ) {
-		raster <- .rasterFromRasterFile(filename, band) 
-	} else {
-		raster <- .rasterFromGDAL(filename, band) 
-	}
-	if (values) {
-		raster <- readAll(raster)
-	}
-	return(raster)
-}	
-	
 .rasterFromGDAL <- function(filename, band) {	
 	gdalinfo <- GDALinfo(filename)
 	nc <- as.integer(gdalinfo[["columns"]])

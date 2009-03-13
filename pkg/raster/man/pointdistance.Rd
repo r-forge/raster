@@ -35,8 +35,8 @@ distanceGreatcircle(point1, point2, r = 6378137)
 \author{Robert J. Hijmans and Jacob van Etten }
 
 \examples{
-   a <- cbind(c(1,5,55,31),c(3,7,20))
-   b <- cbind(c(4,2,8,65),c(50,-90,20))   
+   a <- cbind(c(1,5,55,31),c(3,7,20,22))
+   b <- cbind(c(4,2,8,65),c(50,-90,20,32))   
 
    distanceEuclidean(c(0, 0), c(1, 1))
    distanceGreatcircle(c(0, 0), c(1, 1))

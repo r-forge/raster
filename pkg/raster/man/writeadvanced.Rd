@@ -37,9 +37,9 @@ canProcessInMemory: logical
 \author{Robert J. Hijmans}
 
 \examples{
-r <- raster(100, 100)
+r <- raster(nrow=100, ncol=100)
 canProcessInMemory(r, 4)
-r <- raster(100000, 100000)
+r <- raster(nrow=100000, ncol=100000)
 canProcessInMemory(r, 2)
 }
 
