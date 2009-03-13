@@ -31,7 +31,26 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 		if (dim(xyCoords)[2] != 2) {
 			stop('xyCoords has wrong dimensions; there should be 2 columns only' )
 		}
-		return(.stackReadXT(object, cells, method))
+		
+
+		if (method == 'bilinear') {
+			for (i in seq(nlayers(object))) {
+				v <- .bilinearValue(object, xyCoords)
+				if (i == 1) {
+					result <- v
+				} else {
+					result <- cbind(result, v)
+				}
+			}
+			if (!(is.null(dim(result)))) {
+				colnames(result) <- object@data@colnames
+			}	
+			return(result)		
+	
+		} else {
+			cells <- cellFromXY(object, xyCoords)
+			return(.stackReadCells(object, cells))
+		}
 	}	
 )
 

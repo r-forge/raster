@@ -10,6 +10,7 @@
 \alias{plot,Raster,numeric-method}
 \alias{plot,RasterLayer,RasterLayer-method}
 \alias{hist,Raster-method}
+\alias{hist,RasterStack-method}
 
 
 \title{Methods for Function plot in Package `raster'}
