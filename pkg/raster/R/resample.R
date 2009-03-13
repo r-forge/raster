@@ -12,7 +12,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 	bb <- intersectBbox(from, to)
 	validObject(bb)
 	if (is.null(filename)){filename <- ""}
-	to <- setRaster(to, filename)
+	to <- raster(to, filename)
 	to <- setDatatype(to, datatype)
 	
 	if (!canProcessInMemory(to, 1) && filename(to) == '') {

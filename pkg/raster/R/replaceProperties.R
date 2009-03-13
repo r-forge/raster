@@ -9,7 +9,7 @@
 	return( setFilename(x, value) )
 }
 
-'datatype<-' <- function(x, value) {
+'dataType<-' <- function(x, value) {
 	return( setDatatype(x, value) )
 }
 

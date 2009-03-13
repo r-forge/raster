@@ -15,7 +15,7 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 		stop('values must be a vector of length=length(xy[,1])')
 	}
 	
-	rs <- setRaster(raster, filename)
+	rs <- raster(raster, filename)
 	rs <- setDatatype(rs, datatype)
 	
 	cells <- cellFromXY(rs, xy)

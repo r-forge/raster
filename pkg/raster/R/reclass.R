@@ -21,7 +21,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 		print(rclmat)
 	}
 	
-	outraster <- setRaster(raster, filename)
+	outraster <- raster(raster, filename)
 	outraster <- setDatatype(outraster, datatype) 
 
 	res <- vector(length = ncol(raster))

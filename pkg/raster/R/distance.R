@@ -21,7 +21,7 @@ distance <-	function(object, filename="") {
 				{			
 					adj <- adjacency(object,fromCells=fromCells,toCells=toCells,directions=8)
 					coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
-					distance <- apply(coord,1,function(x){distanceGreatcircle(x[1:2],x[3:4])})
+					distance <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
 					#What follows is the same as for  non-projected (below)
 					transitionValues <- accDist[adj[,1]] + distance
 					transitionValues <- tapply(transitionValues,adj[,2],min)
@@ -56,7 +56,7 @@ distance <-	function(object, filename="") {
 			
 			nrows <- nrow(object)
 			ncols <- ncol(object)
-			outRaster <- setRaster(object, filename)
+			outRaster <- raster(object, filename)
 			for(r in 1:nrows)
 			{
 				rowValues <- valuesRow(readRow(object, rownr = r), rownr = r)
@@ -75,7 +75,7 @@ distance <-	function(object, filename="") {
 						if(r<nrows-1){rowWindow <- c(rowWindow,valuesRow(readRow(outRaster, rownr=r+1), rownr=r+1))}
 						adj <- adjacency(fromCells=(((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols)), toCells=((r-1)*ncols+1):(r*ncols),directions=8)
 						coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
-						distance <- apply(coord,1,function(x){distanceGreatcircle(x[1:2],x[3:4])})
+						distance <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
 						adj <- adj-((r-1)*ncols+1)
 						transitionValues <- as.vector(rowWindow)[adj[,1]] + distance
 						transitionValues <- tapply(transitionValues,adj[,2],min)

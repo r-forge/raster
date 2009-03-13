@@ -39,7 +39,7 @@ function(x, y, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatyp
 	
 	compare(x)
 
-	outraster <- setRaster(x[[1]], filename)
+	outraster <- raster(x[[1]], filename)
 	outraster <- setDatatype(outraster, datatype) 
 
 	inram <- TRUE

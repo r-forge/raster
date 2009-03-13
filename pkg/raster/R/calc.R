@@ -17,7 +17,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	}
 	
 	filename <- trim(filename)
-	outraster <- setRaster(x, filename)
+	outraster <- raster(x, filename)
 	outraster <- setDatatype(outraster, datatype)
 	
 	if (!(dataContent(x) == 'all' | dataContent(x) == 'sparse' | dataSource(x) == 'disk')) {

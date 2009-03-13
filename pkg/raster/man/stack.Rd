@@ -24,7 +24,7 @@ A RasterStack can be created from RasterLayer objects, or from raster files, or 
   \item{\code{...}}{additional RasterLayer objects (or filenames) }
   \item{bands}{ optional argument. a vector or list of bands of raster data files}
 
-\code{x} can be a filename from which a RasterLayer can be created (with \code{rasterFromFile}, a Raster* object, 
+\code{x} can be a filename from which a RasterLayer can be created (with \code{raster}, a Raster* object, 
 or a list of filenames and/or Raster* objects.
 
 The argument \code{bands} can be used to pass a vector of band numbers to indicated which band of a file (in a multiband file) should be used. 
@@ -46,7 +46,7 @@ If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted, 
 \examples{
   fn <- system.file("external/test.ag", package="sp")
   s <- stack(fn, fn)
-  r <- rasterFromFile(fn)
+  r <- raster(fn)
   s <- stack(r, fn) 
 }
 

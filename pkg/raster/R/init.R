@@ -7,7 +7,7 @@
 
 init <- function(raster, fun=runif, filename="", overwrite=FALSE, datatype = 'FLT4S', filetype='raster', track=-1) {
 
-	outraster <- setRaster(raster, filename)
+	outraster <- raster(raster, filename)
 	outraster <- setDatatype(outraster, datatype)
 	
 	if ( dataContent(raster) == 'all' | dataSource(raster) == 'ram' ) {

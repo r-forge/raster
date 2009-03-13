@@ -11,24 +11,24 @@ setMethod("Math", signature(x='RasterLayer'),
 		fname <- as.character(sys.call(sys.parent())[[1]])
 		 
 		if (canProcessInMemory(x, 3)) {
-			raster <- setRaster(x, values=callGeneric(.getRasterValues(x)))
+			rst <- raster(x, values=callGeneric(.getRasterValues(x)))
 			if (fname %in% c('floor', 'ceiling', 'trunc')) {
-				raster <- setDatatype(raster, 'INT4S')
+				rst <- setDatatype(rst, 'INT4S')
 			}
 		} else {
-			raster <- setRaster(x, filename=tempfile())
+			rst <- raster(x, filename=tempfile())
 			if (fname %in% c('floor', 'ceiling', 'trunc')) {
-				raster <- setDatatype(raster, 'INT4S')
+				rst <- setDatatype(rst, 'INT4S')
 			}
 			for (r in 1:nrow(x)) {
-				raster <- setValues(raster, callGeneric( .getRowValues(x, r) ), r)
-				raster <- writeRaster(raster)
+				rst <- setValues(rst, callGeneric( .getRowValues(x, r) ), r)
+				rst <- writeRaster(rst)
 			}
 			if (options('verbose')[[1]]) {
 				cat('values were written to:', filename(raster))
 			}
 		}
-		return(raster)
+		return(rst)
 	}
 )
 
@@ -43,15 +43,15 @@ setMethod("Math2", signature(x='RasterLayer'),
 			}
 			return(x)
 		} else {
-			raster <- setRaster(x, filename=tempfile())
+			rst <- raster(x, filename=tempfile())
 			if (digits == 0) {
 				x <- setDatatype(x, 'INT4S')
 			}
 			for (r in 1:nrow(x)) {
-				raster <- setValues(raster, callGeneric(.getRowValues(x, r), digits), r)
-				raster <- writeRaster(raster)
+				rst <- setValues(rst, callGeneric(.getRowValues(x, r), digits), r)
+				rst <- writeRaster(rst)
 			}
-			return(raster)
+			return(rst)
 		}
 	}
 )

@@ -32,22 +32,8 @@ setRes <- function(object, xres, yres=xres) {
 }
 
 setRaster <- function(object, filename="", values=NULL) {
-
-	if (class(object) == 'RasterStack') { object <- asRasterLayer(object, 1) }
-	if (class(object) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
-
-	filename <- trim(filename)
-	if (filename != "" & filename == filename(object)) {
-		stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
-	}
-
-	r <- raster(xmn = xmin(object), xmx = xmax(object), ymn = ymin(object), ymx = ymax(object), nrows=nrow(object), ncols=ncol(object), projstring=projection(object))
-	r <- setFilename(r, filename)
-	
-	if (!is.null(values)) {
-		r <- setValues(r, values)
-	}
-	return(r)
+	warning('depracated, use "raster()" instead')
+	return(raster(object, filename, values))
 }
 
 setFilename <- function(object, filename) {

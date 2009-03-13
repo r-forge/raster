@@ -5,32 +5,15 @@
 # Licence GPL v3
 
 
-
-
-
-
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	warning("'rasterFromFile' is deprecated. Use 'raster(filename)' instead")
-
-	fileext <- toupper(fileExtension(filename)) 
-	if ( fileext == ".GRD" | fileext == ".GRI" ) {
-		raster <- .rasterFromRasterFile(filename, band) 
-	} else {
-		raster <- .rasterFromGDAL(filename, band) 
-	}
-	if (values) {
-		raster <- readAll(raster)
-	}
-	return(raster)
+	return(raster(filename, values=values, band=band))
 }	
 	
-
-
 if (!isGeneric("raster")) {
 	setGeneric("raster", function(x, ...)
 		standardGeneric("raster"))
 }	
-
 
 setMethod('raster', signature(x='missing'), 
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projstring="+proj=longlat +datum=WGS84") {
@@ -41,17 +24,41 @@ setMethod('raster', signature(x='missing'),
 	}
 )
 
-
 setMethod('raster', signature(x='Raster'), 
-	function(x, ...) {
-		return(setRaster(x))
+	function(x, filename="", values=NULL) {
+	
+		if (class(x) == 'RasterStack') { 
+			x <- asRasterLayer(x, 1) 
+		}
+		if (class(x) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
+
+		filename <- trim(filename)
+		if (filename != "" & filename == filename(x)) {
+			stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
+		}
+
+		r <- raster(xmn = xmin(x), xmx = xmax(x), ymn = ymin(x), ymx = ymax(x), nrows=nrow(x), ncols=ncol(x), projstring=projection(x))
+		r <- setFilename(r, filename)
+	
+		if (!is.null(values)) {
+			r <- setValues(r, values)
+		}
+		return(r)
 	}
 )
 
-
 setMethod('raster', signature(x='character'), 
 	function(x, values=FALSE, band=1) {
-		return(rasterFromFile(x, values=values, band=band))
+		fileext <- toupper(fileExtension(x)) 
+		if ( fileext == ".GRD" | fileext == ".GRI" ) {
+			raster <- .rasterFromRasterFile(x, band) 
+		} else {
+			raster <- .rasterFromGDAL(x, band) 
+		}
+		if (values) {
+			raster <- readAll(raster)
+		}
+		return(raster)
 	}
 )
 

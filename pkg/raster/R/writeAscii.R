@@ -44,7 +44,7 @@
     }
 	
 	if ( dataIndices(raster)[2] == ncell(raster)) {
-		return(rasterFromFile(filename))
+		return(raster(filename))
 	} else {
 		return(raster)
 	}	

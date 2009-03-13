@@ -12,7 +12,7 @@ canProcessInMemory is typically used within functions. It returns a logical valu
 In the raster package this function is used to determine wether values should be written to disk (in a temporary file) or not when there was
 no filename supplied to the function.
 
-closeHandle removes the handle to the file on disk that was established by rasterFromFile(). 
+closeHandle removes the handle to the file on disk that was established by raster(x) (where x is a filename). 
 After the handle is closed, you can no longer read data from the file through the RasterLayer object. 
 You probably do not need to do this; unless you get problems with files that cannot be overwritten (rm() 
 does not immediately remove the handle; it seems). 

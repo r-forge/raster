@@ -45,13 +45,13 @@ setMethod('!', signature(x='RasterLayer'),
 		if (canProcessInMemory(x, 3)) {
 			return(setValues(x, !values(x)))
 		} else {
-			raster <- setRaster(x, filename=tempfile())
-			raster <- setDatatype(raster, 'LOG1S')
+			rst <- raster(x, filename=tempfile())
+			dataType(rst) <- 'LOG1S'
 			for (r in 1:nrow(x)) {
-				raster <- setValues(raster, !.getRowValues(x, r), r)
-				raster <- writeRaster(raster)
+				rst <- setValues(rst, !.getRowValues(x, r), r)
+				rst <- writeRaster(rst)
 			}
-			return(raster)		
+			return(rst)		
 		}
 	}
 )	
@@ -63,19 +63,19 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		if (!isTRUE(is.atomic(e2) & length(e2)==1)) {
 			stop('second argument should be a single number')
 		}
-		raster <- setRaster(e1)
-		raster <- setDatatype(raster, 'LOG1S')
+		rst <- raster(e1)
+		rst <- setDatatype(rst, 'LOG1S')
 		if (canProcessInMemory(e1, 3)) {
-			raster <- setValues(raster, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )			
+			rst <- setValues(rst, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
-			raster <- setFilename(raster, filename=tempfile())
+			rst <- setFilename(rst, filename=tempfile())
 			rowrep <- rep(e2, ncol(e1))
 			for (r in 1:nrow(e1)) {
-				raster <- setValues(raster, callGeneric( .getRowValues(e1, r), rowrep ), r)
-				raster <- writeRaster(raster)
+				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), rowrep ), r)
+				rst <- writeRaster(rst)
 			}
 		}
-		return(raster)
+		return(rst)
 	}
 )	
 
@@ -87,19 +87,19 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 			stop('first argument should be a single number')
 		}
 		if (canProcessInMemory(e2, 3)) {
-			raster <- setRaster(e2)
-			raster <- setDatatype(raster, 'LOG1S')
-			raster <- setValues(raster, callGeneric(.getRasterValues(e2), rep(e1, ncell(e2)) ) )
+			rst <- raster(e2)
+			dataType(rst) <- 'LOG1S'
+			rst <- setValues(rst, callGeneric(.getRasterValues(e2), rep(e1, ncell(e2)) ) )
 		} else {
-			raster <- setRaster(e2, filename=tempfile())
-			raster <- setDatatype(raster, 'LOG1S')
+			rst <- raster(e2, filename=tempfile())
+			dataType(rst) <- 'LOG1S'
 			rowrep <- rep(e1, ncol(e2))
 			for (r in 1:nrow(e2)) {
-				raster <- setValues(raster, callGeneric( .getRowValues(e2, r), rowrep ), r)
-				raster <- writeRaster(raster)
+				rst <- setValues(rst, callGeneric( .getRowValues(e2, r), rowrep ), r)
+				rst <- writeRaster(rst)
 			}
 		}
-		return(raster)
+		return(rst)
 	}
 )	
 
@@ -109,18 +109,18 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 		if (!cond) {
 			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See compare()")
 		}	
-		raster <- setRaster(e1) 
-		raster <- setDatatype(raster, 'LOG1S')
+		rst <- raster(e1) 
+		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
-			raster <- setValues(raster, callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) 
+			rst <- setValues(rst, callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) 
 		} else {
-			raster <- setFilename(raster, filename=tempfile())
+			rst <- setFilename(rst, filename=tempfile())
 			for (r in 1:nrow(e1)) {
-				raster <- setValues(raster, callGeneric( .getRowValues(e1, r), .getRowValues(e2, r) ), r)
-				raster <- writeRaster(raster)
+				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), .getRowValues(e2, r) ), r)
+				rst <- writeRaster(rst)
 			}
 		}
-		return(raster)
+		return(rst)
 	}
 )	
 
@@ -131,18 +131,18 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if ( compare(c(e1, e2)) ) {
-			raster <- setRaster(e1)
-			raster <- setDatatype(raster, 'LOG1S')
+			rst <- raster(e1)
+			rst <- setDatatype(rst, 'LOG1S')
 			if (canProcessInMemory(e1, 3)) {
-				raster <- setValues(raster, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
+				rst <- setValues(rst, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
 			} else {
-				raster <- setFilename(raster, filename=tempfile())
+				rst <- setFilename(rst, filename=tempfile())
 				for (r in 1:nrow(e1)) {
-					raster <- setValues(raster, callGeneric( .getLogicalRowValues(e1, r), .getLogicalRowValues(e2, r) ), r)
-					raster <- writeRaster(raster)
+					rst <- setValues(rst, callGeneric( .getLogicalRowValues(e1, r), .getLogicalRowValues(e2, r) ), r)
+					rst <- writeRaster(rst)
 				}
 			}	
-			return(raster)
+			return(rst)
 		}	
 	}
 )

@@ -1,6 +1,6 @@
 \name{setDatatype}
 
-\alias{datatype<-}
+\alias{dataType<-}
 \alias{setDatatype}
 
 \title{ Set data type }
@@ -12,15 +12,17 @@ It does not affect the way they are stored in memory.
 
 \usage{
 setDatatype(raster, datatype)
+dataType(x) <- value
 }
 
 \arguments{
   \item{raster}{ A \code{RasterLayer} object }
   \item{datatype}{ the type of data for writing values to disk. See below }
+  \item{x}{ A \code{RasterLayer} object }
+  \item{value}{ the type of data for writing values to disk. See below }
 }
 
 \details{
-
 Setting the data type is useful if you want to write values to disk. In other cases use functions such as round()
 
 While you can access the slots of the object directly, you would do that at your own peril because the value of one raster property can affect values in other properties, and changing slot values may thus break the integrity of the objects. Using slots directly may also lead to code to break in the future if underlying class definitions change. 
@@ -60,7 +62,7 @@ r <- raster()
 # 2 byte signed integer
 r <- setDatatype(r, "INT2S")
 # this is equivalent to 
-datatype(r) <- "INT2S"
+dataType(r) <- "INT2S"
 # 2 byte unsigned integer
 r <- setDatatype(r, "INT2U")
 # very large integers

@@ -62,7 +62,7 @@ xyFromCell(rs, 10000)
 xyFromCell(rs, c(0, 1, 32581, ncell(rs), ncell(rs)+1))
 
 #using a file from disk
-rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+rs <- raster(system.file("external/test.ag", package="sp"))
 rs
 cellFromXY(rs, c(180000, 330000))
 #xy for corners of grid:

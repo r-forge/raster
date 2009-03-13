@@ -22,7 +22,7 @@
 A RasterStack is that it typically points to several seperate data files on disk, but it could also point to different bands from a single file (or not not point to any file at all)
  
 Apart from with the normal new(" ") method, objects can be created with the following functions (among others)
-\code{raster(), RasterFromFile(), stack(),  StackFromFile(), StackFromRasters(), StackFromFiles()}
+\code{raster(), stack(),  StackFromRasters(), StackFromFiles()}
  
  RasterLayer and RasterStack objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package using \code{as}
  or the explicit functions \code{asRasterLayer()} and \code{asRasterStack()}

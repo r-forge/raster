@@ -24,7 +24,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 	ymn <- min(ymn, ymin(raster))
 	ymx <- max(ymx, ymax(raster))
 	
-	outraster <- setRaster(raster, filename)
+	outraster <- raster(raster, filename)
 	bndbox <- newBbox(xmn, xmx, ymn, ymx)
 	outraster <- setExtent(outraster, bndbox, keepres=T)
 

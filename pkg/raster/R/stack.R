@@ -42,15 +42,15 @@ function(x, bands=NULL) {
 		j <- j + 1
 		if (is.character(x[[i]])) {
 			if (is.null(bands)) {
-				r[j] <- rasterFromFile(x[[i]])
+				r[j] <- raster(x[[i]])
 			} else {
 				if (bands[[i]] < 1) {
-					r[j] <- rasterFromFile(x[[i]], 1)
+					r[j] <- raster(x[[i]], 1)
 					bds <- nbands(r)
 					if (bds > 1) {
 						for (b in 2:bds) {
 							j <- j + 1
-							r[j] <- rasterFromFile(x[[i]], b)
+							r[j] <- raster(x[[i]], b)
 						}
 					}
 				}

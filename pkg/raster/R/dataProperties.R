@@ -6,7 +6,9 @@
 
 #dataSize <- function(object) {return(object@file@datasize)}
 dataSize <- function(object) {
-	if (class(object) != 'character'){object <- dataType(object)}
+	if (class(object) != 'character'){
+		object <- dataType(object)
+	}
 	return( as.integer (substr(object, 4, 4)) )
 }
 

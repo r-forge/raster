@@ -10,7 +10,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 #	require(fields)
 	if (class(object) == 'character') { 
-		object <- rasterFromFile(object) 
+		object <- raster(object) 
 	}
 	if ( class(object) != 'RasterLayer' ) { 
 		index <- round(index)
@@ -37,7 +37,7 @@ map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, 
 			
 			m <- values(object, format='matrix')[rows, cols]
 
-			sampraster <- setRaster(object)
+			sampraster <- raster(object)
 			sampraster <- setRowCol(sampraster, dim(m)[1], dim(m)[2])
 			xmx <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
 			ymn <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)

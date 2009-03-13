@@ -46,7 +46,7 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
 	if (is.null(filename)){filename <- ""}
-	to <- setRaster(to, filename)
+	to <- raster(to, filename)
 	to <- setDatatype(to, datatype)
 
 	rowCells <- 1:ncol(to)

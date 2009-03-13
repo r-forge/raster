@@ -106,7 +106,7 @@
 		GDAL.close(raster@file@transient) 
 		
 		# establish the handle:
-		rasterout <- rasterFromFile(filename(raster))
+		rasterout <- raster(filename(raster))
 		
 		rasterout@data@haveminmax <- raster@data@haveminmax
 		rasterout@data@min <- raster@data@min
@@ -138,7 +138,7 @@
 	GDAL.close(transient) 
 	.writeStx(raster) 
 
-	tempras <- rasterFromFile(filename(raster) )
+	tempras <- raster(filename(raster) )
 	raster@file@driver <- 'gdal'
 	raster@file@gdalhandle <- tempras@file@gdalhandle
 	raster@data@source <- 'disk'

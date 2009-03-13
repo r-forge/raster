@@ -33,7 +33,7 @@ dropLayer(rstack, indices)
 }
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{raster}}, \code{\link[raster]{rasterFromFile}}}
+\seealso{ \code{\link[raster]{raster}}}
 
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
@@ -41,7 +41,7 @@ dropLayer(rstack, indices)
 # now adding the same file multiple times, in most cases you would add different files  
 # this generates warnings, but it is not an error
   st <- addFiles(st, c(rasterfile, rasterfile))
-  rs <- rasterFromFile(rasterfile)
+  rs <- raster(rasterfile)
   st <- addRasters(st, c(rs, rs))
   st
   st <- dropLayer(st, c(3, 5))

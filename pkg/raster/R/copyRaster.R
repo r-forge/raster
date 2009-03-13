@@ -20,7 +20,7 @@ saveAs <- function(raster, filename, filetype='raster', datatype='FLT4S', overwr
 
 # if filetype and datatype are the same, then use copyRasterfile 
 
-	newr <- setRaster(raster, filename)
+	newr <- raster(raster, filename)
 	newr <- setDatatype(newr, datatype)
 	for (r in 1:nrow(newr)) {
 		raster <- readRow(raster, r)

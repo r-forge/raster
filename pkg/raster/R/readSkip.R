@@ -11,7 +11,7 @@ sampleSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		rcut <- crop(raster, bndbox) 
 		warning('bndbox option has not been implemented yet')
 	} else {
-		rcut <- setRaster(raster)
+		rcut <- raster(raster)
 	}
 	# Need to do something with this now.....
 	
@@ -46,7 +46,7 @@ sampleSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 				dd <- c(dd, values(raster)[cols])
 			}	
 		}	
-		outras <- setRaster(raster)
+		outras <- raster(raster)
 		outras <- setRowCol(outras, nr, nc)
 		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)

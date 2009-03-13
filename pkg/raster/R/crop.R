@@ -12,7 +12,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
 	bb <- intersectBbox(raster, bndbox)
 	bb <- alignBbox(bb, raster)
-	outraster <- setRaster(raster, filename)
+	outraster <- raster(raster, filename)
 	outraster <- setExtent(outraster, bb, keepres=T)
 	
 	if (dataContent(raster) == 'all')  {

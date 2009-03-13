@@ -40,7 +40,7 @@ r <- raster()
 r <- setValues(r, 1:ncell(r))
 cellValues(r, c(1, 10, 100))
 
-r <- rasterFromFile(system.file("external/test.ag", package="sp"))
+r <- raster(system.file("external/test.ag", package="sp"))
 cells <- c(1, 1900, 5000)
 cellValues(r, cells)
 

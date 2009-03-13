@@ -20,7 +20,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 		stop('length(fact) should be 1 or 2')
 	}
 	
-	outraster <- setRaster(raster, filename)
+	outraster <- raster(raster, filename)
 	outraster <- setDatatype(outraster, datatype)
 	outraster <- setRowCol(outraster, nrow(raster) * yfact, ncol(raster) * xfact) 
 

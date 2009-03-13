@@ -9,10 +9,10 @@
 
 	if (!canProcessInMemory(rasters[[1]], 4)) {
 		filename <- tempfile()
-		raster <- setRaster(rasters[[1]], filename)
+		raster <- raster(rasters[[1]], filename)
 	} else {
 		filename <- ""
-		raster <- setRaster(rasters[[1]])
+		raster <- raster(rasters[[1]])
 		v <- vector(length=0)
 	}
 

@@ -48,7 +48,7 @@ Supported file types include:
 \seealso{ writeFormats \code{\link[raster]{writeFormats}} }  
 
 \examples{ 
-rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+rs <- raster(system.file("external/test.ag", package="sp"))
  
 #read all data
 rs <- readAll(rs)
@@ -72,8 +72,8 @@ rs <- setFilename(rs, "ascall.asc")
 rs <- writeRaster(rs, filetype='ascii', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
-rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
-ascras <- setRaster(rs, filename="ascrow.asc")
+rs <- raster(system.file("external/test.ag", package="sp"))
+ascras <- raster(rs, filename="ascrow.asc")
 for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	v <- values(rs) * 10
@@ -82,7 +82,7 @@ for (r in 1:nrow(rs)) {
 }
 	
 # read and write row by row; write to binary file
-binras <- setRaster(rs, "binbyrow")
+binras <- raster(rs, "binbyrow")
 for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	binras <- setValues(binras, values(rs), r)
@@ -90,7 +90,7 @@ for (r in 1:nrow(rs)) {
 }
 
 # read and write row by row; write to GeoTiff binary file
-binras <- setRaster(rs, "binbyrow")
+binras <- raster(rs, "binbyrow")
 for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	binras <- setValues(binras, values(rs), r)

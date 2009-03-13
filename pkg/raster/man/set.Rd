@@ -42,10 +42,6 @@ setNAvalue(raster, value)
 }
 
 \details{
-setRaster copies the parameters of a RasterLayer object to a new object, but does not copy the filename nor the data associated with the original raster. 
-Use it when creating new RasterLayer objects from existing objects.
-
-
 While you could access the slots of the object directly, you would do that at your own peril because the value of one raster property can affect values in other properties, and changing slot values may thus break the integrity of the objects. Using slots directly may also lead to code to break in the future if underlying class definitions change. 
 }
 

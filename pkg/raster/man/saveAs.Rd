@@ -48,7 +48,7 @@ see \code{writeFormats} for the complete list
 \seealso{ \code{\link[raster]{writeRaster}} }  
 
 \examples{ 
-rs <- rasterFromFile(system.file("external/test.ag", package="sp"))
+rs <- raster(system.file("external/test.ag", package="sp"))
 rsa <- saveAs(rs, 'test.tif', filetype='GTiff')
  
 }

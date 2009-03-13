@@ -32,7 +32,6 @@ RasterLayer object
 \seealso{ \code{\link[raster]{readAll}, \link[raster]{values},  \link[raster]{raster}, \link[raster]{stack},  \link[gdal]{readGDAL} } }
 \examples{
 r <- rasterFromFile(system.file("external/test.ag", package="sp"))
-logo <- rasterFromFile(system.file("pictures/Rlogo.jpg", package="rgdal"))
 }
 
 \keyword{spatial }

@@ -38,7 +38,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	ymn <- ymax(x) - rsteps * yfact * yres(x)
 	xmx <- xmin(x) + csteps * xfact * xres(x)
 		
-	outRaster <- setRaster(x, filename)
+	outRaster <- raster(x, filename)
 	outRaster <- setDatatype(outRaster, datatype)
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setExtent(outRaster, bndbox, keepres=F)

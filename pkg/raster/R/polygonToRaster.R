@@ -70,7 +70,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
 		}
 	}
-	raster <- setRaster(raster, filename)
+	raster <- raster(raster, filename)
 	raster <- setDatatype(raster, datatype)
 
 # check if bbox of raster and spPolys overlap
@@ -229,7 +229,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 
 # check if bbox of raster and spPolys overlap
 	filename <- trim(filename)
-	raster <- setRaster(raster, filename)
+	raster <- raster(raster, filename)
 	raster <- setDatatype(raster, datatype)
 	
 

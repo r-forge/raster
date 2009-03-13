@@ -48,7 +48,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	lim <- floor(ngb / 2)
 	
 	filename <- trim(filename)
-	ngbgrid <- setRaster(raster, filename)
+	ngbgrid <- raster(raster, filename)
 	ngbgrid <- setDatatype(ngbgrid, datatype) 
 
 # first create an empty matrix with nrows = ngb and ncols = raster@ncols
