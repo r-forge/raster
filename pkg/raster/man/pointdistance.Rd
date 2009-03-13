@@ -45,8 +45,12 @@ distanceGreatcircle(point1, point2, r = 6378137)
    
    #Make a distance matrix (dist object)
    dst <- matrix(nrow=4,ncol=4)
-   for (i in 1:4){dst[,i] <- distanceGreatcircle(a[i,],b)}
+   for (i in 1:4){dst[,i] <- distanceGreatcircle(a[i,],a)}
    dst <- as.dist(dst)
+   
+   #Now the same, but avoiding the loop
+   dst <- distanceGreatcircle(a[rep(1:4,times=4),],a[rep(1:4,each=4),])
+   dst <- as.dist(matrix(dst,ncol=4))
 }
 
 \keyword{ spatial }
