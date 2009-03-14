@@ -26,7 +26,6 @@ raster(x, ...)
 }
 
 \section{Methods}{
-
 1) Create a RasterLayer object from a file
 
 \code{raster(x, values=FALSE, band=1)}
@@ -39,39 +38,44 @@ If \code{x} is a character value, it should be a filename of a file that the ras
 'native' raster package format and those that can be read via rgdal. See ?readGDAL help for supported file types.
 
 
+
 2) Create a RasterLayer object from scratch
 
-\code{raster(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projstring="+proj=longlat +datum=WGS84")}
+\code{raster(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84")}
 
-\item{nrows}{number of rows on raster }
-\item{ncols}{number of columns on raster }
-\item{xmn}{minimum x coordinate or raster (left border) }
-\item{xmx}{maximum x coordinate of raster (right border) }
-\item{ymn}{minimum y coordinate or raster (bottom border) }
-\item{ymx}{maximum y coordinate of raster (top border) }
-\item{projstring}{PROJ4 type description of a map projection}
-\item{bndbox}{bounding box used to crop a raster. Any object that is a BoundingBox object or contains one (such as Raster* objects)}
+\item{\code{nrows}}{number of rows on raster }
+\item{\code{ncols}}{number of columns on raster }
+\item{\code{xmn}}{minimum x coordinate or raster (left border) }
+\item{\code{xmx}}{maximum x coordinate of raster (right border) }
+\item{\code{ymn}}{minimum y coordinate or raster (bottom border) }
+\item{\code{ymx}}{maximum y coordinate of raster (top border) }
+\item{\code{projs}}{character. PROJ4 type description of a map projection}
+\item{\code{bndbox}}{bounding box used to crop a raster. Any object that is a BoundingBox object or contains one (such as Raster* objects)}
 
 (item \code{x} is 'missing' in this case)
+
 
   
 3) Create a RasterLayer object from a BoundingBox object
   
-\code{raster(x, nrows=10, ncols=10)}
+\code{raster(x, nrows=10, ncols=10, projs='NA')}
 
-\item{x}{BoundingBox object}
-\item{nrows}{number of rows on raster }
-\item{ncols}{number of columns on raster}
+\item{\code{x}}{BoundingBox object}
+\item{\code{nrows}}{number of rows on raster }
+\item{\code{ncols}}{number of columns on raster}
+\item{\code{projs}}{PROJ4 type description of a map projection}
+
 
 
 4) Create a RasterLayer object from a Raster* object. This copies the parameters of a Raster* object to a new RasterLayer, 
-but does not copy the filename nor the data associated with the original raster. Use it when creating new RasterLayer objects from existing objects.
+but does not copy the filename nor the data associated with the original Raster* object. 
+
 
 \code{raster(x, filename="", values=NULL)}
 
 \item{\code{x}}{a Raster* object}
 \item{\code{filename}}{new filename for new RasterLayer }
-\item{\code{values}}{ use to set values to new object. Either pass a vector of length == ncells(x), or a single number }
+\item{\code{values}}{If not \code{NULL} it is used to set values to new object. Either pass a vector of length == ncells(x), or a single number}
 }
 
 
@@ -100,12 +104,14 @@ logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE)
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
 
 #from a BoundingBox
-bb <- getBbox(r1)
+bb <- getBbox(r)
 r2 <- raster(bb)
 r2[] <- runif(ncell(r2))
 
 #from another Raster* object
 r3 <- raster(r)
+s <- stack(r, r)
+r3 <- raster(s)
 }
 
 \keyword{methods}

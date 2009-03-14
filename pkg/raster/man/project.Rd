@@ -11,7 +11,7 @@ Change the projection of a RasterLayer.
 
 \usage{
 projectRaster(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) 
-projectBbox(object, projstring)
+projectBbox(object, projs)
 }
 
 \arguments{
@@ -24,7 +24,7 @@ projectBbox(object, projstring)
   \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}  
   \item{object}{BoundingBox or Raster* object}
-  \item{projstring}{a character string describing a projection and datum in PROJ4 format}
+  \item{projs}{a character string describing a projection and datum in PROJ4 format}
 
 }
 

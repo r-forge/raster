@@ -44,7 +44,7 @@ closeHandle <- function(raster) {
 	if (yx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
 	yx <- as.numeric( substr( as.character(yx), 1, ndecs) )
 
-	raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projstring="")
+	raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
 	raster <- setFilename(raster, filename)
 	raster <- setDatatype(raster, "FLT4S")
 	
@@ -113,7 +113,7 @@ closeHandle <- function(raster) {
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
     }  
 
-    raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projstring=projstring)
+    raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
 	raster <- setFilename(raster, filename)
 	raster@file@driver <- "raster"
 

@@ -19,7 +19,7 @@ Use these functions to set certain properties of a RasterLayer object.
 }
 
 \usage{
-setProjection(object, projstring)
+setProjection(object, projs)
 setFilename(object, filename)
 setRaster(object, filename="", values=NULL)
 setRowCol(raster, nrows=nrow(raster), ncols=ncol(raster)) 
@@ -37,7 +37,7 @@ setNAvalue(raster, value)
   \item{ncols}{ the new number of cols for the raster }  
   \item{xres}{ the new x resolution}
   \item{yres}{ the new y resolution}  
-  \item{projstring}{a character string describing a projection and datum in PROJ4 format }
+  \item{projs}{a character string describing a projection and datum in PROJ4 format }
   \item{value}{the value to be interpreted as NA; set this before reading the values from the file. Integer values are matched exactely; for decimal values files any value <= the value will be interpreted as NA}  
 }
 

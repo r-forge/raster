@@ -6,18 +6,18 @@
 
 
 
-newCRS <- function(projstring) {
-	projstring <- trim(projstring)
-	if (is.na(projstring) | nchar(projstring) < 3) { 
-		projs <- (CRS(as.character(NA)))
+newCRS <- function(projs) {
+	projs <- trim(projs)
+	if (is.na(projs) | nchar(projs) < 3) { 
+		prj <- (CRS(as.character(NA)))
 	} else {
-		projs <- try(CRS(projstring), silent = T)
-		if (class(projs) == "try-error") { 
-			warning(paste(projstring, 'is not a valid proj4 CRS string')) 
-			projs <- CRS(as.character(NA))
+		prj <- try(CRS(projs), silent = T)
+		if (class(prj) == "try-error") { 
+			warning(paste(projs, 'is not a valid proj4 CRS string')) 
+			prj <- CRS(as.character(NA))
 		}
 	}
-	return(projs)
+	return(prj)
 }
 
 

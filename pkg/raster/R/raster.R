@@ -21,29 +21,26 @@ if (!isGeneric("raster")) {
 }	
 
 setMethod('raster', signature(x='missing'), 
-	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projstring="+proj=longlat +datum=WGS84") {
+	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84") {
 		bb <- newBbox(xmn, xmx, ymn, ymx)
-		rs <- raster(bb, nrows=nrows, ncols=ncols)
-		rs <- setProjection(rs, projstring)
-		return(rs)
+		r <- raster(bb, nrows=nrows, ncols=ncols, projs=projs)
+		return(r)
 	}
 )
 
 setMethod('raster', signature(x='Raster'), 
-	function(x, filename="", values=NULL, layer=1) {
+	function(x, filename="", values=NULL) {
 	
 		if (class(x) == 'RasterStack') { 
-			
-			x <- asRasterLayer(x, layer) 
+			x <- asRasterLayer(x, 1) 
 		}
-		if (class(x) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
 
 		filename <- trim(filename)
 		if (filename != "" & filename == filename(x)) {
 			stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
 		}
 
-		r <- raster(xmn = xmin(x), xmx = xmax(x), ymn = ymin(x), ymx = ymax(x), nrows=nrow(x), ncols=ncol(x), projstring=projection(x))
+		r <- raster(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
 		r <- setFilename(r, filename)
 	
 		if (!is.null(values)) {
@@ -57,32 +54,29 @@ setMethod('raster', signature(x='character'),
 	function(x, values=FALSE, band=1) {
 		fileext <- toupper(fileExtension(x)) 
 		if ( fileext == ".GRD" | fileext == ".GRI" ) {
-			raster <- .rasterFromRasterFile(x, band) 
+			r <- .rasterFromRasterFile(x, band) 
 		} else {
-			raster <- .rasterFromGDAL(x, band) 
+			r <- .rasterFromGDAL(x, band) 
 		}
 		if (values) {
-			raster <- readAll(raster)
+			r <- readAll(r)
 		}
-		return(raster)
+		return(r)
 	}
 )
 
 
 
 setMethod('raster', signature(x='BoundingBox'), 
-function(x, nrows=10, ncols=10) {
-	crs <- newCRS('NA')
-	try(crs <- projection(x, asText=F), silent = T)
-	
+function(x, nrows=10, ncols=10, projs='NA') {
 	bb <- getBbox(x)
-
 	nr = as.integer(round(nrows))
 	nc = as.integer(round(ncols))
 	if (nc < 1) { stop("ncols should be > 0") }
 	if (nr < 1) { stop("nrows should be > 0") }
-	raster <- new("RasterLayer", bbox = bb, crs=crs, ncols = nc, nrows = nr )
-	return(raster) 
+	rs <- new("RasterLayer", bbox=bb, ncols=nc, nrows=nr)
+	rs <- setProjection(rs, projs)
+	return(rs) 
 }
 )
 

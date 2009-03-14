@@ -7,17 +7,17 @@
 	
 
 
-projectBbox <- function(object, projstring) {
+projectBbox <- function(object, projs) {
 	b <- getBbox(object)
-	projstring <- projection(projstring)
+	projs <- projection(projs)
 	xy <- rbind(c(b@xmin, b@ymax), c(b@xmax, b@ymax), c(b@xmin, b@ymin), c(b@xmax, b@ymin))
 
 	if (isLatLon(object)) {
-		p <- project(xy, projstring, inv=FALSE)
+		p <- project(xy, projs, inv=FALSE)
 	} else {
 		p <- project(xy, projection(object), inv=TRUE)
-		if (!isLatLon(projstring)) {
-			p <- project(p, projstring, inv=FALSE)
+		if (!isLatLon(projs)) {
+			p <- project(p, projs, inv=FALSE)
 		}
 	} 
 
@@ -27,7 +27,7 @@ projectBbox <- function(object, projstring) {
 	ymax <- max(p[,2])	
 	bb <- newBbox(xmin, xmax, ymin, ymax)
 	obj <- setExtent(object, bb)
-	obj <- setProjection(obj, projstring)
+	obj <- setProjection(obj, projs)
 	return(obj)
 }
 

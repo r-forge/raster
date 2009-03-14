@@ -58,11 +58,11 @@ setFilename <- function(object, filename) {
 
 
 
-setProjection <- function(object, projstring) {
-	if (class(projstring)=="CRS") {
-		object@crs <- projstring
+setProjection <- function(object, projs) {
+	if (class(projs)=="CRS") {
+		object@crs <- projs
 	} else {	
-		object@crs <- newCRS(projstring)
+		object@crs <- newCRS(projs)
 	}	
 	return(object)
 }

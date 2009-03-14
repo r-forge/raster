@@ -11,13 +11,13 @@
 
 \usage{
 roundCoords(object, digits=0)
-newCRS(projstring)
+newCRS(projs)
 }
 
 \arguments{
   \item{object}{ a Raster* object }
   \item{digits}{ integer indicating the precision to be used} 
-  \item{projstring}{ a PROJ4 type character string describing projection and datum}
+  \item{projs}{charater. a PROJ4 type description of a projection, its paramaters, and the datum}
  }
   
 \author{Robert J. Hijmans }
