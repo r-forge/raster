@@ -1,4 +1,5 @@
 \name{overlay}
+
 \docType{methods}
 
 \alias{overlay}
@@ -11,23 +12,33 @@
 \title{Overlay RasterLayers}
 
 \description{
-
 Calculate values for a new RasterLayer object, based on two or more existing and RasterLayers of the same extent and resolution. 
 overlay is a generic functon used in the sp and raster packages. This help file describes its use in the raster package. 
 
 You should supply a function \code{fun} to set the way that the RasterLayers are combined. The number of arguments in the function must match the number of RasterLayer objects.
 For example, if you merge two RasterLayers you could use multiply: \code{fun=function(x,y){return(x*y)}} percentage: \code{fun=function(x,y){return(100 * x / y)}}. 
 The default function \code{sum} always works because its first argument is \code{...}
+}
 
+\usage{
+overlay(x, y, ...) 
+}
+
+\arguments{
+\item{x}{A RasterLayer object}
+\item{y}{A RasterLayer object}
+\item{...}{Additional arguments. See below, under Methods}  
 }
 
 \section{Methods}{
+\describe{
+A full call to the overlay method is:
 
-\code{overlay(x, y, ..., fun, filename="", overwrite=FALSE,  filetype='raster', datatype='FLT4S')}
+\code{overlay(x, y, ..., fun=sum, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)}
 
   \item{x}{a RasterLayer object}
   \item{y}{a RasterLayer object}
-  \item{...}{additional RasterLayer objects and
+  \item{...}{additional RasterLayer objects}
   \item{fun}{the function to be appliepd. This should be a function that takes two numbers as an argument }
   \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
   \item{overwrite}{logical. If \code{TRUE}, existing files will be overwritten}
@@ -47,7 +58,6 @@ the side effect of a file on disk
 
 \seealso{ \code{\link[raster]{Arith-methods}} }
 
-
 \author{
 Robert J. Hijmans 
 }
@@ -65,7 +75,6 @@ r5 <- r1 * r2
 
 # multiplication with more than two layers (make sure the number of RasterLayers matches the arguments of 'fun'
 r6 <- overlay(r1, r2, r3, r4, fun=function(a,b,c,d){return(a*b+c*d)} )  
-
 }
  
 \keyword{methods}

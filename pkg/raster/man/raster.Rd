@@ -26,6 +26,8 @@ raster(x, ...)
 }
 
 \section{Methods}{
+\describe{
+
 1) Create a RasterLayer object from a file
 
 \code{raster(x, values=FALSE, band=1)}
@@ -76,7 +78,8 @@ but does not copy the filename nor the data associated with the original Raster*
 \item{\code{x}}{a Raster* object}
 \item{\code{filename}}{new filename for new RasterLayer }
 \item{\code{values}}{If not \code{NULL} it is used to set values to new object. Either pass a vector of length == ncells(x), or a single number}
-}
+
+}}
 
 
 \details{
