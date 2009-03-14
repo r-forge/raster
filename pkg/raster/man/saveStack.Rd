@@ -5,8 +5,9 @@
 \title{ Save or open a RasterStack file }
 
 \description{
-  A RasterStack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects, or from raster files.
-  These two functions allow you to save the references to raster files and recreate a rasterStack object later. The values are not saved, only the references to the files.
+A RasterStack is a collection of rasters with the same spatial extent and resolution. They can be crated from RasterLayer objects,
+or from raster files. These two functions allow you to save the references to raster files and recreate a rasterStack object later.
+The values are not saved, only the references to the files.
 }
 
 \usage{
@@ -29,14 +30,14 @@ stackSave(rstack)
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{stack}}, \code{\link[raster]{changeStack}}}
+\seealso{ \code{\link[raster]{filename}}, \code{\link[raster]{stack}}, \code{\link[raster]{changeStack}}}
 
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
   st <- stackFromFiles(c(rasterfile, rasterfile))
-  st <- setFilename(st, "mystack")
+  filename(st) <- "mystack"
   st <- stackSave(st)
-# note that setFilename adds an extension .stk to a stackfile  
+# note that filename adds an extension .stk to a stackfile  
   st2 <- stackOpen("mystack.stk")
   st2
 }

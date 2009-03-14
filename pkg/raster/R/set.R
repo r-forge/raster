@@ -10,61 +10,14 @@
 	}	
 }
 
-setRowCol <- function(raster, nrows=nrow(raster), ncols=ncol(raster)) {
-	raster <- clearValues(raster)
-	raster@ncols <- as.integer(ncols)
-	raster@nrows <- as.integer(nrows)
-	return(raster)
-}
 
-setRes <- function(object, xres, yres=xres) {
-	if (extends(class(object), "Raster")) {
-		object <- clearValues(object)
-	}
-	bb <- getBbox(object)
-	nc <- round( (bb@xmax - bb@xmin) / xres )
-	nr <- round( (bb@ymax - bb@ymin) / yres )
-	bb@xmax <- bb@xmin + nc * xres
-	bb@ymin <- bb@ymax - nr * yres
-	object	<- setExtent(object, bb)
-	object <- setRowCol(object, nr, nc)
-	return(object)
-}
-
-setRaster <- function(object, filename="", values=NULL) {
-	warning('depracated, use "raster()" instead')
-	return(raster(object, filename, values))
-}
-
-setFilename <- function(object, filename) {
-	if (is.na(filename)) {filename <- ""}
-	filename <- trim(filename)
-	if (class(object)=='RasterStack') {
-		object@filename <- setFileExtension(filename, ".stk")
-	} else {
-		object@file@name <- filename
-	}	
-	if (class(object)=='RasterLayer') {
-		shortname <- shortFileName(filename)
-		shortname <- setFileExtension(shortname, "")
-		shortname <- gsub(" ", "_", shortname)
-		if (nbands(object) > 1) { shortname <- paste(shortname, "_", band(object)) } 
-		object@file@shortname <- shortname
-		object@file@gdalhandle <- list()
-	}	
-	return(object)	
-}
-
-
-
-
-setProjection <- function(object, projs) {
-	if (class(projs)=="CRS") {
-		object@crs <- projs
+setProjection <- function(x, value) {
+	if (class(value)=="CRS") {
+		x@crs <- value
 	} else {	
-		object@crs <- newCRS(projs)
+		x@crs <- newCRS(value)
 	}	
-	return(object)
+	return(x)
 }
 
 

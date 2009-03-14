@@ -3,22 +3,12 @@
 # Date : June 2008
 # Version 0.8
 # Licence GPL v3
-
-
-rasterFromBbox <- function(bndbox, nrows=10, ncols=10) {
-	warning("'rasterFromBbox' is deprecated. Use 'raster(bbox, ...)' instead")
-	return(raster(bndbox=bndbox, nrows=nrows, ncols=ncols))
-}
-
-rasterFromFile <- function(filename, values=FALSE, band=1) {
-	warning("'rasterFromFile' is deprecated. Use 'raster(filename)' instead")
-	return(raster(filename, values=values, band=band))
-}	
 	
 if (!isGeneric("raster")) {
 	setGeneric("raster", function(x, ...)
 		standardGeneric("raster"))
 }	
+
 
 setMethod('raster', signature(x='missing'), 
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84") {
@@ -27,6 +17,23 @@ setMethod('raster', signature(x='missing'),
 		return(r)
 	}
 )
+
+
+setMethod('raster', signature(x='character'), 
+	function(x, values=FALSE, band=1) {
+		fileext <- toupper(fileExtension(x)) 
+		if ( fileext == ".GRD" | fileext == ".GRI" ) {
+			r <- .rasterFromRasterFile(x, band) 
+		} else {
+			r <- .rasterFromGDAL(x, band) 
+		}
+		if (values) {
+			r <- readAll(r)
+		}
+		return(r)
+	}
+)
+
 
 setMethod('raster', signature(x='Raster'), 
 	function(x, filename="", values=NULL) {
@@ -50,33 +57,18 @@ setMethod('raster', signature(x='Raster'),
 	}
 )
 
-setMethod('raster', signature(x='character'), 
-	function(x, values=FALSE, band=1) {
-		fileext <- toupper(fileExtension(x)) 
-		if ( fileext == ".GRD" | fileext == ".GRI" ) {
-			r <- .rasterFromRasterFile(x, band) 
-		} else {
-			r <- .rasterFromGDAL(x, band) 
-		}
-		if (values) {
-			r <- readAll(r)
-		}
-		return(r)
-	}
-)
-
 
 
 setMethod('raster', signature(x='BoundingBox'), 
-function(x, nrows=10, ncols=10, projs='NA') {
-	bb <- getBbox(x)
-	nr = as.integer(round(nrows))
-	nc = as.integer(round(ncols))
-	if (nc < 1) { stop("ncols should be > 0") }
-	if (nr < 1) { stop("nrows should be > 0") }
-	rs <- new("RasterLayer", bbox=bb, ncols=nc, nrows=nr)
-	rs <- setProjection(rs, projs)
-	return(rs) 
-}
+	function(x, nrows=10, ncols=10, projs='NA') {
+		bb <- getBbox(x)
+		nr = as.integer(round(nrows))
+		nc = as.integer(round(ncols))
+		if (nc < 1) { stop("ncols should be > 0") }
+		if (nr < 1) { stop("nrows should be > 0") }
+		r <- new("RasterLayer", bbox=bb, ncols=nc, nrows=nr)
+		r <- setProjection(r, projs)
+		return(r) 
+	}
 )
 

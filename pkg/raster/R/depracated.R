@@ -3,9 +3,23 @@
 #	stop("'newRaster' is deprecated. Use 'raster' instead")
 #}
 
+setRaster <- function(object, filename="", values=NULL) {
+	warning('depracated, use "raster()" instead')
+	return(raster(x=object, filename=filename, values=values))
+}
+
+rasterFromBbox <- function(bndbox, nrows=10, ncols=10) {
+	warning("'rasterFromBbox' is deprecated. Use 'raster(bbox, ...)' instead")
+	return(raster(x=bndbox, nrows=nrows, ncols=ncols))
+}
+
+rasterFromFile <- function(filename, values=FALSE, band=1) {
+	warning("'rasterFromFile' is deprecated. Use 'raster(filename)' instead")
+	return(raster(x=filename, values=values, band=band))
+}	
+
 
 # no longer used. Use calc instead. See ?calc
-
 
 
 ...isNA <- function(raster, value=0, filename="", overwrite=FALSE, asInt=FALSE) {

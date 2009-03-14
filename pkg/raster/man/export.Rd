@@ -37,7 +37,7 @@ A "worldfile", is an ESRI "world" file, that is sometimes used to georeference i
 
 r <- raster(system.file("external/test.ag", package="sp"))
 r <- readAll(r)
-r <- setFilename(r, 'export.grd')
+filename(r) <- 'export.grd'
 r <- writeRaster(r)
 writeHeader(r, type="ENVI") 
 

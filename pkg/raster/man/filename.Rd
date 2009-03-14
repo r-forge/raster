@@ -1,0 +1,34 @@
+\name{filename}
+\alias{setFilename}
+\alias{filename<-}
+
+\title{ Set filename}
+
+\description{
+Set the filename of a Raster* object 
+}
+
+\usage{
+setFilename(x, value)
+filename(x) <- value
+}
+
+\arguments{
+  \item{x}{A Raster* object }
+  \item{value}{filename, including path, can be an empty string \code{""} }
+}
+
+\value{
+a Raster* object
+}
+
+
+\author{ Robert J. Hijmans }
+
+\examples{ 
+r <- raster()
+filename(r) <- "c:/test.grd"
+}
+
+\keyword{ spatial }
+
