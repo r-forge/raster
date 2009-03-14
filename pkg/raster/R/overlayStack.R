@@ -23,7 +23,9 @@ function(x, y, fun, indices=1:nlayers(x), filename="", overwrite=FALSE, filetype
 	}
 	
 	if (length(fun) == 1) {
-		return(overlay(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+	
+		return(.overlayList(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+	
 	} else {
 		if (filename != "" &&  (length(filename) != length(fun)) ) {
 			stop('you must provide a filename for each function if you provide multiple functions')
@@ -32,7 +34,7 @@ function(x, y, fun, indices=1:nlayers(x), filename="", overwrite=FALSE, filetype
 		# the idea is to optimize this, by reading all (row) data only once.... 
 		res <- list()
 		for (i in 1:length(fun)) {
-			res[i] <- (overlay(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
+			res[i] <- ( .overlayList(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, track=track))
 		}
 		return(res)
 	}

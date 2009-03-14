@@ -5,10 +5,11 @@
 \alias{aggregate}
 \alias{aggregate,RasterLayer-method}
 
-\title{Aggregate}
+\title{aggregate}
 
 \description{
-Aggregate a RasterLayer to create a new raster with a lower resolution (larger cells). Aggregation groups rectangular areas of RasterLayer cells to create a new RasterLayer with larger cells. 
+Aggregate a RasterLayer to create a new RasterLayer with a lower resolution (larger cells). 
+Aggregation groups rectangular areas of RasterLayer cells to create a new RasterLayer with larger cells. 
 A new value is computed for the resulting cells according to a user specified function (default value = \code{mean}). 
 }
 
@@ -24,20 +25,24 @@ aggregate(x, ...)
 
 \section{Methods}{
 \describe{
-A full call to the aggregate method is:
+A full call to the aggregate method for a RasterLayer is:
 
 \code{aggregate(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) }
  
-  \item{\code{x}}{a RasterLayer object}
-  \item{\code{fun}}{function used to aggregate values}
-  \item{\code{fact}}{integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertial aggregation fcator). See details}
-  \item{\code{expand}}{logical. If \code{TRUE} the output RasterLayer will get larger if a division of the number of columns or rows with \code{factor} does not return an integer}
-  \item{\code{na.rm}}{logical. If \code{TRUE}, remove NA cells from calculations}
-  \item{\code{filename}}{character. output filename}
-  \item{\code{overwrite}}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
-  \item{\code{filetype}}{character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{rasterFormats}}}
-  \item{\code{datatype}}{character. output data type; see \code{\link[raster]{setDatatype}}}
-  \item{\code{track}}{vector of row numbers for which the function will report that they have been processed}   
+ 
+\tabular{rll}{
+\tab \code{x} \tab a RasterLayer object \cr
+\tab \code{fun} \tab function used to aggregate values \cr
+\tab \code{fact} \tab integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertial aggregation fcator). See details \cr
+\tab \code{expand} \tab logical. If \code{TRUE} the output RasterLayer will get larger if a division of the number of columns or rows with \code{factor} does not return an integer \cr
+\tab \code{na.rm} \tab logical. If \code{TRUE}, remove NA cells from calculations \cr
+\tab \code{filename} \tab character. output filename \cr
+\tab \code{overwrite} \tab logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
+\tab \code{filetype} \tab character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{rasterFormats}} \cr
+\tab \code{datatype} \tab character. output data type; see \code{\link[raster]{setDatatype}} \cr
+\tab \code{track} \tab vector of row numbers for which the function will report that they have been processed \cr
+}
+
 }
 }
 

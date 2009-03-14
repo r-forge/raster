@@ -5,10 +5,10 @@
 \alias{overlay}
 \alias{overlay,RasterLayer,RasterLayer-method}
 \alias{overlay,RasterLayer,missing-method}
-\alias{overlay,list,missing-method}
 \alias{overlay,RasterStack,missing-method}
+\alias{overlay,list,missing-method}
 
-\title{Overlay}
+\title{overlay}
 
 \description{
 Calculate values for a new RasterLayer object, based on two or more existing and RasterLayers of the same extent and resolution. 
@@ -25,47 +25,40 @@ Formal definition of the overlay method (in the sp package)
 
 \code{overlay(x, y, ...)}
 
-A full call to the overlay method with RasterLayer objects:
-
-1) x and y are Raster* objects
+\bold{1) x and y are Raster* objects}
 
 \code{overlay(x, y, ..., fun=sum, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)}
 
-  \item{x}{a RasterLayer object}
-  \item{y}{a RasterLayer object}
-  \item{...}{additional RasterLayer objects}
-  \item{fun}{the function to be appliepd. This should be a function that takes two numbers as an argument }
-  \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
-  \item{overwrite}{logical. If \code{TRUE}, existing files will be overwritten}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+\tabular{rll}{
+\tab \code{x} \tab a RasterLayer object \cr
+\tab \code{y} \tab a RasterLayer object \cr
+\tab \code{...} \tab additional RasterLayer objects \cr
+\tab \code{fun} \tab the function to be applied. This should be a function that takes two numbers as an argument  \cr
+\tab \code{filename} \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
+\tab \code{overwrite}\tab logical. If \code{TRUE}, existing files will be overwritten \cr
+\tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+}
   
-  
-2) x is a RasterLayer object, y is missing (equivalent to the \code{\link[raster]{calc}})
+\bold{2) x is a Raster* object, y is missing (this is equivalent to \code{\link[raster]{calc}})}
 
-  \item{x}{a RasterLayer object}
-  \item{fun}{the function to be appliepd. This should be a function that takes two numbers as an argument }
-  \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
-  \item{overwrite}{logical. If \code{TRUE}, existing files will be overwritten}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+\code{overlay(x, fun=sum, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)}
 
+\tabular{rll}{
+  \tab \code{x}  \tab a RasterLayer object \cr
+  \tab \code{fun}  \tab the function to be appliepd. This should be a function that takes two numbers as an argument \cr
+  \tab \code{filename}  \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
+  \tab \code{overwrite}  \tab logical. If \code{TRUE}, existing files will be overwritten \cr
+  \tab \code{filetype}  \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+}
   
-3) x is RasterStack object, y is missing (equivalent to the \code{\link[raster]{calc}})
-
-  \item{x}{a RasterStack object}
-other items as above
-  
-
-4) x is a list of Raster* objects, y is missing
-  
-  \item{x}{a list of Raster* objects}
-other items as above
 
 }
 }
 
 \details{
 In stead of the overlay function you can also use normal artimic functions such as *, /, +, - with RasterLayer objects (see examples), 
-but then you cannot specifiy an output filename, filetype or datatype. 
+but then you cannot specifiy an output filename, filetype or datatype. Overlay should be more efficient when using large data files that 
+cannot be loaded into memory.
 }
 
 \value{
