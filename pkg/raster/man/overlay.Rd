@@ -6,10 +6,9 @@
 \alias{overlay,RasterLayer,RasterLayer-method}
 \alias{overlay,RasterLayer,missing-method}
 \alias{overlay,list,missing-method}
-
 \alias{overlay,RasterStack,missing-method}
 
-\title{Overlay RasterLayers}
+\title{Overlay}
 
 \description{
 Calculate values for a new RasterLayer object, based on two or more existing and RasterLayers of the same extent and resolution. 
@@ -20,19 +19,15 @@ For example, if you merge two RasterLayers you could use multiply: \code{fun=fun
 The default function \code{sum} always works because its first argument is \code{...}
 }
 
-\usage{
-overlay(x, y, ...) 
-}
-
-\arguments{
-\item{x}{A RasterLayer object}
-\item{y}{A RasterLayer object}
-\item{...}{Additional arguments. See below, under Methods}  
-}
-
 \section{Methods}{
 \describe{
-A full call to the overlay method is:
+Formal definition of the overlay method (in the sp package)
+
+\code{overlay(x, y, ...)}
+
+A full call to the overlay method with RasterLayer objects:
+
+1) x and y are Raster* objects
 
 \code{overlay(x, y, ..., fun=sum, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)}
 
@@ -43,6 +38,28 @@ A full call to the overlay method is:
   \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
   \item{overwrite}{logical. If \code{TRUE}, existing files will be overwritten}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+  
+  
+2) x is a RasterLayer object, y is missing (equivalent to the \code{\link[raster]{calc}})
+
+  \item{x}{a RasterLayer object}
+  \item{fun}{the function to be appliepd. This should be a function that takes two numbers as an argument }
+  \item{filename}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
+  \item{overwrite}{logical. If \code{TRUE}, existing files will be overwritten}
+  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
+
+  
+3) x is RasterStack object, y is missing (equivalent to the \code{\link[raster]{calc}})
+
+  \item{x}{a RasterStack object}
+other items as above
+  
+
+4) x is a list of Raster* objects, y is missing
+  
+  \item{x}{a list of Raster* objects}
+other items as above
+
 }
 }
 
@@ -63,18 +80,26 @@ Robert J. Hijmans
 }
 
 \examples{
-r <- raster()
+r <- raster(ncol=10, nrow=10)
 r1 <- init(r)
 r2 <- init(r)
 r3 <- overlay(r1, r2, fun=function(x,y){return(x+y)})
 
 # long version for multiplication
 r4 <- overlay(r1, r2, fun=function(x,y){return(x*y)} )
-# short function doing the same, if values can be loaded into ram memory
-r5 <- r1 * r2
+
+#use a stack
+s <- stack(r1, r2)
+r5 <- overlay(s, fun=function(x,y){return(x*y)} )
+
+# use a single RasterLayer (same as calc function)
+r6 <- overlay(r1, fun=function(x){return(sqrt(x))} )
 
 # multiplication with more than two layers (make sure the number of RasterLayers matches the arguments of 'fun'
-r6 <- overlay(r1, r2, r3, r4, fun=function(a,b,c,d){return(a*b+c*d)} )  
+r7 <- overlay(r1, r2, r3, r4, fun=function(a,b,c,d){return(a*b+c*d)} )  
+# equivalent function, efficient if values can be loaded in memory
+r8 <- r1 * r2 + r3 * r4
+
 }
  
 \keyword{methods}
