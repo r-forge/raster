@@ -53,7 +53,6 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 			stop('xyCoords has wrong dimensions; there should be 2 columns only' )
 		}
 		
-
 		if (method == 'bilinear') {
 			for (i in seq(nlayers(object))) {
 				r <- asRasterLayer(object, i)
@@ -75,8 +74,7 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 		} else {
 			stop('invalid method argument. Should be simple or bilinear.')
 		}
-
-	}	
+	}
 )
 
 
