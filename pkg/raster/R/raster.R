@@ -5,6 +5,11 @@
 # Licence GPL v3
 
 
+rasterFromBbox <- function(bndbox, nrows=10, ncols=10) {
+	warning("'rasterFromBbox' is deprecated. Use 'raster(bbox, ...)' instead")
+	return(raster(bndbox=bndbox, nrows=nrows, ncols=ncols))
+}
+
 rasterFromFile <- function(filename, values=FALSE, band=1) {
 	warning("'rasterFromFile' is deprecated. Use 'raster(filename)' instead")
 	return(raster(filename, values=values, band=band))
@@ -25,10 +30,11 @@ setMethod('raster', signature(x='missing'),
 )
 
 setMethod('raster', signature(x='Raster'), 
-	function(x, filename="", values=NULL) {
+	function(x, filename="", values=NULL, layer=1) {
 	
 		if (class(x) == 'RasterStack') { 
-			x <- asRasterLayer(x, 1) 
+			
+			x <- asRasterLayer(x, layer) 
 		}
 		if (class(x) != 'RasterLayer') { stop('the first argument should be a RasterLayer or a RasterStack object') }
 
@@ -79,3 +85,4 @@ function(x, nrows=10, ncols=10) {
 	return(raster) 
 }
 )
+
