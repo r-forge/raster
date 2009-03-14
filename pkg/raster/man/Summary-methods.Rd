@@ -1,11 +1,12 @@
 \name{Summary}
+
 \docType{methods}
 
 \alias{Summary,Raster-method}
 \alias{mean,Raster-method}
-\alias{median}
-\alias{median,ANY-method}
-\alias{median,Raster-method}
+\alias{Median}
+\alias{Median,ANY-method}
+\alias{Median,Raster-method}
 
 \title{ Summary methods }
 
@@ -15,7 +16,10 @@
  \code{mean, median, max, min, range, prod, sum, any, all}
 }
 
+
 \note{
+ All methods take code{na.rm} as an additional logical argument. Default is \code{FALSE}. 
+ If \code{TRUE}, NA values are removed from calculations
  These methods compare layers and the result of these methods is always a single RasterLayer. 
  
  You can mix RasterLayer, RasterStack objects and single numeric or logical values. 

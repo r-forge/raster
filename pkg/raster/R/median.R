@@ -4,22 +4,21 @@
 # Version 0.8
 # Licence GPL v3
 
-setGeneric("median", function(x, na.rm=FALSE)
-	standardGeneric("median"))
+setGeneric("Median", function(x, ...)
+	standardGeneric("Median"))
 
 
-#setMethod('median', signature(x='ANY'), 
-#	function(x, ..., na.rm=FALSE){
-#		x <- c(x, ...)
-#		return(stats::median(x, na.rm=na.rm))
-#	}
-#)
+setMethod('Median', signature(x='ANY'), 
+	function(x, ..., na.rm=FALSE){
+		x <- c(x, ...)
+		return(stats::median(x, na.rm=na.rm))
+	}
+)
 
 
-setMethod("median", signature(x='Raster'),
-#	function(x, ..., na.rm=FALSE){
-#		rasters <- list(...)
-	function(x, na.rm=FALSE){
+setMethod("Median", signature(x='Raster'),
+	function(x, ..., na.rm=FALSE){
+		rasters <- list(...)
 		if (class(x) == 'RasterLayer') {
 			if (length(rasters)==0) { 
 				return(x) 
