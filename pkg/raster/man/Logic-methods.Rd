@@ -33,8 +33,13 @@ A RasterLayer object with logical (\code{TRUE/FALSE} values)
 \examples{
 r <- raster(ncols=10, nrows=10)
 r[] <- runif(ncell(r)) * 10
-r <- r < 3 | r < 6
-r <- !r
+r1 <- r < 3 | r > 6
+r2 <- !r1
+r3 <- r >= 3 & r <= 6
+r4 <- r2 == r3
+r[r>3] <- NA
+r5 <- is.na(r)
+
 }
 
 \keyword{methods}

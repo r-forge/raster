@@ -22,8 +22,8 @@ rasterToPoints(raster, fun=NULL, asSpatialPoints=FALSE)
 
 fun should be a simple function returning a logical value
 e.g.:
- fun=function(x){x==1}
- fun=function(x){x>3}
+ \code{fun=function(x){x==1}}
+ \code{fun=function(x){x>3}}
 }
 
 \author{Robert J. Hijmans}
