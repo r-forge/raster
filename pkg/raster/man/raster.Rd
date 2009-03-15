@@ -32,12 +32,15 @@ raster(x, ...)
 
 \code{raster(x, values=FALSE, band=1)}
 
-\item{\code{x}}{character. name of raster file  }
-\item{\code{band}}{band number in case of a file of multiple bands, default = 1 }
-\item{\code{values}}{logical. If \code{TRUE}, RasterLayer values will be read into memory with 'readAll()'}
+
+\tabular{rll}{
+\tab \code{x} \tab character. name of raster file  \cr
+\tab \code{band} \tab band number in case of a file of multiple bands, default = 1 \cr
+\tab \code{values} \tab logical. If \code{TRUE}, RasterLayer values are read into memory with \code{\link[raster]{readAll}} \cr
+}
 
 If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 
-'native' raster package format and those that can be read via rgdal. See ?readGDAL help for supported file types.
+'native' raster package format and those that can be read via rgdal. See \code{\link[gdal]{readGDAL}} help for supported file types.
 
 
 
@@ -45,14 +48,16 @@ If \code{x} is a character value, it should be a filename of a file that the ras
 
 \code{raster(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84")}
 
-\item{\code{nrows}}{number of rows on raster }
-\item{\code{ncols}}{number of columns on raster }
-\item{\code{xmn}}{minimum x coordinate or raster (left border) }
-\item{\code{xmx}}{maximum x coordinate of raster (right border) }
-\item{\code{ymn}}{minimum y coordinate or raster (bottom border) }
-\item{\code{ymx}}{maximum y coordinate of raster (top border) }
-\item{\code{projs}}{character. PROJ4 type description of a map projection}
-\item{\code{bndbox}}{bounding box used to crop a raster. Any object that is a BoundingBox object or contains one (such as Raster* objects)}
+\tabular{rll}{
+ \tab \code{nrows} \tab number of rows on raster \cr
+ \tab \code{ncols} \tab number of columns on raster \cr
+ \tab \code{xmn} \tab minimum x coordinate or raster (left border) \cr
+ \tab \code{xmx} \tab maximum x coordinate of raster (right border) \cr
+ \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
+ \tab \code{ymx} \tab maximum y coordinate of raster (top border) \cr
+ \tab \code{projs} \tab character. PROJ4 type description of a map projection \cr
+ \tab \code{bndbox} \tab bounding box used to crop a raster. Any object that is a BoundingBox object or contains one (such as Raster* objects) \cr
+}
 
 (item \code{x} is 'missing' in this case)
 
@@ -62,10 +67,12 @@ If \code{x} is a character value, it should be a filename of a file that the ras
   
 \code{raster(x, nrows=10, ncols=10, projs='NA')}
 
-\item{\code{x}}{BoundingBox object}
-\item{\code{nrows}}{number of rows on raster }
-\item{\code{ncols}}{number of columns on raster}
-\item{\code{projs}}{PROJ4 type description of a map projection}
+\tabular{rll}{
+ \tab \code{x} \tab BoundingBox object \cr
+ \tab \code{nrows} \tab number of rows on raster  \cr
+ \tab \code{ncols} \tab number of columns on raster \cr
+ \tab \code{projs} \tab PROJ4 type description of a map projection \cr
+}
 
 
 
@@ -75,9 +82,11 @@ but does not copy the filename nor the data associated with the original Raster*
 
 \code{raster(x, filename="", values=NULL)}
 
-\item{\code{x}}{a Raster* object}
-\item{\code{filename}}{new filename for new RasterLayer }
-\item{\code{values}}{If not \code{NULL} it is used to set values to new object. Either pass a vector of length == ncells(x), or a single number}
+\tabular{rll}{
+ \tab \code{x} \tab a Raster* object \cr
+ \tab \code{filename} \tab new filename for new RasterLayer \cr
+ \tab \code{values} \tab If not \code{NULL} it is used to set values to new object. Either pass a vector of length == ncells(x), or a single number \cr
+}
 
 }}
 

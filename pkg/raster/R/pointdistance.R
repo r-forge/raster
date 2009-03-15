@@ -5,36 +5,35 @@
 # Licence GPL v3
 
 
+.pointsToMatrix <- function(p) {
+	if (class(p) == 'SpatialPoints' | class(p) == 'SpatialPointsDataFrame') {
+		p <- coordinates(p)
+	}
+	if  (!is.vector(p) & !is.matrix(p))  {
+		stop('points should be vectors of length 2, matrices with 2 columns, or a SpatialPoints* object')
+	}
+	if(is.vector(p)){
+		if (length(p) != 2) {
+			stop('Wrong length for a vector, should be 2')
+		} else {
+			p <- matrix(p, ncol=2) 
+		}
+	} else {
+		if (length(p[1,]) != 2) {
+			stop( 'A points matrix should have 2 columns')
+		}
+	}
+	return(p)
+}
+
+
 pointDistance <- function (point1, point2, type='Euclidean', ...) {
 	if (!(type %in% c('Euclidean', 'GreatCircle'))) {
 		stop('type should be Euclidean or GreatCircle')
 	}	
-	
-	for (i in 1:2) {
-		if (i == 1) { p <- point1 } else { p <- point2  }
-	
-		if (class(p) == 'SpatialPoints' | class(p) == 'SpatialPointsDataFrame') {
-			p <- coordinates(p)
-		}
 
-		if  (!is.vector(p) & !is.matrix(p))  {
-			stop('points should be vectors of length 2, matrices with 2 columns, or a SpatialPoints* object')
-		}
-
-		if(is.vector(p)){
-			if (length(p) != 2) {
-				stop(paste('point', i, '. Wrong length for a vector, should be 2', sep=""))
-			} else {
-				p <- matrix(p, ncol=2) 
-			}
-		} else {
-			if (length(p[1,]) != 2) {
-				stop(paste('point', i, '. The matrix should have 2 columns', sep=""))
-			}
-		}
-		if (i == 1) { point1 <- p } else { point2 <- p }
-	}
-	rm(p)
+	point1 <- .pointsToMatrix(point1)
+	point2 <- .pointsToMatrix(point2)
 	
 	if(length(point1[,1]) != length(point2[,1])) {
 		if(length(point1[,1]) > 1 & length(point2[,1]) > 1) {
