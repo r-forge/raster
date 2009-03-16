@@ -9,20 +9,32 @@
 	if (class(p) == 'SpatialPoints' | class(p) == 'SpatialPointsDataFrame') {
 		p <- coordinates(p)
 	}
-	if  (!is.vector(p) & !is.matrix(p))  {
-		stop('points should be vectors of length 2, matrices with 2 columns, or a SpatialPoints* object')
+	if (is.data.frame(p)) {
+		p <- as.matrix(p)
 	}
-	if(is.vector(p)){
+	if (is.vector(p)){
 		if (length(p) != 2) {
 			stop('Wrong length for a vector, should be 2')
 		} else {
 			p <- matrix(p, ncol=2) 
 		}
-	} else {
+	} else if (is.matrix(p)) {
 		if (length(p[1,]) != 2) {
 			stop( 'A points matrix should have 2 columns')
 		}
+		cn <- colnames(p)
+		if (length(cn) == 2) {
+			if (toupper(cn[1]) == 'Y' | toupper(cn[2]) == 'X')  {
+				stop('Highly suspect column names (x and y reversed?)')
+			}
+			if (toupper(substr(cn[1],1,3) == 'LAT' | toupper(substr(cn[2],1,3)) == 'LON'))  {
+				stop('Highly suspect column names (longitude and latitude reversed?)')
+			}
+		}		
+	} else {
+		stop('points should be vectors of length 2, matrices with 2 columns, or a SpatialPoints* object')
 	}
+
 	return(p)
 }
 
