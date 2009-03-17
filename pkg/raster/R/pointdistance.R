@@ -4,7 +4,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
 .pointsToMatrix <- function(p) {
 	if (class(p) == 'SpatialPoints' | class(p) == 'SpatialPointsDataFrame') {
 		p <- coordinates(p)
@@ -60,11 +59,14 @@ pointDistance <- function (point1, point2, type='Euclidean', ...) {
 	}
 }
 
-
 .greatCircleDist <- function(x1, y1, x2, y2, r=6378137) {
-	#	cosd <- sin(y1) * sin(y2) + cos(y1) * cos(y2) * cos(x1-x2);
-	#	distance <- r * acos(cosd);
-	#  the following is supposedly more precise than above (http://en.wikipedia.org/wiki/Great_circle_distance):
+	x1 <- x1 * pi / 180
+	y1 <- y1 * pi / 180
+	x2 <- x2 * pi / 180
+	y2 <- y2 * pi / 180
+	#cosd <- sin(y1) * sin(y2) + cos(y1) * cos(y2) * cos(x1-x2)
+	#return(r * acos(cosd))
+	#  the following is supposedly more precise than above (http://en.wikipedia.org/wiki/Great_circle_distance)
 	x <- sqrt((cos(y2) * sin(x1-x2))^2 + (cos(y1) * sin(y2) - sin(y1) * cos(y2) * cos(x1-x2))^2)
 	y <- sin(y1) * sin(y2) + cos(y1) * cos(y2) * cos(x1-x2)
 	return ( r * atan2(x, y) )
