@@ -25,6 +25,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 	v <- vector(length=0)
 	rowCells <- 1:ncol(to)
 	starttime <- proc.time()
+
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)
@@ -40,7 +41,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
 
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }
 		
 	}
 	if (inMemory) {

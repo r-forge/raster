@@ -62,7 +62,6 @@
 
 polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updateValue="NA", filename="", overwrite=FALSE,  filetype='raster', datatype='FLT4S', track=-1) {
 	filename <- trim(filename)
-	starttime <- proc.time()
 
 	if (updateRaster) {
 		oldraster <- raster 
@@ -72,6 +71,8 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 	}
 	raster <- raster(raster, filename)
 	raster <- setDatatype(raster, datatype)
+
+	starttime <- proc.time()
 
 # check if bbox of raster and spPolys overlap
 	spbb <- bbox(spPolys)
@@ -207,7 +208,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
 		}
 		
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 
 	}
 	if (filename == "") {

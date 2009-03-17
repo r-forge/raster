@@ -69,7 +69,7 @@
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
-			if (r %in% track) { .showTrack(r, track, starttime) }
+			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 			
 		}
 		if (filename(outraster) == "") { 

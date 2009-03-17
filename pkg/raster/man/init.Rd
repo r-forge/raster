@@ -42,7 +42,7 @@ r <- raster(ncols=36, nrows=18)
 # there are different ways to set all values to 1 
 # with a function (this will work for very large files if a file name is supplied)
  set1function <- function(x){rep(1, x)}
- r <- init(r, fun=set1function, filename='test.grd')
+ r <- init(r, fun=set1function, filename='test.grd', overwrite=TRUE)
 # "manually", if all the values can be kept in memory.
  r <- setValues(r, rep(1, ncell(r)))
 # or  

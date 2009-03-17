@@ -25,10 +25,11 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 		outraster <- setMinMax(outraster)
 		if (filename(outraster) != "" ) { 
 			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
-		}		
+		}
 
 	} else if ( dataSource(raster) == 'disk') { 
 		starttime <- proc.time()
+
 		first_col <- colFromX(raster, xmin(outraster) + 0.5 * xres(outraster))
 		first_row <- rowFromY(raster, ymax(outraster) - 0.5 * yres(outraster))
 		last_row <- first_row + nrow(outraster) - 1
@@ -44,7 +45,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 			}	
 			rownr <- rownr + 1
 
-			if (r %in% track) { .showTrack(r, track, starttime) }
+			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 		} 
 		if (filename(outraster) == '') { 
 			outraster <- setValues(outraster, v) 

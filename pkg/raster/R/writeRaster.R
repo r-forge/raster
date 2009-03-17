@@ -17,6 +17,7 @@
  
 
 .writeRasterAll <- function(raster, overwrite=FALSE) {
+
 	filename <- trim(raster@file@name)
 	if (filename == "") {
 		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
@@ -78,6 +79,9 @@
 		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 		raster@data@values <- as.logical(values(raster))
 	}
+
+	close(raster@file@con)
+	attr(raster@file, "con") <- file(filename, "rb")
 	
 	return(raster)
 }

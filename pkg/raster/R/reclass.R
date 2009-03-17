@@ -47,6 +47,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 		
 	} else {
 		starttime <- proc.time()
+
 		for (r in 1:nrow(raster)) {
 			raster <- readRow(raster, r)
 			res <- values(raster)
@@ -60,7 +61,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 			outraster <- setValues(outraster, res, r)
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 	}	
 	return(outraster)
 }

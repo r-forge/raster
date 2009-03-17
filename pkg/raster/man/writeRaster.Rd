@@ -43,6 +43,10 @@ Supported file types include:
 }
 }
 
+\value{
+This function is used for the side-effect of writing values to a file.
+}
+
 \author{Robert J. Hijmans}
 
 \seealso{ writeFormats \code{\link[raster]{writeFormats}} }  

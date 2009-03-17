@@ -33,6 +33,7 @@
 .stopRowWriting <- function(raster) {
 	.writeRasterHdr(raster) 
 	close(raster@file@con)
+	attr(raster@file, "con") <- file(filename(raster), "rb")
 	raster@data@haveminmax <- TRUE
 	raster@data@source <- 'disk'
 	raster@data@content <- 'nodata'

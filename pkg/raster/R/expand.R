@@ -50,7 +50,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
-	
+
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
 		for (r in 1:nrow(raster)) {
@@ -68,7 +68,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 				v <- c(v, d)
 			}
 
-			if (r %in% track) { .showTrack(r, track, starttime) }
+			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 
 		}
 		if (filename(outraster) == '') { 

@@ -53,9 +53,8 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 		outraster <- setFilename(outraster, filename )
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 	}
-	starttime <- proc.time()
 
-	
+	starttime <- proc.time()
 	
 	for (r in 1:nrow(outraster)) {
 		rd <- as.vector(matrix(NA, nrow=1, ncol=ncol(outraster))) 
@@ -84,7 +83,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 			v <- c(v, rd)
 		}
 
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 		
 	}
 	if (filename(outraster) == '') { 

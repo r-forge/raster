@@ -6,8 +6,6 @@
 # Licence GPL v3
 
 
-
-
 writeFormats <- function() {
 	gd <- gdalDrivers()
 	gd <- as.matrix(subset(gd, gd[,3] == T))
@@ -18,18 +16,11 @@ writeFormats <- function() {
 	return(m)
 }
 
-
-.isSupportedGDALFormat <- function(dname) {
-	gd <- gdalDrivers()
-	gd <- as.matrix(subset(gd, gd[,3] == T))
-	res <- dname %in% gd
-	if (!res) { stop(paste(dname, "is not a supported file format. See writeFormats()" ) ) }
-	return(res)
-}
-
  
  
 writeRaster <- function(raster, filetype='raster', overwrite=FALSE) {
+	
+	raster_name <- deparse(substitute(raster))
 	
 	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
 		stop('No data available for writing. First use setValues()')
@@ -51,7 +42,12 @@ writeRaster <- function(raster, filetype='raster', overwrite=FALSE) {
 			raster <- .writeGDALall(raster, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
 		}  
 	}
+	
+	assign(raster_name, raster, envir=parent.frame())
+#	return(invisible())	
+	
 	return(raster)
+	
 }	
 
 writeStack <- function(rstack, overwrite=FALSE) {

@@ -36,7 +36,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 		
 	} else if ( dataSource(raster) == 'disk') { 
 		starttime <- proc.time()
-
+		
 		v <- vector(length=0)
 		cols <- rep(1:ncol(raster), each=xfact)
 		for (r in 1:nrow(raster)) {
@@ -55,7 +55,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 			outraster <- setValues(outraster, v) 
 		}
 
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 	} 
 	return(outraster)
 }

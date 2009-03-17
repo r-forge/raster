@@ -29,7 +29,7 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 	v <- vector(length=0)	
 	
 	starttime <- proc.time()
-
+	
 	for (r in 1:rs@nrows) {
 		d <- dna
 		if (r %in% urows) {
@@ -48,7 +48,7 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 			v <- c(v, d)
 		}
 
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, rs@nrows, track, starttime) }
 		
 	}	
 	if (filename == "") {

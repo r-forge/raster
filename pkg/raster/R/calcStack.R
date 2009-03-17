@@ -39,7 +39,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}
 	
-			if (r %in% track) { .showTrack(r, track, starttime) }
+			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 		
 		}
 		if (filename(outraster) == "") { 

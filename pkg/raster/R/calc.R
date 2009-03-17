@@ -41,6 +41,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 		}
 		v <- vector(length=0)
 		starttime <- proc.time()
+
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
 			if (filename(outraster)=="") {
@@ -50,7 +51,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}
 			
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 			
 		}
 		if (filename(outraster) == "") { 

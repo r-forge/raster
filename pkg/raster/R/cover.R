@@ -41,7 +41,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
-		
+
 		v <- vector(length=0)
 		for (r in 1:nrow(outRaster)) {
 			x <- readRow(x, r)
@@ -55,7 +55,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 				outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 			}
 			
-			if (r %in% track) { .showTrack(r, track, starttime) }
+			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 			
 		}
 		if (filename(outRaster) == "") {

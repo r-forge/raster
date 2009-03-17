@@ -57,9 +57,9 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 	
 	rr <- 1
 	v <- vector(length=0)
-	for (r in 1:nrow(raster)) {
-		starttime <- proc.time()
+	starttime <- proc.time()
 
+	for (r in 1:nrow(raster)) {		
 		if (dataContent(raster)=='all') {
 			rowdata <- valuesRow(raster, r)
 		} else {	
@@ -77,7 +77,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 			rr <- rr + 1
 		}
 
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 
 	}
 	

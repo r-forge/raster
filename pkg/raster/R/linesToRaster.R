@@ -147,8 +147,10 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 	v <- vector(length=0)
 	rxmn <- xmin(raster) + 0.1 * xres(raster)
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
+
+	starttime <- proc.time()
+
 	for (r in 1:nrow(raster)) {
-		starttime <- proc.time()
 		rv <- rep(NA, ncol(raster))
 		
 		ly <- yFromRow(raster, r)
@@ -196,7 +198,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 			raster <- writeRaster(raster, filetype=filetype)
 		}
 		
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 
 	}
 	if (filename == "") {

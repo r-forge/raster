@@ -60,7 +60,6 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 	}
 	starttime <- proc.time()
 
-
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)
@@ -87,7 +86,7 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 			to <- writeRaster(to, overwrite=overwrite)
 		}
 		
-		if (r %in% track) { .showTrack(r, track, starttime) }
+		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }
 		
 	}
 	if (inMemory) {
