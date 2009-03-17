@@ -50,7 +50,7 @@ Supported file types include:
 \examples{ 
 rs <- raster(system.file("external/test.ag", package="sp"))
  
-#read all data
+# read all data
 rs <- readAll(rs)
 
 # write all to a new binary file
@@ -62,9 +62,9 @@ filename(rs) <- "binall.img"
 rs <- writeRaster(rs, filetype="HFA", overwrite=TRUE)
 
  
-# write all to integer binary file
+# write all to an integer binary file
 filename(rs) <- "binallint.grd"
-rs <- setDatatype(rs, "INT4S")
+dataType(rs) <- "INT4S"
 rs <- writeRaster(rs, overwrite=TRUE)
  
 # write all to ascii file
@@ -90,7 +90,7 @@ for (r in 1:nrow(rs)) {
 }
 
 # read and write row by row; write to GeoTiff binary file
-binras <- raster(rs, "binbyrow")
+binras <- raster(rs, "binbyrow2")
 for (r in 1:nrow(rs)) {
 	rs <- readRow(rs, r)
 	binras <- setValues(binras, values(rs), r)

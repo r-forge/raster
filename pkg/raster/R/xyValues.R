@@ -6,6 +6,7 @@
 # Licence GPL v3
 
 
+
 if (!isGeneric("xyValues")) {
 	setGeneric("xyValues", function(object, xyCoords, ...)
 		standardGeneric("xyValues"))
@@ -14,8 +15,14 @@ if (!isGeneric("xyValues")) {
 
 setMethod("xyValues", signature(object='Raster', xyCoords='SpatialPoints'), 
 	function(object, xyCoords, method='simple') { 
-		xyCoords <- coordinates(xyCoords)
-		callNextMethod(object, xyCoords, method=method)
+		callGeneric(object, coordinates(xyCoords), method=method)
+	}	
+)
+
+
+setMethod("xyValues", signature(object='Raster', xyCoords='data.frame'), 
+	function(object, xyCoords, method='simple') { 
+		callGeneric(object, as.matrix(xyCoords), method=method)
 	}	
 )
 
@@ -25,10 +32,10 @@ setMethod("xyValues", signature(object='Raster', xyCoords='vector'),
 		if (length(xyCoords) != 2) {
 			stop('xyCoords should be a two column matrix or a vector of length 2')
 		}
-		xyCoords <- matrix(xyCoords, ncol=2)
-		callNextMethod(object, xyCoords, method=method)
+		callGeneric(object, matrix(xyCoords, ncol=2), method=method)
 	}
 )
+
 	
 setMethod("xyValues", signature(object='RasterLayer', xyCoords='matrix'), 
 	function(object, xyCoords, method='simple') { 

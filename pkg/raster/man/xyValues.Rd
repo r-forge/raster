@@ -4,6 +4,7 @@
 \alias{xyValues}
 \alias{xyValues,Raster,vector-method}
 \alias{xyValues,Raster,SpatialPoints-method}
+\alias{xyValues,Raster,data.frame-method}
 \alias{xyValues,RasterLayer,matrix-method}
 \alias{xyValues,RasterStack,matrix-method}
 
@@ -12,7 +13,11 @@
 \title{ values at xy coordinates }
 
 \description{
- These methods return values of a RasterLayer or RasterStack for the cells that correspond to the provided xy coordinates (n*2 matrix or SpatialPoints object)
+ These methods return the values of a RasterLayer or RasterStack for a set of xy coordinates (points).
+ The xy coordinates can be passed as a vector of length 2; a n*2 matrix or data.frame; or a SpatialPoints object.
+ 
+ Values can be extracted using bilnear interpolation of values of the four cells nearest to a point.
+ 
 }
 
 \usage{
@@ -23,7 +28,6 @@ xyValues(object, xyCoords, ...)
 \item{object}{RasterLayer or RasterStack object}
 \item{xyCoords}{xy coordinates (see below, under Methods}
 \item{...}{additional arguments. See below}
-
 }
 
 \section{Methods}{
@@ -33,13 +37,12 @@ It can also be a \code{SpatialPoints*} object.
 
 if \code{raster} is a \code{RasterLayer} object, the additional argument \code{method='bilinear'} can be used. In the case, the returned values
 are interpolated from the (centers of the) four nearest raster cells.
-
 }
 }
 
 
 \value{
-a vector of cell values for a RasterLayer or or a matrix of values for a RasterStack
+a vector (object is a RasterLayer) or a matrix (object is a RasterStack)
 }
 
 \seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{readRow}}, \code{\link[raster]{readAll}}, \code{\link[sp]{SpatialPoints}}  }

@@ -24,14 +24,14 @@
 	
 	if (dataSource(raster)=='ram') {
 		result <- valuesRow(raster, rownr)[startcol:endcol]
-	} else 	if (.driver(raster) == 'raster') {
-#		if dataContent(raster=='all')
+		
+	} else if (.driver(raster) == 'raster') {
 		
 		rastergri <- .setFileExtensionValues(filename(raster))
 		if (!file.exists( filename(raster))) { 
 			stop(paste(filename(raster)," does not exist"))
 		}
-		con <- file(rastergri, "rb")
+		#con <- file(rastergri, "rb")
 		
 		dtype <- .shortDataType(raster@file@datanotation)
 		if (dtype == "INT" | dtype == "LOG" ) { 
@@ -43,12 +43,12 @@
 		dsign <- dataSigned(raster@file@datanotation)
 		
 		if (rownr > 0) {
-			seek(con, ((rownr-1) * ncol(raster) + (startcol-1)) * dsize)
-			result <- readBin(con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) }	
+			seek(raster@file@con, ((rownr-1) * ncol(raster) + (startcol-1)) * dsize)
+			result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) }	
 		else {	
-			result <- readBin(con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder) 
+			result <- readBin(raster@file@con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder) 
 		}
-		close(con)
+#		close(con)
 #		result[is.nan(result)] <- NA
 		if (dtype == 'numeric') {
 			result[result <=  (0.999 * .nodatavalue(raster)) ] <- NA 	
@@ -64,24 +64,22 @@
 		else {
 			if (rownr <= 0) {
 				offs <- c(0, 0) 
-				reg <- c(nrow(raster), ncol(raster)) #	reg <- dim(raster@file@gdalhandle[[1]])
+				reg <- c(nrow(raster), ncol(raster)) 
 			}
 			else {
 				offs= c((rownr-1), (startcol-1)) 
 				reg <- c(1, ncolumns)
 			}
 		}
-		result <- getRasterData(raster@file@gdalhandle[[1]], offset=offs, region.dim=reg, band = raster@file@band)
+		result <- getRasterData(raster@file@con, offset=offs, region.dim=reg, band = raster@file@band)
 		
-#		if (!is.vector(result)) {  result <- as.vector(result) 	}
-		
+	
 		# if  setNAvalue() has been used.....
 		if (raster@file@nodatavalue < 0) {
 			result[result <= raster@file@nodatavalue ] <- NA 			
 		} else {
 			result[result == raster@file@nodatavalue ] <- NA 					
-		}
-	
+		}	
 	} 
 	
 	raster@data@values <- as.vector(result)

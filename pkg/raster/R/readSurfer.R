@@ -1,5 +1,5 @@
 
-.readSurfer6 <- function(filename) {
+..readSurfer6 <- function(filename) {
 	con <- file(filename, "rb")
 	id <- readBin(con, "characater", n=1, size=4)
 	r <- raster()
@@ -18,7 +18,7 @@
 	m <- m[nrow(m):1, ] 
 	r@data@values <- as.vector(t(m))
 	r@data@source <- 'disk'
-	r@file@driver <- "surfer"
+#	r@file@driver <- "surfer"
 	return(r)
 }
 

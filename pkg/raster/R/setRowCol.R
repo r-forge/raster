@@ -4,10 +4,12 @@
 # Version 0.8
 # Licence GPL v3
 
+
+
 setRowCol <- function(object, nrows=nrow(object), ncols=ncol(object)) {
-# to do: also remove file connection ! 	
 	if (extends(class(object), "Raster")) {
 		object <- clearValues(object)
+		#object@data@source <- 'ram'
 	}
 	object@ncols <- as.integer(ncols)
 	object@nrows <- as.integer(nrows)
@@ -17,6 +19,7 @@ setRowCol <- function(object, nrows=nrow(object), ncols=ncol(object)) {
 setRes <- function(object, xres, yres=xres) {
 	if (extends(class(object), "Raster")) {
 		object <- clearValues(object)
+		#object@data@source <- 'ram'
 	}
 	bb <- getBbox(object)
 	nc <- round( (bb@xmax - bb@xmin) / xres )

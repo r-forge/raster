@@ -9,22 +9,35 @@
 \title{Set the extent of a RasteLayer}
 
 \description{
-
-setExtent sets the extent (bounding box) of a RasterLayer
+setExtent sets the extent of a Raster* object. Either by providing a new BoundingBox object or by setting the extreme
+coordinates one by one.
 }
 
 \usage{
 setExtent(x, bndbox, keepres=FALSE, snap=FALSE)
+xmin(x) <- value
+xmax(x) <- value
+ymin(x) <- value
+ymax(x) <- value
 }
 
 \arguments{
   \item{x}{A Raster* object}
   \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
-  \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted}
-  \item{snap}{logical. If \code{TRUE}, the object's BoundingBox is adjusted so that the cells of the output RasterLayer are aligned with those of the input RasterLayer }
-  
+  \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (see Details)}
+  \item{snap}{logical. If \code{TRUE}, the extent is adjusted so that the cells of the input and output RasterLayer are aligned}
+  \item{value}{an extreme x or y coordinate}  
 }
- 
+
+\details{
+
+If keepres is \code{FALSE}, 
+(by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted
+
+(the RasterLayers get the same origin)
+
+}
+
 \value{
 a Raster* object
 }

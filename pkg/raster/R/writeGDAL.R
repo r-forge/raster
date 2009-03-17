@@ -94,8 +94,7 @@
 		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, mvFlag, options)
 		attr(raster@file, "transient") <- transient
 		
-		raster@file@driver <- 'gdal'
-		raster@file@gdalhandle <- list()
+#		raster@file@driver <- 'gdal'
 		raster@data@source <- 'disk'		
 	}	
     for (band in 1:nlayers(raster)) {
@@ -139,8 +138,8 @@
 	.writeStx(raster) 
 
 	tempras <- raster(filename(raster) )
-	raster@file@driver <- 'gdal'
-	raster@file@gdalhandle <- tempras@file@gdalhandle
+#	raster@file@driver <- 'gdal'
+	attr(raster@file, "con") <- tempras@file@con
 	raster@data@source <- 'disk'
 	return(raster)
 }

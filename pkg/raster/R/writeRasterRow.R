@@ -26,8 +26,7 @@
 	raster@data@min <- Inf
 	raster@data@max <- -Inf
 	raster@data@haveminmax <- FALSE
-	raster@file@driver <- 'raster'
-	raster@file@gdalhandle <- list()
+#	raster@file@driver <- 'raster'
 	return(raster)
 }
 

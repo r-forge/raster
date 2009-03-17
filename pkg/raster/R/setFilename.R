@@ -7,9 +7,10 @@
 
 
 setFilename <- function(x, value) {
-	filename <- value
-	if (is.na(filename)) {filename <- ""}
-	filename <- trim(filename)
+	filename <- trim(value)
+	if (is.na(filename) || is.null(filename)) {
+		filename <- ""
+	}
 	if (class(x)=='RasterStack') {
 		x@filename <- setFileExtension(filename, ".stk")
 	} else {
@@ -19,9 +20,10 @@ setFilename <- function(x, value) {
 		shortname <- shortFileName(filename)
 		shortname <- setFileExtension(shortname, "")
 		shortname <- gsub(" ", "_", shortname)
-		if (nbands(x) > 1) { shortname <- paste(shortname, "_", band(x)) } 
+		if (nbands(x) > 1) { 
+			shortname <- paste(shortname, "_", band(x)) 
+		} 
 		x@file@shortname <- shortname
-		x@file@gdalhandle <- list()
 	}	
 	return(x)	
 }

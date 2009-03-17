@@ -4,9 +4,9 @@
 # Version 0.8
 # Licence GPL v3
 
-setDatatype <- function(raster, datatype) {
+setDatatype <- function(x, value) {
 # for backward compatibility issues and non fatal mistakes.
-	datatype <- substr( toupper( trim(datatype) ), 1, 5)
+	datatype <- substr( toupper( trim(value) ), 1, 5)
 	if (datatype=='LOGIC') {datatype <- 'LOG1S'}
 	if (datatype == 'INTEG') {datatype <- 'INT4S'}
 	if (datatype == 'NUMER') {datatype <- 'FLT4S'}
@@ -41,66 +41,66 @@ setDatatype <- function(raster, datatype) {
 	signed <- substr(datatype,1,3) != 'U'
 	
 	if (type == "FLT") {
-		if (dataContent(raster) != 'nodata') { 
-			raster@data@values <- as.numeric(values(raster))
+		if (dataContent(x) != 'nodata') { 
+			x@data@values <- as.numeric(values(x))
 		}
 		if (size == '4') {
-			raster@file@datanotation <- 'FLT4S'
-			raster@file@nodatavalue <- -3.4E38
+			x@file@datanotation <- 'FLT4S'
+			x@file@nodatavalue <- -3.4E38
 		} else if (size == '8') {
-			raster@file@datanotation <- 'FLT8S'
-			raster@file@nodatavalue <-  -1.7E308
+			x@file@datanotation <- 'FLT8S'
+			x@file@nodatavalue <-  -1.7E308
 		} else { 
 			stop("invalid datasize for a FLT (should be 4 or 8)") 
 		}
 	} else if (type == "INT") {
-		raster@data@min <- round(minValue(raster))
-		raster@data@max <- round(maxValue(raster))
-		if (dataContent(raster) != 'nodata') { 
-			raster@data@values <- as.integer(round(values(raster)))
+		x@data@min <- round(minValue(x))
+		x@data@max <- round(maxValue(x))
+		if (dataContent(x) != 'nodata') { 
+			x@data@values <- as.integer(round(values(x)))
 		}
 		if (size == '4') {
 			if (signed) {
-				raster@file@datanotation <- 'INT4S'
-				raster@file@nodatavalue <- -2147483647
+				x@file@datanotation <- 'INT4S'
+				x@file@nodatavalue <- -2147483647
 			} else {
-				raster@file@datanotation <- 'INT4U'
-				raster@file@nodatavalue <- 4294967295
+				x@file@datanotation <- 'INT4U'
+				x@file@nodatavalue <- 4294967295
 			}
 		} else if (size == '2') {
 			if (signed) {
-				raster@file@datanotation <- 'INT2S'
-				raster@file@nodatavalue <- -32768
+				x@file@datanotation <- 'INT2S'
+				x@file@nodatavalue <- -32768
 			} else {
-				raster@file@datanotation <- 'INT2U'
-				raster@file@nodatavalue <- 65535
+				x@file@datanotation <- 'INT2U'
+				x@file@nodatavalue <- 65535
 			}
 		} else if (size == '1') {
 			# there is no nodata value for byte
-			raster@file@nodatavalue <- -9999
+			x@file@nodatavalue <- -9999
 			if (signed) {
-				raster@file@datanotation <- 'INT1S'
+				x@file@datanotation <- 'INT1S'
 			} else {
-				raster@file@datanotation <- 'INT1U'
+				x@file@datanotation <- 'INT1U'
 			}
 			warning("binary files of a single byte do not have NA values on disk")
 		} else if (size == '8') {
 			if (signed) {
-				raster@file@nodatavalue <- -9223372036854775808
-				raster@file@datanotation <- 'INT8S'							
+				x@file@nodatavalue <- -9223372036854775808
+				x@file@datanotation <- 'INT8S'							
 			} else {
-				raster@file@nodatavalue <- 18446744073709551615
-				raster@file@datanotation <- 'INT8U'			
+				x@file@nodatavalue <- 18446744073709551615
+				x@file@datanotation <- 'INT8U'			
 			}
 		} else {
 			stop("invalid datasize for this datatype") 
 		}
 	} else if ( type == 'LOG' ) {
-		raster@file@nodatavalue <- -127
-		raster@file@datanotation <- 'LOG1S'
+		x@file@nodatavalue <- -127
+		x@file@datanotation <- 'LOG1S'
 	} else {
 		stop("unknown datatype")
 	} 
-	return(raster)
+	return(x)
 }
 

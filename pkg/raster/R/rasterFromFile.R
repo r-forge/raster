@@ -5,77 +5,12 @@
 # Licence GPL v3
 
 
-closeHandle <- function(raster) {
-#	if handle = gdal then gdalclose the handle
-	if (.driver(raster) == "gdal") {
-		closeDataset(raster@file@gdalhandle[[1]])
-		raster@file@gdalhandle[[1]]	 <- list()
-	} else {
-		cr <- try(close(raster@filecon), silent = T)
-	}
-	return(raster)
-}
-
-
-.rasterFromGDAL <- function(filename, band) {	
-	gdalinfo <- GDALinfo(filename)
-	nc <- as.integer(gdalinfo[["columns"]])
-	nr <- as.integer(gdalinfo[["rows"]])
-	xn <- gdalinfo[["ll.x"]]
-	if (xn < 0) { ndecs <- 9 } else  { ndecs <- 8 }
-	xn <- as.numeric( substr( as.character(xn), 1, ndecs) )
-
-	xx <- xn + gdalinfo[["res.x"]] * nc
-	if (xx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
-	xx <- as.numeric( substr( as.character(xx), 1, ndecs) )
-		
-#	gdalv <- (packageDescription(pkg = "rgdal")$Version)
-#	dif <- compareVersion(gdalv, "0.5-32")
-#	if (dif < 0) {
-#		yx <- gdalinfo[["ll.y"]]
-#		yn <- yx - gdalinfo[["res.y"]] * nr
-#	} else {
-		yn <- gdalinfo[["ll.y"]]
-		yx <- yn + gdalinfo[["res.y"]] * nr
-#	}
-		
-	if (yn < 0) { ndecs <- 9 } else { ndecs <- 8 }
-	yn <- as.numeric( substr( as.character(yn), 1, ndecs) )
-	if (yx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
-	yx <- as.numeric( substr( as.character(yx), 1, ndecs) )
-
-	raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
-	raster <- setFilename(raster, filename)
-	raster <- setDatatype(raster, "FLT4S")
-	
-
-	raster@file@driver <- 'gdal' 
-		#attr(gdalinfo, "driver")
-
-	raster@file@nbands <- as.integer(gdalinfo[["bands"]])
-	band <- as.integer(band)
-	if (band > nbands(raster) ) {
-		warning("band too high. Set to nbands")
-		band <- nbands(raster) }
-	if ( band < 1) { 
-		warning("band too low. Set to 1")
-		band <- 1 }
-	raster@file@band <- as.integer(band)
-
-	raster <- setProjection(raster, attr(gdalinfo, "projection"))
-	
-	raster@file@gdalhandle[1] <- GDAL.open(filename)
-#oblique.x   0  #oblique.y   0 
-	raster@data@source <- 'disk'
-	return(raster)
-}
-
 
 
 .rasterFromRasterFile <- function(filename, band=1) {
-	if (!file.exists( .setFileExtensionValues(filename)) ){
-		warning("no '.gri' file. Assuming this is a Surfer file")
-		return(.readSurfer6(filename))
+	grifile <- .setFileExtensionValues(filename)
+	if (!file.exists( grifile )){
+		stop("no '.gri' file")
 	}	
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
@@ -115,7 +50,7 @@ closeHandle <- function(raster) {
 
     raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
 	raster <- setFilename(raster, filename)
-	raster@file@driver <- "raster"
+#	raster@file@driver <- "raster"
 
 	raster@data@min <- minval
 	raster@data@max <- maxval
@@ -133,6 +68,9 @@ closeHandle <- function(raster) {
 #	raster@data@ncellvals <- as.integer(ncellvals)
 
 	raster@data@source <- 'disk'
+
+	attr(raster@file, "con") <- file(grifile, "rb")
+
     return(raster)
 }
 

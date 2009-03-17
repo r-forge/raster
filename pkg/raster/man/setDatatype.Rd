@@ -11,13 +11,11 @@ It does not affect the way they are stored in memory.
 }
 
 \usage{
-setDatatype(raster, datatype)
+setDatatype(x, value)
 dataType(x) <- value
 }
 
 \arguments{
-  \item{raster}{ A \code{RasterLayer} object }
-  \item{datatype}{ the type of data for writing values to disk. See below }
   \item{x}{ A \code{RasterLayer} object }
   \item{value}{ the type of data for writing values to disk. See below }
 }

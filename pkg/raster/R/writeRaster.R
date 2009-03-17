@@ -17,17 +17,17 @@
  
 
 .writeRasterAll <- function(raster, overwrite=FALSE) {
-	filename(raster) <- trim(filename(raster))
-	if (filename(raster) == "") {
+	filename <- trim(raster@file@name)
+	if (filename == "") {
 		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
 	}
-	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+	filename <- .setFileExtensionHeader(filename)
+	raster <- setFilename(raster, filename)
 
-	if (!overwrite & file.exists(filename(raster))) {
-		stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+	if (!overwrite & file.exists(filename)) {
+		stop(paste(filename, "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
-	raster@file@driver <- 'raster'
-	raster@file@gdalhandle <- list()
+#	raster@file@driver <- 'raster'
 	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
 	raster <- setMinMax(raster)
@@ -62,14 +62,14 @@
 		}	
 	}
 
+	attr(raster@file, "con") <- file(filename, "wb")
+	
 	if (raster@data@content == 'sparse') { 
 		raster <- .writeSparse(raster, overwrite=overwrite) 
 	} else {
 		binraster <- .setFileExtensionValues(filename(raster))
-		con <- file(binraster, "wb")
 		dsize <- dataSize(raster@file@datanotation)
-		writeBin( values(raster), con, size = dsize ) 
-		close(con)
+		writeBin( values(raster), raster@file@con, size = dsize ) 
 		.writeRasterHdr(raster) 
 	}	
 	

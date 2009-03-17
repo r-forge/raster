@@ -6,8 +6,7 @@
 
 .writeSparse <- function(raster, overwrite=FALSE) {
 
-	raster@file@driver <- 'raster'
-    raster@file@gdalhandle <- list()
+#	raster@file@driver <- 'raster'
 	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
@@ -25,10 +24,8 @@
 	raster <- setMinMax(raster)
 
 	binraster <- .setFileExtensionValues(filename(raster))
-	con <- file(binraster, "wb")
-	writeBin( as.vector(dataIndices(raster)), con, size = as.integer(4)) 
-	writeBin( as.vector(values(raster)), con, size = dataSize(raster@file@datanotation) ) 
-	close(con)
+	writeBin( as.vector(dataIndices(raster)), raster@file@con, size = as.integer(4)) 
+	writeBin( as.vector(values(raster)), raster@file@con, size = dataSize(raster@file@datanotation) ) 
 
 	# add the 'sparse' key word to the hdr file!!!
 	.writeRasterHdr(raster) 

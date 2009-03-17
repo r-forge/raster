@@ -62,8 +62,7 @@ setClass('RasterFile',
 	representation (
 		name ='character',
 		shortname ='character', # short name
-		driver ='character', #gdal, raster
-		gdalhandle='list',
+#		driver ='character', #gdal, raster
 #		datatype ='character', #'numeric' or 'integer'
 #		datasize ='integer',
 #		datasigned='logical',
@@ -77,8 +76,7 @@ setClass('RasterFile',
 	prototype (	
 	    name = '',
 		shortname ='',
-		driver = 'raster',
-		gdalhandle= list(),
+#		driver = 'raster',
 #		datatype = 'numeric',
 #		datasize = as.integer(4),
 #		datasigned= TRUE,

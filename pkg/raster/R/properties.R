@@ -67,7 +67,11 @@ maxValue <- function(object, layer=1) {
 
 
 .driver <- function(object) {
-	return(object@file@driver)
+	if (class(object@file@con)[1] == 'file') {
+		return('raster')
+	} else { #  if (class(object@file@con)[1] == "GDALReadOnlyDataset")
+		return('gdal')
+	}
 }	
 
 .nodatavalue <- function(object) {

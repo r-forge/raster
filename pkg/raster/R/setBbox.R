@@ -32,11 +32,16 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 		newobj@bbox@ymax <- newobj@bbox@ymin + nrow(newobj) * yrs
 		
 		if (dataContent(x) == 'all') {
-			indices <- cellsFromBbox(x, bb, expand=TRUE)
-			v <- vector(length=length(indices))
-			v[] <- NA
-			v[!is.na(indices)] <- values(x)[!is.na(indices)]
-			newobj <- setValues(newobj, v)
+			if (ncol(x) == ncol(newobj) & nrow(x) == nrow(newobj)) {
+				newobj <- setValues(newobj, values(x))
+			} else {
+				newobj@data@source <- 'ram'
+				indices <- cellsFromBbox(x, bb, expand=TRUE)
+				v <- vector(length=length(indices))
+				v[] <- NA
+				v[!is.na(indices)] <- values(x)[!is.na(indices)]
+				newobj <- setValues(newobj, v)
+			}
 		}
 		
 	} else if (class(x) != "BasicRaster") {
