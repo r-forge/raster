@@ -6,20 +6,19 @@
 
  
  .startRowWriting <- function(raster, overwrite) {
-	filename(raster) <- trim(filename(raster))
-	if (filename(raster) == "") {
+ 	fname <- trim(raster@file@name)
+	if (fname == "") {
 		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
 	}
+	fname <- .setFileExtensionHeader(fname)
+	filename(raster) <- fname
+	fnamevals <- .setFileExtensionValues(fname)
 	
-	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
-	
-	if (!overwrite & file.exists(filename(raster))) {
-		stop(paste(filename(raster),"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+	if (!overwrite & (file.exists(fname) | file.exists(fnamevals))) {
+		stop(paste(fname,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
-	raster@file@name <- .setFileExtensionHeader(filename(raster))
-	binraster <- .setFileExtensionValues(filename(raster))
 	
-	attr(raster@file, "con") <- file(binraster, "wb")
+	attr(raster@file, "con") <- file(fnamevals, "wb")
 	attr(raster@file, "dsize") <- dataSize(raster@file@datanotation)
 	attr(raster@file, "dtype") <- .shortDataType(raster@file@datanotation)
 	
@@ -30,10 +29,12 @@
 	return(raster)
 }
 
+
 .stopRowWriting <- function(raster) {
 	.writeRasterHdr(raster) 
 	close(raster@file@con)
-	attr(raster@file, "con") <- file(filename(raster), "rb")
+	fnamevals <- .setFileExtensionValues(raster@file@name)
+	attr(raster@file, "con") <- file(fnamevals, "rb")
 	raster@data@haveminmax <- TRUE
 	raster@data@source <- 'disk'
 	raster@data@content <- 'nodata'

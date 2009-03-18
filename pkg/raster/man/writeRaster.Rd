@@ -52,52 +52,52 @@ This function is used for the side-effect of writing values to a file.
 \seealso{ writeFormats \code{\link[raster]{writeFormats}} }  
 
 \examples{ 
-rs <- raster(system.file("external/test.ag", package="sp"))
+rst <- raster(system.file("external/test.ag", package="sp"))
  
 # read all data
-rs <- readAll(rs)
+rst <- readAll(rst)
 
 # write all to a new binary file
-filename(rs) <- "binall.grd"
-rs <- writeRaster(rs, overwrite=TRUE)
+filename(rst) <- "binall.grd"
+rst <- writeRaster(rst, overwrite=TRUE)
 
 # write all to a new ERDAS .img file
-filename(rs) <- "binall.img"
-rs <- writeRaster(rs, filetype="HFA", overwrite=TRUE)
+filename(rst) <- "binall.img"
+rst <- writeRaster(rst, filetype="HFA", overwrite=TRUE)
 
  
 # write all to an integer binary file
-filename(rs) <- "binallint.grd"
-dataType(rs) <- "INT4S"
-rs <- writeRaster(rs, overwrite=TRUE)
+filename(rst) <- "binallint.grd"
+dataType(rst) <- "INT4S"
+rst <- writeRaster(rst, overwrite=TRUE)
  
 # write all to ascii file
-filename(rs) <- "ascall.asc"
-rs <- writeRaster(rs, filetype='ascii', overwrite=TRUE)
+filename(rst) <- "ascall.asc"
+rst <- writeRaster(rst, filetype='ascii', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
-rs <- raster(system.file("external/test.ag", package="sp"))
-ascras <- raster(rs, filename="ascrow.asc")
-for (r in 1:nrow(rs)) {
-	rs <- readRow(rs, r)
-	v <- values(rs) * 10
+rst <- raster(system.file("external/test.ag", package="sp"))
+ascras <- raster(rst, filename="ascrow.asc")
+for (r in 1:nrow(rst)) {
+	rst <- readRow(rst, r)
+	v <- values(rst) * 10
 	ascras <- setValues(ascras, v, r)
 	ascras <- writeRaster(ascras, filetype='ascii', overwrite=TRUE) 
 }
 	
 # read and write row by row; write to binary file
-binras <- raster(rs, "binbyrow")
-for (r in 1:nrow(rs)) {
-	rs <- readRow(rs, r)
-	binras <- setValues(binras, values(rs), r)
+binras <- raster(rst, filename="binbyrow")
+for (r in 1:nrow(rst)) {
+	rst <- readRow(rst, r)
+	binras <- setValues(binras, values(rst), r)
 	binras <- writeRaster(binras, overwrite=TRUE) 
 }
 
 # read and write row by row; write to GeoTiff binary file
-binras <- raster(rs, "binbyrow2")
-for (r in 1:nrow(rs)) {
-	rs <- readRow(rs, r)
-	binras <- setValues(binras, values(rs), r)
+binras <- raster(rst, filename="binbyrow2.tif")
+for (r in 1:nrow(rst)) {
+	rst <- readRow(rst, r)
+	binras <- setValues(binras, values(rst), r)
 	binras <- writeRaster(binras, filetype="GTiff", overwrite=TRUE) 
 }
 }

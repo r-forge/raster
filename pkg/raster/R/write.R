@@ -19,11 +19,10 @@ writeFormats <- function() {
  
  
 writeRaster <- function(raster, filetype='raster', overwrite=FALSE) {
-	
 	raster_name <- deparse(substitute(raster))
-	
+
 	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
-		stop('No data available for writing. First use setValues()')
+		stop('No usable data available for writing. First use setValues()')
 	}
 	
 	if (filetype=='raster') {
@@ -42,13 +41,11 @@ writeRaster <- function(raster, filetype='raster', overwrite=FALSE) {
 			raster <- .writeGDALall(raster, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
 		}  
 	}
-	
 	assign(raster_name, raster, envir=parent.frame())
 #	return(invisible())	
-	
 	return(raster)
-	
 }	
+
 
 writeStack <- function(rstack, overwrite=FALSE) {
 	stop("not available yet")
