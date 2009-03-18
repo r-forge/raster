@@ -82,7 +82,7 @@ setClass('RasterFile',
 #		datasigned= TRUE,
 		datanotation='FLT4S',
 		byteorder = .Platform$endian,
-		nodatavalue = -9999,
+		nodatavalue = -3.4E38,
 		nbands = as.integer(1),
 		band = as.integer(1),
 		bandorder = 'BIL'
