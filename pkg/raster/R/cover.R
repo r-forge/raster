@@ -55,7 +55,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 				writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 			}
 			
-			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
+			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
 			
 		}
 		if (outRaster@file@name == "") {

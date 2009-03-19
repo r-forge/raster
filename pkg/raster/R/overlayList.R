@@ -69,7 +69,7 @@
 				writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
-			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
+			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 			
 		}
 		if (outraster@file@name == "") { 

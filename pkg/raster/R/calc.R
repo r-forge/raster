@@ -51,7 +51,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}
 			
-		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
+		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 			
 		}
 		if (outraster@file@name == "") { 

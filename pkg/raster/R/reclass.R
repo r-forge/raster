@@ -61,7 +61,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 			outraster <- setValues(outraster, res, r)
 			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
-		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
+		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 	}	
 	return(outraster)
 }
