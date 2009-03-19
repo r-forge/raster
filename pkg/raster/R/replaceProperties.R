@@ -5,10 +5,6 @@
 # Licence GPL v3
 
 
-'dataType<-' <- function(x, value) {
-	return( setDatatype(x, value) )
-}
-
 
 'ncol<-' <- function(x, value) {
 	return( setRowCol(x, ncols=value) )

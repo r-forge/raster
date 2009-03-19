@@ -11,7 +11,7 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 	xy <- .pointsToMatrix(xy)
 	
 	rs <- raster(raster, filename)
-	rs <- setDatatype(rs, datatype)
+	dataType(rs) <- datatype
 	
 	cells <- cellFromXY(rs, xy)
 	rows <- rowFromCell(rs, cells)

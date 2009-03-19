@@ -8,7 +8,7 @@
 saveAs <- function(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE) {
 	
 	if (dataContent(raster) == 'all') {
-		raster <- setDatatype(raster, datatype)
+		dataType(raster) <- datatype
 		filename(raster) <- filename
 		writeRaster(raster, filetype=filetype, overwrite=overwrite)
 		return(raster)
@@ -21,7 +21,7 @@ saveAs <- function(raster, filename, filetype='raster', datatype='FLT4S', overwr
 # if filetype and datatype are the same, then use copyRasterfile 
 
 	newr <- raster(raster, filename)
-	newr <- setDatatype(newr, datatype)
+	dataType(newr) <- datatype
 	for (r in 1:nrow(newr)) {
 		raster <- readRow(raster, r)
 		newr <- setValues(newr, values(raster), r)

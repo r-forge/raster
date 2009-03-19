@@ -97,7 +97,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 		}
 	}
 	raster <- raster(raster, filename)
-	raster <- setDatatype(raster, datatype)
+	dataType(raster) <- datatype
 
 	
 	if (class(spLines) == 'SpatialPolygons') {

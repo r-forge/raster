@@ -10,7 +10,7 @@
 	compare(x)
 
 	outraster <- raster(x[[1]], filename)
-	outraster <- setDatatype(outraster, datatype) 
+	dataType(outraster) <- datatype
 
 	inram <- TRUE
 	for (i in 1:length(x)) {

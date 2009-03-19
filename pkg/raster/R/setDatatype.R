@@ -4,7 +4,8 @@
 # Version 0.8
 # Licence GPL v3
 
-setDatatype <- function(x, value) {
+
+'dataType<-' <- function(x, value) {
 # for backward compatibility issues and non fatal mistakes.
 	datatype <- substr( toupper( trim(value) ), 1, 5)
 	if (datatype=='LOGIC') {datatype <- 'LOG1S'}

@@ -18,7 +18,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	
 	filename <- trim(filename)
 	outraster <- raster(x, filename)
-	outraster <- setDatatype(outraster, datatype)
+	dataType(outraster) <- datatype
 	
 	if (!(dataContent(x) == 'all' | dataContent(x) == 'sparse' | dataSource(x) == 'disk')) {
 		stop('RasterLayer has no data on disk, nor a complete set of values in memory')

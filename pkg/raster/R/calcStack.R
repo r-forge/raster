@@ -17,7 +17,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 
 	filename <- trim(filename)
 	outraster <- raster(x, filename)
-	outraster <- setDatatype(outraster, datatype)
+	dataType(outraster) <- datatype
 	if (dataContent(x) == "all") {
 		outraster <- setValues(outraster, apply(values(x), 1, fun)) 
 		if (filename != "") {

@@ -70,7 +70,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 		}
 	}
 	raster <- raster(raster, filename)
-	raster <- setDatatype(raster, datatype)
+	dataType(raster) <- datatype
 
 	starttime <- proc.time()
 
@@ -231,7 +231,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 # check if bbox of raster and spPolys overlap
 	filename <- trim(filename)
 	raster <- raster(raster, filename)
-	raster <- setDatatype(raster, datatype)
+	dataType(raster) <- datatype
 	
 
 	spbb <- bbox(spPolys)

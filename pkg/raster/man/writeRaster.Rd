@@ -59,21 +59,21 @@ rst <- readAll(rst)
 
 # write all to a new binary file
 filename(rst) <- "binall.grd"
-rst <- writeRaster(rst, overwrite=TRUE)
+writeRaster(rst, overwrite=TRUE)
 
 # write all to a new ERDAS .img file
 filename(rst) <- "binall.img"
-rst <- writeRaster(rst, filetype="HFA", overwrite=TRUE)
+writeRaster(rst, filetype="HFA", overwrite=TRUE)
 
  
 # write all to an integer binary file
 filename(rst) <- "binallint.grd"
 dataType(rst) <- "INT4S"
-rst <- writeRaster(rst, overwrite=TRUE)
+writeRaster(rst, overwrite=TRUE)
  
 # write all to ascii file
 filename(rst) <- "ascall.asc"
-rst <- writeRaster(rst, filetype='ascii', overwrite=TRUE)
+writeRaster(rst, filetype='ascii', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
 rst <- raster(system.file("external/test.ag", package="sp"))

@@ -21,7 +21,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 	}
 	
 	outraster <- raster(raster, filename)
-	outraster <- setDatatype(outraster, datatype)
+	dataType(outraster) <- datatype
 	outraster <- setRowCol(outraster, nrow(raster) * yfact, ncol(raster) * xfact) 
 
 	if ( dataContent(raster)=='all') {

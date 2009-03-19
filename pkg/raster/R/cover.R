@@ -16,7 +16,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	compare(c(x, y))
 	
 	outRaster <- raster(x, filename)
-	outRaster <- setDatatype(outRaster, datatype)
+	dataType(outRaster) <- datatype
 	
 	# need to check the datatype. if x = INT and y = FLT, result should be FLT?
 	

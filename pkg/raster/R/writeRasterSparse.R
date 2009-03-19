@@ -19,7 +19,7 @@
 		raster@data@values <- as.integer(values(raster)) 
 	}
 	if (class(values(raster))=='integer') {
-		raster <- setDatatype(raster, 'INT4S')
+		dataType(raster) <- 'INT4S'
 	}	
 	raster <- setMinMax(raster)
 

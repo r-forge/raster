@@ -34,7 +34,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 		}
 	}
 	if (isInt) { 
-		outraster <- setDatatype(outraster, 'INT4S') 
+		dataType(outraster) <- 'INT4S'
 	}
 	
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))

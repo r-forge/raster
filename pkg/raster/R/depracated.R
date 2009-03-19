@@ -3,6 +3,14 @@
 #	stop("'newRaster' is deprecated. Use 'raster' instead")
 #}
 
+
+setDatatype <- function(x, value) {
+	warning('depracated function. Use "dataType(x) <- value"')
+	dataType(x) <- value
+	return(x)
+}
+
+
 setRaster <- function(object, filename="", values=NULL) {
 	warning('depracated, use "raster()" instead')
 	return(raster(x=object, filename=filename, values=values))

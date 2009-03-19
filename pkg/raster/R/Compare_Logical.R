@@ -64,7 +64,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 			stop('second argument should be a single number')
 		}
 		rst <- raster(e1)
-		rst <- setDatatype(rst, 'LOG1S')
+		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
 			rst <- setValues(rst, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
@@ -132,7 +132,7 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if ( compare(c(e1, e2)) ) {
 			rst <- raster(e1)
-			rst <- setDatatype(rst, 'LOG1S')
+			dataType(rst) <- 'LOG1S'
 			if (canProcessInMemory(e1, 3)) {
 				rst <- setValues(rst, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
 			} else {

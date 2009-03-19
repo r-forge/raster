@@ -34,7 +34,7 @@
 
 	raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
 	filename(raster) <- filename
-	raster <- setDatatype(raster, "FLT4S")
+	dataType(raster) <- "FLT4S"
 	
 
 #	raster@file@driver <- 'gdal' 

@@ -39,19 +39,19 @@
 	
 	if ( dtype =='INT') {
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
-			raster <- setDatatype(raster, 'INT2S')
+			dataType(raster) <- 'INT2S'
 			raster@data@values <- as.integer(round(values(raster)))
 			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)						
 		} else if (xmin(raster) > -2147483647 & xmax(raster) < 2147483648 ) {
-			raster <- setDatatype(raster, 'INT4S')
+			dataType(raster) <- 'INT4S'
 			raster@data@values <- as.integer(round(values(raster)))
 			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)			
 		} else if (xmin(raster) > -(2^63/2) & xmax(raster) < (2^64/2)) {
-			raster <- setDatatype(raster, 'INT8S')
+			dataType(raster) <- 'INT8S'
 			raster@data@values <- as.integer(round(values(raster)))
 			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)			
 		} else {
-			raster <- setDatatype(raster, 'FLT8S')
+			dataType(raster) <- 'FLT8S'
 			raster@data@values <- as.numeric(values(raster))
 		}
 	} else if ( dtype =='LOGICAL') {
@@ -59,9 +59,9 @@
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	} else {
 		if (xmin(raster) < -3.4E38 | xmax(raster) > 3.4E38) {
-			raster <- setDatatype(raster, 'FLT8S')
+			dataType(raster) <- 'FLT8S'
 		} else {
-			raster <- setDatatype(raster, 'FLT4S')
+			dataType(raster) <- 'FLT4S'
 		}	
 	}
 

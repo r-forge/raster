@@ -11,7 +11,6 @@ It does not affect the way they are stored in memory.
 }
 
 \usage{
-setDatatype(x, value)
 dataType(x) <- value
 }
 
@@ -22,8 +21,6 @@ dataType(x) <- value
 
 \details{
 Setting the data type is useful if you want to write values to disk. In other cases use functions such as round()
-
-While you can access the slots of the object directly, you would do that at your own peril because the value of one raster property can affect values in other properties, and changing slot values may thus break the integrity of the objects. Using slots directly may also lead to code to break in the future if underlying class definitions change. 
 
 Datatypes are described by 5 characters. The first three indicate whether the values are integers, decimal number or logical values. The fourth character indicates the number of bytes used to save the values on disk, and the last character indicates whether the numbers are signed (i.e. negative and positive values) or not (only zero and positive values)
 
@@ -58,17 +55,15 @@ a Raster* object
 \examples{ 
 r <- raster()
 # 2 byte signed integer
-r <- setDatatype(r, "INT2S")
-# this is equivalent to 
 dataType(r) <- "INT2S"
 # 2 byte unsigned integer
-r <- setDatatype(r, "INT2U")
+dataType(r) <- "INT2U"
 # very large integers
-r <- setDatatype(r, "INT8S")
+dataType(r) <- "INT8S"
 # single byte values (0-255)
-r <- setDatatype(r, "INT1U")
+dataType(r) <- "INT1U"
 #double precision decimal numbers
-r <- setDatatype(r, "FLT8S")
+dataType(r) <- "FLT8S"
 }
 
 \keyword{ spatial }

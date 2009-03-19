@@ -39,7 +39,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	xmx <- xmin(x) + csteps * xfact * xres(x)
 		
 	outRaster <- raster(x, filename)
-	outRaster <- setDatatype(outRaster, datatype)
+	dataType(outRaster) <- datatype
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
 	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 

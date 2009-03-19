@@ -57,7 +57,7 @@
 	raster@data@haveminmax <- TRUE
 	raster@file@nodatavalue <- nodataval
 	
-	raster <- setDatatype(raster, inidatatype)
+	dataType(raster) <- inidatatype
 
 	if ((byteorder == "little") | (byteorder == "big")) { raster@file@byteorder <- byteorder } 	
 	raster@file@nbands <- as.integer(nbands)

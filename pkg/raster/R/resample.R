@@ -13,7 +13,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 	validObject(bb)
 	if (is.null(filename)){filename <- ""}
 	to <- raster(to, filename)
-	to <- setDatatype(to, datatype)
+	dataType(to) <- datatype
 	
 	if (!canProcessInMemory(to, 1) && filename(to) == '') {
 		filename <- tempfile()
