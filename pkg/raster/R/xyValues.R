@@ -75,7 +75,7 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 			}	
 			return(result)		
 	
-		} else if (method==simple) {
+		} else if (method=='simple') {
 			cells <- cellFromXY(object, xyCoords)
 			return(.stackReadCells(object, cells))
 		} else {
