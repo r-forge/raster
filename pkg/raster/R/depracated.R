@@ -11,6 +11,17 @@ setDatatype <- function(x, value) {
 }
 
 
+setFilename <- function(x, value) {
+	warning('depracated function. Use "filename(x) <- value"')
+	filename(x) <- value
+	return(x)
+}
+
+
+setFileExtension <- function(x, value) {
+	stop('depracated function. Use "fileExtension(x) <- value"')
+}
+
 setRaster <- function(object, filename="", values=NULL) {
 	warning('depracated, use "raster()" instead')
 	return(raster(x=object, filename=filename, values=values))

@@ -1,5 +1,6 @@
 \name{fileFunctions}
 
+\alias{setFileExtension}
 \alias{fileExtension}
 \alias{fileExtension<-}
 \alias{shortFileName}

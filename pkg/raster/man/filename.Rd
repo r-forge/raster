@@ -1,5 +1,6 @@
 \name{filename}
 
+\alias{setFilename}
 \alias{filename<-}
 \alias{filename}
 
