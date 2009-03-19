@@ -5,7 +5,7 @@
 \alias{rasterFromBbox}
 \alias{setRaster}
 
-\title{Raster from file}
+\title{Create a RasterLayer}
 
 \description{
   These function have been depracated. Use \code{link[raster]{raster}} instead.

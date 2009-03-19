@@ -29,15 +29,15 @@
 		vals <- do.call(fun, vallist)
 		
 		outraster <- setValues(outraster, vals)
-		if (filename(outraster) != "") { 
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
+		if (outraster@file@name != "") { 
+			writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
 		}
 		
 	} else {
-		if (filename(outraster) == "") {
+		if (outraster@file@name == "") {
 			if (!canProcessInMemory(outraster, 4)) {
 				filename <- tempfile()
-				outraster <- setFilename(outraster, filename )
+				filename(outraster) <- filename
 			} else {
 				v  <- vector(length=ncell(outraster))
 				startcells <- cellFromCol(outraster, 1)
@@ -61,18 +61,18 @@
 			}
 			vals <- do.call(fun, vallist)
 			
-			if (filename(outraster) == "") {
+			if (outraster@file@name == "") {
 #				v <- c(v, vals)
 				v[startcells[r]:endcells[r]] <- vals
 			} else {
 				outraster <- setValues(outraster, vals, r)
-				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
 			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 			
 		}
-		if (filename(outraster) == "") { 
+		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	} 

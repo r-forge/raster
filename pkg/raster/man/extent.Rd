@@ -1,4 +1,4 @@
-\name{extent}
+\name{extentMinMax}
 
 \alias{xmin}
 \alias{xmax}
@@ -6,16 +6,10 @@
 \alias{ymax}
 \alias{origin}
 
-\alias{projection}
-\alias{isLatLon}
-\alias{isLatLon,Raster-method}
-\alias{isLatLon,CRS-method}
-\alias{isLatLon,character-method}
-
   
 \title{Raster extent}
 \description{
-  Extent and projection of Raster* objects
+Extent and projection of Raster* objects
 }
 
 \usage{
@@ -24,13 +18,10 @@ xmax(object)
 ymin(object)
 ymax(object)
 origin(object)
-projection(object, asText=TRUE)
-isLatLon(object)
 }
 
 \arguments{
   \item{object}{Raster* object}
-  \item{asText}{logical. If \code{TRUE}, the projection is returned as text. Otherwise a CRS object is returned}
 }
 
 \note{
@@ -49,7 +40,6 @@ xmin(r)
 xmax(r)
 ymin(r)
 ymax(r)
-projection(r)
 }
 
 \keyword{spatial}

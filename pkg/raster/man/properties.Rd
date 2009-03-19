@@ -1,6 +1,5 @@
 \name{properties}
 
-\alias{filename}
 \alias{dataType} 
 \alias{dataSize} 
 \alias{dataSigned} 
@@ -13,7 +12,6 @@
 }
 
 \usage{
-filename(object)
 dataSize(object)
 dataSigned(object)
 dataType(object)
@@ -27,7 +25,7 @@ dataType(object)
   Some of these functions simply take the values from the data slots in the RasterLayer or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
 }
 
-\seealso{ \code{\link[raster]{setFilename}} }
+\seealso{ \code{\link[raster]{filename}} }
 
 
 \value{
@@ -36,7 +34,6 @@ dataType(object)
 
 \author{Robert J. Hijmans }
 
-
 \examples{
 #using a new default raster (1 degree global)
 r <- raster(nrow=10, ncol=10)
@@ -44,8 +41,6 @@ dataContent(r)
 r[] <- 1:ncell(r)
 dataContent(r)
 dataSource(r)
-filename(r) <- 'myfile.grd'
-filename(r)
 }
 
 \keyword{spatial}

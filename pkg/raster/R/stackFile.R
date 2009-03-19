@@ -13,7 +13,7 @@ stackOpen <- function(stackfile) {
 	} else {
 		rst <- stackFromFiles(as.vector(st[,1]))
 	}
-	rst <- setFilename(rst, stackfile)
+	filename(rst) <- stackfile
 	return(rst)
 }
 

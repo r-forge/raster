@@ -5,17 +5,10 @@
 # Licence GPL v3
 
 
-'filename<-' <- function(x, value) {
-	return( setFilename(x, value) )
-}
-
 'dataType<-' <- function(x, value) {
 	return( setDatatype(x, value) )
 }
 
-'projection<-' <- function(x, value) {
-	return( setProjection(x, value) )
-}
 
 'ncol<-' <- function(x, value) {
 	return( setRowCol(x, ncols=value) )

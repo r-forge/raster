@@ -24,7 +24,7 @@ crop(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', track=-1)
 \details{
  Objects that have a BoundingBox object include RasterLayer, RasterStack. 
  They can also be extracted from objects descending from the Spatial class in the sp package. 
- You can check this with \code{getBbox}. New BoundingBox objects can be created with \code{newBbox}.
+ You can check this with \code{extent}. New BoundingBox objects can be created with \code{newBbox}.
  
  If no filename is specified, and the resulting RasterLayer is too large to hold in memory, it is saved to a temporary file.  
 }

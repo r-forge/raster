@@ -49,7 +49,7 @@
     }  
 
     raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
-	raster <- setFilename(raster, filename)
+	filename(raster) <- filename
 #	raster@file@driver <- "raster"
 
 	raster@data@min <- minval

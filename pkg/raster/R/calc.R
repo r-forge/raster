@@ -26,35 +26,35 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	
 	if ( dataContent(x) == 'all') {
 		outraster <- setValues(outraster, fun(values(x))) 
-		if (filename(outraster)!="") { 
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+		if (outraster@file@name != "") {
+			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if ( dataContent(x) == 'sparse') {
 		outraster <- setValuesSparse(outraster, fun(values(x)),  dataIndices(x)) 
-		if (filename(outraster) != "") { 
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+		if (outraster@file@name != "") { 
+			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if (dataSource(x) == 'disk') {
 		if (!canProcessInMemory(x, 3) & filename == '') {
 			filename <- tempfile()
-			outraster <- setFilename(outraster, filename )
+			filename(outraster) <- filename
 		}
 		v <- vector(length=0)
 		starttime <- proc.time()
 
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
-			if (filename(outraster)=="") {
+			if (outraster@file@name == "") {
 				v <- c(v, fun(values(x)))
 			} else {
 				outraster <- setValues(outraster, fun(values(x)), r)
-				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+				writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}
 			
 		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 			
 		}
-		if (filename(outraster) == "") { 
+		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	}

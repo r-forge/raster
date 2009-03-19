@@ -49,7 +49,7 @@ setMethod('!', signature(x='RasterLayer'),
 			dataType(rst) <- 'LOG1S'
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, !.getRowValues(x, r), r)
-				rst <- writeRaster(rst)
+				writeRaster(rst)
 			}
 			return(rst)		
 		}
@@ -68,11 +68,11 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		if (canProcessInMemory(e1, 3)) {
 			rst <- setValues(rst, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
-			rst <- setFilename(rst, value=tempfile())
+			filename(rst) <- tempfile()
 			rowrep <- rep(e2, ncol(e1))
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), rowrep ), r)
-				rst <- writeRaster(rst)
+				writeRaster(rst)
 			}
 		}
 		return(rst)
@@ -96,7 +96,7 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 			rowrep <- rep(e1, ncol(e2))
 			for (r in 1:nrow(e2)) {
 				rst <- setValues(rst, callGeneric( .getRowValues(e2, r), rowrep ), r)
-				rst <- writeRaster(rst)
+				writeRaster(rst)
 			}
 		}
 		return(rst)
@@ -114,10 +114,10 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 		if (canProcessInMemory(e1, 3)) {
 			rst <- setValues(rst, callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) 
 		} else {
-			rst <- setFilename(rst, value=tempfile())
+			filename(rst) <- tempfile()
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), .getRowValues(e2, r) ), r)
-				rst <- writeRaster(rst)
+				writeRaster(rst)
 			}
 		}
 		return(rst)
@@ -136,10 +136,10 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 			if (canProcessInMemory(e1, 3)) {
 				rst <- setValues(rst, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
 			} else {
-				rst <- setFilename(rst, value=tempfile())
+				filename(rst) <- tempfile()
 				for (r in 1:nrow(e1)) {
 					rst <- setValues(rst, callGeneric( .getLogicalRowValues(e1, r), .getLogicalRowValues(e2, r) ), r)
-					rst <- writeRaster(rst)
+					writeRaster(rst)
 				}
 			}	
 			return(rst)

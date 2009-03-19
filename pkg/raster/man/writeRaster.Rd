@@ -82,7 +82,7 @@ for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	v <- values(rst) * 10
 	ascras <- setValues(ascras, v, r)
-	ascras <- writeRaster(ascras, filetype='ascii', overwrite=TRUE) 
+	writeRaster(ascras, filetype='ascii', overwrite=TRUE) 
 }
 	
 # read and write row by row; write to binary file
@@ -90,7 +90,7 @@ binras <- raster(rst, filename="binbyrow")
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
-	binras <- writeRaster(binras, overwrite=TRUE) 
+	writeRaster(binras, overwrite=TRUE) 
 }
 
 # read and write row by row; write to GeoTiff binary file
@@ -98,8 +98,9 @@ binras <- raster(rst, filename="binbyrow2.tif")
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
-	binras <- writeRaster(binras, filetype="GTiff", overwrite=TRUE) 
+	writeRaster(binras, filetype="GTiff", overwrite=TRUE) 
 }
+
 }
 
 \keyword{ spatial }

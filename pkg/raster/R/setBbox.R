@@ -9,8 +9,8 @@
 
 setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 
-	oldbb <- getBbox(x)
-	bb <- getBbox(bndbox)
+	oldbb <- extent(x)
+	bb <- extent(bndbox)
 	newobj <- clearValues(x)
 	
 	if (snap) {

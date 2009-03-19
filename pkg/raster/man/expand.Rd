@@ -23,10 +23,6 @@ expand(raster, bndbox, filename=NULL, filetype='raster', overwrite=FALSE, track=
   \item{track}{vector of row numbers for which the function will report that they have been processed}
 }
 
-\details{
- Objects that have a BoundingBox object include RasterLayer, RasterStack. They can also be extracted from objects descending from the Spatial class in the sp package. 
- You can check this with getBbox(object). New BoundingBox objects can be reated with the function newBbox().
-}
 
 \value{
 A new RasterLayer object, and in some cases the side effect of a new file on disk.

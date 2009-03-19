@@ -8,7 +8,7 @@
  .startRowWriting <- function(raster, overwrite) {
  	fname <- trim(raster@file@name)
 	if (fname == "") {
-		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')
+		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')
 	}
 	fname <- .setFileExtensionHeader(fname)
 	filename(raster) <- fname

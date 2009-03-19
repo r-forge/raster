@@ -70,7 +70,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 			ngbvals <- .calc.ngb(ngbdata, ngb, fun, keepdata)
 			if (filename != "") {
 				ngbgrid <- setValues(ngbgrid, ngbvals, rr)
-				ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)
+				writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)
 			} else {
 				v <- c(v, ngbvals)
 			}
@@ -87,7 +87,7 @@ neighborhood <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ov
 		ngbvals <- .calc.ngb(ngbdata, ngb, fun, keepdata)
 		if (filename != "") {
 			ngbgrid <- setValues(ngbgrid, ngbvals, rr)
-			ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)
+			writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)
 		} else {
 			v <- c(v, ngbvals)
 		}

@@ -63,7 +63,7 @@ distance <-	function(object, filename="") {
 				outRowValues <- rep(Inf,times=ncols)
 				outRowValues[is.na(rowValues)] <- 0
 				outRaster <- setValues(outRaster, outRowValues, r)
-				outRaster <- writeRaster(outRaster, overwrite=TRUE)				
+				writeRaster(outRaster, overwrite=TRUE)				
 			}
 			if(isLatLon(object)){
 				remainingCells <- TRUE
@@ -86,8 +86,10 @@ distance <-	function(object, filename="") {
 						rowWindow[index] 
 						# startRow is undefined
 						# outRaster <- setValues(outRaster, rowValues, startRow)
-						outRaster <- writeRaster(outRaster, overwrite=TRUE)
-						if(r>1){rowWindow <- rowWindow[-1:ncols]}
+						writeRaster(outRaster, overwrite=TRUE)
+						if(r > 1){
+							rowWindow <- rowWindow[-1:ncols]
+						}
 					}
 				}
 			}
@@ -115,8 +117,10 @@ distance <-	function(object, filename="") {
 						rowWindow[index] 
 						# startRow is undefined
 						#outRaster <- setValues(outRaster, rowValues, startRow)
-						outRaster <- writeRaster(outRaster, overwrite=TRUE)
-						if(r>1){rowWindow <- rowWindow[-1:ncols]}
+						writeRaster(outRaster, overwrite=TRUE)
+						if(r > 1){
+							rowWindow <- rowWindow[-1:ncols]
+						}
 					}
 				}
 			}

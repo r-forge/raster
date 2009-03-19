@@ -116,7 +116,7 @@ logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE)
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
 
 #from a BoundingBox
-bb <- getBbox(r)
+bb <- extent(r)
 r2 <- raster(bb)
 r2[] <- runif(ncell(r2))
 

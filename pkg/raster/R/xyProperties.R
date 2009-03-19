@@ -6,22 +6,22 @@
 
 
 xmin <- function(object) {
-	object <- getBbox(object)
+	object <- extent(object)
 	return(object@xmin)
 }
 
 xmax <- function(object) {
-	object <- getBbox(object)
+	object <- extent(object)
 	return(object@xmax)
 }
 
 ymin <- function(object) {
-	object <- getBbox(object)
+	object <- extent(object)
 	return( object@ymin)
 }
 
 ymax <- function(object) {
-	object <- getBbox(object)
+	object <- extent(object)
 	return (object@ymax)
 }
 

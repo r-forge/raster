@@ -51,7 +51,7 @@ sampleSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
 		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
 		bndbox <- changeExtent(raster, xmx=xmx, ymn=ymn)
-		outras <- setExtent(outras, bndbox, keepres=F)
+		outras <- setExtent(outras, bndbox, keepres=FALSE)
 		outras <- setValues(outras, dd)
 	}
 	if (asRaster) {

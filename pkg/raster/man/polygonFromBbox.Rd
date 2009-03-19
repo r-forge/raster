@@ -27,7 +27,7 @@ a matrix or a SpatialPolygons object
 
 \examples{
 r <- raster()
-b <- getBbox(r)
+b <- extent(r)
 pol <- polygonFromBbox(b)
 }
 

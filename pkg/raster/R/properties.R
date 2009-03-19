@@ -6,12 +6,6 @@
 
 
 
-filename <- function(object) {
-	if (class(object) == 'RasterStack') { 
-		return(object@filename) 
-	} 
-	return(object@file@name)
-}
 
 band <- function(object) {
 	if (class(object) == "RasterLayer") {
@@ -28,25 +22,6 @@ nbands <- function(object) {
 		stop(paste("not implemented for:", class(object), "objects"))
 	}	
 }
-
-projection <- function(object, asText=TRUE) {
-	if (extends(class(object), "BasicRaster")) { object <- object@crs 
-	} else if (extends(class(object), "Spatial")) { object <- object@proj4string 
-	} else if (class(object) == 'character') {return(object)
-	} else if (class(object) != "CRS") { stop(paste('cannot use this object of class', class(object))) }
-	
-	if (asText) {
-		if (is.na(object@projargs)) { 
-			return("NA") 
-		} else {
-			return(trim(object@projargs))
-		}	
-	} else {
-		return(object)
-	}
-}
-
-
 
 
 minValue <- function(object, layer=1) {

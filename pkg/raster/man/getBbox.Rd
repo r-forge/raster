@@ -1,23 +1,23 @@
-\name{getBbox}
+\name{extent}
 
-\alias{getBbox}
-\alias{getBbox,BoundingBox-method}
-\alias{getBbox,BasicRaster-method}
-\alias{getBbox,Spatial-method}
-\alias{getBbox,matrix-method}
-\alias{getBbox,vector-method}
+\alias{extent}
+\alias{extent,BoundingBox-method}
+\alias{extent,BasicRaster-method}
+\alias{extent,Spatial-method}
+\alias{extent,matrix-method}
+\alias{extent,vector-method}
 \alias{bbox,Raster-method}
 
   
 \title{Get a BoundingBox}
 \description{
-getBbox extracts a bounding box from a Raster* or Spatial* object (or from a BoundingBox object). 
+extent returns the extent, as a BoundingBox object, for a Raster* or Spatial* object (or from a BoundingBox object). 
 It will also create a BoundingBox object from a matrix (2x2; rows=minx, maxx; cols=miny, maxy) or vector (length=4; order= xmin, xmax, ymin, ymax)
 \code{bbox(x)} returns a SP type bbox object (a matrix)
 }
 
 \usage{
-getBbox(x)
+extent(x)
 }
 
 \arguments{
@@ -34,12 +34,12 @@ A BoundingBox object
 
 \examples{
 r <- raster()
-getBbox(r)
-getBbox(c(0, 20, 0, 20))
+extent(r)
+extent(c(0, 20, 0, 20))
 #is equivalent to
 newBbox(0, 20, 0, 20)
 
-getBbox(matrix(c(0, 0, 20, 20), nrow=2))
+extent(matrix(c(0, 0, 20, 20), nrow=2))
 
 
 }

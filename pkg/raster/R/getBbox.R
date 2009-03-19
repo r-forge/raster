@@ -23,20 +23,20 @@
 
 
 
-if (!isGeneric("getBbox")) {
-	setGeneric("getBbox", function(x)
-		standardGeneric("getBbox"))
+if (!isGeneric("extent")) {
+	setGeneric("extent", function(x)
+		standardGeneric("extent"))
 }	
 
-setMethod('getBbox', signature(x='BoundingBox'), 
+setMethod('extent', signature(x='BoundingBox'), 
 	function(x){ return(x) }
 )
 
-setMethod('getBbox', signature(x='BasicRaster'), 
+setMethod('extent', signature(x='BasicRaster'), 
 	function(x){ return(x@bbox) }
 )
 
-setMethod('getBbox', signature(x='Spatial'), 
+setMethod('extent', signature(x='Spatial'), 
 	function(x){ 
 		bndbox <- bbox(x)
 		bb <- new('BoundingBox')
@@ -48,7 +48,7 @@ setMethod('getBbox', signature(x='Spatial'),
 	}
 )
 
-setMethod('getBbox', signature(x='matrix'), 
+setMethod('extent', signature(x='matrix'), 
 	function(x){ 
 		if (min(dim(x)) < 2) {
 			stop('matrix should have dimensions of at least 2 by 2') }		
@@ -61,7 +61,7 @@ setMethod('getBbox', signature(x='matrix'),
 	}
 )
 	
-setMethod('getBbox', signature(x='vector'), 
+setMethod('extent', signature(x='vector'), 
 	function(x){ 
 		if (length(x) < 4) {
 			stop('vector supplied is too short')

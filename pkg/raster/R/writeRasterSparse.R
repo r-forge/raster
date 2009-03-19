@@ -7,7 +7,7 @@
 .writeSparse <- function(raster, overwrite=FALSE) {
 
 #	raster@file@driver <- 'raster'
-	raster <- setFilename(raster, .setFileExtensionHeader(filename(raster)))
+	filename(raster) <- .setFileExtensionHeader(raster@file@name)
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}

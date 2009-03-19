@@ -5,8 +5,15 @@
 # Licence GPL v3
 
 
+filename <- function(x) {
+	if (class(x) == 'RasterStack') { 
+		return(x@filename) 
+	} 
+	return(x@file@name)
+}
 
-setFilename <- function(x, value) {
+'filename<-' <- function(x, value) {
+
 	filename <- trim(value)
 	if (is.na(filename) || is.null(filename)) {
 		filename <- ""

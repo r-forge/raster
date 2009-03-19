@@ -41,7 +41,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	outRaster <- raster(x, filename)
 	outRaster <- setDatatype(outRaster, datatype)
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
-	outRaster <- setExtent(outRaster, bndbox, keepres=F)
+	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
 	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
 	
 	if (dataContent(x) == 'all') {	
@@ -54,14 +54,14 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		} else {
 			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
 		}
-		if (filename(outRaster) != "") {
-			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+		if (outRaster@file@name != "") {
+			writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
 		if (!canProcessInMemory(x, 3) && filename == '') {
 			filename <- tempfile()
-			outraster <- setFilename(outraster, filename )
+			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
@@ -90,17 +90,17 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 			}
 			vals <- as.vector(vals)
 
-			if (filename(outRaster) == "") {
+			if (outRaster@file@name == "") {
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+				writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 			}
 			
 			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 			
 		} 
-		if (filename(outRaster) == "") { 
+		if (outRaster@file@name == "") { 
 			outRaster <- setValues(outRaster, v) 
 		}
 	}

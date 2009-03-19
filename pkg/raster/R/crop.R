@@ -13,7 +13,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 	bb <- intersectBbox(raster, bndbox)
 	bb <- alignBbox(bb, raster)
 	outraster <- raster(raster, filename)
-	outraster <- setExtent(outraster, bb, keepres=T)
+	outraster <- setExtent(outraster, bb, keepres=TRUE)
 	
 	if (dataContent(raster) == 'all')  {
 		first_start_cell <- cellFromXY(raster, c(xmin(outraster) + 0.5 * xres(raster), ymax(outraster) - 0.5 * yres(raster) ))	
@@ -23,8 +23,8 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 		selected_cells <- as.vector(mapply(seq, start_cells, end_cells))
 		outraster <- setValues(outraster, values(raster)[selected_cells])
 		outraster <- setMinMax(outraster)
-		if (filename(outraster) != "" ) { 
-			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+		if (outraster@file@name != "") { 
+			writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 		}
 
 	} else if ( dataSource(raster) == 'disk') { 
@@ -37,17 +37,17 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 		v <- vector(length=0)
 		for (r in first_row:last_row) {
 			raster <- readPartOfRow( raster, r, first_col, ncol(outraster) )
-			if (filename(outraster) == '') {
+			if (outraster@file@name == "") {
 				v <- c(v, values(raster))
 			} else {
 				outraster <- setValues(outraster, values(raster), rownr)
-				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+				writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}	
 			rownr <- rownr + 1
 
-			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
+			if (r %in% track) { .showTrack(rownr, outraster@nrows, track, starttime) }
 		} 
-		if (filename(outraster) == '') { 
+		if (outraster@file@name == '') { 
 			outraster <- setValues(outraster, v) 
 		}
 	}

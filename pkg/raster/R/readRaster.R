@@ -74,7 +74,7 @@
 		result <- getRasterData(raster@file@con, offset=offs, region.dim=reg, band = raster@file@band)
 		
 	
-		# if  setNAvalue() has been used.....
+		# if  NAvalue() has been used.....
 		if (raster@file@nodatavalue < 0) {
 			result[result <= raster@file@nodatavalue ] <- NA 			
 		} else {

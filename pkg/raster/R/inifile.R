@@ -30,10 +30,10 @@ readIniFile <- function(filename) {
 
 	ini <- lapply(Lines, strsplitcomment) 
 	
-	Lines <- matrix(unlist(ini), ncol=2, byrow=T)[,1]
+	Lines <- matrix(unlist(ini), ncol=2, byrow=TRUE)[,1]
 	ini <- lapply(Lines, strSplitOnFirstToken) 
 	
- 	ini <- matrix(unlist(ini), ncol=2, byrow=T)
+ 	ini <- matrix(unlist(ini), ncol=2, byrow=TRUE)
 	ini <- subset(ini, ini[,1] != "")
 
 	sections <- c(which(is.na(ini[,2])), length(ini[,2]))

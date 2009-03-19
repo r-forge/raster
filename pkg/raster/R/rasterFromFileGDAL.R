@@ -33,7 +33,7 @@
 	yx <- as.numeric( substr( as.character(yx), 1, ndecs) )
 
 	raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
-	raster <- setFilename(raster, filename)
+	filename(raster) <- filename
 	raster <- setDatatype(raster, "FLT4S")
 	
 
@@ -50,7 +50,7 @@
 		band <- 1 }
 	raster@file@band <- as.integer(band)
 
-	raster <- setProjection(raster, attr(gdalinfo, "projection"))
+	projection(raster) <- attr(gdalinfo, "projection")
 	
 	attr(raster@file, "con") <- GDAL.open(filename)
 	

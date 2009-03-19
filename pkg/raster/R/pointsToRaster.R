@@ -8,12 +8,7 @@
 pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 # make this an argument ?  so that you can use e.g.  background=0 
 	
-	if (class(xy) != 'matrix') {
-		stop('xy must be a matrix')
-	}
-	if (length(values) != length(xy[,1])) {
-		stop('values must be a vector of length=length(xy[,1])')
-	}
+	xy <- .pointsToMatrix(xy)
 	
 	rs <- raster(raster, filename)
 	rs <- setDatatype(rs, datatype)
@@ -43,7 +38,7 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 		}
 		if (filename != "") {
 			rs <- setValues(rs, d, r)
-			rs <- writeRaster(rs, overwrite=overwrite, filetype=filetype) 
+			writeRaster(rs, overwrite=overwrite, filetype=filetype) 
 		} else {
 			v <- c(v, d)
 		}

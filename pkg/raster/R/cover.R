@@ -24,8 +24,8 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 		x@data@values[is.na(x@data@values)] <- values(y)[is.na(x@data@values)]
 		rm(y)
 		outRaster <- setValues(outRaster, values(x))
-		if (filename(outRaster) != "") { 
-			outraster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite) 
+		if (outRaster@file@name != "") { 
+			writeRaster(outRaster, filetype=filetype, overwrite=overwrite) 
 		}
 	} else {
 		if (dataContent(x) == 'nodata'  &  dataSource(x) == 'ram' ) {
@@ -37,7 +37,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 		
 		if (!canProcessInMemory(x, 4) && filename == '') {
 			filename <- tempfile()
-			outraster <- setFilename(outraster, filename )
+			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
@@ -52,13 +52,13 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
+				writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 			}
 			
 			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 			
 		}
-		if (filename(outRaster) == "") {
+		if (outRaster@file@name == "") {
 			outRaster <- setValues(outRaster, v)
 		}
 	}

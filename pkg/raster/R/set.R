@@ -11,20 +11,10 @@
 }
 
 
-setProjection <- function(x, value) {
-	if (class(value)=="CRS") {
-		x@crs <- value
-	} else {	
-		x@crs <- newCRS(value)
-	}	
-	return(x)
-}
-
-
 
 roundCoords <- function(object, digits=0) {
 	digits <- max(0, digits)
-	b <- getBbox(object)
+	b <- extent(object)
 	b@xmin <- round(b@xmin, digits)
 	b@xmax <- round(b@xmax, digits)
 	b@ymin <- round(b@ymin, digits)
@@ -37,7 +27,7 @@ roundCoords <- function(object, digits=0) {
 }
 
 .nudgeCoords <- function(bb){
-	bb <- getBbox(bb)
+	bb <- extent(bb)
 	bb@xmin <- floor(bb@xmin)
 	bb@ymin <- floor(bb@ymin)
 	bb@xmax <- ceiling(bb@xmax)
@@ -46,7 +36,7 @@ roundCoords <- function(object, digits=0) {
 }
 
 
-setNAvalue <- function(raster, value) {
-	raster@file@nodatavalue <- value
-	return(raster)
+'NAvalue<-' <- function(x, value) {
+	x@file@nodatavalue <- value
+	return(x)
 }

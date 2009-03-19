@@ -9,11 +9,11 @@
 
 
 cellsFromBbox <- function(object, bndbox, expand=FALSE) {
-	bndbox <- getBbox(bndbox)
+	bndbox <- extent(bndbox)
 #	bndbox@xmax - 0.01 * xres(object)
 #	bndbox@ymin - 0.01 * yres(object)
 	
-	innerBox <- intersectBbox(getBbox(object), bndbox)
+	innerBox <- intersectBbox(extent(object), bndbox)
 
 	srow <- rowFromY(object, innerBox@ymax)
 	

@@ -205,7 +205,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 			v <- c(v, rv)
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
-			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
+			writeRaster(raster, overwrite=overwrite, filetype=filetype)
 		}
 		
 		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
@@ -269,7 +269,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 			v <- c(v, vals)
 		} else {
 			raster <- setValues(raster, vals, r)
-			raster <- writeRaster(raster, overwrite=overwrite)
+			writeRaster(raster, overwrite=overwrite)
 		}
 	}
 	if (filename == "") {

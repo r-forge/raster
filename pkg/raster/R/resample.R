@@ -17,7 +17,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 	
 	if (!canProcessInMemory(to, 1) && filename(to) == '') {
 		filename <- tempfile()
-		to <- setFilename(to, filename )
+		filename(to) <- filename
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(to))	}
 	}
 	inMemory <- filename(to) == ""
@@ -38,7 +38,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 			v <- c(v, vals)
 		} else {
 			to <- setValues(to, vals, r)
-			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
+			writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
 
 		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }

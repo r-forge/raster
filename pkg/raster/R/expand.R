@@ -10,7 +10,7 @@
 expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=FALSE, track=-1)  {
 	if (is.null(filename)) { filename <- "" }
 	
-	bndbox <- getBbox(bndbox)
+	bndbox <- extent(bndbox)
 	res <- resolution(raster)
 # snap points to pixel boundaries
 	xmn <- round(xmin(bndbox) / res[1]) * res[1]
@@ -26,7 +26,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 	
 	outraster <- raster(raster, filename)
 	bndbox <- newBbox(xmn, xmx, ymn, ymx)
-	outraster <- setExtent(outraster, bndbox, keepres=T)
+	outraster <- setExtent(outraster, bndbox, keepres=TRUE)
 
 	startrow <- rowFromY(outraster, ymax(raster))
 	startcol <- colFromX(outraster, xmin(raster))
@@ -40,13 +40,15 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 			outraster <- setValues(outraster, d)
-			if (filename(outraster) != "") {writeRaster(outraster, filetype=filetype, overwrite=overwrite)}
+			if (outraster@file@name != "") {
+				writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+			}
 		}
 
 	} else if ( dataSource(raster) == 'disk' ) { 
 		if (!canProcessInMemory(outraster, 4) && filename == '') {
 			filename <- tempfile()
-			outraster <- setFilename(outraster, filename )
+			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
@@ -61,7 +63,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 
-			if (filename(outraster) != '') {
+			if (outraster@file@name != '') {
 				outraster <- setValues(outraster, d, r)
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			} else {
@@ -71,7 +73,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 
 		}
-		if (filename(outraster) == '') { 
+		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	} 

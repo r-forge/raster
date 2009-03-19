@@ -1,15 +1,16 @@
 \name{filename}
-\alias{setFilename}
-\alias{filename<-}
 
-\title{ Set filename}
+\alias{filename<-}
+\alias{filename}
+
+\title{filename}
 
 \description{
-Set the filename of a Raster* object 
+Get or set the filename of a Raster* object 
 }
 
 \usage{
-setFilename(x, value)
+filename(x)
 filename(x) <- value
 }
 
@@ -28,6 +29,7 @@ a Raster* object
 \examples{ 
 r <- raster()
 filename(r) <- "c:/test.grd"
+filename(r)
 }
 
 \keyword{ spatial }

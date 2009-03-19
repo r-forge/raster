@@ -41,8 +41,8 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 		if ( dataContent(raster) == 'sparse') { 
 			outraster <- setValues(outraster, res,  dataIndices(raster)) 
 		}
-		if (filename(outraster) != "" ) {
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
+		if (outraster@file@name != "" ) {
+			writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
 		}
 		
 	} else {
@@ -59,7 +59,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 				}
 			}	
 			outraster <- setValues(outraster, res, r)
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 	}	

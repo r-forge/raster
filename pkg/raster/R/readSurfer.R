@@ -14,7 +14,7 @@
 	ncells <- r@ncols * r@nrows
 	v <- readBin(con, "numeric", n=ncells, size=4)
 	close(con)
-	m <- matrix(v, nrow=r@rows, ncol=r@ncol, byrow=T)
+	m <- matrix(v, nrow=r@rows, ncol=r@ncol, byrow=TRUE)
 	m <- m[nrow(m):1, ] 
 	r@data@values <- as.vector(t(m))
 	r@data@source <- 'disk'

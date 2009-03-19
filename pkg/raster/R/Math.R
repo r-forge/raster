@@ -22,7 +22,7 @@ setMethod("Math", signature(x='RasterLayer'),
 			}
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, callGeneric( .getRowValues(x, r) ), r)
-				rst <- writeRaster(rst)
+				writeRaster(rst)
 			}
 			if (options('verbose')[[1]]) {
 				cat('values were written to:', filename(raster))
@@ -49,7 +49,7 @@ setMethod("Math2", signature(x='RasterLayer'),
 			}
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, callGeneric(.getRowValues(x, r), digits), r)
-				rst <- writeRaster(rst)
+				writeRaster(rst)
 			}
 			return(rst)
 		}

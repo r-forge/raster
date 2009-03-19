@@ -43,12 +43,12 @@ setMethod('raster', signature(x='Raster'),
 		}
 
 		filename <- trim(filename)
-		if (filename != "" & filename == filename(x)) {
+		if (filename != "" & filename == x@file@name) {
 			stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
 		}
 
 		r <- raster(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
-		r <- setFilename(r, filename)
+		filename(r) <- filename
 	
 		if (!is.null(values)) {
 			r <- setValues(r, values)
@@ -61,13 +61,13 @@ setMethod('raster', signature(x='Raster'),
 
 setMethod('raster', signature(x='BoundingBox'), 
 	function(x, nrows=10, ncols=10, projs='NA') {
-		bb <- getBbox(x)
+		bb <- extent(x)
 		nr = as.integer(round(nrows))
 		nc = as.integer(round(ncols))
 		if (nc < 1) { stop("ncols should be > 0") }
 		if (nr < 1) { stop("nrows should be > 0") }
 		r <- new("RasterLayer", bbox=bb, ncols=nc, nrows=nr)
-		r <- setProjection(r, projs)
+		projection(r) <- projs
 		return(r) 
 	}
 )

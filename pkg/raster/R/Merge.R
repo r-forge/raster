@@ -50,7 +50,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 	
 	if (!canProcessInMemory(x, 2) && filename == '') {
 		filename <- tempfile()
-		outraster <- setFilename(outraster, filename )
+		filename(outraster) <- filename
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 	}
 
@@ -76,9 +76,9 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 			}		
 		}
 		
-		if (filename(outraster) != '') {
+		if (outraster@file@name != '') {
 			outraster <- setValues(outraster, rd, r)
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		} else {
 			v <- c(v, rd)
 		}
@@ -86,7 +86,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 		
 	}
-	if (filename(outraster) == '') { 
+	if (outraster@file@name == "") { 
 		outraster <- setValues(outraster, v) 
 	}
 	return(outraster)

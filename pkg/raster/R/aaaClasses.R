@@ -46,7 +46,7 @@ setClass ('BasicRaster',
 		crs = CRS(as.character(NA))
 	),
 	validity = function(object) {
-		validObject(getBbox(object))
+		validObject(extent(object))
 		c1 <- (object@ncols > 0)
 		if (!c1) { stop('ncols < 1') }
 		c2 <- (object@nrows > 0)

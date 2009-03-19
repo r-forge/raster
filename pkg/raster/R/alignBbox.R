@@ -8,7 +8,7 @@
 
 
 alignBbox <- function(bndbox, object) {
-	oldbb <- getBbox(object)
+	oldbb <- extent(object)
 	bndbox@xmin <- max(bndbox@xmin, oldbb@xmin)
 	bndbox@xmax <- min(bndbox@xmax, oldbb@xmax)
 	bndbox@ymin <- max(bndbox@ymin, oldbb@ymin)

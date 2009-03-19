@@ -119,7 +119,7 @@ setMethod('asRasterLayer', signature(x='RasterStack'),
 			}
 		} else {
 			rs <- new("RasterLayer")
-			rs <- setExtent(rs, getBbox(x))
+			rs <- setExtent(rs, extent(x))
 			rs <- setRowCol(rs, nrow(x), ncol(x))
 		}
 		return(rs)
@@ -131,8 +131,8 @@ setMethod('asRasterLayer', signature(x='RasterStack'),
 setMethod('asRasterLayer', signature(x='SpatialPixelsDataFrame'), 
 	function(x, index){
 		r <- raster()
-		r <- setExtent(r, getBbox(x))
-		r <- setProjection(r, x@proj4string)
+		r <- setExtent(r, extent(x))
+		projection(r) <- x@proj4string
 		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
 		dindex <- max(1, min(dim(x@data)[2], index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
@@ -157,8 +157,8 @@ setMethod('asRasterLayer', signature(x='SpatialPixelsDataFrame'),
 setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'), 
 	function(x, index){
 		r <- raster()
-		r <- setExtent(r, getBbox(x))
-		r <- setProjection(r, x@proj4string)
+		r <- setExtent(r, extent(x))
+		projection(r) <- x@proj4string
 		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
 		dindex <- max(1, min(dim(x@data)[2], index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
@@ -172,8 +172,8 @@ setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'),
 
 .asRasterStack <- function(spgrid) {
 	stk <- new("RasterStack")
-	stk <- setExtent(stk, getBbox(spgrid))
-	stk <- setProjection(stk, spgrid@proj4string)
+	stk <- setExtent(stk, extent(spgrid))
+	projection(stk) <- spgrid@proj4string
 	stk <- setRowCol(stk, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
 	
 	if (class(spgrid)=='SpatialPixelsDataFrame') {
@@ -192,7 +192,7 @@ setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'),
 
 
 .toSpBbox <- function(object) {
-	b <- getBbox(object)
+	b <- extent(object)
 	bb <- matrix(NA, 2, 2)
 	bb[1,1] <- b@xmin
 	bb[1,2] <- b@xmax

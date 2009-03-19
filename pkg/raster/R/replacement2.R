@@ -24,7 +24,7 @@ function(x,i,j,...,drop=TRUE) {
 	}
 
 	if (dataContent(x) == 'all') {
-		m <- matrix(values(x), nrow(x), ncol(x), byrow=T)
+		m <- matrix(values(x), nrow(x), ncol(x), byrow=TRUE)
 		rm(x)
 #		callNextMethod(m, i=i, j=j, drop=drop)
 		return(m[i=i, j=j, drop=drop])

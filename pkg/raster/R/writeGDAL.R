@@ -17,9 +17,9 @@
     nbands = nlayers(raster)
 # but we keep this for later (RatserStack)
 
-	raster <- setFilename(raster, trim(filename(raster)))
+	filename(raster) <- trim(raster@file@name)
 	if (filename(raster) == "") {	
-		stop('first provide a filename. E.g.: raster <- setFilename(raster, "c:/myfile")')	
+		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')	
 	}
 
 	if (file.exists( filename(raster) )) {

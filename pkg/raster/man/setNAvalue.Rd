@@ -1,6 +1,6 @@
 \name{setNAvalue}
 
-\alias{setNAvalue}
+\alias{NAvalue<-}
 
 \title{set the NA value of a RasterLayer }
 
@@ -12,11 +12,11 @@ If the NA value is smaller than zero, all values smaller or equal to that number
 }
 
 \usage{
-setNAvalue(raster, value)
+NAvalue(x) <- value
 }
 
 \arguments{
- \item{raster}{A \code{RasterLayer} object}
+ \item{x}{A \code{RasterLayer} object}
  \item{value}{the value to be interpreted as NA; set this before reading the values from the file. Integer values are matched exactely; for decimal values files any value <= the value will be interpreted as NA}  
 }
 
@@ -30,7 +30,8 @@ a Raster* object
 
 \examples{ 
 r1 <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"))
-r2 <- setNAvalue(r1, 255)
+r2 <- r1
+NAvalue(r2) <- 255
 #plot(r1)
 #x11()
 #plot(r2)

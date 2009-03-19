@@ -21,28 +21,28 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	if (dataContent(x) == "all") {
 		outraster <- setValues(outraster, apply(values(x), 1, fun)) 
 		if (filename != "") {
-			outRaster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+			writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 		}
 	} else {
 		starttime <- proc.time()
 		if (!canProcessInMemory(x, 4) & filename == '') {
 			filename=tempfile()
-			outraster <- setFilename(outraster, filename )
+			filename(outraster) <- filename
 		}
 		v <- vector(length=0)
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
-			if (filename(outraster)=="") {
+			if (outraster@file@name == "") {
 				v <- c(v, apply(values(x), 1, fun))
 			} else {
 				outraster <- setValues(outraster, apply(values(x), 1, fun), r) 
-				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}
 	
 			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 		
 		}
-		if (filename(outraster) == "") { 
+		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	}		

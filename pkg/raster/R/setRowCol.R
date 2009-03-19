@@ -21,7 +21,7 @@ setRes <- function(object, xres, yres=xres) {
 		object <- clearValues(object)
 		#object@data@source <- 'ram'
 	}
-	bb <- getBbox(object)
+	bb <- extent(object)
 	nc <- round( (bb@xmax - bb@xmin) / xres )
 	nr <- round( (bb@ymax - bb@ymin) / yres )
 	bb@xmax <- bb@xmin + nc * xres
