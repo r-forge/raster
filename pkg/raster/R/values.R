@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,1
+# Version 0.8
 # Licence GPL v3
 
 
@@ -52,81 +52,6 @@ values <- function(object, format='', names=FALSE) {
 		return(vals)
 }
 
-
-
-
-
-valuesRow <- function(raster, rownr) {
-	if (dataContent(raster) == 'nodata') {
-		stop('no values in memory. First read or set values')
-	}
-	if (rownr < 0) {
-		if (dataContent(raster) == 'all') {
-			return(raster)
-		} else {
-			stop('cannot get these values')
-		}
-	}
-	if (!(validRow(raster, rownr))) {
-		stop(paste(rownr,'is not a valid rownumber')) 
-	}
-	if (dataContent(raster) == 'sparse') {
-		return (.valuesRow.sparse(raster, rownr)) 
-	} else if (dataContent(raster) == 'row') {
-		startcell <- cellFromRowCol(raster, rownr, 1)
-		endcell <- startcell+ncol(raster)-1
-		if (dataIndices(raster) == c(startcell, endcell)) {
-			return(values(raster))
-		} else {
-			stop('this row is not in memory. First use readRow() or readAll')		
-		}
-	} else if (dataContent(raster) == 'block') {
-		firstcol <- colFromCell(raster, dataIndices(raster)[1])
-		lastcol <- colFromCell(raster, dataIndices(raster)[2])
-		if (firstcol != 1 | lastcol != ncol(raster)) {
-			stop('the block data in this raster does not have complete rows')
-		}
-		firstrow <- rowFromCell(raster, dataIndices(raster)[1])
-		lastrow <- rowFromCell(raster, dataIndices(raster)[2])
-		if (rownr < firstrow | rownr > lastrow) {
-			stop('this row is not in memory. First use readRow() or readAll')		
-		}
-		startcell <- ((rownr - firstrow) * ncol(raster) + 1) 
-		endcell <- startcell + ncol(raster) - 1
-		if (class(raster) == 'RasterStack') {
-			return(values(raster)[startcell:endcell,])
-		} else {	
-			return(values(raster)[startcell:endcell])
-		}
-	} else if (dataContent(raster) == 'all'){
-		startcell <- cellFromRowCol(raster, rownr, 1)
-		endcell <- startcell+ncol(raster)-1
-		if (class(raster) == 'RasterStack') {
-			return(values(raster)[startcell:endcell,])
-		} else {	
-			return(values(raster)[startcell:endcell])
-		}
-	} else {
-		stop('something is wrong with the RasterLayer dataContent')
-	}
-}
-
-
-.valuesRow.sparse <- function(raster, rownr, explode=TRUE) {
-	if (dataContent(raster) != 'sparse') {stop('cannot do. Need sparse')}
-	startcell <- cellFromRowCol(raster, rownr, 1)
-	endcell <- startcell+ncol(raster)-1
-	d <- cbind(dataIndices(raster), values(raster))
-	d <- d[d[,1] >= startcell & d[,1] <= endcell, ] 
-	if (explode) { 
-		cells <- startcell:endcell
-		cells[] <- NA
-		cells[d[,1]] <- d[,2]	
-		return(cells)
-	} else {
-		return(d)
-	}	
-}
 
 
 .values.as.dataframe <- function(raster) {

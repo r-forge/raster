@@ -1,10 +1,9 @@
-\name{values}
-\alias{values}
-\alias{valuesRow}
+\name{extremeValues}
+\alias{maxValue}
+\alias{minValue}
   
   
-\title{Get raster values}
-
+\title{Get raster properties}
 \description{
   values returns cell values for a Raster* object (typically after read* has been used).
  
@@ -13,22 +12,20 @@
 }
 
 \usage{
-values(object, format='', names=FALSE)
-valuesRow(object, rownr)
+minValue(object, layer=1)
+maxValue(object, layer=1)
 }
 
 \arguments{
   \item{object}{RasterLayer or RasterStack object}
-  \item{format}{specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack, and a vector for a RasterLayer}
-  \item{names}{If TRUE, row and col names are provided}
-  \item{rownr}{The rownumber for which values are returned}
+  \item{layer}{layer number (for RasterStack objects}
 }
   
 
 \note{
-	RasterLayer values are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
-	Some of these functions simply take the values from the data slots in the Raster or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
-  
+	RasterLayer values are returned as a vector unless the option format='matrix' is used. 
+	In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
+	Some of these functions simply take the values from the data slots in the Raster or RasterStack object.   
 }
 
 \value{

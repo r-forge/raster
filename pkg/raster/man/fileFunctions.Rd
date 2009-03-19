@@ -1,7 +1,7 @@
 \name{fileFunctions}
 
-\alias{setFileExtension}
 \alias{fileExtension}
+\alias{fileExtension<-}
 \alias{shortFileName}
 \alias{filePath}
 \alias{trim}
@@ -15,8 +15,8 @@
 }
 
 \usage{
-setFileExtension(filename, newextension)
 fileExtension(filename)
+fileExtension(filename) <- value
 shortFileName(filename)
 filePath(filename)
 trim(x)
@@ -24,7 +24,7 @@ trim(x)
 
 \arguments{
   \item{filename}{A filename, with or without the path}
-  \item{newextension}{A file extension, e.g., ".txt" }
+  \item{value}{A file extension including the dot, e.g., ".txt" }
   \item{x}{A character string (filename)}
 }
 
@@ -38,7 +38,8 @@ A file extension, filename or path.
 	fn <- "  c:/temp folder/filename.extension  "
 	fn <- trim(fn)
 	fileExtension(fn)
-	setFileExtension(fn, ".txt")
+	fileExtension(fn) <- ".txt"
+	fileExtension(fn)
 	shortFileName(fn)
 	filePath(fn)
 }

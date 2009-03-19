@@ -13,19 +13,17 @@ filename <- function(x) {
 }
 
 'filename<-' <- function(x, value) {
-
 	filename <- trim(value)
 	if (is.na(filename) || is.null(filename)) {
 		filename <- ""
 	}
 	if (class(x)=='RasterStack') {
-		x@filename <- setFileExtension(filename, ".stk")
+		fileExtension(filename) <- ".stk"
+		x@filename <- filename
 	} else {
 		x@file@name <- filename
-	}	
-	if (class(x)=='RasterLayer') {
 		shortname <- shortFileName(filename)
-		shortname <- setFileExtension(shortname, "")
+		fileExtension(shortname) <- ""
 		shortname <- gsub(" ", "_", shortname)
 		if (nbands(x) > 1) { 
 			shortname <- paste(shortname, "_", band(x)) 

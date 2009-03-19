@@ -49,11 +49,11 @@ fileExtension <- function(filename) {
 }   
 
 
-setFileExtension <- function(filename, newextension="") {
+'fileExtension<-' <- function(filename, value) {
 	lfn <- nchar(filename)
-	newextension <- trim(newextension)
-	if (newextension != "" & substr(newextension, 1, 1) != ".") {
-		newextension <- paste(".", newextension, sep="") 
+	value <- trim(value)
+	if (value != "" & substr(value, 1, 1) != ".") {
+		value <- paste(".", value, sep="") 
 	}
 	extstart <- -1
 	for (i in lfn : 2) {
@@ -63,9 +63,9 @@ setFileExtension <- function(filename, newextension="") {
 		}
 	}
     if (extstart > 0) {
-	   fname <- paste(substr(filename, 1, extstart-1), newextension, sep="")
+	   fname <- paste(substr(filename, 1, extstart-1), value, sep="")
 	   }
-	else { fname <- paste(filename, newextension, sep="")   
+	else { fname <- paste(filename, value, sep="")   
 	}
   return(fname)  
 }   
