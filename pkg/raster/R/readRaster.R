@@ -46,6 +46,7 @@
 			seek(raster@file@con, ((rownr-1) * ncol(raster) + (startcol-1)) * dsize)
 			result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) }	
 		else {	
+			seek(raster@file@con, 0)
 			result <- readBin(raster@file@con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder) 
 		}
 #		close(con)

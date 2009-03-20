@@ -23,11 +23,12 @@ function(x,i,j,...,drop=TRUE) {
 	}
 	
 	if (dataContent(x) == 'all') {
-		callNextMethod(values(x), i=i, drop=drop )
+		values(x)[i, drop=drop]
 	} else {
 		if (missing(i)) {
 			stop('raster too large.')
 		} else {
+			print('hello')
 			return(cellValues(x, i))
 		}
 	}

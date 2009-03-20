@@ -56,33 +56,20 @@
 }	
 
 
-
 .readCellsRaster <- function(raster, cells) {
-#	cells <- cbind(cells, NA)
-#	valuename <- raster@file@shortname
-#	if (valuename == "") {valuename <- "value" }
-#	colnames(cells) <- c("id", "cell", valuename)
-#	uniquecells <- na.omit(unique(cells[order(cells[,2]),2]))
-	
-	rastergri <- .setFileExtensionValues(filename(raster))
-	if (!file.exists(filename(raster))) { stop(paste(filename(raster)," does not exist")) }
-
-	con <- file(rastergri, "rb")
-
 	res <- vector(length=length(cells))
 	res[] <- NA
 	dsize <- dataSize(raster@file@datanotation)
-	dtype <- .shortDataType(raster@file@datanotation)
-	for (i in 1:length(cells)) {
-		seek(con, (cells[i]-1) * dsize)
-		if (dtype == "FLT") { 
-			dtype <- "numeric"
-		} else { 
-			dtype <- "integer"
-		}
-		res[i] <- readBin(con, what=dtype, n=1, size=dsize, endian=raster@file@byteorder) 
+	if (.shortDataType(raster@file@datanotation) == "FLT") { 
+		dtype <- "numeric"
+	} else { 
+		dtype <- "integer"
 	}
-	close(con)
+	for (i in 1:length(cells)) {
+		seek(raster@file@con, (cells[i]-1) * dsize)
+		res[i] <- readBin(raster@file@con, what=dtype, n=1, size=dsize, endian=raster@file@byteorder) 
+	}
+	seek(raster@file@con, 0)
 	res[res <=  max(-3e+38, .nodatavalue(raster))] <- NA
 	return(cbind(cells,res))
 }
