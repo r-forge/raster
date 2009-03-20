@@ -41,7 +41,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 			outraster <- setValues(outraster, d)
 			if (outraster@file@name != "") {
-				writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}
 		}
 
@@ -65,7 +65,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 
 			if (outraster@file@name != '') {
 				outraster <- setValues(outraster, d, r)
-				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				outraster <- outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			} else {
 				v <- c(v, d)
 			}

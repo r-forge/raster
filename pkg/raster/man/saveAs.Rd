@@ -5,11 +5,11 @@
 \title{Save a raster file to a different format}
 
 \description{
-  Save a raster file (on disk) to another format. 
+Save a raster file to a file of another type (format). 
 }
 
 \usage{
-  saveAs(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE)
+saveAs(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE, result=TRUE)
 }
 
 \arguments{
@@ -18,6 +18,11 @@
   \item{filetype}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
   \item{datatype}{output data type; see below}
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
+  \item{result}{Logical. If \code{TRUE} a new RasterLayer object is returned, else the function returns nothing}  
+}
+
+\value{
+A RasterLayer object or nothing \code{result=FALSE}. This function is used for its side-effect of writing a file to disk.
 }
 
 \details{

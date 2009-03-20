@@ -10,13 +10,14 @@ You can write an entire raster dataset at once, or by row.
 }
 
 \usage{
-writeRaster(raster, filetype='raster', overwrite=FALSE)
+writeRaster(raster, filetype='raster', overwrite=FALSE, assign=FALSE)
 }
 
 \arguments{
   \item{raster}{RasterLayer object}
   \item{filetype}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
+  \item{assign}{Logical. If \code{TRUE} the function does not return a new object but overwrites the existing object} 
 }
 
 \details{
@@ -59,21 +60,25 @@ rst <- readAll(rst)
 
 # write all to a new binary file
 filename(rst) <- "binall.grd"
-writeRaster(rst, overwrite=TRUE)
+rst <- writeRaster(rst, overwrite=TRUE)
+
+# equivalent to:
+writeRaster(rst, overwrite=TRUE, assign=TRUE)
+
 
 # write all to a new ERDAS .img file
 filename(rst) <- "binall.img"
-writeRaster(rst, filetype="HFA", overwrite=TRUE)
+rst <- writeRaster(rst, filetype="HFA", overwrite=TRUE)
 
  
 # write all to an integer binary file
 filename(rst) <- "binallint.grd"
 dataType(rst) <- "INT4S"
-writeRaster(rst, overwrite=TRUE)
+rst <- writeRaster(rst, overwrite=TRUE)
  
 # write all to ascii file
 filename(rst) <- "ascall.asc"
-writeRaster(rst, filetype='ascii', overwrite=TRUE)
+rst <- writeRaster(rst, filetype='ascii', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
 rst <- raster(system.file("external/test.ag", package="sp"))
@@ -82,7 +87,7 @@ for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	v <- values(rst) * 10
 	ascras <- setValues(ascras, v, r)
-	writeRaster(ascras, filetype='ascii', overwrite=TRUE) 
+	ascras <- writeRaster(ascras, filetype='ascii', overwrite=TRUE) 
 }
 	
 # read and write row by row; write to binary file
@@ -90,7 +95,7 @@ binras <- raster(rst, filename="binbyrow")
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
-	writeRaster(binras, overwrite=TRUE) 
+	binras <- writeRaster(binras, overwrite=TRUE) 
 }
 
 # read and write row by row; write to GeoTiff binary file
@@ -98,7 +103,7 @@ binras <- raster(rst, filename="binbyrow2.tif")
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
-	writeRaster(binras, filetype="GTiff", overwrite=TRUE) 
+	binras <- writeRaster(binras, filetype="GTiff", overwrite=TRUE) 
 }
 
 }

@@ -78,7 +78,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 		
 		if (outraster@file@name != '') {
 			outraster <- setValues(outraster, rd, r)
-			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		} else {
 			v <- c(v, rd)
 		}

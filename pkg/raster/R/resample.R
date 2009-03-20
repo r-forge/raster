@@ -38,7 +38,7 @@ resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', d
 			v <- c(v, vals)
 		} else {
 			to <- setValues(to, vals, r)
-			writeRaster(to, overwrite=overwrite, filetype=filetype)
+			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
 
 		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }

@@ -21,7 +21,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	if (dataContent(x) == "all") {
 		outraster <- setValues(outraster, apply(values(x), 1, fun)) 
 		if (filename != "") {
-			writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 		}
 	} else {
 		starttime <- proc.time()
@@ -36,7 +36,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				v <- c(v, apply(values(x), 1, fun))
 			} else {
 				outraster <- setValues(outraster, apply(values(x), 1, fun), r) 
-				writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}
 	
 			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }

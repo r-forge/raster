@@ -49,7 +49,7 @@ setMethod('!', signature(x='RasterLayer'),
 			dataType(rst) <- 'LOG1S'
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, !.getRowValues(x, r), r)
-				writeRaster(rst)
+				rst <- writeRaster(rst)
 			}
 			return(rst)		
 		}
@@ -72,7 +72,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 			rowrep <- rep(e2, ncol(e1))
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), rowrep ), r)
-				writeRaster(rst)
+				rst <- writeRaster(rst)
 			}
 		}
 		return(rst)
@@ -96,7 +96,7 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 			rowrep <- rep(e1, ncol(e2))
 			for (r in 1:nrow(e2)) {
 				rst <- setValues(rst, callGeneric( .getRowValues(e2, r), rowrep ), r)
-				writeRaster(rst)
+				rst <- writeRaster(rst)
 			}
 		}
 		return(rst)
@@ -117,7 +117,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 			filename(rst) <- tempfile()
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), .getRowValues(e2, r) ), r)
-				writeRaster(rst)
+				rst <- writeRaster(rst)
 			}
 		}
 		return(rst)
@@ -139,7 +139,7 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 				filename(rst) <- tempfile()
 				for (r in 1:nrow(e1)) {
 					rst <- setValues(rst, callGeneric( .getLogicalRowValues(e1, r), .getLogicalRowValues(e2, r) ), r)
-					writeRaster(rst)
+					rst <- writeRaster(rst)
 				}
 			}	
 			return(rst)

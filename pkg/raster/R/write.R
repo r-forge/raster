@@ -1,8 +1,7 @@
-
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0,1
+# Version 0.8
 # Licence GPL v3
 
 
@@ -18,8 +17,8 @@ writeFormats <- function() {
 
  
  
-writeRaster <- function(raster, filetype='raster', overwrite=FALSE) {
-	raster_name <- deparse(substitute(raster))
+writeRaster <- function(raster, filetype='raster', overwrite=FALSE, assign=FALSE) {
+	if (assign){ raster_name <- deparse(substitute(raster))}
 
 	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
 		stop('No usable data available for writing. First use setValues()')
@@ -41,9 +40,12 @@ writeRaster <- function(raster, filetype='raster', overwrite=FALSE) {
 			raster <- .writeGDALall(raster, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
 		}  
 	}
-	assign(raster_name, raster, envir=parent.frame())
-#	return(invisible())	
-	return(raster)
+	if (assign) {
+		assign(raster_name, raster, envir=parent.frame())
+		return(invisible())	
+	} else {
+		return(raster)
+	}
 }	
 
 

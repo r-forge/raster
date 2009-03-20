@@ -30,7 +30,7 @@
 		
 		outraster <- setValues(outraster, vals)
 		if (outraster@file@name != "") { 
-			writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
 		}
 		
 	} else {
@@ -66,7 +66,7 @@
 				v[startcells[r]:endcells[r]] <- vals
 			} else {
 				outraster <- setValues(outraster, vals, r)
-				writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
 			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }

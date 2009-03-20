@@ -25,7 +25,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 		rm(y)
 		outRaster <- setValues(outRaster, values(x))
 		if (outRaster@file@name != "") { 
-			writeRaster(outRaster, filetype=filetype, overwrite=overwrite) 
+			outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite) 
 		}
 	} else {
 		if (dataContent(x) == 'nodata'  &  dataSource(x) == 'ram' ) {
@@ -52,7 +52,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
+				outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 			}
 			
 			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }

@@ -5,32 +5,6 @@
 # Licence GPL v3
 
 
-saveAs <- function(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE) {
-	
-	if (dataContent(raster) == 'all') {
-		dataType(raster) <- datatype
-		filename(raster) <- filename
-		writeRaster(raster, filetype=filetype, overwrite=overwrite)
-		return(raster)
-	} 
-	
-	if ( trim(filename(raster)) == trim(filename) ) {
-		stop('filenames should be different')
-	}
-
-# if filetype and datatype are the same, then use copyRasterfile 
-
-	newr <- raster(raster, filename)
-	dataType(newr) <- datatype
-	for (r in 1:nrow(newr)) {
-		raster <- readRow(raster, r)
-		newr <- setValues(newr, values(raster), r)
-		writeRaster(newr, filetype=filetype, overwrite=overwrite)
-	}
-	return(newr)
-}
-
-
 moveRasterFile <- function(raster, filename, overwrite=FALSE) {
 	r <- copyRasterFile(raster, filename, overwrite)
 	f <- trim(filename(raster))

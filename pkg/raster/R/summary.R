@@ -48,7 +48,7 @@
 			v <- c(v, vv)
 		} else {
 			raster <- setValues(raster, vv, r)
-			writeRaster(raster)
+			raster <- writeRaster(raster)
 		}
 	}
 	if (filename == "") {

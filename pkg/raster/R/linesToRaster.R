@@ -195,7 +195,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 			v <- c(v, rv)
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
-			writeRaster(raster, filetype=filetype)
+			raster <- writeRaster(raster, filetype=filetype)
 		}
 		
 		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }

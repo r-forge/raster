@@ -38,7 +38,7 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 		}
 		if (filename != "") {
 			rs <- setValues(rs, d, r)
-			writeRaster(rs, overwrite=overwrite, filetype=filetype) 
+			rs <- writeRaster(rs, overwrite=overwrite, filetype=filetype) 
 		} else {
 			v <- c(v, d)
 		}

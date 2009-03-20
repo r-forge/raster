@@ -27,12 +27,12 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	if ( dataContent(x) == 'all') {
 		outraster <- setValues(outraster, fun(values(x))) 
 		if (outraster@file@name != "") {
-			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if ( dataContent(x) == 'sparse') {
 		outraster <- setValuesSparse(outraster, fun(values(x)),  dataIndices(x)) 
 		if (outraster@file@name != "") { 
-			writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if (dataSource(x) == 'disk') {
 		if (!canProcessInMemory(x, 3) & filename == '') {
@@ -48,7 +48,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				v <- c(v, fun(values(x)))
 			} else {
 				outraster <- setValues(outraster, fun(values(x)), r)
-				writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}
 			
 		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
