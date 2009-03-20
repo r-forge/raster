@@ -5,17 +5,35 @@
 # Licence GPL v3
 
 
+setValuesRows <- function(object, values, startrow, endrow) {
+	if (!is.vector(values)) {stop('values must be a vector')}
+	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
+		stop('values must be numeric, integer or logical.')	}
+	startow <- round(start)
+	endrow <- round(endrow)
+	if (startrow > endrow) {stop()}
+	if (startrow < 1 | startrow > nrow(object)) {
+		stop(paste("rownumber out of bounds"))
+	}
+	object@data@values <- values
+	object@data@content <- 'row' 
+	firstcell <- cellFromRowCol(object, rownr=startrow, colnr=1)
+	lastcell <- cellFromRowCol(object, rownr=endrow, colnr=ncol(object))
+	object@data@indices <- c(firstcell, lastcell)
+	if (length(values) != (lastcell-firstcell) + 1) {stop('wrong length')}
+	return(object)
+}
+
 
 if (!isGeneric('setValues')) {
 	setGeneric('setValues', function(object, values, rownr=-1, layer=-1)
 		standardGeneric('setValues')) 
 	}	
 
-
 		
 setMethod('setValues', signature(object='RasterLayer'), 
   
-  function(object, values, rownr=-1,  layer=-1) {
+function(object, values, rownr=-1, layer=-1) {
   
 	if (!is.vector(values)) {stop('values must be a vector')}
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
@@ -51,6 +69,8 @@ setMethod('setValues', signature(object='RasterLayer'),
 		lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
 		object@data@indices <- c(firstcell, lastcell)
 		return(object)
+	} else if (length(values) / ncol(object) ) {
+		
 	} else {
 		stop("length(values) is not equal to ncell(object) or ncol(object)") 
 	}
