@@ -53,7 +53,7 @@ setMethod("plot", signature(x='RasterLayer', y='RasterLayer'),
 		if (length(x) < nc) {
 			warning(paste('plot used a sample of ', round(100*length(x)/nc), "% of the cells", sep=""))
 		}
-		plot(x, y, ...)			
+		plot(x, y, cex=cex, ...)			
 	}
 )
 	

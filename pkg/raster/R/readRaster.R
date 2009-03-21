@@ -23,7 +23,14 @@
 	}
 	
 	if (dataSource(raster)=='ram') {
-		result <- valuesRow(raster, rownr)[startcol:endcol]
+		if (rownr < 1) {
+			if (dataContent(raster) != 'all') {
+				stop('cannot read data for this RasterLayer')
+			} 
+			return(raster)
+		} else {
+			result <- valuesRow(raster, rownr)[startcol:endcol]
+		}
 		
 	} else if (.driver(raster) == 'raster') {
 		
