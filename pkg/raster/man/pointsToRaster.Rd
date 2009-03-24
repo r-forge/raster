@@ -30,7 +30,7 @@ If you want the count of points in each grid cell, use the (default) \code{lengt
 of the vector of points.
 For the sum of the values, use \code{sum}, for a yes/no result, you can use \code{fun=function(x){if(lenght(x)>0 {r<-1} else {r<-0}; return(r)}}
 
-For the number of unique values use \code{fun=function(x){length(unique(x)}}
+For the number of unique values use \code{fun=function(x){length(unique(x))}}
 }
 
 \value{
