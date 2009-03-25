@@ -9,25 +9,16 @@
 
 
 cellsFromBbox <- function(object, bndbox, expand=FALSE) {
+	
 	bndbox <- extent(bndbox)
-#	bndbox@xmax - 0.01 * xres(object)
-#	bndbox@ymin - 0.01 * yres(object)
-	
+	bndbox <- alignBbox(bndbox, object)
 	innerBox <- intersectBbox(extent(object), bndbox)
-
+	
 	srow <- rowFromY(object, innerBox@ymax)
-	
-	if (trunc((ymin(object) - bndbox@ymin)/yres(object)) == (ymin(object) - bndbox@ymin)/yres(object)) { 
-		bndbox@ymin <- bndbox@ymin + 0.5 * yres(object) 
-	}
-	erow <- rowFromY(object, innerBox@ymin)
-	
+	erow <- rowFromY(object, innerBox@ymin + 0.5 * yres(object))
 	scol <- colFromX(object, innerBox@xmin)
-	if (trunc((xmax(object) - bndbox@xmax)/xres(object)) == (xmax(object) - bndbox@xmax)/xres(object)) { 
-		bndbox@xmax <- bndbox@xmax - 0.5 * xres(object) 
-	}
-	ecol <- colFromX(object, innerBox@xmax)
-
+	ecol <- colFromX(object, innerBox@xmax - 0.5 * xres(object))
+	
 	if (expand) {
 		addrowstop <- as.integer(round((bndbox@ymax - innerBox@ymax) / yres(object)))
 		addrowsbot <- as.integer(round((innerBox@ymin - bndbox@ymin) / yres(object)))
@@ -35,9 +26,8 @@ cellsFromBbox <- function(object, bndbox, expand=FALSE) {
 		addcolsright <- as.integer(round((bndbox@xmax - innerBox@xmax) / xres(object)))
 		nc <- ecol-scol+1+addcolsleft+addcolsright
 	}
-	
+
 	cell <- vector()
-	
 	if (expand && addrowstop > 0) {
 		cell <- rep(NA, nc * addrowstop)
 	}
