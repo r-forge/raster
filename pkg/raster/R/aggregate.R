@@ -18,7 +18,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		xfact <- yfact <- fact
 	} else if (length(fact)==2) {
 		xfact <- as.integer(round(fact[[1]]))
-		yfact <- as.intger(round(fact[[2]]))
+		yfact <- as.integer(round(fact[[2]]))
 		if (xfact < 2) { stop('fact[[1]] should be > 1') } 
 		if (yfact < 2) { stop('fact[[2]] should be > 1') }
 	} else {
