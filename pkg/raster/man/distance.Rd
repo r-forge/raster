@@ -5,10 +5,10 @@
 
 \alias{distance,RasterLayer-method}
 
-\title{distance to raster cells}
+\title{distance}
 
 \description{
- The function calculates the distance to cells of a RasterLayer that are not \code{NA}.
+ The function calculates the distance to cells of a RasterLayer that are \code{<= 0}.
  
  The distance is in meters if the RasterLayer is in a geographic (latlon) projection and in map units when not projected.
  
@@ -24,6 +24,7 @@
 }}
 \examples{
 r1 <- raster(ncol=36,nrow=18)
+r1[] <- 0
 r1[345:355] <- 1
 distmap <- distance(r1) 
 #plot(distmap)

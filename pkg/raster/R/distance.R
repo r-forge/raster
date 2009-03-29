@@ -8,17 +8,21 @@
 
 #setMethod("distance", signature(object = "RasterLayer"), def =	
 	
-distance <-	function(object, filename="") {
+distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, datatype='FLT4S') {
 		n <- ncell(object)
+#		if (dataSource = 'disk' & dataContent(object)=='all' & canProcessInMemory(object, 6)) {
+#			object <- readAll(object)
+#		}
 		
-		if(dataContent(object)=='all'){
-			fromCells <- which(!is.na(values(object)))
-			toCells <- which(is.na(values(object)))
+		if(dataContent(object)=='all' & canProcessInMemory(object, 5)){
+			outRaster <- raster(object, filename=filename)
+
+			fromCells <- which(values(object) > 0)
+			toCells <- (1:n)[-fromCells]
 			accDist <- rep(0,times=n)
 			accDist[toCells] <- Inf
 			if (isLatLon(object)) {
-				while(length(fromCells)>0)
-				{			
+				while(length(fromCells)>0) {			
 					adj <- adjacency(object,fromCells=fromCells,toCells=toCells,directions=8)
 					coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
 					distance <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
@@ -45,38 +49,34 @@ distance <-	function(object, filename="") {
 					accDist[index] <- pmin(transitionValues,accDist[index])
 				}
 			}
-			outRaster <- object
+			accDist[is.na(values(object))] <- NA
 			outRaster <- setValues(outRaster, accDist)	
+			if (filename != "") {
+				outRaster <- writeRaster(outRaster)
+			}
 			return(outRaster)
-		}
-		if( dataSource(object) =='disk'){ #to be tested
+			
+		} else if( dataSource(object) =='disk'){ 
 		
-		# Fix error:  startRow has not been initialized.
-			stop("currently only available for dataContent(raster)=='all'; use readAll")
+			stop('not yet implemented for data on disk')
 			
 			nrows <- nrow(object)
 			ncols <- ncol(object)
-			outRaster <- raster(object, filename)
-			for(r in 1:nrows)
-			{
-				object <- readRow(object, rownr = r)
-				rowValues <- values(object)
-				outRowValues <- rep(Inf,times=ncols)
-				outRowValues[is.na(rowValues)] <- 0
-				outRaster <- setValues(outRaster, outRowValues, r)
-				outRaster <- writeRaster(outRaster, overwrite=TRUE)				
-			}
+
+			m <- c(-Inf, 0, 0,  NA, NA, 0,  0, Inf, 1)
+			rsl1 <- reclass(object, m, filename=tempfile(), overwrite=TRUE)
+			rsl2 <- raster(tempfile())
+			
 			if(isLatLon(object)){
 				remainingCells <- TRUE
-				while(remainingCells){
+				while (remainingCells) {
 					remainingCells <- FALSE
-					oldRowValues <- integer(0)
-					outRaster <- readRow(outRaster, rownr=1)
-					rowWindow <- values(outRaster)
+					rsl1 <- readRow(rsl1, rownr=1)
+					rowWindow <- values(rsl1)
 					for(r in 1:nrows){
 						if(r < nrows-1) {
-							outRaster <- readRow(outRaster, rownr=r+1)
-							rowWindow <- c(rowWindow, values(outRaster))
+							rsl1 <- readRow(rsl1, rownr=r+1)
+							rowWindow <- c(rowWindow, values(rsl1))
 						}
 						adj <- adjacency(fromCells=(((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols)), toCells=((r-1)*ncols+1):(r*ncols),directions=8)
 						coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
@@ -87,27 +87,28 @@ distance <-	function(object, filename="") {
 						transitionValues <- transitionValues[transitionValues < Inf]
 						index <- as.integer(names(transitionValues))
 						newValues <- pmin(transitionValues,rowWindow[index])
-						if(newValues != rowWindow[index]){remainingCells<-TRUE}
-						rowWindow[index] 
-						# startRow is undefined
-						# outRaster <- setValues(outRaster, rowValues, startRow)
-						outRaster <- writeRaster(outRaster, overwrite=TRUE)
+						if(newValues != rowWindow[index]){ 
+							remainingCells<-TRUE
+						}						
+						rsl2 <- setValues(rsl2, newValues, r)
+						rsl2 <- writeRaster(rsl2, overwrite=TRUE)
 						if(r > 1){
 							rowWindow <- rowWindow[-1:ncols]
 						}
-					}
+					} 
+					rtmp <- rsl1
+					rsl1 <- rsl2
+					rsl2 <- rtmp
 				}
-			}
-			else{
+			} else {
 				remainingCells <- TRUE
 				while(remainingCells){
 					remainingCells <- FALSE
-					oldRowValues <- integer(0)
-					outRaster <- readRow(outRaster, rownr = 1)
-					rowWindow <- values(outRaster)
+					rsl1 <- readRow(rsl1, rownr=1)
+					rowWindow <- values(rsl1)
 					for(r in 1:nrows){
-						if(r<nrows-1){
-							outRaster <- readRow(outRaster, rownr=r+1)
+						if(r < nrows-1){
+							rsl1 <- readRow(rsl1, rownr=r+1)
 							rowWindow <- c(rowWindow, values(outRaster))
 						}
 						fromCells <- (((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols))
@@ -122,17 +123,21 @@ distance <-	function(object, filename="") {
 						transitionValues <- transitionValues[transitionValues < Inf]
 						index <- as.integer(names(transitionValues))
 						newValues <- pmin(transitionValues,rowWindow[index])
-						if(newValues != rowWindow[index]){remainingCells<-TRUE}
-						rowWindow[index] 
-						# startRow is undefined
-						#outRaster <- setValues(outRaster, rowValues, startRow)
-						outRaster <- writeRaster(outRaster, overwrite=TRUE)
+						if(newValues != rowWindow[index]){
+							remainingCells<-TRUE
+						}
+						rsl2 <- setValues(rsl2, newValues, r)
+						rsl2 <- writeRaster(rsl2, overwrite=TRUE)
 						if(r > 1){
 							rowWindow <- rowWindow[-1:ncols]
 						}
 					}
+					rtmp <- rsl1
+					rsl1 <- rsl2
+					rsl2 <- rtmp
 				}
 			}
+			outRaster <- saveAs(rsl1, filename, overwrite=overwrite, filetype=filetype, datatype=datatype)
 		}
 	}
 #)
