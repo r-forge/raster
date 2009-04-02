@@ -4,7 +4,6 @@
 \alias{nrow}
 \alias{nrow,BasicRaster-method}
 \alias{ncol,BasicRaster-method}
-\alias{dim}
 \alias{dim,BasicRaster-method}
 \alias{ncell}
 \alias{ncell,ANY-method}
