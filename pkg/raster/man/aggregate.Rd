@@ -10,7 +10,7 @@
 \description{
 Aggregate a RasterLayer to create a new RasterLayer with a lower resolution (larger cells). 
 Aggregation groups rectangular areas of RasterLayer cells to create a new RasterLayer with larger cells. 
-A new value is computed for the resulting cells according to a user specified function (default value = \code{mean}). 
+A new value is computed for the resulting cells according to a specified function (default value = \code{mean}). 
 }
 
 \usage{
@@ -52,12 +52,13 @@ A full call to the aggregate method for a RasterLayer is:
  If two numbers are supplied, e.g., \code{fact=c(2,3)}, the first will be used for aggregating in the horizontal direction, 
  and the second for aggregating in the vertical direction, and the new RasterLayer will have \code{2*3=6} times fewer cells.  
  
- If the input RasterLayer has 100 columns, and \code{fact=12}, the output RasterLayer will have either 8 columns (\code{expand=FALSE}) or 
- 9 columns (\code{expand=TRUE}). The maximum x coordinate of the output RasterLayer will, of course, also be affected.
- 
- Aggregation starts at the upper-left end of a raster.
- 
- The function \code{fun} should take multiple numbers, and return a single number. For example \code{mean}, \code{min} or \code{max}. 
+ Aggregation starts at the upper-left end of a raster. If a division of the number of columns or rows with \code{factor} does not 
+ return an integer, the extent of the resulting RasterLayer will either be somewhat smaller or somewhat larger then the original RasterLayer.
+ For example, the input RasterLayer has 100 columns, and \code{fact=12}, the output RasterLayer will have either 8 columns (\code{expand=FALSE}) 
+ (using \code{8 x 12 = 96} of the original columns) or 9 columns (\code{expand=TRUE}). The maximum x coordinate of the output RasterLayer will, 
+ of course, also be adjusted.
+  
+ The function \code{fun} should take multiple numbers, and return a single number. For example \code{mean}, \code{modal}, \code{min} or \code{max}. 
  
  If no filename is specified, and the resulting RasterLayer is too large to hold in memory, it is saved to a temporary file.  
 }

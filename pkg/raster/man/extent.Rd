@@ -1,4 +1,4 @@
-\name{extentMinMax}
+\name{coordinates}
 
 \alias{xmin}
 \alias{xmax}
@@ -7,9 +7,13 @@
 \alias{origin}
 
   
-\title{Raster extent}
+\title{coordinates}
+
 \description{
-Extent and projection of Raster* objects
+These functions return the extreme coordinates of a Raster* object. 
+
+Origin returns the coordinates of the point of origin of a Raster* object. This is the point closest to (0, 0) 
+that you could get if you moved towards that point in steps of the x and y resolution.
 }
 
 \usage{
@@ -29,17 +33,20 @@ origin(object)
 }
 
 \value{
-  varies
+  a single number or (for \code{origin}, a vector of two numbers.
 }
 
 \author{Robert J. Hijmans }
 
 \examples{
-r <- raster()
+
+r <- raster(xmn=-0.5, xmx = 9.5, ncols=10)
 xmin(r)
 xmax(r)
 ymin(r)
 ymax(r)
+origin(r)
+
 }
 
 \keyword{spatial}

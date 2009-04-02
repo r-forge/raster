@@ -7,18 +7,19 @@
 \alias{Arith,RasterLayer,numeric-method}
 \alias{Arith,RasterLayer,RasterLayer-method}
 
-\title{arithmic functions}
+\title{Arithmic}
 
 \description{
-  Standard arithmic functions, \code{"+", "-", "*", "/", "^", "\%\%", "\%/\%"}, for computations with RasterLayer objects and numeric values.
-  Functions are applied on a cell by cell basis (single numeric values are recycled). 
+  Standard arithmic operators for computations with RasterLayer objects and numeric values. The following operators are available:
+  \code{ +, -, *, /, ^, \%\%, \%/\% }
+  Operators are applied on a cell by cell basis, and single numeric values are recycled. 
   Input RasterLayers must have the same extent and resolution.
 }
 
 \section{Note}{
+ These are convenient operators/functions that are most usful for relatively small RasterLayers for which all the values can be held in memory. 
  If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. 
- If you want to set the filename (and perhaps filetype and datatype), use \code{\link[raster]{overlay}} 
- or \code{\link[raster]{calc}} instead of the Arith-methods.
+ In that case it could be more efficient to use use \code{\link[raster]{calc}} instead.
 }
 
 \seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay}}, \code{\link[raster]{calc}} }

@@ -61,7 +61,7 @@ function(x, bands=NULL) {
 			stop("Arguments should be Raster* objects or filenames")
 		}	
 	}
-	return(addRasters(new("RasterStack"), r))
+	return(addLayer(new("RasterStack"), r))
 } )
 
 

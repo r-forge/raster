@@ -25,13 +25,13 @@ addFiles <- function(rstack, rasterfiles, bands=rep(1, length(rasterfiles))) {
 			rasters <- c(rasters, raster(rasterfiles[[i]], FALSE, band=bands[[i]]))
 		}
 	}	
-	rstack <- addRasters(rstack, rasters) 
+	rstack <- addLayer(rstack, rasters) 
 	return(rstack)
 }
 
 
 
-addRasters <- function(rstack, rasters) {
+addLayer <- function(rstack, rasters) {
 #rasters is a list of raster objects
 	if (class(rstack) != "RasterStack") { 
 		stop("rstack should be a RasterStack object") 

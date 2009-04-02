@@ -5,7 +5,7 @@
 \alias{asRasterLayer,SpatialGridDataFrame-method}
 \alias{asRasterLayer}
 
-\title{ Coercion to RasterLayer }
+\title{Coercion}
 
 \description{  
 Functions to coerce a SpatialGridDataFrame, SpatialPixelsDataFrame, and RasterStack objects to a RasterLayer object. 

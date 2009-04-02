@@ -9,10 +9,12 @@
 \alias{bbox,Raster-method}
 
   
-\title{Get a BoundingBox}
+\title{Extent}
+
 \description{
-extent returns the extent, as a BoundingBox object, for a Raster* or Spatial* object (or from a BoundingBox object). 
+This function returns the extent, as a BoundingBox object, of a Raster* or Spatial* object (or a BoundingBox object). 
 It will also create a BoundingBox object from a matrix (2x2; rows=minx, maxx; cols=miny, maxy) or vector (length=4; order= xmin, xmax, ymin, ymax)
+
 \code{bbox(x)} returns a SP type bbox object (a matrix)
 }
 
@@ -40,8 +42,6 @@ extent(c(0, 20, 0, 20))
 newBbox(0, 20, 0, 20)
 
 extent(matrix(c(0, 0, 20, 20), nrow=2))
-
-
 }
 
 \keyword{spatial}

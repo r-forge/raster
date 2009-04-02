@@ -8,8 +8,8 @@
 \description{
 
 newBbox creates a new BoundingBox object
-alignBbox aligns a bounding box with the cells of a Raster* object
 
+alignBbox aligns a bounding box with the cells of a Raster* object
 }
 
 \usage{
@@ -38,6 +38,10 @@ a BoundingBox object
 r <- raster()
 bb <- newBbox(-10.1, 10.1, -20.1, 20.1)
 bba <- alignBbox(bb, r)
+bb
+extent(r)
+bba
+
 }
 
 \keyword{spatial}
