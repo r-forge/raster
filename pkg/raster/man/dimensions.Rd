@@ -29,7 +29,6 @@
 \usage{
 ncol(x)
 nrow(x)
-dim(x)
 ncell(x)
 xres(object)
 yres(object)
