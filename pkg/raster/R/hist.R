@@ -31,7 +31,10 @@ setMethod('hist', signature(x='Raster'),
 			} else { stop('cannot make a histogram; need data on disk or in memory')}
 		} else {
 			values <- values(x)
-		}			
+		}		
+		if (.shortDataType(x) == 'LOG') {
+			values <- values * 1
+		}
 		hist(values, ...)
 	}	
 )

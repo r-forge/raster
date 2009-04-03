@@ -44,13 +44,26 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
 	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
 	
+	
+	if (na.rm) {
+		# this avoid warning messages 
+		narmfun <- function(x) { 
+			x <- na.omit(x)
+			if (length(x) == 0) { 
+				return(NA)
+			} else { 
+				return( fun(x) )
+			}
+		}
+	}
+	
 	if (dataContent(x) == 'all') {	
 		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(x)], times=nrow(x))
 		rows <- rep(1:rsteps, each=ncol(x) * yfact)[1:ncell(x)]
 		cells <- cellFromRowCol(x, rows, cols)
 		
 		if (na.rm) {
-			outRaster <- setValues(outRaster, as.vector( tapply(values(x), cells, function(x){fun(na.omit(x))}))) 
+			outRaster <- setValues(outRaster, as.vector( tapply(values(x), cells, narmfun ))) 
 		} else {
 			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
 		}
@@ -84,7 +97,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 			cells <- cellFromRowCol(x, theserows, cols)
 			
 			if (na.rm) { 
-				vals <- tapply(values(x), cells, function(x){fun(na.omit(x))} ) 
+				vals <- tapply(values(x), cells, narmfun ) 
 			} else { 
 				vals <- tapply(values(x), cells, fun) 
 			}

@@ -43,7 +43,10 @@ rasterToPoints <- function(raster, fun=NULL, asSpatialPoints=FALSE) {
 	if (asSpatialPoints) {
 		coords <- xyv[,1:2]
 		row.names(coords) <- 1:nrow(coords)
-		return(SpatialPointsDataFrame(coords=coords, data=as.data.frame(xyv[,3]), proj4string=projection(raster, asText=FALSE)))
+		colnames(coords) <- c('x', 'y')
+		rastvals <- as.data.frame(xyv[,3])
+		colnames(rastvals) <- 'value'
+		return(SpatialPointsDataFrame(coords=coords, data=rastvals, proj4string=projection(raster, asText=FALSE)))
 	} else {
 		return(xyv)
 	}

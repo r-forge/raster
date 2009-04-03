@@ -18,7 +18,9 @@ dataSigned <- function(object) {
 }
 
 .shortDataType <- function(object) {
-	if (class(object) != 'character'){object <- dataType(object)}
+	if (class(object) != 'character') {
+		object <- dataType(object)
+	}
 	return( substr(object, 1, 3)) 
 }
 
