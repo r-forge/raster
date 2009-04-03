@@ -17,7 +17,7 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 		if(dataContent(object)=='all' & canProcessInMemory(object, 5)){
 			outRaster <- raster(object, filename=filename)
 
-			fromCells <- which(!is.na(values(object) > 0))
+			fromCells <- which(!is.na(values(object)))
 			toCells <- (1:n)[-fromCells]
 			accDist <- rep(0,times=n)
 			accDist[toCells] <- Inf
