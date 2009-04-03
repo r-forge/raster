@@ -49,7 +49,6 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 					accDist[index] <- pmin(transitionValues,accDist[index])
 				}
 			}
-			accDist[is.na(values(object))] <- NA
 			outRaster <- setValues(outRaster, accDist)	
 			if (filename != "") {
 				outRaster <- writeRaster(outRaster)
@@ -63,7 +62,7 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 			nrows <- nrow(object)
 			ncols <- ncol(object)
 
-			m <- c(-Inf, 0, 0,  NA, NA, 0,  0, Inf, 1)
+			m <- c(-Inf, Inf, 0)
 			rsl1 <- reclass(object, m, filename=tempfile(), overwrite=TRUE)
 			rsl2 <- raster(tempfile())
 			
