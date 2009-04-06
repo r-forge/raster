@@ -1,6 +1,7 @@
 \name{advanced writing}
 
-\alias{closeHandle}
+\alias{closeConnection}
+\alias{resetConnection}
 \alias{canProcessInMemory}
 
 \title{ advanced writing }
@@ -20,7 +21,8 @@ does not immediately remove the handle; it seems).
 
 \usage{
 canProcessInMemory(raster, n=4)
-closeHandle(raster)
+closeConnection(raster)
+resetConnection(raster)
 }
 
 \arguments{

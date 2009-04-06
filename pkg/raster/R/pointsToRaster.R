@@ -7,13 +7,6 @@
 
 pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 	
-#	if (class(xy) == 'SpatialPointsDataFrame' & length(values)==1)  {
-#		values <- xy[[values]]
-#	}
-
-	if (!is.vector(values)) {
-		stop('values should be a vector')
-	}
 	xy <- .pointsToMatrix(xy)
 	
 	rs <- raster(raster, filename)
