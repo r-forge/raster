@@ -2,7 +2,7 @@
 
 \alias{expand}
 
-\title{expand}
+\title{Expand}
 
 \description{
 Expand returns an RasterLayer with a larger spatial extent. 

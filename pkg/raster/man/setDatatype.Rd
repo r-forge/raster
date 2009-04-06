@@ -1,16 +1,17 @@
 \name{setDatatype}
 
 \alias{dataType<-}
-\alias{setDatatype}
+\alias{dataType}
 
-\title{ Set data type }
+\title{data type }
 
 \description{
-Use these functions to set the datatype properties of a RasterLayer object. The datatype determines how values are written to disk. 
-It does not affect the way they are stored in memory.
+Get or set the datatype of a RasterLayer object. The datatype determines how values are stored on or written to disk. 
+It does not directly affect the way they are stored in memory.
 }
 
 \usage{
+dataType(x)
 dataType(x) <- value
 }
 
@@ -54,6 +55,7 @@ a Raster* object
 
 \examples{ 
 r <- raster()
+dataType(r)
 # 2 byte signed integer
 dataType(r) <- "INT2S"
 # 2 byte unsigned integer

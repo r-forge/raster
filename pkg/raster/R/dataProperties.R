@@ -25,8 +25,8 @@ dataSigned <- function(object) {
 }
 
 
-dataType <- function(object) {
-	return(object@file@datanotation)
+dataType <- function(x) {
+	return(x@file@datanotation)
 }
 
 dataContent <- function(object) {

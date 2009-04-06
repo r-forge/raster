@@ -7,7 +7,7 @@
 \alias{ceiling,RasterLayer-method}
 \alias{floor,RasterLayer-method}
 
-\title{ Create integer values  }
+\title{integer values}
 
 \description{
 These functions take a single RasterLayer argument \code{x} and change its values to integers.

@@ -1,28 +1,26 @@
 \name{properties}
 
-\alias{dataType} 
 \alias{dataSize} 
 \alias{dataSigned} 
 
   
-\title{Raster properties}
+\title{Raster file properties}
 
 \description{
-  Properties of Raster* objects
+  Properties of the values of the file that a RasterLayer object points to
+  
+  \code{dataSize} returns the number of bytes used for each value (pixel, grid cell)
+  \code{dataSigned} is TRUE for data types that include negative numbers.
+  
 }
 
 \usage{
 dataSize(object)
 dataSigned(object)
-dataType(object)
 }
 
 \arguments{
   \item{object}{Raster* object}
-}
-
-\note{
-  Some of these functions simply take the values from the data slots in the RasterLayer or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
 }
 
 \seealso{ \code{\link[raster]{filename}} }
@@ -35,10 +33,11 @@ dataType(object)
 \author{Robert J. Hijmans }
 
 \examples{
-#using a new default raster (1 degree global)
-r <- raster(nrow=10, ncol=10)
-dataContent(r)
-r[] <- 1:ncell(r)
+r <- raster(system.file("external/test.ag", package="sp"))
+dataSize(r)
+dataSigned(r)
+dataType(r)
+
 dataContent(r)
 dataSource(r)
 }
