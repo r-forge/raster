@@ -2,7 +2,7 @@
 
 \alias{linesToRaster}
 
-\title{Transfer lines to a RasterLayer }
+\title{Lines to raster}
 
 \description{
   Lines to raster conversion. Lines are raserized.

@@ -6,21 +6,21 @@
 
 
 
-.calcFilter <- function(rows, colnrs, res, filter) {
+.calcFilter <- function(rows, colnrs, res, filter, fun) {
 	res[] <- NA
     for (i in 1:dim(rows)[2]) {
 		d <- rows[, colnrs[i, ]]
 		if (!all(dim(d) == dim(filter))) {
 			res[i] <- NA
 		} else {
-			res[i] <- sum(d * filter)
+			res[i] <- fun(d * filter)
 		}
 	}	
 	return(res)
 }
 
 
-focalFilter <- function(raster, filter, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
+focalFilter <- function(raster, filter, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
 	if (!is.matrix(filter)) {stop('filter must be a matrix')}
 	ngb <- dim(filter)
 
@@ -70,7 +70,7 @@ focalFilter <- function(raster, filter, filename="", overwrite=FALSE, filetype='
 		}
 
 		
-		ngbvals <- .calcFilter(ngbdata, colnrs, res, filter)
+		ngbvals <- .calcFilter(ngbdata, colnrs, res, filter, fun)
 		if (filename != "") {
 			ngbgrid <- setValues(ngbgrid, ngbvals, r)
 			ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)

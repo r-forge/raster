@@ -60,9 +60,14 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updateValue="NA", filename="", overwrite=FALSE,  filetype='raster', datatype='FLT4S', track=-1) {
+polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, updateValue="NA", 
+						filename="", overwrite=FALSE,  filetype='raster', datatype='FLT4S', track=-1) {
+						
 	filename <- trim(filename)
 
+	if (!(overlap %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
+		stop('invalid value for overlap')
+	}
 	if (updateRaster) {
 		oldraster <- raster 
 		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
@@ -80,11 +85,15 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 	if (spbb[1,1] > rsbb[1,2] | spbb[2,1] > rsbb[2,2]) {
 		stop('polygon and raster have no overlapping areas')
 	}
+	
 	npol <- length(spPolys@polygons)
-	if (class(spPolys) == 'SpatialPolygons' | field == 0) {
+	
+	if (field < 0) {
+		putvals <- rep(1, length=npol)	
+	} else if (class(spPolys) == 'SpatialPolygons' | field == 0) {
 		putvals <- as.integer(1:npol)
 	} else {
-		putvals <- as.vector(spPolys@data[,field])
+		putvals <- as.vector(spPolys@data[[field]])
 		if (class(putvals) == 'character') {
 			stop('selected field is charater type')
 		}
@@ -144,6 +153,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 				intersection <- .intersectLinePolygon(myline, mypoly@coords)
 				x <- sort(intersection[,1])
 				if (length(x) > 0) {
+					rvtmp <- rv1
 					if ( sum(x[-length(x)] == x[-1]) > 0 ) {
 					# single node intersection going out of polygon ....
 						spPnts <- xyFromCell(raster, cellFromRowCol(raster, rep(r, ncol(raster)), 1:ncol(raster)), TRUE)
@@ -152,7 +162,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 						if ( subpol[i, 4] == 1 ) {
 							holes[over] <- TRUE
 						} else {
-							rv[over] <- subpol[i,4] 
+							rvtmp[over] <- subpol[i,4] 
 						}
 						# print(paste('exit node intersection on row:', r))
 					} else {
@@ -177,9 +187,23 @@ polygonsToRaster <- function(spPolys, raster, field=0, updateRaster=FALSE, updat
 							if ( subpol[i, 5] == 1 ) {
 								holes[col1:col2] <- TRUE
 							} else {
-								rv[col1:col2] <- subpol[i,4]
+								rvtmp[col1:col2] <- subpol[i,4]
 							}
 						}
+					}
+					if (overlap=='last') {
+						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
+					} else if (overlap=='first') {
+						rv[is.na(rv)] <- rvtmp[is.na(rv)]
+					} else if (overlap=='sum') {
+						rv[!is.na(rv) & !is.na(rvtmp)] <- rv[!is.na(rv) & !is.na(rvtmp)] + rvtmp[!is.na(rv) & !is.na(rvtmp)] 
+						rv[is.na(rv)] <- rvtmp[is.na(rv)]
+					} else if (overlap=='min') {
+						rv[!is.na(rv) & !is.na(rvtmp)] <- pmin(rv[!is.na(rv) & !is.na(rvtmp)], rvtmp[!is.na(rv) & !is.na(rvtmp)])
+						rv[is.na(rv)] <- rvtmp[is.na(rv)]
+					} else if (overlap=='max') {
+						rv[!is.na(rv) & !is.na(rvtmp)] <- pmax(rv[!is.na(rv) & !is.na(rvtmp)], rvtmp[!is.na(rv) & !is.na(rvtmp)])
+						rv[is.na(rv)] <- rvtmp[is.na(rv)]
 					}
 				}
 			}

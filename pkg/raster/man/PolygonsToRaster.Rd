@@ -10,15 +10,16 @@ Holes in polygons are recognized if they are correctly specified.
 }
 
 \usage{
-polygonsToRaster(spPolys, raster, field=0, updateRaster=FALSE, updateValue="NA", filename="", overwrite=FALSE,  filetype='raster',  datatype='FLT4S', track=-1) 
+polygonsToRaster(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, updateValue="NA", filename="", overwrite=FALSE,  filetype='raster',  datatype='FLT4S', track=-1) 
 }
 
 \arguments{
-  \item{spPolys}{ a SpatialPolygons or a SpatialPolygonsDataFrame object }
-  \item{raster}{ RasterLayer  }
-  \item{field}{ The index of the column in the SpatialPolygonsDataFrame to be transfered to the RasterLayer }
-  \item{filename}{ output filename }
-  \item{overwrite}{ logical. if \code{TRUE} ouput file will be overwritten if it exists }
+  \item{spPolys}{a SpatialPolygons or a SpatialPolygonsDataFrame object }
+  \item{raster}{a RasterLayer}
+  \item{field}{The index (or colname) of the column in the SpatialPolygonsDataFrame to be transfered to the RasterLayer (see Details)}
+  \item{overlap}{character. Determines what to do with cells with overlapping polygons. Either 'first', 'last', 'sum', 'min', or 'max'}
+  \item{filename}{output filename }
+  \item{overwrite}{logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either \code{'all'}, \code{'NA'}, \code{'!NA'}, or \code{'zero'} } 
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
@@ -27,7 +28,8 @@ polygonsToRaster(spPolys, raster, field=0, updateRaster=FALSE, updateValue="NA",
 }
 
 \details{
-For SpatialPolygons, the 'field' argument is ignored. The polygon index is tranferred.
+For SpatialPolygons, the \code{field} argument is ignored. The polygon index is used (i.e. numbers from 1 to the number of polygons. This is also 
+done for SpatialPolygonDataFrame objects when \code{field}==0. If  \code{field} < 0, all polygons get the value 1.
 }
 
 \author{Robert J. Hijmans}
@@ -35,18 +37,20 @@ For SpatialPolygons, the 'field' argument is ignored. The polygon index is tranf
 \seealso{ \code{\link[raster]{linesToRaster}}, \code{\link[raster]{pointsToRaster}}}
 
 \examples{ 
-cds1 <- rbind(c(-50,0), c(0,60), c(40,5), c(15,-45), c(-10,-25), c(-50,0))
-cds2 <- rbind(c(80,20), c(140,60), c(160,0), c(140,-55), c(80,20))
-cds3 <- rbind(c(-180,-20), c(-140,55), c(-60,-20), c(-140,-60), c(-180,-20))
+
+cds1 <- rbind(c(-180,-20), c(-140,55), c(10, 0), c(-140,-60), c(-180,-20))
+cds2 <- rbind(c(-50,0), c(0,60), c(40,5), c(15,-45), c(-10,-25), c(-50,0))
+cds3 <- rbind(c(-10,0), c(140,60), c(160,0), c(140,-55), c(-10,0))
 hole <- rbind(c(-150,-20), c(-100,-10), c(-110,20), c(-150,-20))
 
 polys <- SpatialPolygons(list(Polygons(list(Polygon(cds1)), 1), Polygons(list(Polygon(cds2)), 2), Polygons(list(Polygon(cds3)), 3), Polygons(list(Polygon(hole)), 4) ))
 polys@polygons[[4]]@Polygons[[1]]@hole <- TRUE
+
 r <- raster()
-r <- polygonsToRaster(polys, r)
+r <- polygonsToRaster(polys, r, overlap='sum')
 #plot(r)
 #plot(polys, add=T)
-cds4 <- rbind(c(-180,10), c(0,40), c(40,45), c(145,-10),  c(-25, -15), c(-180,0), c(-180,10))
+cds4 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),  c(-25, -15), c(-180,0), c(-180,10))
 addpoly <- SpatialPolygons(list(Polygons(list(Polygon(cds4)), 1)))
 addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
 addpoly@data[1,1] <- 10
