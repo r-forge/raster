@@ -10,33 +10,52 @@
 \alias{[<-,RasterLayer-method}
 \alias{[<-,RasterLayer,ANY,missing-method}
 
-\title{ Replace methods }
+\title{Replace methods}
 
 \description{
-  \code{[} is sometimes equivalent to setValues() 
+  \code{object[x]} can be used to access or set values of a RasterLayer object, using cell numbers as index. 
+  \code{object[[x]]} can be used to access values of a RasterLayer object, using row and column numbers as index. 
 }
+
 
 \section{Methods}{
 \describe{
-  if r is a RasterLayer, r[] is valid with a single index (cell number)
-  e.g.: r[1], r[6:15]
-  r[[]] is valid with two indices
-  e.g.: r[[1,1]], r[[1,]]
+
+\code{object[x]}
+
+\code{object[x] <- value}
+
+\code{object[[r,c]]}
+
+Arguments
+\tabular{rll}{
+\tab \code{object} \tab a RasterLayer object \cr
+\tab \code{x} \tab cell number(s) \cr
+\tab \code{r} \tab row number(s) \cr
+\tab \code{c} \tab column number(s) \cr
+\tab \code{value} \tab value(s) \cr
+}
 
 }}
 
 \examples{
 r <- raster(ncol=10, nrow=5)
 r[] <- 1:ncell(r) * 2
+values(r)
 r[1]
-
 r[1:10]
 r[3:8] <- NA
 r[1:10]
 
-#r[[,1]]
-#r[[1,]]
-
+values(r, format='matrix')
+#equivalent to
+r[[1,1]]
+r[[1:2,1:2]]
+#first column
+r[[,1]]
+# first row
+r[[1,]]
+r[[]]
 }
 
 \keyword{methods}

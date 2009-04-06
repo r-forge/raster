@@ -2,7 +2,7 @@
 
 \alias{pointDistance}
 
-\title{distance between points}
+\title{Distance between points}
 
 \description{
 Calculate the geographic distance between two points on a sphere (\code{type='GreatCircle'}) or on a plane (\code{type='Euclidean'}).
@@ -21,7 +21,7 @@ pointDistance(point1, point2, type='Euclidean', ...)
 }
 \details{
   A sphere is an approximation for the earth (a spheroid) and type='Greatcircle' can thus be used with geographic 
-  coordinates (latitude & longitude). There are probably more sophisticated functions available in other packages.
+  coordinates (latitude & longitude). 
   You can use type='Euclidean' for coordinates of a map projection such as UTM (but note that in some projections distance is distorted). 
 }
 

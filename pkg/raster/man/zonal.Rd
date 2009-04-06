@@ -5,7 +5,7 @@
 \title{Zonal statistics}
 
 \description{
-Compute zonal statistics. I.e. the values of the cells of a RasterLayer based on the values of the "zones" RasterLayer. 
+Compute zonal statistics. That is, cross-tabulate the values of a RasterLayer based on a "zones" RasterLayer. 
 }
 
 \usage{
@@ -32,7 +32,7 @@ A data frame with a value for each zone
 
 \examples{
 r <- raster(ncols=10, nrows=10)
-r[] <- runif(ncell(r))
+r[] <- runif(ncell(r)) * 1:ncell(r)
 z <- r
 z[] <- rep(1:5, each=20)
 zonal(r, z, 'mean')

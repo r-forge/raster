@@ -9,9 +9,14 @@
 
 \description{  
 Functions to coerce a SpatialGridDataFrame, SpatialPixelsDataFrame, and RasterStack objects to a RasterLayer object. 
-You can use \code{as( , )} for this type of coercion (see examples), and for many other coercions between sp and raster objects, 
-but asRasterLayer allows for indicating which variable should be passed to the RasterLayer object.
-RasterLayer objects only have a single variable, whereas a RasterStack and the Spatial* objects can have multiple variables.
+You can use 
+
+\code{as( , )} 
+
+for this type of coercion (see examples), and other coercions between sp and raster objects, 
+but \code{asRasterLayer} allows for indicating which variable should be passed to the \code{RasterLayer} object.
+While \code{RasterLayer} objects only have a single variable, a \code{RasterStack} and the \code{Spatial * DataFrame}
+ objects can have multiple variables.
 }
 
 \usage{

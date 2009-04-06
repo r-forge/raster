@@ -7,7 +7,7 @@
 \alias{calc,RasterStack,function-method}
 \alias{calc,RasterStack,list-method}
 
-\title{ calculate }
+\title{Calculate}
 
 \description{
  Calculate values for a new RasterLayer, from a single RasterLayer or from a RasterStack

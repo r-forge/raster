@@ -5,23 +5,35 @@
 
 \alias{distance,RasterLayer-method}
 
-\title{distance}
+\title{Distance}
 
 \description{
- The function calculates the distance to cells of a RasterLayer that are \code{<= 0}.
+ The function calculates the distance to cells of a RasterLayer that are \code{NA}.
  
- The distance is in meters if the RasterLayer is in a geographic (latlon) projection and in map units when not projected.
+ The distance is in meters if the RasterLayer is not projected (\code{+proj=longlat})
+ and in map units (typically meters) when it is projected.
  
  Distances are calculated by summing local distances between cells, which are connected with their neighbours in 8 directions.
- 
- For more options (directions, cost-distance) see the gdistance package.
 }
 
-\section{Methods}{
-\describe{
+\usage{
+distance(object, filename = "", filetype = "raster", overwrite = FALSE, datatype = "FLT4S", track=-1) 
+}
 
-\item{raster = "RasterLayer"}{ ~~describe this method here }
-}}
+\arguments{
+\item{object}{a RasterLayer object}
+\item{filename}{character. output filename}
+\item{overwrite}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
+\item{filetype}{character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{rasterFormats}}}
+\item{datatype}{character. output data type; see \code{\link[raster]{setDatatype}}}
+\item{track}{vector of row numbers for which the function will report that they have been processed}
+}
+
+
+
+\seealso{ For more options (directions, cost-distance) see the \code{ \link[gdistance]{gdistance}} package } 
+
+
 \examples{
 r1 <- raster(ncol=36,nrow=18)
 r1[] <- 0

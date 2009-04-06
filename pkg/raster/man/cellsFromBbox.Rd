@@ -18,7 +18,7 @@ cellsFromBbox(object, bndbox, expand=FALSE)
   \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
   \item{expand}{Logical. If \code{TRUE}, \code{NA} is returned for (virtual) cells implied by \code{bndbox}, 
       that are outside the RasterLayer (\code{object}). If \code{FALSE}, only cell numbers for the area where \code{object} and \code{bndbox}
-      overlap are returned (see \link[raster]{intersectBbox} }
+      overlap are returned (see \link[raster]{intersectBbox}) }
 }
 
 \value{

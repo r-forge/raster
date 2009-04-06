@@ -5,7 +5,7 @@
 \alias{aggregate}
 \alias{aggregate,RasterLayer-method}
 
-\title{aggregate}
+\title{Aggregate}
 
 \description{
 Aggregate a RasterLayer to create a new RasterLayer with a lower resolution (larger cells). 

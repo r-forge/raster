@@ -12,13 +12,13 @@
 \description{
 These functions take a single RasterLayer argument \code{x} and change its values to integers.
 
-ceiling returns a RasterLayer with the smallest integers not less than the corresponding values of x. 
+\code{ceiling} returns a RasterLayer with the smallest integers not less than the corresponding values of x. 
 
-floor returns a RasterLayer with the largest integers not greater than the corresponding values of x. 
+\code{floor} returns a RasterLayer with the largest integers not greater than the corresponding values of x. 
 
-trunc returns a RasterLayer with the integers formed by truncating the values in x toward 0. 
+\code{trunc} returns a RasterLayer with the integers formed by truncating the values in x toward 0. 
 
-round returns a RasterLayer with values rounded to the specified number of digits (decimal places; default 0). 
+\code{round} returns a RasterLayer with values rounded to the specified number of digits (decimal places; default 0). 
 }
 
 

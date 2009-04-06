@@ -8,11 +8,12 @@
 
 #setMethod("distance", signature(object = "RasterLayer"), def =	
 	
-distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, datatype='FLT4S') {
+distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, datatype='FLT4S', track=-1) {
 		n <- ncell(object)
-#		if (dataSource = 'disk' & dataContent(object)=='all' & canProcessInMemory(object, 6)) {
-#			object <- readAll(object)
-#		}
+		
+		if (dataSource(object) == 'disk' & dataContent(object) != 'all' & canProcessInMemory(object, 6)) {
+			object <- readAll(object)
+		}
 		
 		if(dataContent(object)=='all' & canProcessInMemory(object, 5)){
 			outRaster <- raster(object, filename=filename)
@@ -26,7 +27,7 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 					adj <- adjacency(object,fromCells=fromCells,toCells=toCells,directions=8)
 					coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
 					distance <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
-					#What follows is the same as for  non-projected (below)
+					#What follows is the same as for  projected  data ( further below)
 					transitionValues <- accDist[adj[,1]] + distance
 					transitionValues <- tapply(transitionValues,adj[,2],min)
 					transitionValues <- transitionValues[transitionValues < Inf]

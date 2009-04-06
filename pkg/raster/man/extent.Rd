@@ -36,6 +36,9 @@ origin(object)
   a single number or (for \code{origin}, a vector of two numbers.
 }
 
+\seealso{ \code{\link[raster]{dimensions}} }
+
+
 \author{Robert J. Hijmans }
 
 \examples{

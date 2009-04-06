@@ -46,13 +46,12 @@ cellFromCol(object, colnr)
 \author{Robert J. Hijmans }
 
 \examples{
-#using a new default raster (1 degree global)
-r <- raster()
-colFromCell(r, 10000)
-rowFromCell(r, 10000)
+r <- raster(ncols=10, nrows=10)
+colFromCell(r, c(5,15))
+rowFromCell(r, c(5,15))
 cellFromRowCol(r, 5, 5)
-cellFromRowCol(r, 4:5, 4:5)
-cellFromRowColCombine(r, 4:5, 4:5)
+cellFromRowCol(r, 1:2, 1:2)
+cellFromRowColCombine(r, 1:3, 1:2)
 cellFromCol(r, 1)
 cellFromRow(r, 1)
 
