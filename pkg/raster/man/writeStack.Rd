@@ -2,10 +2,13 @@
 
 \alias{writeStack}
 
-\title{Write values of a RasterStack to a file}
+\title{Write RasterStack}
 
 \description{
-xxx
+
+NOT IMPLEMENTED YET
+
+values of a RasterStack to a multi-band RasterFile
 }
 
 \usage{

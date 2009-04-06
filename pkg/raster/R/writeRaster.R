@@ -6,12 +6,12 @@
 
 
 .setFileExtensionValues <- function(fname) {
-	fileExtension(fname) <- ".gri"
+	ext(fname) <- ".gri"
 	return(fname)
 }
  
 .setFileExtensionHeader <- function(fname) {
-	fileExtension(fname) <- ".grd"
+	ext(fname) <- ".grd"
 	return(fname)
 }
  

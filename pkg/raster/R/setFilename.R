@@ -18,12 +18,12 @@ filename <- function(x) {
 		filename <- ""
 	}
 	if (class(x)=='RasterStack') {
-		fileExtension(filename) <- ".stk"
+		ext(filename) <- ".stk"
 		x@filename <- filename
 	} else {
 		x@file@name <- filename
-		shortname <- shortFileName(filename)
-		fileExtension(shortname) <- ""
+		shortname <- .shortFileName(filename)
+		ext(shortname) <- ""
 		shortname <- gsub(" ", "_", shortname)
 		if (nbands(x) > 1) { 
 			shortname <- paste(shortname, "_", band(x)) 

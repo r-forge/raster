@@ -4,16 +4,16 @@
 \alias{xmax}
 \alias{ymin}
 \alias{ymax}
-\alias{origin}
+\alias{xmin<-}
+\alias{xmax<-}
+\alias{ymin<-}
+\alias{ymax<-}
 
   
-\title{coordinates}
+\title{Coordinates}
 
 \description{
-These functions return the extreme coordinates of a Raster* object. 
-
-Origin returns the coordinates of the point of origin of a Raster* object. This is the point closest to (0, 0) 
-that you could get if you moved towards that point in steps of the x and y resolution.
+These functions return or set the extreme coordinates of a Raster* object. 
 }
 
 \usage{
@@ -21,22 +21,26 @@ xmin(object)
 xmax(object)
 ymin(object)
 ymax(object)
-origin(object)
+
+xmin(x) <- value
+xmax(x) <- value
+ymin(x) <- value
+ymax(x) <- value
+
 }
 
 \arguments{
-  \item{object}{Raster* object}
+  \item{object}{A Raster* object}
+  \item{x}{A Raster* object}
+  \item{value}{A new x or y coordinate}  
 }
 
-\note{
-  Some of these functions simply take the values from the data slots in the RasterLayer or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
-}
 
 \value{
-  a single number or (for \code{origin}, a vector of two numbers.
+a single number
 }
 
-\seealso{ \code{\link[raster]{dimensions}} }
+\seealso{ \code{\link[raster]{setExtent}},  \code{\link[raster]{dimensions}} }
 
 
 \author{Robert J. Hijmans }
@@ -48,8 +52,8 @@ xmin(r)
 xmax(r)
 ymin(r)
 ymax(r)
-origin(r)
-
+xmin(r) <- -180
+xmax(r) <- 180
 }
 
 \keyword{spatial}

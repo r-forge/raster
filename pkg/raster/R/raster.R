@@ -21,7 +21,7 @@ setMethod('raster', signature(x='missing'),
 
 setMethod('raster', signature(x='character'), 
 	function(x, values=FALSE, band=1) {
-		fileext <- toupper(fileExtension(x)) 
+		fileext <- toupper(ext(x)) 
 		if ( fileext == ".GRD" | fileext == ".GRI" ) {
 			r <- .rasterFromRasterFile(x, band) 
 		} else {

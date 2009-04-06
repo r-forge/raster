@@ -13,9 +13,9 @@ resetConnection <- function(raster) {
 
 	fn <- trim(filename(object))
 	if (fn == "") { stop('no file') }
-	fileext <- toupper(fileExtension(fn)) 
+	fileext <- toupper(ext(fn)) 
 	if ( fileext == ".GRD" ) {
-		fileExtension(fn) <- '.gri'
+		ext(fn) <- '.gri'
 		attr(object@file, "con") <- file(fn, "rb")
 	} else {
 		attr(object@file, "con") <- GDAL.open(fn)

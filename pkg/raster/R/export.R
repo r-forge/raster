@@ -19,7 +19,7 @@ writeHeader <- function(raster, type) {
 .writeStx <- function(raster) {
 	if (raster@data@haveminmax) {
 		stxfile <- filename(raster)
-		fileExtension(stxfile) <- ".stx"
+		ext(stxfile) <- ".stx"
 		thefile <- file(stxfile, "w")  # open an txt file connectionis
 		cat(1, " ", minValue(raster), " ", maxValue(raster), "\n", file = thefile)
 		close(thefile)
@@ -29,7 +29,7 @@ writeHeader <- function(raster, type) {
  
 .writeBilHdr <- function(raster) {
 	hdrfile <- filename(raster)
-	fileExtension(hdrfile) <- ".hdr"
+	ext(hdrfile) <- ".hdr"
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("NROWS ",  nrow(raster), "\n", file = thefile)
 	cat("NCOLS ",  ncol(raster), "\n", file = thefile)
@@ -80,7 +80,7 @@ writeHeader <- function(raster, type) {
 
 .writeErdasRawHdr <- function(raster) {
 	hdrfile <- filename(raster)
-	fileExtension(hdrfile) <- ".raw"
+	ext(hdrfile) <- ".raw"
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("IMAGINE_RAW_FILE\n", file = thefile)
 	cat("PIXEL_FILES ", .setFileExtensionValues(filename(raster)), "\n", file = thefile)
@@ -126,7 +126,7 @@ writeHeader <- function(raster, type) {
 
 worldFile <- function(raster, extension=".wld") {
 	hdrfile <- filename(raster)
-	fileExtension(hdrfile) <- extension
+	ext(hdrfile) <- extension
 	thefile <- file(hdrfile, "w")  
 	cat(xres(raster), "\n", file = thefile)
 	cat("0\n", file = thefile)
@@ -142,7 +142,7 @@ worldFile <- function(raster, extension=".wld") {
 
 .writeENVIHdr <- function(raster) {
 	hdrfile <- filename(raster)
-	fileExtension(hdrfile) <- ".hdr"
+	ext(hdrfile) <- ".hdr"
 	thefile <- file(hdrfile, "w") 
 	cat("ENVI\n", file = thefile)
 	cat("description = {", raster@file@shortname, "}", "\n", file = thefile)

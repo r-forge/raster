@@ -8,10 +8,10 @@
 moveRasterFile <- function(raster, filename, overwrite=FALSE) {
 	r <- copyRasterFile(raster, filename, overwrite)
 	f <- trim(filename(raster))
-	fileext <- toupper(fileExtension(f)) 
+	fileext <- toupper(ext(f)) 
 	if (fileext == ".GRD") {
 		file.remove(f)
-		fileExtension(f) <- '.gri'
+		ext(f) <- '.gri'
 		file.remove(f)
 	}
 	return(r)
@@ -20,12 +20,12 @@ moveRasterFile <- function(raster, filename, overwrite=FALSE) {
 
 copyRasterFile <- function(raster, filename, overwrite=FALSE) {
 	f <- trim(filename(raster))
-	fileext <- toupper(fileExtension(f)) 
+	fileext <- toupper(ext(f)) 
 	if (fileext == ".GRD") {
 		fgrd <- filename
-		fileExtension(fgrd) <- '.grd'
+		ext(fgrd) <- '.grd'
 		fgri <- filename
-		fileExtension(fgri) <- '.gri'
+		ext(fgri) <- '.gri'
 		if ( file.exists(fgrd) & !overwrite ) {
 			stop('file exists & overwrite = FALSE')
 		}
@@ -34,7 +34,7 @@ copyRasterFile <- function(raster, filename, overwrite=FALSE) {
 		}
 		res <- file.copy(f, fgrd, overwrite)
 		if (!res) { stop('could not copy grd file') } 
-		fileExtension(f) <- ".gri"
+		ext(f) <- ".gri"
 		res <- file.copy(f, fgri, overwrite)
 		if (!res) { stop('could not copy gri file') } 
 		filename(raster) <- fgrd

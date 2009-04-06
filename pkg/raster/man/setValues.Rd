@@ -8,11 +8,10 @@
 \alias{setValuesSparse}
 \alias{clearValues}
 
-\title{ Set values of a RasterLayer object }
+\title{Set values}
 
 \description{
-Use these functions to assign values ot a RasterLayer object. 
-While you can access the slots of the object directly, you would do that at your own peril because when setting values,
+Use these functions to assign values to a RasterLayer object. While you can access the slots of the object directly, you would do that at your own peril because when setting values,
 multiple slots need to be changed. 
 }
 
@@ -38,6 +37,9 @@ clearValues(object)
   \item{sparsevalues}{ not implemented yet -- sparse data values. I.e. values for a number of raster cells }
   \item{cellnumbers}{ the cell numbers corresponding to the sparse data }
 }
+
+
+\seealso{ \code{\link[raster]{replacement}} }
 
 
 \value{

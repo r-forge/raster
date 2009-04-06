@@ -1,13 +1,11 @@
 \name{fileFunctions}
 
-\alias{setFileExtension}
-\alias{fileExtension}
-\alias{fileExtension<-}
-\alias{shortFileName}
-\alias{filePath}
+\alias{ext}
+\alias{ext<-}
+\alias{path}
 \alias{trim}
 
-\title{filename functions}
+\title{Filename manipulation}
 
 \description{
   Low level functions for file name handling. 
@@ -16,10 +14,9 @@
 }
 
 \usage{
-fileExtension(filename)
-fileExtension(filename) <- value
-shortFileName(filename)
-filePath(filename)
+ext(filename)
+ext(filename) <- value
+path(filename)
 trim(x)
 }
 
@@ -36,13 +33,12 @@ A file extension, filename or path.
 \author{Robert J. Hijmans }
 
 \examples{
-	fn <- "  c:/temp folder/filename.extension  "
-	fn <- trim(fn)
-	fileExtension(fn)
-	fileExtension(fn) <- ".txt"
-	fileExtension(fn)
-	shortFileName(fn)
-	filePath(fn)
+fn <- "  c:/temp folder/filename.exten sion  "
+fn <- trim(fn)
+ext(fn)
+ext(fn) <- ".txt"
+ext(fn)
+path(fn)
 }
 
 \keyword{file}

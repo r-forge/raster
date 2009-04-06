@@ -13,7 +13,7 @@ trim <- function(x) {
 }
 
 
-shortFileName <- function(filename) {
+.shortFileName <- function(filename) {
     filename <- gsub("\\\\", "/", filename)
 	if (filename == "") {return(filename)
 	} else {
@@ -24,15 +24,15 @@ shortFileName <- function(filename) {
 	}	
 }   
    
-filePath <- function(filename) {
+path <- function(filename) {
     filename <- gsub("\\\\", "/", filename)
-	file <- shortFileName(filename)
+	file <- .shortFileName(filename)
 	path <- gsub(file, '', filename)
 	return(path)
 }   
 
    
-fileExtension <- function(filename) {
+ext <- function(filename) {
 	lfn <- nchar(filename)
 	extstart <- -1
     for (i in lfn : 2) {
@@ -49,7 +49,7 @@ fileExtension <- function(filename) {
 }   
 
 
-'fileExtension<-' <- function(filename, value) {
+'ext<-' <- function(filename, value) {
 	lfn <- nchar(filename)
 	value <- trim(value)
 	if (value != "" & substr(value, 1, 1) != ".") {

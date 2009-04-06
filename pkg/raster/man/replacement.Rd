@@ -38,6 +38,9 @@ Arguments
 
 }}
 
+\seealso{ \code{\link[raster]{values}} , \code{\link[raster]{setValues}} }
+
+
 \examples{
 r <- raster(ncol=10, nrow=5)
 r[] <- 1:ncell(r) * 2

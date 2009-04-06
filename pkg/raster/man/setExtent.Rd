@@ -1,10 +1,6 @@
 \name{setExtent}
 
 \alias{setExtent}
-\alias{xmin<-}
-\alias{xmax<-}
-\alias{ymin<-}
-\alias{ymax<-}
   
 \title{Set the extent of a RasteLayer}
 
@@ -15,10 +11,6 @@ coordinates one by one.
 
 \usage{
 setExtent(x, bndbox, keepres=FALSE, snap=FALSE)
-xmin(x) <- value
-xmax(x) <- value
-ymin(x) <- value
-ymax(x) <- value
 }
 
 \arguments{
@@ -26,14 +18,12 @@ ymax(x) <- value
   \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
   \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (see Details)}
   \item{snap}{logical. If \code{TRUE}, the extent is adjusted so that the cells of the input and output RasterLayer are aligned}
-  \item{value}{an extreme x or y coordinate}  
 }
 
 \details{
 
 If keepres is \code{FALSE}, 
 (by adjusting the number of rows and columns). if \code{FALSE}, the number of rows and columns will stay the same, and the resolution will be adjusted
-
 (the RasterLayers get the same origin)
 
 }
