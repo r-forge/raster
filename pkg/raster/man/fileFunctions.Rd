@@ -2,21 +2,18 @@
 
 \alias{ext}
 \alias{ext<-}
-\alias{path}
 \alias{trim}
 
 \title{Filename manipulation}
 
 \description{
-  Low level functions for file name handling. 
-  Get or change file extension or extract the filename or path from a full name (path + filename). 
-  use \code{trim} to remove the whitespace before or after a string of characters.
+Get or change a file extension
+use \code{trim} to remove the whitespace before or after a string of characters.
 }
 
 \usage{
 ext(filename)
 ext(filename) <- value
-path(filename)
 trim(x)
 }
 
@@ -38,7 +35,6 @@ fn <- trim(fn)
 ext(fn)
 ext(fn) <- ".txt"
 ext(fn)
-path(fn)
 }
 
 \keyword{file}

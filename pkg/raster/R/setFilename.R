@@ -17,12 +17,13 @@ filename <- function(x) {
 	if (is.na(filename) || is.null(filename)) {
 		filename <- ""
 	}
+	filename <- path.expand(filename)
 	if (class(x)=='RasterStack') {
 		ext(filename) <- ".stk"
 		x@filename <- filename
 	} else {
 		x@file@name <- filename
-		shortname <- .shortFileName(filename)
+		shortname <- basename(filename)
 		ext(shortname) <- ""
 		shortname <- gsub(" ", "_", shortname)
 		if (nbands(x) > 1) { 

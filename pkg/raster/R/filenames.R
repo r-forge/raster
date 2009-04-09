@@ -14,6 +14,7 @@ trim <- function(x) {
 
 
 .shortFileName <- function(filename) {
+# is this the same as basename ?
     filename <- gsub("\\\\", "/", filename)
 	if (filename == "") {return(filename)
 	} else {
@@ -24,7 +25,8 @@ trim <- function(x) {
 	}	
 }   
    
-path <- function(filename) {
+.path <- function(filename) {
+#  use dirname instead
     filename <- gsub("\\\\", "/", filename)
 	file <- .shortFileName(filename)
 	path <- gsub(file, '', filename)
