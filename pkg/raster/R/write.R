@@ -48,10 +48,3 @@ writeRaster <- function(raster, filetype='raster', overwrite=FALSE, assign=FALSE
 	}
 }	
 
-
-writeStack <- function(rstack, overwrite=FALSE) {
-	stop("not available yet")
-	for (i in 1:nlayers(rstack)) {
-		
-	}
-}

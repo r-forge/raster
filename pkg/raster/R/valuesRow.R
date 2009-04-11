@@ -4,6 +4,9 @@
 # Version 0.8
 # Licence GPL v3
 
+
+
+
 valuesRow <- function(object, rownr) {
 	if (dataContent(object) == 'nodata') {
 		stop('no values in memory. First read or set values')
@@ -18,6 +21,8 @@ valuesRow <- function(object, rownr) {
 	if (!(validRow(object, rownr))) {
 		stop(paste(rownr,'is not a valid rownumber')) 
 	}
+	
+	
 	if (dataContent(object) == 'sparse') {
 		return (.valuesRow.sparse(object, rownr)) 
 	} else if (dataContent(object) == 'row') {
@@ -49,13 +54,13 @@ valuesRow <- function(object, rownr) {
 	} else if (dataContent(object) == 'all'){
 		startcell <- cellFromRowCol(object, rownr, 1)
 		endcell <- startcell+ncol(object)-1
-		if (class(object) == 'objectStack') {
+		if (class(object) == 'RasterStack') {
 			return(values(object)[startcell:endcell,])
 		} else {	
 			return(values(object)[startcell:endcell])
 		}
 	} else {
-		stop('something is wrong with the objectLayer dataContent')
+		stop('something is wrong with the RasterLayer dataContent')
 	}
 }
 

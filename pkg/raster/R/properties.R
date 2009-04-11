@@ -24,6 +24,7 @@ nbands <- function(object) {
 }
 
 
+
 minValue <- function(object, layer=1) {
 	if (layer < 1) { 
 		return(NA)

@@ -57,7 +57,7 @@ function(object, values, rownr=-1, layer=-1) {
 		object@data@source <- 'ram'
 		object@data@indices <- c(1, ncell(object))
 		object <- setMinMax(object)
-		return(object)	
+		return(object)
 	} else if (length(values) == ncol(object)) {
 		rownr <- round(rownr)
 		if (rownr < 1 | rownr > nrow(object)) {
@@ -69,10 +69,8 @@ function(object, values, rownr=-1, layer=-1) {
 		lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
 		object@data@indices <- c(firstcell, lastcell)
 		return(object)
-	} else if (length(values) / ncol(object) ) {
-		
 	} else {
-		stop("length(values) is not equal to ncell(object) or ncol(object)") 
+		stop("length(values) is not equal to ncell(object), or to ncol(object), or 1") 
 	}
  }
 )
