@@ -5,47 +5,22 @@
 # Licence GPL v3
 
 
-.bboxmatrix <- function(x) {
-	xy <- matrix(NA, nrow=5, ncol=2)
-	xy[1,1] <- x@xmin
-	xy[1,2] <- x@ymax
-	xy[2,1] <- x@xmax
-	xy[2,2] <- x@ymax
-	xy[3,1] <- x@xmax
-	xy[3,2] <- x@ymin
-	xy[4,1] <- x@xmin
-	xy[4,2] <- x@ymin
-	return(xy)
-}
-
-
-setMethod("plot", signature(x='BoundingBox', y='ANY'), 
-	function(x, y, ...)  {
-		xy <- .bboxmatrix(x)
-		xy[5,] <- xy[1,]
-		plot(xy, type='l', ...)
-		if (class(y) == 'BoundingBox') {
-			lines(y)
-		}
-	}
-)	
-
 
 setMethod("plot", signature(x='Raster', y='missing'), 
 	function(x, y, ...)  {
-		map(x, ...)
+		.plotraster(x, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
 	}
 )	
 
 setMethod("plot", signature(x='Raster', y='numeric'), 
-	function(x, y, ...)  {
-		map(x, y, ...)
+	function(x, y=1, ...)  {
+		.plotraster(x, index=y, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
 	}
 )		
 
 
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, maxdim=1000, cex=0.1, ...)  {
+	function(x, y, maxdim=10000, cex=0.1, ...)  {
 		comp <- compare(c(x, y), bb=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
 		nc <- ncell(x)
 		x <- sampleSkip(x, maxdim=maxdim)

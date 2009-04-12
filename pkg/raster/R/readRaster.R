@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-.rasterRead <- function(raster, rownr,  startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
+.rasterRead <- function(raster, rownr, startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
 	rownr <- round(rownr)
 	ncolums <- round(ncolumns)
 	if (rownr == 0) { stop("rownr == 0. It should be between 1 and nrow(raster), or < 0 for all rows") }
@@ -16,11 +16,13 @@
 	if (ncolumns < 1) { stop("ncols should be > 1") }
 
 	endcol <- startcol + ncolumns - 1
-	if (endcol > ncol(raster)) {
-		warning("ncolumns too high, truncated")
-		endcol <- ncol(raster) 
-		ncolumns <- ncol(raster) - startcol + 1  
-	}
+	
+# allowing this for readRows
+#	if (endcol > ncol(raster)) {
+#		warning("ncolumns too high, truncated")
+#		endcol <- ncol(raster) 
+#		ncolumns <- ncol(raster) - startcol + 1  
+#	}
 	
 	if (dataSource(raster)=='ram') {
 		if (rownr < 1) {
@@ -38,7 +40,6 @@
 		if (!file.exists( filename(raster))) { 
 			stop(paste(filename(raster)," does not exist"))
 		}
-		#con <- file(rastergri, "rb")
 		
 		dtype <- .shortDataType(raster@file@datanotation)
 		if (dtype == "INT" | dtype == "LOG" ) { 
@@ -95,13 +96,14 @@
 		raster@data@indices <- c(1, ncell(raster))
 		raster@data@content <- "all"
 		raster <- setMinMax(raster)
-	} else if (startcol==1 & ncolumns==(ncol(raster)-startcol+1)) {
-		raster@data@indices <- c(cellFromRowCol(raster, rownr, startcol), cellFromRowCol(raster, rownr, endcol))
-		raster@data@content <- "row"
 	} else {
-		raster@data@indices <- c(cellFromRowCol(raster, rownr, startcol), cellFromRowCol(raster, rownr, endcol))
-		raster@data@content <- "block"
-	}	
+		raster@data@content <- 'row' 
+		firstcell <- cellFromRowCol(raster, rownr, 1)
+		lastcell <- cellFromRowCol(raster, rownr, raster@ncols)
+		raster@data@indices <- c(firstcell, lastcell)
+	}
 	
 	return(raster)
 }
+
+

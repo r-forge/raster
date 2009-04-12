@@ -6,7 +6,7 @@
 
 
 
-map <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) {
+.plotraster <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 #	require(fields)
 	if (class(object) == 'character') { 

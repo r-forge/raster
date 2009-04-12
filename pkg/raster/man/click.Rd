@@ -4,7 +4,7 @@
 \title{ Click }
 
 \description{
-  Click on a plot (map) to get values of a Raster* object at a location; and optionally the coordinates for the location. 
+  Click on a plot (map) of a RasterLayer to get values of a Raster* object at a location; and optionally the coordinates for the location. 
   Multiple locations can be clicked on by specifying \code{n=}. 
 }
 

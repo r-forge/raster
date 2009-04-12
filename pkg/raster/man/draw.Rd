@@ -5,7 +5,7 @@
 
 \title{ Draw a line or polygon on a map }
 \description{
-Draw a line or polygon on a map and save it for later use
+Draw a line or polygon on a plot (map) and save it for later use
 }
 
 \usage{

@@ -28,7 +28,7 @@ Datatypes are described by 5 characters. The first three indicate whether the va
 The following datatypes are available.
 
 \tabular{rll}{
-\bold{datatype \tab min \tab max} \cr
+\bold{datatype} \tab \bold{min} \tab \bold{max} \cr
 \code{LOG1S} \tab FALSE (0)\tab TRUE (1) \cr
 \code{INT1S} \tab -127 \tab  127 \cr
 \code{INT1U} \tab 0 \tab  255 \cr

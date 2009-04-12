@@ -4,28 +4,17 @@
 # Version 0.8
 # Licence GPL v3
 
-
-writeFormats <- function() {
-	gd <- gdalDrivers()
-	gd <- as.matrix(subset(gd, gd[,3] == T))
-	short <- c("raster", "ascii", as.vector(gd[,1]))
-	long <- c("raster package format", "Arc ascii", as.vector(gd[,2]))
-	m <- cbind(short, long)
-	colnames(m) <- c("name", "long_name")
-	return(m)
-}
-
  
  
 writeRaster <- function(raster, filetype='raster', overwrite=FALSE, assign=FALSE) {
 	if (assign){ raster_name <- deparse(substitute(raster))}
 
-	if (dataContent(raster) != 'row' & dataContent(raster) != 'all' & dataContent(raster) != 'sparse' ) {
-		stop('No usable data available for writing. First use setValues()')
+	if (! dataContent(raster) %in% c('row', 'rows', 'all', 'sparse') ) {
+		stop('No usable data available for writing.')
 	}
 	
 	if (filetype=='raster') {
-		if (dataContent(raster) == 'row' ) {
+		if (substr(dataContent(raster), 1, 3) == 'row' ) {
 			raster <- .writeRasterRow(raster, overwrite=overwrite)
 		} else {
 			raster <- .writeRasterAll(raster, overwrite=overwrite)

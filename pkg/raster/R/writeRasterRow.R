@@ -44,9 +44,6 @@
  
  
 .writeRasterRow <- function(raster, overwrite=FALSE) {
-#	if (dataContent(raster) != 'row') { 
-#		stop('raster does not contain a row') 
-#	}
 
 	if (dataIndices(raster)[1] == 1) { 
 		raster <- .startRowWriting(raster, overwrite=overwrite)
