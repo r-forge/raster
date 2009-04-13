@@ -5,18 +5,44 @@
 # Licence GPL v3
 
 
-
-setMethod("plot", signature(x='Raster', y='missing'), 
+setMethod("plot", signature(x='RasterStack', y='ANY'), 
 	function(x, y, ...)  {
-		.plotraster(x, index=1, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+		if (missing(y)) {
+			nl <- nlayers(x)
+			if (nl > 25) {
+				warning('only first 25 layers are mapped')
+				nl <- 25
+			}
+			nc <- ceiling(sqrt(nl))
+			nr <- ceiling(nl / nc)
+			par(mfrow=c(nr, nc))
+			for (i in 1:nl) {
+				.plotraster(x, index=i, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+			}
+		} else if (is.numeric(y)) {
+			y <- unique(as.integer(round(y)))
+			if (length(y) > 1) {
+				nl <- length(y)
+				nc <- ceiling(sqrt(nl))
+				nr <- ceiling(nl / nc)
+				par(mfrow=c(nr, nc))
+				par(mfrow=c(nr, nc))
+				for (i in 1:length(y)) {
+					.plotraster(x, index=y[i], col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+				}
+			} else {
+				.plotraster(x, index=y, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+			}		
+		}
 	}
 )	
 
-setMethod("plot", signature(x='Raster', y='numeric'), 
-	function(x, y=1, ...)  {
-		.plotraster(x, index=y, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+
+setMethod("plot", signature(x='RasterLayer', y='missing'), 
+	function(x, ...)  {
+		.plotraster(x, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
 	}
-)		
+)	
 
 
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 

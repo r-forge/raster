@@ -42,14 +42,13 @@ setMethod('raster', signature(x='Raster'),
 			x <- asRasterLayer(x, 1) 
 		}
 
-		filename <- trim(filename)
-		if (filename != "" & filename == x@file@name) {
-			stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
-		}
-
 		r <- raster(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
 		filename(r) <- filename
-	
+
+		if (r@file@name != "" & r@file@name == x@file@name) {
+			stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
+		}
+		
 		if (!is.null(values)) {
 			r <- setValues(r, values)
 		}

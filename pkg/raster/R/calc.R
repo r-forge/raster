@@ -16,7 +16,6 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 		stop("function 'fun' returns more than one value") 
 	}
 	
-	filename <- trim(filename)
 	outraster <- raster(x, filename)
 	dataType(outraster) <- datatype
 	

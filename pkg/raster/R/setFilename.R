@@ -14,10 +14,11 @@ filename <- function(x) {
 
 'filename<-' <- function(x, value) {
 	filename <- trim(value)
-	if (is.na(filename) || is.null(filename)) {
+	if (is.na(filename) | is.null(filename) | !is.character(value)) {
 		filename <- ""
 	}
 	filename <- path.expand(filename)
+# could also throw in normalizePath(utils) 
 	if (class(x)=='RasterStack') {
 		ext(filename) <- ".stk"
 		x@filename <- filename
