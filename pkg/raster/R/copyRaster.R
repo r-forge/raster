@@ -46,3 +46,48 @@ copyRasterFile <- function(raster, filename, overwrite=FALSE) {
 
 
 
+removeFile <- function(raster) {
+	raster <- closeConnection(raster)
+	fname <- filename(raster)
+	fileext <- toupper(ext(fname))
+    if (fileext == ".GRD") {
+		fgrd <- fname
+        ext(fgrd) <- '.grd'
+        fgri <- fname
+		ext(fgri) <- '.gri'
+		if (!file.exists(fgrd) | !file.exists(fgri)) {
+			stop('file does not exist')
+		}
+		res <- file.remove(fgrd)
+		if (!res) { stop('could not remove grd file') }
+		res <- file.remove(fgri)
+        if (!res) { stop('could not remove gri file') }
+    } else {
+		stop('only implemented for raster format files')
+    }
+	filename(raster) <- ''
+	return(raster)
+}
+
+
+
+removeRasterFile <- function(filename) {
+	fname <- trim(filename)
+	fileext <- toupper(ext(fname))
+    if (fileext == ".GRD") {
+		fgrd <- fname
+        ext(fgrd) <- '.grd'
+        fgri <- fname
+		ext(fgri) <- '.gri'
+		if (!file.exists(fgrd) | !file.exists(fgri)) {
+			stop('file does not exist')
+		}
+		res <- file.remove(fgrd)
+		if (!res) { stop('could not remove grd file') }
+		res <- file.remove(fgri)
+        if (!res) { stop('could not remove gri file') }
+    } else {
+		stop('only implemented for raster format files')
+    }
+}
+

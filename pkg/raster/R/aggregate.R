@@ -72,7 +72,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
-		if (!canProcessInMemory(x, 3) && filename == '') {
+		if (!canProcessInMemory(x, 2) && filename == '') {
 			filename <- tempfile()
 			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
