@@ -5,7 +5,6 @@
 \alias{removeRasterFile}
 \alias{removeFile}
 
-
 \title{move or copy a raster file}
 
 \description{
@@ -25,7 +24,6 @@ removeFile(raster)
 \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
 }
 
-
 \value{
 a RasterLayer
 }
@@ -39,7 +37,6 @@ r <- raster(system.file("external/test.ag", package="sp"))
 r <- saveAs(r, 'test.grd', filetype='raster', overwrite=TRUE)
 rc <- copyRasterFile(r, 'test2.grd', overwrite=TRUE)
 rm <- moveRasterFile(r, 'test3.grd', overwrite=TRUE)
- 
 }
 
 \keyword{ spatial }
