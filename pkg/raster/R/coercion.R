@@ -202,3 +202,11 @@ setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'),
 }	
 
 
+
+setAs('matrix', 'RasterLayer',
+	function(from){ return(raster(from)) }
+)
+
+setAs('RasterLayer', 'matrix',
+	function(from){ return( values(from, format='matrix')) }
+)
