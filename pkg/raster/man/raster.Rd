@@ -7,6 +7,7 @@
 \alias{raster,character-method}
 \alias{raster,missing-method}
 \alias{raster,Raster-method}
+\alias{raster,matrix-method}
 
 \title{Create a RasterLayer object}
 
@@ -65,7 +66,7 @@ If \code{x} is a character value, it should be a filename of a file that the ras
   
 3) Create a RasterLayer object from a BoundingBox object
   
-\code{raster(x, nrows=10, ncols=10, projs='NA')}
+\code{raster(x, nrows=10, ncols=10, projs=NA)}
 
 \tabular{rll}{
  \tab \code{x} \tab BoundingBox object \cr
@@ -79,13 +80,26 @@ If \code{x} is a character value, it should be a filename of a file that the ras
 4) Create a RasterLayer object from a Raster* object. This copies the parameters of a Raster* object to a new RasterLayer, 
 but does not copy the filename nor the data associated with the original Raster* object. 
 
-
 \code{raster(x, filename="", values=NULL)}
 
 \tabular{rll}{
  \tab \code{x} \tab a Raster* object \cr
  \tab \code{filename} \tab new filename for new RasterLayer \cr
  \tab \code{values} \tab If not \code{NULL} it is used to set values to new object. Either pass a vector of length == ncells(x), or a single number \cr
+}
+
+
+5) Create a RasterLayer object from a matrix. The default extent is set to be between 0 and 1 in the x and y direction but can be changed at creation of the RasterLayer object or later. You can also provide a projection.  
+
+\code{function(x, xmn=0, xmx=1, ymn=0, ymx=1, projs=NA)}
+
+\tabular{rll}{
+ \tab \code{x} \tab a Raster* object \cr
+ \tab \code{xmn} \tab minimum x coordinate or raster (left border) \cr
+ \tab \code{xmx} \tab maximum x coordinate of raster (right border) \cr
+ \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
+ \tab \code{ymx} \tab maximum y coordinate of raster (top border) \cr
+ \tab \code{projs} \tab PROJ4 type description of a map projection \cr
 }
 
 }}

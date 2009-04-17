@@ -18,6 +18,14 @@ setMethod('raster', signature(x='missing'),
 	}
 )
 
+setMethod('raster', signature(x='matrix'), 
+	function(x, xmn=0, xmx=1, ymn=0, ymx=1, projs=NA) {
+		r <- raster(ncols=ncol(x), nrows=nrow(x), projs=projs, xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx)
+		r <- setValues(r, as.vector(t(x)))
+		return(r)
+	}
+)
+
 
 setMethod('raster', signature(x='character'), 
 	function(x, values=FALSE, band=1) {
@@ -59,7 +67,7 @@ setMethod('raster', signature(x='Raster'),
 
 
 setMethod('raster', signature(x='BoundingBox'), 
-	function(x, nrows=10, ncols=10, projs='NA') {
+	function(x, nrows=10, ncols=10, projs=NA) {
 		bb <- extent(x)
 		nr = as.integer(round(nrows))
 		nc = as.integer(round(ncols))
