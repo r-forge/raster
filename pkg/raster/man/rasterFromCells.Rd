@@ -2,7 +2,6 @@
 
 \alias{rasterFromCells}
 
-  
 \title{Subset a raster by cell numbers}
 
 \description{
@@ -22,7 +21,6 @@ rasterFromCells(object, cells)
 \details{
 Cell numbers start at 1 in the upper left corner, and increase from left to right, and then from top to bottom
 The last cell number equals the number of cells of the Raster* object.
- 
 }
 
 \value{
@@ -30,7 +28,6 @@ A RasterLayer
 }
 
 \seealso{ \code{\link[raster]{rowFromCell}} }
-
 
 \author{Robert J. Hijmans }
 
