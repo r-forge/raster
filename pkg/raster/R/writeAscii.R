@@ -8,7 +8,11 @@
 
 
 .writeAscii <- function(raster, overwrite=FALSE) {
-	filename <- filename(raster)
+	filename <- trim(raster@file@name)
+	if (filename == "") {
+		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')
+	}
+	
 	if (dataIndices(raster)[1] == 1) {
 		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
 		if (resdif > 0.01) {
