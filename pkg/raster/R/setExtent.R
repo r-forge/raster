@@ -7,6 +7,7 @@
 # Licence GPL v3
 
 
+
 setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 
 	oldbb <- extent(x)

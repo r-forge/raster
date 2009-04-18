@@ -37,7 +37,7 @@ calc(x, fun, ...)
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
   \tab  \code{overwrite}  \tab Logical to indicate whether an existing output file should be overwritten \cr
   \tab  \code{filetype}  \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
-  \tab  \code{datatype}  \tab output data type; see \code{\link[raster]{setDatatype}} \cr
+  \tab  \code{datatype}  \tab output data type; see \code{\link[raster]{dataType}} \cr
   \tab  \code{track}  \tab vector of row numbers for which the function will report that they have been processed \cr
 }
 

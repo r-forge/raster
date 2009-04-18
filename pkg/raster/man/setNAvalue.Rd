@@ -1,10 +1,12 @@
-\name{setNAvalue}
+\name{NAvalue}
 
 \alias{NAvalue<-}
+\alias{NAvalue}
 
 \title{set the NA value of a RasterLayer }
 
 \description{
+NAvalue returns the value that is used to write NA values to disk (in 'raster' type files). 
 If you set the NA value of a RasterLayer, this value will be interpreted as NA when reading the values from a file. 
 Values already in memory will not be affected. 
 
@@ -31,6 +33,7 @@ a Raster* object
 \examples{ 
 r1 <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"))
 r2 <- r1
+NAvalue(r2)
 NAvalue(r2) <- 255
 #plot(r1)
 #x11()

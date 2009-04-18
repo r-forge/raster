@@ -17,7 +17,7 @@ disaggregate(raster, fact=2, filename="", overwrite=FALSE, filetype='raster', da
   \item{fact}{degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details}
   \item{overwrite}{if TRUE, "filename" will be overwritten if it exists}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}   
 }
 

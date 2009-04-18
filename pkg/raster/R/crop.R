@@ -7,13 +7,14 @@
 # Licence GPL v3
 
 
-crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', track=-1) {
+crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', datatype=dataType(raster), track=-1) {
 
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
 	bb <- intersectBbox(raster, bndbox)
 	bb <- alignBbox(bb, raster)
 	outraster <- raster(raster, filename)
 	outraster <- setExtent(outraster, bb, keepres=TRUE)
+	dataType(outraster) <- datatype
 	
 	if (dataContent(raster) == 'all')  {
 		first_start_cell <- cellFromXY(raster, c(xmin(outraster) + 0.5 * xres(raster), ymax(outraster) - 0.5 * yres(raster) ))	

@@ -20,7 +20,7 @@ focal(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, file
   \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
   \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}   
 }
 

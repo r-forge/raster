@@ -8,15 +8,6 @@
 
 
 
-changeExtent <- function(x, xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx = ymax(x), keepres=FALSE) {
-	bb <- newBbox(xmn, xmx, ymn, ymx) 
-	if (class(x) == 'BoundingBox') { 
-		return(bb)
-	}
-	x <- setExtent(x, bb, keepres=keepres) 
-	return(x)
-}
-
 shift <- function(object, x=0, y=0) {
 	object@bbox@xmin <- object@bbox@xmin + x
 	object@bbox@ymin <- object@bbox@ymin + y

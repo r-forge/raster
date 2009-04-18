@@ -23,18 +23,22 @@
 }
 
 'xmin<-' <- function(x, value) {
-	return(changeExtent(x, xmn=value))
+	x@bbox@xmin <- value
+	return(x)
 }
 
 'xmax<-' <- function(x, value) {
-	return(changeExtent(x, xmx=value))
+	x@bbox@xmax <- value
+	return(x)
 }
 
 'ymin<-' <- function(x, value) {
-	return(changeExtent(x, ymn=value))
+	x@bbox@ymin <- value
+	return(x)
 }
 
 'ymax<-' <- function(x, value) {
-	return(changeExtent(x, ymx=value))
+	x@bbox@ymax <- value
+	return(x)
 }
 

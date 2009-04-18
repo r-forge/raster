@@ -18,7 +18,7 @@ init(raster, fun=runif, filename="", overwrite=FALSE, datatype='FLT4S', filetype
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
   \item{overwrite}{Logical. if \code{TRUE}, the file will be overwritten if it exists}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}  
 }
 

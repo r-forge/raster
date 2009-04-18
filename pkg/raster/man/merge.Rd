@@ -38,7 +38,7 @@ A full call to the merge method is:
   \item{\code{filename}}{character. output filename}
   \item{\code{overwrite}}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
   \item{\code{filetype}}{character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{rasterFormats}}}
-  \item{\code{datatype}}{character. output data type; see \code{\link[raster]{setDatatype}}}
+  \item{\code{datatype}}{character. output data type; see \code{\link[raster]{dataType}}}
   \item{\code{track}}{vector of row numbers for which the function will report that they have been processed}   
 }  
   

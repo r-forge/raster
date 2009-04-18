@@ -39,10 +39,9 @@
 
 			sampraster <- raster(object)
 			sampraster <- setRowCol(sampraster, dim(m)[1], dim(m)[2])
-			xmx <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
-			ymn <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)
-			bndbox <- changeExtent(object, xmx=xmx, ymn=ymn)
-			object <- setExtent(sampraster, bndbox, keepres=FALSE)
+			xmax(sampraster) <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
+			ymin(sampraster) <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)
+			object <- sampraster
  		} else { 
 			m <- values(object, format='matrix')
 			subsample=FALSE

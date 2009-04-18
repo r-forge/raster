@@ -19,7 +19,7 @@ pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background
   \item{filename}{ output filename }
   \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}  
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}    
   
 }

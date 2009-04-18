@@ -48,10 +48,8 @@ sampleSkip <- function(raster, maxdim=500, bndbox=NA, asRaster=FALSE) {
 		}	
 		outras <- raster(raster)
 		outras <- setRowCol(outras, nr, nc)
-		xmx <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
-		ymn <- ymin(raster) + (nrow(raster) - row) * yres(raster)
-		bndbox <- changeExtent(raster, xmx=xmx, ymn=ymn)
-		outras <- setExtent(outras, bndbox, keepres=FALSE)
+		xmax(outras) <- xmax(raster) - (ncol(raster) - cols[nc]) * xres(raster)
+		ymin(outras) <- ymin(raster) + (nrow(raster) - row) * yres(raster)
 		outras <- setValues(outras, dd)
 	}
 	if (asRaster) {

@@ -21,7 +21,7 @@ projectBbox(object, projs)
   \item{filename}{character. output filename}  
   \item{overwrite}{Logical. If \code{TRUE}, the output file is overwritten if it already exists}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}  
   \item{object}{BoundingBox or Raster* object}
   \item{projs}{a character string describing a projection and datum in PROJ4 format}

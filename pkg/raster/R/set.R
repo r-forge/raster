@@ -40,3 +40,7 @@ roundCoords <- function(object, digits=0) {
 	x@file@nodatavalue <- value
 	return(x)
 }
+
+'NAvalue' <- function(x, value) {
+	return(x@file@nodatavalue)
+}

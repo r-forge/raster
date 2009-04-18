@@ -21,7 +21,7 @@ linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRast
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either 'all', 'NA', '!NA', or 'zero' } 
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{setDatatype}}}
+  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}    
 }
 

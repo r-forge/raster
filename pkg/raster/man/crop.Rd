@@ -9,16 +9,17 @@ Areas in the bounding box outside of the intput RasterLayer are ignored, and the
 }
 
 \usage{
-crop(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', track=-1) 
+crop(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', datatype=dataType(raster), track=-1) 
 }
 
 \arguments{
-  \item{raster}{a RasterLayer object}
+  \item{raster}{A RasterLayer object}
   \item{bndbox}{BoundingBox object, or any object that is or has a bounding box (see below)}
-  \item{filename}{character. Output filename for a new raster}
-  \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL format see \code{\link[raster]{writeRaster}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}  
+  \item{filename}{Character. Output filename for a new raster}
+  \item{overwrite}{If \code{TRUE}, the file will be overwritten if it exists}
+  \item{filetype}{Output file type. Either 'raster', 'ascii' or a supported GDAL format see \code{\link[raster]{writeRaster}}}
+  \item{datatype}{Output data type; see \code{\link[raster]{dataType}}}
+  \item{track}{Vector of row numbers for which the function will report that they have been processed}  
 }
 
 \details{

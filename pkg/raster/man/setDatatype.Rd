@@ -1,4 +1,4 @@
-\name{setDatatype}
+\name{dataType}
 
 \alias{dataType<-}
 \alias{dataType}

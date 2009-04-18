@@ -21,7 +21,7 @@ values of a RasterStack to a multi-band RasterFile
   \item{filename}{character. output filename}
   \item{overwrite}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
 \item{filetype}{character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{rasterFormats}}}
-\item{datatype}{character. output data type; see \code{\link[raster]{setDatatype}}}
+\item{datatype}{character. output data type; see \code{\link[raster]{dataType}}}
 }
 
 \details{
