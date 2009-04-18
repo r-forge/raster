@@ -45,15 +45,13 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
 	
 	
-	if (na.rm) {
 		# this avoid warning messages 
-		narmfun <- function(x) { 
-			x <- na.omit(x)
-			if (length(x) == 0) { 
-				return(NA)
-			} else { 
-				return( fun(x) )
-			}
+	narmfun <- function(x) { 
+		x <- na.omit(x)
+		if (length(x) == 0) { 
+			return(NA)
+		} else { 
+			return( fun(x) )
 		}
 	}
 	
@@ -82,19 +80,19 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
 		rows <- rep(1, each=(ncol(x) * yfact))
 		v <- vector(length=0)
+		
+		nrows = yfact
+		cells <- cellFromRowCol(x, rows, cols)
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
 				endrow <- min(nrow(x), startrow + yfact - 1)
 				nrows <- endrow - startrow + 1
-				theserows <- (startrow * rows)[1:(ncol(x)*nrows)]
+				rows <- rows[1:(ncol(x)*nrows)]
 				cols <- cols[1:(ncol(x)*nrows)]
-			} else {
-				nrows = yfact
-				theserows <- startrow * rows
-			}	
+				cells <- cellFromRowCol(x, rows, cols)
+			} 
 			x <- readRows(x, startrow = startrow, nrows = nrows)
-			cells <- cellFromRowCol(x, theserows, cols)
 			
 			if (na.rm) { 
 				vals <- tapply(values(x), cells, narmfun ) 
