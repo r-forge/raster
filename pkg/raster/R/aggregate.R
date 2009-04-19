@@ -26,25 +26,6 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	}
 	if (xfact > ncol(x)) {warning('aggregation factor is larger than the number of columns') }
 	if (yfact > nrow(x)) {warning('aggregation factor is larger than the number of rows')}
-
-	if (expand) {
-		rsteps <- as.integer(ceiling(nrow(x)/yfact))
-		csteps <- as.integer(ceiling(ncol(x)/xfact))
-	} else 	{
-		rsteps <- as.integer(floor(nrow(x)/yfact))
-		csteps <- as.integer(floor(ncol(x)/xfact))
-	}
-	
-	ymn <- ymax(x) - rsteps * yfact * yres(x)
-	xmx <- xmin(x) + csteps * xfact * xres(x)
-		
-	outRaster <- raster(x, filename)
-	dataType(outRaster) <- datatype
-	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
-	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
-	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
-	
-	
 		# this avoid warning messages 
 	narmfun <- function(x) { 
 		x <- na.omit(x)
@@ -55,68 +36,102 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		}
 	}
 	
-	if (dataContent(x) == 'all') {	
-		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(x)], times=nrow(x))
-		rows <- rep(1:rsteps, each=ncol(x) * yfact)[1:ncell(x)]
-		cells <- cellFromRowCol(x, rows, cols)
-		
-		if (na.rm) {
-			outRaster <- setValues(outRaster, as.vector( tapply(values(x), cells, narmfun ))) 
-		} else {
-			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
-		}
-		if (outRaster@file@name != "") {
-			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
-		}
+	if (expand) {
+		rsteps <- as.integer(ceiling(nrow(x)/yfact))
+		csteps <- as.integer(ceiling(ncol(x)/xfact))
+	} else {
+		rsteps <- as.integer(floor(nrow(x)/yfact))
+		csteps <- as.integer(floor(ncol(x)/xfact))
+		nc <- csteps * xfact
+		nr <- rsteps * yfact			
+	}
+	ymn <- ymax(x) - rsteps * yfact * yres(x)
+	xmx <- xmin(x) + csteps * xfact * xres(x)
+	outRaster <- raster(x, filename)
+	dataType(outRaster) <- datatype
+	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
+	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
+	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
 
-	} else if ( dataSource(x) == 'disk') { 
+	addcol <- 0
+	addrow <- 0
+	if (expand) {
+		nc <- csteps * xfact
+		nr <- rsteps * yfact
+		if (nc > ncol(x)) { 
+			csteps <- csteps - 1
+			nc <- csteps * xfact
+			addcol <- ncol(x) - nc
+		}
+		if (nr > nrow(x)) { 
+			nr <- (rsteps-1) * yfact
+			addrow <- nrow(x) - nr
+		}
+	}
+	ncells <- xfact * yfact
+	
+	if (dataContent(x) == 'all' | dataSource(x) == 'disk') { 
+		if (dataContent(x) == 'all') { 
+			mem <- TRUE 
+			ncolumns <- ncol(x)
+		} else {
+			mem <- FALSE
+		}
 		if (!canProcessInMemory(x, 2) && filename == '') {
 			filename <- tempfile()
 			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
-		
-		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
-		rows <- rep(1, each=(ncol(x) * yfact))
 		v <- vector(length=0)
-		
 		nrows = yfact
-		cells <- cellFromRowCol(x, rows, cols)
+
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
-			if ( r==rsteps) {
-				endrow <- min(nrow(x), startrow + yfact - 1)
-				nrows <- endrow - startrow + 1
-				rows <- rows[1:(ncol(x)*nrows)]
-				cols <- cols[1:(ncol(x)*nrows)]
-				cells <- cellFromRowCol(x, rows, cols)
-			} 
-			x <- readRows(x, startrow = startrow, nrows = nrows)
-			
-			if (na.rm) { 
-				vals <- tapply(values(x), cells, narmfun ) 
-			} else { 
-				vals <- tapply(values(x), cells, fun) 
+			if (r==rsteps & addrow > 0) {
+				nrows <- addrow
+				ncells <- xfact * nrows
 			}
-			vals <- as.vector(vals)
-
+			if (mem) {
+				firstcell <- (startrow-1) * ncolumns + 1
+				lastcell <- firstcell + ncolumns * nrows - 1
+				a <- matrix(x@data@values[firstcell:lastcell], nrow=nrows, byrow=T)
+			} else {
+				x <- readRows(x, startrow = startrow, nrows = nrows)
+				a <- matrix(x@data@values, nrow=nrows, byrow=T)
+			}
+			
+			if (addcol > 0) {
+				b <- a[,(nc+1):(nc+addcol)] 
+				a <- a[,1:nc]
+			}
+			a <- matrix(as.vector(a), nrow=ncells)
+			if (na.rm) { 
+				vals <- apply(a, 2, narmfun ) 
+			} else { 
+				vals <- apply(a, 2, fun) 
+			}
+			if (addcol > 0) {
+				if (na.rm) { 	
+					vals <- c(vals, narmfun(b))
+				} else {
+					vals <- c(vals, fun(b))				
+				}
+			}
 			if (outRaster@file@name == "") {
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
-			}
-			
+			}			
 			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
-			
 		} 
+
 		if (outRaster@file@name == "") { 
 			outRaster <- setValues(outRaster, v) 
 		}
 	}
 	return(outRaster)
 }
+
 )
-
-
