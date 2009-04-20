@@ -26,7 +26,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 #	bndbox <- newBbox(bb[1,1], bb[1,2], bb[2,1], bb[2,2])
 	outraster <- setExtent(outraster, bb, keepres=TRUE, snap=FALSE)
 
-	isint <- TRUE
+	isInt <- TRUE
 	for (i in 1:length(rasters)) {
 		dtype <- .shortDataType(rasters[[i]]@file@datanotation)
 		if (dtype != 'INT') {

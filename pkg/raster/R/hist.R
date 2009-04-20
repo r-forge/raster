@@ -12,7 +12,7 @@ setMethod('hist', signature(x='RasterStack'),
 )
 
 setMethod('hist', signature(x='Raster'), 
-	function(x, maxsamp=100000, ...){
+	function(x, maxsamp=10000, ...){
 		if (dataContent(x) != 'all') {
 			if (dataSource(x) == 'disk') {
 		# TO DO: make a function that does this by block and combines  all data into a single histogram
