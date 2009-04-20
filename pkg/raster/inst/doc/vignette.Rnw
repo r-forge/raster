@@ -24,7 +24,8 @@ foo <- packageDescription("raster")
 
 \section{Abstract}
 
-This is an vignette for the \verb@raster@ package in R.  The \verb@raster@ package deals with basic spatial raster (grid) data access and manipulation. It defines raster classes; can deal with very large files (stored on disk); and includes standard raster management and  manipulation functions. The purpose of the 'raster' package is to provide easy to use functions for raster manipulation and analysis. These include high level functions such as overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for very large raster datasets that cannot be loaded into memory. In addition, the package provides lower level functions such as row by row reading and writing (to many formats via \verb@rgdal@) for creating other functions that operate on very large files. The package is build around a number of S4 classes of which the RasterLayer and RasterStack classes are the most important. Many generic methods are implemented for RasterLayers (arithmic, logical, plot, hist, ...).
+This is an vignette for the \verb@raster@ package in R.  The \verb@raster@ package deals with basic spatial raster (grid) data access and manipulation. Its principal aims are (1) to provide an easy interface to common 'high level' functions for raster data manipulation and management; (2) that all functions can work with very large raster datasets that are stored on disk as they cannot be loaded into memory; (3) to provide low-level functions on which new functions can be easily developed; and (4) to provide an easy-to-use raster algebra implementation. High level functions include overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for raster datasets that cannot be loaded into memory. Lower level functions include row by row reading and writing (from and to many different file formats via \verb@rgdal@). 
+
 
 \section{Introduction}
 
@@ -33,9 +34,15 @@ One of the main reasons for developing this package is that we would like to bui
 
 bla bla bla normally distributed with mean 0 and standard deviation 2.
 
+
 \section{Beginning}
 
-A frequentist analysis for the problem is done by the following R statements
+The first thing to do is to install \verb@raster@ package of you have not yet done so. As the package is currently not on CRAN, this takes a tiny bit more effort than installing packages that are on CRAN. \verb@raster@ depends on \verb@rgdal@ so if you do not have that, install it first: 
+\verb@install.packages("rgdal")@
+Now install \verb@raster@ from the R-Forge repository
+\verb@install.packages("raster", repos="http://R-Forge.R-project.org")@
+
+The following R statements should now work
 <<raster-1>>=
 library(raster)
 r <- raster()
@@ -43,7 +50,7 @@ r[] <- 1:ncell(r)
 plot(r)
 @
 
-bla bla bla 
+Let's use a file, the famous Meuse dataset:
 
 <<raster-2>>=
 r <- raster(system.file("external/test.ag", package="sp"))
@@ -53,15 +60,21 @@ values(r)
 s <- sqrt(r)
 @
 
-The arguments to the \verb@raster@ function here (there are more we don't use here) are
 \begin{itemize}
-\item an R function (here \verb@xxx@ that density is \verb@-Inf@.
-\item an initial state (here \verb@beta.init@) of the Markov chain.
+\item this is a bullet point
+\item and so is this
 \end{itemize}
 
-\citet{geyer-temp} came to a similar conclusion,
-that a 20\% acceptance rate is about right, in a very different situation.
+\citet{great-paper} came to a similar conclusion.
 
+\section{some background: the RasterLayer class}
+
+pointer to a file
+nrow, ncol, extent
+cells are numbered 1 to ncell(r)
+
+
+\section{Deeper and deeper}
 
 Figure~\ref{fig:fig1} (page~\pageref{fig:fig1})
 shows the time series plot made by the R statement
@@ -78,7 +91,8 @@ plot(r)
 \label{fig:fig1}
 \end{figure}
 
-Another way to look at the output is an autocorrelation plot.
+Another way to look at the output is:
+
 Figure~\ref{fig:fig2} (page~\pageref{fig:fig2})
 shows the time series plot made by the R statement
 <<label=fig2too,include=FALSE>>=
@@ -97,14 +111,19 @@ plot(r, s)
 
 \section{RasterStack}
 
-We have added an argument \verb@outfun@ that gives the ``functional''
+A RasterStack ...
 
-\subsection{Simple Means}
+\subsection{Simple}
 
-\subsection{Functions of Means}
 
+
+\section{Package design}
+
+S4 classes 
+bla bla bla
 
 \section{Future plans}
+
 In the current version, the design has emphasised simplicity over speed. In later versions we will work on improving speed, which can be very important given the very large size of raster datasets. Currently all code is written in R, for is clarity, and ease of adapation. However, in some future version we would like to also implement C functions to speed up processing of very large datasets. 
 
 
