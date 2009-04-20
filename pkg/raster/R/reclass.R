@@ -5,8 +5,9 @@
 # Licence GPL v3
 
 reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)  {
+
 	if (class(raster) != 'RasterLayer' ) {
-		stop('first two arguments should be objects of class "RasterLayer"')
+		stop('first argument should be an object of class "RasterLayer"')
 	}
 
 	if ( is.null(dim(rclmat)) ) { 
@@ -47,16 +48,22 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 		
 	} else {
 		starttime <- proc.time()
-
+		hasNA <- FALSE
+		for (i in 1:length(rclmat[,1])) {
+			if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
+				namat <- rclmat[i,]
+				rclmat <- rclmat[-i,]
+				hasNA <- TRUE
+			}
+		}
 		for (r in 1:nrow(raster)) {
 			raster <- readRow(raster, r)
 			res <- values(raster)
 			for (i in 1:length(rclmat[,1])) {
-				if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
-					res[ is.na(values(raster)) ] <- rclmat[i, 3] 
-				} else {
-					res[ (values(raster) >= rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
-				}
+				res[ (values(raster) >= rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
+			}
+			if (hasNA) {
+				res[ is.na(values(raster)) ] <- namat[1, 3] 				
 			}	
 			outraster <- setValues(outraster, res, r)
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
