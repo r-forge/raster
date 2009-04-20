@@ -6,11 +6,7 @@
 # Licence GPL v3
 
 
-setMethod('aggregate', signature(x='RasterLayer'), 
-
-function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1, old=FALSE)  {
-
-	if (old) { return(.aggregate_old(x,fact, fun, expand, na.rm, filetype, datatype, overwrite, track)) }
+.aggregate_old <- function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
 
 	if (is.null(filename)) { filename <- "" }
 
@@ -28,115 +24,95 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	}
 	if (xfact > ncol(x)) {warning('aggregation factor is larger than the number of columns') }
 	if (yfact > nrow(x)) {warning('aggregation factor is larger than the number of rows')}
-		# this avoid warning messages 
-	narmfun <- function(x) { 
-		x <- na.omit(x)
-		if (length(x) == 0) { 
-			return(NA)
-		} else { 
-			return( fun(x) )
-		}
-	}
-	
+
 	if (expand) {
 		rsteps <- as.integer(ceiling(nrow(x)/yfact))
 		csteps <- as.integer(ceiling(ncol(x)/xfact))
-	} else {
+	} else 	{
 		rsteps <- as.integer(floor(nrow(x)/yfact))
 		csteps <- as.integer(floor(ncol(x)/xfact))
-		nc <- csteps * xfact
-		nr <- rsteps * yfact			
 	}
+	
 	ymn <- ymax(x) - rsteps * yfact * yres(x)
 	xmx <- xmin(x) + csteps * xfact * xres(x)
+		
 	outRaster <- raster(x, filename)
 	dataType(outRaster) <- datatype
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
 	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
-
-	addcol <- 0
-	addrow <- 0
-	if (expand) {
-		nc <- csteps * xfact
-		nr <- rsteps * yfact
-		if (nc > ncol(x)) { 
-			csteps <- csteps - 1
-			nc <- csteps * xfact
-			addcol <- ncol(x) - nc
-		}
-		if (nr > nrow(x)) { 
-			nr <- (rsteps-1) * yfact
-			addrow <- nrow(x) - nr
+	
+	
+	if (na.rm) {
+		# this avoid warning messages 
+		narmfun <- function(x) { 
+			x <- na.omit(x)
+			if (length(x) == 0) { 
+				return(NA)
+			} else { 
+				return( fun(x) )
+			}
 		}
 	}
-	ncells <- xfact * yfact
 	
-	if (dataContent(x) == 'all' | dataSource(x) == 'disk') { 
-		if (dataContent(x) == 'all') { 
-			mem <- TRUE 
-			ncolumns <- ncol(x)
+	if (dataContent(x) == 'all') {	
+		cols <- rep(rep(1:csteps, each=xfact)[1:ncol(x)], times=nrow(x))
+		rows <- rep(1:rsteps, each=ncol(x) * yfact)[1:ncell(x)]
+		cells <- cellFromRowCol(x, rows, cols)
+		
+		if (na.rm) {
+			outRaster <- setValues(outRaster, as.vector( tapply(values(x), cells, narmfun ))) 
 		} else {
-			mem <- FALSE
+			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
 		}
+		if (outRaster@file@name != "") {
+			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+		}
+
+	} else if ( dataSource(x) == 'disk') { 
 		if (!canProcessInMemory(x, 2) && filename == '') {
 			filename <- tempfile()
 			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
+		
+		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
+		rows <- rep(1, each=(ncol(x) * yfact))
 		v <- vector(length=0)
-		newcols <- ncol(outRaster)
-		vals <- vector(length=newcols)
+
+		theserows <- startrow * rows
+		cells <- cellFromRowCol(x, theserows, cols)
 		nrows = yfact
 
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
-			if (r==rsteps & addrow > 0) {
-				nrows <- addrow
-				ncells <- xfact * nrows
-			}
-			if (mem) {
-				firstcell <- (startrow-1) * ncolumns + 1
-				lastcell <- firstcell + ncolumns * nrows - 1
-				a <- matrix(x@data@values[firstcell:lastcell], nrow=nrows, byrow=T)
-			} else {
-				x <- readRows(x, startrow = startrow, nrows = nrows)
-				a <- matrix(x@data@values, nrow=nrows, byrow=T)
-			}
+			if ( r==rsteps) {
+				endrow <- min(nrow(x), startrow + yfact - 1)
+				nrows <- endrow - startrow + 1
+				theserows <- (startrow * rows)[1:(ncol(x)*nrows)]
+				cols <- cols[1:(ncol(x)*nrows)]
+				cells <- cellFromRowCol(x, theserows, cols)
+			}	
+			x <- readRows(x, startrow = startrow, nrows = nrows)
 			
-			if (addcol > 0) {
-				b <- a[,(nc+1):(nc+addcol)] 
-				a <- a[,1:nc]
-			}
-			a <- matrix(as.vector(a), nrow=ncells)
 			if (na.rm) { 
-				for (i in 1:csteps) {
-					vals[i] <- narmfun(a[,i])
-				}
-#				vals <- apply(a, 2, narmfun ) 
+				vals <- tapply(values(x), cells, narmfun ) 
 			} else { 
-#				vals <- apply(a, 2, fun) 
-				for (i in 1:csteps) {
-					vals[i] <- fun(a[,i])
-				}
+				vals <- tapply(values(x), cells, fun) 
 			}
-			if (addcol > 0) {
-				if (na.rm) { 	
-					vals[newcols] <- narmfun(b)
-				} else {
-					vals[newcols] <- fun(b)			
-				}
-			}
+			vals <- as.vector(vals)
+
 			if (outRaster@file@name == "") {
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
-			}			
+			}
+			
 			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
+			
 		} 
-
 		if (outRaster@file@name == "") { 
 			outRaster <- setValues(outRaster, v) 
 		}
@@ -144,4 +120,3 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	return(outRaster)
 }
 
-)

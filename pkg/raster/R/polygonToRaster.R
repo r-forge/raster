@@ -88,14 +88,26 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	
 	npol <- length(spPolys@polygons)
 	
-	if (field < 0) {
+	if (length(field) > 1) { 
+		stop('field should be a single value') 
+	}
+	if (is.numeric(field) & field < 0) {
 		putvals <- rep(1, length=npol)	
 	} else if (class(spPolys) == 'SpatialPolygons' | field == 0) {
 		putvals <- as.integer(1:npol)
 	} else {
+		if (is.character(field)){ 
+			if (!(field %in% colnames(spPolys@data))) {
+				stop('field does not exist')
+			}
+		} else if (is.numeric(field)){ 
+			if (field > dim(spPolys@data)[2]) {
+				stop('field index too large')
+			}
+		}
 		putvals <- as.vector(spPolys@data[[field]])
 		if (class(putvals) == 'character') {
-			stop('selected field is charater type')
+			stop('selected field is character type')
 		}
 	}
 
