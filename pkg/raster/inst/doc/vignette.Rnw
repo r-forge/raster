@@ -1,0 +1,131 @@
+\documentclass{article}
+
+\usepackage{natbib}
+\usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{indentfirst}
+\usepackage[utf8]{inputenc}
+
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+
+% \VignetteIndexEntry{raster package}
+
+\begin{document}
+
+<<foo,include=FALSE,echo=FALSE>>=
+options(keep.source = TRUE, width = 60)
+foo <- packageDescription("raster")
+@
+
+\title{The "raster" package (Version \Sexpr{foo$Version})}
+\author{Robert J. Hijmans}
+\maketitle
+
+\section{Abstract}
+
+This is an vignette for the \verb@raster@ package in R.  The \verb@raster@ package deals with basic spatial raster (grid) data access and manipulation. It defines raster classes; can deal with very large files (stored on disk); and includes standard raster management and  manipulation functions. The purpose of the 'raster' package is to provide easy to use functions for raster manipulation and analysis. These include high level functions such as overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for very large raster datasets that cannot be loaded into memory. In addition, the package provides lower level functions such as row by row reading and writing (to many formats via \verb@rgdal@) for creating other functions that operate on very large files. The package is build around a number of S4 classes of which the RasterLayer and RasterStack classes are the most important. Many generic methods are implemented for RasterLayers (arithmic, logical, plot, hist, ...).
+
+\section{Introduction}
+
+One of the main reasons for developing this package is that we would like to build a bridge to - the powerful statistics and modeling of - R for the "GIS" community. Our perspective is that standard GIS is too map-centric, and that proper data-analysis needs tools that are more model and data centric.
+
+
+bla bla bla normally distributed with mean 0 and standard deviation 2.
+
+\section{Beginning}
+
+A frequentist analysis for the problem is done by the following R statements
+<<raster-1>>=
+library(raster)
+r <- raster()
+r[] <- 1:ncell(r)
+plot(r)
+@
+
+bla bla bla 
+
+<<raster-2>>=
+r <- raster(system.file("external/test.ag", package="sp"))
+r
+r <- readRow(r, 50)
+values(r)
+s <- sqrt(r)
+@
+
+The arguments to the \verb@raster@ function here (there are more we don't use here) are
+\begin{itemize}
+\item an R function (here \verb@xxx@ that density is \verb@-Inf@.
+\item an initial state (here \verb@beta.init@) of the Markov chain.
+\end{itemize}
+
+\citet{geyer-temp} came to a similar conclusion,
+that a 20\% acceptance rate is about right, in a very different situation.
+
+
+Figure~\ref{fig:fig1} (page~\pageref{fig:fig1})
+shows the time series plot made by the R statement
+<<label=fig1too,include=FALSE>>=
+plot(r)
+@
+\begin{figure}
+\begin{center}
+<<label=fig1,fig=TRUE,echo=FALSE>>=
+<<fig1too>>
+@
+\end{center}
+\caption{Here is a map.}
+\label{fig:fig1}
+\end{figure}
+
+Another way to look at the output is an autocorrelation plot.
+Figure~\ref{fig:fig2} (page~\pageref{fig:fig2})
+shows the time series plot made by the R statement
+<<label=fig2too,include=FALSE>>=
+plot(r, s)
+@
+\begin{figure}
+\begin{center}
+<<label=fig2,fig=TRUE,echo=FALSE>>=
+<<fig2too>>
+@
+\end{center}
+\caption{Another plot.}
+\label{fig:fig2}
+\end{figure}
+
+
+\section{RasterStack}
+
+We have added an argument \verb@outfun@ that gives the ``functional''
+
+\subsection{Simple Means}
+
+\subsection{Functions of Means}
+
+
+\section{Future plans}
+In the current version, the design has emphasised simplicity over speed. In later versions we will work on improving speed, which can be very important given the very large size of raster datasets. Currently all code is written in R, for is clarity, and ease of adapation. However, in some future version we would like to also implement C functions to speed up processing of very large datasets. 
+
+
+\begin{thebibliography}{}
+
+\bibitem[Author et al.(1996)Gelman, Roberts, and Gilks]{great-paper}
+Author, A., G.~O. Roberts, and W.~R. Ewing (1996).
+\newblock Efficient jumping.
+\newblock In \emph{Statistics, 5 (Alicante, 1994)}, pp.~599--607.
+  Oxford University Press.
+
+\bibitem[Another(1992)]{practical}
+Another, C.~J. (1992).
+\newblock Practical Theory (with discussion).
+\newblock \emph{Science}, 7, 473--511.
+
+\bibitem[Geyer and Thompson(1995)]{temp}
+Geyser, C.~J. and E.~A. Tson (1995).
+\newblock Monte Carlo simulaion with applications to getting rich.
+\newblock \emph{Journal of the American Capitalist Association}, 90, 909--920.
+
+\end{thebibliography}
+
+\end{document}
