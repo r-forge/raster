@@ -6,10 +6,14 @@
 
 
 setMethod("contour", signature(x='RasterLayer'), 
-	function(x, ...)  {
+	function(x, maxdim=1000, add=TRUE, ...)  {
 		if (dataContent(x) != 'all') { 
 #	to do: should  test if can read, else sample
-			x <- readAll(x) 
+			if (canProcessInMemory(x, 2)) {
+				x <- readAll(x) 
+			} else {
+				x <- sampleSkip(x, maxdim, asRaster=TRUE)
+			}
 		}
 		contour(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
 	}
