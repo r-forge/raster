@@ -32,7 +32,7 @@ A BoundingBox object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{setBoungingBox}}, \code{\link[raster]{drawBbox}} }
+\seealso{ \code{\link[raster]{setExtent}}, \code{\link[raster]{drawBox}} }
 
 \examples{
 r <- raster()

@@ -29,7 +29,7 @@ click(object, n=1, xy=FALSE, type = "n", ...)
 The value(s) of \code{object} at the point(s) clicked on; and the coordinates if \code{xy==TRUE}.
 } 
 
-\seealso{ \code{\link[raster]{drawBbox}} }
+\seealso{ \code{\link[raster]{drawBox}} }
 
 \author{ Robert J. Hijmans }
 

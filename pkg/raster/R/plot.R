@@ -6,18 +6,18 @@
 
 
 setMethod("plot", signature(x='RasterStack', y='ANY'), 
-	function(x, y, ...)  {
+	function(x, y, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
 		if (missing(y)) {
 			nl <- nlayers(x)
-			if (nl > 25) {
-				warning('only first 25 layers are mapped')
-				nl <- 25
+			if (nl > 12) {
+				warning('only first 12 layers are plotted')
+				nl <- 12
 			}
 			nc <- ceiling(sqrt(nl))
 			nr <- ceiling(nl / nc)
 			par(mfrow=c(nr, nc))
 			for (i in 1:nl) {
-				.plotraster(x, index=i, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+				.plotraster(x, index=i, col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 			}
 		} else if (is.numeric(y)) {
 			y <- unique(as.integer(round(y)))
@@ -28,10 +28,10 @@ setMethod("plot", signature(x='RasterStack', y='ANY'),
 				par(mfrow=c(nr, nc))
 				par(mfrow=c(nr, nc))
 				for (i in 1:length(y)) {
-					.plotraster(x, index=y[i], col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+					.plotraster(x, index=y[i], col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 				}
 			} else {
-				.plotraster(x, index=y, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+				.plotraster(x, index=y, col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 			}		
 		}
 	}
@@ -39,8 +39,8 @@ setMethod("plot", signature(x='RasterStack', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, ...)  {
-		.plotraster(x, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) 
+	function(x, col=rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
+		.plotraster(x, col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 	}
 )	
 
@@ -58,4 +58,3 @@ setMethod("plot", signature(x='RasterLayer', y='RasterLayer'),
 	}
 )
 	
-

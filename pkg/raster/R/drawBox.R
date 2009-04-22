@@ -8,7 +8,7 @@
 
 
 
-drawBbox <- function(show=TRUE, col="red") {
+drawBox <- function(show=TRUE, col="red") {
 	loc <- locator(n=2, type="p")
 	bb <- newBbox(min(loc$x), max(loc$x), min(loc$y), max(loc$y))
 	if (show) {

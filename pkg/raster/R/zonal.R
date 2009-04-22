@@ -7,8 +7,11 @@
 zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
 
 	if (class(stat) != 'character') {
-		if (canProcessInMemory(raster, 4)) {
-			d <- cbind(values(readAll(raster)), as.integer(values(readAll(zones))))
+		if (canProcessInMemory(raster, 3)) {
+			d <- values(readAll(raster))
+			rm(raster)
+			d <- cbind(d, as.integer(values(readAll(zones))))
+			rm(zones)
 			if (keepdata) {
 				d <- na.omit(d)
 			}

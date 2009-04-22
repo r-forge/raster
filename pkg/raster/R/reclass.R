@@ -33,7 +33,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 			if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
 				res[ is.na(values(raster)) ] <- rclmat[i, 3] 
 			} else { 
-				res[ (values(raster) > rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
+				res[ (values(raster) >= rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
 			}
 		}
 		if ( dataContent(raster) == 'all') { 

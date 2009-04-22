@@ -1,12 +1,12 @@
-\name{drawBbox}
-\alias{drawBbox}
+\name{drawBox}
+\alias{drawBox}
 
 \title{ Draw Bounding Box }
 \description{
   Click on two points of a plot (map) to obtain a BoundingBox object  
 }
 \usage{
-drawBbox(show = TRUE, col = "red") 
+drawBox(show = TRUE, col = "red") 
 }
 
 \arguments{
@@ -25,8 +25,8 @@ drawBbox(show = TRUE, col = "red")
 r1 <- raster(nrow=10, ncol=10)
 r1[] <- runif(ncell(r1))
 #plot(r1)
-#bb <- drawBbox()
-#mean(values(crop(r1, drawBbox())))
+#bb <- drawBox()
+#mean(values(crop(r1, drawBox())))
 
 
 

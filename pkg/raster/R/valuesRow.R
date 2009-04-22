@@ -9,7 +9,7 @@
 
 valuesRow <- function(object, rownr) {
 	if (dataContent(object) == 'nodata') {
-		stop('no values in memory. First read or set values')
+		return(values(readRow(object, rownr)))
 	}
 	if (rownr < 0) {
 		if (dataContent(object) == 'all') {
