@@ -57,4 +57,4 @@ setMethod("plot", signature(x='RasterLayer', y='RasterLayer'),
 		plot(x, y, cex=cex, ...)			
 	}
 )
-	
+

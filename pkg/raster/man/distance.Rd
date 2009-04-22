@@ -30,13 +30,12 @@ distance(object, filename = "", filetype = "raster", overwrite = FALSE, datatype
 }
 
 
-
 \seealso{ For more options (directions, cost-distance) see the \code{ \link[gdistance]{gdistance}} package } 
 
 
 \examples{
 r1 <- raster(ncol=36,nrow=18)
-r1[] <- 0
+r1[] <- NA
 r1[345:355] <- 1
 distmap <- distance(r1) 
 #plot(distmap)
