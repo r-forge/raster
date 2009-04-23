@@ -5,8 +5,29 @@
 
 
 rasterFromFile <- function(filename, values=FALSE, band=1) {
-	stop("'rasterFromFile' is deprecated. Use 'raster(filename)' instead")
+	stop("'rasterFromFile' has been removed. Use 'raster(filename)' instead")
 }	
+
+
+..shortFileName <- function(filename) {
+# is this the same as basename ?
+    filename <- gsub("\\\\", "/", filename)
+	if (filename == "") {return(filename)
+	} else {
+		split <- strsplit(filename, "/")
+		l <- length(split[[1]])
+		shortfilename <- split[[1]][[l]]
+		return(shortfilename)
+	}	
+}   
+   
+..path <- function(filename) {
+#  use dirname instead
+    filename <- gsub("\\\\", "/", filename)
+	file <- ..shortFileName(filename)
+	path <- gsub(file, '', filename)
+	return(path)
+}   
 
 
 ...isNA <- function(raster, value=0, filename="", overwrite=FALSE, asInt=FALSE) {

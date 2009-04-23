@@ -21,7 +21,7 @@ zonal(raster, zones, stat='mean', keepdata=TRUE, track=-1)
 }
 
 \details{
-If \code{stat} is a \code{function}, \code{zonal} will fail for very large RasterLayers
+If \code{stat} is a \code{function}, \code{zonal} will fail (gracefully) for very large RasterLayers
 }
 
 \value{

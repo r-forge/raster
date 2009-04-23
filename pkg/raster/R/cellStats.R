@@ -4,13 +4,11 @@
 # Version 0.8
 # Licence GPL v3
 
-cellStats <- function(x, ..., na.rm=TRUE) {
+.Old.cellStats <- function(x, ..., na.rm=TRUE) {
 	funs <- list(...)
 	if (length(funs) == 0) {
 		stop('you must provide a function as argument')
 	}
-	
-
 	res <- list()
 	if (dataContent(x) != 'all') {
 		if (dataSource(x) == 'ram') {

@@ -11,24 +11,21 @@
 }
 
 \usage{
-cellStats(x, ..., na.rm=TRUE)
+cellStats(raster, stat='mean', track=-1)
 }
 
 \arguments{
-  \item{x}{A vector of numbers (typically integers for mode)}
-  \item{...}{one or more applicable functions}
-  \item{na.rm}{Remove (ignore) NA values}
+  \item{raster}{A RasterLayer}
+  \item{stat}{The function to be applied. Either as character: 'mean', 'min', 'max', 'sum'; or a function (see Details) }
+  \item{track}{vector of row numbers for which the function will report that they have been processed}   
 }
 
 \value{
-  depends on the function(s) passed as ... argument. Typically a numeric value.
+  A numeric value.
 }
 
 \details{
-valid functions are those that take a numeric vector as argument, and return a single value. 
-For example: \code{min}, \code{max}, \code{mean}
-
-This function does not work for very large raster datasets (as all the data need to be loaded into memory).
+If \code{stat} is a \code{function}, \code{zonal} will fail (gracefully) for very large RasterLayers
 }
 
 \seealso{ \code{\link[raster]{setMinMax} } }
@@ -38,7 +35,10 @@ This function does not work for very large raster datasets (as all the data need
 \examples{
 r <- raster(nrow=18, ncol=36)
 r[] <- runif(ncell(r)) * 10
-cellStats(r, min, max)
+# works for large files
+cellStats(r, 'mean')
+# does not work for very large files
+cellStats(r, mean)
 }
 
 \keyword{univar}

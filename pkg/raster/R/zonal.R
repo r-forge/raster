@@ -8,9 +8,15 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
 
 	if (class(stat) != 'character') {
 		if (canProcessInMemory(raster, 3)) {
-			d <- values(readAll(raster))
+			if (dataContent(raster) != 'all') {
+				raster <- readAll(raster)
+			}
+			d <- values(raster)
 			rm(raster)
-			d <- cbind(d, as.integer(values(readAll(zones))))
+			if (dataContent(zones) != 'all') {
+				zones <- readAll(zones)
+			}
+			d <- cbind(d, as.integer(values(zones)))
 			rm(zones)
 			if (keepdata) {
 				d <- na.omit(d)
@@ -18,7 +24,7 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
 			alltab  <-  tapply(d[,1], d[,2], stat) 
 			stat <- deparse(substitute(stat))
 		} else {
-			stop("RasterLayers are too large. You an use fun='sum', 'mean', 'min', or 'max', but not a function")
+			stop("RasterLayers are too large. You can use fun='sum', 'mean', 'min', or 'max', but not a function")
 		}
 	} else {
 

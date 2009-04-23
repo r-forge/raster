@@ -3,29 +3,31 @@
 \alias{moveRasterFile}
 \alias{copyRasterFile}
 \alias{removeRasterFile}
-\alias{removeFile}
 
 \title{move or copy a raster file}
 
 \description{
-Move, copy or remove 'raster' format files. removeRaster removes the files on disk that are associated with the RasterLayer object.
+Move, copy or remove 'raster' format files that are associated with the RasterLayer object.
 }
 
 \usage{
 moveRasterFile(raster, filename, overwrite=FALSE)
 copyRasterFile(raster, filename, overwrite=FALSE)
-removeRasterFile(filename)
-removeFile(raster)
+removeRasterFile(raster)
 }
 
 \arguments{
 \item{raster}{RasterLayer object that is associated with a file on disk}
-\item{filename}{Output filename}  
+\item{filename}{New filename}
 \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
 }
 
 \value{
 a RasterLayer
+}
+
+\details{
+\code{removeRasterFile} can also take a filename as argument in stead of a RasterLayer. 
 }
 
 \author{Robert J. Hijmans}
