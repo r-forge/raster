@@ -15,7 +15,7 @@ setMethod("contour", signature(x='RasterLayer'),
 				x <- sampleSkip(x, maxdim, asRaster=TRUE)
 			}
 		}
-		contour(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
+		contour(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), add=add, ...)
 	}
 )
 
