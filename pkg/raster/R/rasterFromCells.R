@@ -9,7 +9,7 @@ rasterFromCells <- function(object, cells) {
 	x <- unique(cells)
 	cols <- colFromCell(object, x)
 	rows <- rowFromCell(object, x)
-	res <- resolution(object)
+	res <- res(object)
 	x1 <- xFromCol(object, min(cols)) - 0.5 * res[1]
 	x2 <- xFromCol(object, max(cols)) + 0.5 * res[1]
 	y1 <- yFromRow(object, max(rows)) - 0.5 * res[2]

@@ -11,7 +11,7 @@ expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=F
 	if (is.null(filename)) { filename <- "" }
 	
 	bndbox <- extent(bndbox)
-	res <- resolution(raster)
+	res <- res(raster)
 # snap points to pixel boundaries
 	xmn <- round(xmin(bndbox) / res[1]) * res[1]
 	xmx <- round(xmax(bndbox) / res[1]) * res[1]

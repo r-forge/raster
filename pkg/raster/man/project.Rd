@@ -59,7 +59,7 @@ newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100 +ellps=WGS84"
 # create a new RasterLayer with a BoundingBox with the new projection
 projras <- projectBbox(r, newproj)
 # Adjust the cell size 
-projras <- setRes(projras, 100000)
+res(projras) <- 100000
 # project the values of RasterLayer 'r' to the new RasterLayer 'projras'
 projras <- projectRaster(r, projras)
 # inverse projection, back to the properties of 'r'

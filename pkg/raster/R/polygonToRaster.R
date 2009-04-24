@@ -259,9 +259,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 
 
 .polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", datatype='FLT4S', overwrite=FALSE) {
-#  This is based on sampling by points. Should be slower except when  polygons very detailed and raster las ow resolution
+#  This is based on sampling by points. Should be slower except when  polygons very detailed and raster  has low resolution
 # but it could be optimized further
-
+# currently not used. Perhaps it should be used under certain conditions. 
 # this version does not deal with polygon holes 
 
 # check if bbox of raster and spPolys overlap

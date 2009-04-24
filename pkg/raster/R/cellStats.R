@@ -37,6 +37,7 @@ cellStats <- function(raster, stat='mean', track=-1) {
 		st  <- NULL
 		starttime <- proc.time()
 		for (r in 1:nrow(raster)) {
+			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime)  }
 			d <- na.omit(valuesRow(raster, r))
 			if (length(d) == 0) { next }
 			if (stat == 'sd') {
@@ -49,9 +50,6 @@ cellStats <- function(raster, stat='mean', track=-1) {
 			} else {
 				st <- fun(c(d, st))
 			}
-			if (r %in% track) { 
-				.showTrack(r, raster@nrows, track, starttime) 
-			}
 		}
 		if (stat == 'sd') {
 			meansq <- (st/cnt)^2
@@ -62,4 +60,6 @@ cellStats <- function(raster, stat='mean', track=-1) {
 		return(st)
 	}
 }
+
+
 

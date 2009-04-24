@@ -2,6 +2,7 @@
 
 \docType{methods}
 
+\alias{plot}
 \alias{plot,RasterLayer,missing-method}
 \alias{plot,RasterStack,ANY-method}
 \alias{plot,RasterLayer,RasterLayer-method}
@@ -11,6 +12,7 @@
 \description{
 Plot (that is, make a map of) the values of a RasterLayer or RasterStack, or make a scatterplot of their values.
 }
+
 
 
 \section{Methods}{

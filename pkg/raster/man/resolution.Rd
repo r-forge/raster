@@ -2,7 +2,9 @@
 
 \alias{xres}
 \alias{yres}
-\alias{resolution}
+\alias{res}
+\alias{res<-}
+
 
 \title{Resolution}
 
@@ -13,11 +15,13 @@
 \usage{
 xres(object)
 yres(object)
-resolution(object)
+res(object)
+res(object) <- value
 }
 
 \arguments{
   \item{object}{Raster* object}
+  \item{value}{depends on context. Can be row or column number or resolution }  
 }
 
 
@@ -33,7 +37,13 @@ A single numeric value or two numeric values.
 r <- raster(ncol=18, nrow=18)
 xres(r)
 yres(r)
-resolution(r)
+res(r)
+
+res(r) <- 1/120
+# set yres diffrently
+res(r) <- c(1/120, 1/60)
+
+
 }
 
 \keyword{spatial}

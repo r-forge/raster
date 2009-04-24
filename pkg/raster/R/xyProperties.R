@@ -33,7 +33,7 @@ yres <- function(object) {
 	return ( (ymax(object) - ymin(object)) / nrow(object))  
 }
 
-resolution <- function(object) {
+res <- function(object) {
 	return(c(xres(object), yres(object)))
 }
 

@@ -40,7 +40,7 @@
 	dataType(outRaster) <- datatype
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
-	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
+	rowcol(outRaster) <- c(rsteps, csteps) 
 	
 	
 	if (na.rm) {

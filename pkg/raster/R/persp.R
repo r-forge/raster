@@ -4,12 +4,12 @@
 # Version 0.8
 # Licence GPL v3
 
-if (!isGeneric("contour")) {
-	setGeneric("contour", function(x,...)
-		standardGeneric("contour"))
+if (!isGeneric("persp")) {
+	setGeneric("persp", function(x,...)
+		standardGeneric("persp"))
 }	
 
-setMethod("contour", signature(x='RasterLayer'), 
+setMethod("persp", signature(x='RasterLayer'), 
 	function(x, maxdim=1000, ...)  {
 		if (dataContent(x) != 'all') { 
 #	to do: should  test if can read, else sample
@@ -19,16 +19,18 @@ setMethod("contour", signature(x='RasterLayer'),
 				x <- sampleSkip(x, maxdim, asRaster=TRUE)
 			}
 		}
-		contour(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
+		value <- t((values(x, format='matrix'))[nrow(x):1,])
+		y <- yFromRow(x, nrow(x):1)
+		x <- xFromCol(x,1:ncol(x))
+		persp(x=x, y=y, z=value, ...)
 	}
 )
 
-
-setMethod("contour", signature(x='RasterStack'), 
+setMethod("persp", signature(x='RasterStack'), 
 	function(x, y=1, maxdim=1000, ...)  {
 		if (y < 1) { y <- 1 }
 		if (y > nlayers(x)) { y <- nlayers(x) }
-		contour(x=x, y=y, maxdim=maxdim, ...)
+		persp(x=x, y=y, maxdim=maxdim, ...)
 	}	
 )
 

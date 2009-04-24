@@ -51,7 +51,7 @@ addLayer <- function(rstack, rasters) {
 			if (class(raster) == 'RasterStack') {
 				rstack <- raster
 			} else {
-				rstack <- setRowCol(rstack, nrow(raster), ncol(raster))
+				rowcol(rstack) <- c(nrow(raster), ncol(raster))
 				rstack <- setExtent(rstack, raster, snap=FALSE)
 				projection(rstack) <- projection(raster)
 

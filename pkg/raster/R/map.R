@@ -38,7 +38,7 @@
 			m <- values(object, format='matrix')[rows, cols]
 
 			sampraster <- raster(object)
-			sampraster <- setRowCol(sampraster, dim(m)[1], dim(m)[2])
+			rowcol(sampraster) <- c(dim(m)[1], dim(m)[2])
 			xmax(sampraster) <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
 			ymin(sampraster) <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)
 			object <- sampraster

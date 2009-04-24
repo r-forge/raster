@@ -30,7 +30,8 @@ compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, toleranc
 	r1 <- raster()
 	r2 <- r1
 	compare(c(r1, r2))
-	r3 <- setRowCol(r1, 10)
+	r3 <- r1
+	nrow(r3) <- 10
 #	compare(c(r1, r3))
 	compare(c(r1, r3), stopiffalse=FALSE)
 	compare(c(r1, r3), rowcol=FALSE)

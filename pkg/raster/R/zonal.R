@@ -46,10 +46,12 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
 		cnttab <- alltab
 		starttime <- proc.time()
 		for (r in 1:nrow(raster)) {
+			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 			d <- cbind(valuesRow(raster, r), as.integer(valuesRow(zones, r)))
 			if (keepdata) {
 				d <- na.omit(d)
 			}
+			if (length(d) == 0) { next }
 			alltab <- c(alltab, tapply(d[,1], d[,2], fun))
 			if (counts) {
 				cnttab <- c(cnttab, tapply(d[,1], d[,2], length))
@@ -61,7 +63,6 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
 					cnttab <- tapply(as.vector(cnttab), groups, sum)
 				}
 			}
-			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 		}
 		groups <- as.integer(names(alltab))
 		alltab <- tapply(as.vector(alltab), groups, fun)

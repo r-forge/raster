@@ -11,7 +11,7 @@
 
 .asSpGrid <- function(object, type='grid', dataframe=TRUE)  {
 	bb <- .toSpBbox(object)
-	cs <- resolution(object)
+	cs <- res(object)
 	cc <- bb[,1] + (cs/2)
 	cd <- ceiling(diff(t(bb))/cs)
 	grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
@@ -120,7 +120,7 @@ setMethod('asRasterLayer', signature(x='RasterStack'),
 		} else {
 			rs <- new("RasterLayer")
 			rs <- setExtent(rs, extent(x))
-			rs <- setRowCol(rs, nrow(x), ncol(x))
+			rowcol(rs) <- c(nrow(x), ncol(x))
 		}
 		return(rs)
 	}
@@ -133,7 +133,7 @@ setMethod('asRasterLayer', signature(x='SpatialPixelsDataFrame'),
 		r <- raster()
 		r <- setExtent(r, extent(x))
 		projection(r) <- x@proj4string
-		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
+		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
 		dindex <- max(1, min(dim(x@data)[2], index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
 # to become an option, but currently support for sparse is too .....  sparse	
@@ -159,7 +159,7 @@ setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'),
 		r <- raster()
 		r <- setExtent(r, extent(x))
 		projection(r) <- x@proj4string
-		r <- setRowCol(r, x@grid@cells.dim[2], x@grid@cells.dim[1])
+		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])		
 		dindex <- max(1, min(dim(x@data)[2], index))
 		if (dindex != index) { warning(paste("index was changed to", dindex))}
 		r <- setValues(r, x@data[[dindex]])
@@ -174,7 +174,7 @@ setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'),
 	stk <- new("RasterStack")
 	stk <- setExtent(stk, extent(spgrid))
 	projection(stk) <- spgrid@proj4string
-	stk <- setRowCol(stk, spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
+	rowcol(stk) <- c(spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
 	
 	if (class(spgrid)=='SpatialPixelsDataFrame') {
 		spgrid <- as(spgrid, 'SpatialGridDataFrame')

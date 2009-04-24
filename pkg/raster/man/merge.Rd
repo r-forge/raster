@@ -61,7 +61,7 @@ A new RasterLayer object, and in some cases, the side effect of a new file on di
 r1 <- raster(xmx=-150, ymn=60, ncols=30, nrows=30)
 r1[] <- 1:ncell(r1)
 r2 <- raster(xmn=-100, xmx=-50, ymx=50, ymn=30)
-r2 <- setRes(r2, xres(r1), yres(r1))
+res(r2) <- c(xres(r1), yres(r1))
 r2[] <- 1:ncell(r2)
 rm <- merge(r1, r2)
 }

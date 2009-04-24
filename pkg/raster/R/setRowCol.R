@@ -5,30 +5,18 @@
 # Licence GPL v3
 
 
-
-setRowCol <- function(object, nrows=nrow(object), ncols=ncol(object)) {
-	if (extends(class(object), "Raster")) {
-		object <- clearValues(object)
-		#object@data@source <- 'ram'
+'rowcol<-' <- function(x, value) {
+	if (length(value) == 1) {
+		value <- c(value, ncol(x))
 	}
-	object@ncols <- as.integer(ncols)
-	object@nrows <- as.integer(nrows)
-	return(object)
-}
-
-setRes <- function(object, xres, yres=xres) {
-	if (extends(class(object), "Raster")) {
-		object <- clearValues(object)
-		#object@data@source <- 'ram'
+	if (value[1] != nrow(x) | value[2] != ncol(x)) {
+		if (extends(class(x), "Raster")) {
+			x <- clearValues(x)
+		}
 	}
-	bb <- extent(object)
-	nc <- round( (bb@xmax - bb@xmin) / xres )
-	nr <- round( (bb@ymax - bb@ymin) / yres )
-	bb@xmax <- bb@xmin + nc * xres
-	bb@ymin <- bb@ymax - nr * yres
-	object	<- setExtent(object, bb)
-	object <- setRowCol(object, nr, nc)
-	return(object)
+	x@nrows <- as.integer(value[1])
+	x@ncols <- as.integer(value[2])
+	return(x)
 }
 
 

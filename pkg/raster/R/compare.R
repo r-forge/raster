@@ -14,7 +14,7 @@ compare <- function(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FAL
 		result <- F
 		stop('The first argument should consist of at least 2 Raster* objects')
 	}	
-	minres <- min(resolution(objects[[1]]))
+	minres <- min(res(objects[[1]]))
 	for (i in 2:length(objects)) { 
 		if (bb) {
 			if (!(isTRUE(all.equal(extent(objects[[1]]), extent(objects[[i]]), tolerance=tolerance, scale=minres )))) {
@@ -44,7 +44,7 @@ compare <- function(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FAL
 		}
 # Can also check res through bb & rowcol
 		if (res) {
-			if (!(isTRUE(all.equal(resolution(objects[[1]]), resolution(objects[[i]]), tolerance=tolerance, scale=minres)))) {
+			if (!(isTRUE(all.equal(res(objects[[1]]), res(objects[[i]]), tolerance=tolerance, scale=minres)))) {
 				result <- F
 				if (stopiffalse)  { stop('different resolution') }
 				if (showwarning) { warning('different resolution') }

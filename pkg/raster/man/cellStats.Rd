@@ -2,12 +2,12 @@
 
 \alias{cellStats}
 
-\title{Statistics for the cells of a single RasterLayer}
+\title{Cell statistics}
 
 \description{
-  Compute statistics for the cells of a single RasterLayer. In this package, functions such as max, min, mean
-  with one or more RasterLayer objects as argument, will return another RasterLayer. CellStats returns a single value, 
-  computed from all the cell values of a single RasterLayer.
+Compute statistics for the cells of a single RasterLayer. In the \code{raster} package, functions such as max, min, and mean,
+when used with a RasterLayer objects as argument, return another RasterLayer. In contrasct, cellStats returns a single value, 
+computed from the values of a single RasterLayer.
 }
 
 \usage{
@@ -15,20 +15,22 @@ cellStats(raster, stat='mean', track=-1)
 }
 
 \arguments{
-  \item{raster}{A RasterLayer}
-  \item{stat}{The function to be applied. Either as character: 'mean', 'min', 'max', 'sum', or 'sd'; or a function (see Details) }
-  \item{track}{vector of row numbers for which the function will report that they have been processed}   
+ \item{raster}{A RasterLayer}
+ \item{stat}{The function to be applied. Either as character: 'mean', 'min', 'max', 'sum', or 'sd'; or a function (see Details) }
+ \item{track}{Vector of row numbers for which the function will report that they have been processed}   
 }
 
 \value{
-  A numeric value.
+A numeric value.
 }
 
 \details{
-If \code{stat} is a \code{function} rather than a character string, \code{zonal} will fail (gracefully) for very large RasterLayers.
+If \code{stat} is a \code{function} rather than a character string, \code{zonal} will fail (gracefully) for very large RasterLayers. In such cases
+you can use the character string function name if applicable. Otherwise you could use a sample of the RasterLayer that can be held in memory (see 
+\link[raster]{readRandom} and \link[raster]{readSkip} )
 
 \code{stat='sd'} returns slightly different values than \code{stat=sd}, because the former computes the standard deviation of the population
-using this \code{sqrt((1/N) * sum(x^2) - mean(x)^2)} formula
+using this formula: \code{sqrt((1/N) * sum(x^2) - mean(x)^2)}
 }
 
 \seealso{ \code{\link[raster]{setMinMax} } }
@@ -40,8 +42,14 @@ r <- raster(nrow=18, ncol=36)
 r[] <- runif(ncell(r)) * 10
 # works for large files
 cellStats(r, 'mean')
-# does not work for very large files
+# same, but does not work for very large files
 cellStats(r, mean)
+
+# not quite the same
+cellStats(r, 'sd')
+cellStats(r, sd)
+
 }
 
+\keyword{spatial}
 \keyword{univar}

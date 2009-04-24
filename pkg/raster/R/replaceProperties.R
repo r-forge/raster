@@ -7,20 +7,15 @@
 
 
 'ncol<-' <- function(x, value) {
-	return( setRowCol(x, ncols=value) )
+	rowcol(x) <- c(nrow(x), value)
+	return(x)
 }	
 
 'nrow<-' <- function(x, value) {
-	return( setRowCol(x, nrows=value) )
+	rowcol(x) <- c(value, ncol(x))
+	return(x)
 }	
 
-'resolution<-' <- function(x, value) {
-	if (length(value) == 1) {
-		return( setRes(x, xres=value, yres=value) )
-	} else {
-		return( setRes(x, xres=value[1], yres=value[2]) )
-	}
-}
 
 'xmin<-' <- function(x, value) {
 	x@bbox@xmin <- value

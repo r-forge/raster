@@ -53,7 +53,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 	dataType(outRaster) <- datatype
 	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
-	outRaster <- setRowCol(outRaster, nrows=rsteps, ncols=csteps) 
+	rowcol(outRaster) <- c(rsteps, csteps) 
 
 	addcol <- 0
 	addrow <- 0
