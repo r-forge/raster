@@ -5,7 +5,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
 KML <- function (raster, filename, col=rainbow(255), maxdim=1000) {
     if (!isLatLon(raster)) { 
         stop("raster must be in geographical coordinates")
@@ -34,7 +33,7 @@ KML <- function (raster, filename, col=rainbow(255), maxdim=1000) {
         "<kml xmlns='http://earth.google.com/kml/2.0'>", "<GroundOverlay>")
     kmname <- paste("<name>", name, "</name>", sep = "")
 	
-    icon <- paste("<Icon><href>", imagefile, "</href><viewBoundScale>0.75</viewBoundScale></Icon>", 
+    icon <- paste("<Icon><href>", basename(imagefile), "</href><viewBoundScale>0.75</viewBoundScale></Icon>", 
         sep = "")
     latlonbox <- paste("<LatLonBox><north>", N, "</north><south>", 
         S, "</south><east>", E, "</east><west>", W, "</west></LatLonBox>", 
@@ -46,6 +45,12 @@ KML <- function (raster, filename, col=rainbow(255), maxdim=1000) {
     x <- append(x, latlonbox)
     x <- append(x, footer)
     cat(paste(x, sep = "", collapse = "\n"), file = kmlfile, sep = "")
+	
+	kmz <- kmlfile
+	ext(kmz) <- '.kmz'
+	com1 <- paste("7za a -tzip", kmz, kmlfile, imagefile)
+	try(	sss <- system(com1, intern=TRUE) , silent = TRUE)
+	
 }
 
 
