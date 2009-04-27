@@ -4,9 +4,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
-
-
 band <- function(object) {
 	if (class(object) == "RasterLayer") {
 		return(object@file@band)
@@ -43,13 +40,17 @@ maxValue <- function(object, layer=1) {
 
 
 .driver <- function(object) {
-	if (class(object@file@con)[1] == 'file') {
+	fcon <- class(try( object@file@con, silent = T ))[1]
+	if (fcon == 'file') {
 		return('raster')
-	} else if (class(object@file@con)[1] == "GDALReadOnlyDataset") {
+	} else if (fcon == "GDALReadOnlyDataset") {
 		return('gdal')
+	} else if (fcon == "try-error") {
+		return('NA')
 	} else {
-		stop('could not determine driver')
+		stop('unknown driver')
 	}
+
 }	
 
 .nodatavalue <- function(object) {
