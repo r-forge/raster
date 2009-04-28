@@ -50,6 +50,7 @@
 		dsize <- dataSize(raster@file@datanotation)
 		dsign <- dataSigned(raster@file@datanotation)
 		
+		raster <- openConnection(raster)
 		if (rownr > 0) {
 			seek(raster@file@con, ((rownr-1) * ncol(raster) + (startcol-1)) * dsize)
 			result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) }	
@@ -57,10 +58,12 @@
 			seek(raster@file@con, 0)
 			result <- readBin(raster@file@con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder) 
 		}
-#		close(con)
+		raster <- closeConnection(raster)
+
 #		result[is.nan(result)] <- NA
 		if (dtype == 'numeric') {
-			result[result <=  (0.999 * .nodatavalue(raster)) ] <- NA 	
+			result[result <=  (0.999999 * .nodatavalue(raster)) ] <- NA 	
+			result[is.nan(result)] <- NA
 		} else {
 			result[result == raster@file@nodatavalue ] <- NA 			
 		}
@@ -80,8 +83,10 @@
 				reg <- c(1, ncolumns)
 			}
 		}
-		result <- getRasterData(raster@file@con, offset=offs, region.dim=reg, band = raster@file@band)
 		
+		raster <- openConnection(raster)
+		result <- getRasterData(raster@file@con, offset=offs, region.dim=reg, band = raster@file@band)
+		raster <- closeConnection(raster)
 	
 		# if  NAvalue() has been used.....
 		if (raster@file@nodatavalue < 0) {
@@ -101,8 +106,7 @@
 		firstcell <- cellFromRowCol(raster, rownr, 1)
 		lastcell <- cellFromRowCol(raster, rownr, raster@ncols)
 		raster@data@indices <- c(firstcell, lastcell)
-	}
-	
+	}	
 	return(raster)
 }
 

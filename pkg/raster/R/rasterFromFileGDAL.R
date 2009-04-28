@@ -52,7 +52,7 @@
 
 	projection(raster) <- attr(gdalinfo, "projection")
 	
-	attr(raster@file, "con") <- GDAL.open(filename)
+#	attr(raster@file, "con") <- GDAL.open(filename)
 	
 #oblique.x   0  #oblique.y   0 
 	raster@data@source <- 'disk'

@@ -34,7 +34,7 @@
 	.writeRasterHdr(raster) 
 	close(raster@file@con)
 	fnamevals <- .setFileExtensionValues(raster@file@name)
-	attr(raster@file, "con") <- file(fnamevals, "rb")
+#	attr(raster@file, "con") <- file(fnamevals, "rb")
 	raster@data@haveminmax <- TRUE
 	raster@data@source <- 'disk'
 	raster@data@content <- 'nodata'

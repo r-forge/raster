@@ -23,6 +23,7 @@
 	projstring <- ""
 	minval <- NA
 	maxval <- NA
+	nodataval <- -Inf
 	
 	for (i in 1:length(ini[,1])) {
 		if (ini[i,2] == "MINX") {xn <- as.numeric(ini[i,3])} 
@@ -47,7 +48,7 @@
 #		else if (ini[i,2] == "NCELLVALS") {ncellvals <- ini[i,3]} 
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
     }  
-
+	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
     raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
 	filename(raster) <- filename
 #	raster@file@driver <- "raster"
@@ -69,7 +70,7 @@
 
 	raster@data@source <- 'disk'
 
-	attr(raster@file, "con") <- file(grifile, "rb")
+#	attr(raster@file, "con") <- file(grifile, "rb")
 
     return(raster)
 }

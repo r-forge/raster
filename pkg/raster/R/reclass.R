@@ -22,8 +22,15 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 		print(rclmat)
 	}
 	
-	outraster <- raster(raster, filename)
-	dataType(outraster) <- datatype
+	if (dataContent(raster) == 'all') { nr <- 1 } else { nr <- 2 }
+	if (!canProcessInMemory(raster, nr) && filename == '') {
+		filename <- tempfile()
+		if (options('verbose')[[1]]) { cat('writing raster to:', filename(outRaster))	}						
+	}
+	
+	outRaster <- raster(raster)
+	filename(outRaster) <- filename
+	dataType(outRaster) <- datatype
 
 	res <- vector(length = ncol(raster))
 	
@@ -37,13 +44,13 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 			}
 		}
 		if ( dataContent(raster) == 'all') { 
-			outraster <- setValues(outraster, res) 
+			outRaster <- setValues(outRaster, res) 
 		}
 		if ( dataContent(raster) == 'sparse') { 
-			outraster <- setValues(outraster, res,  dataIndices(raster)) 
+			outRaster <- setValues(outRaster, res,  dataIndices(raster)) 
 		}
-		if (outraster@file@name != "" ) {
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
+		if (outRaster@file@name != "" ) {
+			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype) 
 		}
 		
 	} else {
@@ -65,11 +72,11 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 			if (hasNA) {
 				res[ is.na(values(raster)) ] <- namat[1, 3] 				
 			}	
-			outraster <- setValues(outraster, res, r)
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			outRaster <- setValues(outRaster, res, r)
+			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 		}
-		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
+		if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
 	}	
-	return(outraster)
+	return(outRaster)
 }
 

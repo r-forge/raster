@@ -128,7 +128,7 @@
 
 	tempras <- raster(filename(raster) )
 #	raster@file@driver <- 'gdal'
-	attr(raster@file, "con") <- tempras@file@con
+#	attr(raster@file, "con") <- tempras@file@con
 	raster@data@source <- 'disk'
 	return(raster)
 }

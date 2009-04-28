@@ -1,7 +1,7 @@
 \name{advanced writing}
 
 \alias{closeConnection}
-\alias{resetConnection}
+\alias{openConnection}
 \alias{canProcessInMemory}
 
 \title{ advanced writing }
@@ -13,18 +13,15 @@ low level functions for programmers
 In the raster package this function is used to determine wether values should be written to disk (in a temporary file) or not when there was
 no filename supplied to the function.
 
-closeConnection removes the handle to the file on disk that was established by raster(x) (where x is a filename). 
-After the handle is closed, you can no longer read data from the file through the RasterLayer object. 
-You probably do not need to do this; unless you get problems with files that cannot be overwritten (rm() 
-does not immediately remove the handle; it seems). 
+openConnection opens a file connection for reading, closeConnection removes it. 
 
-resetConnection will restore the file connection if it has been lost (e.g. after saving a RasterLayer object to disk).
+
 }
 
 \usage{
 canProcessInMemory(raster, n=4)
 closeConnection(raster)
-resetConnection(raster)
+openConnection(raster)
 }
 
 \arguments{

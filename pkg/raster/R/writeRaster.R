@@ -36,7 +36,7 @@
 	raster <- setMinMax(raster)
 
 	dtype <- .shortDataType(raster@file@datanotation)
-	
+
 	if ( dtype =='INT') {
 		if (xmin(raster) > -32767 & xmax(raster) < 32768) {
 			dataType(raster) <- 'INT2S'
@@ -74,12 +74,14 @@
 		.writeRasterHdr(raster) 
 	}
 	close(raster@file@con)
-	attr(raster@file, "con") <- file(fnamevals, "rb")
+#	attr(raster@file, "con") <- file(fnamevals, "rb")
 	
 	# put logical values back to T/F
-	if ( dtype =='logical') {
+	if ( dtype =='logical' ) {
 		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 		raster@data@values <- as.logical(values(raster))
+	} else if ( dtype =='integer' ) {
+		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 	}
 
 	return(raster)

@@ -40,16 +40,27 @@ maxValue <- function(object, layer=1) {
 
 
 .driver <- function(object) {
-	fcon <- class(try( object@file@con, silent = T ))[1]
-	if (fcon == 'file') {
-		return('raster')
-	} else if (fcon == "GDALReadOnlyDataset") {
-		return('gdal')
-	} else if (fcon == "try-error") {
-		return('NA')
-	} else {
-		stop('unknown driver')
+	fn <- filename(object)
+	if (fn == '') {
+		stop('no file asociated with this object')
 	}
+	fileext <- toupper(ext(fn)) 
+	if ( fileext == ".GRD" | fileext == ".GRI" ) {
+		return('raster')
+	} else {
+		return('gdal')
+	}
+	
+#	fcon <- class(try( object@file@con, silent = T ))[1]
+#	if (fcon == 'file') {
+#		return('raster')
+#	} else if (fcon == "GDALReadOnlyDataset") {
+#		return('gdal')
+#	} else if (fcon == "try-error") {
+#		return('NA')
+#	} else {
+#		stop('unknown driver')
+#	}
 
 }	
 

@@ -65,11 +65,12 @@
 	} else { 
 		dtype <- "integer"
 	}
+	raster <- openConnection(raster)
 	for (i in 1:length(cells)) {
 		seek(raster@file@con, (cells[i]-1) * dsize)
 		res[i] <- readBin(raster@file@con, what=dtype, n=1, size=dsize, endian=raster@file@byteorder) 
 	}
-	seek(raster@file@con, 0)
+	raster <- closeConnection(raster)
 	res[res <=  max(-3e+38, .nodatavalue(raster))] <- NA
 	return(cbind(cells,res))
 }
