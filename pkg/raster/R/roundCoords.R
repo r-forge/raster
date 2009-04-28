@@ -25,6 +25,9 @@ nudgeExtent <- function(object){
 	b@ymin <- floor(b@ymin)
 	b@xmax <- ceiling(b@xmax)
 	b@ymax <- ceiling(b@ymax)
+	if (class(object) == 'BoundingBox') {
+		return(b)
+	}
 	object <- setExtent(object, b)
 	return(object)
 }
