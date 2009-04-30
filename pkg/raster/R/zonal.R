@@ -5,6 +5,7 @@
 # Licence GPL v3
 
 zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
+	compare(c(raster, zones))
 
 	if (class(stat) != 'character') {
 		if (canProcessInMemory(raster, 3)) {

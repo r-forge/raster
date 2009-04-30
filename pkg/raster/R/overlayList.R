@@ -61,6 +61,12 @@
 			}
 			vals <- do.call(fun, vallist)
 			
+			if (r == 1) {
+				if (length(vals) == 1 && ncol(outraster) > 1) {
+					stop('single value returned for a row; inappropriate formula used')
+				}
+			}
+			
 			if (outraster@file@name == "") {
 #				v <- c(v, vals)
 				v[startcells[r]:endcells[r]] <- vals
