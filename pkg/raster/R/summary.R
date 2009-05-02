@@ -8,7 +8,7 @@
 .summaryRasters <- function(rasters, fun, funname, na.rm) {
 
 	if (!canProcessInMemory(rasters[[1]], 4)) {
-		filename <- tempfile()
+		filename <- rasterTmpFile()
 		raster <- raster(rasters[[1]], filename)
 	} else {
 		filename <- ""

@@ -24,7 +24,7 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 	
 	if (dataContent(raster) == 'all') { nr <- 1 } else { nr <- 2 }
 	if (!canProcessInMemory(raster, nr) && filename == '') {
-		filename <- tempfile()
+		filename <- rasterTmpFile()
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(outRaster))	}						
 	}
 	

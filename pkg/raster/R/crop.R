@@ -31,7 +31,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 	} else if ( dataSource(raster) == 'disk') { 
 		
 		if (!canProcessInMemory(outraster, 2) && filename == '') {
-			filename <- tempfile()
+			filename <- rasterTmpFile()
 			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(outraster))	}						
 		}

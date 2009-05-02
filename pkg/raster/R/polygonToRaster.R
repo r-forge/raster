@@ -223,7 +223,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 		rv[holes] <- NA
 		
 		if (updateRaster) {
-			oldvals <- values(readRow(oldraster, r))
+			oldvals <- valuesRow(oldraster, r)
 			if (updateValue == "all") {
 				ind <- which(!is.na(rv))
 			} else if (updateValue == "zero") {

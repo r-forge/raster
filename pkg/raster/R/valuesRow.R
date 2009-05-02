@@ -21,8 +21,6 @@ valuesRow <- function(object, rownr) {
 	if (!(validRow(object, rownr))) {
 		stop(paste(rownr,'is not a valid rownumber')) 
 	}
-	
-	
 	if (dataContent(object) == 'sparse') {
 		return (.valuesRow.sparse(object, rownr)) 
 	} else if (dataContent(object) == 'row') {
@@ -31,7 +29,7 @@ valuesRow <- function(object, rownr) {
 		if (dataIndices(object) == c(startcell, endcell)) {
 			return(values(object))
 		} else {
-			stop('this row is not in memory. First use readRow() or readAll')		
+			return(values(readRow(object, rownr)))
 		}
 	} else if (dataContent(object) == 'block') {
 		firstcol <- colFromCell(object, dataIndices(object)[1])

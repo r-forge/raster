@@ -54,7 +54,7 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 	v <- vector(length=0)
 
 	if (!canProcessInMemory(to, 1) && filename(to) == '') {
-		filename <- tempfile()
+		filename <- rasterTmpFile()
 		filename(to) <- filename
 		if (options('verbose')[[1]]) { cat('writing raster to:', filename(to))	}
 	}

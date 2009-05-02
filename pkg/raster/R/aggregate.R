@@ -80,7 +80,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 			mem <- FALSE
 		}
 		if (!canProcessInMemory(x, 2) && filename == '') {
-			filename <- tempfile()
+			filename <- rasterTmpFile()
 			filename(outRaster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(outRaster))	}						
 		}

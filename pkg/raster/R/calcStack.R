@@ -26,7 +26,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	} else {
 		starttime <- proc.time()
 		if (!canProcessInMemory(x, 4) & filename == '') {
-			filename=tempfile()
+			filename=rasterTmpFile()
 			filename(outraster) <- filename
 		}
 		v <- vector(length=0)

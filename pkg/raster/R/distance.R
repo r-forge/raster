@@ -64,8 +64,8 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 			ncols <- ncol(object)
 
 			m <- c(-Inf, Inf, 0)
-			rsl1 <- reclass(object, m, filename=tempfile(), overwrite=TRUE)
-			rsl2 <- raster(tempfile())
+			rsl1 <- reclass(object, m, filename=rasterTmpFile(), overwrite=TRUE)
+			rsl2 <- raster(rasterTmpFile())
 			
 			if(isLatLon(object)){
 				remainingCells <- TRUE

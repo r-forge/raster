@@ -31,7 +31,7 @@
 			} 
 			return(raster)
 		} else {
-			result <- valuesRow(raster, rownr)[startcol:endcol]
+			stop('cannot read a row of data for a raster that only exists in memory. Use valuesRow(raster, rownr)')
 		}
 		
 	} else if (.driver(raster) == 'raster') {

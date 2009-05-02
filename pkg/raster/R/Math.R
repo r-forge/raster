@@ -16,7 +16,7 @@ setMethod("Math", signature(x='RasterLayer'),
 				dataType(rst) <- 'INT4S'
 			}
 		} else {
-			rst <- raster(x, filename=tempfile())
+			rst <- raster(x, filename=rasterTmpFile())
 			if (fname %in% c('floor', 'ceiling', 'trunc')) {
 				dataType(rst) <- 'INT4S'
 			}
@@ -43,7 +43,7 @@ setMethod("Math2", signature(x='RasterLayer'),
 			}
 			return(x)
 		} else {
-			rst <- raster(x, filename=tempfile())
+			rst <- raster(x, filename=rasterTmpFile())
 			if (digits == 0) {
 				dataType(x) <- 'INT4S'
 			}

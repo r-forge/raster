@@ -38,7 +38,7 @@
 	
 #	GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
 #	typeNum <- match(gdalfiletype, GDALDataTypes, 1) - 1
-# 	my_tempfile <- tempfile()
+# 	my_tempfile <- rasterTmpFile()
 #	gdhandle <- .Call('RGDAL_CreateDataset', driver=driver, as.integer(c(ncol(raster), nrow(raster), nlayers(raster))), as.integer(typeNum), options=NULL, my_tempfile, PACKAGE="rgdal")
 #   transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=gdoptions, handle=gdhandle)
 

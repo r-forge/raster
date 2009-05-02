@@ -71,7 +71,7 @@
 
 	} else if ( dataSource(x) == 'disk') { 
 		if (!canProcessInMemory(x, 2) && filename == '') {
-			filename <- tempfile()
+			filename <- rasterTmpFile()
 			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
 		}

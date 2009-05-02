@@ -8,11 +8,12 @@
 
 
 
-compare <- function(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE, showwarning=FALSE) {
+compare <- function(object, ..., bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE, showwarning=FALSE) {
 	result <- TRUE
+	objects <- c(object, list(...))
 	if (!isTRUE(length(objects) > 1)) {
-		result <- F
-		stop('The first argument should consist of at least 2 Raster* objects')
+		warning('There should be at least 2 Raster* objects to compare')
+		return(result)
 	}	
 	minres <- min(res(objects[[1]]))
 	for (i in 2:length(objects)) { 

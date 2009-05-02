@@ -37,7 +37,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 	} else if ( dataSource(raster) == 'disk') { 
 		
 		if (!canProcessInMemory(outraster) && filename == '') {
-			filename <- tempfile()
+			filename <- rasterTmpFile()
 			filename(outraster) <- filename
 			if (options('verbose')[[1]]) { cat('writing raster to:', filename)	}						
 		}

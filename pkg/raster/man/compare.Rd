@@ -2,18 +2,20 @@
 
 \alias{compare}
   
-\title{ Compare RasterLayer objects }
+\title{Compare}
 
 \description{
-  compare evaluates whether a list of rasters has the same origin, resolution, number of rows and columns, and projection (or a subset of these comparisons).
+Evaluate whether a two or more rasters have the same origin, resolution, number of rows and columns, and projection (or a subset of these comparisons).
+Data values are not compared by this function.
 }
 
 \usage{
-compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE, showwarning=FALSE) 
+compare(object, ..., bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE, showwarning=FALSE) 
 }
 
 \arguments{
-  \item{objects}{vector or list of Raster* objects }
+  \item{object}{A Raster* object }
+  \item{...}{Additional Raster* objects}
   \item{bb}{logical. If \code{TRUE}, bounding boxes are compared}
   \item{rowcol}{logical. If \code{TRUE}, number of rows and columns of the objects are compared}
   \item{prj}{logical. If \code{TRUE} projections are compared.}
@@ -29,12 +31,12 @@ compare(objects, bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, toleranc
 \examples{
 	r1 <- raster()
 	r2 <- r1
-	compare(c(r1, r2))
 	r3 <- r1
+	compare(r1, r2, r3)
 	nrow(r3) <- 10
-#	compare(c(r1, r3))
-	compare(c(r1, r3), stopiffalse=FALSE)
-	compare(c(r1, r3), rowcol=FALSE)
+#	compare(r1, r3)
+	compare(r1, r3, stopiffalse=FALSE)
+	compare(r1, r3, rowcol=FALSE)
 }
 
 \keyword{ spatial }

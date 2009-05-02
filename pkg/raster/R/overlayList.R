@@ -36,7 +36,7 @@
 	} else {
 		if (outraster@file@name == "") {
 			if (!canProcessInMemory(outraster, 4)) {
-				filename <- tempfile()
+				filename <- rasterTmpFile()
 				filename(outraster) <- filename
 			} else {
 				v  <- vector(length=ncell(outraster))
