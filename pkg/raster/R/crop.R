@@ -33,7 +33,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 		if (!canProcessInMemory(outraster, 2) && filename == '') {
 			filename <- rasterTmpFile()
 			filename(outraster) <- filename
-			if (options('verbose')[[1]]) { cat('writing raster to:', filename(outraster))	}						
+			if (getOption('verbose')) { cat('writing raster to:', filename(outraster))	}						
 		}
 		
 		starttime <- proc.time()

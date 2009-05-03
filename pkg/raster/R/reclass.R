@@ -18,14 +18,14 @@ reclass <- function(raster, rclmat, filename="", overwrite=FALSE, filetype='rast
 	if ( dim(rclmat)[2] != 3 ) { stop('rclmat must have 3 columns') }
 	colnames(rclmat) <- c("From", "To", "Becomes")	
 	
-	if (options('verbose')[[1]]) {
+	if (getOption('verbose')) {
 		print(rclmat)
 	}
 	
 	if (dataContent(raster) == 'all') { nr <- 1 } else { nr <- 2 }
 	if (!canProcessInMemory(raster, nr) && filename == '') {
 		filename <- rasterTmpFile()
-		if (options('verbose')[[1]]) { cat('writing raster to:', filename(outRaster))	}						
+		if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 	}
 	
 	outRaster <- raster(raster)

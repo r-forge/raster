@@ -28,7 +28,11 @@ setTmpDir(d=NULL)
 }
 
 \arguments{
-\item{d}{The new temporary files directory (for this session)}
+\item{d}{The new temporary files directory (for this session); If \code{d} is \code{NULL}, temp dir is set to the default temporary directory}
+}
+
+\details{
+\code{setTmpDir} creates a global option called rasterTmpDir. See ?options.
 }
 
 \value{
@@ -43,13 +47,10 @@ setTmpDir(d=NULL)
 setTmpDir(d=NULL) sets a global option for the current sessions, but returns nothing
 }
 
-\details{
-\code{removeRasterFile} can also take a filename as argument in stead of a RasterLayer. 
-}
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[base]{tempdir}} }  
+\seealso{ \code{\link[base]{tempfile}} }  
 
 
 \keyword{ spatial }

@@ -22,7 +22,7 @@ canProcessInMemory <- function(raster, n=4) {
 			return(TRUE)
 		}
 	} else {
-		w <- options('warn')[[1]]
+		w <- getOption('warn')
 		options('warn'=-1) 
 		r <- try( matrix(NA, ncol=n, nrow=cells), silent=TRUE )
 		options('warn'= w) 

@@ -56,7 +56,7 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 	if (!canProcessInMemory(to, 1) && filename(to) == '') {
 		filename <- rasterTmpFile()
 		filename(to) <- filename
-		if (options('verbose')[[1]]) { cat('writing raster to:', filename(to))	}
+		if (getOption('verbose')) { cat('writing raster to:', filename(to))	}
 	}
 	starttime <- proc.time()
 

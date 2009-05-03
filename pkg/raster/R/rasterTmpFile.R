@@ -17,7 +17,7 @@ setTmpDir <- function(d=NULL) {
 
 
 rasterTmpDir <- function() {
-	d <- options('rasterTmpDir')[[1]]
+	d <- getOption('rasterTmpDir')
 	if (is.null(d)) {
 		d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
 	}

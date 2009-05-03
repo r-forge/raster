@@ -30,7 +30,7 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 	
 	if (!canProcessInMemory(outraster, 3) && filename == '') {
 		filename <- rasterTmpFile()
-		if (options('verbose')[[1]]) { cat('writing raster to:', filename)	}						
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
 	filename(outraster) <- filename
 	

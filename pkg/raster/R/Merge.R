@@ -51,7 +51,7 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 	if (!canProcessInMemory(x, 2) && filename == '') {
 		filename <- rasterTmpFile()
 		filename(outraster) <- filename
-		if (options('verbose')[[1]]) { cat('writing raster to:', filename(raster))	}						
+		if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 	}
 
 	starttime <- proc.time()

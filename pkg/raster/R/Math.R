@@ -24,7 +24,7 @@ setMethod("Math", signature(x='RasterLayer'),
 				rst <- setValues(rst, callGeneric( .getRowValues(x, r) ), r)
 				rst <- writeRaster(rst)
 			}
-			if (options('verbose')[[1]]) {
+			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
 			}
 		}

@@ -82,7 +82,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		if (!canProcessInMemory(x, 2) && filename == '') {
 			filename <- rasterTmpFile()
 			filename(outRaster) <- filename
-			if (options('verbose')[[1]]) { cat('writing raster to:', filename(outRaster))	}						
+			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 		}
 		starttime <- proc.time()
 		v <- vector(length=0)

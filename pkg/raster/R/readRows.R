@@ -12,7 +12,7 @@
 	
 	endrow <- startrow+nrows-1
 	if (endrow > nrow(raster)) {
-		if (options('verbose')[[1]]) { 
+		if (getOption('verbose')) { 
 			warning("Rows beyond end of raster not read") 
 		}
 		endrow <- nrow(raster)
