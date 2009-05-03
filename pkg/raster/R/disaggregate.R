@@ -19,50 +19,44 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 	} else {
 		stop('length(fact) should be 1 or 2')
 	}
-	
-	outraster <- raster(raster, filename)
+	filename <- trim(filename)
+	outraster <- raster(raster)
 	dataType(outraster) <- datatype
 	rowcol(outraster) <- c(nrow(raster) * yfact, ncol(raster) * xfact) 
+
+	if (dataContent(raster) == 'nodata' & dataSource(raster) == 'ram') {
+		return(outraster)
+	}
 	
-	if ( dataContent(raster)=='all') {
-		
+	if (!canProcessInMemory(outraster, 3) && filename == '') {
+		filename <- rasterTmpFile()
+		if (options('verbose')[[1]]) { cat('writing raster to:', filename)	}						
+	}
+	filename(outraster) <- filename
+	
+	if ( filename == "" ) {
+		if (dataContent(raster) != 'all') {
+			raster <- readAll(raster)
+		}
 		cols <- rep(rep(1:ncol(raster), each=xfact), times=nrow(raster)*yfact)
 		rows <- rep(1:nrow(raster), each=ncol(raster)*xfact*yfact)
 		cells <- cellFromRowCol(raster, rows, cols)
 		outraster <- setValues(outraster, values(raster)[cells])
-		if (outraster@file@name != "") {
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
-		}
 		
-	} else if ( dataSource(raster) == 'disk') { 
-		
-		if (!canProcessInMemory(outraster) && filename == '') {
-			filename <- rasterTmpFile()
-			filename(outraster) <- filename
-			if (options('verbose')[[1]]) { cat('writing raster to:', filename)	}						
-		}
-	
-		starttime <- proc.time()
-		
+	} else { 
+		# to speed up valuesRow
+		if (dataContent(raster) != 'all') { raster <- clearValues(raster) }
+		starttime <- proc.time()		
 		v <- vector(length=0)
 		cols <- rep(1:ncol(raster), each=xfact)
 		for (r in 1:nrow(raster)) {
-			raster <- readRow(raster, r)
+			vals <- valuesRow(raster, r)
 			for (i in 1:yfact) {
-			
-				if (outraster@file@name == "") {
-					v <- c(v, values(raster)[cols])
-				} else {
-					outraster <- setValues(outraster, values(raster)[cols], (r-1) * xfact + i)
-					outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
-				}	
+				outraster <- setValues(outraster, vals[cols], (r-1) * xfact + i)
+				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}	
+			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
 		}
-		if (outraster@file@name == "") { 
-			outraster <- setValues(outraster, v) 
-		}
-
-		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 	} 
 	return(outraster)
 }
