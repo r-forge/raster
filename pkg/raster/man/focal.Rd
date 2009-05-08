@@ -49,9 +49,6 @@ r <- raster(ncols=36, nrows=18)
 r[] <- runif(ncell(r)) 
 rf <- focal(r, fun=sum, ngb=3) 
 
-gf=matrix(c(1,2,3,2,1,2,3,4,3,2,3,4,5,4,3,2,3,4,3,2,1,2,3,2,1), nrow=5)/65
-rff <- focalFilter(r, filter = gf)
- 
 }
 \keyword{spatial}
 

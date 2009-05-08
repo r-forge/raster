@@ -48,8 +48,13 @@ KML <- function (raster, filename, col=rainbow(255), maxdim=1000) {
 	
 	kmz <- kmlfile
 	ext(kmz) <- '.kmz'
-	com1 <- paste("7za a -tzip", kmz, kmlfile, imagefile)
-	try(	sss <- system(com1, intern=TRUE) , silent = TRUE)
+	rzipcmd <- Sys.getenv('R_ZIPCMD')
+	if (rzipcmd != "") {
+		com1 <- paste(rzipcmd, '-a', kmz, kmlfile, imagefile)
+	} else {
+		com1 <- paste("7za a -tzip", kmz, kmlfile, imagefile)
+		try(	sss <- system(com1, intern=TRUE) , silent = TRUE)
+	}
 	
 }
 

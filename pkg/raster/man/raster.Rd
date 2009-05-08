@@ -31,13 +31,14 @@ raster(x, ...)
 
 1) Create a RasterLayer object from a file
 
-\code{raster(x, values=FALSE, band=1)}
+\code{raster(x, values=FALSE, band=1, projs=NULL)}
 
 
 \tabular{rll}{
 \tab \code{x} \tab character. name of raster file  \cr
-\tab \code{band} \tab band number in case of a file of multiple bands, default = 1 \cr
 \tab \code{values} \tab logical. If \code{TRUE}, RasterLayer values are read into memory with \code{\link[raster]{readAll}} \cr
+\tab \code{band} \tab band number in case of a file of multiple bands, default = 1 \cr
+\tab \code{projs} \tab Character. PROJ4 type description of a Coordinate Reference System (map projection). If NULL, the value stored on disk (if any and recognised) is used \cr
 }
 
 If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 
@@ -56,7 +57,7 @@ If \code{x} is a character value, it should be a filename of a file that the ras
  \tab \code{xmx} \tab maximum x coordinate of raster (right border) \cr
  \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
  \tab \code{ymx} \tab maximum y coordinate of raster (top border) \cr
- \tab \code{projs} \tab character. PROJ4 type description of a map projection \cr
+ \tab \code{projs} \tab Character. PROJ4 type description of a Coordinate Reference System (map projection) \cr
  \tab \code{bndbox} \tab bounding box used to crop a raster. Any object that is a BoundingBox object or contains one (such as Raster* objects) \cr
 }
 

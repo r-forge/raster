@@ -28,7 +28,7 @@ setMethod('raster', signature(x='matrix'),
 
 
 setMethod('raster', signature(x='character'), 
-	function(x, values=FALSE, band=1) {
+	function(x, values=FALSE, band=1, proj=NULL) {
 		fileext <- toupper(ext(x)) 
 		if ( fileext == ".GRD" | fileext == ".GRI" ) {
 			r <- .rasterFromRasterFile(x, band) 
@@ -37,6 +37,9 @@ setMethod('raster', signature(x='character'),
 		}
 		if (values) {
 			r <- readAll(r)
+		}
+		if (!is.null(proj)) {
+			projection(r) <- proj
 		}
 		return(r)
 	}
