@@ -65,7 +65,7 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)
-		res <- .Call("transform", projfrom, projto, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+		res <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 		unProjXY <- cbind(res[[1]], res[[2]])
 		vals <- xyValues(from, unProjXY, method=xymethod)
 		if (inMemory) {
