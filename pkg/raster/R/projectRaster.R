@@ -52,8 +52,10 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 		filename(to) <- filename
 		if (getOption('verbose')) { cat('writing raster to:', filename(to))	}
 	}
-	inMemory <- to@file@name == ""
-	v <- matrix(NA, nrow=ncol(to), ncol=nrow(to))
+	inMemory <- filename(to) == ""
+	if (inMemory) {
+		v <- matrix(NA, nrow=ncol(to), ncol=nrow(to))
+	}
 	
 	if (method=='ngb') {
 		xymethod <- 'simple' 
