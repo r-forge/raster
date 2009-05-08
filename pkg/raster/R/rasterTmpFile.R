@@ -3,8 +3,6 @@
 # Version 0.8
 # Licence GPL v3
 
-
-
 setTmpDir <- function(d=NULL) {
 	if (!is.null(d)) {
 		res <- file.exists(d)

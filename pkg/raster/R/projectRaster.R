@@ -5,21 +5,6 @@
 # Licence GPL v3
 
 
-.xyTransform <- function(crds, projfrom, projto) {
-# May 2009. This function was extracted from function "spTransform.SpatialPoints" in the rgdal package
-# Copyright (c) 2003-8 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
-	res <- .Call("transform", projfrom, projto, nrow(crds), as.double(crds[,1]), as.double(crds[,2]), PACKAGE="rgdal")
-	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
-		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
-		cat("non finite transformation detected:\n")
-		print(cbind(crds, res[[1]], res[[2]])[k,])
-		stop(paste("failure in points", paste(k, collapse=":")))
-	}
-	return(cbind(res[[1]], res[[2]]))
-}
-
-
-
 projectBbox <- function(object, projs) {
 	validObject(projection(object, asText=FALSE))
 	validObject(projection(projs, asText=FALSE))
@@ -27,7 +12,11 @@ projectBbox <- function(object, projs) {
 	projto <- projection(projs)
 	b <- extent(object)
 	xy <- rbind(c(b@xmin, b@ymax), c(b@xmax, b@ymax), c(b@xmin, b@ymin), c(b@xmax, b@ymin))
-	p <- .xyTransform(xy, projfrom, projto)	
+	res <- .Call("transform", projfrom, projto, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+	p <- cbind(res[[1]], res[[2]])
+	if (any(is.infinite(p[,1])) || any(is.infinite(p[,2]))) {
+		stop("non finite transformation detected")
+	}
 	obj <- setExtent(object, newBbox(min(p[,1]), max(p[,1]), min(p[,2]),  max(p[,2])))
 	projection(obj) <- projs
 	return(obj)
@@ -35,6 +24,8 @@ projectBbox <- function(object, projs) {
 
 
 projectRaster <- function(from, to, method="ngb", filename="", filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
+	if (dataContent(from) != 'all' & dataSource(from) == 'ram') { stop('no vales for "from". Nothing to do') }
+
 	validObject(to)
 	validObject(projection(from, asText=FALSE))
 	validObject(projection(to, asText=FALSE))
@@ -50,6 +41,7 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }
 	filename <- trim(filename)
 	to <- raster(to)
+
 	filename(to) <- filename
 	dataType(to) <- datatype
 
@@ -73,7 +65,8 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)
-		unProjXY <- .xyTransform(xy, projto, projfrom)
+		res <- .Call("transform", projfrom, projto, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+		unProjXY <- cbind(res[[1]], res[[2]])
 		vals <- xyValues(from, unProjXY, method=xymethod)
 		if (inMemory) {
 			v[,r] <- vals
@@ -88,4 +81,5 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 	}
 	return(to)
 }
+
 
