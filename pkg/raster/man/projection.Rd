@@ -25,7 +25,9 @@ projection(x) <- value
 a Raster* object
 }
 
-\seealso{ \code{\link[raster]{project}, \link[rgdal]{CRS-class}, \link[rgdal]{projInfo}}}
+\seealso{ \code{\link[raster]{projectRaster}, \link[rgdal]{CRS-class}, \link[rgdal]{spTransform-methods}, \link[rgdal]{projInfo}}}
+
+\details{ projections are done by with the PROJ.4 library exposed by rgdal }
 
 \author{ Robert J. Hijmans }
 

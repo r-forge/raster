@@ -5,34 +5,8 @@
 # Licence GPL v3
 
 	
-
-
-projectBbox <- function(object, projs) {
-	b <- extent(object)
-	projs <- projection(projs)
-	xy <- rbind(c(b@xmin, b@ymax), c(b@xmax, b@ymax), c(b@xmin, b@ymin), c(b@xmax, b@ymin))
-
-	if (isLatLon(object)) {
-		p <- project(xy, projs, inv=FALSE)
-	} else {
-		p <- project(xy, projection(object), inv=TRUE)
-		if (!isLatLon(projs)) {
-			p <- project(p, projs, inv=FALSE)
-		}
-	} 
-
-	xmin <- min(p[,1])
-	xmax <- max(p[,1])
-	ymin <- min(p[,2])
-	ymax <- max(p[,2])	
-	bb <- newBbox(xmin, xmax, ymin, ymax)
-	obj <- setExtent(object, bb)
-	projection(obj) <- projs
-	return(obj)
-}
-
 .xyTransform <- function(crds, from, to) {
-# This function was extracted from "spTransform.SpatialPoints" in the rgdal package
+# May 2009. This function was extracted from "spTransform.SpatialPoints" in the rgdal package
 # Copyright (c) 2003-8 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
 	res <- .Call("transform", from, to, nrow(crds), as.double(crds[,1]), as.double(crds[,2]), PACKAGE="rgdal")
 	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
@@ -42,6 +16,21 @@ projectBbox <- function(object, projs) {
 		stop(paste("failure in points", paste(k, collapse=":")))
 	}
 	return(cbind(res[[1]], res[[2]]))
+}
+
+
+
+projectBbox <- function(object, projs) {
+	projfrom <- projection(object)
+	projto <- projection(projs)
+	validObject(projection(object, asText=FALSE))
+	validObject(projection(projs, asText=FALSE))
+	b <- extent(object)
+	xy <- rbind(c(b@xmin, b@ymax), c(b@xmax, b@ymax), c(b@xmin, b@ymin), c(b@xmax, b@ymin))
+	p <- .xyTransform(xy, projfrom, projto)	
+	obj <- setExtent(object, newBbox(min(p[,1]), max(p[,1]), min(p[,2]),  max(p[,2])))
+	projection(obj) <- projs
+	return(obj)
 }
 
 
