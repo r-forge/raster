@@ -31,13 +31,28 @@ projectBbox <- function(object, projs) {
 	return(obj)
 }
 
+.xyTransform <- function(crds, from, to) {
+# This function was extracted from "spTransform.SpatialPoints" in the rgdal package
+# Copyright (c) 2003-8 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
+	res <- .Call("transform", from, to, nrow(crds), as.double(crds[,1]), as.double(crds[,2]), PACKAGE="rgdal")
+	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
+		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+		cat("non finite transformation detected:\n")
+		print(cbind(crds, res[[1]], res[[2]])[k,])
+		stop(paste("failure in points", paste(k, collapse=":")))
+	}
+	return(cbind(res[[1]], res[[2]]))
+}
 
-projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
+
+projectRaster <- function(from, to, method="ngb", filename="", filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
 	validObject(to)
 	validObject(projection(from, asText=FALSE))
 	validObject(projection(to, asText=FALSE))
-	if  (projection(from) == "NA") {stop("input projection is NA")}
-	if  (projection(to) == "NA") {stop("output projection is NA")}
+	projfrom <- projection(from)
+	projto <- projection(to)
+	if (projfrom == "NA") {stop("input projection is NA")}
+	if (projto == "NA") {stop("output projection is NA")}
 	
 	pbb <- projectBbox(to, projection(from))
 	bb <- intersectBbox(pbb, from)
@@ -45,55 +60,43 @@ projectRaster <- function(from, to, method="ngb", filename=NULL, filetype='raste
 
 
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
-	if (is.null(filename)){filename <- ""}
-	to <- raster(to, filename)
+	filename <- trim(filename)
+	to <- raster(to)
+	filename(to) <- filename
 	dataType(to) <- datatype
 
 	rowCells <- 1:ncol(to)
-	inMemory <- to@file@name == ""
-	v <- vector(length=0)
 
-	if (!canProcessInMemory(to, 1) && filename(to) == '') {
+	if (!canProcessInMemory(to, 1) && filename(to) == "") {
 		filename <- rasterTmpFile()
 		filename(to) <- filename
 		if (getOption('verbose')) { cat('writing raster to:', filename(to))	}
 	}
-	starttime <- proc.time()
+	inMemory <- to@file@name == ""
+	v <- vector(length=0)
 
+	starttime <- proc.time()
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)
-		if (isLatLon(from)) {
-			unProjXY <- project(xy, projection(to), inv=TRUE )
-		} else {
-			unProjXY <- project(xy, projection(from), inv=FALSE )
-			if (!isLatLon(to)) {
-				unProjXY <- project(unProjXY, projection(to), inv=TRUE )
-			}
-		}
+		unProjXY <- .xyTransform(xy, projto, projfrom)
 		
 		if (method=='ngb') {
-			vals <- xyValues(from, xy)
+			vals <- xyValues(from, unProjXY)
 		} else {
-			vals <- xyValues(from, xy, method='bilinear')
+			vals <- xyValues(from, unProjXY, method='bilinear')
 		}
-		
-		vals <- xyValues(from, unProjXY)
+
 		if (inMemory) {
 			v <- c(v, vals)
 		} else {
 			to <- setValues(to, vals, r)
 			to <- writeRaster(to, overwrite=overwrite)
 		}
-		
 		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }
-		
 	}
 	if (inMemory) {
 		to <- setValues(to, v) 
-		if (to@file@name != "") {
-			to <- writeRaster(to, overwrite=overwrite)
-		}
 	}
 	return(to)
 }

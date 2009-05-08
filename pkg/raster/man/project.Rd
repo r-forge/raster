@@ -10,7 +10,7 @@ Change the projection of a RasterLayer.
 }
 
 \usage{
-projectRaster(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) 
+projectRaster(from, to, method="ngb", filename="", filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) 
 projectBbox(object, projs)
 }
 
