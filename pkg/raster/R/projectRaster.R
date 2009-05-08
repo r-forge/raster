@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 
-projectBbox <- function(object, projs) {
+projectExtent <- function(object, projs) {
 	validObject(projection(object, asText=FALSE))
 	validObject(projection(projs, asText=FALSE))
 	projfrom <- projection(object)
@@ -17,8 +17,7 @@ projectBbox <- function(object, projs) {
 	if (any(is.infinite(p[,1])) || any(is.infinite(p[,2]))) {
 		stop("non finite transformation detected")
 	}
-	obj <- setExtent(object, newBbox(min(p[,1]), max(p[,1]), min(p[,2]),  max(p[,2])))
-	projection(obj) <- projs
+	obj <- raster(newBbox(min(p[,1]), max(p[,1]), min(p[,2]),  max(p[,2])), nrows=nrow(object), ncols=ncol(object), proj=(projs))
 	return(obj)
 }
 
@@ -34,7 +33,7 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 	if (projfrom == "NA") {stop("input projection is NA")}
 	if (projto == "NA") {stop("output projection is NA")}
 	
-	pbb <- projectBbox(to, projection(from))
+	pbb <- projectExtent(to, projection(from))
 	bb <- intersectBbox(pbb, from)
 	validObject(bb)
 

@@ -1,23 +1,25 @@
 \name{projectRaster}
 
 \alias{projectRaster}
-\alias{projectBbox}
+\alias{projectExtent}
 
 \title{project a RasterLayer}
 
 \description{
 Change the projection of a RasterLayer. 
+\code{projecExtent} returns a RasterLayer with a projected extent, but without any values. This RasterLayer can then 
+be used as \code{'to'} RasterLayer in \code{projectRaster}. \code{projectRaster} computes values for the cells of the new RasterLayer.
 }
 
 \usage{
 projectRaster(from, to, method="ngb", filename="", filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) 
-projectBbox(object, projs)
+projectExtent(object, projs)
 }
 
 \arguments{
   \item{from}{a RasterLayer object}
   \item{to}{a Raster* object}
-  \item{method}{method used to compute values for the new RasterLayer}
+  \item{method}{method used to compute values for the new RasterLayer. Either 'ngb' (nearest neighbor) or 'bilinear' (bilinear interpolation).}
   \item{filename}{character. output filename}  
   \item{overwrite}{Logical. If \code{TRUE}, the output file is overwritten if it already exists}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
@@ -29,10 +31,10 @@ projectBbox(object, projs)
 }
 
 \details{
-First create a RasterLayer with a projected BoundingBox; also set the number of rows and columns. 
+First create a template RasterLayer with a projected extent; also set the number of rows and columns (or the resolution); and perhaps adjust the extent. 
 Then use that object to project the input RasterLayer to. 
-  
-Valid values for \code{method} are \code{'ngb'} (nearest neighbor) and \code{'bilinear'} (bilinear interpolation).
+
+The resolution of the output RasterLayer should not be much larger of that of the input RasterLayer.
 
 See \code{projInfo('proj')}, \code{projInfo('ellps')}, and \code{projInfo('datum')} for options for valid PROJ.4 strings. 
  
@@ -56,14 +58,22 @@ r <- setValues(r, 1:ncell(r))
 # proj.4 projection description
 newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100 +ellps=WGS84"
 
-# create a new RasterLayer with a BoundingBox with the new projection
-projras <- projectBbox(r, newproj)
+# create a new RasterLayer with a projected extent (no values are transferred)
+pr <- projectExtent(r, newproj)
 # Adjust the cell size 
-res(projras) <- 100000
+res(pr) <- 100000
+
 # project the values of RasterLayer 'r' to the new RasterLayer 'projras'
-projras <- projectRaster(r, projras)
+pr <- projectRaster(r, pr)
 # inverse projection, back to the properties of 'r'
-inverse <- projectRaster(projras, r)
+inv <- projectRaster(pr, r)
+
+## using a higher resolution and bilinear interpolation
+# res(pr) <- 10000
+# pr <- projectRaster(r, pr, method='bilinear')
+# inv <- projectRaster(pr, r, method='bilinear')
+# dif <- r - inv
+# plot(dif)
 
 }
 
