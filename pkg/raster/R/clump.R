@@ -72,8 +72,19 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 	if (tmpfile1 == "") {
 		x1 <- setValues(x1, v)
 	}
-	rcl <- unique(rbind(rcl, cbind(rcl[,2], rcl[,1])))
-	rcl <- rcl[rcl[,1] < rcl[,2],]
+	rcl1 <- unique(rbind(rcl, cbind(rcl[,2], rcl[,1])))
+	rcl <- rcl1[rcl1[,1] > rcl1[,2],]
+	aggrcl1 <- aggregate(rcl, by=list(rcl[,1]), FUN=min)[,-1]
+	colnames(rcl) <- c('a', 'b')
+	colnames(aggrcl1) <- c('a', 'c')
+	aggrcl2 <- merge(rcl, aggrcl1)[,-1]
+	aggrcl2 <- aggrcl2[aggrcl2[,1] != aggrcl2[,2],]
+	colnames(aggrcl2)[1] <- 'a'
+	aggrcl <- rbind(aggrcl1, aggrcl2)
+	aggrcl <- aggregate(aggrcl, by=list(aggrcl[,1]), FUN=min)[,-1]
+	rcldown <- aggrcl[rev(order(aggrcl[,1])), ]
+	
+	rcl <- rcl1[rcl1[,1] < rcl1[,2],]
 	aggrcl1 <- aggregate(rcl, by=list(rcl[,1]), FUN=max)[,-1]
 	colnames(rcl) <- c('a', 'b')
 	colnames(aggrcl1) <- c('a', 'c')
@@ -82,9 +93,11 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 	colnames(aggrcl2)[1] <- 'a'
 	aggrcl <- rbind(aggrcl1, aggrcl2)
 	aggrcl <- aggregate(aggrcl, by=list(aggrcl[,1]), FUN=max)[,-1]
-	aggrcl <- aggrcl[order(aggrcl[,1]), ]
+	rclup <- aggrcl[order(aggrcl[,1]), ]
 	
-	rclm <- cbind(aggrcl[,1], aggrcl)
+	rclcomb <- rbind(rcldown, rclup)
+	
+	rclm <- cbind(rclcomb[,1], rclcomb)
 	if (tmpfile1 == "") {
 		x1 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite)
 		return(x1)
