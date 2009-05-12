@@ -5,9 +5,10 @@
 # Licence GPL v3
 
 clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', datatype='INT4S', track=-1) {
-	cat('WARNING: this function does not return correct results', '\n')
-	
 	if (is.null(filename)) { filename <- "" }
+	if (filename != ""  & file.exists(filename) & overwrite==FALSE) {
+		stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
+	}
 	tmpfile1 <- ""
 	x1 <- raster(raster)
 	dataType(x1) <- datatype
@@ -26,6 +27,8 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 	c2 <- vector(length=nc)
 	c2[] <- 0
 	rcl <- matrix(NA, nrow=0, ncol=2)
+	
+	starttime <- proc.time()
 	for (r in 1:nrow(x1)) {
 		b <- valuesRow(raster, r)
 		c1 <- c2
@@ -47,7 +50,7 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 		}
 
 # check for joining clumps:
-		
+
 		for (cc in 1:nc) {
 			if (c2[cc] > 0) {
 				if (isTRUE(c1[cc] > 0) & isTRUE(c1[cc] != c2[cc])) {
@@ -65,46 +68,55 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 		if (tmpfile1 == "") {
 			v <- c(v, c2)
 		} else {
-			x1 <- setValues(x1, c2)
-			x1 <- writeRaster(x1, r)
+			x1 <- setValues(x1, c2, r)
+			x1 <- writeRaster(x1)
 		}	
+		
+		rcl <- unique(rcl)
+		if (r %in% track) { .showTrack(r, x1@nrows, track, starttime) }
+
 	}
 	if (tmpfile1 == "") {
 		x1 <- setValues(x1, v)
 	}
-	rcl1 <- unique(rbind(rcl, cbind(rcl[,2], rcl[,1])))
-	rcl <- rcl1[rcl1[,1] > rcl1[,2],]
-	aggrcl1 <- aggregate(rcl, by=list(rcl[,1]), FUN=min)[,-1]
-	colnames(rcl) <- c('a', 'b')
-	colnames(aggrcl1) <- c('a', 'c')
-	aggrcl2 <- merge(rcl, aggrcl1)[,-1]
-	aggrcl2 <- aggrcl2[aggrcl2[,1] != aggrcl2[,2],]
-	colnames(aggrcl2)[1] <- 'a'
-	aggrcl <- rbind(aggrcl1, aggrcl2)
-	aggrcl <- aggregate(aggrcl, by=list(aggrcl[,1]), FUN=min)[,-1]
-	rcldown <- aggrcl[rev(order(aggrcl[,1])), ]
 	
-	rcl <- rcl1[rcl1[,1] < rcl1[,2],]
-	aggrcl1 <- aggregate(rcl, by=list(rcl[,1]), FUN=max)[,-1]
-	colnames(rcl) <- c('a', 'b')
-	colnames(aggrcl1) <- c('a', 'c')
-	aggrcl2 <- merge(rcl, aggrcl1)[,-1]
-	aggrcl2 <- aggrcl2[aggrcl2[,1] != aggrcl2[,2],]
-	colnames(aggrcl2)[1] <- 'a'
-	aggrcl <- rbind(aggrcl1, aggrcl2)
-	aggrcl <- aggregate(aggrcl, by=list(aggrcl[,1]), FUN=max)[,-1]
-	rclup <- aggrcl[order(aggrcl[,1]), ]
+	if (nrow(rcl) > 1) {
+		rcl1 <- unique(rbind(rcl, cbind(rcl[,2], rcl[,1])))
+		rcl <- rcl1[rcl1[,1] > rcl1[,2],]
+		aggrcl1 <- aggregate(rcl, by=list(rcl[,1]), FUN=min)[,-1]
+		colnames(rcl) <- c('a', 'b')
+		colnames(aggrcl1) <- c('a', 'c')
+		aggrcl2 <- merge(rcl, aggrcl1)[,-1]
+		aggrcl2 <- aggrcl2[aggrcl2[,1] != aggrcl2[,2],]
+		colnames(aggrcl2)[1] <- 'a'
+		aggrcl <- rbind(aggrcl1, aggrcl2)
+		aggrcl <- aggregate(aggrcl, by=list(aggrcl[,1]), FUN=min)[,-1]
+		rcldown <- aggrcl[rev(order(aggrcl[,1])), ]
 	
-	rclcomb <- rbind(rcldown, rclup)
+		rcl <- rcl1[rcl1[,1] < rcl1[,2],]
+		aggrcl1 <- aggregate(rcl, by=list(rcl[,1]), FUN=max)[,-1]
+		colnames(rcl) <- c('a', 'b')
+		colnames(aggrcl1) <- c('a', 'c')
+		aggrcl2 <- merge(rcl, aggrcl1)[,-1]
+		aggrcl2 <- aggrcl2[aggrcl2[,1] != aggrcl2[,2],]
+		colnames(aggrcl2)[1] <- 'a'
+		aggrcl <- rbind(aggrcl1, aggrcl2)
+		aggrcl <- aggregate(aggrcl, by=list(aggrcl[,1]), FUN=max)[,-1]
+		rclup <- aggrcl[order(aggrcl[,1]), ]
 	
-	rclm <- cbind(rclcomb[,1], rclcomb)
+		rclcomb <- rbind(rcldown, rclup, c(0, NA))
+		rclm <- cbind(rclcomb[,1], rclcomb)
+	} else {
+		rclm <- c(0, 0, NA)
+	}
 	if (tmpfile1 == "") {
-		x1 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite)
+		x1 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
 		return(x1)
 	} else {
-		x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite)
+		x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
 		removeRasterFile(x1)
 		return(x2)
 	}
 }	
+
 

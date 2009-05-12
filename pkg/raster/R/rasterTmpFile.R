@@ -32,10 +32,11 @@ rasterTmpFile <- function()  {
 
 removeTmpFiles <- function() {
 	d <- rasterTmpDir()
-	unlink(d)
+	unlink(paste(d,'/*', sep=""))
 }
 
 showTmpFiles <- function() {
 	d <- rasterTmpDir()
 	list.files(d, '.grd')
 }
+

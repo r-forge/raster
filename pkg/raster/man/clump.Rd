@@ -35,7 +35,7 @@ A new RasterLayer object (in the R environment), and in some cases the side effe
 r <- raster(ncols=50, nrows=50)
 r[] <- round(runif(ncell(r))*0.75 )
 rc <- clump(r) 
-
+#freq(rc)
 }
 \keyword{spatial}
 
