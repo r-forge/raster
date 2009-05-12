@@ -95,7 +95,7 @@ but does not copy the filename nor the data associated with the original Raster*
 \code{function(x, xmn=0, xmx=1, ymn=0, ymx=1, projs=NA)}
 
 \tabular{rll}{
- \tab \code{x} \tab a Raster* object \cr
+ \tab \code{x} \tab a matrix \cr
  \tab \code{xmn} \tab minimum x coordinate or raster (left border) \cr
  \tab \code{xmx} \tab maximum x coordinate of raster (right border) \cr
  \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
