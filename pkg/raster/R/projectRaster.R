@@ -15,9 +15,9 @@ projectExtent <- function(object, projs) {
 	res <- .Call("transform", projfrom, projto, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 	p <- cbind(res[[1]], res[[2]])
 	if (any(is.infinite(p[,1])) || any(is.infinite(p[,2]))) {
-		stop("non finite transformation detected")
+		stop("non finite transformation detected. This probably means that the map projection chosen is not appropriate for this geographic area")
 	}
-	obj <- raster(newBbox(min(p[,1]), max(p[,1]), min(p[,2]),  max(p[,2])), nrows=nrow(object), ncols=ncol(object), proj=(projs))
+	obj <- raster(newExtent(min(p[,1]), max(p[,1]), min(p[,2]),  max(p[,2])), nrows=nrow(object), ncols=ncol(object), proj=(projs))
 	return(obj)
 }
 
@@ -34,7 +34,7 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 	if (projto == "NA") {stop("output projection is NA")}
 	
 	pbb <- projectExtent(to, projection(from))
-	bb <- intersectBbox(pbb, from)
+	bb <- intersectExtent(pbb, from)
 	validObject(bb)
 
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }

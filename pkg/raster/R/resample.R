@@ -9,7 +9,7 @@
 resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
 		
-	bb <- intersectBbox(from, to)
+	bb <- intersectExtent(from, to)
 	validObject(bb)
 	if (is.null(filename)){filename <- ""}
 	to <- raster(to, filename)

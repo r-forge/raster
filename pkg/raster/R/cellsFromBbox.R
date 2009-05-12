@@ -12,7 +12,7 @@ cellsFromBbox <- function(object, bndbox, expand=FALSE) {
 	
 	bndbox <- extent(bndbox)
 	bndbox <- alignBbox(bndbox, object)
-	innerBox <- intersectBbox(extent(object), bndbox)
+	innerBox <- intersectExtent(extent(object), bndbox)
 	
 	srow <- rowFromY(object, innerBox@ymax)
 	erow <- rowFromY(object, innerBox@ymin + 0.5 * yres(object))

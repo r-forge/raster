@@ -8,23 +8,8 @@
 
 
 
-.bboxmatrix <- function(x) {
-	xy <- matrix(NA, nrow=5, ncol=2)
-	xy[1,1] <- x@xmin
-	xy[1,2] <- x@ymax
-	xy[2,1] <- x@xmax
-	xy[2,2] <- x@ymax
-	xy[3,1] <- x@xmax
-	xy[3,2] <- x@ymin
-	xy[4,1] <- x@xmin
-	xy[4,2] <- x@ymin
-	return(xy)
-}
-
-
-
 if (!isGeneric("extent")) {
-	setGeneric("extent", function(x)
+	setGeneric("extent", function(x, ...)
 		standardGeneric("extent"))
 }	
 
@@ -61,13 +46,15 @@ setMethod('extent', signature(x='matrix'),
 	}
 )
 	
-setMethod('extent', signature(x='vector'), 
-	function(x){ 
+setMethod('extent', signature(x='numeric'), 
+	function(x, ...){ 
+		dots <- unlist(list(...))
+		x <- c(x, dots)
 		if (length(x) < 4) {
-			stop('vector supplied is too short')
+			stop('insufficient number of elements (should be 4)')
 		}
 		if (length(x) > 4) {
-			warning('vector supplied is longer then expected (should be 4)')
+			warning('more elements than expected (should be 4)')
 		}
 		bb <- new('BoundingBox')
 		bb@xmin <- x[1]

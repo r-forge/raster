@@ -9,6 +9,7 @@
 # for backward compatibility issues and non fatal mistakes.
 	datatype <- substr( toupper( trim(value) ), 1, 5)
 	if (datatype=='LOGIC') {datatype <- 'LOG1S'}
+	if (datatype == 'BYTE') {datatype <- 'INT1U'}
 	if (datatype == 'INTEG') {datatype <- 'INT4S'}
 	if (datatype == 'NUMER') {datatype <- 'FLT4S'}
 	if (datatype == 'FLOAT') {datatype <- 'FLT4S'}
@@ -84,7 +85,7 @@
 			} else {
 				x@file@datanotation <- 'INT1U'
 			}
-			warning("binary files of a single byte do not have NA values on disk")
+			#warning("binary files of a single byte do not have NA values on disk")
 		} else if (size == '8') {
 			if (signed) {
 				x@file@nodatavalue <- -9223372036854775808

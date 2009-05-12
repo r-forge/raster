@@ -1,19 +1,19 @@
-\name{newBbox}
+\name{newExtent}
 
-\alias{newBbox}
+\alias{newExtent}
 \alias{alignBbox}
   
-\title{create or align a BoundingBox}
+\title{create or align an Extent}
 
 \description{
 
-newBbox creates a new BoundingBox object
+newExtent creates a new Extent object
 
 alignBbox aligns a bounding box with the cells of a Raster* object
 }
 
 \usage{
-newBbox(xmn, xmx, ymn, ymx)
+newExtent(xmn, xmx, ymn, ymx)
 alignBbox(bndbox, object)
 }
 
@@ -22,7 +22,7 @@ alignBbox(bndbox, object)
   \item{xmx}{the maximum x coordinate of the bounding box}
   \item{ymn}{the minimum y coordinate of the bounding box}
   \item{ymx}{the maximum y coordinate of the bounding box}
-  \item{bndbox}{An object of class BoundingBox (which you can create with newBbox() )}  
+  \item{bndbox}{An object of class BoundingBox (which you can create with newExtent() )}  
   \item{object}{A Raster* object}
 }
  
@@ -36,7 +36,7 @@ a BoundingBox object
 
 \examples{
 r <- raster()
-bb <- newBbox(-10.1, 10.1, -20.1, 20.1)
+bb <- newExtent(-10.1, 10.1, -20.1, 20.1)
 bba <- alignBbox(bb, r)
 bb
 extent(r)

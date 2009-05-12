@@ -1,15 +1,15 @@
-\name{intersectBbox}
+\name{intersectExtent}
 
-\alias{intersectBbox}
+\alias{intersectExtent}
   
-\title{BoundingBox intersection}
+\title{BoundingExtent intersection}
 
 \description{
-intersectBbox returns the instersection of multiple bounding boxes
+intersectExtent returns the instersection of multiple bounding boxes
 }
 
 \usage{
-intersectBbox(x, ...)
+intersectExtent(x, ...)
 }
 
 \arguments{
@@ -23,13 +23,13 @@ a BoundingBox object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{unionBbox}}, \code{\link[raster]{getBoungingBox}},  \code{\link[raster]{setBoungingBox}} }
+\seealso{ \code{\link[raster]{unionExtent}}, \code{\link[raster]{getBoungingBox}},  \code{\link[raster]{setBoungingBox}} }
 
 \examples{
 r <- raster()
-b1 <- newBbox(-10, 10, -20, 20)
-b2 <- newBbox(0, 20, -40, 5)
-i <- intersectBbox(b1, b2)
+b1 <- newExtent(-10, 10, -20, 20)
+b2 <- newExtent(0, 20, -40, 5)
+i <- intersectExtent(b1, b2)
 }
 
 \keyword{spatial}

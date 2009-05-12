@@ -38,7 +38,7 @@
 		
 	outRaster <- raster(x, filename)
 	dataType(outRaster) <- datatype
-	bndbox <- newBbox(xmin(x), xmx, ymn, ymax(x))
+	bndbox <- newExtent(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
 	rowcol(outRaster) <- c(rsteps, csteps) 
 	

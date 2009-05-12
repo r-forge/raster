@@ -8,7 +8,7 @@
 
 
 
-newBbox <- function(xmn, xmx, ymn, ymx) {
+newExtent <- function(xmn, xmx, ymn, ymx) {
 	bb <- new('BoundingBox')
 	bb@xmin <- xmn
 	bb@xmax <- xmx

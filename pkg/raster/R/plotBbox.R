@@ -5,6 +5,7 @@
 # Licence GPL v3
 
 
+
 .bboxmatrix <- function(x) {
 	xy <- matrix(NA, nrow=5, ncol=2)
 	xy[1,1] <- x@xmin
@@ -20,7 +21,7 @@
 
 
 setMethod("plot", signature(x='BoundingBox', y='ANY'), 
-	function(x, y, add=TRUE, ...)  {
+	function(x, y, add=FALSE, ...)  {
 		xy <- .bboxmatrix(x)
 		xy[5,] <- xy[1,]
 		if (add) {

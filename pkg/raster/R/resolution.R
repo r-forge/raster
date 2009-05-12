@@ -8,24 +8,23 @@
 
 'res<-' <- function(object, value) {
 	if (length(value) == 1) {
-		return( .setRes(object, xres=value, yres=value) )
+		xr=value
+		yr=value
 	} else {
-		return( .setRes(object, xres=value[1], yres=value[2]) )
+		xr=value[1]
+		yr=value[2]
 	}
-}
-
-
-.setRes <- function(object, xres, yres=xres) {
+	
 	bb <- extent(object)
-	nc <- round( (bb@xmax - bb@xmin) / xres )
-	nr <- round( (bb@ymax - bb@ymin) / yres )
+	nc <- round( (bb@xmax - bb@xmin) / xr )
+	nr <- round( (bb@ymax - bb@ymin) / yr )
 	if (nr != object@nrows | nc != object@ncols) {
 		if (extends(class(object), "Raster")) {
 			object <- clearValues(object)
 		}
 	}
-	bb@xmax <- bb@xmin + nc * xres
-	bb@ymin <- bb@ymax - nr * yres
+	bb@xmax <- bb@xmin + nc * xr
+	bb@ymin <- bb@ymax - nr * yr
 	object	<- setExtent(object, bb)
 	rowcol(object) <- c(nr, nc)
 	return(object)

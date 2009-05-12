@@ -1,15 +1,15 @@
-\name{unionBbox}
+\name{unionExtent}
 
-\alias{unionBbox}
+\alias{unionExtent}
   
 \title{BoundingBox union}
 
 \description{
-unionBbox returns the union of multiple bounding boxes
+unionExtent returns the union of multiple bounding boxes
 }
 
 \usage{
-unionBbox(x, ...)
+unionExtent(x, ...)
 }
 
 \arguments{
@@ -27,9 +27,9 @@ a BoundingBox object
 
 \examples{
 r <- raster()
-b1 <- newBbox(-10, 10, -20, 20)
-b2 <- newBbox(0, 20, -40, 5)
-u <- unionBbox(b1, b2)
+b1 <- newExtent(-10, 10, -20, 20)
+b2 <- newExtent(0, 20, -40, 5)
+u <- unionExtent(b1, b2)
 }
 
 \keyword{spatial}

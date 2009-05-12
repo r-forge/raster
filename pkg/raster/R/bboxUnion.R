@@ -5,7 +5,7 @@
 # Version 0.8
 # Licence GPL v3
 
-unionBbox <- function(x, ...) {
+unionExtent <- function(x, ...) {
 	objects <- c(x, list(...))
 	if (length(objects) == 1) {
 		return(extent(x))
@@ -21,7 +21,7 @@ unionBbox <- function(x, ...) {
 	return(bb)
 }
 
-intersectBbox <- function(x, ...) {
+intersectExtent <- function(x, ...) {
 	objects <- c(x, list(...))
 	if (length(objects) == 1) {
 		return(extent(x))

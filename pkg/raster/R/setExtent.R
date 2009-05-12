@@ -6,7 +6,9 @@
 # Version 0.8
 # Licence GPL v3
 
-
+'extent<-' <- function(x, value) {
+	return(setExtent(x, value))
+}
 
 setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 
