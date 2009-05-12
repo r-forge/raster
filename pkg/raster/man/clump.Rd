@@ -32,7 +32,7 @@ A new RasterLayer object (in the R environment), and in some cases the side effe
 \author{Robert J. Hijmans}
 
 \examples{
-r <- raster(ncols=25, nrows=25)
+r <- raster(ncols=50, nrows=50)
 r[] <- round(runif(ncell(r))*0.75 )
 rc <- clump(r) 
 
