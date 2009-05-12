@@ -29,7 +29,11 @@ click <- function(object, n=1, xy=FALSE, type="n", ...) {
 	if (class(object) == 'RasterStack') {
 		colnames(value) <- layerNames(object)
 	} else {
-		colnames(value) <- 'value'
+		if (n==1) {
+			colnames(value) <- 'value'
+		} else {
+			colnames(value) <- paste('value', 1:n, sep="")
+		}
 	}
 	
 	if (xy) { 

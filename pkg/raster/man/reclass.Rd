@@ -8,12 +8,13 @@
 Reclassify values of a RasterLayer
 }
 \usage{
-reclass(raster, rclmat, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
+reclass(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{rclmat}{Matrix (or vector) for reclassifcation. (see below)}
+  \item{update}{Logical. If \code{TRUE} reclass updates previously reclassed values (see details)}
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
   \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
@@ -23,14 +24,14 @@ reclass(raster, rclmat, filename="", overwrite=FALSE, filetype='raster', datatyp
 
 \details{
 \code{reclass} reclassifies groups of values to other values. E.g. All values between 1 and 10 become 1, and between 11 and 15 become 2. 
-Reclassification is done with matrix "rclmat". This matrix must have 3 columns. 
+Reclassification is done with matrix "rclmat". This matrix must have 3 columns. (You can also supply a vector that can be coecred into a n*3 matrix)
 The first two columns are "from" "to" of the input values, and the third column has the new value for that range.
-A reclass is applied to  \code{from <= x <= to}, in the order that they are in the reclass table.  
 
-You can also supply a vector that can be coecred into a n*3 matrix
-	
-If the input RasterLayer object has all values in memory (e.g. after readAll(raster)), the function will also return the new values in memory. If a filename is provided, the values will also be saved to that file. 
-If the values are not in memory the new values will be written to file. 
+Reclassification is applied to  \code{from <= x <= to}. 
+Reclassification is done in the order of the reclass table. Thus there are overlapping ranges, the last range applies.  
+
+If \code{update=TRUE}, reclass can update values that were re-classified according to an earlier row in the reclass table. 
+For example if row 1 has \code{1, 10, 15} and row 2 has \code{11, 20, 25}, all the values from 1 to 20 will be classified as 25. 
 }
 
 \value{
