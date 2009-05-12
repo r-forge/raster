@@ -9,37 +9,46 @@
 
 
 
-click <- function(object, n=1, xy=FALSE, type="n", ...) {
+click <- function(object, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 	loc <- locator(n, type, ...)
-	xyCoords <- cbind(loc$x, loc$y)
-	if (missing(object)) {
-		return(cbind(xyCoords))
+	xy <- cbind(loc$x, loc$y)
+	if (missing(object)) { return(xy) }
+	cells <- cellFromXY(object, xy)
+	cells <- unique(na.omit(cells))
+	if (length(cells) == 0 ) { stop('no valid cells selected') }
+	xy <- xyFromCell(object, cells)
+	colnames(xy) <- c('x', 'y')
+	n <- nrow(xy)
+	if (id) {
+		for (i in 1:n) {
+			text(xy[i,1], xy[i,2], i)
+		}
 	}
+
 	if (dataContent(object) != 'all') {
-		value <- xyValues(object, xyCoords)
+		value <- xyValues(object, xy)
 	} else {
-		cell <- cellFromXY(object, xyCoords)
+		cell <- cellFromXY(object, xy)
 		if (class(object) == 'RasterStack') {
 			value <- values(object)[cell,]
 		} else {
 			value <- values(object)[cell]
 		}
 	}	
-	value <- t(matrix(value))
 	if (class(object) == 'RasterStack') {
-		colnames(value) <- layerNames(object)
+		value <- t(matrix(value, nrow=n))
+		rownames(value) <- layerNames(object)
 	} else {
-		if (n==1) {
-			colnames(value) <- 'value'
+		value <- t(matrix(value))
+		if (layerNames(object) == "") {
+			rownames(value) <- 'value'
 		} else {
-			colnames(value) <- paste('value', 1:n, sep="")
+			rownames(value) <- layerNames(object)
 		}
 	}
 	
 	if (xy) { 
-		value <- cbind(xyCoords, value)
-		colnames(value)[1] <- 'x'
-		colnames(value)[2] <- 'y'
+		value <- rbind(t(xy), value)
 	} 
 	return(t(value))
 	

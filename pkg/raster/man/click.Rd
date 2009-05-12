@@ -9,25 +9,33 @@
 }
 
 \usage{
-click(object, n=1, xy=FALSE, type = "n", ...)
+click(object, n=1, id=FALSE, xy=FALSE, type = "n", ...)
 }
 
-\note{
-  The plot only provides the coordinates (xy pair), the values are read from the Raster* object that is passed as an argument.
-  Thus you can extract values for a Raster* object that is not plotted, as long as it shares the coordinate system (CRS) with the layer that is plotted.
-}
 
 \arguments{
   \item{object}{RasterLayer or RasterStack object}
   \item{n}{number of clicks on the map}
-  \item{xy}{show xy coordinates}
+  \item{id}{Logical. If \code{TRUE}, a numeric ID is shown on the map that corresponds to the row number of the output}
+  \item{xy}{Logical. If \code{TRUE}, xy coordinates are included in the output}
   \item{type}{One of "n", "p", "l" or "o". If "p" or "o" the points are plotted; if "l" or "o" they are joined by lines. See ?locator}
   \item{...}{additional graphics parameters used if type != "n" for plotting the locations. See ?locator}   
  }
  
 \value{
-The value(s) of \code{object} at the point(s) clicked on; and the coordinates if \code{xy==TRUE}.
+The value(s) of \code{object} at the point(s) clicked on; and the coordinates of the center of the cell if \code{xy==TRUE}.
 } 
+
+\note{
+  The plot only provides the coordinates (xy pair), the values are read from the Raster* object that is passed as an argument.
+  Thus you can extract values for a Raster* object that is not plotted, as long as it shares the coordinate system (CRS) 
+  with the layer that is plotted.
+  
+  Unless the process is terminated prematurely values at at most \code{n} positions are determined. 
+  The identification process can be terminated by clicking the second button and selecting 'Stop' from the menu,
+  or from the 'Stop' menu on the graphics window. 
+}
+
 
 \seealso{ \code{\link[raster]{drawBox}} }
 

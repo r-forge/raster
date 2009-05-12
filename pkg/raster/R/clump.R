@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', datatype='INT4S', track=-1) {
-	warning('clump function has not completed yet; results are approximate')
+	warning('clump function is under development; results are approximate')
 	if (is.null(filename)) { filename <- "" }
 	if (filename != ""  & file.exists(filename) & overwrite==FALSE) {
 		stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
@@ -34,7 +34,7 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 		c1 <- c2
 		c2[] <- 0
 		b <- valuesRow(raster, r)
-		b <- which(b==1)
+		b <- which(b > 0)
 
 		for ( cc in b ) {
 			if (isTRUE(c2[cc-1] > 0)) { 
@@ -108,8 +108,8 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 		rclm <- c(0, 0, NA)
 	}
 	if (tmpfile1 == "") {
-		x1 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
-		return(x1)
+		x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
+		return(list(x1, x2, rcl1, rclm))
 	} else {
 		x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
 		removeRasterFile(x1)

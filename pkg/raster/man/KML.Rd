@@ -19,8 +19,6 @@ KML(raster, filename, col=rainbow(255), maxdim=1000)
 \item{maxdim}{sampling scheme}
 }
 
-\details{
-}
 
 \value{
 None. But two files are written to disk. 
@@ -28,7 +26,5 @@ None. But two files are written to disk.
 
 \author{adapted for the raster package by Robert J. Hijmans; based on functions in the maptools package by Duncan Golicher, David Forrest and Roger Bivand }
 
-\examples{
-}
 
 \keyword{spatial}
