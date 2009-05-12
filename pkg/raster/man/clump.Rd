@@ -2,10 +2,10 @@
 
 \alias{clump}
 
-\title{clump}
+\title{Detect clumps}
 
 \description{
-Calculate values for the neighborhood of clump cells 
+Detect clumps (patches) of connected cells. Each clump gets a unique integer ID.
 }
 
 \usage{

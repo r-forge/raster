@@ -5,6 +5,7 @@
 # Licence GPL v3
 
 clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', datatype='INT4S', track=-1) {
+	warning('clump function has not completed yet; results are approximate')
 	if (is.null(filename)) { filename <- "" }
 	if (filename != ""  & file.exists(filename) & overwrite==FALSE) {
 		stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
@@ -30,38 +31,35 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 	
 	starttime <- proc.time()
 	for (r in 1:nrow(x1)) {
-		b <- valuesRow(raster, r)
 		c1 <- c2
 		c2[] <- 0
-		for (cc in 1:nc) {
-			if (b[cc]==1) {
-				if (isTRUE(c2[cc-1] > 0)) { c2[cc] <- c2[cc-1] 
-				} else if ( isTRUE(c1[cc-1] > 0) ) {
-					c2[cc] <- c1[cc-1]
-				} else if ( c1[cc] > 0) {
-					c2[cc] <- c1[cc]
-				} else if (isTRUE(c1[cc+1] > 0)) {
-					c2[cc] <- c1[cc+1]
-				} else {
-					c2[cc] <- nextclump
-					nextclump <- nextclump + 1					
-				}
+		b <- valuesRow(raster, r)
+		b <- which(b==1)
+
+		for ( cc in b ) {
+			if (isTRUE(c2[cc-1] > 0)) { 
+				c2[cc] <- c2[cc-1] 
+			} else if ( isTRUE(c1[cc-1] > 0) ) {
+				c2[cc] <- c1[cc-1]
+			} else if ( c1[cc] > 0) {
+				c2[cc] <- c1[cc]
+			} else if (isTRUE(c1[cc+1] > 0)) {
+				c2[cc] <- c1[cc+1]
+			} else {
+				c2[cc] <- nextclump
+				nextclump <- nextclump + 1					
 			}
 		}
-
-# check for joining clumps:
-
-		for (cc in 1:nc) {
-			if (c2[cc] > 0) {
-				if (isTRUE(c1[cc] > 0) & isTRUE(c1[cc] != c2[cc])) {
-					rcl <- rbind(rcl, c(c2[cc], c1[cc]))
-				}
-				if (isTRUE(c1[cc-1] > 0) & isTRUE(c1[cc-1] != c2[cc])) {
-					rcl <- rbind(rcl, c(c2[cc], c1[cc-1] ))
-				}
-				if (isTRUE(c1[cc+1] > 0) & isTRUE(c1[cc+1] != c2[cc])) {
-					rcl <- rbind(rcl, c(c2[cc], c1[cc+1] ))
-				}
+	# check for joining clumps:
+		for ( cc in b ) {
+			if (isTRUE(c1[cc] > 0) & isTRUE(c1[cc] != c2[cc])) {
+				rcl <- rbind(rcl, c(c2[cc], c1[cc]))
+			}
+			if (isTRUE(c1[cc-1] > 0) & isTRUE(c1[cc-1] != c2[cc])) {
+				rcl <- rbind(rcl, c( c2[cc], c1[cc-1] ))
+			}
+			if (isTRUE(c1[cc+1] > 0) & isTRUE(c1[cc+1] != c2[cc])) {
+				rcl <- rbind(rcl, c(c2[cc], c1[cc+1] ))
 			}
 		}
 	
