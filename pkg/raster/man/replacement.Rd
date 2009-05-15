@@ -14,7 +14,7 @@
 
 \description{
   \code{object[x]} can be used to access or set values of a RasterLayer object, using cell numbers as index. 
-  \code{object[[x]]} can be used to access values of a RasterLayer object, using row and column numbers as index. 
+  \code{object[[r,c]]} can be used to access values of a RasterLayer object, using row and column numbers as index. 
 }
 
 
