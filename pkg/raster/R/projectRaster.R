@@ -73,7 +73,7 @@ projectRaster <- function(from, to, method="ngb", filename="", filetype='raster'
 			v[,r] <- vals
 		} else {
 			to <- setValues(to, vals, r)
-			to <- writeRaster(to, overwrite=overwrite)
+			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
 		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }
 	}
