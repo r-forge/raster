@@ -10,19 +10,49 @@ projectExtent <- function(object, projs) {
 	validObject(projection(projs, asText=FALSE))
 	projfrom <- projection(object)
 	projto <- projection(projs)
-	b <- extent(object)
-	xy <- rbind(c(b@xmin, b@ymax), c(b@xmax, b@ymax), c(b@xmin, b@ymin), c(b@xmax, b@ymin))
+	
+	xy1 <- xyFromCell(object, cellFromCol(object, 1))
+	xy1[,1] <- xy1[,1] - 0.5 * xres(object)
+	xy1[1,2] <- xy1[1,2] + 0.5 * yres(object)
+	xy1[nrow(object),2] <- xy1[nrow(object),2] + 0.5 * yres(object)
+	
+	xy2 <- xyFromCell(object, cellFromCol(object, ncol(object)))
+	xy2[,1] <- xy2[,1] + 0.5 * xres(object)
+	xy2[1,2] <- xy2[1,2] + 0.5 * yres(object)
+	xy2[nrow(object),2] <- xy2[nrow(object),2] + 0.5 * yres(object)
+	
+	xy <- rbind(xy1, xy2)
+	
 	res <- .Call("transform", projfrom, projto, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
-	p <- cbind(res[[1]], res[[2]])
-	if (any(is.infinite(p[,1])) || any(is.infinite(p[,2]))) {
-		stop("non finite transformation detected. This probably means that the map projection chosen is not appropriate for this geographic area")
+	
+	x <- res[[1]]
+	y <- res[[2]]
+	xy <- cbind(x, y)
+	xy <- subset(xy, !(is.infinite(xy[,1]) | is.infinite(xy[,2])) )
+	x <- xy[,1]
+	y <- xy[,2]
+	
+	if (length(y) == 0 | length(y) ==0) { stop("cannot do this transformation") }
+	minx <- min(x)
+	maxx <- max(x)
+	if (maxx == minx) {
+		maxx <- maxx + 0.5
+		minx <- minx - 0.5
 	}
-	obj <- raster(newExtent(min(p[,1]), max(p[,1]), min(p[,2]),  max(p[,2])), nrows=nrow(object), ncols=ncol(object), proj=(projs))
+	miny <- min(y)
+	maxy <- max(y)
+	if (maxy == miny) {
+		maxy <- maxy + 0.5
+		miny <- miny - 0.5
+	}
+	
+	obj <- raster(newExtent(minx, maxx, miny,  maxy), nrows=nrow(object), ncols=ncol(object), proj=(projs))
 	return(obj)
 }
 
 
 projectRaster <- function(from, to, method="ngb", filename="", filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
+	
 	if (dataContent(from) != 'all' & dataSource(from) == 'ram') { stop('no vales for "from". Nothing to do') }
 
 	validObject(to)
