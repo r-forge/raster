@@ -23,19 +23,20 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, 
 		print(rclmat)
 	}
 	
-	if (dataContent(raster) == 'all') { nr <- 1 } else { nr <- 2 }
-	if (!canProcessInMemory(raster, nr) && filename == '') {
+	if (!canProcessInMemory(raster, 2) && filename == '') {
 		filename <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 	}
 	
-	outRaster <- raster(raster)
-	filename(outRaster) <- filename
-	dataType(outRaster) <- datatype
+	outRaster <- raster(raster, filename=filename, datatype=datatype)
 
 	res <- vector(length = ncol(raster))
 	
-	if ( dataContent(raster) == 'all' |  dataContent(raster) == 'sparse') {
+	
+	if ( filename == "" ) {
+		if (dataContent( raster ) != 'all') {
+			raster <- readAll(raster)
+		}
 		res <- values(raster)
 		if (update) {
 			for (i in 1:length(rclmat[,1])) {
@@ -54,15 +55,8 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, 
 				}
 			}
 		}
-		if ( dataContent(raster) == 'all') { 
-			outRaster <- setValues(outRaster, res) 
-		}
-		if ( dataContent(raster) == 'sparse') { 
-			outRaster <- setValues(outRaster, res,  dataIndices(raster)) 
-		}
-		if (outRaster@file@name != "" ) {
-			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype) 
-		}
+		
+		return( setValues(outRaster, res) )
 		
 	} else {
 		starttime <- proc.time()
@@ -105,7 +99,7 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, 
 			}
 			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
 		}
-	}	
-	return(outRaster)
+		return(outRaster)
+	}
 }
 

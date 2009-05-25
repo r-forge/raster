@@ -47,25 +47,35 @@ setMethod('raster', signature(x='character'),
 
 
 setMethod('raster', signature(x='Raster'), 
-	function(x, filename="", values=NULL) {
-	
-		if (class(x) == 'RasterStack') { 
-			x <- asRasterLayer(x, 1) 
-		}
-
+	function(x, filename="", datatype="FLT4S", values=NULL) {
 		r <- raster(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
 		filename(r) <- filename
-
-		if (r@file@name != "" & r@file@name == x@file@name) {
-			stop("it is not allowed to set the filename of the output RasterLayer to that of the input RasterLayer")
-		}
-		
 		if (!is.null(values)) {
-			r <- setValues(r, values)
+			x <- setValues(x, values)
 		}
 		return(r)
 	}
 )
+
+
+setMethod('raster', signature(x='RasterStack'), 
+	function(x, index=1){
+		if (nlayers(x) > 0 & index > 0) {
+			dindex <- max(1, min(nlayers(x), index))
+			if (dindex != index) { warning(paste("index was changed to", dindex))}
+			r <- x@layers[[dindex]]
+			if (dataContent(x) == 'all') {
+				r <- setValues(r, values(x)[,dindex])
+			}
+		} else {
+			r <- new("RasterLayer")
+			extent(r) <- extent(x)
+			rowcol(r) <- c(nrow(x), ncol(x))
+		}
+		return(r)
+	}
+)
+
 
 
 
@@ -81,4 +91,39 @@ setMethod('raster', signature(x='BoundingBox'),
 		return(r) 
 	}
 )
+
+
+setMethod('raster', signature(x='SpatialGrid'), 
+	function(x, index=0){
+		r <- raster()
+		r <- setExtent(r, extent(x))
+		projection(r) <- x@proj4string
+		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])		
+		if (index > 0 & class(x) == 'SpatialGridDataFrame') {
+			dindex <- max(1, min(dim(x@data)[2], index))
+			if (dindex != index) { warning(paste("index was changed to", dindex))}
+			r <- setValues(r, x@data[[dindex]])
+		}
+		return(r)
+	}	
+)
+
+
+setMethod('raster', signature(x='SpatialPixels'), 
+	function(x, index=0){
+		r <- raster()
+		r <- setExtent(r, extent(x))
+		projection(r) <- x@proj4string
+		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
+		if (index > 0 & class(x) == 'SpatialPixelsDataFrame') {
+			dindex <- max(1, min(dim(x@data)[2], index))
+			if (dindex != index) { warning(paste("index was changed to", dindex))}
+			x <- as(x, 'SpatialGridDataFrame')
+			r <- setValues(r, x@data[[dindex]])
+		}
+		return(r)
+	}
+)
+
+
 

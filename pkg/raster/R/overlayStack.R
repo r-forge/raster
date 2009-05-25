@@ -15,7 +15,7 @@ function(x, y, fun, indices=1:nlayers(x), filename="", overwrite=FALSE, filetype
 	
 	rasters <- list()
 	for (i in 1:length(indices)) {
-		rasters[i] <- asRasterLayer(x, indices[i])
+		rasters[i] <- raster(x, indices[i])
 	}
 	
 	if (missing(fun)) { 

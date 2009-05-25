@@ -55,7 +55,7 @@ addLayer <- function(rstack, rasters) {
 				rstack <- setExtent(rstack, raster, snap=FALSE)
 				projection(rstack) <- projection(raster)
 
-				nl <- rstack@data@nlayers + nlayers(raster)
+				nl <- 1
 				rstack@data@nlayers <- as.integer(nl)
 				rstack@layers[nl] <- raster 
 				rstack@data@min[nl] <- raster@data@min
@@ -88,7 +88,7 @@ addLayer <- function(rstack, rasters) {
 			}
 			
 			for (k in 1:length(rasterlist)) {
-				nl <- as.integer( rstack@data@nlayers + nlayers(raster) )
+				nl <- as.integer( rstack@data@nlayers + 1 )
 				rstack@data@nlayers <- nl
 				rstack@layers[nl] <- raster 
 				rstack@data@min[nl] <- raster@data@min
@@ -128,5 +128,4 @@ addLayer <- function(rstack, rasters) {
 	}	
 	return(rstack)
 }	
-
 

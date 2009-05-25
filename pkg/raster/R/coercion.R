@@ -63,132 +63,44 @@ setAs('RasterStack', 'SpatialGridDataFrame',
 
 
 setAs('RasterStack', 'RasterLayer', 
-	function(from){ return(asRasterLayer (from)) }
+	function(from){ return( raster (from)) }
 )
 
 	
 setAs('SpatialGridDataFrame', 'RasterLayer', 
-	function(from){ return(asRasterLayer (from)) }
+	function(from){ return( raster (from)) }
 )
 
 setAs('SpatialPixelsDataFrame', 'RasterLayer', 
-	function(from){ return(asRasterLayer (from)) }
+	function(from){ return(raster (from)) }
 )
 
 setAs('SpatialGrid', 'RasterLayer', 
-	function(from){ return(asRasterLayer (from)) }
+	function(from){ return(raster (from)) }
 )
 
 setAs('SpatialPixels', 'RasterLayer', 
-	function(from){ return(asRasterLayer (from)) }
+	function(from){ return(raster (from)) }
 )
 
 
 setAs('SpatialGrid', 'RasterStack',
-	function(from){ return(.asRasterStack (from)) }
+	function(from){ return(stack(from)) }
 )
 
 setAs('SpatialGridDataFrame', 'RasterStack',
-	function(from){ return(.asRasterStack (from)) }
+	function(from){ return(stack(from)) }
 )
 
 setAs('SpatialPixels', 'RasterStack', 
-	function(from){ return(.asRasterStack (from)) }
+	function(from){ return(stack(from)) }
 )
 
 setAs('SpatialPixelsDataFrame', 'RasterStack', 
-	function(from){ return(.asRasterStack (from)) }
+	function(from){ return(stack(from)) }
 )
 
 
-
-if (!isGeneric("asRasterLayer")) {
-	setGeneric("asRasterLayer", function(x, index)
-		standardGeneric("asRasterLayer"))
-}	
-
-
-setMethod('asRasterLayer', signature(x='RasterStack'), 
-	function(x, index){
-		if (nlayers(x) > 0) {
-			dindex <- max(1, min(nlayers(x), index))
-			if (dindex != index) { warning(paste("index was changed to", dindex))}
-			rs <- x@layers[[dindex]]
-			if (dataContent(x) == 'all') {
-				rs <- setValues(rs, values(x)[,dindex])
-			}
-		} else {
-			rs <- new("RasterLayer")
-			rs <- setExtent(rs, extent(x))
-			rowcol(rs) <- c(nrow(x), ncol(x))
-		}
-		return(rs)
-	}
-)
-
-
-
-setMethod('asRasterLayer', signature(x='SpatialPixelsDataFrame'), 
-	function(x, index){
-		r <- raster()
-		r <- setExtent(r, extent(x))
-		projection(r) <- x@proj4string
-		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
-		dindex <- max(1, min(dim(x@data)[2], index))
-		if (dindex != index) { warning(paste("index was changed to", dindex))}
-# to become an option, but currently support for sparse is too .....  sparse	
-		sparse <- FALSE
-		if (!sparse) {
-				x <- as(x, 'SpatialGridDataFrame')
-				r <- setValues(r, x@data[[dindex]])
-		} else {
-				cells <- x@grid.index
-				if (length(cells)==0) {
-					cells <- cellFromXY(r, x@coords)
-				}
-				r <- setValuesSparse(r, cells, x@data[[dindex]])
-		}
-		return(r)
-	}
-)
-
-
-
-setMethod('asRasterLayer', signature(x='SpatialGridDataFrame'), 
-	function(x, index){
-		r <- raster()
-		r <- setExtent(r, extent(x))
-		projection(r) <- x@proj4string
-		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])		
-		dindex <- max(1, min(dim(x@data)[2], index))
-		if (dindex != index) { warning(paste("index was changed to", dindex))}
-		r <- setValues(r, x@data[[dindex]])
-		return(r)
-	}	
-)
-
-
-
-
-.asRasterStack <- function(spgrid) {
-	stk <- new("RasterStack")
-	stk <- setExtent(stk, extent(spgrid))
-	projection(stk) <- spgrid@proj4string
-	rowcol(stk) <- c(spgrid@grid@cells.dim[2], spgrid@grid@cells.dim[1])
-	
-	if (class(spgrid)=='SpatialPixelsDataFrame') {
-		spgrid <- as(spgrid, 'SpatialGridDataFrame')
-	}
-	if (class(spgrid)=='SpatialGridDataFrame' ) {
-		stk <- setValues(stk, as.matrix(spgrid@data))
-		rs <- as(stk, 'RasterLayer')
-		stk <- setValues(stk, as.matrix(spgrid@data))
-		for (i in 1:ncol(spgrid@data)) {
-			stk@layers[i] <- rs
-		}		
-	}
-	return(stk)
-}
 
 
 .toSpBbox <- function(object) {

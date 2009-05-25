@@ -6,7 +6,7 @@
 
 
 yFromRow <- function(object, rownr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	rownr <- round(rownr)
 	rownr[rownr < 1 | rownr > nrow(object)] <- NA
 	y <- ymax(object) - ((rownr-0.5) * yres(object))
@@ -15,7 +15,7 @@ yFromRow <- function(object, rownr) {
 	
 	
 xFromCol <- function(object, colnr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	colnr <- round(colnr)
 	colnr[colnr < 1 | colnr > ncol(object)] <- NA
 	x <- xmin(object) + (colnr - 0.5) * xres(object) 
@@ -23,7 +23,7 @@ xFromCol <- function(object, colnr) {
 
 
 cellFromXY <- function(object, xy) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	if (class(xy) == 'SpatialPoints' | class(xy) == 'SpatialPointsDataFrame') {
 		x <- coordinates(xy)[,1]
 		y <- coordinates(xy)[,2]
@@ -42,7 +42,7 @@ cellFromXY <- function(object, xy) {
 
 
 colFromX <- function ( object, x )	{
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	if (class(x) == 'SpatialPoints' | class(x) == 'SpatialPointsDataFrame') {	x <- x@points[,1] }
 	colnr <- (trunc((x - xmin(object)) / xres(object))) + 1 
 	colnr[x == xmax(object)] <- ncol(object)
@@ -52,7 +52,7 @@ colFromX <- function ( object, x )	{
 	
 	
 rowFromY <- function ( object, y )	{
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	if (class(y) == 'SpatialPoints' | class(y) == 'SpatialPointsDataFrame') {	y <- y@points[,2] }
 	rownr <- 1 + (trunc((ymax(object) - y) / yres(object)))
 	rownr[y == ymin(object) ] <- nrow(object) 
@@ -62,7 +62,7 @@ rowFromY <- function ( object, y )	{
 	
 
 xyFromCell <- function(object, cell, asSpatialPoints=FALSE) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	cell <- round(cell)
 	xy <- matrix(data = NA, ncol=2, nrow=length(cell))
 	colnr <- colFromCell(object, cell)
@@ -79,7 +79,7 @@ xyFromCell <- function(object, cell, asSpatialPoints=FALSE) {
 
 	
 cxyFromBbox <- function(object, bbox) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	bbox <- extent(bbox)
 	cells <- cellsFromBbox(object, bbox)
 	cxy <- cbind(cells, xyFromCell(object, cells))

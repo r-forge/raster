@@ -7,6 +7,9 @@
 \alias{stack,character-method}
 \alias{stack,Raster-method}
 \alias{stack,list-method}
+\alias{stack,missing-method}
+\alias{stack,SpatialPixels-method}
+\alias{stack,SpatialGrid-method}
 
 \title{ stack }
 
@@ -20,7 +23,7 @@ A RasterStack can be created from RasterLayer objects, or from raster files, or 
 \code{stack(x, ...)}
 
 
-  \item{\code{x}}{ filename (character), Raster* object, or list (of filenames and/or Raster* objects) }
+  \item{\code{x}}{ filename (character), Raster* object, SpatialGrid*, SpatialPixels*, or list (of filenames and/or Raster* objects) }
   \item{\code{...}}{additional RasterLayer objects (or filenames) }
   \item{bands}{ optional argument. a vector or list of bands of raster data files}
 

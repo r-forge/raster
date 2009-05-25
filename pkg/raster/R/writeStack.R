@@ -55,7 +55,7 @@ writeStack <- function(rstack, bandorder='BIL', filename='', filetype='raster', 
 		} else {
 			fakerow <- 0
 			for (i in 1:nl) {
-				sr <- asRasterLayer(rstack, i)
+				sr <- raster(rstack, i)
 				for (r in 1:nrow(sr)) {
 					fakerow <- fakerow + 1
 					sr <- readRow(sr, r)

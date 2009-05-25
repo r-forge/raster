@@ -6,7 +6,7 @@
 
 setMethod('hist', signature(x='RasterStack'), 
 	function(x, layer=1, maxsamp=100000, ...) {
-		x <- asRasterLayer(x, layer)
+		x <- raster(x, layer)
 		hist(x, maxsamp=100000, ...)
 	}
 )

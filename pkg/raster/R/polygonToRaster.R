@@ -74,7 +74,8 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
 		}
 	}
-	raster <- raster(raster, filename)
+	raster <- raster(raster)
+	filename(raster) <- filename
 	dataType(raster) <- datatype
 
 	starttime <- proc.time()

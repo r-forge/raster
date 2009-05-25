@@ -16,7 +16,7 @@
 		index <- round(index)
 		i <- min(max(1, index), nlayers(object))
 		if (i != index) { stop("index should be >= 1 and <=", nlayers(object), " =nlayers(object)") }
-		raster2 <- asRasterLayer(object, i)
+		raster2 <- raster(object, i)
 		if (dataContent(object) == 'all') {
 			raster2 <- setValues(raster2, values(object)[,i])
 		}

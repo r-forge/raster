@@ -14,7 +14,7 @@ setMethod("unstack", signature(x='RasterStack'),
 function(x) {
 	rlist <- list()
 	for (i in nlayers(x):1) {
-		rlist[i] <- asRasterLayer(x, i)
+		rlist[i] <- raster(x, i)
 		x <- dropLayer(x, i)
 	}
 	return(rlist)

@@ -6,7 +6,7 @@
 
 
 validCell <- function(object, cell) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	cell <- round(cell)
 	validcell <- vector(length=length(cell))
 	validcell[cell > 0 & cell <= ncell(object)] <- TRUE
@@ -14,7 +14,7 @@ validCell <- function(object, cell) {
 }
 
 validRow <- function(object, rownr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	rownr <- round(rownr)
 	validrows <- vector(length=length(rownr))
 	validrows[rownr > 0 & rownr <= nrow(object)] <- TRUE
@@ -22,7 +22,7 @@ validRow <- function(object, rownr) {
 }
 
 validCol <- function(object, colnr) {
-	if (.isSPgrid(object)) { object <- asRasterLayer(object, FALSE) }
+	if (.isSPgrid(object)) { object <- raster(object) }
 	colnr <- round(colnr)
 	validcols <- vector(length=length(colnr))
 	validcols[colnr > 0 & colnr <= nrow(object)] <- TRUE

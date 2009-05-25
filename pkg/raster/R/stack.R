@@ -19,6 +19,12 @@ if (!isGeneric("stack")) {
 		standardGeneric("stack"))
 }	
 
+setMethod("stack", signature(x='missing'), 
+function(x) {
+	return(new("RasterStack"))
+	}
+)
+
 setMethod("stack", signature(x='Raster'), 
 function(x, ..., bands=NULL) {
 	rlist <- c(x, list(...))
@@ -43,15 +49,15 @@ function(x, bands=NULL) {
 		if (is.character(x[[i]])) {
 			if (is.null(bands)) {
 				r[j] <- raster(x[[i]])
+			} else if (bands[[i]] > 0) {
+					r[j] <- raster(x[[i]], bands[[i]])
 			} else {
-				if (bands[[i]] < 1) {
-					r[j] <- raster(x[[i]], 1)
-					bds <- nbands(r)
-					if (bds > 1) {
-						for (b in 2:bds) {
-							j <- j + 1
-							r[j] <- raster(x[[i]], b)
-						}
+				r[j] <- raster(x[[i]], 1)
+				bds <- nbands(r[[j]])
+				if (bds > 1) {
+					for (b in 2:bds) {
+						j <- j + 1
+						r[j] <- raster(x[[i]], band=b)
 					}
 				}
 			}
@@ -65,3 +71,29 @@ function(x, bands=NULL) {
 } )
 
 
+setMethod("stack", signature(x='SpatialGrid'), 
+	function(x) {
+		stk <- new("RasterStack")
+		stk <- setExtent(stk, extent(x))
+		projection(stk) <- x@proj4string
+		rowcol(stk) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
+
+		if (class(x)=='SpatialGridDataFrame') {
+			stk <- setValues(stk, as.matrix(x@data))
+			rs <- as(stk, 'RasterLayer')
+			stk <- setValues(stk, as.matrix(x@data))
+			for (i in 1:ncol(x@data)) {
+				stk@layers[i] <- rs
+			}
+		}
+		return(stk)
+	}
+)
+	
+
+setMethod("stack", signature(x='SpatialPixels'), 
+	function(x) {
+		x <- as(x, 'SpatialGridDataFrame')
+		return(stack(x))
+	}
+)

@@ -7,18 +7,21 @@
 \alias{raster,character-method}
 \alias{raster,missing-method}
 \alias{raster,Raster-method}
+\alias{raster,RasterStack-method}
+\alias{raster,SpatialGrid-method}
+\alias{raster,SpatialPixels-method}
 \alias{raster,matrix-method}
 
 \title{Create a RasterLayer object}
 
 \description{
-  Create a new RasterLayer object from a filename, from scratch, a BoundingBox, or a Raster* object.
-  The created object does normally not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
+Methods to create a RasterLayer object. RasterLayer objects can be created from a filename, from scratch, a BoundingBox, or a Raster* or SpatialPixels* or SpatialGrid* object.
+In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
 }
 
 
 \arguments{
-  \item{x}{a filename, BoundingBox, Raster* object, or missing}
+  \item{x}{a filename, BoundingBox, Raster*, SpatialPixels*, SpatialGrid* object, or missing}
   \item{...}{ additional argumens }  
 }
 
@@ -78,8 +81,8 @@ If \code{x} is a character value, it should be a filename of a file that the ras
 
 
 
-4) Create a RasterLayer object from a Raster* object. This copies the parameters of a Raster* object to a new RasterLayer, 
-but does not copy the filename nor the data associated with the original Raster* object. 
+4) Create a RasterLayer object from a RasterLayer object. This copies the parameters of a RasterLayer object to a new RasterLayer, 
+but does not copy the filename nor the data associated with the original Raster object. 
 
 \code{raster(x, filename="", values=NULL)}
 
@@ -90,7 +93,19 @@ but does not copy the filename nor the data associated with the original Raster*
 }
 
 
-5) Create a RasterLayer object from a matrix. The default extent is set to be between 0 and 1 in the x and y direction but can be changed at creation of the RasterLayer object or later. You can also provide a projection.  
+
+5) Create a RasterLayer object from a RasterStack, SpatialPixels* or SpatialGrid* object. This copies the parameters of a RasterStack object to the new RasterLayer, and the values of the selected layer (if \code{layer > 0}. 
+
+\code{raster(x, layer=0)}
+
+\tabular{rll}{
+ \tab \code{x} \tab a RasterStack, SpatialPixels* or SpatialGrid* object \cr
+ \tab \code{layer} \tab The RasterStack layer from which to copy values to the new RasterLayer \cr
+}
+
+
+
+6) Create a RasterLayer object from a matrix. The default extent is set to be between 0 and 1 in the x and y direction but can be changed at creation of the RasterLayer object or later. You can also provide a projection.  
 
 \code{function(x, xmn=0, xmx=1, ymn=0, ymx=1, projs=NA)}
 

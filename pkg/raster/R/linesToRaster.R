@@ -96,7 +96,8 @@ linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE
 			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
 		}
 	}
-	raster <- raster(raster, filename)
+	raster <- raster(raster)
+	filename(raster) <- filename
 	dataType(raster) <- datatype
 
 	

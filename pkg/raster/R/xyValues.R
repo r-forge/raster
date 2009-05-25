@@ -62,7 +62,7 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 		
 		if (method == 'bilinear') {
 			for (i in seq(nlayers(object))) {
-				r <- asRasterLayer(object, i)
+				r <- raster(object, i)
 				v <- .bilinearValue(r, xyCoords)
 				if (i == 1) {
 					result <- v

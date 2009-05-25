@@ -7,16 +7,15 @@
 
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
-
 		fname <- as.character(sys.call(sys.parent())[[1]])
-		 
-		if (canProcessInMemory(x, 3)) {
-			rst <- raster(x, values=callGeneric(.getRasterValues(x)))
+		rst <- raster(x)
+		if (canProcessInMemory(rst, 3)) {
+			rst <- setValues(rst, callGeneric(.getRasterValues(x)))
 			if (fname %in% c('floor', 'ceiling', 'trunc')) {
 				dataType(rst) <- 'INT4S'
 			}
 		} else {
-			rst <- raster(x, filename=rasterTmpFile())
+			filename(rst) <- rasterTmpFile()
 			if (fname %in% c('floor', 'ceiling', 'trunc')) {
 				dataType(rst) <- 'INT4S'
 			}
@@ -36,16 +35,17 @@ setMethod("Math", signature(x='RasterLayer'),
 setMethod("Math2", signature(x='RasterLayer'), 
 	function (x, digits=0) {
 		digits <- max(0, digits)
+		rst <- raster(x)
 		if (canProcessInMemory(x, 3)) {
-			x <- setValues(x, callGeneric(values(x), digits))
+			rst <- setValues(rst, callGeneric( .getRasterValues(x), digits))
 			if (digits == 0) {
-				dataType(x) <- 'INT4S'
+				dataType(rst) <- 'INT4S'
 			}
-			return(x)
+			return(rst)
 		} else {
-			rst <- raster(x, filename=rasterTmpFile())
+			filename(rst) <- rasterTmpFile()
 			if (digits == 0) {
-				dataType(x) <- 'INT4S'
+				dataType(rst) <- 'INT4S'
 			}
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, callGeneric(.getRowValues(x, r), digits), r)
