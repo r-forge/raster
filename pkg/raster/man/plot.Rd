@@ -27,9 +27,6 @@ Plot (that is, make a map of) the values of a RasterLayer or RasterStack, or mak
 \tab \code{subsample}  \tab  Logical. If \code{TRUE}, the image is resampled using maxdim \cr
 \tab \code{maxdim}  \tab  Maximum requested number of pixels in the map display (either vertical or horizontal)  \cr
 \tab \code{addbox}  \tab  Logical. If \code{TRUE} a box is drawn around the map \cr
-\tab \code{axes}  \tab  see \code{?image} \cr
-\tab \code{xlab}  \tab  see \code{?image} \cr
-\tab \code{ylab}  \tab  see \code{?image} \cr
 \tab \code{...}  \tab  Any argument that can be passed to \code{\link[fields]{image.plot}} and to \code{\link[graphics]{plot}}  \cr
 }
 

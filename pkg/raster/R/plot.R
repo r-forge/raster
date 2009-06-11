@@ -6,8 +6,11 @@
 
 
 setMethod("plot", signature(x='RasterStack', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
-		if (missing(y)) {
+	function(x, y, col=rev(terrain.colors(255)), subsample=TRUE, maxdim=500, addbox=TRUE, ...)  {
+	if(axes == NULL){axes <- TRUE}
+	if(xlab == NULL) {xlab <- ""} 
+	if(ylab == NULL) {ylab <- ""}
+	if (missing(y)) {
 			nl <- nlayers(x)
 			if (nl > 12) {
 				warning('only first 12 layers are plotted')
