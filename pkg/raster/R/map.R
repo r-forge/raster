@@ -64,7 +64,7 @@
 	
 	z[is.infinite(z)] <- NA
 	
-	.imageplot(x, y, z, col=col, axes = axes, xlab=xlab, ylab=ylab, ...)
+	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, ...)
 	if (addbox) {box()}
 }	
 
