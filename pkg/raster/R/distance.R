@@ -19,7 +19,8 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 			outRaster <- raster(object, filename=filename)
 
 			fromCells <- which(!is.na(values(object)))
-			toCells <- (1:n)[-fromCells]
+			fromCells <- fromCells[which(values(object)[fromCells] == TRUE)]
+			toCells <- which(is.na(values(object)))
 			accDist <- rep(0,times=n)
 			accDist[toCells] <- Inf
 			if (isLatLon(object)) {

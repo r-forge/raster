@@ -8,7 +8,9 @@
 \title{Distance}
 
 \description{
- The function calculates the distance to cells of a RasterLayer that are \code{NA}.
+ The function calculates the distance to cells of a RasterLayer.
+ 
+ Origin cells should have value TRUE (or 1), destination cells should be \code{NA} and cells that can not be traversed should be set to FALSE (or 0).
  
  The distance is in meters if the RasterLayer is not projected (\code{+proj=longlat})
  and in map units (typically meters) when it is projected.
