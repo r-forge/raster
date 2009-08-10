@@ -16,7 +16,7 @@ setMethod('predict', signature(object='RasterStack'),
 		dataType(predrast) <- datatype
 		
 		dataclasses <- attr(model$terms, "dataClasses")
-		f <- which(dataclasses == 'factor')
+		f <- names( which(dataclasses == 'factor') )
 		if (length(f) > 0) { 
 			haveFactor <- TRUE 
 		} else {
@@ -37,6 +37,7 @@ setMethod('predict', signature(object='RasterStack'),
 				predrast <- writeRaster(predrast)
 			}
 			return(predrast)
+			
 		} else {
 			for (r in 1:nrow(object)) {
 				object <- readRow(object, r)
@@ -55,5 +56,3 @@ setMethod('predict', signature(object='RasterStack'),
 	}
 )
 
-
-	
