@@ -6,6 +6,8 @@
 
 
 .isSupportedGDALFormat <- function(dname) {
+	if (!require(rgdal)) { stop() }
+
 	gd <- gdalDrivers()
 	gd <- as.matrix(subset(gd, gd[,3] == T))
 	res <- dname %in% gd

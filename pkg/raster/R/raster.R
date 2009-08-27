@@ -1,6 +1,5 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
-# Date : June 2008
+# Date : August 2008
 # Version 0.8
 # Licence GPL v3
 	
@@ -28,12 +27,36 @@ setMethod('raster', signature(x='matrix'),
 
 
 setMethod('raster', signature(x='character'), 
-	function(x, values=FALSE, band=1, proj=NULL) {
+	function(x, values=FALSE, band=1, proj=NULL, ...) {
 		fileext <- toupper(ext(x)) 
-		if ( fileext == ".GRD" | fileext == ".GRI" ) {
-			r <- .rasterFromRasterFile(x, band) 
-		} else {
+		if ( fileext == ".GRD" | fileext == ".GRI" | fileext == "" ) {
+			grifile <- .setFileExtensionValues(x)
+			grdfile <- .setFileExtensionHeader(x)
+			if (file.exists( grdfile) ) {
+				if (file.exists( grifile)) {
+					r <- .rasterFromRasterFile(x, band) 
+				} else {
+					# TODO check if the problem is that the .gri is missing
+					#
+					
+					# check if this is a netcdf file
+					fcon <- file("d:/data/ca.grd", "rb")
+					w <- readBin(fcon, what='character', n=1)
+					close(fcon)
+					if (substr(w, 1, 3) == "CDF") { 
+						r <- .rasterFromNetCDF(x, ...) 
+					} else {
+					# perhaps a surfer grid...
+						r <- .rasterFromGDAL(x, band) 
+					}
+				}
+			} else {
+				r <- .rasterFromGDAL(x, band) 
+			}
+		} else if (file.exists( x )){
 			r <- .rasterFromGDAL(x, band) 
+		} else {
+			stop(paste('file', x, 'does not exist'))
 		}
 		if (values) {
 			r <- readAll(r)

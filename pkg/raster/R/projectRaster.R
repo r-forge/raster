@@ -6,6 +6,8 @@
 
 
 projectExtent <- function(object, projs) {
+	if (!require(rgdal)) { stop() }
+
 	validObject(projection(object, asText=FALSE))
 	validObject(projection(projs, asText=FALSE))
 	projfrom <- projection(object)

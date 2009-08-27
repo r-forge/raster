@@ -34,6 +34,8 @@
 
 
 .readCellsGDAL <- function(raster, cells) {
+	if (!require(rgdal)) { stop() }
+
 	colrow <- matrix(ncol=5, nrow=length(cells))
 #	valuename <- raster@file@shortname
 #	if (valuename == "") {valuename <- "value" }

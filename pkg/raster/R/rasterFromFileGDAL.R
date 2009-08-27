@@ -6,6 +6,8 @@
 
 
 .rasterFromGDAL <- function(filename, band) {	
+	if (!require(rgdal)) { stop() }
+
 	gdalinfo <- GDALinfo(filename)
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])

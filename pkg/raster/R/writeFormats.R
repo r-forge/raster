@@ -6,10 +6,16 @@
 
 
 writeFormats <- function() {
-	gd <- gdalDrivers()
-	gd <- as.matrix(subset(gd, gd[,3] == T))
-	short <- c("raster", "ascii", as.vector(gd[,1]))
-	long <- c("raster package format", "Arc ascii", as.vector(gd[,2]))
+	if (require(rgdal)) { 
+		gd <- gdalDrivers()
+		gd <- as.matrix(subset(gd, gd[,3] == T))
+		short <- c("raster", "ascii", as.vector(gd[,1]))
+		long <- c("raster package format", "Arc ascii", as.vector(gd[,2]))
+		m <- cbind(short, long)
+	} else {
+		short <- c("raster", "ascii", "")
+		long <- c("raster package format", "Arc ascii", "rgdal not installed")
+	}
 	m <- cbind(short, long)
 	colnames(m) <- c("name", "long_name")
 	return(m)
