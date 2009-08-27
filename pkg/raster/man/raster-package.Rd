@@ -19,8 +19,8 @@ work correctly, because they will read, process, and write blocks of data, witho
 \tabular{ll}{
 Package: \tab raster\cr
 Type: \tab Package\cr
-Version: \tab 0.8\cr
-Date: \tab 2009-03-5\cr
+Version: \tab 0.9\cr
+Date: \tab 2009-08-25\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
