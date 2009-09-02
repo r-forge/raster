@@ -6,6 +6,8 @@
 \alias{plot,RasterLayer,missing-method}
 \alias{plot,RasterStack,ANY-method}
 \alias{plot,RasterLayer,RasterLayer-method}
+\alias{plot,BoundingBox,ANY-method}
+\alias{plot,BoundingBox,missing-method}
 
 \title{Plot a Raster* object}
 
@@ -62,6 +64,15 @@ Produces a scatter plot of the values of x against those of y.
 \tab \code{cex}  \tab  point size \cr
 \tab \code{...}  \tab  Any argument that can be passed to \code{\link[graphics]{plot}}  \cr
 }
+
+\bold{x=BoundingBox, y="ANY"}
+Draws the (rectangular) bounding box of a raster object. 
+\code{plot(ext) }
+
+\tabular{rll}{
+\tab \code{ext} \tab a BoundingBox object \cr
+}
+
 }}
 
 
@@ -82,6 +93,7 @@ Most of the code for this function was taken from image.plot (fields package)
 r <- raster(nrows=36, ncols=18)
 r <- setValues(r, runif(ncell(r)))
 plot(r)
+plot(extent(r))
 }
 
 \keyword{methods}

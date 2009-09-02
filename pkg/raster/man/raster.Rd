@@ -45,7 +45,7 @@ raster(x, ...)
 }
 
 If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 
-'native' raster package format and those that can be read via rgdal. See \code{\link[gdal]{readGDAL}} help for supported file types.
+'native' raster package format and those that can be read via rgdal. See \code{\link[rgdal]{readGDAL}} help for supported file types.
 
 
 
@@ -123,8 +123,8 @@ but does not copy the filename nor the data associated with the original Raster 
 
 \details{
 New RasterLayer objects normally have no values in memory. 
-You can get values into memory with \code{\link[raster]{readRow}}, and \code{\link[raster]{readAll}}; extract values with \code{\link[raster]{xyValues}};
-Or set values with \code{\link[raster]{Replacement}} functions.
+You can get values into memory with \code{\link[raster]{read}*}, functions; extract values with \code{\link[raster]{xyValues}};
+Or set values with \code{\link[raster]{replaceMethods}}.
 }
 
 
@@ -134,7 +134,7 @@ RasterLayer object
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{stack},  \link[raster]{values}, \link[gdal]{readGDAL} } }
+\seealso{ \code{\link[raster]{stack},  \link[raster]{values}, \link[rgdal]{readGDAL} } }
 
 
 \examples{

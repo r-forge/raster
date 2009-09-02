@@ -30,24 +30,31 @@ setMethod('raster', signature(x='character'),
 	function(x, values=FALSE, band=1, proj=NULL, ...) {
 		fileext <- toupper(ext(x)) 
 		if ( fileext == ".GRD" | fileext == ".GRI" | fileext == "" ) {
+			if (fileext == "" & file.exists(x)) {
+				r <- .rasterFromGDAL(x, band) 
+			}
 			grifile <- .setFileExtensionValues(x)
 			grdfile <- .setFileExtensionHeader(x)
 			if (file.exists( grdfile) ) {
 				if (file.exists( grifile)) {
 					r <- .rasterFromRasterFile(x, band) 
 				} else {
-					# TODO check if the problem is that the .gri is missing
-					#
+					# TODO check if this is a valid rater .grd but the problem is that the .gri is missing?
 					
-					# check if this is a netcdf file
-					fcon <- file("d:/data/ca.grd", "rb")
-					w <- readBin(fcon, what='character', n=1)
-					close(fcon)
-					if (substr(w, 1, 3) == "CDF") { 
-						r <- .rasterFromNetCDF(x, ...) 
+					if (fileext == ".GRD" ) {
+						# check if this is a netcdf file
+						fcon <- file(x, "rb")
+						w <- readBin(fcon, what='character', n=1)
+						close(fcon)
+						if (substr(w, 1, 3) == "CDF") { 
+							r <- .rasterFromNetCDF(x, ...) 
+						} else {
+						# perhaps a surfer grid...
+							r <- .rasterFromGDAL(x, band) 
+						}
 					} else {
-					# perhaps a surfer grid...
-						r <- .rasterFromGDAL(x, band) 
+					# what would this be? A gri, but no grd. 
+						stop('unknown file type; .gri file found but .grd is missing')
 					}
 				}
 			} else {

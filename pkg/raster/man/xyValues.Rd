@@ -50,7 +50,7 @@ are interpolated from the (centers of the) four nearest raster cells. \cr
 a vector (object is a RasterLayer) or a matrix (object is a RasterStack)
 }
 
-\seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{readRow}}, \code{\link[raster]{readAll}}, \code{\link[sp]{SpatialPoints}}  }
+\seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{read}}, \code{\link[sp]{SpatialPoints}}  }
 
 \author{Robert J. Hijmans }
 

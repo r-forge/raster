@@ -29,7 +29,7 @@ cv(x, ..., aszero=FALSE, na.rm = FALSE)
 }
 
 \value{
-  Mode returns the modal (most frequent) value of a vector of values, ties are broken at random
+  modal returns the mode, or modal (most frequent) value of a vector of values, ties are broken at random.
   cv returns the coefficient of variation (expressed as a percentage). If there is only a single value, \code{sd} is \code{NA}
   and \code{cv} returns \code{NA} if \code{aszero=FALSE} (the default). However, if (\code{aszero=TRUE}), \code{cv} returns \code{0}.
 }
