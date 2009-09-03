@@ -8,5 +8,5 @@ Suggests: rgdal (>= 0.5-33), RNetCDF
 Author: Robert J. Hijmans & Jacob van Etten
 Maintainer: Robert J. Hijmans <r.hijmans@gmail.com> 
 Description: Package for reading, writing, and manipulating (geographic, spatial) raster (grid) data
-License: GPL3
+License: GPL (>=3)
 URL: http://raster.r-forge.r-project.org/

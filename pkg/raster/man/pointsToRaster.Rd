@@ -1,4 +1,5 @@
-\name{point to raster conversion}
+\name{pointsToRaster}
+
 \alias{pointsToRaster}
 
 \title{ Point to raster conversion }
