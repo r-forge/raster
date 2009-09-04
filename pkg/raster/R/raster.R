@@ -47,7 +47,7 @@ setMethod('raster', signature(x='character'),
 						w <- readBin(fcon, what='character', n=1)
 						close(fcon)
 						if (substr(w, 1, 3) == "CDF") { 
-							r <- .rasterFromNetCDF(x, ...) 
+							r <- rasterCDF(x, ...) 
 						} else {
 						# perhaps a surfer grid...
 							r <- .rasterFromGDAL(x, band) 
@@ -61,6 +61,9 @@ setMethod('raster', signature(x='character'),
 				r <- .rasterFromGDAL(x, band) 
 			}
 		} else if (file.exists( x )){
+		    if (fileext == '.NC') {
+				r <- rasterCDF(x, ...) 
+			}
 			r <- .rasterFromGDAL(x, band) 
 		} else {
 			stop(paste('file', x, 'does not exist'))
