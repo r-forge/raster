@@ -3,16 +3,15 @@
 # Version 0.8
 # Licence GPL v3
 
-
 .getxvar <- function(xvar, vars) {
 	if (xvar == '') {
 		if ('x' %in% vars) { xvar <- 'x'
 		} else if ('lon' %in% vars) { xvar <- 'lon' 
 		} else if ('long' %in% vars) { xvar <- 'long' 
 		} else if ('longitude' %in% vars) { xvar <- 'longitude' 
-		} else { stop('cannot find xvar in file') 
+		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(xvar %in% vars)) { stop('cannot find xvar in file') }	
+	} else if (!(xvar %in% vars)) { stop( paste('Cannot find xvar in file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(xvar)
 }
 
@@ -20,15 +19,15 @@
 	if (yvar == '') { if ('y' %in% vars){ yvar <- 'y'
 		} else if ('lat' %in% vars) { yvar <- 'lat' 
 		} else if ('latitude' %in% vars) { yvar <- 'latitude' 
-		} else { stop('cannot find yvar in file') 
+		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(yvar %in% vars)) { stop('cannot find yvar in file') }	
+	} else if (!(yvar %in% vars)) { stop( paste('Cannot find yvar in file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(yvar)
 }
 
 .getzvar <- function(zvar, vars) {
 	if (zvar == '') { zvar <- 'z' }
-	if (!(zvar %in% vars)) { stop('cannot find zvar in file') }
+	if (!(zvar %in% vars)) { stop ( 'Cannot find an obvious zvar in file. Select one from:\n', paste(vars, collapse=", ") ) }
 	return(zvar)
 }
 
@@ -50,24 +49,19 @@ rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 	if (!require(RNetCDF)) { stop() }
 	nc <- open.nc(filename)
 # should do some checks if x, y and z are present. Or perhaps lat and lon in stead of x	
-
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
-     
 	xvar <- .getxvar(xvar, vars) 
 	yvar <- .getyvar(yvar, vars) 
 	zvar <- .getzvar(zvar, vars) 
 	r <- .getraster(nc, xvar, yvar, zvar)
-	
 	d <- var.get.nc(nc, zvar)
 	d <- d[,,time]
-	
     close.nc(nc)
 # y needs to go from big to small
 	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
-	d <- as.vector( t( d[nrow(r):1,] ) )
-	
+	d <- as.vector( t( d[nrow(r):1,] ) )	
 	r <- setValues(r, d)
 	return(r)
 }
@@ -89,10 +83,10 @@ stackCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 	yvar <- .getyvar(yvar, vars) 
 	zvar <- .getzvar(zvar, vars) 
 	r <- .getraster(nc, xvar, yvar, zvar)
-	d <- var.get.nc(nc, zvar)
+	dd <- var.get.nc(nc, zvar)
     close.nc(nc)
 	
-	dims <- dim(d)
+	dims <- dim(dd)
 	if (length(dims)== 3) { tsteps <- dims[3] 
 	} else if (length(dims)== 3) { tsteps <- 1
 	} else if (length(dims)== 2) { 
@@ -101,7 +95,7 @@ stackCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 	
 
 	for (i in 1:tsteps) {
-		d <- d[,,i]
+		d <- dd[,,i]
 # y needs to go from big to small
 		d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
 		d <- as.vector( t( d[nrow(r):1,] ) )
@@ -111,3 +105,5 @@ stackCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 	}
 	return(stk)
 }
+
+
