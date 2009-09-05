@@ -63,8 +63,9 @@ setMethod('raster', signature(x='character'),
 		} else if (file.exists( x )){
 		    if (fileext == '.NC') {
 				r <- rasterCDF(x, ...) 
+			} else {
+				r <- .rasterFromGDAL(x, band) 
 			}
-			r <- .rasterFromGDAL(x, band) 
 		} else {
 			stop(paste('file', x, 'does not exist'))
 		}

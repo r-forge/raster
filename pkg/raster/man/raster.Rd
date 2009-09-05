@@ -21,8 +21,8 @@ In many cases, e.g. when a RasterLayer is created from a file, it does (initiall
 
 
 \arguments{
-  \item{x}{a filename, BoundingBox, Raster*, SpatialPixels*, SpatialGrid* object, or missing}
-  \item{...}{ additional argumens }  
+  \item{x}{a filename, BoundingBox, Raster*, SpatialPixels*, SpatialGrid* object, matrix, or missing}
+  \item{...}{ additional argumens, see below }  
 }
 
 \usage{
@@ -38,15 +38,18 @@ raster(x, ...)
 
 
 \tabular{rll}{
-\tab \code{x} \tab character. name of raster file  \cr
+\tab \code{x} \tab character. Name of raster file  \cr
 \tab \code{values} \tab logical. If \code{TRUE}, RasterLayer values are read into memory with \code{\link[raster]{readAll}} \cr
-\tab \code{band} \tab band number in case of a file of multiple bands, default = 1 \cr
-\tab \code{projs} \tab Character. PROJ4 type description of a Coordinate Reference System (map projection). If NULL, the value stored on disk (if any and recognised) is used \cr
+\tab \code{band} \tab integer. Band number in case of a file of multiple bands, default = 1 \cr
+\tab \code{projs} \tab character. PROJ4 type description of a Coordinate Reference System (map projection). If NULL, the value stored on disk (if any and recognised) is used \cr
+\tab \code{xvar} \tab character. For netCDF files only: identify the x variable (e.g. 'longitude' or 'x') \cr
+\tab \code{yvar} \tab character. For netCDF files only: identify the y variable (e.g. 'latitude' or 'y')\cr
+\tab \code{zvar} \tab character. For netCDF files only: identify the z variable (e.g. 'altitide' or 'precipitation')\cr
+\tab \code{time} \tab integer > 0. For netCDF files only: identify which of the time variables you want (default=1)\cr
 }
 
 If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 
-'native' raster package format and those that can be read via rgdal. See \code{\link[rgdal]{readGDAL}} help for supported file types.
-
+'native' raster package format and those that can be read via rgdal. See \code{\link[rgdal]{readGDAL}} help for supported file types. For netCDF files, see \code{\link[raster]{rasterCDF}} 
 
 
 2) Create a RasterLayer object from scratch
