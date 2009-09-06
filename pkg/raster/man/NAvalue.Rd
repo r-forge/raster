@@ -24,7 +24,7 @@ NAvalue(x) <- value
 
 
 \value{
-a Raster* object
+Returns or set the NA value used for storage on disk.
 }
 
 

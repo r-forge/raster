@@ -26,6 +26,8 @@ a Raster* object
 
 \details{
   The function will try to guess values for the xvar, yvar, and zvar if they are not supplied.
+  
+  For this function to work, the RNetCDF package needs to have been installed.
 }
 
 \author{Robert J. Hijmans}
@@ -35,6 +37,5 @@ a Raster* object
 \examples{
 }
 
-\keyword{methods}
 \keyword{spatial}
 

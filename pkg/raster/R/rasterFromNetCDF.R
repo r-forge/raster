@@ -49,7 +49,6 @@ rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
 	nc <- open.nc(filename)
-# should do some checks if x, y and z are present. Or perhaps lat and lon in stead of x	
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
@@ -81,7 +80,6 @@ stackCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
 	nc <- open.nc(filename)
-# should do some checks if x, y and z are present. Or perhaps lat and lon in stead of x	
 
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
