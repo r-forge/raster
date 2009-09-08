@@ -80,7 +80,7 @@ Classes \code{RasterLayer} and \code{RasterStack} extend class \code{"\linkS4cla
     \item{show}{\code{signature(object = "RasterLayer")}: ... }
     \item{summary}{\code{signature(object = "RasterLayer")}: ... }
 	
-    \item{asRasterLayer}{\code{signature(object = "RasterStack")}: ... }
+    \item{raster}{\code{signature(object = "RasterStack")}: ... }
     \item{show}{\code{signature(object = "RasterStack")}: ... }
     \item{summary}{\code{signature(object = "RasterStack")}: ... }
 	

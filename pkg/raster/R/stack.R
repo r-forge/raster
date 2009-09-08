@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
-# Date : June 2008
-# Version 0.8
+# Date : September 2008
+# Version 0.9
 # Licence GPL v3
 
 
@@ -34,9 +33,13 @@ function(x, ..., bands=NULL) {
 
 
 setMethod("stack", signature(x='character'), 
-function(x, ..., bands=NULL) {
-	rlist <- c(x, list(...))
-	return(stack(rlist, bands))
+function(x, ..., bands=NULL, xvar='', yvar='', zvar='', time='') {
+    if (xvar != '' | yvar != '' | zvar != '' | is.numeric(time)) {
+		return(.stackCDF(x, xvar, yvar, zvar, time))
+	} else {
+		rlist <- c(x, list(...))
+		return(stack(rlist, bands))
+	}
 } )
 
 

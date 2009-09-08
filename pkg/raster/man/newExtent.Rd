@@ -32,7 +32,7 @@ a BoundingBox object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{getBoungingBox}}, \code{\link[raster]{BoungingBox-class}}, \code{\link[raster]{clickBbox}} }
+\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{drawBox}}, \code{\link[raster]{BoungingBox-class}} }
 
 \examples{
 r <- raster()

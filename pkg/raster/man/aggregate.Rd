@@ -38,7 +38,7 @@ A full call to the aggregate method for a RasterLayer is:
 \tab \code{na.rm} \tab logical. If \code{TRUE}, remove NA cells from calculations \cr
 \tab \code{filename} \tab character. output filename \cr
 \tab \code{overwrite} \tab logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
-\tab \code{filetype} \tab character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{rasterFormats}} \cr
+\tab \code{filetype} \tab character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}} \cr
 \tab \code{datatype} \tab character. output data type; see \code{\link[raster]{dataType}} \cr
 \tab \code{track} \tab vector of row numbers for which the function will report that they have been processed \cr
 }

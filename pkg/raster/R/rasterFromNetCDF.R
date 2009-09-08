@@ -1,6 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date: Aug 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 .getxvar <- function(xvar, vars) {
@@ -45,7 +45,7 @@
 }
 
 
-rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
+.rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
 	nc <- open.nc(filename)
@@ -76,7 +76,7 @@ rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
 
 
 
-stackCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
+.stackCDF <- function(filename, xvar='', yvar='', zvar='', time='') {
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
 	nc <- open.nc(filename)
@@ -93,14 +93,19 @@ stackCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
     close.nc(nc)
 	
 	dims <- dim(dd)
-	if (length(dims)== 3) { tsteps <- dims[3] 
+	if (length(dims)== 3) { 
+		if (is.numeric(time)) { 
+			tsteps <- time	
+		} else { 
+			tsteps <- 1:dims[3] 
+		}
 	} else if (length(dims)== 3) { tsteps <- 1
 	} else if (length(dims)== 2) { 
-		return(stack(rasterCDF(filename, xvar, yvar, zvar)))
+		return(stack(.rasterCDF(filename, xvar, yvar, zvar)))
 	} else { stop(paste('data has an unexpected number of dimensions', dims)) }
 	
 
-	for (i in 1:tsteps) {
+	for (i in tsteps) {
 		d <- dd[,,i]
 # y needs to go from big to small
 		d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)

@@ -23,7 +23,7 @@ a BoundingBox object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{unionExtent}}, \code{\link[raster]{getBoungingBox}},  \code{\link[raster]{setBoungingBox}} }
+\seealso{ \code{\link[raster]{unionExtent}}, \code{\link[raster]{extent}},  \code{\link[raster]{setExtent}} }
 
 \examples{
 r <- raster()

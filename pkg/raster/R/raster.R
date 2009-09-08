@@ -1,6 +1,6 @@
- # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# Date : August 2008
-# Version 0.8
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Date : September 2008
+# Version 0.9
 # Licence GPL v3
 	
 if (!isGeneric("raster")) {
@@ -48,7 +48,7 @@ setMethod('raster', signature(x='character'),
 						w <- readBin(fcon, what='character', n=1)
 						close(fcon)
 						if (substr(w, 1, 3) == "CDF") { 
-							r <- rasterCDF(x, ...) 
+							r <- .rasterCDF(x, ...) 
 						} else {
 						# perhaps a surfer grid...
 							r <- .rasterFromGDAL(x, band) 
@@ -63,7 +63,7 @@ setMethod('raster', signature(x='character'),
 			}
 		} else if (file.exists( x )){
 		    if (fileext == '.NC') {
-				r <- rasterCDF(x, ...) 
+				r <- .rasterCDF(x, ...) 
 			} else {
 				r <- .rasterFromGDAL(x, band) 
 			}

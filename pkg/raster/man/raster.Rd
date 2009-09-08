@@ -48,8 +48,9 @@ raster(x, ...)
 \tab \code{time} \tab integer > 0. For netCDF files only: identify which of the time variables you want (default=1)\cr
 }
 
-If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 
-'native' raster package format and those that can be read via rgdal. See \code{\link[rgdal]{readGDAL}} help for supported file types. For netCDF files, see \code{\link[raster]{rasterCDF}} 
+If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 'native' raster package format and those that can be read via rgdal. See \code{\link[rgdal]{readGDAL}} help for supported file types.
+
+For netCDF files, the function will try to guess values for the \code{xvar}, \code{yvar}, and \code{zvar} if they are not supplied. For this function to work, the RNetCDF package needs to have been installed. Note that currently, a raster object made from a netCDF file will load all values from file at creation (unlike other raster objects), and that 'read' functions are therefore not applicable. 
 
 
 2) Create a RasterLayer object from scratch
