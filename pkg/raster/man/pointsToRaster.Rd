@@ -3,9 +3,7 @@
 \alias{pointsToRaster}
 
 \title{ Point to raster conversion }
-\description{
-  Convert points to a RasterLayer object
-}
+\description{  Convert points to a RasterLayer object }
 
 \usage{
 pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)
