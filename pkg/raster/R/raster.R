@@ -37,6 +37,7 @@ setMethod('raster', signature(x='character'),
 			grdfile <- .setFileExtensionHeader(x)
 			if (file.exists( grdfile) ) {
 				if (file.exists( grifile)) {
+				    if (fileext != '.grd') { ext(x) <- '.grd' }
 					r <- .rasterFromRasterFile(x, band) 
 				} else {
 					# TODO check if this is a valid rater .grd but the problem is that the .gri is missing?
