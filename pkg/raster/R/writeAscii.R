@@ -14,9 +14,9 @@
 	
 	if (dataIndices(raster)[1] == 1) {
 		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
-		if (resdif > 0.001) {
+		if (resdif > 0.01) {
 			stop(paste("raster has unequal horizontal and vertical resolutions","\n", "these data cannot be stored in arc-ascii format"))
-		} else if (resdif > 0.00001) {
+		} else if (resdif > 0.001) {
 			warning("arc-ascii format ignore that this raster has slightly unequal horizontal and vertical resolutions")
 		}
 		if (!overwrite & file.exists(filename)) {
