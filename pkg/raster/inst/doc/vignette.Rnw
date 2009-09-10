@@ -24,21 +24,17 @@ foo <- packageDescription("raster")
 
 \section{Abstract}
 
-This is an vignette for the \verb@raster@ package in R.  The \verb@raster@ package deals with basic spatial raster (grid) data access and manipulation. Its principal aims are (1) to provide an easy interface to common 'high level' functions for raster data manipulation and management; (2) that all functions can work with very large raster datasets that are stored on disk as they cannot be loaded into memory; (3) to provide low-level functions on which new functions can be easily developed; and (4) to provide an easy-to-use raster algebra implementation. High level functions include overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for raster datasets that cannot be loaded into memory. Lower level functions include row by row reading and writing (from and to many different file formats via \verb@rgdal@). 
+This is an vignette for the \verb@raster@ package in R.  The \verb@raster@ package has functions for with spatial raster (grid) data access and manipulation. The package was developed to (1) provide an easy interface to common 'high level' functions for raster data manipulation and management; (2) assure that all these functions can work with very large raster datasets, that are stored on disk as they cannot be loaded into memory; (3) to provide low-level functions on which new functions can be easily developed; and (4) to provide an easy-to-use raster algebra implementation. High level functions include overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for raster datasets that cannot be loaded into memory. Lower level functions include row by row reading and writing (from and to many different file formats via \verb@rgdal@). 
 
 
 \section{Introduction}
 
 One of the main reasons for developing this package is that we would like to build a bridge to - the powerful statistics and modeling of - R for the "GIS" community. Our perspective is that standard GIS is too map-centric, and that proper data-analysis needs tools that are more model and data centric.
 
-
-bla bla bla normally distributed with mean 0 and standard deviation 2.
-
-
 \section{Beginning}
 
-The first thing to do is to install \verb@raster@ package of you have not yet done so. As the package is currently not on CRAN, this takes a tiny bit more effort than installing packages that are on CRAN. \verb@raster@ depends on \verb@rgdal@ so if you do not have that, install it first: 
-\verb@install.packages("rgdal")@
+The first thing to do is to install \verb@raster@ package if you have not yet done so. As the package is currently not on CRAN, this takes a tiny bit more effort than installing packages that are on CRAN. \verb@raster@ depends on \verb@sp@ and \verb@rgdal@ so if you do not have these packages, intsall them first: 
+\verb@install.packages(c("rgdal", "sp")@
 Now install \verb@raster@ from the R-Forge repository
 \verb@install.packages("raster", repos="http://R-Forge.R-project.org")@
 
@@ -47,17 +43,35 @@ The following R statements should now work
 library(raster)
 r <- raster()
 r[] <- 1:ncell(r)
+r[1:10]
 plot(r)
 @
 
-Let's use a file, the famous Meuse dataset:
+The command \verb@r <- raster()@ creates a RasterLayer object. RasterLayer objects consist of several parameters describing a raster dataset, such as the number of columns and rows, and the spatial extent. A RasterLayer object does not necessarily contain any raster cell values though. Frequently these values are stored in a file on disk. In this first example we do not have a reference to a file, so we provided some values to the RasterLayer. The values of a RasterLayer are repersented as a (one dimensional) vector, starting in the upper left corner and then increasing to the right and then down row by row untill the last cell in the lower-right corner. An alternative notation for \verb@r[] <- 1:ncell(r)@ is \verb@r <- setValues(r, 1:ncell(r))@.
+
+It is probably more common to create a RasterLayer from a file. The raster package can read raster files support by rgdal and grid data in netCDF format. Here is an example using the Meuse dataset that comes with the sp package:
 
 <<raster-2>>=
 r <- raster(system.file("external/test.ag", package="sp"))
 r
 r <- readRow(r, 50)
 values(r)
-s <- sqrt(r)
+s <- sqrt(r) - 5
+plot(s)
+@
+
+The command \verb@r <- raster(filename)@ creates a raster object describing the data on file, but not reading the actual raster cell values. \verb@readRow@ reads the values of a specified row of a raster file into memory. \verb@readAll@ reads all values, but this may not be possible if the file is very large. \verb@values(r)@ returns the values that are currently in memory (i.e. those of row 50). \verb@s <- sqrt(r) - r + 1@ is an example of raster algebra. \verb@s@ is a new RasterLayer, its values are the square root of r minus 5. The computation was done for the entire raster, not just for the values that were in memory. The new values are available in memory and can be inspected via \verb@plot@, @values(r)@, or via indexing, e.g. \verb@r[1:5]@. If the raster file had been very large, the results might have been written to a temporary file.
+
+<<raster-3>>=
+r <- raster()
+r[] <- 1:ncell(r)
+ra <- aggregate(r, 10)
+r1 <- crop(r, newExtent(-180,0,0,30))
+r2 <- crop(r, newExtent(-10,180,-20,10))
+m <- merge(r1, r2)
+o <- overlay(ra, m, fun=sum)
+d <- disaggregate(m, 2)
+f <- focal(d)
 @
 
 \begin{itemize}
