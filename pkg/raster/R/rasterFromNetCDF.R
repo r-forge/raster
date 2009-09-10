@@ -40,6 +40,12 @@
 	yy <- as.vector(var.get.nc(nc, yvar))
 	yrange <- c(min(yy), max(yy))
 	rm(yy)
+	resx <- (xrange[2] - xrange[1]) / (ncols-1)
+	resy <- (yrange[2] - yrange[1]) / (nrows-1)
+	xrange[1] <- xrange[1] - 0.5 * resx
+	xrange[2] <- xrange[2] + 0.5 * resx
+	yrange[1] <- yrange[1] - 0.5 * resy
+	yrange[2] <- yrange[2] + 0.5 * resy
     r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
     return(r)
 }
