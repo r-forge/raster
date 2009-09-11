@@ -14,8 +14,7 @@ when no filename is provided to a function and in functions where you cannot pro
 
 The default location is returned by \code{rasterTmpDir}. It is the same as that of the R tempdir but you can change it (for the current session) to somewhere else with \code{setTmpDir}, for example, if there is insufficient diskspace in that location. 
 
-Temporary files are automatically removed at the start of each session. During a session you can use \code{showTmpFiles} to see what is there and \code{removeTmpFiles} to delete all the temporary files.  \code{rasterTmpFile} returns a temporary filename. These can be useful when developing your own functions.
-
+Temporary files are automatically removed at the start of each session. During a session you can use \code{showTmpFiles} to see what is there and \code{removeTmpFiles} to delete all the temporary files.  \code{rasterTmpFile} returns a temporary filename. These can be useful when developing your own functions. To permanentely set the temporary directory, you can add a line like \code{options(rasterTmpDir='c:/temp/')} to the file \code{<your R installation>\etc\Rprofile.site}. User beware: all raster (*.grd and *.gri) files in that folder will be deleted every time the raster package is loaded.
 }
 
 \usage{
