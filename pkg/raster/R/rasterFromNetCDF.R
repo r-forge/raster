@@ -55,7 +55,7 @@
 }
 
 
-.rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=1) {
+.rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=NA) {
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
 	nc <- open.nc(filename)
@@ -65,19 +65,25 @@
 	zvar <- .getzvar(zvar, vars) 
 	r <- .getraster(nc, vars, xvar, yvar)
 	
-	d <- var.get.nc(nc, zvar)
-    close.nc(nc)
-    
-	dims <- dim(d)
-
-	if (length(dims)== 2) { 
-		d <- as.vector(d)
-	} else if (length(dims)== 3) { 
-	    if (time > dims[3] | time < 1) {
-			stop(paste('time should be >= 1 and <=', dims[3]))
+	if (is.na(time) ) {
+		d <- var.get.nc(nc, variable=zvar)
+		dims <- dim(d)
+		if (length(dims)== 1) { 
+			stop('zvar only has a single dimension')
+		} else if (length(dims)== 2) { 
+			d <- as.vector(d)
+		} else if (length(dims)== 3) { 
+			stop('zvar has three dimensions, provide a value for "time"')
+		} else if (length(dims)== 4) { 
+			stop('zvar has four dimensions, I cannot process that')
 		}
-		d <- as.vector(d[,,time])
-	} else { stop(paste('data has an unexpected number of dimensions', dims)) }
+		
+	} else {
+		start <- c(1, 1, time)
+		count <- c(ncol(r), nrow(r), 1)
+		d <- as.vector ( var.get.nc(nc, variable=zvar, start=start, count=count) )
+	} 
+	close.nc(nc)
 
 # y needs to go from big to small
 	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
