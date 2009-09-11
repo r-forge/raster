@@ -23,7 +23,7 @@ a BoundingBox object
   
 \author{Robert J. Hijmans}
 
-\seealso{  \code{\link[raster]{intersectBbox}}, \code{\link[raster]{extent}},  \code{\link[raster]{setExtent}} }
+\seealso{  \code{\link[raster]{intersectExtent}}, \code{\link[raster]{extent}},  \code{\link[raster]{setExtent}},  \code{\link[raster]{newExtent}} }
 
 \examples{
 r <- raster()

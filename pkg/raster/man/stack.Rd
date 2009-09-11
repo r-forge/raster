@@ -44,7 +44,7 @@ If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted, 
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{changestack}}, \code{\link[raster]{rasterFromFile}}}
+\seealso{ \code{\link[raster]{addLayer}}, \code{\link[raster]{dropLayer}}, \code{\link[raster]{rasterFromFile}} }
 
 \examples{
   fn <- system.file("external/test.ag", package="sp")

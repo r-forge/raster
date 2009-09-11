@@ -130,7 +130,7 @@ but does not copy the filename nor the data associated with the original Raster 
 \details{
 New RasterLayer objects normally have no values in memory. 
 You can get values into memory with \code{\link[raster]{read}*}, functions; extract values with \code{\link[raster]{xyValues}};
-Or set values with \code{\link[raster]{replaceMethods}}.
+Or set values with \code{\link[raster]{replacement}}.
 }
 
 
