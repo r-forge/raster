@@ -6,16 +6,15 @@
 \alias{showTmpFiles}
 \alias{setTmpDir}
 
-\title{temporary files}
+\title{Temporary files}
 
 \description{
 Functions in the raster package create temporary files if the values of an output RasterLayer cannot be stored in memory (ram). This can happen
 when no filename is provided to a function and in functions where you cannot provide a filename (e.g. when using 'raster algebra').
 
-The default location is returned by \code{rasterTmpDir}. It is the same as that of the R tempdir but you can change it (for the current session) to somewhere else with \code{setTmpDir}, for example if there is insufficient diskspace in that location. 
+The default location is returned by \code{rasterTmpDir}. It is the same as that of the R tempdir but you can change it (for the current session) to somewhere else with \code{setTmpDir}, for example, if there is insufficient diskspace in that location. 
 
-Temporary files are not automatically removed. You can use \code{showTmpFiles} to see what is there and \code{removeTmpFiles} to delete them. 
- \code{rasterTmpFile} returns a temporary filename. These can be useful when developing your own functions.
+Temporary files are automatically removed at the start of each session. During a session you can use \code{showTmpFiles} to see what is there and \code{removeTmpFiles} to delete all the temporary files.  \code{rasterTmpFile} returns a temporary filename. These can be useful when developing your own functions.
 
 }
 
@@ -44,7 +43,7 @@ setTmpDir(d=NULL)
 
 \code{removeTmpFiles} returns nothing
 
-setTmpDir(d=NULL) sets a global option for the current sessions, but returns nothing
+\code{setTmpDir(d=NULL)} sets a global option for the current sessions, but returns nothing
 }
 
 

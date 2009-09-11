@@ -1,9 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
-# Date :  June 2008
-# Version 0,8
+# Date: June 2008
+# Version 0.8
 # Licence GPL v3
-
 
 
 setMethod('summary', signature(object='RasterStack'), 
@@ -21,7 +19,6 @@ setMethod('summary', signature(object='RasterStack'),
 )	
 
 
-
 setClass('RasterLayerSummary',
 	representation (
 		ncell = 'numeric',
@@ -31,6 +28,7 @@ setClass('RasterLayerSummary',
 	)
 )
 	
+
 setMethod('show', signature(object='RasterLayerSummary'), 	
 	function(object) {
 		cat ("Cells: " , object@ncell, "\n")

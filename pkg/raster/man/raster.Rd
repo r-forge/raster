@@ -15,7 +15,8 @@
 \title{Create a RasterLayer object}
 
 \description{
-Methods to create a RasterLayer object. RasterLayer objects can be created from a filename, from scratch, a BoundingBox, or a Raster* or SpatialPixels* or SpatialGrid* object.
+Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a filename, a BoundingBox object, a matrix, or a Raster* or SpatialPixels* or SpatialGrid* object.
+
 In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
 }
 

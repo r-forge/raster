@@ -1,7 +1,8 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date :  May 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
+
 
 setTmpDir <- function(d=NULL) {
 	if (!is.null(d)) {
@@ -32,11 +33,18 @@ rasterTmpFile <- function()  {
 
 removeTmpFiles <- function() {
 	d <- rasterTmpDir()
-	unlink(paste(d,'/*', sep=""))
+#	unlink(paste(d,'/*', sep=""))
+	gri <- Sys.glob(paste(d, '*.gri'))
+	file.remove(gri)
+	grd <- Sys.glob(paste(d, '*.grd'))
+	file.remove(grd)
 }
 
 showTmpFiles <- function() {
 	d <- rasterTmpDir()
-	list.files(d, '.grd')
+	if (file.exists(d)) {
+		list.files(d, '.grd')
+	} else {
+		cat('--- none ---\n')
+	}
 }
-

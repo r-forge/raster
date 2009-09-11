@@ -22,16 +22,17 @@ foo <- packageDescription("raster")
 \author{Robert J. Hijmans}
 \maketitle
 
-\section{Abstract}
-
-This is an vignette for the \verb@raster@ package in R.  The \verb@raster@ package has functions for with spatial raster (grid) data access and manipulation. The package was developed to (1) provide an easy interface to common 'high level' functions for raster data manipulation and management; (2) assure that all these functions can work with very large raster datasets, that are stored on disk as they cannot be loaded into memory; (3) to provide low-level functions on which new functions can be easily developed; and (4) to provide an easy-to-use raster algebra implementation. High level functions include overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for raster datasets that cannot be loaded into memory. Lower level functions include row by row reading and writing (from and to many different file formats via \verb@rgdal@). 
-
 
 \section{Introduction}
 
-One of the main reasons for developing this package is that we would like to build a bridge to - the powerful statistics and modeling of - R for the "GIS" community. Our perspective is that standard GIS is too map-centric, and that proper data-analysis needs tools that are more model and data centric.
+This is a -very brief- vignette for the \verb@raster@ package in R.  The \verb@raster@ package has functions for with spatial raster (grid) data access and manipulation. The package was developed to (1) to provide general low-level raster data manipulation functions (e.g. read raster values by row) that can easily be used to develop higher level specific functions; (2) assure that all these functions can work with very large raster datasets, that are stored on disk as they cannot be loaded into memory; (3) to provide 'high level' functions for raster data manipulation and management that are also commonly available in GIS software; and (4) to provide an easy-to-use raster algebra implementation. 
 
-\section{Beginning}
+High level functions include overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for raster datasets that cannot be loaded into memory. Reading and writing data for most file formats is done via the \verb@rgdal@ package. For 'vector type data (points, lines, polygons), objects of classes defined in the \verb@sp@ package are used. 
+
+With this package, together with other efforts, we would like to help build a bridge to -the powerful statistics and modeling of- R for the "GIS" community. Our perspective is that standard GIS is too map-centric, and that proper data-analysis needs tools that are more model and data centric. 
+
+
+\section{Some examples}
 
 The first thing to do is to install \verb@raster@ package if you have not yet done so. As the package is currently not on CRAN, this takes a tiny bit more effort than installing packages that are on CRAN. \verb@raster@ depends on \verb@sp@ and \verb@rgdal@ so if you do not have these packages, intsall them first: 
 \verb@install.packages(c("rgdal", "sp")@
@@ -65,100 +66,27 @@ The command \verb@r <- raster(filename)@ creates a raster object describing the 
 <<raster-3>>=
 r <- raster()
 r[] <- 1:ncell(r)
+s <- setValues(r, runif(ncell(r)))
 ra <- aggregate(r, 10)
 r1 <- crop(r, newExtent(-180,0,0,30))
 r2 <- crop(r, newExtent(-10,180,-20,10))
 m <- merge(r1, r2)
-o <- overlay(ra, ra, fun=sum)
+o1 <- overlay(r, s, fun=function(x,y){return(x*y)})
+# this is the same as
+o2 <- r * s
 d <- disaggregate(m, 2)
-f <- focal(d)
 @
 
-\begin{itemize}
-\item this is a bullet point
-\item and so is this
-\end{itemize}
 
-\citet{great-paper} came to a similar conclusion.
+\section{Large files}
 
-\section{some background: the RasterLayer class}
-
-pointer to a file
-nrow, ncol, extent
-cells are numbered 1 to ncell(r)
-
-
-\section{Deeper and deeper}
-
-Figure~\ref{fig:fig1} (page~\pageref{fig:fig1})
-shows the time series plot made by the R statement
-<<label=fig1too,include=FALSE>>=
-plot(r)
-@
-\begin{figure}
-\begin{center}
-<<label=fig1,fig=TRUE,echo=FALSE>>=
-<<fig1too>>
-@
-\end{center}
-\caption{Here is a map.}
-\label{fig:fig1}
-\end{figure}
-
-Another way to look at the output is:
-
-Figure~\ref{fig:fig2} (page~\pageref{fig:fig2})
-shows the time series plot made by the R statement
-<<label=fig2too,include=FALSE>>=
-plot(r)
-@
-\begin{figure}
-\begin{center}
-<<label=fig2,fig=TRUE,echo=FALSE>>=
-<<fig2too>>
-@
-\end{center}
-\caption{Another plot.}
-\label{fig:fig2}
-\end{figure}
-
-
-\section{RasterStack}
-
-A RasterStack ...
-
-\subsection{Simple}
-
+The raster package can work with extremely large files because it does not load the files into memory. When a RasterLayer object is created form a file, the object stores some information about the data on disk (number of rows and columns, spatial extent), and it contains a pointer to that file, to read parts of the data as needed. In computations such as raster algebra or the 'higher level functions', data will normally be read in chunks, processed, and written to disk again. If there is no output filename specified (or if that is not possible such as is the case with raster algebra), the results will be written to a temporary file. If you want to keep that file you should move it another location, e.g. using the copyRasterFile or moveRasterFile functions. At the start of each session, the raster package will attempt to delete temporary files it has created in previous sessions.
 
 
 \section{Package design}
 
-S4 classes 
-bla bla bla
-
-\section{Future plans}
-
-In the current version, the design has emphasised simplicity over speed. In later versions we will work on improving speed, which can be very important given the very large size of raster datasets. Currently all code is written in R, for is clarity, and ease of adapation. However, in some future version we would like to also implement C functions to speed up processing of very large datasets. 
+The design has emphasised simplicity over speed. All code is written in R, for is clarity, and ease of adapation. However, in some future version we plan to also implement C++ functions to speed up processing of very large datasets. The package is build around a number of S4 classes of which the RasterLayer and RasterStack classes are the most important. Many generic methods are implemented for RasterLayers (arithmic, logical, plot, hist, ...).
 
 
-\begin{thebibliography}{}
-
-\bibitem[Author et al.(1996)Gelman, Roberts, and Gilks]{great-paper}
-Author, A., G.~O. Roberts, and W.~R. Ewing (1996).
-\newblock Efficient jumping.
-\newblock In \emph{Statistics, 5 (Alicante, 1994)}, pp.~599--607.
-  Oxford University Press.
-
-\bibitem[Another(1992)]{practical}
-Another, C.~J. (1992).
-\newblock Practical Theory (with discussion).
-\newblock \emph{Science}, 7, 473--511.
-
-\bibitem[Geyer and Thompson(1995)]{temp}
-Geyser, C.~J. and E.~A. Tson (1995).
-\newblock Monte Carlo simulaion with applications to getting rich.
-\newblock \emph{Journal of the American Capitalist Association}, 90, 909--920.
-
-\end{thebibliography}
 
 \end{document}

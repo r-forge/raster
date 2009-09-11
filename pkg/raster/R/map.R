@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
-# Date :  June 2008
-# Version 0,1
+# Date: Sept 2009
+# Version 0.9
 # Licence GPL v3
 
 
@@ -73,13 +72,19 @@
 
 
 	
-# The functions below were taken from the fields package !!! (image.plot and subroutines)
+# The functions below here were taken from the fields package !!! (image.plot and subroutines)
 # to be adjusted for the RasterLayer object.
-# author::
-#license:	
 
+# fields, Tools for spatial data
+# Copyright 2004-2007, Institute for Mathematics Applied Geosciences
+# University Corporation for Atmospheric Research
+# Licensed under the GPL -- www.gpl.org/licenses/gpl.html
 
 .imageplot <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE, 
+# fields, Tools for spatial data
+# Copyright 2004-2007, Institute for Mathematics Applied Geosciences
+# University Corporation for Atmospheric Research
+# Licensed under the GPL -- www.gpl.org/licenses/gpl.html
     legend.shrink = 0.5, legend.width = 0.8, legend.mar = ifelse(horizontal, 
         3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = heat.colors(nlevel), 
@@ -238,6 +243,10 @@
 
 
 .polyimage <- function (x, y, z, col = heat.colors(64), transparent.color = "white", 
+# fields, Tools for spatial data
+# Copyright 2004-2007, Institute for Mathematics Applied Geosciences
+# University Corporation for Atmospheric Research
+# Licensed under the GPL -- www.gpl.org/licenses/gpl.html
     midpoint = FALSE, zlim = range(z, na.rm = TRUE), xlim = range(x),  ylim = range(y), add = FALSE, border = NA, ...) {
 
 	polyimageregrid <- function (x) { 
@@ -302,6 +311,10 @@
 
 
 .imageplotplt <- function (x, add = FALSE, legend.shrink = 0.9, legend.width = 1, 
+# fields, Tools for spatial data
+# Copyright 2004-2007, Institute for Mathematics Applied Geosciences
+# University Corporation for Atmospheric Research
+# Licensed under the GPL -- www.gpl.org/licenses/gpl.html
     horizontal = FALSE, legend.mar = NULL, bigplot = NULL, smallplot = NULL, ...) {
     old.par <- par(no.readonly = TRUE)
     if (is.null(smallplot)) 
