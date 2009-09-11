@@ -31,7 +31,11 @@
 	return(zvar)
 }
 
-.getraster <- function(nc, xvar, yvar, zvar) {
+.getraster <- function(nc, vars, xvar, yvar) {
+	xvar <- .getxvar(xvar, vars) 
+	yvar <- .getyvar(yvar, vars) 
+	# to do: also consider "lat_bnds" and "lat_bnds"
+	
 	ncols <- dim.inq.nc(nc, xvar)$length
 	nrows <- dim.inq.nc(nc, yvar)$length
 	xx <- as.vector(var.get.nc(nc, xvar))
@@ -58,10 +62,9 @@
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
-	xvar <- .getxvar(xvar, vars) 
-	yvar <- .getyvar(yvar, vars) 
 	zvar <- .getzvar(zvar, vars) 
-	r <- .getraster(nc, xvar, yvar, zvar)
+	r <- .getraster(nc, vars, xvar, yvar)
+	
 	d <- var.get.nc(nc, zvar)
     close.nc(nc)
     
@@ -70,6 +73,9 @@
 	if (length(dims)== 2) { 
 		d <- as.vector(d)
 	} else if (length(dims)== 3) { 
+	    if (time > dims[3] | time < 1) {
+			stop(paste('time should be >= 1 and <=', dims[3]))
+		}
 		d <- as.vector(d[,,time])
 	} else { stop(paste('data has an unexpected number of dimensions', dims)) }
 
@@ -78,49 +84,6 @@
 	d <- as.vector( t( d[nrow(r):1,] ) )	
 	r <- setValues(r, d)
 	return(r)
-}
-
-
-
-.stackCDF <- function(filename, xvar='', yvar='', zvar='', time='') {
-# to be improved for large files (i.e. do not read all data from file...)
-	if (!require(RNetCDF)) { stop() }
-	nc <- open.nc(filename)
-
-	nv <- file.inq.nc(nc)$nvars
-    vars <- vector()
-	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
-     
-	xvar <- .getxvar(xvar, vars) 
-	yvar <- .getyvar(yvar, vars) 
-	zvar <- .getzvar(zvar, vars) 
-	r <- .getraster(nc, xvar, yvar, zvar)
-	dd <- var.get.nc(nc, zvar)
-    close.nc(nc)
-	
-	dims <- dim(dd)
-	if (length(dims)== 3) { 
-		if (is.numeric(time)) { 
-			tsteps <- time	
-		} else { 
-			tsteps <- 1:dims[3] 
-		}
-	} else if (length(dims)== 3) { tsteps <- 1
-	} else if (length(dims)== 2) { 
-		return(stack(.rasterCDF(filename, xvar, yvar, zvar)))
-	} else { stop(paste('data has an unexpected number of dimensions', dims)) }
-	
-
-	for (i in tsteps) {
-		d <- dd[,,i]
-# y needs to go from big to small
-		d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
-		d <- as.vector( t( d[nrow(r):1,] ) )
-		r <- setValues(r, d)
-		if (i == 1) { stk <- stack(r) 
-		} else { stk <- addLayer(stk, r) }
-	}
-	return(stk)
 }
 
 

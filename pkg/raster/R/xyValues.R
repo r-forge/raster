@@ -2,7 +2,7 @@
 # International Rice Research Institute. Philippines
 # contact: r.hijmans@gmail.com
 # Date : November 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 

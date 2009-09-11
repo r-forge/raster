@@ -1,8 +1,7 @@
 # R code for reading raster (grid) data
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
-# Date : June 2008
-# Version 0.8
+# Date: Sept 2008
+# Version 0.9
 # Licence GPL v3
 
 
@@ -31,7 +30,7 @@
 
 .stackReadCells <- function(object, cells) {
 		for (i in seq(nlayers(object))) {
-			v <- .rasterReadCells(object@layers[[i]], cells)
+			v <- .rasterReadCells( raster(object, i), cells)
 			if (i == 1) {
 				result <- v
 			} else {

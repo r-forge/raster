@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date : June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -43,10 +42,6 @@ addLayer <- function(rstack, rasters) {
 	for (i in 1:length(rasters)) { 
 		raster <- rasters[[i]]
 
-		if (dataContent(raster) != 'all' & dataSource(raster) == 'ram') {
-			stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
-		}
-
 		if (nlayers(rstack) == 0) {
 			if (class(raster) == 'RasterStack') {
 				rstack <- raster
@@ -55,28 +50,27 @@ addLayer <- function(rstack, rasters) {
 				rstack <- setExtent(rstack, raster, snap=FALSE)
 				projection(rstack) <- projection(raster)
 
-				nl <- 1
-				rstack@data@nlayers <- as.integer(nl)
-				rstack@layers[nl] <- raster 
-				rstack@data@min[nl] <- raster@data@min
-				rstack@data@max[nl] <- raster@data@max		
+				if (dataSource(raster) == 'ram' & dataContent(raster) != "all") {
+					nl <- 0
+				} else {
+					nl <- 1
+					rstack@data@nlayers <- as.integer(nl)
+					rstack@data@min[nl] <- raster@data@min
+					rstack@data@max[nl] <- raster@data@max		
 
-				if (trim(raster@file@shortname) != "") {
-					cname <- trim(raster@file@shortname)
-				} else {
-					cname <- "layer1"
-				}
-				rstack@data@colnames[1] <- cname
-				if (dataContent(raster) == 'all') {
-					rstack@data@values <- as.matrix(values(raster))
-					rstack@data@content <- 'all'
-					raster <- clearValues(raster)
-				} else {
-					if (dataSource(raster) == 'ram' & dataContent(raster) != "all") {
-						stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
+					if (trim(raster@file@shortname) != "") {
+						cname <- trim(raster@file@shortname)
+					} else {
+						cname <- "layer1"
 					}
-				}
-
+					rstack@data@colnames[1] <- cname
+					if (dataContent(raster) == 'all') {
+						rstack@data@values <- as.matrix(values(raster))
+						rstack@data@content <- 'all'
+						raster <- clearValues(raster)
+					}
+					rstack@layers[nl] <- raster 
+				} 
 			}
 			
 		} else {
@@ -90,11 +84,15 @@ addLayer <- function(rstack, rasters) {
 			for (k in 1:length(rasterlist)) {
 				nl <- as.integer( rstack@data@nlayers + 1 )
 				rstack@data@nlayers <- nl
-				rstack@layers[nl] <- raster 
 				rstack@data@min[nl] <- raster@data@min
 				rstack@data@max[nl] <- raster@data@max		
 
 				raster <- rasterlist[[k]]
+				
+				if (dataContent(raster) != 'all' & dataSource(raster) == 'ram') {
+					stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
+				}
+
 				if (!compare(c(rstack, raster))) { 
 					stop(paste("could not add raster:", filename(raster))) 
 				}
@@ -122,7 +120,7 @@ addLayer <- function(rstack, rasters) {
 						raster <- clearValues(raster)
 					}
 				}
-
+				rstack@layers[nl] <- raster 
 			}	
 		}
 	}	
