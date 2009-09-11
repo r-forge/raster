@@ -3,12 +3,15 @@
 \docType{methods}
 
 \alias{predict}
+\alias{predict,RasterLayer-method}
 \alias{predict,RasterStack-method}
 
 \title{Predict}
 
 \description{
-Make a RasterLayer with a prediction based on a a fitted model object and a RasterStack object as independent variables. The RasterStack should have been used (via xyValues) to obtain the values that were used to fit the model. Any type of model (e.g. glm) for which a predict method has been implemented can be used. 
+Make a RasterLayer with a prediction based on a a fitted model object. If only x and y are independent variables provide a RasterLayer for which you want predictions.
+ If there are additional independent variables, provide a RasterStack with these. The layerNames in the RasterStack should match those expected by the model. This will be the case 
+ if the RasterStack was used (via xyValues) to obtain the values to fit the model. Any type of model (e.g. glm) for which a predict method has been implemented can be used. 
 }
 
 \usage{
@@ -27,7 +30,7 @@ predict(object, ...)
 \code{predict(object, ...,  model, filename='', overwrite=FALSE, filetype='raster', datatype='FLT4S')}
   
 \tabular{rll}{  
-  \tab  \code{object} \tab a RasterStack object \cr
+  \tab  \code{object} \tab a RasterStack or RasterLayer object \cr
   \tab  \code{model}  \tab A fitted model\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
   \tab  \code{overwrite}  \tab Logical to indicate whether an existing output file should be overwritten \cr
@@ -84,6 +87,16 @@ r <- predict(logo, model)
 #plot(r>0.3)
 #points(presence)
 #points(absence, col='red')
+
+
+## Thin plate spline interpolation with x and y only
+#r <- raster(system.file("external/test.ag", package="sp"))
+#ra <- aggregate(r, 10)
+#require(fields)
+#tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), values(ra) )
+#p <- predict(r, tps)
+#p[is.na(r)] <- NA
+## 
 
 }
 

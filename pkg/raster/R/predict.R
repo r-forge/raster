@@ -31,7 +31,7 @@ setMethod('predict', signature(object='RasterStack'),
 				}
 			}
 			
-			predv <- predict(model, rowvals, ...)
+			predv <- as.vector( predict(model, rowvals, ...) )
 			predrast <- setValues(predrast, predv)
 			if (filename(predrast) != "") {
 				predrast <- writeRaster(predrast)
@@ -39,6 +39,13 @@ setMethod('predict', signature(object='RasterStack'),
 			return(predrast)
 			
 		} else {
+			if (!canProcessInMemory(predrast) && filename == '') {
+				filename <- rasterTmpFile()
+				filename(outRaster) <- filename
+				if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
+			} 
+			v <- vector()
+
 			for (r in 1:nrow(object)) {
 				object <- readRow(object, r)
 				rowvals <- data.frame( values(object, names=TRUE))		
@@ -47,11 +54,51 @@ setMethod('predict', signature(object='RasterStack'),
 						rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
 					}
 				}
-				predv <- predict(model, rowvals, ...)
-				predrast <- setValues(predrast, predv, r)
+				predv <- as.vector( predict(model, rowvals, ...) )
+				if (filename == '') {
+					v <- c(v, predv)
+				} else {
+					predrast <- setValues(predrast, predv, r)
+					predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
+				}
+			}
+		}	
+		if (filename == '') {
+			predrast <- setValues(predrast, v)
+		}
+		return(predrast)
+	}
+)
+
+
+
+setMethod('predict', signature(object='RasterLayer'), 
+	function(object, model, filename="", datatype='FLT4S', filetype = 'raster', overwrite=FALSE, track=-1,  ...) {
+		predrast <- raster(object)
+		filename(predrast) <- filename
+		dataType(predrast) <- datatype
+
+		if (!canProcessInMemory(predrast) && filename == '') {
+			filename <- rasterTmpFile()
+			filename(outRaster) <- filename
+			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
+		} 
+		v <- vector()
+
+		arow <- 1:ncol(object)
+		for (r in 1:nrow(object)) {
+			xy <- as.data.frame(xyFromCell(object, arow + (r-1) * ncol(object)) )
+			predv <- as.vector( predict(model, xy, ...) )
+			if (filename == '') {
+				v <- c(v, predv)
+			} else {
+				predrast <- setValues(predrast, predv, r)			
 				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
 			}
 		}	
+		if (filename == '') {
+			predrast <- setValues(predrast, v)
+		}
 		return(predrast)
 	}
 )
