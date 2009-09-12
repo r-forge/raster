@@ -1,7 +1,7 @@
 \name{newExtent}
 
 \alias{newExtent}
-\alias{alignBbox}
+\alias{alignExtent}
   
 \title{create or align an Extent}
 
@@ -9,12 +9,12 @@
 
 newExtent creates a new Extent object
 
-alignBbox aligns a bounding box with the cells of a Raster* object
+alignExtent aligns an extent (BoundingBox object) with the cells of a Raster* object
 }
 
 \usage{
 newExtent(xmn, xmx, ymn, ymx)
-alignBbox(bndbox, object)
+alignExtent(extent, object)
 }
 
 \arguments{
@@ -22,13 +22,18 @@ alignBbox(bndbox, object)
   \item{xmx}{the maximum x coordinate of the bounding box}
   \item{ymn}{the minimum y coordinate of the bounding box}
   \item{ymx}{the maximum y coordinate of the bounding box}
-  \item{bndbox}{An object of class BoundingBox (which you can create with newExtent() )}  
+  \item{extent}{An object of class BoundingBox (which you can create with \code{newExtent()} )}  
   \item{object}{A Raster* object}
 }
  
 \value{
-a BoundingBox object
+a object of class BoundingBox
 }
+ 
+\details{
+Aligning extents assures that the two extents have the same origin and resolution. This should only be used to adjust objects because of imprecision in the data. alignExtent should not be used to force data to match that really does not match (use resample, (dis)aggregate for this).
+}
+  
   
 \author{Robert J. Hijmans}
 
@@ -37,7 +42,7 @@ a BoundingBox object
 \examples{
 r <- raster()
 bb <- newExtent(-10.1, 10.1, -20.1, 20.1)
-bba <- alignBbox(bb, r)
+bba <- alignExtent(bb, r)
 bb
 extent(r)
 bba

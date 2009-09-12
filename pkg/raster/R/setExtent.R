@@ -1,9 +1,8 @@
 # R function for the raster package
 # Author: Robert J. Hijmans
-# International Rice Research Institute. Philippines
 # contact: r.hijmans@gmail.com
 # Date : January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 'extent<-' <- function(x, value) {
@@ -17,7 +16,7 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 	newobj <- clearValues(x)
 	
 	if (snap) {
-		bb <- alignBbox(bb, newobj)
+		bb <- alignExtent(bb, newobj)
 	}
 
 	newobj@bbox <- bb
@@ -39,7 +38,7 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 				newobj <- setValues(newobj, values(x))
 			} else {
 				newobj@data@source <- 'ram'
-				indices <- cellsFromBbox(x, bb, expand=TRUE)
+				indices <- cellsFromExtent(x, bb, expand=TRUE)
 				v <- vector(length=length(indices))
 				v[] <- NA
 				v[!is.na(indices)] <- values(x)[!is.na(indices)]

@@ -2,14 +2,14 @@
 
 \alias{adjacency}
 
-\title{adjacency}
+\title{Adjacency}
 
 \description{
-	Identify cells that are adjacent to a set of cells on a grid
+ Identify cells that are adjacent to a set of cells on a raster
 }
 
 \usage{
-adjacency(raster, fromCells, toCells, directions) 
+ adjacency(raster, fromCells, toCells, directions) 
 }
 
 \arguments{
@@ -20,7 +20,7 @@ adjacency(raster, fromCells, toCells, directions)
 }
 
 \details{
-Cell numbers start with 1 in the upperleft corner and increase from left to right and from top to bottom.
+Cell numbers start with 1 in the upper-left corner and increase from left to right and from top to bottom.
 Number of directions: 4 connects cells with one-cell rook moves, 8 with one-cell queen moves, and 16 with knight and one-cell queen moves.
 Bishop connects cells with one-cell diagonal moves (special cases).
 The function connects the outer meridians if the raster is not projeced (in a geographic (lat/lon) "projection") and there is 

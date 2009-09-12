@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date : May 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', datatype='INT4S', track=-1) {
@@ -107,14 +106,13 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 	} else {
 		rclm <- c(0, 0, NA)
 	}
-	if (tmpfile1 == "") {
-		x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
-		return(list(x1, x2, rcl1, rclm))
-	} else {
-		x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
-		removeRasterFile(x1)
-		return(x2)
+	x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
+
+	if (tmpfile1 != "") { 	
+		removeRasterFile(x1) 
 	}
+	# return(list(x1, x2, rcl1, rclm))
+	return(x2)
 }	
 
 

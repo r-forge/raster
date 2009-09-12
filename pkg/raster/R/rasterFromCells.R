@@ -16,7 +16,7 @@ rasterFromCells <- function(object, cells) {
 	y2 <- yFromRow(object, min(rows)) + 0.5 * res[2]
 	bb <- newExtent(x1, x2, y1, y2)
 	object <- clearValues(object)
-	cells2 <- cellsFromBbox(object, bb)
+	cells2 <- cellsFromExtent(object, bb)
 	r <- crop(object, bb)
 	r[] <- cells2
 	return(r)

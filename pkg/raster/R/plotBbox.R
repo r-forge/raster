@@ -1,12 +1,10 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
-
-.bboxmatrix <- function(x) {
+.extentMatrix <- function(x) {
 	xy <- matrix(NA, nrow=5, ncol=2)
 	xy[1,1] <- x@xmin
 	xy[1,2] <- x@ymax
@@ -22,7 +20,7 @@
 
 setMethod("plot", signature(x='BoundingBox', y='ANY'), 
 	function(x, y, add=FALSE, ...)  {
-		xy <- .bboxmatrix(x)
+		xy <- .extentMatrix(x)
 		xy[5,] <- xy[1,]
 		if (add) {
 			lines(xy, ...) 

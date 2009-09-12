@@ -81,7 +81,7 @@ xyFromCell <- function(object, cell, asSpatialPoints=FALSE) {
 cxyFromBbox <- function(object, bbox) {
 	if (.isSPgrid(object)) { object <- raster(object) }
 	bbox <- extent(bbox)
-	cells <- cellsFromBbox(object, bbox)
+	cells <- cellsFromExtent(object, bbox)
 	cxy <- cbind(cells, xyFromCell(object, cells))
 	colnames(cxy) <- c("cell", "x", "y")
 	return(cxy)

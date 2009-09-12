@@ -1,9 +1,8 @@
 # R code for changing rasters (spatial data)
 # Authors: Robert J. Hijmans and Jacob van Etten
-# International Rice Research Institute
 #contact: r.hijmans@gmail.com
 # Date : October 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -11,7 +10,7 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
 	bb <- intersectExtent(raster, bndbox)
-	bb <- alignBbox(bb, raster)
+	bb <- alignExtent(bb, raster)
 	outraster <- raster(raster, filename)
 	outraster <- setExtent(outraster, bb, keepres=TRUE)
 	dataType(outraster) <- datatype
