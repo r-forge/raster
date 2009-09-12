@@ -1,9 +1,10 @@
 \name{raster-package}
 \alias{raster-package}
+
 \docType{package}
 
 \title{
-Analysis and modeling of raster data.
+Management, analysis and modeling of raster data.
 }
 
 \description{
@@ -13,6 +14,8 @@ Such data are also referred to as 'grid' data.
 
 The package should be particularly useful when using very large datasets that can not be loaded into the computer's memory. Functions will
 work correctly, because they will read, process, and write blocks of data, without loading all values into memory. 
+
+See the vignette (\code{vignette('raster', 'raster')}) for more information
 }
 
 \details{
@@ -20,7 +23,7 @@ work correctly, because they will read, process, and write blocks of data, witho
 Package: \tab raster\cr
 Type: \tab Package\cr
 Version: \tab 0.9\cr
-Date: \tab 2009-08-25\cr
+Date: \tab 2009-09-11\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }

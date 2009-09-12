@@ -17,7 +17,7 @@ The following logical (boolean) operators are available for computations with Ra
 
 \code{&, |, and !}
 
-These functions are also available with a RasterLayer argument: 
+The following functions are also available with a RasterLayer argument: 
 
 \code{is.na}, \code{is.nan}, \code{is.finite}, \code{is.infinite}
 }
@@ -29,8 +29,7 @@ A RasterLayer object with logical (\code{TRUE/FALSE} values)
 
 \section{Note}{
  These are convenient operators/functions that are most usful for relatively small RasterLayers for which all the values can be held in memory. 
- If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. 
- In that case it could be more efficient to use use \code{\link[raster]{calc}} instead.
+ If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. In that case it could be more efficient to use \code{\link[raster]{calc}} instead.
 }
 
 \seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay}}, \code{\link[raster]{calc}} }

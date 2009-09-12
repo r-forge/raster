@@ -5,14 +5,6 @@
 
 
 
-stackFromFiles <- function(rasterfiles, bands= rep(1, length(rasterfiles))) {
-#	stop("this function is depracated. Use makeStack() instead.")
-	rstack <- new("RasterStack") 
-	return(addFiles(rstack, rasterfiles, bands))
-}
-
-
-
 if (!isGeneric("stack")) {
 	setGeneric("stack", function(x, ...)
 		standardGeneric("stack"))

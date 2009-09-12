@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -27,7 +26,7 @@ valuesRow <- function(object, rownr) {
 	} else if (dataContent(object) == 'row') {
 		startcell <- cellFromRowCol(object, rownr, 1)
 		endcell <- startcell+ncol(object)-1
-		if (dataIndices(object) == c(startcell, endcell)) {
+		if ( (dataIndices(object)[1] == startcell) & (dataIndices(object)[2] == endcell) ) {
 			return(values(object))
 		} else {
 			return(values(readRow(object, rownr)))

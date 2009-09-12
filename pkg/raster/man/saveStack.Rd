@@ -34,7 +34,7 @@ stackSave(rstack)
 
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
-  st <- stackFromFiles(c(rasterfile, rasterfile))
+  st <- stack(c(rasterfile, rasterfile))
   filename(st) <- "mystack"
   st <- stackSave(st)
 # note that filename adds an extension .stk to a stackfile  

@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date : June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -9,9 +8,9 @@
 stackOpen <- function(stackfile) {
 	st <- read.table(stackfile, as.is=FALSE, strip.white=TRUE)
 	if (dim(st)[2] > 1) {
-		rst <- stackFromFiles(as.vector(st[,1]), as.vector(st[,2]))
+		rst <- stack(as.vector(st[,1]), bands=as.vector(st[,2]))
 	} else {
-		rst <- stackFromFiles(as.vector(st[,1]))
+		rst <- stack(as.vector(st[,1]))
 	}
 	filename(rst) <- stackfile
 	return(rst)

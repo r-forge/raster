@@ -1,13 +1,4 @@
 
-#newRaster <- function(...xmn=-180, xmx=180, ymn=-90, ymx=90, nrows=180, ncols=360, projstring="+proj=longlat +datum=WGS84") {
-#	stop("'newRaster' is deprecated. Use 'raster' instead")
-#}
-
-
-rasterFromFile <- function(filename, values=FALSE, band=1) {
-	stop("'rasterFromFile' has been removed. Use 'raster(filename)' instead")
-}	
-
 
 ..shortFileName <- function(filename) {
 # is this the same as basename ?

@@ -1,6 +1,5 @@
-\name{changestack}
+\name{changeStack}
 
-\alias{stackFromFiles}
 
 \alias{addFiles}
 \alias{addLayer}
@@ -10,7 +9,7 @@
 
 \description{
   A RasterStack is a collection of RasterLayers with the same spatial extent and resolution. 
-  With these functions, you can add a RasterLayer to, or remove a RasterLayer from, a RasterStack object. 
+  With these functions, you can add RasterLayers to, or remove RasterLayers from, a RasterStack object. 
 }
 
 \usage{
@@ -37,7 +36,7 @@ dropLayer(rstack, indices)
 
 \examples{
   rasterfile <- system.file("external/test.ag", package="sp")
-  st <- stackFromFiles(rasterfile)
+  st <- stack(rasterfile)
 # now adding the same file multiple times, in most cases you would add different files  
 # this generates warnings, but it is not an error
   st <- addFiles(st, c(rasterfile, rasterfile))

@@ -8,11 +8,11 @@
 
 \title{Compare Raster* objects}
 \description{
- These methods compare the location and resolution of Raster* objects. That is, they compare their bounding boxes, projection, and rows and columns. 
- For BasicRaster objects you can use \code{==} and \code{!=}, the values returned is a single logical value \code{TRUE} or \code{FALSE}
+ These methods compare the location and resolution of Raster* objects. That is, they compare their spatial extent, projection, and number of rows and columns. 
  
- For RasterLayer objects, they also compare the values associated with the objects, and the result is a logical (Boolean) RasterLayer object. And the 
- value returned is a RasterLayer object, if the location and resolution match, or an error of they do not match.
+ For \code{BasicRaster} objects you can use \code{==} and \code{!=}, the values returned is a single logical value \code{TRUE} or \code{FALSE}
+ 
+ For RasterLayer objects, they also compare the values associated with the objects, and the result is a logical (Boolean) RasterLayer object. And the value returned is a RasterLayer object, if the location and resolution of the two RasterLayers match, or an error of they do not match.
  
  The following methods have been implemented for RasterLayer objects:
  
