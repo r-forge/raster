@@ -22,9 +22,8 @@ for example a multi-band remote sensing image.
  
 Objects can be created with the following helper functions: \code{\link[raster]{raster} and \link[raster]{stack}}  
  
-RasterLayer and RasterStack objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package using \code{as}
-or the explicit function \code{\link[raster]{asRasterLayer}}. 
-Vice versa, Raster* objects can be coerced into a sp type oject with \code{as( , )} and with \code{asSpGrid()}. 
+RasterLayer and RasterStack objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package using \code{as}, or the simply with the function \code{\link[raster]{raster}}. 
+Vice versa, Raster* objects can be coerced into a sp type oject with \code{as( , )}, e.g. \code{as(x, 'SpatialGridDataFrame')} . 
  
 Common generic methods implemented for these classes include: 
  

@@ -74,11 +74,9 @@ setMethod("stack", signature(x='SpatialGrid'),
 		rowcol(stk) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
 
 		if (class(x)=='SpatialGridDataFrame') {
-			stk <- setValues(stk, as.matrix(x@data))
-			rs <- as(stk, 'RasterLayer')
-			stk <- setValues(stk, as.matrix(x@data))
 			for (i in 1:ncol(x@data)) {
-				stk@layers[i] <- rs
+				rs <- raster(x, i)
+				stk <- addLayer(stk, rs)
 			}
 		}
 		return(stk)

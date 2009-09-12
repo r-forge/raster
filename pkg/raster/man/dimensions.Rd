@@ -12,7 +12,7 @@
 \alias{rowcol<-}
 
 
-\title{Dimensions}
+\title{Dimensions of a Raster* object}
 
 \description{
  Get the number of rows, columns, or cells of a Raster* object; or set the number of rows and/columns

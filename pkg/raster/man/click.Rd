@@ -37,7 +37,7 @@ The value(s) of \code{object} at the point(s) clicked on; and the coordinates of
 }
 
 
-\seealso{ \code{\link[raster]{drawExtent}} }
+\seealso{ \code{\link[raster]{drawBox}} }
 
 \author{ Robert J. Hijmans }
 

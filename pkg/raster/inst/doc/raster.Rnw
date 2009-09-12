@@ -122,6 +122,22 @@ Raster can read most, and write several raster file formats, via the rgdal packa
 A RasterStack is a collection of RasterLayers with the same spatial extent and resolution.
 
 
+\section{coercion to sp objects}
+
+Although the raster package defines its own set of classes, it is easy to coerce objects of these classes to objects of the 'spatial' family defined by sp. This allows for using functions defined by sp (e.g. spplot) and for using other packages that expect spatial* objects. To create a RasterLayer from variable n in a SpatialGrid* x use \verb@raster(x, n)@ or \verb@stack(x)@. Vice versa use \verb@as( , )@
+
+<<raster-6>>=
+r1 <- raster(ncol=36, nrow=18)
+r2 <- r1
+r1[] <- runif(ncell(r1))
+r2[] <- runif(ncell(r1))
+s <- stack(r1, r2)
+sgdf <- as(s, 'SpatialGridDataFrame')
+newr2 <- raster(sgdf, 2)
+news <- stack(sgdf)
+@
+
+
 \section{Package design}
 
 The design has emphasised simplicity over speed. All code is written in R, for is clarity, and ease of adapation. However, in some future version we plan to also implement C++ functions to speed up processing of very large datasets. The package is build around a number of S4 classes of which the RasterLayer and RasterStack classes are the most important. Many generic methods are implemented for RasterLayers (arithmic, logical, plot, hist, ...).

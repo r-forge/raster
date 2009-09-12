@@ -1,4 +1,4 @@
-\name{dimensions}
+\name{Layers}
 
 \alias{nlayers}
 \alias{nlayers,BasicRaster-method}
@@ -11,7 +11,7 @@
 \title{Layers}
 
 \description{
-Get layer properties of a RasterStack object
+Get or set layer properties of a RasterStack object
 }
 
 \usage{
