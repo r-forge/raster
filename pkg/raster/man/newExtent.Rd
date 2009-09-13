@@ -3,13 +3,13 @@
 \alias{newExtent}
 \alias{alignExtent}
   
-\title{create or align an Extent}
+\title{Create or align an extent (object of class Extent)}
 
 \description{
 
 newExtent creates a new Extent object
 
-alignExtent aligns an extent (BoundingBox object) with the cells of a Raster* object
+alignExtent aligns an extent (Extent object) with the cells of a Raster* object
 }
 
 \usage{
@@ -18,16 +18,16 @@ alignExtent(extent, object)
 }
 
 \arguments{
-  \item{xmn}{the minimum x coordinate of the bounding box}
-  \item{xmx}{the maximum x coordinate of the bounding box}
-  \item{ymn}{the minimum y coordinate of the bounding box}
-  \item{ymx}{the maximum y coordinate of the bounding box}
-  \item{extent}{An object of class BoundingBox (which you can create with \code{newExtent()} )}  
+  \item{xmn}{the minimum x coordinate of the extent object}
+  \item{xmx}{the maximum x coordinate of the extent object}
+  \item{ymn}{the minimum y coordinate of the extent object}
+  \item{ymx}{the maximum y coordinate of the extent object}
+  \item{extent}{An object of class Extent (which you can create with \code{newExtent()} )}  
   \item{object}{A Raster* object}
 }
  
 \value{
-a object of class BoundingBox
+a object of class Extent
 }
  
 \details{

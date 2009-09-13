@@ -6,7 +6,7 @@
 \title{Cells from Extent}
 
 \description{
-This function returns the cell numbers for a Raster* object that are within a specfied extent (rectangular area), supply either an object of class BoundingBox, or another Raster* object.
+This function returns the cell numbers for a Raster* object that are within a specfied extent (rectangular area), supply either an object of class Extent, or another Raster* object.
 }
 
 \usage{
@@ -15,7 +15,7 @@ cellsFromExtent(object, extent, expand=FALSE)
 
 \arguments{
   \item{object}{A Raster* object}
-  \item{extent}{An object of class BoundingBox (which you can create with newExtent(), or another Raster* object )}  
+  \item{extent}{An object of class Extent (which you can create with newExtent(), or another Raster* object )}  
   \item{expand}{Logical. If \code{TRUE}, \code{NA} is returned for (virtual) cells implied by \code{bndbox}, 
       that are outside the RasterLayer (\code{object}). If \code{FALSE}, only cell numbers for the area where \code{object} and \code{bndbox}
       overlap are returned (see \link[raster]{intersectExtent}) }

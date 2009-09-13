@@ -25,7 +25,7 @@ a Raster* object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{BoundingBox-class}}, \code{\link[raster]{rotate}} }
+\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{Extent-class}}, \code{\link[raster]{rotate}} }
 
 \examples{
 r <- raster()

@@ -3,7 +3,7 @@
 
 \title{ Draw Bounding Box }
 \description{
-  Click on two points of a plot (map) to obtain a BoundingBox object  
+  Click on two points of a plot (map) to obtain a Extent object  
 }
 \usage{
 drawBox(show = TRUE, col = "red") 
@@ -15,7 +15,7 @@ drawBox(show = TRUE, col = "red")
  }
  
 \value{
- a BoundingBox object
+ a Extent object
 } 
 
 \author{ Robert J. Hijmans }

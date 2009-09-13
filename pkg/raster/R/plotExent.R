@@ -18,7 +18,7 @@
 }
 
 
-setMethod("plot", signature(x='BoundingBox', y='ANY'), 
+setMethod("plot", signature(x='Extent', y='ANY'), 
 	function(x, y, add=FALSE, ...)  {
 		xy <- .extentMatrix(x)
 		xy[5,] <- xy[1,]
@@ -28,7 +28,7 @@ setMethod("plot", signature(x='BoundingBox', y='ANY'),
 			plot(xy, type='l', ...)
 		}
 		if (!missing(y)) {
-			if (class(y) == 'BoundingBox') {
+			if (class(y) == 'Extent') {
 				plot(x=y, add=TRUE, ...)
 			}
 		}

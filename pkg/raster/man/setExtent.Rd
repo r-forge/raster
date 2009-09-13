@@ -6,7 +6,7 @@
 \title{Set the extent of a RasteLayer}
 
 \description{
-setExtent sets the extent of a Raster* object. Either by providing a new BoundingBox object or by setting the extreme
+setExtent sets the extent of a Raster* object. Either by providing a new Extent object or by setting the extreme
 coordinates one by one.
 }
 
@@ -17,10 +17,10 @@ extent(x) <- value
 
 \arguments{
   \item{x}{A Raster* object}
-  \item{bndbox}{An object of class BoundingBox (which you can create with \code{\link[raster]{extent}} )}  
+  \item{bndbox}{An object of class Extent (which you can create with \code{\link[raster]{extent}} )}  
   \item{keepres}{logical. If \code{TRUE}, the resolution of the cells will stay the same after adjusting the bounding box (see Details)}
   \item{snap}{logical. If \code{TRUE}, the extent is adjusted so that the cells of the input and output RasterLayer are aligned}
-  \item{value}{An object of class BoundingBox (which you can create with \code{\link[raster]{extent}} )}  
+  \item{value}{An object of class Extent (which you can create with \code{\link[raster]{extent}} )}  
 }
 
 \details{

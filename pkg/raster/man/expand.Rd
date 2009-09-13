@@ -6,7 +6,7 @@
 
 \description{
 Expand returns an RasterLayer with a larger spatial extent. 
-The output RasterLayer has the extreme minimum and maximum coordinates of the input RasterLayer and input BoundingBox arguments. 
+The output RasterLayer has the extreme minimum and maximum coordinates of the input RasterLayer and input Extent arguments. 
 Thus, all of the cells of the original raster are included.
 }
 
@@ -16,7 +16,7 @@ expand(raster, bndbox, filename=NULL, filetype='raster', overwrite=FALSE, track=
 
 \arguments{
   \item{raster}{a RasterLayer object}
-  \item{bndbox}{BoundingBox object, or any object that is or has a bounding box (see below)}
+  \item{bndbox}{Extent object, or any object that is or has a bounding box (see below)}
   \item{filename}{filename for the output RasterLayer}
   \item{overwrite}{if TRUE, "filename" will be overwritten if it exists}
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}

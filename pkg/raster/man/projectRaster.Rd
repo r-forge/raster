@@ -25,7 +25,7 @@ projectExtent(object, projs)
   \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
   \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
   \item{track}{vector of row numbers for which the function will report that they have been processed}  
-  \item{object}{BoundingBox or Raster* object}
+  \item{object}{Extent or Raster* object}
   \item{projs}{a character string describing a projection and datum in PROJ4 format}
 
 }

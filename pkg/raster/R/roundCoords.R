@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -12,7 +11,7 @@ roundExtent <- function(object, digits=0) {
 	b@xmax <- round(b@xmax, digits)
 	b@ymin <- round(b@ymin, digits)
 	b@ymax <- round(b@ymax, digits)
-	if (class(object) == 'BoundingBox') {
+	if (class(object) == 'Extent') {
 		return(b)
 	}
 	object <- setExtent(object, b)
@@ -25,7 +24,7 @@ nudgeExtent <- function(object){
 	b@ymin <- floor(b@ymin)
 	b@xmax <- ceiling(b@xmax)
 	b@ymax <- ceiling(b@ymax)
-	if (class(object) == 'BoundingBox') {
+	if (class(object) == 'Extent') {
 		return(b)
 	}
 	object <- setExtent(object, b)

@@ -1,16 +1,16 @@
-\name{BoundingBox-class}
+\name{Extent-class}
 
 \docType{class}
 
-\alias{BoundingBox-class}
-\alias{show,BoundingBox-method}
+\alias{Extent-class}
+\alias{show,Extent-method}
 
-\title{Class "BoundingBox" }
+\title{Class "Extent" }
 
-\description{Object of class BoundingBox are used to define the geographic extenmt (extremes) of a Raster* object}
+\description{Object of class Extent are used to define the geographic extenmt (extremes) of a Raster* object}
 
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("BoundingBox", ...)}.
+Objects can be created by calls of the form \code{new("Extent", ...)}.
 }
 \section{Slots}{
 	 \describe{
@@ -22,7 +22,7 @@ Objects can be created by calls of the form \code{new("BoundingBox", ...)}.
 }
 \section{Methods}{
   \describe{
- \item{show}{\code{signature(object = "BoundingBox")}: display values of a BoundingBox object }
+ \item{show}{\code{signature(object = "Extent")}: display values of a Extent object }
  }
 }
 \author{ Robert J. Hijmans}
@@ -31,7 +31,7 @@ Objects can be created by calls of the form \code{new("BoundingBox", ...)}.
 \seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{setExtent}} }
 
 \examples{
-showClass("BoundingBox")
+showClass("Extent")
 }
 
 \keyword{classes}

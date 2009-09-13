@@ -114,7 +114,7 @@ setMethod('raster', signature(x='RasterStack'),
 
 
 
-setMethod('raster', signature(x='BoundingBox'), 
+setMethod('raster', signature(x='Extent'), 
 	function(x, nrows=10, ncols=10, projs=NA) {
 		bb <- extent(x)
 		nr = as.integer(round(nrows))

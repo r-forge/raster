@@ -6,6 +6,8 @@
 \alias{xFromCol}
 \alias{yFromRow}
 \alias{xyFromCell}
+\alias{xFromCell}
+\alias{yFromCell}
 \alias{cxyFromBbox}
 
   
@@ -22,6 +24,8 @@ cellFromXY(object, xy)
 xFromCol(object, colnr)
 yFromRow(object, rownr)
 xyFromCell(object, cell, asSpatialPoints=FALSE)
+xFromCell(object, cell)
+yFromCell(object, cell)
 cxyFromBbox(object, bbox)
 }
 
@@ -33,7 +37,7 @@ cxyFromBbox(object, bbox)
   \item{xy}{matrix of x and y coordinates, or a SpatialPoints or SpatialPointsDataFrame object}
   \item{colnr}{column number; or vector of column numbers}
   \item{rownr}{row number; or vector of row numbers}
-  \item{bbox}{A BoundingBox object (or an object that can be coerced to a BoundingBox object)}
+  \item{bbox}{A Extent object (or an object that can be coerced to a Extent object)}
   \item{asSpatialPoints}{return a SpatialPoints object (sp package) instead of a matrix}
 }
   
@@ -44,7 +48,7 @@ cxyFromBbox(object, bbox)
 
 \value{
   colFromX, rowFromY, cellFromXY: row, col or cell number(s) 
-  xFromCol, yFromCol: vector of x or y coordinate(s) 
+  xFromCol, yFromCol, xFromCell, yFromCell: vector of x or y coordinate(s) 
   xyFromCell: matrix(x,y) of pairs of coordinates 
   cxyFromBbox: matrix(cell, x, y) of cellnumbers and x and y coordinates
 }

@@ -6,8 +6,8 @@
 \alias{plot,RasterLayer,missing-method}
 \alias{plot,RasterStack,ANY-method}
 \alias{plot,RasterLayer,RasterLayer-method}
-\alias{plot,BoundingBox,ANY-method}
-\alias{plot,BoundingBox,missing-method}
+\alias{plot,Extent,ANY-method}
+\alias{plot,Extent,missing-method}
 
 \title{Plot a Raster* object}
 
@@ -65,12 +65,12 @@ Produces a scatter plot of the values of x against those of y.
 \tab \code{...}  \tab  Any argument that can be passed to \code{\link[graphics]{plot}}  \cr
 }
 
-\bold{x=BoundingBox, y="ANY"}
+\bold{x=Extent, y="ANY"}
 Draws the (rectangular) bounding box of a raster object. 
 \code{plot(ext) }
 
 \tabular{rll}{
-\tab \code{ext} \tab a BoundingBox object \cr
+\tab \code{ext} \tab a Extent object \cr
 }
 
 }}

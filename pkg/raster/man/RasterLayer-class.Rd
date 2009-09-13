@@ -36,7 +36,7 @@ Common generic methods implemented for these classes include:
  These classes inherit from the \code{Raster}, which is a virtual class (objects cannot be created from it). However, many of the generic methods
  in this package are implemented for the Raster class so that they can be used with the other three classes.
 
- Raster includes a slot with an object of the \code{BoundingBox} class )
+ Raster includes a slot with an object of the \code{Extent} class )
 
  RasterLayer includes the classes \code{RasterFile} and \code{SingleLayerData}, 
  whereas RasterStack contains \code{RasterFile} and \code{MultipleLayerData}
@@ -59,7 +59,7 @@ Slots for RasterLayer and RasterStack objects
     \item{\code{file}:}{Object of class \code{"RasterFile"} }
     \item{\code{data}:}{Object of class \code{"SingleLayerData"} or \code{"MulitpleLayerData"}}
     \item{\code{history}:}{Object of class \code{"vector"} }
-    \item{\code{bbox}:}{Object of class \code{"BoundingBox"} }
+    \item{\code{bbox}:}{Object of class \code{"Extent"} }
     \item{\code{ncols}:}{Object of class \code{"integer"} }
     \item{\code{nrows}:}{Object of class \code{"integer"} }
     \item{\code{crs}:}{Object of class \code{"CRS"}, i.e. the coordinate reference system }

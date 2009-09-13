@@ -77,6 +77,22 @@ xyFromCell <- function(object, cell, asSpatialPoints=FALSE) {
 }  
 	
 
+yFromCell <- function(object, cell) {
+	if (.isSPgrid(object)) { object <- raster(object) }
+	cell <- round(cell)
+	rownr <- rowFromCell(object, cell)
+	y <- yFromRow(object, rownr) 		
+	return(y)
+}  
+	
+xFromCell <- function(object, cell) {
+	if (.isSPgrid(object)) { object <- raster(object) }
+	cell <- round(cell)
+	colnr <- colFromCell(object, cell)
+	x <- xFromCol(object, colnr)
+	return(x)
+}  
+
 	
 cxyFromBbox <- function(object, bbox) {
 	if (.isSPgrid(object)) { object <- raster(object) }

@@ -1,13 +1,12 @@
 # R classes for spatial data (raster data specifically) 
 # Authors: Robert J. Hijmans and Jacob van Etten, 
-# International Rice Research Institute. Philippines
 # contact: r.hijmans@gmail.com
 # Date : November 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
-setClass('BoundingBox',
+setClass('Extent',
 	representation (
 		xmin = 'numeric',
 		xmax = 'numeric',
@@ -27,7 +26,7 @@ setClass('BoundingBox',
 		if (!c2) { stop('ymin > ymax') }
 		v <- c(object@xmin, object@xmax, object@ymin, object@ymax)
 		c3 <- all(!is.infinite(v))
-		if (!c3) { stop('infinite in BoundingBox') }		
+		if (!c3) { stop('infinite in Extent') }		
 		return(c1 & c2 & c3)
 	}
 )
@@ -35,7 +34,7 @@ setClass('BoundingBox',
 
 setClass ('BasicRaster',
 	representation (
-		bbox = 'BoundingBox',
+		bbox = 'Extent',
 		ncols ='integer',
 		nrows ='integer',
 		crs = 'CRS'

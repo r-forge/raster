@@ -3,7 +3,7 @@
 \docType{methods}
 
 \alias{raster}
-\alias{raster,BoundingBox-method}
+\alias{raster,Extent-method}
 \alias{raster,character-method}
 \alias{raster,missing-method}
 \alias{raster,Raster-method}
@@ -15,14 +15,14 @@
 \title{Create a RasterLayer object}
 
 \description{
-Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a filename, a BoundingBox object, a matrix, or a Raster* or SpatialPixels* or SpatialGrid* object.
+Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a filename, a Extent object, a matrix, or a Raster* or SpatialPixels* or SpatialGrid* object.
 
 In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
 }
 
 
 \arguments{
-  \item{x}{a filename, BoundingBox, Raster*, SpatialPixels*, SpatialGrid* object, matrix, or missing}
+  \item{x}{a filename, Extent, Raster*, SpatialPixels*, SpatialGrid* object, matrix, or missing}
   \item{...}{ additional argumens, see below }  
 }
 
@@ -67,19 +67,19 @@ netCDF data can only be read if the data are stored in 2 (x and y) or 3 (x, y, a
  \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
  \tab \code{ymx} \tab maximum y coordinate of raster (top border) \cr
  \tab \code{projs} \tab Character. PROJ4 type description of a Coordinate Reference System (map projection) \cr
- \tab \code{bndbox} \tab bounding box used to crop a raster. Any object that is a BoundingBox object or contains one (such as Raster* objects) \cr
+ \tab \code{bndbox} \tab bounding box used to crop a raster. Any object that is a Extent object or contains one (such as Raster* objects) \cr
 }
 
 (item \code{x} is 'missing' in this case)
 
 
   
-3) Create a RasterLayer object from a BoundingBox object
+3) Create a RasterLayer object from a Extent object
   
 \code{raster(x, nrows=10, ncols=10, projs=NA)}
 
 \tabular{rll}{
- \tab \code{x} \tab BoundingBox object \cr
+ \tab \code{x} \tab Extent object \cr
  \tab \code{nrows} \tab number of rows on raster  \cr
  \tab \code{ncols} \tab number of columns on raster \cr
  \tab \code{projs} \tab PROJ4 type description of a map projection \cr
@@ -151,7 +151,7 @@ logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE)
 #from scratch
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
 
-#from a BoundingBox
+#from a Extent
 bb <- extent(r)
 r2 <- raster(bb)
 r2[] <- runif(ncell(r2))

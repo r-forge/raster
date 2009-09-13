@@ -13,12 +13,12 @@ intersectExtent(x, ...)
 }
 
 \arguments{
-  \item{x}{A BoundingBox or Raster* object } 
-  \item{...}{ additional BoundingBox or Raster* objects } 
+  \item{x}{A Extent or Raster* object } 
+  \item{...}{ additional Extent or Raster* objects } 
 }
  
 \value{
-a BoundingBox object
+a Extent object
 }
   
 \author{Robert J. Hijmans}
