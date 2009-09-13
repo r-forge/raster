@@ -9,10 +9,10 @@
 \alias{cv,ANY-method}
 \alias{cv,Raster-method}
 
-\title{mode and coefficien of variation}
+\title{Miscekkaneous statistical functions}
 
 \description{
-  Miscellanous statistical functions: mode and coefficient of variation
+  mode and coefficient of variation
 }
 
 \usage{
@@ -38,8 +38,8 @@ cv(x, ..., aszero=FALSE, na.rm = FALSE)
 
 \examples{
 data <- c(0,1,2,3,3,3,3,4,4,4,5,5,6,7,7,8,9,NA)
-#modal(data)
-#cv(data)
+modal(data, na.rm=TRUE)
+cv(data, na.rm=TRUE)
 }
 
 \keyword{univar}

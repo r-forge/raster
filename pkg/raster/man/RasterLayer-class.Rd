@@ -59,7 +59,7 @@ Slots for RasterLayer and RasterStack objects
     \item{\code{file}:}{Object of class \code{"RasterFile"} }
     \item{\code{data}:}{Object of class \code{"SingleLayerData"} or \code{"MulitpleLayerData"}}
     \item{\code{history}:}{Object of class \code{"vector"} }
-    \item{\code{bbox}:}{Object of class \code{"Extent"} }
+    \item{\code{extent}:}{Object of class \code{"Extent"} }
     \item{\code{ncols}:}{Object of class \code{"integer"} }
     \item{\code{nrows}:}{Object of class \code{"integer"} }
     \item{\code{crs}:}{Object of class \code{"CRS"}, i.e. the coordinate reference system }

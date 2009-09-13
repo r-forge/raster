@@ -17,7 +17,7 @@ setMethod('extent', signature(x='Extent'),
 )
 
 setMethod('extent', signature(x='BasicRaster'), 
-	function(x){ return(x@bbox) }
+	function(x){ return(x@extent) }
 )
 
 setMethod('extent', signature(x='Spatial'), 

@@ -34,7 +34,7 @@ setClass('Extent',
 
 setClass ('BasicRaster',
 	representation (
-		bbox = 'Extent',
+		extent = 'Extent',
 		ncols ='integer',
 		nrows ='integer',
 		crs = 'CRS'

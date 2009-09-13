@@ -1,15 +1,15 @@
-\name{polygonFromBbox}
-\alias{polygonFromBbox}
+\name{polygonFromExtent}
+\alias{polygonFromExtent}
 
 
 \title{Polygon from Extent}
 
 \description{
-polygonFromBbox creates a SpatialPolygon object from a Extent object (or a Raster*) object
+polygonFromExtent creates a SpatialPolygon object from a Extent object (or a Raster*) object
 }
 
 \usage{
-polygonFromBbox(bndbox, sp=TRUE)
+polygonFromExtent(bndbox, sp=TRUE)
 }
 
 \arguments{
@@ -23,12 +23,12 @@ a matrix or a SpatialPolygons object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{cellsFromBbox}}, \code{\link[raster]{newExtent}}, \code{\link[sp]{SpatialPolygons}} }
+\seealso{ \code{\link[raster]{cellsFromExtent}}, \code{\link[raster]{newExtent}}, \code{\link[sp]{SpatialPolygons}} }
 
 \examples{
 r <- raster()
 b <- extent(r)
-pol <- polygonFromBbox(b)
+pol <- polygonFromExtent(b)
 }
 
 \keyword{spatial}

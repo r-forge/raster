@@ -4,9 +4,9 @@
 \alias{cover}
 \alias{cover,RasterLayer,RasterLayer-method}
 
-\title{ cover }
+\title{ Cover }
 \description{
- Replace \code{NA} values in the first RasterLayer with the values of the second RasterLayer
+ Replace \code{NA} values in the first RasterLayer (x) with the values of the second RasterLayer (y)
  
  
 }
@@ -24,13 +24,7 @@
 }}
 
 \details{
-The function returns a RasterLayer with the values of the second RasterLayer, \code{y}, 
-where the values of the first RasterLayer, \code{x}, are NA and the values of the first RasterLayer elsewhere.
-
-If the input RasterLayer objects have all values in memory (e.g. after readAll(raster)), 
-the function will also return the new values in memory. If a filename is provided, the values will also be saved to that file. 
-
-If no filename is specified, and the resulting RasterLayer is too large to hold in memory, it is saved to a temporary file.  
+The function returns a RasterLayer with the values of the second RasterLayer (\code{y}) where the first RasterLayer (\code{x}) has \code{NA} values, and the values of the first RasterLayer elsewhere.
 }
 
 \value{

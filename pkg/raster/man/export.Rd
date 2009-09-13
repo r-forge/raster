@@ -6,7 +6,7 @@
 \title{Header files}
 
 \description{
-Write header files to use together with raster binary files in different software.
+Write header files to use together with raster binary files to read the data in other applications.
 }
 
 \usage{
@@ -26,7 +26,7 @@ you can also only export a header file, and use the data file that already exist
 writeHeader writes an ENVI, or BIL header (.hdr) file; or an Erdas Raw (.raw) header file. This (hopefully) allows for 
 reading the binary data ("raster.gri") in other programs such as ENVI or ArcMap.
 
-A "worldfile", is an ESRI "world" file, that is sometimes used to georeference images.	
+A "worldfile", is an ESRI "world file", that can be used to georeference images.
 }
 
 \author{Robert J. Hijmans}

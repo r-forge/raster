@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  October 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -94,9 +93,11 @@ xFromCell <- function(object, cell) {
 }  
 
 	
-cxyFromBbox <- function(object, bbox) {
-	if (.isSPgrid(object)) { object <- raster(object) }
-	bbox <- extent(bbox)
+cxyFromExtent <- function(object, extent) {
+	if (.isSPgrid(object)) { 
+		object <- raster(object) 
+	}
+	bbox <- extent(extent)
 	cells <- cellsFromExtent(object, bbox)
 	cxy <- cbind(cells, xyFromCell(object, cells))
 	colnames(cxy) <- c("cell", "x", "y")

@@ -2,7 +2,7 @@
 
 \alias{shift}
   
-\title{shift}
+\title{Shift}
 
 \description{
 shift the location of a Raster* object in the x and/or y direction

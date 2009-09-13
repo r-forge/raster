@@ -1,4 +1,5 @@
 \name{Summarize}
+
 \docType{methods}
 \alias{summary}
 \alias{summary,RasterLayer-method}
@@ -6,14 +7,14 @@
 \alias{show,RasterLayerSummary-method}
 
 
-\title{ Summary}
+\title{ Summarize}
 \description{
  Summarize a RasterLayer or RasterStack
 }
 \section{Methods}{
 \describe{
 
--
+Creates an object of class "RasterLayerSummary". Not particularly useful.
 
 }}
 \keyword{methods}

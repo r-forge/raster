@@ -1,5 +1,5 @@
-# Author: Jacob van Etten jacobvanetten@yahoo.com
-# International Rice Research Institute
+# Author: Jacob van Etten
+# email jacobvanetten@yahoo.com
 # Date :  January 2009
 # Version 1.0
 # Licence GPL v3
@@ -11,11 +11,14 @@
 distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, datatype='FLT4S', track=-1) {
 		n <- ncell(object)
 		
-		if (dataSource(object) == 'disk' & dataContent(object) != 'all' & canProcessInMemory(object, 6)) {
-			object <- readAll(object)
+		if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) {
+			stop('cannot compute distance on a RasterLayer with no data')
 		}
 		
-		if(dataContent(object)=='all' & canProcessInMemory(object, 5)){
+		if(canProcessInMemory(object, 5)){
+			if (dataContent(object) != 'all' ) { 
+				object <- readAll(object) 
+			}
 			outRaster <- raster(object, filename=filename)
 
 			fromCells <- which(!is.na(values(object)))
@@ -51,15 +54,17 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 					accDist[index] <- pmin(transitionValues,accDist[index])
 				}
 			}
+			
 			outRaster <- setValues(outRaster, accDist)	
 			if (filename != "") {
 				outRaster <- writeRaster(outRaster)
 			}
 			return(outRaster)
 			
-		} else if( dataSource(object) =='disk'){ 
+			
+		} else { 
 		
-			stop('not yet implemented for data on disk')
+			stop('not yet implemented for large rasters')
 			
 			nrows <- nrow(object)
 			ncols <- ncol(object)
@@ -139,6 +144,8 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 				}
 			}
 			outRaster <- saveAs(rsl1, filename, overwrite=overwrite, filetype=filetype, datatype=datatype)
+			removeRasterFile(rsl1)
+			removeRasterFile(rsl2)
 		}
 	}
 #)

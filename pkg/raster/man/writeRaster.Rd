@@ -15,15 +15,14 @@ writeRaster(raster, filetype='raster', filename='', overwrite=FALSE, assign=FALS
 
 \arguments{
   \item{raster}{RasterLayer object}
-  \item{filetype}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
+  \item{filetype}{either 'raster', 'ascii', or a supported GDAL 'driver' name (see below)}
   \item{filename}{Character. If omitted, the filename of the RasterLayer object is used (if it has one)}
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
   \item{assign}{Logical. If \code{TRUE} the function does not return a new object but overwrites the existing object} 
 }
 
 \details{
-Values in a \code{RasterLayer} object are written to a file. Relatively small datasets can be loaded into memory, manipulated, and saved to disk in their entirety. 
-Large datasets can be read and written row by row. 
+Values in a \code{RasterLayer} object are written to a file. Relatively small datasets can be loaded into memory, manipulated, and saved to disk in their entirety. Large datasets can be read and written row by row. 
 When writing by row, you must write all rows, and you must write them in sequence. Start at row=1, and end at row=nrow(raster). You cannot overwrite a single row in an existing raster file.
 See \code{writeFormats} for supported file types ("formats", "drivers"); the rgdal package is needed for this function, exxcept for the 'raster', ascii, and 'CDF' formats.
 

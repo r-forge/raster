@@ -9,9 +9,9 @@
 
 
 shift <- function(object, x=0, y=0) {
-	object@bbox@xmin <- object@bbox@xmin + x
-	object@bbox@ymin <- object@bbox@ymin + y
-	object@bbox@xmax <- object@bbox@xmax + x
-	object@bbox@ymax <- object@bbox@ymax + y
+	object@extent@xmin <- object@extent@xmin + x
+	object@extent@ymin <- object@extent@ymin + y
+	object@extent@xmax <- object@extent@xmax + x
+	object@extent@ymax <- object@extent@ymax + y
 	return(object)
 }

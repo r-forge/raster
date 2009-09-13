@@ -121,7 +121,7 @@ setMethod('raster', signature(x='Extent'),
 		nc = as.integer(round(ncols))
 		if (nc < 1) { stop("ncols should be > 0") }
 		if (nr < 1) { stop("nrows should be > 0") }
-		r <- new("RasterLayer", bbox=bb, ncols=nc, nrows=nr)
+		r <- new("RasterLayer", extent=bb, ncols=nc, nrows=nr)
 		projection(r) <- projs
 		return(r) 
 	}

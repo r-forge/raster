@@ -23,7 +23,6 @@ sampleRandom(raster, n=500, na.rm = TRUE)
   \item{na.rm}{Logical. If \code{TRUE} NA values are removed from random sample}  
 }
 
-
 \author{Robert J. Hijmans}
 
 \examples{

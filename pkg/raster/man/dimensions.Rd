@@ -48,6 +48,7 @@ r <- raster()
 ncell(r)
 ncol(r)
 nrow(r)
+dim(r)
 
 nrow(r) <- 18
 ncol(r) <- 36

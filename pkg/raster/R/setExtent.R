@@ -19,7 +19,7 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 		bb <- alignExtent(bb, newobj)
 	}
 
-	newobj@bbox <- bb
+	newobj@extent <- bb
 	
 	if (keepres) {
 		xrs <- xres(x)
@@ -30,8 +30,8 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 		nr <- as.integer(round( (ymax(newobj) - ymin(newobj)) / yrs ) )
 		if (nr < 1) { stop( "ymin and ymax are less than one cell apart" )
 		} else { newobj@nrows <- nr }
-		newobj@bbox@xmax <- newobj@bbox@xmin + ncol(newobj) * xrs
-		newobj@bbox@ymax <- newobj@bbox@ymin + nrow(newobj) * yrs
+		newobj@extent@xmax <- newobj@extent@xmin + ncol(newobj) * xrs
+		newobj@extent@ymax <- newobj@extent@ymin + nrow(newobj) * yrs
 		
 		if (dataContent(x) == 'all') {
 			if (ncol(x) == ncol(newobj) & nrow(x) == nrow(newobj)) {

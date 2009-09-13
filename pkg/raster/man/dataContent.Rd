@@ -9,9 +9,9 @@
 \description{ 
 These are helper functons for programmers and for debugging that provide information about the data values that are associated with the object. 
 
-dataContent provides information regrading the values currently in memory (RAM). Possible values are: nodata, all, row, block, sparse
-dataIndices returns the first and last cell number of the data in memory. Or all cell numbers for a sparse RasterLayer
-dataSource returns a value indicating whether the data source is a file on disk or whether it only exists in memory. Possible values are: ram, disk
+dataContent provides information regrading the values currently in memory (RAM). Possible values are: 'nodata', 'all', 'row', 'block', 'sparse'.
+dataIndices returns the first and last cell number of the data in memory. Or all cell numbers for a sparse RasterLayer. 
+dataSource returns a value indicating whether the data source is a file on disk or whether it only exists in memory. Possible values are: 'ram' and 'disk'.
 }
 
 \usage{
@@ -49,6 +49,6 @@ rs
 dataSource(rs)
 dataContent(rs)
 dataIndices(rs)
-
 }
+
 \keyword{ spatial }

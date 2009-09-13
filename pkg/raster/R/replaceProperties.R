@@ -18,22 +18,22 @@
 
 
 'xmin<-' <- function(x, value) {
-	x@bbox@xmin <- value
+	x@extent@xmin <- value
 	return(x)
 }
 
 'xmax<-' <- function(x, value) {
-	x@bbox@xmax <- value
+	x@extent@xmax <- value
 	return(x)
 }
 
 'ymin<-' <- function(x, value) {
-	x@bbox@ymin <- value
+	x@extent@ymin <- value
 	return(x)
 }
 
 'ymax<-' <- function(x, value) {
-	x@bbox@ymax <- value
+	x@extent@ymax <- value
 	return(x)
 }
 
