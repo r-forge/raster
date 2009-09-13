@@ -1,20 +1,17 @@
-\name{advanced writing}
+\name{Function writing}
 
 \alias{closeConnection}
 \alias{openConnection}
 \alias{canProcessInMemory}
 
-\title{ advanced writing }
+\title{ These are helper functions to use in your own functions }
 
 \description{ 
 low level functions for programmers 
 
-\code{canProcessInMemory} is typically used within functions. 
-In the raster package this function is used to determine wether values should be written to disk (in a temporary file) or not when there was
-no filename supplied to the function.
+\code{canProcessInMemory} is typically used within functions. In the raster package this function is used to determine wether values should be written to disk (e.g. in a temporary file) or not when there was no filename supplied to the function.
 
 openConnection opens a file connection for reading, closeConnection removes it. 
-
 
 }
 

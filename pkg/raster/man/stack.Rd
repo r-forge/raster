@@ -11,17 +11,16 @@
 \alias{stack,SpatialPixels-method}
 \alias{stack,SpatialGrid-method}
 
-\title{ stack }
+\title{ Create a RasterStack object}
 
 \description{
 A RasterStack is a collection of RasterLayer objects with the same spatial extent and resolution. 
-A RasterStack can be created from RasterLayer objects, or from raster files, or both.
+A RasterStack can be created from RasterLayer objects, or from raster files, or both. The can also be created from SpatialPixels or SpatialGrid objects.
 }
 
 \section{Methods}{
 \describe{
 \code{stack(x, ...)}
-
 
   \item{\code{x}}{ filename (character), Raster* object, SpatialGrid*, SpatialPixels*, or list (of filenames and/or Raster* objects) }
   \item{\code{...}}{additional RasterLayer objects (or filenames) }
@@ -41,7 +40,6 @@ If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted, 
   a RasterStack object
 }
 
-
 \author{Robert J. Hijmans}
 
 \seealso{ \code{\link[raster]{addLayer}}, \code{\link[raster]{dropLayer}}, \code{\link[raster]{rasterFromFile}} }
@@ -52,7 +50,6 @@ If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted, 
   r <- raster(fn)
   s <- stack(r, fn) 
 }
-
 
 \keyword{methods}
 \keyword{spatial}
