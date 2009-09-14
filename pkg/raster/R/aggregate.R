@@ -70,9 +70,9 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
-		if (!canProcessInMemory(x, 2) && filename == '') {
+		if (!canProcessInMemory(outRaster, 2) && filename == '') {
 			filename <- rasterTmpFile()
-			filename(outraster) <- filename
+			filename(outRaster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 		}
 		starttime <- proc.time()
@@ -81,8 +81,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='
 		rows <- rep(1, each=(ncol(x) * yfact))
 		v <- vector(length=0)
 
-		theserows <- startrow * rows
-		cells <- cellFromRowCol(x, theserows, cols)
+		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
 		for (r in 1:rsteps) {

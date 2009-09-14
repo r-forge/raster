@@ -9,7 +9,7 @@
 \description{ 
 low level functions for programmers 
 
-\code{canProcessInMemory} is typically used within functions. In the raster package this function is used to determine wether values should be written to disk (e.g. in a temporary file) or not when there was no filename supplied to the function.
+\code{canProcessInMemory} is typically used within functions. In the raster package this function is used to determine if the amount of memory needed for the function is available. If there is not enough memory available, the function returns \code{FALSE}, and the function that called it will write the results to a temporary file. 
 
 openConnection opens a file connection for reading, closeConnection removes it. 
 
@@ -28,8 +28,9 @@ openConnection(raster)
 
 
 \value{
-closeHandle: RasterLayer object
 canProcessInMemory: logical
+
+closeHandle: RasterLayer object
 }
 
 \author{Robert J. Hijmans}
