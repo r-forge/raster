@@ -37,7 +37,7 @@ Aligning extents assures that the two extents have the same origin and resolutio
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{drawBox}}, \code{\link[raster]{BoungingBox-class}} }
+\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{drawBox}}, \code{\link[raster]{Extent-class}} }
 
 \examples{
 r <- raster()

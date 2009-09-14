@@ -37,7 +37,7 @@ a Raster* object
   
 \author{Robert J. Hijmans}
 
-\seealso{  \code{\link[raster]{extent}}, \code{\link[raster]{BoungingBox-class}} }
+\seealso{  \code{\link[raster]{extent}}, \code{\link[raster]{Extent-class}} }
 
 \examples{
 r <- raster()

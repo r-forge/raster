@@ -41,9 +41,6 @@ predict(object, ...)
 
 }}
 
-\details{
-}
-
 \value{
 a RasterLayer object
 }
