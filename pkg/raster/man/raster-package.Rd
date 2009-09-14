@@ -4,7 +4,7 @@
 \docType{package}
 
 \title{
-Management, analysis and modeling of raster data.
+Management, analysis and modeling of raster data
 }
 
 \description{
@@ -15,7 +15,7 @@ Such data are also referred to as 'grid' data.
 The package should be particularly useful when using very large datasets that can not be loaded into the computer's memory. Functions will
 work correctly, because they will read, process, and write blocks of data, without loading all values into memory. 
 
-See the vignette (\code{vignette('raster', 'raster')}) for more information
+See the vignette for more information: \code{vignette('raster', 'raster')}
 }
 
 \details{
