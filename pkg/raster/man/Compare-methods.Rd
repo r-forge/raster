@@ -8,15 +8,24 @@
 
 \title{Compare Raster* objects}
 \description{
- These methods compare the location and resolution of Raster* objects. That is, they compare their spatial extent, projection, and number of rows and columns. 
+These methods compare the location and resolution of Raster* objects. That is, they compare their spatial extent, projection, and number of rows and columns. 
  
- For \code{BasicRaster} objects you can use \code{==} and \code{!=}, the values returned is a single logical value \code{TRUE} or \code{FALSE}
+For \code{BasicRaster} objects you can use \code{==} and \code{!=}, the values returned is a single logical value \code{TRUE} or \code{FALSE}
  
- For RasterLayer objects, they also compare the values associated with the objects, and the result is a logical (Boolean) RasterLayer object. And the value returned is a RasterLayer object, if the location and resolution of the two RasterLayers match, or an error of they do not match.
+For RasterLayer objects, they also compare the values associated with the objects, and the result is a logical (Boolean) RasterLayer object. And the value returned is a RasterLayer object, if the location and resolution of the two RasterLayers match, or an error of they do not match.
  
- The following methods have been implemented for RasterLayer objects:
+The following methods have been implemented for RasterLayer objects:
  
  \code{==, !=, >, <,  <=, >=}
+}
+
+\section{details}{
+If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file unless a default filename has been set with \code{link[raster]{rasterOptions}}. You can also use \code{link[raster]{rasterOptions}} to set the filetype, datatype and overwrite options.
+}
+
+
+\value{
+A logical value or a RasterLayer object, and in some cases the side effect of a new file on disk.
 }
 
 \author{Robert J. Hijmans }

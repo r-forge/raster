@@ -11,10 +11,16 @@ if (!isGeneric("calc")) {
 
 setMethod('calc', signature(x='RasterLayer', fun='function'), 
 
-function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
+function(x, fun, filename="", ...) {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
+	
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+
 	
 	outraster <- raster(x, filename)
 	dataType(outraster) <- datatype
@@ -25,12 +31,12 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 	
 	if ( dataContent(x) == 'all') {
 		outraster <- setValues(outraster, fun(values(x))) 
-		if (outraster@file@name != "") {
+		if (filename(outraster) != "") {
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if ( dataContent(x) == 'sparse') {
 		outraster <- setValuesSparse(outraster, fun(values(x)),  dataIndices(x)) 
-		if (outraster@file@name != "") { 
+		if (filename(outraster) != "") { 
 			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 		}
 	} else if (dataSource(x) == 'disk') {
@@ -43,7 +49,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
-			if (outraster@file@name == "") {
+			if (filename(outraster) == "") {
 				v <- c(v, fun(values(x)))
 			} else {
 				outraster <- setValues(outraster, fun(values(x)), r)
@@ -53,7 +59,7 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
 			
 		}
-		if (outraster@file@name == "") { 
+		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	}

@@ -70,8 +70,7 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, 
 
 		if (update) {
 			for (r in 1:nrow(raster)) {
-				raster <- readRow(raster, r)
-				res <- values(raster)
+				res <- valuesRow(raster, r)
 				for (i in 1:length(rclmat[,1])) {
 					res[ (res >= rclmat[i,1]) & (res <= rclmat[i,2]) ] <- rclmat[i,3] 
 				}
@@ -85,13 +84,12 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, 
 			
 		} else {
 			for (r in 1:nrow(raster)) {
-				raster <- readRow(raster, r)
-				res <- values(raster)
+				res <- valuesRow(raster, r)
 				for (i in 1:length(rclmat[,1])) {
-					res[ (values(raster) >= rclmat[i,1]) & (values(raster) <= rclmat[i,2]) ] <- rclmat[i , 3] 
+					res[ (res >= rclmat[i,1]) & ( res <= rclmat[i,2]) ] <- rclmat[i , 3] 
 				}
 				if (hasNA) {
-					res[ is.na(values(raster)) ] <- namat[1, 3] 				
+					res[ is.na(res) ] <- namat[1, 3] 				
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)

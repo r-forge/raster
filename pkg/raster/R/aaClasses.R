@@ -1,7 +1,6 @@
-# R classes for spatial data (raster data specifically) 
-# Authors: Robert J. Hijmans and Jacob van Etten, 
-# contact: r.hijmans@gmail.com
-# Date : November 2008
+# R classes for raster (grid) type spatial data
+# Robert J. Hijmans, r.hijmans@gmail.com
+# November 2008
 # Version 0.9
 # Licence GPL v3
 
@@ -61,10 +60,6 @@ setClass('RasterFile',
 	representation (
 		name ='character',
 		shortname ='character', # short name
-#		driver ='character', #gdal, raster
-#		datatype ='character', #'numeric' or 'integer'
-#		datasize ='integer',
-#		datasigned='logical',
 		datanotation='character',
 		byteorder ='character',
 		nodatavalue ='numeric', # on disk, in ram it is NA
@@ -75,10 +70,6 @@ setClass('RasterFile',
 	prototype (	
 	    name = '',
 		shortname ='',
-#		driver = 'raster',
-#		datatype = 'numeric',
-#		datasize = as.integer(4),
-#		datasigned= TRUE,
 		datanotation='FLT4S',
 		byteorder = .Platform$endian,
 		nodatavalue = -3.4E38,

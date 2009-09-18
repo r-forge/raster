@@ -9,7 +9,7 @@ Calculate values for the neighborhood of focal cells using a matrix of weights
 }
 
 \usage{
-focalFilter(raster, filter, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
+focalFilter(raster, filter, fun=sum, filename="", ...) 
 }
 
 \arguments{
@@ -17,10 +17,7 @@ focalFilter(raster, filter, fun=sum, filename="", overwrite=FALSE, filetype='ras
   \item{filter}{a matrix of weights. See Details}    
   \item{fun}{a function to apply to the product of the matrix of weights and the values}
   \item{filename}{Output filename for a new raster}
-  \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}   
+  \item{...}{additional arguments. See Details.}  
 }
 
 \details{
@@ -40,6 +37,14 @@ Sobel filter:
 
 \code{filter=matrix(c(0,0,0,0,1,1,0,1,1), nrow=3)} and \code{fun=max} returns the max value for the lower-rigth corner of a 3x3 matrix 
 around a focal cell
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 
 }
 

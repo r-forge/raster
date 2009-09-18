@@ -4,27 +4,9 @@
 # Licence GPL v3
 
 
-setTmpDir <- function(d=NULL) {
-	if (!is.null(d)) {
-		res <- file.exists(d)
-		if (!res) {
-			res <- dir.create(d,  showWarnings = FALSE)
-		}
-		if (res) { options(rasterTmpDir = d) }
-	}
-}
-
-
-rasterTmpDir <- function() {
-	d <- getOption('rasterTmpDir')
-	if (is.null(d)) {
-		d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
-	}
-	return(d)
-}
 
 rasterTmpFile <- function()  {
-	d <- rasterTmpDir()
+	d <- .tmpdir()
 	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
 	d <- paste(d, f, '.grd', sep="")
@@ -32,7 +14,7 @@ rasterTmpFile <- function()  {
 }
 
 removeTmpFiles <- function() {
-	d <- rasterTmpDir()
+	d <- .tmpdir()
 #	unlink(paste(d,'/*', sep=""))
 	gri <- Sys.glob(paste(d, '*.gri'))
 	file.remove(gri)
@@ -41,7 +23,7 @@ removeTmpFiles <- function() {
 }
 
 showTmpFiles <- function() {
-	d <- rasterTmpDir()
+	d <- .tmpdir()
 	if (file.exists(d)) {
 		list.files(d, '.grd')
 	} else {

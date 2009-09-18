@@ -11,10 +11,16 @@ if (!isGeneric("cover")) {
 }	
 
 setMethod('cover', signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, filename="", overwrite=TRUE, filetype='raster', datatype=dataType(x), track=-1) {
+	function(x, y, filename="", ...) {
+	
 	
 	compare(c(x, y))
 	
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+
 	outRaster <- raster(x, filename)
 	dataType(outRaster) <- datatype
 	

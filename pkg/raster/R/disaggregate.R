@@ -5,7 +5,14 @@
 # Licence GPL v3
 
 
-disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
+disaggregate <- function(raster, fact=2, filename='', ...) {
+
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+	inMemory <- .inMemory(...)
+	
 	if (length(fact)==1) {
 		fact <- round(fact)
 		if (fact < 2) { stop('fact should be > 1') }
@@ -18,22 +25,23 @@ disaggregate <- function(raster, fact=2, filename="", overwrite=FALSE, filetype=
 	} else {
 		stop('length(fact) should be 1 or 2')
 	}
+
 	filename <- trim(filename)
 	outraster <- raster(raster)
 	dataType(outraster) <- datatype
 	rowcol(outraster) <- c(nrow(raster) * yfact, ncol(raster) * xfact) 
 
-	if (dataContent(raster) == 'nodata' & dataSource(raster) == 'ram') {
+	if (dataContent(raster) != 'all' & dataSource(raster) == 'ram') {
 		return(outraster)
 	}
 	
-	if (!canProcessInMemory(outraster, 3) && filename == '') {
+	if ((!canProcessInMemory(outraster, 3) | !inMemory) && filename == '') {
 		filename <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
 	filename(outraster) <- filename
 	
-	if ( filename == "" ) {
+	if ( filename == ""  & inMemory ) {
 		if (dataContent(raster) != 'all') {
 			raster <- readAll(raster)
 		}

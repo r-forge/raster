@@ -1,7 +1,6 @@
-# Authors: Robert J. Hijmans, r.hijmans@gmail.com 
-# International Rice Research Institute
+# Author: Robert J. Hijmans, r.hijmans@gmail.com 
 # Date :  January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -13,10 +12,16 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 			if (canProcessInMemory(e1, 4)) {
 				return( setValues(r, values=callGeneric( as.numeric(.getRasterValues(e1)), .getRasterValues(e2))) )
 			} else {
-				filename(r) <- rasterTmpFile()
+				dataType(r) <- .datatype()
+				filetype <- .filetype()
+				overwrite <- .overwrite()
+				filename(r) <- .filename()
+				if (filename(r) == "") { 
+					filename(r) <- rasterTmpFile() 
+				}
 				for (row in 1:nrow(e1)) {
 					r <- setValues(r, callGeneric( as.numeric(.getRowValues(e1, row)), .getRowValues(e2, row) ), row)
-					r <- writeRaster(r)
+					r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
 				}
 				if (getOption('verbose')) {
 					cat('values were written to:', raster@file@name)
@@ -34,10 +39,17 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 		if (canProcessInMemory(e1, 4)) {
 			return ( setValues(r,  callGeneric(as.numeric(.getRasterValues(e1)), e2) ) )
 		} else {
-			filename(r) <- rasterTmpFile()
+			dataType(r) <- .datatype()
+			filetype <- .filetype()
+			overwrite <- .overwrite()
+			track <- .track()
+			filename(r) <- .filename()
+			if (filename(r) == "") { 
+				filename(r) <- rasterTmpFile() 
+			}
 			for (row in 1:nrow(e1)) {
 				r <- setValues(r, callGeneric( as.numeric(.getRowValues(e1, row)), e2) , row) 
-				r <- writeRaster(r)
+				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
 			}
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
@@ -53,10 +65,17 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 		if (canProcessInMemory(e2, 4)) {
 			return( setValues(r, callGeneric(as.numeric(e1), .getRasterValues(e2))) )
 		} else {
-			filename(r) <- rasterTmpFile()
+			dataType(r) <- .datatype()
+			filetype <- .filetype()
+			overwrite <- .overwrite()
+			track <- .track()
+			filename(r) <- .filename()
+			if (filename(r) == "") { 
+				filename(r) <- rasterTmpFile() 
+			}
 			for (row in 1:nrow(e2)) {
 				r <- setValues(r, callGeneric(as.numeric(e1), .getRowValues(e2, row)) , row)
-				r <- writeRaster(r)
+				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
 			}
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))

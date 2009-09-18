@@ -9,7 +9,7 @@ Calculate values for the neighborhood of focal cells
 }
 
 \usage{
-focal(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
+focal(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) 
 }
 
 \arguments{
@@ -18,10 +18,7 @@ focal(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, file
   \item{filename}{Output filename for a new raster}
   \item{ngb}{Neighborhood size. See Details.}
   \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
-  \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}   
+  \item{...}{additional arguments. See Details.}  
 }
 
 \details{
@@ -32,6 +29,15 @@ A neighborhood is expressed in number of cells in a single direction or in two d
 at each side of the focal cell. Queen's case, 8 cells in total. This is equivalent to \code{ngb=c(3,3)}. 
 You can also specify a rectangular neighborhood, e.g. \code{ngb=c(3,5)}. Neighborhoods are normally odd numbers so that the focal
 cell is centered, but even numbers are permitted in this function.
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
+
 }
 
 \value{

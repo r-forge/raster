@@ -1,9 +1,15 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
+.isSupportedFormat <- function(dname) {
+	res <- dname %in% c('raster', 'ascii')
+	if (!res) { 
+		res <- .isSupportedGDALFormat(dname) 
+	} 
+	return(res)
+}
 
 .isSupportedGDALFormat <- function(dname) {
 	if (!require(rgdal)) { stop() }

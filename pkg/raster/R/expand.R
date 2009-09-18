@@ -6,8 +6,13 @@
 # Licence GPL v3
 
 
-expand <- function(raster, bndbox, filename=NULL, filetype='raster', overwrite=FALSE, track=-1)  {
+expand <- function(raster, bndbox, filename=NULL, ...)  {
 	if (is.null(filename)) { filename <- "" }
+	
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+
 	
 	bndbox <- extent(bndbox)
 	res <- res(raster)

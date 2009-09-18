@@ -1,21 +1,29 @@
-# Author: Jacob van Etten
+# Author: Jacob van Etten and Robert J. Hijmans
 # email jacobvanetten@yahoo.com
 # Date :  January 2009
-# Version 1.0
+# Version 0.9
 # Licence GPL v3
 
 #setGeneric("distance", function(object, ...) standardGeneric("distance"))
 
 #setMethod("distance", signature(object = "RasterLayer"), def =	
 	
-distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, datatype='FLT4S', track=-1) {
-		n <- ncell(object)
+distance <-	function(object, filename="", ...) {
+
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+	inMemory <- .inMemory(...)
+#	inMemory=TRUE
 		
+		n <- ncell(object)
+
 		if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) {
 			stop('cannot compute distance on a RasterLayer with no data')
 		}
 		
-		if(canProcessInMemory(object, 5)){
+		if((inMemory) & (canProcessInMemory(object, 5))){
 			if (dataContent(object) != 'all' ) { 
 				object <- readAll(object) 
 			}
@@ -71,7 +79,8 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 
 			m <- c(-Inf, Inf, 0)
 			rsl1 <- reclass(object, m, filename=rasterTmpFile(), overwrite=TRUE)
-			rsl2 <- raster(rasterTmpFile())
+			rsl2 <- raster(rsl1)
+			filename(rsl2) <- rasterTmpFile()
 			
 			if(isLatLon(object)){
 				remainingCells <- TRUE
@@ -84,7 +93,7 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 							rsl1 <- readRow(rsl1, rownr=r+1)
 							rowWindow <- c(rowWindow, values(rsl1))
 						}
-						adj <- adjacency(fromCells=(((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols)), toCells=((r-1)*ncols+1):(r*ncols),directions=8)
+						adj <- adjacency(object, fromCells=(((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols)), toCells=((r-1)*ncols+1):(r*ncols),directions=8)
 						coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
 						distance <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
 						adj <- adj-((r-1)*ncols+1)
@@ -92,8 +101,10 @@ distance <-	function(object, filename="", filetype='raster', overwrite=FALSE, da
 						transitionValues <- tapply(transitionValues,adj[,2],min)
 						transitionValues <- transitionValues[transitionValues < Inf]
 						index <- as.integer(names(transitionValues))
-						newValues <- pmin(transitionValues,rowWindow[index])
-						if(newValues != rowWindow[index]){ 
+						newValues <- pmin(transitionValues, rowWindow[index])
+						if (sum(is.na(newValues)) > 0) {
+							remainingCells<-TRUE
+						} else if(newValues != rowWindow[index]){ 
 							remainingCells<-TRUE
 						}						
 						rsl2 <- setValues(rsl2, newValues, r)

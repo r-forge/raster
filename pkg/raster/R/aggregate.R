@@ -7,9 +7,13 @@
 
 setMethod('aggregate', signature(x='RasterLayer'), 
 
-function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1, old=FALSE)  {
-	if (is.null(filename)) { filename <- "" }
+function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+	
 	if (length(fact)==1) {
 		fact <- as.integer(round(fact))
 		if (fact < 2) { stop('fact should be > 1') }

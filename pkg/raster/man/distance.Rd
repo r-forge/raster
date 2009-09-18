@@ -19,21 +19,27 @@
 }
 
 \usage{
-distance(object, filename = "", filetype = "raster", overwrite = FALSE, datatype = "FLT4S", track=-1) 
+distance(object, filename = "", ...) 
 }
 
 \arguments{
 \item{object}{a RasterLayer object}
 \item{filename}{character. output filename}
-\item{overwrite}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
-\item{filetype}{character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}}}
-\item{datatype}{character. output data type; see \code{\link[raster]{dataType}}}
-\item{track}{vector of row numbers for which the function will report that they have been processed}
+\item{...}{additional arguments. See Details.}  
 }
 
 
 \seealso{ For more options (directions, cost-distance) see the \code{ \link[gdistance]{gdistance}} package } 
 
+\details{
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
+}
 
 \examples{
 r1 <- raster(ncol=36,nrow=18)

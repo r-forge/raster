@@ -7,23 +7,25 @@
 \alias{Arith,RasterLayer,numeric-method}
 \alias{Arith,RasterLayer,RasterLayer-method}
 
-\title{Arithmic}
+\title{Arithmic with rasters}
 
 \description{
   Standard arithmic operators for computations with RasterLayer objects and numeric values. The following operators are available:
-  \code{ +, -, *, /, ^, \%\%, \%/\% }
+\code{ +, -, *, /, ^, \%\%, \%/\% }
   Operators are applied on a cell by cell basis, and single numeric values are recycled. 
   Input RasterLayers must have the same extent and resolution.
 }
 
-\section{Note}{
- These are convenient operators/functions that are most usful for relatively small RasterLayers for which all the values can be held in memory. 
- If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. 
- In that case it could be more efficient to use use \code{\link[raster]{calc}} instead.
+\section{details}{
+If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file unless a default filename has been set with \code{link[raster]{rasterOptions}}. You can also use \code{link[raster]{rasterOptions}} to set the filetype, datatype and overwrite options.
+}
+
+
+\value{
+A RasterLayer object, and in some cases the side effect of a new file on disk.
 }
 
 \seealso{ \code{\link[raster]{Math-methods}}, \code{\link[raster]{overlay}}, \code{\link[raster]{calc}} }
-
 
 \author{Robert J. Hijmans}
 
@@ -38,3 +40,4 @@ r3 <- r1 * (r2 - 1 + r1^2 / r2)
 
 \keyword{methods}
 \keyword{math}
+\keyword{spatial}

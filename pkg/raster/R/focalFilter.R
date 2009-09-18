@@ -20,10 +20,15 @@
 }
 
 
-focalFilter <- function(raster, filter, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
+focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	if (!is.matrix(filter)) {stop('filter must be a matrix')}
 	ngb <- dim(filter)
 
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+	
 	filename <- trim(filename)
 	ngbgrid <- raster(raster, filename=filename)
 	dataType(ngbgrid) <- datatype

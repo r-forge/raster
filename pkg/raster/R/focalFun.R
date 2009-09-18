@@ -26,7 +26,13 @@
 }
 
 
-focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
+focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
+	
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+
 	ngb <- as.integer(round(ngb))
 	if (length(ngb) == 1) {
 		ngb <- c(ngb, ngb)
