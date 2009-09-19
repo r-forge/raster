@@ -146,7 +146,9 @@ RasterLayer object
 \examples{
 #from file
 r <- raster(system.file("external/test.ag", package="sp"))
+if (require(rgdal)) {
 logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE)
+}
 
 #from scratch
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
