@@ -17,7 +17,7 @@
 }
 
 \section{details}{
-If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file unless a default filename has been set with \code{link[raster]{rasterOptions}}. You can also use \code{link[raster]{rasterOptions}} to set the filetype, datatype and overwrite options.
+If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file unless a default filename has been set with \code{\link[raster]{rasterOptions}}. You can also use \code{\link[raster]{rasterOptions}} to set the filetype, datatype and overwrite options.
 }
 
 
