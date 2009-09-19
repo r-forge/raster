@@ -87,7 +87,13 @@
 }
 
 
-linesToRaster <- function(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", filetype='raster', datatype='FLT4S', track=-1) {
+linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FALSE, updateValue="NA", ...) {
+
+
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
 
 	filename <- trim(filename)
 	if (updateRaster) {

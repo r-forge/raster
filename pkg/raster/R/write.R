@@ -5,7 +5,7 @@
 
  
  
-writeRaster <- function(raster, filetype='raster', filename='', overwrite=FALSE, assign=FALSE) {
+writeRaster <- function(raster, filetype='raster', filename='', overwrite=FALSE,  assign=FALSE) {
 	if (assign){ 
 		raster_name <- deparse(substitute(raster))
 	}

@@ -1,16 +1,19 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
-pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
+pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", ...) {
 	
 	xy <- .pointsToMatrix(xy)
 	
 	rs <- raster(raster, filename)
-	dataType(rs) <- datatype
+	dataType(rs) <- .datatype(...)
+
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)	
 	
 	cells <- cellFromXY(rs, xy)
 	rows <- rowFromCell(rs, cells)

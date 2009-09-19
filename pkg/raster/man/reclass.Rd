@@ -8,7 +8,7 @@
 Reclassify values of a RasterLayer
 }
 \usage{
-reclass(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) 
+reclass(raster, rclmat, update=FALSE, filename="", ...) 
 }
 
 \arguments{
@@ -16,10 +16,7 @@ reclass(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, filetype='ra
   \item{rclmat}{Matrix (or vector) for reclassifcation. (see below)}
   \item{update}{Logical. If \code{TRUE} reclass updates previously reclassed values (see details)}
   \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
-  \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}   
+  \item{...}{additional arguments. See Details.}  
 }
 
 \details{
@@ -32,6 +29,14 @@ Reclassification is done in the order of the reclass table. Thus there are overl
 
 If \code{update=TRUE}, reclass can update values that were re-classified according to an earlier row in the reclass table. 
 For example if row 1 has \code{1, 10, 15} and row 2 has \code{11, 20, 25}, all the values from 1 to 20 will be classified as 25. 
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 }
 
 \value{

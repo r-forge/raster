@@ -3,8 +3,13 @@
 # Version 0.9
 # Licence GPL v3
 
-reclass <- function(raster, rclmat, update=FALSE, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)  {
+reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 	if (is.null(filename)) { filename <- "" }
+	
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
 
 	if (class(raster) != 'RasterLayer' ) {
 		stop('first argument should be an object of class "RasterLayer"')

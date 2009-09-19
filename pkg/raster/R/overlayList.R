@@ -1,16 +1,20 @@
-# Author: Robert J. Hijmans and Reinhard Krug
-# International Rice Research Institute
+# Author: Robert J. Hijmans
+# Contributors: Reinhard Krug
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
-.overlayList <- function(x, fun=sum, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1){ 
+.overlayList <- function(x, fun=sum, filename="", ...){ 
 	
 	compare(x)
 
 	outraster <- raster(x[[1]], filename)
-	dataType(outraster) <- datatype
+	
+	dataType(outraster) <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
 
 	inram <- TRUE
 	for (i in 1:length(x)) {
@@ -18,6 +22,7 @@
 			inram <- FALSE
 		} 
 	}	
+	if (!canProcessInMemory(outraster,2)) {inram <- FALSE }
 	
 	vallist <- list()
 

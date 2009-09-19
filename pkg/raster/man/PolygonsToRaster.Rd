@@ -10,7 +10,7 @@ Holes in polygons are recognized if they are correctly specified.
 }
 
 \usage{
-polygonsToRaster(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, updateValue="NA", filename="", overwrite=FALSE,  filetype='raster',  datatype='FLT4S', track=-1) 
+polygonsToRaster(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, updateValue="NA", filename="", ...) 
 }
 
 \arguments{
@@ -19,17 +19,22 @@ polygonsToRaster(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, u
   \item{field}{The index (or colname) of the column in the SpatialPolygonsDataFrame to be transfered to the RasterLayer (see Details)}
   \item{overlap}{character. Determines what to do with cells with overlapping polygons. Either 'first', 'last', 'sum', 'min', or 'max'}
   \item{filename}{output filename }
-  \item{overwrite}{logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either \code{'all'}, \code{'NA'}, \code{'!NA'}, or \code{'zero'} } 
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed. To track progress on very large files }
+  \item{...}{additional arguments. See Details.}    
 }
 
 \details{
 For SpatialPolygons, the \code{field} argument is ignored. The polygon index is used (i.e. numbers from 1 to the number of polygons. This is also 
 done for SpatialPolygonDataFrame objects when \code{field}==0. If  \code{field} < 0, all polygons get the value 1.
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 }
 
 \author{Robert J. Hijmans}

@@ -3,7 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-# helper functions
 
 
 .showOptions <- function() {
@@ -68,7 +67,6 @@
 		}
 	}
 }
-
 
 
 .datatype <- function(datatype, ...) {

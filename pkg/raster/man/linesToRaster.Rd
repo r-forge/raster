@@ -9,7 +9,7 @@
 }
 
 \usage{
-linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRaster=FALSE, updateValue="NA", filetype='raster', datatype='FLT4S', track=-1) 
+linesToRaster(spLines, raster, field=0, filename="", updateRaster=FALSE, updateValue="NA", ...) 
 }
 
 \arguments{
@@ -17,16 +17,21 @@ linesToRaster(spLines, raster, field=0, filename="", overwrite=FALSE, updateRast
   \item{raster}{RasterLayer object}
   \item{field}{The index of the column in the SpatialLinesDataFrame to be transfered to the RasterLayer (or the name of that field)}
   \item{filename}{Character. output filename }
-  \item{overwrite}{ logical. if \code{TRUE} ouput file will be overwritten if it exists }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either 'all', 'NA', '!NA', or 'zero' } 
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}    
+  \item{...}{additional arguments. See Details.}  
 }
 
 \details{
-For SpatialLines, the 'field' argument is ignored. The line index is used as attribute,
+For SpatialLines, the 'field' argument is ignored. The line index is used as attribute.
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 }
 
 \author{Robert J. Hijmans }

@@ -6,25 +6,28 @@
 
 \title{ Cover }
 \description{
- Replace \code{NA} values in the first RasterLayer (x) with the values of the second RasterLayer (y)
- 
- 
+ Replace \code{NA} values in the first RasterLayer (x) with the values of the second RasterLayer (y), and so forth for additional RasterLayers.
 }
+
+
 \section{Methods}{
 \describe{
-\code{cover(x, y, filename="", overwrite=TRUE) }
-
-  \item{\code{x}}{ a RasterLayer object }
-  \item{\code{y}}{ a RasterLayer object }
-  \item{\code{filename}}{ filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk }
-  \item{\code{overwrite}}{logical. If \code{TRUE}, existing files will be overwritten}
-
-
-\item{x = "RasterLayer", y = "RasterLayer"}{ ~~describe this method here }
+\code{cover(x, y, ..., filename="") }
+  \item{\code{x}}{ RasterLayer object }
+  \item{\code{y}}{ RasterLayer object }
+  \item{\code{...}}{ Additional RasterLayer objects or other arguments (see Details) }
+  \item{\code{filename}}{ filename for the output RasterLayer}
 }}
 
 \details{
 The function returns a RasterLayer with the values of the second RasterLayer (\code{y}) where the first RasterLayer (\code{x}) has \code{NA} values, and the values of the first RasterLayer elsewhere.
+
+\tabular{rll}{
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 }
 
 \value{

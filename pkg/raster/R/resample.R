@@ -6,7 +6,13 @@
 
 
 
-resample <- function(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
+resample <- function(from, to, method="ngb", filename="", ...)  {
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+
+	
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
 		
 	bb <- intersectExtent(from, to)

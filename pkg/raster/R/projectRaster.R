@@ -53,7 +53,13 @@ projectExtent <- function(object, projs) {
 }
 
 
-projectRaster <- function(from, to, method="ngb", filename="", filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1)  {
+projectRaster <- function(from, to, method="ngb", filename="", ...)  {
+	if (!require(rgdal)) { stop() }
+	
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
 	
 	if (dataContent(from) != 'all' & dataSource(from) == 'ram') { stop('no vales for "from". Nothing to do') }
 

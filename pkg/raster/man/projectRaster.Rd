@@ -12,7 +12,7 @@ be used as \code{'to'} RasterLayer in \code{projectRaster}. \code{projectRaster}
 }
 
 \usage{
-projectRaster(from, to, method="ngb", filename="", filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) 
+projectRaster(from, to, method="ngb", filename="", ...) 
 projectExtent(object, projs)
 }
 
@@ -21,10 +21,7 @@ projectExtent(object, projs)
   \item{to}{a Raster* object}
   \item{method}{method used to compute values for the new RasterLayer. Either 'ngb' (nearest neighbor) or 'bilinear' (bilinear interpolation).}
   \item{filename}{character. output filename}  
-  \item{overwrite}{Logical. If \code{TRUE}, the output file is overwritten if it already exists}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}  
+  \item{...}{additional arguments. See Details.}    
   \item{object}{Extent or Raster* object}
   \item{projs}{a character string describing a projection and datum in PROJ4 format}
 
@@ -44,7 +41,16 @@ Projection is performed using the PROJ.4 library accesed through the rgdal packa
 }
 
 \value{
-a RasterLayer object, and, in some cases, the side-effect of a raster file written to disk 
+A RasterLayer object, and, in some cases, the side-effect of a raster file written to disk.
+
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 }
 
 \author{Robert J. Hijmans}

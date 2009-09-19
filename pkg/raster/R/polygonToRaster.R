@@ -60,11 +60,16 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, updateValue="NA", 
-						filename="", overwrite=FALSE,  filetype='raster', datatype='FLT4S', track=-1) {
+polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, updateValue="NA", filename="", ...) {
 						
 	filename <- trim(filename)
 
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	track <- .track(...)
+	
+	
 	if (!(overlap %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
 		stop('invalid value for overlap')
 	}

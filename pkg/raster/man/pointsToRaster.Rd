@@ -6,7 +6,7 @@
 \description{  Convert points to a RasterLayer object }
 
 \usage{
-pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)
+pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", ...)
 }
 
 \arguments{
@@ -16,11 +16,7 @@ pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background
   \item{fun}{ the function to be applied}
   \item{background}{the value to be applied to the cells in which no points fall (typically \code{NA} or \code{0})}
   \item{filename}{ output filename }
-  \item{overwrite}{if \code{TRUE}, the file will be overwritten if it exists}  
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}    
-  
+  \item{...}{additional arguments. See Details.}  
 }
 
 \details{
@@ -30,6 +26,14 @@ of the vector of points.
 For the sum of the values, use \code{sum}, for a yes/no result, you can use \code{fun=function(x){if(lenght(x)>0 {r<-1} else {r<-0}; return(r)}}
 
 For the number of unique values use \code{fun=function(x){length(unique(x))}}
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 }
 
 \value{

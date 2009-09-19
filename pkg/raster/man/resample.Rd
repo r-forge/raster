@@ -11,7 +11,7 @@ these functions are more accurate and much faster.
 }
 
 \usage{
-resample(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) 
+resample(from, to, method="ngb", filename="", ...) 
 }
 
 \arguments{
@@ -19,14 +19,20 @@ resample(from, to, method="ngb", filename=NULL, filetype='raster', datatype='FLT
   \item{to}{a Raster* object}
   \item{method}{method used to compute values for the new RasterLayer}
   \item{filename}{character. output filename}  
-  \item{overwrite}{logical. If \code{TRUE}, the output file is overwritten if it already exists}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}  
-}
+  \item{...}{additional arguments. See Details.}    
+ }
 
 \details{
 valid values for \code{method} are \code{'ngb'} (nearest neighbor) and \code{'bilinear'} (bilinear interpolation).
+
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab track \tab vector of row numbers for which the function will report that they have been processed  \cr
+ }
 }
 
 \value{
@@ -47,7 +53,6 @@ s <- resample(r, r2, method='bilinear')
 #plot(r)
 #x11()
 #plot(s)
-
 }
 
 \keyword{spatial}

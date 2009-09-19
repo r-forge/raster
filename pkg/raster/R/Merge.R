@@ -6,20 +6,28 @@
 # Licence GPL v3
 
 setMethod('merge', signature(x='RasterLayer', y='RasterLayer'), 
-function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster', track=-1 ){ 
+function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, track){ 
 	
-	rasters <- list(...)
-	if (length(rasters) > 0) {
-		for (i in 1:length(rasters)) {
-			if (class(rasters[[i]]) != 'RasterLayer') {
-				print(class(rasters[[i]]))
-				stop('only supply RasterLayer objects as ... arguments')
+	if (missing(filetype)) {
+		filetype <- .filetype(...)
+	} 
+	if (missing(overwrite)) {
+		overwrite <- .overwrite(...)
+	}
+	if (missing(track)) {
+		track <- .track(...)
+	}
+
+	dots <- list(...)
+	rasters <- c(x, y)
+	if (length(dots) > 0) {
+		for (i in 1:length(dots)) {
+			if (class(dots[[i]]) == 'RasterLayer') {
+				rasters <- c(rasters, dots[[i]])
 			}
 		}
 	}
-	rasters <- c(x, y, rasters)
-	
-			
+
 	compare(rasters, bb=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
 	bb <- unionExtent(rasters)
 	outraster <- raster(rasters[[1]], filename)
@@ -34,6 +42,8 @@ function(x,y,...,tolerance=0.05, filename="", overwrite=FALSE, filetype='raster'
 	}
 	if (isInt) { 
 		dataType(outraster) <- 'INT4S'
+	} else { 
+		dataType(outraster) <- 'FLT4S'
 	}
 	
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
