@@ -2,7 +2,7 @@
 
 \alias{setValues}
 \alias{setValues,RasterLayer-method}
-\alias{setValues,RasterStack-method}
+\alias{setValues,RasterStackBrick-method}
 \alias{setValuesBlock}
 \alias{setValuesRows}
 \alias{setValuesSparse}

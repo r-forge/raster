@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  October 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 band <- function(object) {
@@ -23,8 +22,9 @@ nbands <- function(object) {
 
 
 minValue <- function(object, layer=1) {
+	layer <- round(layer)
 	if (layer < 1) { 
-		return(NA)
+		return(object@data@min)
 	} else {
 		return(object@data@min[layer])
 	}
@@ -33,9 +33,11 @@ minValue <- function(object, layer=1) {
 
 maxValue <- function(object, layer=1) {
 	layer <- round(layer)
-	layer <- max(1, min(nlayers(object), layer))
-	if (layer < 1) { return(NA)
-	} else { return(object@data@max[layer]) }
+	if (layer < 1) { 
+		return(object@data@max)
+	} else { 
+		return(object@data@max[layer]) 
+	}
 }
 
 

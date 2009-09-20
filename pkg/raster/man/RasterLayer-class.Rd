@@ -6,23 +6,29 @@
 \alias{Raster-class}
 \alias{RasterLayer-class}
 \alias{RasterStack-class}
+\alias{RasterBrick-class}
 
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
+\alias{show,RasterBrick-method}
 
 
 \title{ Raster* classes}
 
 
-\description{ \code{RasterLayer} and \code{RasterStack} (Raster* in short) are classes for handling spatial raster (grid) data.
+\description{
 
-RasterLayer represents a single layer raster.  RasterStack represents a collection of RasterLayers with the same extent and resolution;
+\code{RasterLayer}, \code{RasterStack} and \code{RasterBrick} (Raster* in short) are classes for handling spatial raster (grid) data.
+
+RasterLayer represents a single layer raster. RasterBrick and RasterStack represents a collection of RasterLayers with the same extent and resolution;
 for example a multi-band remote sensing image. 
+
+The only important difference between a RasterBrick and a RasterStack is that a RasterBrick can refer to only a single (multi-band) data file, whereas each layer in a RasterStack can refer to another file.
  
-Objects can be created with the following helper functions: \code{\link[raster]{raster} and \link[raster]{stack}}  
+Objects can be created with the following helper functions: \code{\link[raster]{raster}, \link[raster]{brick}} and \link[raster]{stack}  
  
-RasterLayer and RasterStack objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package using \code{as}, or the simply with the function \code{\link[raster]{raster}}. 
+Raster* objects can also be created from SpatialPixels* and SpatialGrid* objects from the sp package using \code{as}, or the simply with the function \code{\link[raster]{raster}}, \code{\link[raster]{brick}}, or \code{\link[raster]{stack}}. 
 Vice versa, Raster* objects can be coerced into a sp type oject with \code{as( , )}, e.g. \code{as(x, 'SpatialGridDataFrame')} . 
  
 Common generic methods implemented for these classes include: 
@@ -44,6 +50,7 @@ Common generic methods implemented for these classes include:
  These classes are not further described here because users should not need to directly access these slots. 
  The 'setter' functions such as \code{setValues} should be used instead. Using such 'setter' functions
  is much safe because a change in one slot should often affect the values in other slots. 
+
  }
 
 
@@ -52,7 +59,7 @@ Objects can be created by calls of the form \code{new("RasterLayer", ...)}, or w
 }
 
 \section{Slots}{
-Slots for RasterLayer and RasterStack objects
+Slots for Raster* objects
 
 	\describe{
     \item{\code{title}:}{Object of class \code{"character"} }
@@ -66,13 +73,12 @@ Slots for RasterLayer and RasterStack objects
   }
 }
 \section{Extends}{
-Classes \code{RasterLayer} and \code{RasterStack} extend class \code{"\linkS4class{Raster}"}, directly.
-Classes \code{RasterLayer} and \code{RasterStack} extend class \code{"\linkS4class{BasicRaster}"}, by class "Raster", distance 2.
+Classes \code{Raster*} extend class \code{"\linkS4class{Raster}"}, directly.
+Classes \code{Raster*} extend class \code{"\linkS4class{BasicRaster}"}, by class "Raster", distance 2.
 }
 
 \section{Methods}{
   \describe{
-  
     \item{[}{\code{signature(x = "RasterLayer", i = "ANY", j = "ANY")}: ... }
     \item{[<-}{\code{signature(x = "RasterLayer", i = "ANY", j = "ANY")}: ... }
     \item{plot}{\code{signature(x = "RasterLayer", y = "RasterLayer")}: ... }

@@ -32,7 +32,8 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 		if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 	}
 	
-	outRaster <- raster(raster, filename=filename, datatype=datatype)
+	outRaster <- raster(raster, filename=filename)
+	dataType(outRaster) <- datatype
 
 	res <- vector(length = ncol(raster))
 	

@@ -36,6 +36,13 @@
 	fnamevals <- .setFileExtensionValues(raster@file@name)
 #	attr(raster@file, "con") <- file(fnamevals, "rb")
 	raster@data@haveminmax <- TRUE
+	if (raster@file@dtype == "INT") {
+		raster@data@min <- round(raster@data@min)
+		raster@data@max <- round(raster@data@max)
+	} else if ( raster@file@dtype =='LOG' ) { 
+#		raster@data@min <- as.logical(raster@data@min)
+#		raster@data@max <- as.logical(raster@data@max)
+	}
 	raster@data@source <- 'disk'
 	raster@data@content <- 'nodata'
 	raster@data@values <- vector(length=0)

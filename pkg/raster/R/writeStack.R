@@ -1,15 +1,16 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  April 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
-writeStack <- function(rstack, bandorder='BIL', filename='', filetype='raster', datatype='FLT4S', overwrite=FALSE) {
+writeStack <- function(rstack, filename, bandorder='BIL', ...) {
+
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+
 	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) {
 		stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'")
-	}
-	if (!datatype == 'raster') {
-		stop('only implemented for datatype=raster')
 	}
 
 	nl <- nlayers(rstack)
@@ -24,7 +25,7 @@ writeStack <- function(rstack, bandorder='BIL', filename='', filetype='raster', 
 		if (dataContent(rstack) == 'all') {
 			for (r in 1:nrow(rstack)) {
 				rv <- valuesRow(rstack, r)
-				rout <- setValues(rout, as.vector(rv))
+				rout <- setValues(rout, as.vector(rv), r)
 				rout <- writeRaster(rout,  overwrite=overwrite)			
 			}
 		} else {
@@ -65,7 +66,12 @@ writeStack <- function(rstack, bandorder='BIL', filename='', filetype='raster', 
 			}
 		}		
 	}
-	return(missing())
+	nrow(rout) <- nrow(rstack)
+	ncol(rout) <- ncol(rstack)
+	rout@data@min <- minValue(rstack, -1)
+	rout@data@max <- maxValue(rstack, -1)
+	writeHeader(rout, type='raster')
+	return(invisible(rstack))
 }
 
 

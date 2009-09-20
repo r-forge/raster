@@ -2,6 +2,7 @@
 
 \alias{readAll,RasterLayer-method}
 \alias{readAll,RasterStack-method}
+\alias{readAll,RasterBrick-method}
 \alias{readRow,RasterLayer-method}
 \alias{readRow,RasterStack-method}
 \alias{readPartOfRow,RasterLayer-method}

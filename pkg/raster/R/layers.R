@@ -28,6 +28,12 @@ setMethod('nlayers', signature(object='RasterStack'),
     }
 )
 
+setMethod('nlayers', signature(object='RasterBrick'), 
+	function(object){
+		return(object@data@nlayers) 
+    }
+)
+
 setMethod('nlayers', signature(object='Spatial'), 
 	function(object){
 		if ( class(object)=='SpatialPixelsDataFrame' |  class(object)=='SpatialGridDataFrame' ) { 

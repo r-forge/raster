@@ -1,12 +1,68 @@
 # R code for reading raster (grid) data
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date : June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
+
+.getRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, offset=0) {
+	raster <- openConnection(raster)
+	if (rownr > 0) {
+		seek(raster@file@con, ((rownr-1) * ncol(raster) + (startcol-1) + offset) * dsize)
+		result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) 
+	} else {	
+		seek(raster@file@con, offset)
+		result <- readBin(raster@file@con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder)
+	}
+	raster <- closeConnection(raster)
+	return(result)
+}
+
+
+.getBilRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, band=1) {
+	raster <- openConnection(raster)
+	if (rownr > 0) {
+		seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) + (band-1) * ncol(raster)) * dsize)
+		result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder)
+	} else {	
+		result <- vector(length=0)
+		for (rownr in 1:nrow(raster)) {
+			seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) + (band-1) * ncol(raster)) * dsize)
+			res <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder)
+			result <- c(result, res)
+		}
+	}
+	raster <- closeConnection(raster)
+	return(result)
+}
+
+
+.getBipRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, band=1) {
+	raster <- openConnection(raster)
+	index <- rep(FALSE, nbands(raster))
+	index[band] <- TRUE
+	index <- rep(index, ncolumns)
+	if (rownr > 0) {
+		seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) * nbands(raster)) * dsize)
+		nc <- ncolumns * nbands(raster)
+		result <- readBin(raster@file@con, what=dtype, n=nc, dsize, dsign, endian=raster@file@byteorder) 
+		result <- result[index]
+	} else {	
+		result <- vector(length=0)
+		for (rownr in 1:nrow(raster)) {
+			seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) * nbands(raster)) * dsize)
+			nc <- ncolumns * nbands(raster)
+			res <- readBin(raster@file@con, what=dtype, n=nc, dsize, dsign, endian=raster@file@byteorder) 
+			res <- res[index]
+			result <- c(result, res)
+		}
+	}
+	raster <- closeConnection(raster)
+	return(result)
+}
 
 
 .rasterRead <- function(raster, rownr, startcol=1, ncolumns=(ncol(raster)-startcol+1)) {
+
 	rownr <- round(rownr)
 	ncolums <- round(ncolumns)
 	if (rownr == 0) { stop("rownr == 0. It should be between 1 and nrow(raster), or < 0 for all rows") }
@@ -50,15 +106,20 @@
 		dsize <- dataSize(raster@file@datanotation)
 		dsign <- dataSigned(raster@file@datanotation)
 		
-		raster <- openConnection(raster)
-		if (rownr > 0) {
-			seek(raster@file@con, ((rownr-1) * ncol(raster) + (startcol-1)) * dsize)
-			result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) }	
-		else {	
-			seek(raster@file@con, 0)
-			result <- readBin(raster@file@con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder) 
+		if (nbands(raster) > 1) {
+			band <- band(raster)
+			bo <- raster@file@bandorder
+			if (bo == 'BSQ') {
+				offs <- (band-1) * ncell(raster)
+				result <- .getRasterData(raster=raster, rownr=rownr, startcol=startcol, ncolumns=ncolumns, dtype=dtype, dsize=dsize, dsign=dsign, offset=offs) 
+			} else if (bo == 'BIL') {
+				result <- .getBilRasterData(raster=raster, rownr=rownr, startcol=startcol, ncolumns=ncolumns, dtype=dtype, dsize=dsize, dsign=dsign, band=band) 
+			} else if (bo == 'BIP') {
+				result <- .getBipRasterData(raster=raster, rownr=rownr, startcol=startcol, ncolumns=ncolumns, dtype=dtype, dsize=dsize, dsign=dsign, band=band) 
+			} 
+		} else {
+			result <- .getRasterData(raster=raster, rownr=rownr, startcol=startcol, ncolumns=ncolumns, dtype=dtype, dsize=dsize, dsign=dsign, offset=0) 
 		}
-		raster <- closeConnection(raster)
 
 #		result[is.nan(result)] <- NA
 		if (dtype == 'numeric') {

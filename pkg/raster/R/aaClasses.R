@@ -166,7 +166,26 @@ setClass('MultipleRasterData',
 )
 
 
+setClass ('RasterBrick',
+	contains = 'Raster',
+	representation (
+		title = 'character',
+		file = 'RasterFile',
+		data = 'MultipleRasterData',
+		legend = 'RasterLegend',
+#		sparse = 'logical',
+		history = 'vector'
+		),
+	prototype (
+#		sparse = FALSE,
+		history = vector(mode='character')
+		),
+	validity = function(object)
+	{
+	}
+)
 
+	
 	
 setClass ('RasterStack',
 	contains = 'Raster',
@@ -186,3 +205,4 @@ setClass ('RasterStack',
 	}
 )
 
+setClassUnion("RasterStackBrick", c("RasterStack", "RasterBrick"))

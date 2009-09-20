@@ -19,6 +19,9 @@ setMethod('readAll', signature(object='RasterLayer'),
 setMethod('readAll', signature(object='RasterStack'), 
 	function(object){ return(.stackRead(object, -1))}
 )
+setMethod('readAll', signature(object='RasterBrick'), 
+	function(object){ return(.brickRead(object, -1))}
+)
 
 
 ###   readRow   ###

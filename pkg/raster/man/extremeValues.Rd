@@ -3,12 +3,9 @@
 \alias{minValue}
   
   
-\title{Get raster properties}
+\title{Minimum and maximum values}
 \description{
-  values returns cell values for a Raster* object (typically after read* has been used).
- 
-  valuesRow returns values for a row of values in the case that all values are in memory 
-  (if they are on disk, use \code{readRow} and \code{values})
+Returns the minimum or maximum value of a RasterLayer or layer in a RasterStack
 }
 
 \usage{
@@ -18,23 +15,15 @@ maxValue(object, layer=1)
 
 \arguments{
   \item{object}{RasterLayer or RasterStack object}
-  \item{layer}{layer number (for RasterStack objects}
+  \item{layer}{layer number (for RasterStack objects) }
 }
   
-
-\note{
-	RasterLayer values are returned as a vector unless the option format='matrix' is used. 
-	In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
-	Some of these functions simply take the values from the data slots in the Raster or RasterStack object.   
-}
-
 \value{
-raster cell value(s)
+a number
 }
 
 \author{Robert J. Hijmans }
 \examples{
-#using a new default raster (1 degree global)
 r <- raster()
 r <- setValues(r, 1:ncell(r))
 minValue(r)

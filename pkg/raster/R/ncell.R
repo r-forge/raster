@@ -10,6 +10,17 @@ if (!isGeneric("ncell")) {
 		standardGeneric("ncell"))
 }	
 
+setMethod('ncell', signature(x='Raster'), 
+	function(x) {
+		d <- dim(x)
+		# return numeric to avoid integer overflow
+		t <- as.numeric(d[1]) * d[2]
+		return(t)
+	}
+)
+
+
+
 setMethod('ncell', signature(x='ANY'), 
 	function(x) {
 		d <- dim(x)

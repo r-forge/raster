@@ -1,31 +1,41 @@
 \name{writeStack}
 
 \alias{writeStack}
+\alias{writeBrick}
 
-\title{Write RasterStack}
+\title{Write RasterStack or RasterBrick to file}
 
 \description{
-
-NOT IMPLEMENTED YET
-
-values of a RasterStack to a multi-band RasterFile
+Write the values of a RasterStack or RasterBrick object to a multi-band RasterFile.
 }
 
 \usage{
-  writeStack(rstack, bandorder='BIL', filename='', filetype='raster', datatype='FLT4S', overwrite=FALSE)
+  writeStack(rstack, filename, bandorder='BIL', ...)
+  writeBrick(brick, filename, bandorder='BIL', ...)
 }
 
 \arguments{
   \item{rstack}{RasterStack object} 
-  \item{bandorder}{BIL, BIP, or BSQ} 
+  \item{brick}{RasterBrick object} 
   \item{filename}{character. output filename}
-  \item{overwrite}{logical. If \code{TRUE}, "filename" will be overwritten if it exists}
-\item{filetype}{character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}}}
-\item{datatype}{character. output data type; see \code{\link[raster]{dataType}}}
+  \item{bandorder}{BIL, BIP, or BSQ} 
+  \item{...}{additional arguments. See Details.}  
 }
 
 \details{
-xxx
+BIL = 'Bands Interleaved by Line'
+
+BIP = 'Bands Interleaved by Pixels'
+
+BSQ = 'Bands SeQuential'
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab overwrite \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab filetype \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab datatype \tab output data type; see \code{\link[raster]{dataType}} \cr
+ }
+
 }
 
 

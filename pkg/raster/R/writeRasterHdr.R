@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -23,13 +22,13 @@
 	cat("yres=", yres(raster), "\n", file = thefile)
 	cat("projection=", projection(raster), "\n", file = thefile)
 	cat("[data]", "\n", file = thefile)
-	cat("DataType=",  raster@file@datanotation, "\n", file = thefile)
-	cat("ByteOrder=",  .Platform$endian, "\n", file = thefile)
+	cat("datatype=",  raster@file@datanotation, "\n", file = thefile)
+	cat("byteorder=",  .Platform$endian, "\n", file = thefile)
 	cat("nbands=",  nbands(raster), "\n", file = thefile)
-	cat("bandOrder=",  raster@file@bandorder, "\n", file = thefile)
-	cat("minValue=",  minValue(raster), "\n", file = thefile)
-	cat("maxValue=",  maxValue(raster), "\n", file = thefile)
-	cat("NoDataValue=", .nodatavalue(raster), "\n", file = thefile)
+	cat("bandorder=",  raster@file@bandorder, "\n", file = thefile)
+	cat("minvalue=",  paste(minValue(raster,-1), collapse=':'), "\n", file = thefile)
+	cat("maxvalue=",  paste(maxValue(raster,-1), collapse=':'), "\n", file = thefile)
+	cat("nodatavalue=", .nodatavalue(raster), "\n", file = thefile)
 #	cat("Sparse=", raster@sparse, "\n", file = thefile)
 #	cat("nCellvals=", raster@data@ncellvals, "\n", file = thefile)	
 	close(thefile)

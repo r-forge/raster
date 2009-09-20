@@ -82,7 +82,7 @@ setMethod('raster', signature(x='character'),
 
 
 setMethod('raster', signature(x='Raster'), 
-	function(x, filename="", datatype="FLT4S", values=NULL) {
+	function(x, filename="", values=NULL) {
 		r <- raster(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
 		filename(r) <- filename
 		if (!is.null(values)) {

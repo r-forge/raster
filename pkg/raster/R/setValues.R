@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -74,7 +73,7 @@ function(object, values, rownr=-1, layer=-1) {
 	
 
 
-setMethod('setValues', signature(object='RasterStack'), 
+setMethod('setValues', signature(object='RasterStackBrick'), 
   function(object, values, rownr=-1, layer=-1) {
 	if (!(is.vector(values) | is.matrix(values))) {
 		stop('values must be a vector or a matrix')
@@ -86,15 +85,16 @@ setMethod('setValues', signature(object='RasterStack'),
 	
 	if (is.matrix(values)) {
 		if (ncol(values) == nlayers(object)) {
-			object@data@values <- values
-			if (nrow(values) == 1) {
+			if (nrow(values) == ncell(object)) {
 				object@data@content <= 'all'
 				object@data@indices <- c(1, ncell(object))
+				object@data@values <- values
 			} else if (nrow(values) == nrow(object)) {
 				object@data@content <= 'row'
 				firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
 				lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
 				object@data@indices <- c(firstcell, lastcell)				
+				object@data@values <- values
 			} else {
 				stop('either set all data or a single row')
 			}
@@ -130,10 +130,11 @@ setMethod('setValues', signature(object='RasterStack'),
 			firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
 			lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
 			object@data@indices <- c(firstcell, lastcell)
+		} else {
+			stop("length(values) is not equal to ncell(object) or ncol(object)") 
 		}
-	} else {
-		stop("length(values) is not equal to ncell(object) or ncol(object)") 
 	}
+	return(object)
  }
 )
 	

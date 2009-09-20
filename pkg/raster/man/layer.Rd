@@ -4,6 +4,7 @@
 \alias{nlayers,BasicRaster-method}
 \alias{nlayers,Raster-method}
 \alias{nlayers,RasterStack-method}
+\alias{nlayers,RasterBrick-method}
 \alias{nlayers,Spatial-method}
 \alias{layerNames}
 \alias{layerNames<-}

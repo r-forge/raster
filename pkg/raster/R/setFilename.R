@@ -27,8 +27,10 @@ filename <- function(x) {
 		shortname <- basename(filename)
 		ext(shortname) <- ""
 		shortname <- gsub(" ", "_", shortname)
-		if (nbands(x) > 1) { 
-			shortname <- paste(shortname, "_", band(x)) 
+		if (class(x)=='RasterLayer') {
+			if (nbands(x) > 1) { 
+				shortname <- paste(shortname, "_", band(x), sep="") 
+			}
 		} 
 		x@file@shortname <- shortname
 	}	
