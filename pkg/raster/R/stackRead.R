@@ -22,6 +22,11 @@
 		}
 		rstack@data@values[,i] <- values(r)
 	}
+	
+	if (dataContent(rstack) == 'all') {
+		rstack <- setMinMax(rstack)
+	}	
+	
 	return(rstack)
 }
 

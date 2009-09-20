@@ -46,7 +46,7 @@ a Raster* object
 \author{ Robert J. Hijmans }
 
 \examples{ 
-	rs <- raster()
+	rs <- raster(ncol=10, nrow=10)
 	vals <- 1:ncell(rs)
 	rs <- setValues(rs, vals)
 	rs <- clearValues(rs)
@@ -55,4 +55,5 @@ a Raster* object
 }
 
 \keyword{ spatial }
+\keyword{ methods }
 

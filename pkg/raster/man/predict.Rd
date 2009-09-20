@@ -6,12 +6,12 @@
 \alias{predict,RasterLayer-method}
 \alias{predict,RasterStack-method}
 
-\title{Predict}
+\title{Model predictions}
 
 \description{
 Make a RasterLayer with a prediction based on a a fitted model object. If only x and y are independent variables provide a RasterLayer for which you want predictions.
- If there are additional independent variables, provide a RasterStack with these. The layerNames in the RasterStack should match those expected by the model. This will be the case 
- if the RasterStack was used (via xyValues) to obtain the values to fit the model. Any type of model (e.g. glm) for which a predict method has been implemented can be used. 
+
+If there are additional independent variables, provide a RasterStack with these. The layerNames in the RasterStack should match those expected by the model. This will be the case if the RasterStack was used (via xyValues) to obtain the values to fit the model. Any type of model (e.g. glm) for which a predict method has been implemented can be used. 
 }
 
 \usage{

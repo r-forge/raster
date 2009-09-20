@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 
-setMethod("plot", signature(x='RasterStack', y='ANY'), 
+setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
 	function(x, y, col=rev(terrain.colors(255)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
 		if (missing(y)) {
 			nl <- nlayers(x)

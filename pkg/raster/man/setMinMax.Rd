@@ -1,18 +1,23 @@
-\name{set}
+\name{setMinMax}
+
+\alias{setMinMax,RasterLayer-method}
+\alias{setMinMax,RasterStack-method}
+\alias{setMinMax,RasterBrick-method}
+
 \alias{setMinMax}
 
-\title{Set extreme values }
+\title{Compute min and max values}
 
 \description{
-The minimum and maximum value of a RasterLayer are computed from a file in disk and stored in the resulting RasterLayer object. 
+The minimum and maximum value of a RasterLayer are computed (from a file on disk if necessary) and stored in the returned Raster* object. 
 }
 
 \usage{
-setMinMax(raster)
+setMinMax(x)
 }
 
 \arguments{
-  \item{raster}{ A \code{RasterLayer} object }
+  \item{x}{ A \code{Raster*} object }
 }
 
 \value{
@@ -32,4 +37,5 @@ r
 }
 
 \keyword{ spatial }
+\keyword{ methods }
 

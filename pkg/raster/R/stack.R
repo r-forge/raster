@@ -45,9 +45,9 @@ function(x, bands=NULL) {
 			if (is.null(bands)) {
 				r[j] <- raster(x[[i]])
 			} else if (bands[[i]] > 0) {
-					r[j] <- raster(x[[i]], bands[[i]])
+					r[j] <- raster(x[[i]], band=bands[[i]])
 			} else {
-				r[j] <- raster(x[[i]], 1)
+				r[j] <- raster(x[[i]], band=1)
 				bds <- nbands(r[[j]])
 				if (bds > 1) {
 					for (b in 2:bds) {

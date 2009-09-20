@@ -4,7 +4,7 @@
 
 \alias{plot}
 \alias{plot,RasterLayer,missing-method}
-\alias{plot,RasterStack,ANY-method}
+\alias{plot,RasterStackBrick,ANY-method}
 \alias{plot,RasterLayer,RasterLayer-method}
 \alias{plot,Extent,ANY-method}
 \alias{plot,Extent,missing-method}

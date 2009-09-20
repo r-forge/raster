@@ -11,8 +11,8 @@ if (!isGeneric("raster")) {
 
 setMethod('raster', signature(x='missing'), 
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84") {
-		bb <- newExtent(xmn, xmx, ymn, ymx)
-		r <- raster(bb, nrows=nrows, ncols=ncols, projs=projs)
+		ext <- newExtent(xmn, xmx, ymn, ymx)
+		r <- raster(ext, nrows=nrows, ncols=ncols, projs=projs)
 		return(r)
 	}
 )
@@ -111,6 +111,26 @@ setMethod('raster', signature(x='RasterStack'),
 	}
 )
 
+setMethod('raster', signature(x='RasterBrick'), 
+	function(x, index=1){
+		if (nlayers(x) > 0) {
+			dindex <- max(1, min(nlayers(x), index))
+			if (filename(x) != '') {
+				if (dindex != index) { warning(paste("index was changed to", dindex))}
+				r <- raster(filename(x), band=dindex)
+			} else {
+				r <- raster(extent(x), nrows=nrows(x), ncols=ncols(x), projs=projection(x))	
+				if (dataContent(x) == 'all') {
+					if (dindex != index) { warning(paste("index was changed to", dindex))}
+					r <- setValues(r, values(x)[,dindex])
+				}
+			}
+		} else {
+			r <- raster(extent(x), nrows=nrows(x), ncols=ncols(x), projs=projection(x))	
+		}
+		return(r)
+	}
+)
 
 
 

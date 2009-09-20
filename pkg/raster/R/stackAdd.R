@@ -82,20 +82,25 @@ addLayer <- function(rstack, rasters) {
 			}
 			
 			for (k in 1:length(rasterlist)) {
+				raster <- rasterlist[[k]]
+				if (!compare(c(rstack, raster))) { 
+					stop(paste("could not add raster:", filename(raster))) 
+				}
+				
+				if (dataSource(raster) == 'ram') {
+					if (dataContent(raster) != 'all') { 
+						stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
+					}
+					if (dataContent(rstack) != 'all') {
+						rstack <- readAll(rstack)
+					}
+				}
+				
 				nl <- as.integer( rstack@data@nlayers + 1 )
 				rstack@data@nlayers <- nl
 				rstack@data@min[nl] <- raster@data@min
 				rstack@data@max[nl] <- raster@data@max		
 
-				raster <- rasterlist[[k]]
-				
-				if (dataContent(raster) != 'all' & dataSource(raster) == 'ram') {
-					stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
-				}
-
-				if (!compare(c(rstack, raster))) { 
-					stop(paste("could not add raster:", filename(raster))) 
-				}
 				count <- 1
 				cname <- trim(raster@file@shortname)
 				if (cname == "") {

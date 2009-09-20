@@ -23,6 +23,11 @@
 		}
 		brick@data@values[,i] <- values(r)
 	}
+	
+	if (dataContent(brick) == 'all') {
+		brick <- setMinMax(brick)
+	}	
+	
 	return(brick)
 }
 

@@ -35,7 +35,10 @@ setMethod('brick', signature(x='Raster'),
 			b <- setValues(b, values(x))
 		} 
 		if (nlayers(x) == 1) {
-			filename(b) <- filename(x)
+			filename(b) <- trim(filename(x))
+			if (filename(b) != '') {
+				b@data@source == 'disk'	
+			}
 		}
 		return(b)
 	}
@@ -112,14 +115,14 @@ setMethod('brick', signature(x='character'),
 		fileext <- toupper(ext(x)) 
 		if ( fileext == ".GRD" | fileext == ".GRI" | fileext == "" ) {
 			if (fileext == "" & file.exists(x)) {
-				b <- .rasterFromGDAL(x, band) 
+				r <- .rasterFromGDAL(x, band) 
 			}
 			grifile <- .setFileExtensionValues(x)
 			grdfile <- .setFileExtensionHeader(x)
 			if (file.exists( grdfile) ) {
 				if (file.exists( grifile)) {
 				    if (fileext != '.grd') { ext(x) <- '.grd' }
-					b <- .rasterFromRasterFile(x, band) 
+					r <- .rasterFromRasterFile(x, band) 
 				} else {
 					# TODO check if this is a valid rater .grd but the problem is that the .gri is missing?
 					
@@ -129,10 +132,10 @@ setMethod('brick', signature(x='character'),
 						w <- readBin(fcon, what='character', n=1)
 						close(fcon)
 						if (substr(w, 1, 3) == "CDF") { 
-							b <- .rasterCDF(x, ...) 
+							r <- .rasterCDF(x, ...) 
 						} else {
 						# perhaps a surfer grid...
-							b <- .rasterFromGDAL(x, band) 
+							r <- .rasterFromGDAL(x, band) 
 						}
 					} else {
 					# what would this be? A gri, but no grd. 
@@ -140,22 +143,26 @@ setMethod('brick', signature(x='character'),
 					}
 				}
 			} else {
-				b <- .rasterFromGDAL(x, band) 
+				r <- .rasterFromGDAL(x, band) 
 			}
 		} else if (file.exists( x )){
 		    if (fileext == '.NC') {
-				b <- .rasterCDF(x, ...) 
+				r <- .rasterCDF(x, ...) 
 			} else {
-				b <- .rasterFromGDAL(x, band) 
+				r <- .rasterFromGDAL(x, band) 
 			}
 		} else {
 			stop(paste('file', x, 'does not exist'))
 		}
+		b <- brick(r)
+		filename(b) <- filename(r)
+		b@data@nlayers <- nbands(r)
 		if (values) {
-			b <- readAll(r)
+			b <- readAll(b)
 		}
+		b@data@source <- 'disk'
 		if (!is.null(proj)) {
-			projection(r) <- proj
+			projection(b) <- proj
 		}
 		return(b)
 	}

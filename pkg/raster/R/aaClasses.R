@@ -149,7 +149,8 @@ setClass('MultipleRasterData',
 		nlayers='integer',
 		haveminmax = 'logical',
 		min = 'vector',
-		max = 'vector'
+		max = 'vector',
+		source='character' # ram, disk
 		),
 	prototype (	
 		values=matrix(NA,0,0),
@@ -159,7 +160,8 @@ setClass('MultipleRasterData',
 		nlayers=as.integer(0),
 		haveminmax = FALSE,
 		min = c(Inf),
-		max = c(-Inf)
+		max = c(-Inf),
+		source='ram'
 	),	
 	validity = function(object) {
 	}

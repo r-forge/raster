@@ -8,6 +8,7 @@
 \alias{raster,missing-method}
 \alias{raster,Raster-method}
 \alias{raster,RasterStack-method}
+\alias{raster,RasterBrick-method}
 \alias{raster,SpatialGrid-method}
 \alias{raster,SpatialPixels-method}
 \alias{raster,matrix-method}
@@ -100,7 +101,7 @@ but does not copy the filename nor the data associated with the original Raster 
 
 
 
-5) Create a RasterLayer object from a RasterStack, SpatialPixels* or SpatialGrid* object. This copies the parameters of a RasterStack object to the new RasterLayer, and the values of the selected layer (if \code{layer > 0}. 
+5) Create a RasterLayer object from a RasterStack, RasterBrick, SpatialPixels* or SpatialGrid* object. This copies the parameters of a RasterStack object to the new RasterLayer, and the values of the selected layer (if \code{layer > 0}. 
 
 \code{raster(x, layer=0)}
 

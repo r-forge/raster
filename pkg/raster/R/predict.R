@@ -47,7 +47,7 @@ setMethod('predict', signature(object='RasterStack'),
 			v <- vector()
 
 			for (r in 1:nrow(object)) {
-				object <- readRow(object, r)
+				object <- valuesRow(object, r)
 				rowvals <- data.frame( values(object, names=TRUE))		
 				if (haveFactor) {
 					for (i in 1:length(f)) {
