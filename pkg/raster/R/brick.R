@@ -29,11 +29,13 @@ setMethod('brick', signature(x='missing'),
 
 
 setMethod('brick', signature(x='Raster'), 
-	function(x, filename="", values=NULL) {
+	function(x) {
 		b <- brick(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
-		filename(b) <- filename
-		if (!is.null(values)) {
-			x <- setValues(x, values)
+		if (dataContent(x) == 'all') {
+			b <- setValues(b, values(x))
+		} 
+		if (nlayers(x) == 1) {
+			filename(b) <- filename(x)
 		}
 		return(b)
 	}

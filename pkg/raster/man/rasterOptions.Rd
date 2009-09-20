@@ -41,7 +41,7 @@ argument \code{datatype} sets global option \code{rasterDatatype}. The option is
 
 argument \code{track} sets global option \code{rasterTrack}. The option is ignored by a function if you pass \code{track} as an argument to that function.
 
-argument \code{tmpdir} sets global option \code{rasterTmpDir}.  See \code{\link[raster]{tmpFile}}
+argument \code{tmpdir} sets global option \code{rasterTmpDir}.  See \code{\link[raster]{rasterTmpFile}}
 
 argument \code{inMemory} sets global option \code{rasterInMemory}. The option is ignored by a function if you pass \code{inMemory} as an argument to that function. 
 }

@@ -69,7 +69,7 @@ setMethod ('show' , 'RasterLayer',
 )
 
 
-setMethod ('show' , 'RasterStack',
+setMethod ('show' , 'RasterStackBrick',
 	function ( object ) {
 		cat ('class       :' , class ( object ) , '\n')
 		cat ('filename    :' , filename(object), '\n')
