@@ -39,6 +39,7 @@ addLayer <- function(rstack, rasters) {
 		rasters <- list(rasters)
 	}
 
+	
 	for (i in 1:length(rasters)) { 
 		raster <- rasters[[i]]
 
@@ -64,16 +65,17 @@ addLayer <- function(rstack, rasters) {
 						cname <- "layer1"
 					}
 					rstack@data@colnames[1] <- cname
-					if (dataContent(raster) == 'all') {
-						rstack@data@values <- as.matrix(values(raster))
-						rstack@data@content <- 'all'
-						raster <- clearValues(raster)
-					}
+				#	if (dataContent(raster) == 'all') {
+				#		rstack@data@values <- as.matrix(values(raster))
+				#		rstack@data@content <- 'all'
+				#		raster <- clearValues(raster)
+				#	}
 					rstack@layers[nl] <- raster 
 				} 
 			}
 			
 		} else {
+			rstack <- clearValues(rstack)
 
 			if (class(raster) == 'RasterStack') {
 				rasterlist <- unstack(raster)
@@ -91,9 +93,9 @@ addLayer <- function(rstack, rasters) {
 					if (dataContent(raster) != 'all') { 
 						stop("Cannot add a memory based RasterLayer object without values to a Rasterstack object")
 					}
-					if (dataContent(rstack) != 'all') {
-						rstack <- readAll(rstack)
-					}
+				#	if (dataContent(rstack) != 'all') {
+				#		rstack <- readAll(rstack)
+				#	}
 				}
 				
 				nl <- as.integer( rstack@data@nlayers + 1 )
@@ -114,16 +116,15 @@ addLayer <- function(rstack, rasters) {
 					}
 				}	
 				rstack@data@colnames[nl] <- cn
-				if (dataContent(rstack)=='all') {
-					if (dataContent(raster) != 'all') {
-						raster <- readAll(raster)
-					} 
-					rstack@data@values <- cbind(rstack@data@values, values(raster))
-					raster <- clearValues(raster)
-				} else {
-					if (dataSource(raster)=='disk') {
+				#if (dataContent(rstack)=='all') {
+					#if (dataContent(raster) != 'all') {
+					#	raster <- readAll(raster)
+					#} 
+					#rstack@data@values <- cbind(rstack@data@values, values(raster))
+					#raster <- clearValues(raster)
+				#}
+				if (dataSource(raster) == 'disk') {
 						raster <- clearValues(raster)
-					}
 				}
 				rstack@layers[nl] <- raster 
 			}	

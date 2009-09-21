@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# University of California, Davis
 # Date :  August 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 if (!isGeneric("predict")) {
@@ -47,8 +46,8 @@ setMethod('predict', signature(object='RasterStack'),
 			v <- vector()
 
 			for (r in 1:nrow(object)) {
-				object <- valuesRow(object, r)
-				rowvals <- data.frame( values(object, names=TRUE))		
+				rowvals <- as.data.frame(valuesRow(object, r))
+				names(rowvals) <- layerNames(object)
 				if (haveFactor) {
 					for (i in 1:length(f)) {
 						rowvals[,f[i]] <- as.factor(rowvals[,f[i]])

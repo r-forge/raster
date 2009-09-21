@@ -4,58 +4,165 @@
 # Licence GPL v3
 
 
-valuesRow <- function(object, rownr) {
-	if (dataContent(object) == 'nodata') {
-		return(values(readRow(object, rownr)))
-	}
-	if (!(validRow(object, rownr))) {
+
+if (!isGeneric("valuesRow")) {
+	setGeneric("valuesRow", function(x, rownr)
+		standardGeneric("valuesRow"))
+}	
+
+
+setMethod('valuesRow', signature(x='RasterStack'), 
+function(x, rownr) {
+
+	if (!(validRow(x, rownr))) {
 		stop(paste(rownr,'is not a valid rownumber')) 
 	}
 
-	if (dataContent(object) == 'all'){
+	if (dataContent(x) == 'nodata') {
+		return( .getStackValuesRow(x, rownr) )
+	}
+	
+	if (dataContent(x) == 'all'){
 		if (rownr < 0) {
-			return(values(object))
+			return(values(x))
 		}
-		startcell <- cellFromRowCol(object, rownr, 1)
-		endcell <- startcell+ncol(object)-1
-		if (class(object) == 'RasterStack') {
-			return(values(object)[startcell:endcell,])
-		} else {	
-			return(values(object)[startcell:endcell])
-		}
-	} else if (dataContent(object) == 'row') {
-		startcell <- cellFromRowCol(object, rownr, 1)
-		endcell <- startcell+ncol(object)-1
-		if ( (dataIndices(object)[1] == startcell) & (dataIndices(object)[2] == endcell) ) {
-			return(values(object))
+		startcell <- cellFromRowCol(x, rownr, 1)
+		endcell <- startcell+ncol(x)-1
+		return(values(x)[startcell:endcell,])
+
+	} else if (dataContent(x) == 'row') {
+		startcell <- cellFromRowCol(x, rownr, 1)
+		endcell <- startcell+ncol(x)-1
+		if ( (dataIndices(x)[1] == startcell) & (dataIndices(x)[2] == endcell) ) {
+			return(values(x))
 		} else {
-			return(values(readRow(object, rownr)))
+			return(.getStackValuesRow(x, rownr))
 		}
-	} else if (dataContent(object) == 'block') {
-		firstcol <- colFromCell(object, dataIndices(object)[1])
-		lastcol <- colFromCell(object, dataIndices(object)[2])
-		if (firstcol != 1 | lastcol != ncol(object)) {
-			return(values(readRow(object, rownr)))
+		
+	} else if (dataContent(x) == 'block') {
+		firstcol <- colFromCell(x, dataIndices(x)[1])
+		lastcol <- colFromCell(x, dataIndices(x)[2])
+		if (firstcol != 1 | lastcol != ncol(x)) {
+			return(.getStackValuesRow(x, rownr))
 		}
-		firstrow <- rowFromCell(object, dataIndices(object)[1])
-		lastrow <- rowFromCell(object, dataIndices(object)[2])
+		firstrow <- rowFromCell(x, dataIndices(x)[1])
+		lastrow <- rowFromCell(x, dataIndices(x)[2])
 		if (rownr < firstrow | rownr > lastrow) {
-			return(values(readRow(object, rownr)))
+			return(.getStackValuesRow(x, rownr))
 		}
-		startcell <- ((rownr - firstrow) * ncol(object) + 1) 
-		endcell <- startcell + ncol(object) - 1
-		if (class(object) == 'objectStack') {
-			return(values(object)[startcell:endcell,])
-		} else {	
-			return(values(object)[startcell:endcell])
+		startcell <- ((rownr - firstrow) * ncol(x) + 1) 
+		endcell <- startcell + ncol(x) - 1
+		return(values(x)[startcell:endcell,])
+	} else {
+		stop('something is wrong with the RasterStack dataContent')
+	}
+}
+)
+
+
+.getStackValuesRow <- function(x, rownr) {
+	m <- matrix(NA, ncol=nlayers(x), nrow=ncol(x)) 
+	for (i in 1:nlayers(x)) {	
+		m[,i] <- valuesRow(x@layers[[i]], rownr)
+	}
+	return(m)
+}
+
+
+
+
+setMethod('valuesRow', signature(x='RasterBrick'), 
+function(x, rownr) {
+	if (dataContent(x) == 'nodata') {
+		return(values(readRow(x, rownr)))
+	}
+	if (!(validRow(x, rownr))) {
+		stop(paste(rownr,'is not a valid rownumber')) 
+	}
+
+	if (dataContent(x) == 'all'){
+		if (rownr < 0) {
+			return(values(x))
 		}
-	} else if (dataContent(object) == 'sparse') {
-		return (.valuesRow.sparse(object, rownr)) 
+		startcell <- cellFromRowCol(x, rownr, 1)
+		endcell <- startcell+ncol(x)-1
+		return(values(x)[startcell:endcell])
+	} else if (dataContent(x) == 'row') {
+		startcell <- cellFromRowCol(x, rownr, 1)
+		endcell <- startcell+ncol(x)-1
+		if ( (dataIndices(x)[1] == startcell) & (dataIndices(x)[2] == endcell) ) {
+			return(values(x))
+		} else {
+			return(values(readRow(x, rownr)))
+		}
+	} else if (dataContent(x) == 'block') {
+		firstcol <- colFromCell(x, dataIndices(x)[1])
+		lastcol <- colFromCell(x, dataIndices(x)[2])
+		if (firstcol != 1 | lastcol != ncol(x)) {
+			return(values(readRow(x, rownr)))
+		}
+		firstrow <- rowFromCell(x, dataIndices(x)[1])
+		lastrow <- rowFromCell(x, dataIndices(x)[2])
+		if (rownr < firstrow | rownr > lastrow) {
+			return(values(readRow(x, rownr)))
+		}
+		startcell <- ((rownr - firstrow) * ncol(x) + 1) 
+		endcell <- startcell + ncol(x) - 1
+		return(values(x)[startcell:endcell])
+	} else if (dataContent(x) == 'sparse') {
+		return (.valuesRow.sparse(x, rownr)) 
 	} else {
 		stop('something is wrong with the RasterLayer dataContent')
 	}
 }
+)
 
+
+
+setMethod('valuesRow', signature(x='RasterLayer'), 
+function(x, rownr) {
+	if (!(validRow(x, rownr))) {
+		stop(paste(rownr,'is not a valid rownumber')) 
+	}
+
+	if (dataContent(x) == 'nodata') {
+		return(values(readRow(x, rownr)))
+	} else if (dataContent(x) == 'all'){
+		if (rownr < 0) {
+			return(values(x)) 
+		}
+		startcell <- cellFromRowCol(x, rownr, 1)
+		endcell <- startcell+ncol(x)-1
+		return(values(x)[startcell:endcell])
+	} else if (dataContent(x) == 'row') {
+		startcell <- cellFromRowCol(x, rownr, 1)
+		endcell <- startcell+ncol(x)-1
+		if ( (dataIndices(x)[1] == startcell) & (dataIndices(x)[2] == endcell) ) {
+			return(values(x))
+		} else {
+			return(values(readRow(x, rownr)))
+		}
+	} else if (dataContent(x) == 'block') {
+		firstcol <- colFromCell(x, dataIndices(x)[1])
+		lastcol <- colFromCell(x, dataIndices(x)[2])
+		if (firstcol != 1 | lastcol != ncol(x)) {
+			return(values(readRow(x, rownr)))
+		}
+		firstrow <- rowFromCell(x, dataIndices(x)[1])
+		lastrow <- rowFromCell(x, dataIndices(x)[2])
+		if (rownr < firstrow | rownr > lastrow) {
+			return(values(readRow(x, rownr)))
+		}
+		startcell <- ((rownr - firstrow) * ncol(x) + 1) 
+		endcell <- startcell + ncol(x) - 1
+		return(values(x)[startcell:endcell])
+	} else if (dataContent(x) == 'sparse') {
+		return (.valuesRow.sparse(x, rownr)) 
+	} else {
+		stop('something is wrong with the RasterLayer dataContent')
+	}
+}
+)
 
 .valuesRow.sparse <- function(raster, rownr, explode=TRUE) {
 	if (dataContent(raster) != 'sparse') {stop('cannot do. Need sparse')}

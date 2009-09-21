@@ -1,66 +1,40 @@
 \name{values}
 \alias{values}
-\alias{valuesRow}
-  
   
 \title{Get raster values}
 
 \description{
-  values returns cell values for a Raster* object (typically after read* has been used).
- 
-  valuesRow returns values for a row of values in the case that all values are in memory 
-  (if they are on disk, use \code{readRow} and \code{values})
+ values returns the cell values for a Raster* object that are currently in memory (typically after read* has been used).
 }
 
 \usage{
 values(object, format='', names=FALSE)
-valuesRow(object, rownr)
 }
 
 \arguments{
-  \item{object}{RasterLayer or RasterStack object}
-  \item{format}{specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack, and a vector for a RasterLayer}
-  \item{names}{If TRUE, row and col names are provided}
-  \item{rownr}{The rownumber for which values are returned}
+ \item{object}{RasterLayer or RasterStack object}
+ \item{format}{Character. specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack, and a vector for a RasterLayer}
+ \item{names}{Logical. If \code{TRUE}, and format='matrix', the returned matrix will have row and column names}
 }
   
 
-\note{
-	RasterLayer values are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
-	Some of these functions simply take the values from the data slots in the Raster or RasterStack object. It is advisable to use these and other 'getter' functions rather than dirctly accessing the slots of an object. This will ensure that code will not break in the future, even if the underlying class definitions change. 
-  
+\details{
+\code{values} are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
 }
 
 \value{
-raster cell value(s)
+raster values
 }
 
-\author{Robert J. Hijmans }
+\author{Robert J. Hijmans}
 \examples{
-#using a new default raster (1 degree global)
-r <- raster()
+r <- raster(ncol=10, nrow=10)
 r <- setValues(r, 1:ncell(r))
-minValue(r)
-maxValue(r)
-r <- setValues(r, round(100 * runif(ncell(r)) + 0.5))
-minValue(r)
-maxValue(r)
-
-r <- raster(system.file("external/test.ag", package="sp"))
-# this raster is from an 'external' format, so min and maxValue are not known
-minValue(r)
-maxValue(r)
-
-r1 <- setMinMax(r)
-# now they are known:
-minValue(r1)
-maxValue(r1)
-
-r2 <- readAll(r)
-# now they are known too:
-minValue(r2)
-maxValue(r2)
-
+values(r)
+r <- setValues(r, 1:ncol(r), row=5)
+values(r)
 
 }
+
 \keyword{spatial}
+\keyword{methods}
