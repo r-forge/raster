@@ -34,7 +34,7 @@ setMethod('brick', signature(x='Raster'),
 		if (dataContent(x) == 'all') {
 			b <- setValues(b, values(x))
 		} 
-		if (nlayers(x) == 1) {
+		if ( nbands(x) == 1 ) {
 			filename(b) <- trim(filename(x))
 			if (filename(b) != '') {
 				b@data@source == 'disk'	
@@ -46,12 +46,15 @@ setMethod('brick', signature(x='Raster'),
 
 
 setMethod('brick', signature(x='RasterStack'), 
-	function(x, index=1){
+	function(x){
 		if (nlayers(x) > 0) {
 			b <- brick(x@layers[[1]])
-			b@data@nlayers <- nlayers(x)
+			
 			if (dataContent(x) == 'all') {
+				b@data@nlayers <- nlayers(x)
 				b <- setValues(b, values(x))
+			} else {
+				b@data@nlayers <- nbands(x@layers[[1]])
 			}
 		} else {
 			b <- new("RasterBrick")

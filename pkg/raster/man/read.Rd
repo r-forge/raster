@@ -5,8 +5,10 @@
 \alias{readAll,RasterBrick-method}
 \alias{readRow,RasterLayer-method}
 \alias{readRow,RasterStack-method}
+\alias{readRow,RasterBrick-method}
 \alias{readPartOfRow,RasterLayer-method}
 \alias{readPartOfRow,RasterStack-method}
+\alias{readPartOfRow,RasterBrick-method}
 \alias{readBlock,RasterLayer-method}
 \alias{readRows,RasterLayer-method}
 
