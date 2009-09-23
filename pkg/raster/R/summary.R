@@ -31,7 +31,7 @@
 			if (is.atomic(rasters[[i]])) {
 				m[,i] <- rasters[[i]]
 			} else {
-				m[,i] <- .getRowValues(rasters[[i]], r)
+				m[,i] <- getValues(rasters[[i]], r)
 			}
 		}
 		if (funname == 'any' || funname == 'all') {
@@ -61,28 +61,11 @@
 
 setMethod("Summary", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
-
-		rasters <- list(...)
-		if (class(x) == 'RasterLayer') {
-			if (length(rasters)==0) { 
-				return(x) 
-			}
-		}
-		rasters <- c(x, rasters)
+		rasters <- .makeRasterList(x, ...)
+		if (length(rasters) == 1) { return(x) }
 		rm(x)
-		
-		for (i in 1:length(rasters)) {
-			if (class(rasters[[i]]) == 'RasterStack') {
-				r <- rasters[[i]]
-				rasters <- rasters[-i]
-				rasters <- c(rasters, unstack(r))
-				rm(r)
-			}
-		}
-
 		fun <- sys.call(sys.parent())[[1]]
 		funname <- as.character(sys.call(sys.parent())[[1]])
-		
 		return( .summaryRasters(rasters, fun, funname, na.rm) )
 	}
 )

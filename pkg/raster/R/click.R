@@ -1,9 +1,8 @@
 # R function for the raster package
 # Author: Robert J. Hijmans
-# International Rice Research Institute. Philippines
 # contact: r.hijmans@gmail.com
 # Date : January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 

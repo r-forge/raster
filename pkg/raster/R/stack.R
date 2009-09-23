@@ -18,9 +18,11 @@ function(x) {
 
 setMethod("stack", signature(x='Raster'), 
 function(x, ..., bands=NULL) {
-	rlist <- c(x, list(...))
+	rlist <- .makeRasterList(x, ...)
 	return(stack(rlist, bands))	
 } )
+
+
 
 
 
@@ -39,7 +41,7 @@ setMethod("stack", signature(x='list'),
 function(x, bands=NULL) {
 	j <- 0
 	r <- list()
-	for (i in 1:length(x)) {
+	for (i in seq(along=x)) {
 		j <- j + 1
 		if (is.character(x[[i]])) {
 			if (is.null(bands)) {
@@ -59,8 +61,8 @@ function(x, bands=NULL) {
 		} else if (extends(class(x[[i]]), "Raster")) {
 			r[j] <- x[[i]]
 		} else {
-			stop("Arguments should be Raster* objects or filenames")
-		}	
+			stop("Arguments should be Raster* objects or filenames")	
+		}
 	}
 	return(addLayer(new("RasterStack"), r))
 } )
@@ -69,7 +71,7 @@ function(x, bands=NULL) {
 setMethod("stack", signature(x='SpatialGrid'), 
 	function(x) {
 		stk <- new("RasterStack")
-		stk <- setExtent(stk, extent(x))
+		stk@extent <- extent(x)
 		projection(stk) <- x@proj4string
 		rowcol(stk) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
 

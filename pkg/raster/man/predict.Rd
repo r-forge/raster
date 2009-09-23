@@ -4,7 +4,7 @@
 
 \alias{predict}
 \alias{predict,RasterLayer-method}
-\alias{predict,RasterStack-method}
+\alias{predict,RasterStackBrick-method}
 
 \title{Model predictions}
 

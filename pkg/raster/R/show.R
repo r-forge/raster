@@ -68,7 +68,7 @@ setMethod ('show' , 'RasterLayer',
 )
 
 
-setMethod ('show' , 'RasterStackBrick',
+setMethod ('show' , 'RasterBrick',
 	function ( object ) {
 		cat ('class       :' , class ( object ) , '\n')
 		cat ('filename    :' , filename(object), '\n')
@@ -97,6 +97,42 @@ setMethod ('show' , 'RasterStackBrick',
 		cat ('ymax        :' , ymax(object), '\n')
 		cat ('xres        :' , xres(object) , '\n')
 		cat ('yres        :' , yres(object) , '\n')
+		cat ('\n')
+	}
+)
+
+
+
+setMethod ('show' , 'RasterStack',
+	function ( object ) {
+		cat ('class       :' , class ( object ) , '\n')
+		cat ('filename    :' , filename(object), '\n')
+		cat ('nlayers     :' , nlayers(object), '\n')
+		if (nlayers(object) > 0) {
+			cat ('nrow        :' , nrow(object@layers[[1]]), '\n')
+			cat ('ncol        :' , ncol(object@layers[[1]]), '\n')
+			cat ('ncells      :' , ncell(object@layers[[1]]), '\n')
+			cat ('projection  :' , projection(object@layers[[1]], TRUE), '\n')
+			minv <- list()
+			maxv <- list()
+			for (i in 1:nlayers(object)) {
+				if (object@layers[[i]]@data@haveminmax) {
+					minv[i] <- minValue(object@layers[[i]])
+					maxv[i] <- maxValue(object@layers[[i]])
+				} else {
+					minv[i] <- '?'
+					maxv[i] <- '?'
+				}
+			}
+			cat('min value   :', paste(minv, collapse=' '), '\n')
+			cat('max value   :', paste(maxv, collapse=' '), '\n')
+		}
+		cat ('xmin        :' , xmin(object), '\n')
+		cat ('xmax        :' , xmax(object), '\n')
+		cat ('ymin        :' , ymin(object), '\n')
+		cat ('ymax        :' , ymax(object), '\n')
+		cat ('xres        :' , xres(object), '\n')
+		cat ('yres        :' , yres(object), '\n')
 		cat ('\n')
 	}
 )

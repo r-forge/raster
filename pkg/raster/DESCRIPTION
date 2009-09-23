@@ -1,10 +1,10 @@
 Package: raster
 Type: Package
 Title: Raster data handling for geographic data analysis and modeling
-Version: 0.9.7-4
-Date: 20-September-2009
+Version: 0.9.7-5
+Date: 22-September-2009
 Depends: methods, sp, R (>= 2.8.0)
-Suggests: rgdal (>= 0.5-33), RNetCDF
+Suggests: rgdal (>= 0.5-33), RNetCDF, tcltk
 Author: Robert J. Hijmans & Jacob van Etten
 Maintainer: Robert J. Hijmans <r.hijmans@gmail.com> 
 Description: Package for reading, writing, and manipulating (geographic, spatial) raster (grid) data

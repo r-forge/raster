@@ -9,8 +9,10 @@ layerNames <- function(object) {
 	if (class(object) == "RasterLayer") {
 		return(object@file@shortname)
 	} else if (class(object) == "RasterStack") {
-		return(object@data@colnames)
-	}	
+		return(object@layernames)
+	} else if (class(object) == "RasterBrick") {
+		return(object@data@colnames)	
+	}
 }
 
 
@@ -21,9 +23,15 @@ layerNames <- function(object) {
 	if (class(object) == "RasterLayer") {
 		object@file@shortname <- value
 		return(object)
-	} else if (class(object) == "RasterStack") {
+	} else if (class(object) == "RasterBrick") {
 		object@data@colnames <- value
 		if (length(unique(object@data@colnames)) != nlayers(object)) {
+			stop('layer names must be unique')
+		}
+		return(object)
+	} else if (class(object) == "RasterStack") {
+		object@layernames <- value
+		if (length(unique(object@layernames)) != nlayers(object)) {
 			stop('layer names must be unique')
 		}
 		return(object)

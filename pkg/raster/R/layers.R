@@ -24,7 +24,7 @@ setMethod('nlayers', signature(object='Raster'),
 
 setMethod('nlayers', signature(object='RasterStack'), 
 	function(object){
-		return(object@data@nlayers) 
+		return(length(object@layers)) 
     }
 )
 

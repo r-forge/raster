@@ -19,7 +19,7 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 		}
 		
 		if (class(i) == "RasterLayer") {
-			i <- as.logical( .getRasterValues(i) ) 
+			i <- as.logical( getValues(i) ) 
 		}
 # what about data rows ?		
 		if (dataContent(x) == 'nodata') {

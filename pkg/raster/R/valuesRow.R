@@ -18,44 +18,15 @@ function(x, rownr) {
 		stop(paste(rownr,'is not a valid rownumber')) 
 	}
 
-	if (dataContent(x) == 'nodata') {
-		return( .getStackValuesRow(x, rownr) )
+	rownr <- as.integer(round(rownr))
+	if (!(validRow(x, rownr))) {
+		stop(paste(row,'is not a valid rownumber')) 
 	}
-	
-	if (dataContent(x) == 'all'){
-		if (rownr < 0) {
-			return(values(x))
-		}
-		startcell <- cellFromRowCol(x, rownr, 1)
-		endcell <- startcell+ncol(x)-1
-		return(values(x)[startcell:endcell,])
-
-	} else if (dataContent(x) == 'row') {
-		startcell <- cellFromRowCol(x, rownr, 1)
-		endcell <- startcell+ncol(x)-1
-		if ( (dataIndices(x)[1] == startcell) & (dataIndices(x)[2] == endcell) ) {
-			return(values(x))
-		} else {
-			return(.getStackValuesRow(x, rownr))
-		}
-		
-	} else if (dataContent(x) == 'block') {
-		firstcol <- colFromCell(x, dataIndices(x)[1])
-		lastcol <- colFromCell(x, dataIndices(x)[2])
-		if (firstcol != 1 | lastcol != ncol(x)) {
-			return(.getStackValuesRow(x, rownr))
-		}
-		firstrow <- rowFromCell(x, dataIndices(x)[1])
-		lastrow <- rowFromCell(x, dataIndices(x)[2])
-		if (rownr < firstrow | rownr > lastrow) {
-			return(.getStackValuesRow(x, rownr))
-		}
-		startcell <- ((rownr - firstrow) * ncol(x) + 1) 
-		endcell <- startcell + ncol(x) - 1
-		return(values(x)[startcell:endcell,])
-	} else {
-		stop('something is wrong with the RasterStack dataContent')
+	m <- matrix(NA, ncol=nlayers(x), nrow=ncol(x)) 
+	for (i in 1:nlayers(x)) {	
+		m[,i] <- valuesRow(x@layers[[i]], rownr)
 	}
+	return(m)
 }
 )
 

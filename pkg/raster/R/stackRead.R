@@ -6,27 +6,11 @@
 
 
 .stackRead <- function(rstack, rownumber, startcol=1, ncolumns=(ncol(rstack)-startcol+1)) {
-	if (dataContent(rstack) == 'all') {  
-		if (rownumber > 0) {
-			warning('all values are in memory; no point in using read')
-		}
-		return(rstack)
-	}
-
 	for (i in seq(nlayers(rstack))) {
-		r <- .rasterRead(rstack@layers[[i]], rownumber, startcol, ncolumns)
-		if (i==1) {
-			rstack@data@values <- matrix(nrow=length(values(r)), ncol=nlayers(rstack)) 
-			rstack@data@content <- dataContent(r)
-			rstack@data@indices <- dataIndices(r)
+		if (dataSource(rstack@layers[[i]]) == 'disk') {
+			r <- .rasterRead(rstack@layers[[i]], rownumber, startcol, ncolumns)
 		}
-		rstack@data@values[,i] <- values(r)
 	}
-	
-	if (dataContent(rstack) == 'all') {
-		rstack <- setMinMax(rstack)
-	}	
-	
 	return(rstack)
 }
 
@@ -44,7 +28,7 @@
 			}
 		}
 		if (!(is.null(dim(result)))) {
-			colnames(result) <- object@data@colnames
+			colnames(result) <- object@layernames
 		}	
 		return(result)
 }

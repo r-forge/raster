@@ -5,22 +5,9 @@
 
 
 
-.plotraster <- function(object, index=1, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes, xlab, ylab, ...) {
+.plotraster <- function(object, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes, xlab, ylab, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
-#	require(fields)
-	if (class(object) == 'character') { 
-		object <- raster(object) 
-	}
-	if ( class(object) != 'RasterLayer' ) { 
-		index <- round(index)
-		i <- min(max(1, index), nlayers(object))
-		if (i != index) { stop("index should be >= 1 and <=", nlayers(object), " =nlayers(object)") }
-		raster2 <- raster(object, i)
-		if (dataContent(object) == 'all') {
-			raster2 <- setValues(raster2, values(object)[,i])
-		}
-		object <- raster2
-	}
+
 	
 	if (class(object) != 'RasterLayer') { stop("class of 'object' should be RasterLayer") }
 

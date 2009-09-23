@@ -5,20 +5,26 @@
 \title{ Make sparse}
 
 \description{
-Make a sparse RasterLayer object. 
+Make a sparse Raster* object. 
 }
 
 \usage{
-makeSparse(raster)
+makeSparse(object)
 }
 
 \arguments{
-  \item{raster}{ A \code{RasterLayer} object }
+  \item{object}{ A \code{Raster*} object }
 }
 
 \value{
-a RasterLayer object
+a sparse Raster* object
 }
+
+\details{
+	Unlike other Raster* objects, sparse objects only store values for cells that are not NA (and an index). Sparse Raster* objects are currently 
+	not well supported in the raster package and should not be used.
+}
+
 \author{ Robert J. Hijmans }
 
 \examples{ 

@@ -12,10 +12,15 @@ if (!isGeneric("unstack")) {
 
 setMethod("unstack", signature(x='RasterStack'), 
 function(x) {
+	return(x@layers)
+} )
+
+
+setMethod("unstack", signature(x='RasterBrick'), 
+function(x) {
 	rlist <- list()
-	for (i in nlayers(x):1) {
-		rlist[i] <- raster(x, i)
-		x <- dropLayer(x, i)
+	for (i in seq(along=nlayers(x))) {
+		rlist <- c(rlist, raster(x, i))
 	}
 	return(rlist)
 } )

@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -10,7 +9,7 @@
 		value <- c(value, ncol(x))
 	}
 	if (value[1] != nrow(x) | value[2] != ncol(x)) {
-		if (extends(class(x), "Raster")) {
+		if (extends(class(x), "Raster") & class(x) != "RasterStack") {
 			x <- clearValues(x)
 		}
 	}

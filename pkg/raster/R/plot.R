@@ -17,7 +17,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			nr <- ceiling(nl / nc)
 			par(mfrow=c(nr, nc))
 			for (i in 1:nl) {
-				.plotraster(x, index=i, col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+				.plotraster(raster(x, i), col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 			}
 		} else if (is.numeric(y)) {
 			y <- unique(as.integer(round(y)))
@@ -28,10 +28,10 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				par(mfrow=c(nr, nc))
 				par(mfrow=c(nr, nc))
 				for (i in 1:length(y)) {
-					.plotraster(x, index=y[i], col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+					.plotraster(raster(x, y[i]), col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 				}
 			} else {
-				.plotraster(x, index=y, col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+				.plotraster(raster(x, y), col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 			}		
 		}
 	}

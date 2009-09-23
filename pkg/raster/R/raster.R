@@ -1,3 +1,4 @@
+# R raster package
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date : September 2008
 # Version 0.9
@@ -32,34 +33,35 @@ setMethod('raster', signature(x='character'),
 		if ( fileext == ".GRD" | fileext == ".GRI" | fileext == "" ) {
 			if (fileext == "" & file.exists(x)) {
 				r <- .rasterFromGDAL(x, band) 
-			}
-			grifile <- .setFileExtensionValues(x)
-			grdfile <- .setFileExtensionHeader(x)
-			if (file.exists( grdfile) ) {
-				if (file.exists( grifile)) {
-				    if (fileext != '.grd') { ext(x) <- '.grd' }
-					r <- .rasterFromRasterFile(x, band) 
-				} else {
+			} else {
+				grifile <- .setFileExtensionValues(x)
+				grdfile <- .setFileExtensionHeader(x)
+				if (file.exists( grdfile) ) {
+					if (file.exists( grifile)) {
+						if (fileext != '.grd') { ext(x) <- '.grd' }
+						r <- .rasterFromRasterFile(x, band) 
+					} else {
 					# TODO check if this is a valid rater .grd but the problem is that the .gri is missing?
 					
-					if (fileext == ".GRD" ) {
-						# check if this is a netcdf file
-						fcon <- file(x, "rb")
-						w <- readBin(fcon, what='character', n=1)
-						close(fcon)
-						if (substr(w, 1, 3) == "CDF") { 
-							r <- .rasterCDF(x, ...) 
+						if (fileext == ".GRD" ) {
+							# check if this is a netcdf file
+							fcon <- file(x, "rb")
+							w <- readBin(fcon, what='character', n=1)
+							close(fcon)
+							if (substr(w, 1, 3) == "CDF") { 
+								r <- .rasterCDF(x, ...) 
+							} else {
+							# perhaps a surfer grid...
+								r <- .rasterFromGDAL(x, band) 
+							}
 						} else {
-						# perhaps a surfer grid...
-							r <- .rasterFromGDAL(x, band) 
-						}
-					} else {
 					# what would this be? A gri, but no grd. 
-						stop('unknown file type; .gri file found but .grd is missing')
+							stop('unknown file type; .gri file found but .grd is missing')
+						}
 					}
+				} else {
+					r <- .rasterFromGDAL(x, band) 
 				}
-			} else {
-				r <- .rasterFromGDAL(x, band) 
 			}
 		} else if (file.exists( x )){
 		    if (fileext == '.NC') {
@@ -99,9 +101,6 @@ setMethod('raster', signature(x='RasterStack'),
 			dindex <- max(1, min(nlayers(x), index))
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
 			r <- x@layers[[dindex]]
-			if (dataContent(x) == 'all') {
-				r <- setValues(r, values(x)[,dindex])
-			}
 		} else {
 			r <- new("RasterLayer")
 			extent(r) <- extent(x)
@@ -119,14 +118,14 @@ setMethod('raster', signature(x='RasterBrick'),
 				if (dindex != index) { warning(paste("index was changed to", dindex))}
 				r <- raster(filename(x), band=dindex)
 			} else {
-				r <- raster(extent(x), nrows=nrows(x), ncols=ncols(x), projs=projection(x))	
+				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))	
 				if (dataContent(x) == 'all') {
 					if (dindex != index) { warning(paste("index was changed to", dindex))}
 					r <- setValues(r, values(x)[,dindex])
 				}
 			}
 		} else {
-			r <- raster(extent(x), nrows=nrows(x), ncols=ncols(x), projs=projection(x))	
+			r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))	
 		}
 		return(r)
 	}

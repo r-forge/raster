@@ -21,12 +21,12 @@ setValuesRows <- function(object, values, firstcell, lastcell) {
 }
 
 
+
 if (!isGeneric('setValues')) {
 	setGeneric('setValues', function(object, values, rownr=-1, layer=-1)
 		standardGeneric('setValues')) 
 	}	
 
-		
 setMethod('setValues', signature(object='RasterLayer'), 
   
 function(object, values, rownr=-1, layer=-1) {
@@ -108,8 +108,13 @@ setMethod('setValues', signature(object='RasterStackBrick'),
 	if (is.vector(values)) {
 		layer <- round(layer)
 		if (layer < 1) { 
-			print(class(object))
-			stop('specify layer')	}
+			if (nlayers(object) == 1) {
+				layer <- 1
+			} else {
+				print(class(object))
+				stop('specify layer')	
+			}
+		}
 		if (layer > nlayers(object)) {stop('layer number too high')}
 		
 		

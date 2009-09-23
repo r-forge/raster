@@ -10,7 +10,8 @@
 
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
-\alias{show,RasterStackBrick-method}
+\alias{show,RasterStack-method}
+\alias{show,RasterBrick-method}
 
 
 \title{ Raster* classes}

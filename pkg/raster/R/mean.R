@@ -20,15 +20,20 @@ setMethod("mean", signature(x='Raster'),
 		rasters <- c(x, rasters)
 		rm(x)
 
+		newrasters <- list()
 		for (i in 1:length(rasters)) {
+			if (class(rasters[[i]]) == 'RasterLayer') {
+				newrasters <- c(newrasters, rasters[[i]])
+			}
 			if (class(rasters[[i]]) == 'RasterStack') {
-				r <- rasters[[i]]
-				rasters <- c(rasters[-i], unstack(r))
-				rm(r)
+				newrasters <- c(newrasters, unstack(rasters[[i]]))
+			} else {
+				stop('not yet implemented for a Brick')
 			}
 		}
-
-		return( .summaryRasters(rasters, mean, 'mean', na.rm=na.rm) )
+		rm(rasters)
+		
+		return( .summaryRasters(newrasters, mean, 'mean', na.rm=na.rm) )
 	}
 )
 

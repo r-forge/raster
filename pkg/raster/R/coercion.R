@@ -1,12 +1,7 @@
-# R code for changing rasters (spatial data)
-# Authors: Robert J. Hijmans
-# International Rice Research Institute
-#contact: r.hijmans@gmail.com
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date : October 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
-
-
 
 
 .asSpGrid <- function(object, type='grid', dataframe=TRUE)  {
@@ -16,23 +11,20 @@
 	cd <- ceiling(diff(t(bb))/cs)
 	grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
 	if (dataframe) {
-		if (dataContent(object) != 'all') { 
-			object <- readAll(object) 
-		}
-		data <- values(object)
-		data <- as.data.frame(data)
+		vals <- getValues(object)
+		vals <- as.data.frame(vals)
 	}
 	if (type=='pixel') {
 		object <- makeSparse(object)
 		pts <- SpatialPoints(xyFromCell(object,  dataIndices(object)))
 		if (dataframe) {
-			sp <- SpatialPixelsDataFrame(points=pts, data=data, proj4string=projection(object, FALSE)) 	
+			sp <- SpatialPixelsDataFrame(points=pts, data=vals, proj4string=projection(object, FALSE)) 	
 		} else {
 			sp <- SpatialPixels(points=pts, proj4string=projection(object, FALSE))
 		}
 	} else if (type=='grid') {
 		if (dataframe) {
-			sp <- SpatialGridDataFrame(grd, proj4string=projection(object, FALSE), data=data)
+			sp <- SpatialGridDataFrame(grd, proj4string=projection(object, FALSE), data=vals)
 		} else { 
 			sp  <- SpatialGrid(grd, proj4string=projection(object, FALSE))
 		}	

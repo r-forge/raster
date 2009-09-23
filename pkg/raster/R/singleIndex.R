@@ -9,7 +9,7 @@ setMethod("[", c("RasterLayer","ANY", "missing"),
 function(x,i,j,...,drop=TRUE) {
 
 	if (!missing(i) && class(i) == "RasterLayer") {
-		i <- as.logical( .getRasterValues(i) ) 
+		i <- as.logical( getValues(i) ) 
 	}
 
 	if (dataContent(x) != 'all') {

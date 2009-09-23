@@ -9,7 +9,11 @@
 	return(setExtent(x, value))
 }
 
+
 setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
+	if (class(x) == 'RasterStack' ) {
+		stop('you can not change the extent of a RasterStack that has one or more layers')
+	}
 
 	oldbb <- extent(x)
 	bb <- extent(bndbox)
@@ -46,7 +50,7 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 			}
 		}
 		
-	} else if (class(x) != "BasicRaster") {
+	} else if (class(x) != "BasicRaster" & class(x) != "RasterStack") {
 		if (ncol(x)==ncol(newobj) & nrow(x)==nrow(newobj))  {
 			if (dataContent(x) == 'all') {
 				newobj <- setValues(newobj, values(x))
@@ -55,3 +59,4 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 	}
 	return(newobj)
 }
+

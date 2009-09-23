@@ -5,6 +5,7 @@
 # Licence GPL v3
 
 
+
 values <- function(object, format='', names=FALSE) {
 	format <- trim(format)
 	if (class(object) == 'RasterLayer') {
@@ -12,18 +13,18 @@ values <- function(object, format='', names=FALSE) {
 			format <- 'vector'
 		}
 		return(.rasterValues(object, format, names=names))
+	} else if (class(object) == 'RasterBrick') {
+		return(object@data@values)
 	} else {
-		if (format=='') {
-			format <- 'matrix'
-		}
-		return(.stackValues(object, format, names=names))	
+		stop('use getValues for a RasterStack')
 	}
 }
 
 
+
 .rasterValues <- function(x, format='vector', names=FALSE) {
 	if (dataContent(x)=="nodata") {
-		stop("first read some data (e.g., readAll()") 
+		stop("first read some data (e.g., readAll(), or use getValues()") 
 	}
 	if (format=='matrix') { 
 		return(.values.as.matrix(x, names)) 
@@ -32,24 +33,6 @@ values <- function(object, format='', names=FALSE) {
 	} else {
 		return(x@data@values) 
 	}
-}
-
-
-.stackValues <- function(x, format='matrix', names=FALSE) {
-		if (dataContent(x)=="nodata") {
-			stop("first read some data (e.g., readAll()") 
-		}
-		vals <- x@data@values
-		if (names) {
-			colnames(vals) <- x@data@colnames
-		} 
-		if (format == 'dataframe') {
-			vals <- as.data.frame(vals)
-		}
-		if (format == 'vector') {
-			vals <- as.vector(vals)
-		}
-		return(vals)
 }
 
 

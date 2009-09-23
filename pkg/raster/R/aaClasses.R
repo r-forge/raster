@@ -194,17 +194,45 @@ setClass ('RasterStack',
 	representation (
 	    filename ='character',
 		layers ='list',
-		data = 'MultipleRasterData'	
+		layernames = 'vector'
+		#data = 'MultipleRasterData'	
+		),
+	prototype (
+		filename='',
+		layers = list(),
+		layernames = vector(mode='character')
+		),
+	validity = function(object) {
+		if (length(object@layers) > 1) {
+			cond <- compare(object@layers[[1]], object@layers, bb=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
+		} else {
+			cond <- TRUE
+		}
+		return(cond)
+	}
+)
+
+
+setClassUnion("RasterStackBrick", c("RasterStack", "RasterBrick"))
+
+
+
+setClass ('RasterList',
+	representation (
+	    filename ='character',
+		layers ='list'
+		#data = 'MultipleRasterData'	
 		),
 	prototype (
 		filename='',
 		layers = list()
 		),
 	validity = function(object) {
-		cond1 <- length(object@layers) == object@data@nlayers
-		cond <- cond1
-		return(cond)
+		return( length(object@layers) == object@data@nlayers )
 	}
 )
 
-setClassUnion("RasterStackBrick", c("RasterStack", "RasterBrick"))
+
+setClassUnion("RasterStackBrickList", c("RasterStack", "RasterBrick", "RasterList"))
+
+

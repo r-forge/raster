@@ -1,8 +1,9 @@
 \name{changeStack}
 
-
-\alias{addFiles}
 \alias{addLayer}
+\alias{addLayer,RasterStack-method}
+\alias{addLayer,RasterBrick-method}
+\alias{addFiles}
 \alias{dropLayer}
 
 \title{Change a RasterStack}
@@ -13,16 +14,17 @@
 }
 
 \usage{
+addLayer(x, ...) 
 addFiles(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
-addLayer(rstack, rasters) 
 dropLayer(rstack, indices) 
 }
 
 \arguments{
+  \item{x}{ a RasterStack or RasterBrick object }
+  \item{...}{Raster* objects or filenames (character) }
   \item{rstack}{ a RasterStack object }
   \item{rasterfiles}{ Filename(s) of (a) raster dataset(s) }
   \item{bands}{ a vector or list of bands of raster data files (default values = 1)}
-  \item{rasters}{ a list of RasterLayer objects }
   \item{indices}{ a vector of the indices of the raster(s) to remove from a RasterStack }  
 }
 

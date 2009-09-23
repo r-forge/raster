@@ -4,6 +4,18 @@
 # Licence GPL v3
 
 
+setMethod("Math", signature(x='Raster'),
+    function(x){ 
+		stop('This function has not been defined for the class of this object')
+	}
+)
+setMethod("Math2", signature(x='Raster'),
+    function(x, digits=0){ 
+		stop('This function has not been defined for the class of this object')
+	}
+)
+
+
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
 		fname <- as.character(sys.call(sys.parent())[[1]])
@@ -15,7 +27,7 @@ setMethod("Math", signature(x='RasterLayer'),
 		}
 
 		if (canProcessInMemory(rst, 3)) {
-			rst <- setValues(rst, callGeneric(.getRasterValues(x)))
+			rst <- setValues(rst, callGeneric(getValues(x)))
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
@@ -24,7 +36,7 @@ setMethod("Math", signature(x='RasterLayer'),
 				filename(rst) <- rasterTmpFile() 
 			}
 			for (r in 1:nrow(rst)) {
-				rst <- setValues(rst, callGeneric( .getRowValues(x, r) ), r)
+				rst <- setValues(rst, callGeneric( getValues(x, r) ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 			if (getOption('verbose')) {
@@ -46,7 +58,7 @@ setMethod("Math2", signature(x='RasterLayer'),
 			dataType(rst) <- .datatype()
 		}
 		if (canProcessInMemory(rst, 3)) {
-			rst <- setValues(rst, callGeneric( .getRasterValues(x), digits))
+			rst <- setValues(rst, callGeneric( getValues(x), digits))
 			return(rst)
 		} else {
 			filetype <- .filetype()
@@ -56,7 +68,7 @@ setMethod("Math2", signature(x='RasterLayer'),
 				filename(rst) <- rasterTmpFile() 
 			}
 			for (r in 1:nrow(x)) {
-				rst <- setValues(rst, callGeneric(.getRowValues(x, r), digits), r)
+				rst <- setValues(rst, callGeneric(getValues(x, r), digits), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 			return(rst)

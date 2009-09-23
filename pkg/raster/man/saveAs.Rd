@@ -53,8 +53,8 @@ see \code{writeFormats} for the complete list
 \seealso{ \code{\link[raster]{writeRaster}} }  
 
 \examples{ 
-rs <- raster(system.file("external/test.ag", package="sp"))
-rsa <- saveAs(rs, 'test.tif', filetype='GTiff')
+r1 <- raster(system.file("external/test.ag", package="sp"))
+r2 <- saveAs(r1, 'test.tif', filetype='GTiff')
  
 }
 

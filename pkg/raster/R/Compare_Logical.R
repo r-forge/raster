@@ -7,14 +7,14 @@
 
 .getLogicalRowValues <- function(x, r) {
 # need to take care of 'spase'
-	v <- .getRowValues(x, r)
+	v <- getValues(x, r)
 	v[v!=0] <- 1
 	return(v)
 }	
 
 
 .getLogicalValues <- function(x) {
-	v <- .getRasterValues(x)
+	v <- getValues(x)
 	v[v!=0] <- 1
 	return(v)
 }
@@ -55,7 +55,7 @@ setMethod('!', signature(x='RasterLayer'),
 			}
 			
 			for (r in 1:nrow(x)) {
-				rst <- setValues(rst, !.getRowValues(x, r), r)
+				rst <- setValues(rst, !getValues(x, r), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 			return(rst)		
@@ -73,7 +73,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 		rst <- raster(e1)
 		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
-			rst <- setValues(rst, values=callGeneric(.getRasterValues(e1), rep(e2, ncell(e1)) ) )			
+			rst <- setValues(rst, values=callGeneric(getValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
@@ -83,7 +83,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 			}
 			rowrep <- rep(e2, ncol(e1))
 			for (r in 1:nrow(e1)) {
-				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), rowrep ), r)
+				rst <- setValues(rst, callGeneric( getValues(e1, r), rowrep ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 		}
@@ -100,7 +100,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='logical'),
 		rst <- raster(e1)
 		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
-			rst <- setValues(rst, values=callGeneric(.getRasterValues(e1), e2 ) )			
+			rst <- setValues(rst, values=callGeneric(getValues(e1), e2 ) )			
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
@@ -109,7 +109,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='logical'),
 				filename(rst) <- rasterTmpFile() 
 			}
 			for (r in 1:nrow(e1)) {
-				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), e2 ), r)
+				rst <- setValues(rst, callGeneric( getValues(e1, r), e2 ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 		}
@@ -127,7 +127,7 @@ setMethod("Compare", signature(e1='logical', e2='RasterLayer'),
 		rst <- raster(e2)
 		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e2, 3)) {
-			rst <- setValues(rst, values=callGeneric(.getRasterValues(e2), e1 ) )			
+			rst <- setValues(rst, values=callGeneric(getValues(e2), e1 ) )			
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
@@ -136,7 +136,7 @@ setMethod("Compare", signature(e1='logical', e2='RasterLayer'),
 				filename(rst) <- rasterTmpFile() 
 			}
 			for (r in 1:nrow(e2)) {
-				rst <- setValues(rst, callGeneric( .getRowValues(e2, r), e1 ), r)
+				rst <- setValues(rst, callGeneric( getValues(e2, r), e1 ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 		}
@@ -155,7 +155,7 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e2, 3)) {
 			dataType(rst) <- 'LOG1S'
-			rst <- setValues(rst, callGeneric(.getRasterValues(e2), rep(e1, ncell(e2)) ) )
+			rst <- setValues(rst, callGeneric(getValues(e2), rep(e1, ncell(e2)) ) )
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
@@ -165,7 +165,7 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 			}
 			rowrep <- rep(e1, ncol(e2))
 			for (r in 1:nrow(e2)) {
-				rst <- setValues(rst, callGeneric( .getRowValues(e2, r), rowrep ), r)
+				rst <- setValues(rst, callGeneric( getValues(e2, r), rowrep ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 		}
@@ -182,7 +182,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 		rst <- raster(e1) 
 		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
-			rst <- setValues(rst, callGeneric(.getRasterValues(e1), .getRasterValues(e2) ) ) 
+			rst <- setValues(rst, callGeneric(getValues(e1), getValues(e2) ) ) 
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
@@ -191,7 +191,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 				filename(rst) <- rasterTmpFile() 
 			}
 			for (r in 1:nrow(e1)) {
-				rst <- setValues(rst, callGeneric( .getRowValues(e1, r), .getRowValues(e2, r) ), r)
+				rst <- setValues(rst, callGeneric( getValues(e1, r), getValues(e2, r) ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
 			}
 		}
