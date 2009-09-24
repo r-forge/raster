@@ -1,22 +1,34 @@
-\name{rasterOptions}
+\name{Options}
 
-\alias{rasterOptions}
+\alias{setOptions}
+\alias{showOptions}
+\alias{clearOptions}
+\alias{saveOptions}
 
 
 \title{Global options for the raster package}
 
 \description{
-rasterOptions allows you to set, and inspect, a number of global options used by the raster package.
+setOptions allows you to set, and inspect, a number of global options used by the raster package.
 
 Most of these options, are used when writing files to disk. They can be ignored by specific functions if the corresponding argument is provided as an argument to these functions.
 
-The desfault location is returned by \code{rasterTmpDir}. It is the same as that of the R tempdir but you can change it (for the current session) with \code{rasterOptions(tmpdir= }. 
+The default location is returned by \code{rasterTmpDir}. It is the same as that of the R tempdir but you can change it (for the current session) with \code{rasterOptions(tmpdir= }. 
 
 To permanentely set any of these options, you can add them to \code{<your R installation>/etc/Rprofile.site}. For example, to change the default directory used to save temporary files, add a line like this: \code{options(rasterTmpDir='c:/temp/')} to that file. Beware: all raster (*.grd and *.gri) files in that folder will be deleted every time the raster package is loaded.
+
+\code{showOptions} shows the current options
+
+\code{saveOptions} attempts to save the current options to file to make them persistent (they will be set when starting a new R session).
+
+\code{clearOptions} resets the options to their default values.
 }
 
 \usage{
-rasterOptions(filename, filetype, overwrite, datatype, tmpdir, progress, show=TRUE)
+setOptions(filename, filetype, overwrite, datatype, tmpdir, progress)
+showOptions()
+saveOptions()
+clearOptions()
 }
 
 \arguments{
@@ -26,7 +38,6 @@ rasterOptions(filename, filetype, overwrite, datatype, tmpdir, progress, show=TR
 \item{datatype}{Character. The default data type to use. See \code{\link[raster]{dataType}}}
 \item{tmpdir}{Character. The default location for writing temporary files}
 \item{progress}{Character. Valid values are "text", "tcltk" (requirs the tcltk package), "windows" (on that platform only) and "" (the default in most functions, no progress bar)}
-\item{show}{Logical. If \code{TRUE}, the current values for the options are shown}
 }
 
 \details{

@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.showOptions <- function() {
+showOptions <- function() {
 	ft <- .filename()
 	if (ft == '') {	
 		cat('rasterFilenamee : ', '""', '\n')
@@ -16,8 +16,7 @@
 	cat('overwrite: ', .overwrite(), '\n')
 	cat('tmpdir   : ', .tmpdir(), '\n')
 	cat('progress : ', .progress(), '\n')
-	inmem <- .inMemory()
-	if (!inmem) {
+	if (!.inMemory()) {
 		cat('inMemory : FALSE\n')
 	}
 }
@@ -98,16 +97,16 @@
 	if (missing(progress)) { 
 		progress <- getOption('rasterProgress')
 		if (is.null(progress)) {
-			return('') 
+			return('none') 
 		} else {
 			if (is.character(progress)) {
 				if (progress[1] %in% c('text', 'tcltk', 'windows')) {
-					return(progress)
+					return(progress[1])
 				} else {
-					return('')
+					return('none')
 				}
 			} else {
-				return('')
+				return('none')
 			}
 		}
 	} else { 
@@ -115,10 +114,10 @@
 			if (progress[1] %in% c('text', 'tcltk', 'windows')) {
 				return(progress[1])
 			} else {
-				return('')
+				return('none')
 			}
 		} else {
-			return('')
+			return('none')
 		}
 	}
 }
