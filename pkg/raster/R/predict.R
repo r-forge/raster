@@ -18,6 +18,15 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		filename(predrast) <- filename
 		dataType(predrast) <- datatype
 			
+		v <- (attr(model$terms, "factors"))
+		varnames <- attr(v, "dimnames")[[2]]
+		stacknames <- layerNames(object)
+		for (i in seq(along=varnames)) {
+			if (!varnames[i] %in% stacknames) {
+				stop('variable in model that is not in stack/brick: ', varnames[i])
+			}
+		}
+			
 		dataclasses <- attr(model$terms, "dataClasses")
 		f <- names( which(dataclasses == 'factor') )
 		if (length(f) > 0) { 
