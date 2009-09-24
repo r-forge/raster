@@ -27,7 +27,7 @@ aggregate(x, ...)
 \describe{
 A full call to the aggregate method for a RasterLayer is:
 
-\code{aggregate(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename=NULL, filetype='raster', datatype='FLT4S', overwrite=FALSE, track=-1) }
+\code{aggregate(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ... ) }
  
  
 \tabular{rll}{
@@ -37,14 +37,11 @@ A full call to the aggregate method for a RasterLayer is:
 \tab \code{expand} \tab logical. If \code{TRUE} the output RasterLayer will get larger if a division of the number of columns or rows with \code{factor} does not return an integer \cr
 \tab \code{na.rm} \tab logical. If \code{TRUE}, remove NA cells from calculations \cr
 \tab \code{filename} \tab character. output filename \cr
-\tab \code{overwrite} \tab logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
-\tab \code{filetype} \tab character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}} \cr
-\tab \code{datatype} \tab character. output data type; see \code{\link[raster]{dataType}} \cr
-\tab \code{track} \tab vector of row numbers for which the function will report that they have been processed \cr
+\tab \code{...} \tab Additional arguments, see Details \cr}
+}
 }
 
-}
-}
+
 
 \details{
  Aggregation will result in a RasterLayer with \code{fact*fact} fewer cells; sometimes adjusted according to the values of \code{expand}.
@@ -61,6 +58,15 @@ A full call to the aggregate method for a RasterLayer is:
  The function \code{fun} should take multiple numbers, and return a single number. For example \code{mean}, \code{modal}, \code{min} or \code{max}. 
  
  If no filename is specified, and the resulting RasterLayer is too large to hold in memory, it is saved to a temporary file.  
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{filetype} \tab Characer. Output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+ }
+ 
 }
 
 \value{

@@ -16,7 +16,7 @@ To permanentely set any of these options, you can add them to \code{<your R inst
 }
 
 \usage{
-rasterOptions(filename, filetype, overwrite, datatype, track, tmpdir, inmemory, show=TRUE)
+rasterOptions(filename, filetype, overwrite, datatype, track, tmpdir, progress, show=TRUE)
 }
 
 \arguments{
@@ -26,7 +26,7 @@ rasterOptions(filename, filetype, overwrite, datatype, track, tmpdir, inmemory, 
 \item{datatype}{Character. The default data type to use. See \code{\link[raster]{dataType}}}
 \item{track}{Integer. Vector with the default row numbers for which functions provide feedback when tracking progress in functions. Default=-1 (no tracking) }
 \item{tmpdir}{Character. The default location for writing temporary files}
-\item{inmemory}{Logical. If \code{FALSE}, functions that support this argument will process row by row and write the results to file; for debugging purposes}
+\item{progress}{Character. Valid values are "text", "tcltk" (requirs the tcltk package), "windows" (on that platform only) and "" (the default in most functions, no progress bar)}
 \item{show}{Logical. If \code{TRUE}, the current values for the options are shown}
 }
 
@@ -43,7 +43,7 @@ argument \code{track} sets global option \code{rasterTrack}. The option is ignor
 
 argument \code{tmpdir} sets global option \code{rasterTmpDir}.  See \code{\link[raster]{rasterTmpFile}}
 
-argument \code{inMemory} sets global option \code{rasterInMemory}. The option is ignored by a function if you pass \code{inMemory} as an argument to that function. 
+argument \code{progress} sets global option \code{rasterProgress}. The option is ignored by a function if you pass \code{progress} as an argument to that function. 
 }
 
 \value{

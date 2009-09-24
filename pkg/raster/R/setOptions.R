@@ -4,13 +4,13 @@
 # Licence GPL v3
 
 
-rasterOptions <- function(filename, filetype, overwrite, datatype, track, tmpdir, inmemory, show=TRUE) {
+rasterOptions <- function(filename, filetype, overwrite, datatype, track, tmpdir, progress, show=TRUE) {
 	if (!missing(filename)) { .setFilename(filename) }
 	if (!missing(filetype)) { .setFiletype(filetype) }
 	if (!missing(overwrite)) { .setOverwrite(overwrite) }
 	if (!missing(datatype)) { .setDatatype(datatype) }
 	if (!missing(track)) { .setTrack(track) }
-	if (!missing(inmemory)) { .setInMemory(inmemory) }
+	if (!missing(progress)) { .setProgress(progress) }
 	if (!missing(tmpdir)) { .setTmpdir(tmpdir) }
 	if (show) { .showOptions() }
 }
@@ -51,6 +51,27 @@ rasterOptions <- function(filename, filetype, overwrite, datatype, track, tmpdir
 		warning(paste('inmemory must be a logical value'))	
 	}
 }
+
+
+.setProgress <- function(progress) {
+	if (is.character(progress)) {
+		progress <- trim(progress)
+		if (progress %in% c('text', 'tcltk', 'windows', '')) {
+			if (substr( R.Version()$platform, 1, 7) != "i386-pc" ) {
+				if (progress == 'windows') {
+					warning('The windows progress bar is only availble on the Windows Operating System')
+				} else {
+					options(rasterInMemory = progress )
+				}
+			} else {
+				options(rasterInMemory = progress )
+			}
+		}
+	} else {
+		warning(paste('progress must be a character value'))	
+	}
+}
+
 
 
 .setFiletype <- function(filetype) {

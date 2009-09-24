@@ -5,6 +5,7 @@
 # Licence GPL v3
 
 
+
 setMethod('aggregate', signature(x='RasterLayer'), 
 
 function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
@@ -12,7 +13,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
+	progress <- .progress(...)
 	
 	if (length(fact)==1) {
 		fact <- as.integer(round(fact))
@@ -88,6 +89,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
+		pb <- .setProgressBar(rsteps, type=progress)
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
@@ -112,10 +114,11 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				outRaster <- setValues(outRaster, vals, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 			}
-			
-			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
-			
+		
+			.doProgressBar(pb, r, starttime) 
+
 		} 
+		.closeProgressBar(pb, starttime)
 		if (outRaster@file@name == "") { 
 			outRaster <- setValues(outRaster, v) 
 		}

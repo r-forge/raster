@@ -110,6 +110,27 @@
 }
 
 
+.progress <- function(progress, ...) {
+	if (missing(progress)) { 
+		progress <- getOption('rasterProgress')
+		if (is.null(progress)) {
+			return('') 
+		} else {
+			if (progress %in% c('text', 'tcltk', 'windows')) {
+				return(progress)
+			} else {
+				return('')
+			}
+		}
+	} else { 
+		if (progress %in% c('text', 'tcltk', 'windows')) {
+			return(progress)
+		} else {
+			return('')
+		}
+	}
+}
+
 
 .inMemory <- function(inMemory, ...) {
 	if (missing(inMemory)) { 
