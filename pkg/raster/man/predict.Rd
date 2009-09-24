@@ -77,15 +77,16 @@ colnames(v)[1] <- 'presabs'
 #build model, e.g. with glm or randomforest
 formula <- as.formula(paste(colnames(v)[1], '~', paste(colnames(v)[2:ncol(v)], collapse=" + ")))
 model <- glm(formula, data=data.frame(v))
+# also try:
 # require(randomForest)
 # model <- randomForest(formula, data=data.frame(v))
 
 #predict to a raster
-r <- predict(logo, model)
+r <- predict(logo, model, progress='text')
 
-#plot(r>0.3)
-#points(presence)
-#points(absence, col='red')
+plot(r>0.3)
+points(presence, bg='blue', pch=21)
+points(absence, bg='red', pch=21)
 
 
 ## Thin plate spline interpolation with x and y only
