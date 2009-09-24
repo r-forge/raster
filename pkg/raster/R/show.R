@@ -73,23 +73,17 @@ setMethod ('show' , 'RasterBrick',
 		cat ('class       :' , class ( object ) , '\n')
 		cat ('filename    :' , filename(object), '\n')
 		cat ('nlayers     :' , nlayers(object), '\n')
-		cat ('nrow        :' , nrow(object), '\n')
-		cat ('ncol        :' , ncol(object), '\n')
-		cat ('ncells      :' , ncell(object), '\n')
-		cat ('projection  :' , projection(object, TRUE), '\n')
-#		if (dataContent(object) == 'nodata') { cat('vals in mem : none', '\n')
-#		} else { cat('vals in mem :', dataContent(object) , '\n') }
-		if (object@data@haveminmax) {
-			cat('min value   :', paste(minValue(object, -1), collapse=' '), '\n')
-			cat('max value   :', paste(maxValue(object, -1), collapse=' '), '\n')
-		} else { 
-			if (object@data@source == 'disk')  {
-				cat('min value   : ? \n')
-				cat('max value   : ? \n')
-			} else {
-				cat('min value   :  \n')
-				cat('max value   :  \n')		
-			}
+		if (nlayers(object) > 0) {
+			cat ('nrow        :' , nrow(object), '\n')
+			cat ('ncol        :' , ncol(object), '\n')
+			cat ('ncells      :' , ncell(object), '\n')
+			cat ('projection  :' , projection(object, TRUE), '\n')
+			minv <- as.character(minValue(object))
+			maxv <- as.character(maxValue(object))
+			minv <- gsub('Inf', '?', minv)
+			maxv <- gsub('-Inf', '?', maxv)
+			cat('min value   :', paste(minv, collapse=' '), '\n')
+			cat('max value   :', paste(maxv, collapse=' '), '\n')
 		}
 		cat ('xmin        :' , xmin(object), '\n')
 		cat ('xmax        :' , xmax(object), '\n')
@@ -113,17 +107,10 @@ setMethod ('show' , 'RasterStack',
 			cat ('ncol        :' , ncol(object@layers[[1]]), '\n')
 			cat ('ncells      :' , ncell(object@layers[[1]]), '\n')
 			cat ('projection  :' , projection(object@layers[[1]], TRUE), '\n')
-			minv <- list()
-			maxv <- list()
-			for (i in 1:nlayers(object)) {
-				if (object@layers[[i]]@data@haveminmax) {
-					minv[i] <- minValue(object@layers[[i]])
-					maxv[i] <- maxValue(object@layers[[i]])
-				} else {
-					minv[i] <- '?'
-					maxv[i] <- '?'
-				}
-			}
+			minv <- as.character(minValue(object))
+			maxv <- as.character(maxValue(object))
+			minv <- gsub('Inf', '?', minv)
+			maxv <- gsub('-Inf', '?', maxv)
 			cat('min value   :', paste(minv, collapse=' '), '\n')
 			cat('max value   :', paste(maxv, collapse=' '), '\n')
 		}

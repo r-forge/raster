@@ -1,7 +1,9 @@
 \name{writeRaster}
 
 \alias{writeRaster,RasterLayer-method}
-\alias{writeRaster,RasterStackBrick-method}
+\alias{writeRaster,RasterStack-method}
+\alias{writeRaster,RasterBrick-method}
+
 \alias{writeRaster}
 
 \title{Write raster data to a file}
@@ -63,6 +65,9 @@ BIL = 'Bands Interleaved by Line'
 BIP = 'Bands Interleaved by Pixels'
 
 BSQ = 'Bands SeQuential'
+
+
+Note that the values of a RasterBrick and RasterLayer objects can be written to a single file in a row by row fashion; but the values of a RasterStack can only be saved to a file in one go.  
 
 
 See \code{writeFormats} for supported file types ("formats", "drivers"); the rgdal package is needed for this function, exxcept for the 'raster', ascii, and 'CDF' formats.

@@ -79,7 +79,6 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			filename(outRaster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 		}
-		starttime <- proc.time()
 		
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
 		rows <- rep(1, each=(ncol(x) * yfact))
@@ -88,6 +87,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
+		starttime <- proc.time()
 		pb <- .setProgressBar(rsteps, type=.progress(...))
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact

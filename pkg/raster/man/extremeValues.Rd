@@ -1,6 +1,13 @@
 \name{extremeValues}
-\alias{maxValue}
+
 \alias{minValue}
+\alias{maxValue}
+\alias{minValue,RasterLayer-method}
+\alias{minValue,RasterStack-method}
+\alias{minValue,RasterBrick-method}
+\alias{maxValue,RasterLayer-method}
+\alias{maxValue,RasterStack-method}
+\alias{maxValue,RasterBrick-method}
   
   
 \title{Minimum and maximum values}
@@ -9,18 +16,23 @@ Returns the minimum or maximum value of a RasterLayer or layer in a RasterStack
 }
 
 \usage{
-minValue(object, layer=1)
-maxValue(object, layer=1)
+minValue(x, ...)
+maxValue(x, ...)
 }
 
 \arguments{
-  \item{object}{RasterLayer or RasterStack object}
-  \item{layer}{layer number (for RasterStack objects) }
+  \item{x}{RasterLayer or RasterStack object}
+  \item{...}{Additional argument: layer number (for RasterStack or RasterBrick objects) }
 }
   
 \value{
 a number
 }
+
+\details{
+If a Raster* object is created from a file on disk, the min and max values are often not known (depending on the file format). You can use \code{\link[raster]{setMinMax}} to set them in the Raster* object.
+}
+
 
 \author{Robert J. Hijmans }
 \examples{

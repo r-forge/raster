@@ -21,25 +21,6 @@ nbands <- function(object) {
 
 
 
-minValue <- function(object, layer=1) {
-	layer <- round(layer)
-	if (layer < 1) { 
-		return(object@data@min)
-	} else {
-		return(object@data@min[layer])
-	}
-}
-
-
-maxValue <- function(object, layer=1) {
-	layer <- round(layer)
-	if (layer < 1) { 
-		return(object@data@max)
-	} else { 
-		return(object@data@max[layer]) 
-	}
-}
-
 
 .driver <- function(object) {
 	fn <- filename(object)

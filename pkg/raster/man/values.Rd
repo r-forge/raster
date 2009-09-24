@@ -13,18 +13,24 @@ values(object, format='', names=FALSE)
 
 \arguments{
  \item{object}{RasterLayer or RasterStack object}
- \item{format}{Character. specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack, and a vector for a RasterLayer}
- \item{names}{Logical. If \code{TRUE}, and format='matrix', the returned matrix will have row and column names}
+ \item{format}{Character. specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack or RasterBrick, and a vector for a RasterLayer}
+ \item{names}{Logical. If \code{TRUE}, and format='matrix' or 'dataframe', the returned matrix will have row and column names}
 }
   
 
 \details{
-\code{values} are returned as a vector unless the option format='matrix' is used. In that case, a matrix is returned, optionally with the row and col numbers (names=TRUE). 
+In most cases it is better to use \code{\link[raster]{getValues}} rather than \code{values}. \code{values} is typically used in functions after a read* function has been used and it will return all the values that happen to be in memory at that point, or fail if there are no values in memory. In contrast \code{getValues} will read values from disk if necessary. 
+
 }
 
 \value{
 raster values
 }
+
+\seealso{
+\code{\link[raster]{getValues}}, \code{\link[raster]{read}}
+}
+
 
 \author{Robert J. Hijmans}
 \examples{

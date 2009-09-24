@@ -11,31 +11,50 @@ if (!isGeneric('writeRaster')) {
 	}	
 
 
-setMethod('writeRaster', signature(x='RasterStackBrick'), 
+setMethod('writeRaster', signature(x='RasterBrick'), 
 function(x, filename, bandorder='BIL', ...) {
     filename <- trim(filename)
 	if (filename == '') {
-		if (class(x) == 'RasterStack') {
-			stop('No filename')
-		}
 		filename <- filename(x)
+		if (filename == '') {
+			stop('RasterBrick has no filename; and no filename specified as argument to writeRaster')
+		}
 	}
-	if (filename == '') {
-		stop('RasterBrick has no filename; and no filename specified as argument to writeRaster')
-	}
-	dataType(x) <- .datatype(...)
+	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
+	progress <- .progress(...)
 
 	if (filetype != 'raster') {
-		stop('Only raster format is currently supported for writing multiband files')
+		stop('Only "raster" format is currently supported for writing multiband files')
 	}
 	if (substr(dataContent(x), 1, 3) == 'row' ) {
 		stop('Row by row writing has not yet been implemented for multiband files')
 	}
-	return( .writeStackBrick(x, filename, bandorder='BIL', datatype=datatype, filetype=filetype, overwrite=overwrite) )
+	return( .writeBrick(x, filename=filename, bandorder='BIL', datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
 }
 )
+
+
+setMethod('writeRaster', signature(x='RasterStack'), 
+function(x, filename, bandorder='BIL', ...) {
+    filename <- trim(filename)
+	if (filename == '') {
+		stop('you must supply a filename')
+	}
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	progress <- .progress(...)
+
+	if (filetype != 'raster') {
+		stop('Only "raster" format is currently supported for writing multiband files')
+	}
+	
+	return( .writeStack(x, filename, bandorder='BIL', datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
+}
+)
+
 
 	
 setMethod('writeRaster', signature(x='RasterLayer'), 

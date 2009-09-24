@@ -87,7 +87,7 @@
 			} 
 			return(raster)
 		} else {
-			stop('cannot read a row of data for a raster that only exists in memory. Use getValues(raster, rownr)')
+			stop('there are no values associated with this RasterLayer')
 		}
 		
 	} else if (.driver(raster) == 'raster') {

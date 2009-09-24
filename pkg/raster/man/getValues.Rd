@@ -2,8 +2,9 @@
 \alias{getValues}
 \alias{getValues,Raster,missing-method}
 \alias{getValues,RasterStack,missing-method}
-\alias{getValues,Raster,numeric-method}
+\alias{getValues,RasterLayer,numeric-method}
 \alias{getValues,RasterStack,numeric-method}
+\alias{getValues,RasterBrick,numeric-method}
   
 \title{Get raster values}
 
@@ -24,9 +25,9 @@ getValues(x, row, ...)
   
 
 \details{
-Additional arguments (only when all data are requeested):
- \code{format} Character. specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack, and a vector for a RasterLayer
- \code{names} Logical. If \code{TRUE}, and format='matrix', the returned matrix will have row and column names
+Additional arguments:
+ \code{format} Character. specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack or RasterBrick, and a vector for a RasterLayer
+ \code{names} Logical. If \code{TRUE}, and format='matrix' or 'dataframe', the returned matrix will have row and column names
 }
 
 \value{
