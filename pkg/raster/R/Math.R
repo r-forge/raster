@@ -31,13 +31,18 @@ setMethod("Math", signature(x='RasterLayer'),
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
+		
 			filename(rst) <- .filename()
 			if (filename(rst) == "") { 
 				filename(rst) <- rasterTmpFile() 
 			}
+
+			starttime <- proc.time()
+			pb <- .setProgressBar(nrow(rst), type=.progress())			
 			for (r in 1:nrow(rst)) {
 				rst <- setValues(rst, callGeneric( getValues(x, r) ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				.doProgressBar(pb, rst) 
 			}
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
@@ -63,13 +68,19 @@ setMethod("Math2", signature(x='RasterLayer'),
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
+
 			filename(rst) <- .filename()
 			if (filename(rst) == "") { 
 				filename(rst) <- rasterTmpFile() 
 			}
+			
+			starttime <- proc.time()
+			pb <- .setProgressBar(nrow(x), type=.progress() )
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, callGeneric(getValues(x, r), digits), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				.doProgressBar(pb, r) 
+				
 			}
 			return(rst)
 		}

@@ -6,10 +6,15 @@
 # Licence GPL v3
 
 
-crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster', datatype=dataType(raster), track=-1) {
+crop <- function(raster, extent, filename="", ...) {
 
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
-	bb <- intersectExtent(raster, bndbox)
+
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+
+	bb <- intersectExtent(raster, extent)
 	bb <- alignExtent(bb, raster)
 	outraster <- raster(raster, filename)
 	outraster <- setExtent(outraster, bb, keepres=TRUE)
@@ -35,13 +40,15 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 			if (getOption('verbose')) { cat('writing raster to:', filename(outraster))	}						
 		}
 		
-		starttime <- proc.time()
 
 		first_col <- colFromX(raster, xmin(outraster) + 0.5 * xres(outraster))
 		first_row <- rowFromY(raster, ymax(outraster) - 0.5 * yres(outraster))
 		last_row <- first_row + nrow(outraster) - 1
 		rownr <- 1
 		v <- vector(length=0)
+
+		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(outraster), type=.progress(...))
 		for (r in first_row:last_row) {
 			raster <- readPartOfRow( raster, r, first_col, ncol(outraster) )
 			if (outraster@file@name == "") {
@@ -52,11 +59,13 @@ crop <- function(raster, bndbox, filename="", overwrite=FALSE, filetype='raster'
 			}	
 			rownr <- rownr + 1
 
-			if (r %in% track) { .showTrack(rownr, outraster@nrows, track, starttime) }
+			.doProgressBar(pb, r) 			
 		} 
 		if (outraster@file@name == '') { 
 			outraster <- setValues(outraster, v) 
 		}
+		.closeProgressBar(pb, r)
+		
 	}
 	return(outraster)
 }

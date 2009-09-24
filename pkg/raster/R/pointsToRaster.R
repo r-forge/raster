@@ -13,7 +13,6 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)	
 	
 	cells <- cellFromXY(rs, xy)
 	rows <- rowFromCell(rs, cells)
@@ -26,6 +25,7 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 	v <- vector(length=0)	
 	
 	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(raster), type=.progress(...))
 	
 	for (r in 1:rs@nrows) {
 		d <- dna
@@ -45,9 +45,10 @@ pointsToRaster <- function(raster, xy, values=rep(1, length(xy[,1])), fun=length
 			v <- c(v, d)
 		}
 
-		if (r %in% track) { .showTrack(r, rs@nrows, track, starttime) }
+		.doProgressBar(pb, r)
+	}
+	.closeProgressBar(pb, starttime)
 		
-	}	
 	if (filename == "") {
 		rs <- setValues(rs, v)
 	}

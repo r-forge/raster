@@ -87,7 +87,7 @@
 			} 
 			return(raster)
 		} else {
-			stop('cannot read a row of data for a raster that only exists in memory. Use valuesRow(raster, rownr)')
+			stop('cannot read a row of data for a raster that only exists in memory. Use getValues(raster, rownr)')
 		}
 		
 	} else if (.driver(raster) == 'raster') {

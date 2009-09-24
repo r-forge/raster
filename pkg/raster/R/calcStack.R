@@ -9,12 +9,16 @@
 
 setMethod('calc', signature(x='RasterStack', fun='function'), 
 
-function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1) {
+function(x, fun, filename="", ...) {
 
 	if (length(fun(seq(1:5))) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
 
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	
 	filename <- trim(filename)
 	outraster <- raster(x, filename)
 	dataType(outraster) <- datatype
@@ -24,12 +28,14 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 		}
 	} else {
-		starttime <- proc.time()
 		if (!canProcessInMemory(x, 4) & filename == '') {
 			filename=rasterTmpFile()
 			filename(outraster) <- filename
 		}
 		v <- vector(length=0)
+
+		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(x), type=.progress(...))
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
 			if (outraster@file@name == "") {
@@ -38,10 +44,9 @@ function(x, fun, filename="", overwrite=FALSE, filetype='raster', datatype='FLT4
 				outraster <- setValues(outraster, apply(values(x), 1, fun), r) 
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}
-	
-			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
-		
+			.doProgressBar(pb, r) 
 		}
+		.closeProgressBar(pb, starttime)
 		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 
 		}

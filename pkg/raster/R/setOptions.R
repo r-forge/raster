@@ -4,24 +4,16 @@
 # Licence GPL v3
 
 
-rasterOptions <- function(filename, filetype, overwrite, datatype, track, tmpdir, progress, show=TRUE) {
+rasterOptions <- function(filename, filetype, overwrite, datatype, tmpdir, progress, show=TRUE) {
 	if (!missing(filename)) { .setFilename(filename) }
 	if (!missing(filetype)) { .setFiletype(filetype) }
 	if (!missing(overwrite)) { .setOverwrite(overwrite) }
 	if (!missing(datatype)) { .setDatatype(datatype) }
-	if (!missing(track)) { .setTrack(track) }
 	if (!missing(progress)) { .setProgress(progress) }
 	if (!missing(tmpdir)) { .setTmpdir(tmpdir) }
 	if (show) { .showOptions() }
 }
 
-.setTrack <- function(track) {
-	if (is.integer(track)) {
-		options(rasterTrack = track)
-	} else {
-		warning(paste('Could not set track. It should be a vector of integers'))			
-	}
-}
 
 .setFilename <- function(filename) {
 	if (is.character(filename)) {
@@ -61,10 +53,10 @@ rasterOptions <- function(filename, filetype, overwrite, datatype, track, tmpdir
 				if (progress == 'windows') {
 					warning('The windows progress bar is only availble on the Windows Operating System')
 				} else {
-					options(rasterInMemory = progress )
+					options(rasterProgress = progress )
 				}
 			} else {
-				options(rasterInMemory = progress )
+				options(rasterProgress = progress )
 			}
 		}
 	} else {

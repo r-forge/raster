@@ -1,16 +1,13 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  Jaunary 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
-
 
 
 resample <- function(from, to, method="ngb", filename="", ...)  {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 
 	
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
@@ -30,7 +27,9 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 
 	v <- vector(length=0)
 	rowCells <- 1:ncol(to)
-	starttime <- proc.time()
+
+	starttime <- proc.time()		
+	pb <- .setProgressBar(nrow(raster), type=.progress(...))
 
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
@@ -47,9 +46,10 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
 
-		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }
-		
+		.doProgressBar(pb, r)
 	}
+	.closeProgressBar(pb, starttime)
+
 	if (inMemory) {
 		to <- setValues(to, v) 
 	}

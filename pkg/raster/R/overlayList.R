@@ -14,7 +14,6 @@
 	dataType(outraster) <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 
 	inram <- TRUE
 	for (i in 1:length(x)) {
@@ -50,14 +49,11 @@
 			}
 		}	
 		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(outraster), type=.progress(...))
 
 		for (r in 1:nrow(outraster)) {
 			for (i in 1:length(x)) {
-				if (dataSource(x[[i]]) == 'ram') {
-					x[i] <- valuesRow(x[[i]], r)
-				} else {	
-					x[i] <- readRow(x[[i]], r)
-				}	
+				x[i] <- getValues(x[[i]], r)
 			}	
 			
 			for (i in 1:length(x)) {
@@ -80,9 +76,10 @@
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
-			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
-			
+			.doProgressBar(pb, r)
 		}
+		.closeProgressBar(pb, starttime)
+		
 		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 
 		}

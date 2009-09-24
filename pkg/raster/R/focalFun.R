@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 .embed <- function(x, dimension) {
@@ -31,7 +30,6 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 
 	ngb <- as.integer(round(ngb))
 	if (length(ngb) == 1) {
@@ -58,11 +56,7 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 	ngbdata <- matrix(NA, nrow=0, ncol=ncol(ngbgrid))
 # add all rows needed for first ngb, minus 1 that will be read in first loop	
 	for (r in 1:limrow) {
-		if (dataContent(raster)=='all') {
-			rowdata <- valuesRow(raster, r)
-		} else {	
-			rowdata <- values(readRow(raster, r))
-		}
+		rowdata <- getValues(raster, r)
 		ngbdata <- rbind(ngbdata, rowdata)
 	}
 
@@ -70,15 +64,12 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 
 	v <- vector(length=0)
 	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(ngbgrid), type=.progress(...))
 
 	for (r in 1:nrow(ngbgrid)) {		
 		rr <- r + limrow
 		if (rr <= nrow(ngbgrid)) {
-			if (dataContent(raster)=='all') {
-				rowdata <- valuesRow(raster, rr)
-			} else {	
-				rowdata <- values(readRow(raster, rr))
-			}
+			rowdata <- getValues(raster, rr)
 			if (dim(ngbdata)[1] == ngb[1]) {
 				ngbdata <- rbind(ngbdata[2:ngb[1],], rowdata)
 			} else {
@@ -96,8 +87,10 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 		} else {
 			v <- c(v, ngbvals)
 		}
-		if (r %in% track) { .showTrack(r, ngbgrid@nrows, track, starttime) }
+		.doProgressBar(pb, r)
 	}
+	.closeProgressBar(pb, starttime)
+
 	if (filename == "") { 
 		ngbgrid <- setValues(ngbgrid, v) 
 	}

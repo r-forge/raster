@@ -19,8 +19,6 @@ function(x, fun, filename="", ...) {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
-
 	
 	outraster <- raster(x, filename)
 	dataType(outraster) <- datatype
@@ -45,8 +43,10 @@ function(x, fun, filename="", ...) {
 			filename(outraster) <- filename
 		}
 		v <- vector(length=0)
-		starttime <- proc.time()
 
+		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(x), type=.progress(...))
+		
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
 			if (filename(outraster) == "") {
@@ -55,10 +55,10 @@ function(x, fun, filename="", ...) {
 				outraster <- setValues(outraster, fun(values(x)), r)
 				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}
-			
-		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
-			
+			.doProgressBar(pb, r)
 		}
+		.closeProgressBar(pb, starttime)
+		
 		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 
 		}

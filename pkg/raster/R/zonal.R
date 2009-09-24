@@ -4,8 +4,10 @@
 # Version 0.8
 # Licence GPL v3
 
-zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
+zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
 	compare(c(raster, zones))
+	
+	if (missing(progress)) {progress <- .progress()}
 
 	if (class(stat) != 'character') {
 		if (canProcessInMemory(raster, 3)) {
@@ -45,10 +47,12 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
 
 		alltab <- array(dim=0)
 		cnttab <- alltab
+	
 		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(raster), type=progress)
+		
 		for (r in 1:nrow(raster)) {
-			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
-			d <- cbind(valuesRow(raster, r), as.integer(valuesRow(zones, r)))
+			d <- cbind(getValues(raster, r), as.integer(getValues(zones, r)))
 			if (keepdata) {
 				d <- na.omit(d)
 			}
@@ -64,7 +68,10 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, track=-1) {
 					cnttab <- tapply(as.vector(cnttab), groups, sum)
 				}
 			}
+			.doProgressBar(pb, r)
 		}
+		.closeProgressBar(pb, starttime)
+			
 		groups <- as.integer(names(alltab))
 		alltab <- tapply(as.vector(alltab), groups, fun)
 		if (counts) {

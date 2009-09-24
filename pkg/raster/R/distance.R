@@ -13,7 +13,6 @@ distance <-	function(object, filename="", ...) {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 	inMemory <- .inMemory(...)
 #	inMemory=TRUE
 		

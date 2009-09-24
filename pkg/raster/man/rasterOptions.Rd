@@ -16,7 +16,7 @@ To permanentely set any of these options, you can add them to \code{<your R inst
 }
 
 \usage{
-rasterOptions(filename, filetype, overwrite, datatype, track, tmpdir, progress, show=TRUE)
+rasterOptions(filename, filetype, overwrite, datatype, tmpdir, progress, show=TRUE)
 }
 
 \arguments{
@@ -24,7 +24,6 @@ rasterOptions(filename, filetype, overwrite, datatype, track, tmpdir, progress, 
 \item{filetype}{Character. The default file format to use. See \code{\link[raster]{writeFormats}}}
 \item{overwrite}{Logical. The default value for overwriting existing files. If \code{TRUE}, existing files will be overwritten}
 \item{datatype}{Character. The default data type to use. See \code{\link[raster]{dataType}}}
-\item{track}{Integer. Vector with the default row numbers for which functions provide feedback when tracking progress in functions. Default=-1 (no tracking) }
 \item{tmpdir}{Character. The default location for writing temporary files}
 \item{progress}{Character. Valid values are "text", "tcltk" (requirs the tcltk package), "windows" (on that platform only) and "" (the default in most functions, no progress bar)}
 \item{show}{Logical. If \code{TRUE}, the current values for the options are shown}
@@ -38,8 +37,6 @@ argument \code{filetype} sets global option \code{rasterFiletype}. The option is
 argument \code{overwrite} sets global option \code{rasterOverwrite}. The option is ignored by a function if you pass \code{overwrite} as an argument to that function.
 
 argument \code{datatype} sets global option \code{rasterDatatype}. The option is ignored by a function if you pass \code{datatype} as an argument to that function.
-
-argument \code{track} sets global option \code{rasterTrack}. The option is ignored by a function if you pass \code{track} as an argument to that function.
 
 argument \code{tmpdir} sets global option \code{rasterTmpDir}.  See \code{\link[raster]{rasterTmpFile}}
 

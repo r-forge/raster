@@ -11,13 +11,13 @@ computed from the values of a single RasterLayer.
 }
 
 \usage{
-cellStats(raster, stat='mean', track=-1)
+cellStats(raster, stat='mean', ...)
 }
 
 \arguments{
  \item{raster}{A RasterLayer}
  \item{stat}{The function to be applied. Either as character: 'mean', 'min', 'max', 'sum', or 'sd'; or a function (see Details) }
- \item{track}{Vector of row numbers for which the function will report that they have been processed}   
+ \item{...}{Additional argument. See \code{\link[raster]{rasterOptions}} }  
 }
 
 \value{

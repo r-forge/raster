@@ -4,7 +4,6 @@
 # Licence GPL v3
 
 
-
 .showOptions <- function() {
 	ft <- .filename()
 	if (ft == '') {	
@@ -16,7 +15,7 @@
 	cat('datatype : ', .datatype(), '\n')
 	cat('overwrite: ', .overwrite(), '\n')
 	cat('tmpdir   : ', .tmpdir(), '\n')
-	cat('track    : ', .track(), '\n')
+	cat('progress : ', .progress(), '\n')
 	inmem <- .inMemory()
 	if (!inmem) {
 		cat('inMemory : FALSE\n')
@@ -95,36 +94,29 @@
 	}
 }
 
-
-.track <- function(track, ...) {
-	if (missing(track)) { 
-	track <- getOption('rasterTrack')
-		if (is.null(track)) {
-			return(-1) 
-		} else {
-			return(track)
-		}
-	} else { 
-		return(track)
-	}
-}
-
-
 .progress <- function(progress, ...) {
 	if (missing(progress)) { 
 		progress <- getOption('rasterProgress')
 		if (is.null(progress)) {
 			return('') 
 		} else {
-			if (progress %in% c('text', 'tcltk', 'windows')) {
-				return(progress)
+			if (is.character(progress)) {
+				if (progress[1] %in% c('text', 'tcltk', 'windows')) {
+					return(progress)
+				} else {
+					return('')
+				}
 			} else {
 				return('')
 			}
 		}
 	} else { 
-		if (progress %in% c('text', 'tcltk', 'windows')) {
-			return(progress)
+		if (is.character(progress)) {
+			if (progress[1] %in% c('text', 'tcltk', 'windows')) {
+				return(progress[1])
+			} else {
+				return('')
+			}
 		} else {
 			return('')
 		}

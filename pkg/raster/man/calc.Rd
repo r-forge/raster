@@ -21,7 +21,7 @@ calc(x, fun, ...)
 \arguments{
   \item{x}{a Raster* object}
   \item{fun}{a function}
-  \item{...}{Additional arguments. See below, under Methods}  
+  \item{...}{Additional arguments. See Details}  
 }
 
 \section{Methods}{
@@ -35,16 +35,12 @@ calc(x, fun, ...)
   \tab  \code{x} \tab a RasterLayer object \cr
   \tab  \code{fun}  \tab The function to be applied\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
-  \tab  \code{overwrite}  \tab Logical to indicate whether an existing output file should be overwritten \cr
-  \tab  \code{filetype}  \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
-  \tab  \code{datatype}  \tab output data type; see \code{\link[raster]{dataType}} \cr
-  \tab  \code{track}  \tab vector of row numbers for which the function will report that they have been processed \cr
 }
 
 
 \bold{2) \code{x} is a RasterLayer object; \code{fun} is a function}
 
-\code{calc(x, fun, filename='', overwrite=FALSE, filetype='raster', datatype='FLT4S')}
+\code{calc(x, fun, filename='', ...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterStack object \cr
@@ -53,7 +49,7 @@ Other items as above
 
 \bold{3) \code{x} is a RasterLayer object; \code{fun} is a list of functions}
 
-\code{calc(x, fun, filename='', overwrite=FALSE, filetype='raster', datatype='FLT4S')}
+\code{calc(x, fun, filename='', ...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterStack object \cr
@@ -66,6 +62,15 @@ Other items as above
 \details{
 if \code{x = "RasterLayer"}, \code{fun} should be a function that takes a single value as input, and returns a single value.
 if \code{x = "RasterStack"}, \code{fun} should be a function that takes a vector of value as input, and returns a single value.
+
+
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{filetype} \tab Characer. Output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+ }
 }
 
 

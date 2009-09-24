@@ -10,11 +10,11 @@ if (!isGeneric("cover")) {
 }	
 
 setMethod('cover', signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, ..., filename="", filetype, datatype,  overwrite, track) {
+	function(x, y, ..., filename="", filetype, datatype,  overwrite, progress) {
 
-	if (missing(filetype)) { filetype <- .filetype(...)	} 
-	if (missing(overwrite)) { overwrite <- .overwrite(...) }
-	if (missing(track)) { track <- .track(...) }
+	if (missing(filetype)) { filetype <- .filetype()	} 
+	if (missing(overwrite)) { overwrite <- .overwrite() }
+	if (missing(progress)) { progress <- .progress() }
 
 	outRaster <- raster(x, filename)
 
@@ -72,10 +72,12 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	starttime <- proc.time()
 
 	v <- vector(length=0)
+	pb <- .setProgressBar(nrow(outRaster), type=.progress(...))
+	
 	for (r in 1:nrow(outRaster)) {
-		v1 <- valuesRow(rasters[[1]], r)
+		v1 <- getValues(rasters[[1]], r)
 		for (j in 2:length(rasters)) {
-			v2 <- valuesRow(rasters[[j]], r)
+			v2 <- getValues(rasters[[j]], r)
 			v1[is.na(v1)] <- v2[is.na(v1)] 
 		}	
 		if (filename == "") {
@@ -84,8 +86,10 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 			outRaster <- setValues(outRaster, v1, r)
 			outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 		}
-		if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
+		.doProgressBar(pb, r) 
 	}
+	.closeProgressBar(pb, starttime)
+
 	if (outRaster@file@name == "") {
 		outRaster <- setValues(outRaster, v)
 	}

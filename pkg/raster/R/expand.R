@@ -11,7 +11,6 @@ expand <- function(raster, bndbox, filename=NULL, ...)  {
 	
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 
 	
 	bndbox <- extent(bndbox)
@@ -40,7 +39,7 @@ expand <- function(raster, bndbox, filename=NULL, ...)  {
 		d <- vector(length=ncell(outraster))
 		d[] <- NA
 		for (r in 1:nrow(raster)) {
-			vals <- valuesRow(raster, r) 
+			vals <- getValues(raster, r) 
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(raster)-1)] <- vals
 			outraster <- setValues(outraster, d)
@@ -55,7 +54,8 @@ expand <- function(raster, bndbox, filename=NULL, ...)  {
 			filename(outraster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 		}
-		starttime <- proc.time()
+		starttime <- proc.time()		
+		pb <- .setProgressBar(nrow(raster), type=.progress(...))
 
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
@@ -74,9 +74,10 @@ expand <- function(raster, bndbox, filename=NULL, ...)  {
 				v <- c(v, d)
 			}
 
-			if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
-
+			.doProgressBar(pb, r)
 		}
+		.closeProgressBar(pb, starttime)
+
 		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 
 		}

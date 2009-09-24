@@ -9,11 +9,15 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='RasterStackBrick'), 
-	function(object, model, filename="", datatype='FLT4S', filetype = 'raster', overwrite=FALSE, track=-1, vartype=NA, ...) {
+	function(object, model, filename="", ...) {
 		predrast <- raster(object)
+		datatype <- .datatype(...)
+		filetype <- .filetype(...)
+		overwrite <- .overwrite(...)
+
 		filename(predrast) <- filename
 		dataType(predrast) <- datatype
-		
+			
 		dataclasses <- attr(model$terms, "dataClasses")
 		f <- names( which(dataclasses == 'factor') )
 		if (length(f) > 0) { 
@@ -29,9 +33,13 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		} 
 		v <- vector()
 
+		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(object), type=.progress(...))
+
 		for (r in 1:nrow(object)) {
-			rowvals <- as.data.frame(valuesRow(object, r))
-			names(rowvals) <- layerNames(object)
+			rowvals <- getValues(object, r)
+			rowvals <- as.data.frame(rowvals)
+			colnames(rowvals) <- layerNames(object)
 			if (haveFactor) {
 				for (i in 1:length(f)) {
 					rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
@@ -44,7 +52,10 @@ setMethod('predict', signature(object='RasterStackBrick'),
 				predrast <- setValues(predrast, predv, r)
 				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
 			}
+			.doProgressBar(pb, r) 
 		}
+		.closeProgressBar(pb, starttime)
+		
 		if (filename == '') {
 			predrast <- setValues(predrast, v)
 		}
@@ -55,7 +66,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 
 
 setMethod('predict', signature(object='RasterLayer'), 
-	function(object, model, filename="", datatype='FLT4S', filetype = 'raster', overwrite=FALSE, track=-1,  ...) {
+	function(object, model, filename="",  ...) {
 		predrast <- raster(object)
 		filename(predrast) <- filename
 		dataType(predrast) <- datatype
@@ -68,6 +79,9 @@ setMethod('predict', signature(object='RasterLayer'),
 		v <- vector()
 
 		arow <- 1:ncol(object)
+		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(object), type=.progress(...))
+
 		for (r in 1:nrow(object)) {
 			xy <- as.data.frame(xyFromCell(object, arow + (r-1) * ncol(object)) )
 			predv <- as.vector( predict(model, xy, ...) )
@@ -77,7 +91,9 @@ setMethod('predict', signature(object='RasterLayer'),
 				predrast <- setValues(predrast, predv, r)			
 				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
 			}
-		}	
+			.doProgressBar(pb, r) 
+		}
+		.closeProgressBar(pb, starttime)
 		if (filename == '') {
 			predrast <- setValues(predrast, v)
 		}

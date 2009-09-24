@@ -10,7 +10,6 @@ disaggregate <- function(raster, fact=2, filename='', ...) {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 	inMemory <- .inMemory(...)
 	
 	if (length(fact)==1) {
@@ -53,17 +52,20 @@ disaggregate <- function(raster, fact=2, filename='', ...) {
 	} else { 
 		# to speed up valuesRow
 		if (dataContent(raster) != 'all') { raster <- clearValues(raster) }
-		starttime <- proc.time()		
 		v <- vector(length=0)
 		cols <- rep(1:ncol(raster), each=xfact)
+
+		starttime <- proc.time()		
+		pb <- .setProgressBar(nrow(raster), type=.progress(...))
 		for (r in 1:nrow(raster)) {
-			vals <- valuesRow(raster, r)
+			vals <- getValues(raster, r)
 			for (i in 1:yfact) {
 				outraster <- setValues(outraster, vals[cols], (r-1) * xfact + i)
 				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}	
-			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
+			.doProgressBar(pb, r)
 		}
-	} 
+		.closeProgressBar(pb, starttime)
+	}
 	return(outraster)
 }

@@ -40,7 +40,7 @@
 	raster@data@values[is.na(values(raster))] <- .nodatavalue(raster)
 	if (dataContent(raster) == 'all') {
 		for (r in 1:nrow(raster)) {
-			write.table(t(valuesRow(raster, r)), filename, append = TRUE, quote = FALSE, 
+			write.table(t(getValues(raster, r)), filename, append = TRUE, quote = FALSE, 
 								sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
 		}					
 	} else {

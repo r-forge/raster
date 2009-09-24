@@ -36,7 +36,7 @@ predict(object, ...)
   \tab  \code{overwrite}  \tab Logical to indicate whether an existing output file should be overwritten \cr
   \tab  \code{filetype}  \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
   \tab  \code{datatype}  \tab output data type; see \code{\link[raster]{dataType}} \cr
-  \tab  \code{track}  \tab vector of row numbers for which the function will report that they have been processed \cr
+  \tab  \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
 }
 
 }}

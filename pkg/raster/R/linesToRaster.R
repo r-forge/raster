@@ -93,7 +93,6 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 
 	filename <- trim(filename)
 	if (updateRaster) {
@@ -156,6 +155,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 
 	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(raster), type=.progress(...))
 
 	for (r in 1:nrow(raster)) {
 		rv <- rep(NA, ncol(raster))
@@ -205,9 +205,10 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 			raster <- writeRaster(raster, filetype=filetype)
 		}
 		
-		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
-
+		.doProgressBar(pb, r)
 	}
+	.closeProgressBar(pb, starttime)
+
 	if (filename == "") {
 		raster <- setValues(raster, v)
 	}

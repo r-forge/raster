@@ -9,20 +9,23 @@ Detect clumps (patches) of connected cells. Each clump gets a unique integer ID.
 }
 
 \usage{
-clump(raster, filename=NULL, overwrite=FALSE, filetype='raster', datatype='INT4S', track=-1) 
+clump(raster, filename=NULL, ...) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{filename}{Output filename for a new raster}
-  \item{overwrite}{Logical to indicate whether an existing output file should be overwritten}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}   
+  \item{...}{additional arguments. See Details.}  
 }
 
 \details{
-\code{clump} .
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+ }
 }
 
 \value{

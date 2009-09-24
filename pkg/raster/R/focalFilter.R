@@ -27,7 +27,6 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 	
 	filename <- trim(filename)
 	ngbgrid <- raster(raster, filename=filename)
@@ -45,7 +44,7 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 # add all rows needed for first ngb, minus 1 that will be read in first loop	
 	for (r in 1:limrow) {
 		if (dataContent(raster)=='all') {
-			rowdata <- valuesRow(raster, r)
+			rowdata <- getValues(raster, r)
 		} else {	
 			rowdata <- values(readRow(raster, r))
 		}
@@ -56,12 +55,13 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 
 	v <- vector(length=0)
 	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(ngbgrid), type=.progress(...))
 
 	for (r in 1:nrow(ngbgrid)) {		
 		rr <- r + limrow
 		if (rr <= nrow(ngbgrid)) {
 			if (dataContent(raster)=='all') {
-				rowdata <- valuesRow(raster, rr)
+				rowdata <- getValues(raster, rr)
 			} else {	
 				rowdata <- values(readRow(raster, rr))
 			}
@@ -82,8 +82,10 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 		} else {
 			v <- c(v, ngbvals)
 		}
-		if (r %in% track) { .showTrack(r, ngbgrid@nrows, track, starttime) }
+		.doProgressBar(pb, r)
 	}
+	.closeProgressBar(pb, starttime)
+	
 	if (filename == "") { 
 		ngbgrid <- setValues(ngbgrid, v) 
 	}

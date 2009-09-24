@@ -15,14 +15,20 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 				dataType(r) <- .datatype()
 				filetype <- .filetype()
 				overwrite <- .overwrite()
+
 				filename(r) <- .filename()
 				if (filename(r) == "") { 
 					filename(r) <- rasterTmpFile() 
 				}
+				
+				starttime <- proc.time()
+				pb <- .setProgressBar(nrow(e1), type=.progress() )
 				for (row in 1:nrow(e1)) {
 					r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), getValues(e2, row) ), row)
 					r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
+					.doProgressBar(pb, row) 
 				}
+				.closeProgressBar(pb, starttime)
 				if (getOption('verbose')) {
 					cat('values were written to:', raster@file@name)
 				}
@@ -42,15 +48,20 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 			dataType(r) <- .datatype()
 			filetype <- .filetype()
 			overwrite <- .overwrite()
-			track <- .track()
+			
 			filename(r) <- .filename()
 			if (filename(r) == "") { 
 				filename(r) <- rasterTmpFile() 
 			}
+			
+			starttime <- proc.time()
+			pb <- .setProgressBar(nrow(e1), type=.progress())
 			for (row in 1:nrow(e1)) {
 				r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), e2) , row) 
 				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
+				.doProgressBar(pb, row) 
 			}
+			.closeProgressBar(pb, starttime)
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
 			}			
@@ -68,15 +79,19 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			dataType(r) <- .datatype()
 			filetype <- .filetype()
 			overwrite <- .overwrite()
-			track <- .track()
+			progress <- .progress()
 			filename(r) <- .filename()
 			if (filename(r) == "") { 
 				filename(r) <- rasterTmpFile() 
 			}
+			starttime <- proc.time()
+			pb <- .setProgressBar(nrow(e1), type=progress)
 			for (row in 1:nrow(e2)) {
 				r <- setValues(r, callGeneric(as.numeric(e1), getValues(e2, row)) , row)
 				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
+				.doProgressBar(pb, row) 
 			}
+			.closeProgressBar(pb, starttime)
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
 			}

@@ -9,7 +9,7 @@ Compute zonal statistics. That is, cross-tabulate the values of a RasterLayer ba
 }
 
 \usage{
-zonal(raster, zones, stat='mean', keepdata=TRUE, track=-1) 
+zonal(raster, zones, stat='mean', keepdata=TRUE, progress) 
 }
 
 \arguments{
@@ -17,7 +17,7 @@ zonal(raster, zones, stat='mean', keepdata=TRUE, track=-1)
   \item{zones}{A RasterLayer object; with codes representing zones that are treated as integer values}
   \item{stat}{The function to be applied. Either as character: 'mean', 'min', 'max', 'sum'; or a function (see Details) }
   \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}   
+  \item{progress}{Character. Valid values are "text", "tcltk", "windows" (on that platform only) and "" }   
 }
 
 \details{

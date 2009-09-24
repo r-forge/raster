@@ -66,7 +66,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 	
 	
 	if (!(overlap %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
@@ -157,6 +156,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	rv1 <- rep(NA, ncol(raster))
 	holes1 <- rep(FALSE, ncol(raster))
 
+	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(raster), type=.progress(...))
+
 	for (r in 1:nrow(raster)) {
 		rv <- rv1
 		holes <- holes1
@@ -228,7 +230,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 		rv[holes] <- NA
 		
 		if (updateRaster) {
-			oldvals <- valuesRow(oldraster, r)
+			oldvals <- getValues(oldraster, r)
 			if (updateValue == "all") {
 				ind <- which(!is.na(rv))
 			} else if (updateValue == "zero") {
@@ -249,9 +251,10 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
 		}
 		
-		if (r %in% track) { .showTrack(r, raster@nrows, track, starttime) }
-
+		.doProgressBar(pb, r)
 	}
+	.closeProgressBar(pb, starttime)
+
 	if (filename == "") {
 		raster <- setValues(raster, v)
 	}

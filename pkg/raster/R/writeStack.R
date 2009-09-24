@@ -20,7 +20,7 @@
 		ncol(rout) <- ncol(rout) * nl
 		if (dataContent(object) == 'all') {
 			for (r in 1:nrow(object)) {
-				rv <- valuesRow(object, r)
+				rv <- getValues(object, r)
 				rout <- setValues(rout, as.vector(rv), r)
 				rout <- writeRaster(rout,  overwrite=overwrite)			
 			}

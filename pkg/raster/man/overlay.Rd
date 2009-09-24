@@ -27,7 +27,7 @@ Formal definition of the overlay method (in the sp package)
 
 \bold{1) x and y are Raster* objects}
 
-\code{overlay(x, y, ..., fun=sum, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)}
+\code{overlay(x, y, ..., fun=sum, datatype, filetype, overwrite, progress)}
 
 \tabular{rll}{
 \tab \code{x} \tab a RasterLayer object \cr
@@ -37,11 +37,12 @@ Formal definition of the overlay method (in the sp package)
 \tab \code{filename} \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
 \tab \code{overwrite}\tab logical. If \code{TRUE}, existing files will be overwritten \cr
 \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+\tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
 }
   
 \bold{2) x is a Raster* object, y is missing (this is equivalent to \code{\link[raster]{calc}})}
 
-\code{overlay(x, fun=sum, overwrite=FALSE, filetype='raster', datatype='FLT4S', track=-1)}
+\code{overlay(x, fun=sum, overwrite, filetype, datatype, progress)}
 
 \tabular{rll}{
   \tab \code{x}  \tab a RasterLayer object \cr

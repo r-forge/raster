@@ -10,23 +10,30 @@ Set values for a new raster (from scratch), either using a formula (init) or by 
 }
 
 \usage{
-init(raster, fun=runif, filename="", overwrite=FALSE, datatype='FLT4S', filetype='raster', track=-1) 
-initXYID(raster, v='id', filename="", overwrite=FALSE, datatype='FLT4S', filetype='raster', track=-1) 
+init(raster, fun=runif, filename="", ...) 
+initXYID(raster, v='id', filename="", ...) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{fun}{The function to be applied. This must be a function that can take the number of cells as a single argument to return a vector of values with a length equal to the number of cells}
   \item{v}{'x', 'y', or 'id'}
-  \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
-  \item{overwrite}{Logical. if \code{TRUE}, the file will be overwritten if it exists}
-  \item{filetype}{output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}}}
-  \item{datatype}{output data type; see \code{\link[raster]{dataType}}}
-  \item{track}{vector of row numbers for which the function will report that they have been processed}  
+  \item{filename}{Output filename}
+  \item{...}{Additional arguments. See Details}  
 }
 
 \details{
  \code{init} sets a value without reference to existing values. E.g. initialize with a random number.
+ 
+ 
+The following additional arguments can be passed, to replace default values for this function
+\tabular{rll}{
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{filetype} \tab Characer. Output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+ }
+ 
 }
 
 \value{

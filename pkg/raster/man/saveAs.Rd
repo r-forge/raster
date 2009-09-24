@@ -9,7 +9,7 @@ Save a raster file to a file of another type (format).
 }
 
 \usage{
-saveAs(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE, result=TRUE)
+saveAs(raster, filename, filetype, datatype, overwrite, progress, result=TRUE)
 }
 
 \arguments{
@@ -18,7 +18,9 @@ saveAs(raster, filename, filetype='raster', datatype='FLT4S', overwrite=FALSE, r
   \item{filetype}{either 'raster', 'ascii' or a supported GDAL 'driver' name (see below)}
   \item{datatype}{output data type; see below}
   \item{overwrite}{Logical. If \code{TRUE} existing files are overwritten}
-  \item{result}{Logical. If \code{TRUE} a new RasterLayer object is returned, else the function returns nothing}  
+  \item{result}{Logical. If \code{TRUE} a new RasterLayer object is returned, else the function returns nothing} 
+  \item{progress}{Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""}
+ 
 }
 
 \value{

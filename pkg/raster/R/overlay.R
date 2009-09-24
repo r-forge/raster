@@ -16,18 +16,18 @@ function(x, y, fun=sum, filename="", ...){
 
 
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
-function(x, y, ..., fun=sum, filename="", datatype, filetype, overwrite, track){ 
+function(x, y, ..., fun=sum, filename="", datatype, filetype, overwrite, progress){ 
 	if (missing(datatype)) {
 		datatype <- .datatype(datatype)
 	}
 	if (missing(filetype)) {
-		filetype <- .filetype(...)
+		filetype <- .filetype()
 	} 
 	if (missing(overwrite)) {
-		overwrite <- .overwrite(...)
+		overwrite <- .overwrite()
 	}
-	if (missing(track)) {
-		track <- .track(...)
+	if (missing(progress)) {
+		progress <- .progress()
 	}
 
 	rasters <- c(x, y)
@@ -40,7 +40,7 @@ function(x, y, ..., fun=sum, filename="", datatype, filetype, overwrite, track){
 		}
 	}
 	
-	return(.overlayList(rasters, fun=fun, filename=filename, datatype=datatype, filetype=filetype, overwrite=overwrite, track=track))
+	return(.overlayList(rasters, fun=fun, filename=filename, datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress))
 }
 )
 

@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -59,7 +58,6 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 	
 	if (dataContent(from) != 'all' & dataSource(from) == 'ram') { stop('no vales for "from". Nothing to do') }
 
@@ -101,6 +99,8 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	}
 	
 	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(to), type=.progress(...))
+	
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)
@@ -113,8 +113,9 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 			to <- setValues(to, vals, r)
 			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
-		if (r %in% track) { .showTrack(r, to@nrows, track, starttime) }
+		.doProgressBar(pb, r)
 	}
+	.closeProgressBar(pb, starttime)
 	if (inMemory) {
 		to <- setValues(to, as.vector(v))
 	}

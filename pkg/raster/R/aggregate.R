@@ -13,7 +13,6 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	progress <- .progress(...)
 	
 	if (length(fact)==1) {
 		fact <- as.integer(round(fact))
@@ -89,7 +88,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
-		pb <- .setProgressBar(rsteps, type=progress)
+		pb <- .setProgressBar(rsteps, type=.progress(...))
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
@@ -116,7 +115,6 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			}
 		
 			.doProgressBar(pb, r, starttime) 
-
 		} 
 		.closeProgressBar(pb, starttime)
 		if (outRaster@file@name == "") { 

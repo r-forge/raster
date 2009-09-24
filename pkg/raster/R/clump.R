@@ -3,8 +3,15 @@
 # Version 0.9
 # Licence GPL v3
 
-clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', datatype='INT4S', track=-1) {
+clump <- function(raster, filename=NULL, ...) {
+
 	warning('clump function is under development; results are approximate')
+
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	progress <- .progress(...)
+
 	if (is.null(filename)) { filename <- "" }
 	if (filename != ""  & file.exists(filename) & overwrite==FALSE) {
 		stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
@@ -29,10 +36,12 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 	rcl <- matrix(NA, nrow=0, ncol=2)
 	
 	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(x1), type = progress)
+
 	for (r in 1:nrow(x1)) {
 		c1 <- c2
 		c2[] <- 0
-		b <- valuesRow(raster, r)
+		b <- getValues(raster, r)
 		b <- which(b > 0)
 
 		for ( cc in b ) {
@@ -70,9 +79,11 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 		}	
 		
 		rcl <- unique(rcl)
-		if (r %in% track) { .showTrack(r, x1@nrows, track, starttime) }
+		.doProgressBar(pb, r) 			
 
 	}
+	.closeProgressBar(pb, starttime)
+
 	if (tmpfile1 == "") {
 		x1 <- setValues(x1, v)
 	}
@@ -106,7 +117,7 @@ clump <- function(raster, filename=NULL, overwrite=FALSE, filetype='raster', dat
 	} else {
 		rclm <- c(0, 0, NA)
 	}
-	x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, track=track)
+	x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, progress=progress)
 
 	if (tmpfile1 != "") { 	
 		removeRasterFile(x1) 

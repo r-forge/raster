@@ -6,16 +6,16 @@
 # Licence GPL v3
 
 setMethod('merge', signature(x='RasterLayer', y='RasterLayer'), 
-function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, track){ 
+function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, progress){ 
 	
 	if (missing(filetype)) {
-		filetype <- .filetype(...)
+		filetype <- .filetype()
 	} 
 	if (missing(overwrite)) {
-		overwrite <- .overwrite(...)
+		overwrite <- .overwrite()
 	}
-	if (missing(track)) {
-		track <- .track(...)
+	if (missing(progress)) {
+		progress <- .progress()
 	}
 
 	dots <- list(...)
@@ -64,6 +64,7 @@ function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, track){
 	}
 
 	starttime <- proc.time()
+	pb <- .setProgressBar(nrow(outraster), type=.progress(...))
 	
 	for (r in 1:nrow(outraster)) {
 		rd <- as.vector(matrix(NA, nrow=1, ncol=ncol(outraster))) 
@@ -73,7 +74,7 @@ function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, track){
 					rasters[[i]] <- readRow(rasters[[i]], r + 1 - rowcol[i,1]) 
 					d <- values(rasters[[i]])
 				} else if (dataContent(rasters[[i]]) == 'all') {
-					d <- valuesRow(rasters[[i]], r + 1 - rowcol[i,1]) 
+					d <- getValues(rasters[[i]], r + 1 - rowcol[i,1]) 
 				} else {
 					d <- vector(length=ncol(rasters[[i]]))
 					d[] <- NA
@@ -92,9 +93,10 @@ function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, track){
 			v <- c(v, rd)
 		}
 
-		if (r %in% track) { .showTrack(r, outraster@nrows, track, starttime) }
-		
+		.doProgressBar(pb, r)
 	}
+	.closeProgressBar(pb, starttime)
+
 	if (outraster@file@name == "") { 
 		outraster <- setValues(outraster, v) 
 	}

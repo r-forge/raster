@@ -4,7 +4,7 @@
 # Version 0.8
 # Licence GPL v3
 
-cellStats <- function(raster, stat='mean', track=-1) {
+cellStats <- function(raster, stat='mean', ...) {
 
 	if (class(stat) != 'character') {
 		if (dataContent(raster) == 'all') { n <- 1 } else {n <- 2}
@@ -36,9 +36,9 @@ cellStats <- function(raster, stat='mean', track=-1) {
 		sumsq <- 0
 		st  <- NULL
 		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(raster), type=.progress(...))
 		for (r in 1:nrow(raster)) {
-			if (r %in% track) { .showTrack(r, raster@nrows, track, starttime)  }
-			d <- na.omit(valuesRow(raster, r))
+			d <- na.omit(getValues(raster, r))
 			if (length(d) == 0) { next }
 			if (stat == 'sd') {
 				st <- sum(d, st)
@@ -50,6 +50,7 @@ cellStats <- function(raster, stat='mean', track=-1) {
 			} else {
 				st <- fun(c(d, st))
 			}
+			.doProgressBar(pb, r) 
 		}
 		if (stat == 'sd') {
 			meansq <- (st/cnt)^2
@@ -57,6 +58,7 @@ cellStats <- function(raster, stat='mean', track=-1) {
 		} else if (stat == 'mean') {
 			st <- st / cnt
 		}
+		.closeProgressBar(pb, starttime)
 		return(st)
 	}
 }

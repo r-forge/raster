@@ -9,7 +9,6 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 	datatype <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	track <- .track(...)
 
 	if (class(raster) != 'RasterLayer' ) {
 		stop('first argument should be an object of class "RasterLayer"')
@@ -64,7 +63,7 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 		return( setValues(outRaster, res) )
 		
 	} else {
-		starttime <- proc.time()
+
 		hasNA <- FALSE
 		for (i in 1:length(rclmat[,1])) {
 			if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
@@ -74,9 +73,11 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 			}
 		}
 
+		starttime <- proc.time()
+		pb <- .setProgressBar(nrow(raster), type=.progress(...))
 		if (update) {
 			for (r in 1:nrow(raster)) {
-				res <- valuesRow(raster, r)
+				res <- getValues(raster, r)
 				for (i in 1:length(rclmat[,1])) {
 					res[ (res >= rclmat[i,1]) & (res <= rclmat[i,2]) ] <- rclmat[i,3] 
 				}
@@ -85,12 +86,11 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+				.doProgressBar(pb, r)
 			}
-			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
-			
 		} else {
 			for (r in 1:nrow(raster)) {
-				res <- valuesRow(raster, r)
+				res <- getValues(raster, r)
 				for (i in 1:length(rclmat[,1])) {
 					res[ (res >= rclmat[i,1]) & ( res <= rclmat[i,2]) ] <- rclmat[i , 3] 
 				}
@@ -99,8 +99,9 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+				.doProgressBar(pb, r)
 			}
-			if (r %in% track) { .showTrack(r, outRaster@nrows, track, starttime) }
+			.closeProgressBar(pb, starttime)
 		}
 		return(outRaster)
 	}
