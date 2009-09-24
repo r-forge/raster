@@ -1,8 +1,7 @@
 # Author: Robert J. Hijmans
-# International Rice Research Institute. Philippines
 # contact: r.hijmans@gmail.com
 # Date : November 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -17,6 +16,12 @@ if (!isGeneric("cellValues")) {
 setMethod("cellValues", signature(x='RasterLayer', cells='vector'), 
 	function(x, cells) { 
 		return(.rasterReadCells(x, cells))
+	}
+)
+
+setMethod("cellValues", signature(x='RasterBrick', cells='vector'), 
+	function(x, cells) { 
+		return(.brickReadCells(x, cells))
 	}
 )
 

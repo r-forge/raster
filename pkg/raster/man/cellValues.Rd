@@ -3,6 +3,7 @@
 
 \alias{cellValues}
 \alias{cellValues,RasterLayer,vector-method}
+\alias{cellValues,RasterBrick,vector-method}
 \alias{cellValues,RasterStack,vector-method}
 
 \title{ values for cells }
