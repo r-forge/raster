@@ -7,15 +7,15 @@
 showOptions <- function() {
 	ft <- .filename()
 	if (ft == '') {	
-		cat('rasterFilenamee : ', '""', '\n')
+		cat('filename : ""\n')
 	} else {
-		cat('rasterFilename : ', ft, '\n')
+		cat('filename :', ft, '\n')
 	}
 	cat('filetype :', .filetype(), '\n' )
-	cat('datatype : ', .datatype(), '\n')
-	cat('overwrite: ', .overwrite(), '\n')
-	cat('tmpdir   : ', .tmpdir(), '\n')
-	cat('progress : ', .progress(), '\n')
+	cat('datatype :', .datatype(), '\n')
+	cat('overwrite:', .overwrite(), '\n')
+	cat('tmpdir   :', .tmpdir(), '\n')
+	cat('progress :', .progress(), '\n')
 	if (!.inMemory()) {
 		cat('inMemory : FALSE\n')
 	}

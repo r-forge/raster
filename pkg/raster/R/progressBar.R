@@ -20,7 +20,7 @@
 			pb <- txtProgressBar(min = 0, max = nrows, style = 3)
 		}
 	} else {
-		pb <- 'no progress bar'
+		pb <- 'none'
 	}
 	return(pb)
 }
