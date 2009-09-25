@@ -61,6 +61,7 @@ setMethod('brick', signature(x='RasterStack'),
 				b <- addLayer(b, raster(x, i))
 			}
 		}
+		layerNames(b) <- layerNames(x)
 		return(b)
 	}
 )

@@ -1,19 +1,22 @@
+# raster package
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date: June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
 setMethod('summary', signature(object='RasterStack'), 
 	function(object, ...) {
-		if (dataContent(object) == 'all') {
-			for (n in 1:nlayers(object)) {
+		cat ("Cells: " , ncell(object), "\n")
+		for (n in 1:nlayers(object)) {
+			if (dataContent(object@layers[[n]]) == 'all') {
 				cat("layer ", n, "\n")
-				cat("NAs  : ", sum(is.na(values(object)[,n])), "\n")
-				summary(values(object)[,n])
+				cat("   NAs : ", sum(is.na(values(object@layers[[n]]))), "\n")
+				summary(values(object@layers[[n]]))
+			} else {
+				cat("layer ", n, "\n")
+				cat("   values not in memory\n")
 			}
-		} else {
-			cat("values not in memory\n")
 		}
 	}
 )	
@@ -31,7 +34,7 @@ setClass('RasterLayerSummary',
 
 setMethod('show', signature(object='RasterLayerSummary'), 	
 	function(object) {
-		cat ("Cells: " , object@ncell, "\n")
+		cat ("Cells: " , ncell(object), "\n")
 		if ( object@dataContent == "all") {
 			cat("NAs  : ", object@NAs, "\n")
 			cat("\nValues")

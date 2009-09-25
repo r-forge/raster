@@ -116,6 +116,10 @@ function(x, ...) {
 				}
 			}
 
+			if (dataContent(x) != 'all') { 
+				x <- readAll(x)
+			}
+
 			x@data@values <- cbind(x@data@values, getValues(r))
 				
 			nl <- nlayers(x) + 1 

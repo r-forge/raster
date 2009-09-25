@@ -23,7 +23,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		stacknames <- layerNames(object)
 		
 		if (length( varnames[(varnames %in% stacknames)] ) != length(varnames)) {
-			stop('variable in model that is not in Raster* object: \nIn model:', varnames, '\n', 'In Raster object:', stacknames)
+			stop('variable in model that is not in Raster* object: \nIn model: ', paste(varnames, collapse='; '), '\n', 'In Raster object: ', paste(stacknames, collapse='; '))
 		}
 
 		if ( length( unique(stacknames[(stacknames %in% varnames)] )) != length(stacknames[(stacknames %in% varnames)] )) {
