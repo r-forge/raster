@@ -46,7 +46,7 @@ setMethod("xyValues", signature(object='RasterLayer', xyCoords='matrix'),
 			return(.bilinearValue(object, xyCoords))
 		} else if (method=='simple') {
 			cells <- cellFromXY(object, xyCoords)
-			return(.rasterReadCells(object, cells))
+			return(.readCells(object, cells))
 		} else {
 			stop('invalid method argument. Should be simple or bilinear.')
 		}
@@ -84,6 +84,37 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 	}
 )
 
+
+
+setMethod("xyValues", signature(object='RasterBrick', xyCoords='matrix'), 
+	function(object, xyCoords, method='simple') { 
+		if (dim(xyCoords)[2] != 2) {
+			stop('xyCoords has wrong dimensions; there should be 2 columns only' )
+		}
+		
+		if (method == 'bilinear') {
+			for (i in seq(nlayers(object))) {
+				r <- raster(object, i)
+				v <- .bilinearValue(r, xyCoords)
+				if (i == 1) {
+					result <- v
+				} else {
+					result <- cbind(result, v)
+				}
+			}
+			if (!(is.null(dim(result)))) {
+				colnames(result) <- object@data@colnames
+			}	
+			return(result)		
+	
+		} else if (method=='simple') {
+			cells <- cellFromXY(object, xyCoords)
+			return(.brickReadCells(object, cells))
+		} else {
+			stop('invalid method argument. Should be simple or bilinear.')
+		}
+	}
+)
 
 
 

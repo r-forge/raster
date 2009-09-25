@@ -5,10 +5,10 @@
 \alias{xyValues,Raster,vector-method}
 \alias{xyValues,Raster,SpatialPoints-method}
 \alias{xyValues,Raster,data.frame-method}
+
 \alias{xyValues,RasterLayer,matrix-method}
 \alias{xyValues,RasterStack,matrix-method}
-
-\alias{xyValues,RasterStack,SpatialPoints-method}
+\alias{xyValues,RasterBrick,matrix-method}
 
 \title{ values at xy coordinates }
 

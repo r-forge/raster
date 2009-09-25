@@ -19,14 +19,10 @@ These methods return values of a RasterLayer or RasterStack for specified cells 
  \item{cells}{vector of cell numbers, cell numbers should be between 1 and ncells(x)}
 }
 
-\section{Methods}{
-\describe{
- ---
-}}
 
 
 \value{
-a vector of cell values for a RasterLayer or or a matrix of values for a RasterStack
+a vector of cell values for a RasterLayer or or a matrix of values for a RasterStack or RasterBrick
 }
 
 \seealso{ \code{\link[raster]{xyValues}}, \code{\link[raster]{read}} }

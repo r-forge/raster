@@ -15,7 +15,7 @@ if (!isGeneric("cellValues")) {
 	
 setMethod("cellValues", signature(x='RasterLayer', cells='vector'), 
 	function(x, cells) { 
-		return(.rasterReadCells(x, cells))
+		return(.readCells(x, cells))
 	}
 )
 

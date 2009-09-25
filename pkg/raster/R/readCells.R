@@ -5,7 +5,7 @@
 
 
 #read data on the raster for cell numbers
-.rasterReadCells <- function(raster, cells) {
+.readCells <- function(raster, cells) {
 	uniquecells <- na.omit(unique(cells[order(cells)]))
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncell(raster))]
 	res <- cbind(cells, NA)
@@ -16,7 +16,7 @@
 			if (.driver(raster) == 'gdal') {
 				vals <- .readCellsGDAL(raster, uniquecells)
 			} else {
-				vals <- .readCellsRaster(raster, uniquecells)
+				vals <- cbind(uniquecells, .readCellsRaster(raster, uniquecells))
 			}	
 		} else { 
 			vals <- cbind(uniquecells, NA)
@@ -67,13 +67,23 @@
 	} else { 
 		dtype <- "integer"
 	}
+	
+	if (nbands(raster) > 1) {
+		if (.bandOrder(raster) == 'BIL') {
+			cells <- cells + (rowFromCell(raster, cells)-1) * ncol(raster) * nbands(raster) + (band(raster)-1) * ncol(raster)
+		} else if (.bandOrder(raster) == 'BIP') {
+			cells <- cells + (cells - 1) * nbands(raster) + (band(raster) - 1)
+		} else if (.bandOrder(raster) == 'BSQ') {	
+			cells <- cells + (band(raster)-1) * ncell(raster)
+		}
+	}
 	raster <- openConnection(raster)
-	for (i in 1:length(cells)) {
+	for (i in seq(along=cells)) {
 		seek(raster@file@con, (cells[i]-1) * dsize)
 		res[i] <- readBin(raster@file@con, what=dtype, n=1, size=dsize, endian=raster@file@byteorder) 
 	}
 	raster <- closeConnection(raster)
 	res[res <=  max(-3e+38, .nodatavalue(raster))] <- NA
-	return(cbind(cells,res))
+	return(res)
 }
 

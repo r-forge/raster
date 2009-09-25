@@ -45,7 +45,7 @@ function(object, values, rownr=-1, layer=-1) {
 	}
 
 	if (length(values) == ncell(object)) { 
-		if (rownr > 0) {
+		if (rownr > 0 & nrow(object) > 1) {
 			stop("if setting all values, rownr must be < 1")
 		}
 		object@data@values <- values
@@ -118,7 +118,7 @@ setMethod('setValues', signature(object='RasterStackBrick'),
 		if (layer > nlayers(object)) {stop('layer number too high')}
 		
 		
-		if (length(values) == ncell(object)) { 
+		if (length(values) == ncell(object) & nrow(object) > 1) { 
 			if (rownr > 0) {
 				stop("if setting all values, rownr must be < 1")
 			}

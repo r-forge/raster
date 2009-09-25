@@ -19,7 +19,7 @@
 
 .stackReadCells <- function(object, cells) {
 		for (i in seq(nlayers(object))) {
-			v <- .rasterReadCells( raster(object, i), cells)
+			v <- .readCells( raster(object, i), cells)
 			if (i == 1) {
 				result <- v
 			} else {

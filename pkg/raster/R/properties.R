@@ -15,10 +15,17 @@ nbands <- function(object) {
 	if (class(object) == "RasterLayer") {
 		return(object@file@nbands)
 	} else {
-		stop(paste("not implemented for:", class(object), "objects"))
+		stop(paste("not implemented for", class(object), "objects"))
 	}	
 }
 
+.bandOrder <- function(object) {
+	if (class(object) == "RasterStack") {
+		stop(paste("not implemented for RasterStack objects"))
+	} else {
+		return(paste(object@file@bandorder))
+	}
+}
 
 
 
