@@ -1,4 +1,4 @@
-# R code for reading raster (grid) data
+# raster package
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date : June 2008
 # Version 0.9
@@ -18,7 +18,7 @@
 }
 
 
-.getBilRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, band=1) {
+.getBilRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, band) {
 	raster <- openConnection(raster)
 	if (rownr > 0) {
 		seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) + (band-1) * ncol(raster)) * dsize)
@@ -36,11 +36,11 @@
 }
 
 
-.getBipRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, band=1) {
-	raster <- openConnection(raster)
+.getBipRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, band) {
 	index <- rep(FALSE, nbands(raster))
 	index[band] <- TRUE
 	index <- rep(index, ncolumns)
+	raster <- openConnection(raster)
 	if (rownr > 0) {
 		seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) * nbands(raster)) * dsize)
 		nc <- ncolumns * nbands(raster)
@@ -133,7 +133,7 @@
 		}
 	}
 	else { #use GDAL  
-		if (is.na(raster@file@band)) { result <- NA }
+		if (is.na(raster@data@band)) { result <- NA }
 		else {
 			if (rownr <= 0) {
 				offs <- c(0, 0) 
@@ -146,7 +146,7 @@
 		}
 		
 		raster <- openConnection(raster)
-		result <- getRasterData(raster@file@con, offset=offs, region.dim=reg, band = raster@file@band)
+		result <- getRasterData(raster@file@con, offset=offs, region.dim=reg, band = raster@data@band)
 		raster <- closeConnection(raster)
 	
 		# if  NAvalue() has been used.....

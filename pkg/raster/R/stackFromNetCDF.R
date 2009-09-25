@@ -43,6 +43,10 @@
 		r[] <- as.vector(t(x))
 		stk <- addLayer(stk, r)
 	}
+
+	shortname <- gsub(" ", "_", ext(basename(filename), ""))
+	x <- .enforceGoodLayerNames(x, shortname)
+	
 	return(stk)
 }
 

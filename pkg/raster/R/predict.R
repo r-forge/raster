@@ -21,11 +21,15 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		v <- (attr(model$terms, "factors"))
 		varnames <- attr(v, "dimnames")[[2]]
 		stacknames <- layerNames(object)
-		for (i in seq(along=varnames)) {
-			if (!varnames[i] %in% stacknames) {
-				stop('variable in model that is not in stack/brick: ', varnames[i])
-			}
+		
+		if (length( varnames[(varnames %in% stacknames)] ) != length(varnames)) {
+			stop('variable in model that is not in Raster* object: \nIn model:', varnames, '\n', 'In Raster object:', stacknames)
 		}
+
+		if ( length( unique(stacknames[(stacknames %in% varnames)] )) != length(stacknames[(stacknames %in% varnames)] )) {
+			stop('duplicate names in Raster* object: ', stacknames)
+		}
+		
 			
 		dataclasses <- attr(model$terms, "dataClasses")
 		f <- names( which(dataclasses == 'factor') )

@@ -5,7 +5,7 @@
 
 band <- function(object) {
 	if (class(object) == "RasterLayer") {
-		return(object@file@band)
+		return(object@data@band)
 	} else {
 		stop(paste("not implemented for:", class(object), "objects"))
 	}
@@ -33,13 +33,16 @@ nbands <- function(object) {
 	fn <- filename(object)
 	if (fn == '') {
 		stop('no file asociated with this object')
-	}
-	fileext <- toupper(ext(fn)) 
-	if ( fileext == ".GRD" | fileext == ".GRI" ) {
-		return('raster')
 	} else {
-		return('gdal')
+		return(object@file@driver)
 	}
+	
+#	fileext <- toupper(ext(fn)) 
+#	if ( fileext == ".GRD" | fileext == ".GRI" ) {
+#		return('raster')
+#	} else {
+#		return('gdal')
+#	}
 	
 #	fcon <- class(try( object@file@con, silent = T ))[1]
 #	if (fcon == 'file') {

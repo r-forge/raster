@@ -71,7 +71,7 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 				}
 			}
 			if (!(is.null(dim(result)))) {
-				colnames(result) <- object@layernames
+				colnames(result) <- layerNames(object)
 			}	
 			return(result)		
 	
@@ -103,7 +103,7 @@ setMethod("xyValues", signature(object='RasterBrick', xyCoords='matrix'),
 				}
 			}
 			if (!(is.null(dim(result)))) {
-				colnames(result) <- object@layernames
+				colnames(result) <- layerNames(object)
 			}	
 			return(result)		
 	

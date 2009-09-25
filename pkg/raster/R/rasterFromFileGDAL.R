@@ -1,11 +1,10 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date : June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
-.rasterFromGDAL <- function(filename, band) {	
+.rasterFromGDAL <- function(filename, band, type) {	
 	if (!require(rgdal)) { stop() }
 
 	gdalinfo <- GDALinfo(filename)
@@ -34,30 +33,32 @@
 	if (yx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
 	yx <- as.numeric( substr( as.character(yx), 1, ndecs) )
 
-	raster <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
-	filename(raster) <- filename
-	dataType(raster) <- "FLT4S"
+	if (type == 'RasterBrick') {
+		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
+		x@data@nlayers <- as.integer(gdalinfo[["bands"]])
+	} else {
+		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
+		x@file@nbands <- as.integer(gdalinfo[["bands"]])
+		band <- as.integer(band)
+		if ( band > nbands(x) ) {
+			warning("band too high. Set to nbands")
+			band <- nbands(raster) 
+		}
+		if ( band < 1) { 
+			warning("band too low. Set to 1")
+			band <- 1 
+		}
+		x@data@band <- as.integer(band)
+	}
+	filename(x) <- filename
+	dataType(x) <- "FLT4S"
 	
+	x@file@driver <- 'gdal' 
 
-#	raster@file@driver <- 'gdal' 
-		#attr(gdalinfo, "driver")
-
-	raster@file@nbands <- as.integer(gdalinfo[["bands"]])
-	band <- as.integer(band)
-	if (band > nbands(raster) ) {
-		warning("band too high. Set to nbands")
-		band <- nbands(raster) }
-	if ( band < 1) { 
-		warning("band too low. Set to 1")
-		band <- 1 }
-	raster@file@band <- as.integer(band)
-
-	projection(raster) <- attr(gdalinfo, "projection")
-	
-#	attr(raster@file, "con") <- GDAL.open(filename)
+	projection(x) <- attr(gdalinfo, "projection")
 	
 #oblique.x   0  #oblique.y   0 
-	raster@data@source <- 'disk'
-	return(raster)
+	x@data@source <- 'disk'
+	return(x)
 }
 

@@ -28,7 +28,7 @@
 			}
 		}
 		if (!(is.null(dim(result)))) {
-			colnames(result) <- object@layernames
+			colnames(result) <- layerNames(object)
 		}	
 		return(result)
 }

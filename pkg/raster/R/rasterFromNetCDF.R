@@ -55,9 +55,19 @@
 }
 
 
-.rasterCDF <- function(filename, xvar='', yvar='', zvar='', time=NA) {
+.rasterCDF <- function(filename, type, xvar='', yvar='', zvar='', time=NA) {
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
+
+
+	if (type == 'RasterBrick') {
+		b <- .stackCDF(filename, type, xvar, yvar, zvar)
+		b <- brick(b)
+		b@file@driver <- "netcdf"
+		return(b)
+	}
+
+
 	nc <- open.nc(filename)
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
@@ -89,6 +99,11 @@
 	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
 	d <- as.vector( t( d[nrow(r):1,] ) )	
 	r <- setValues(r, d)
+	
+	r@file@driver <- "netcdf"
+	shortname <- gsub(" ", "_", ext(basename(filename), ""))
+	x <- .enforceGoodLayerNames(x, shortname)
+
 	return(r)
 }
 

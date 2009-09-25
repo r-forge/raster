@@ -75,7 +75,7 @@
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)
 	rout@data@max <- maxValue(object, -1)
-	rout@layernames <- object@layernames
+	rout@layernames <- layerNames(object)
 	writeHeader(rout, type=filetype)
 	return(invisible(brick(filename(rout))))
 }

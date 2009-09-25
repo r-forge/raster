@@ -65,8 +65,8 @@ setClass('RasterFile',
 		byteorder ='character',
 		nodatavalue ='numeric', # on disk, in ram it is NA
 		nbands ='integer',
-		band = 'integer',
-		bandorder ='character'
+		bandorder ='character',
+		driver ='character'
 		),
 	prototype (	
 	    name = '',
@@ -74,8 +74,8 @@ setClass('RasterFile',
 		byteorder = .Platform$endian,
 		nodatavalue = -3.4E38,
 		nbands = as.integer(1),
-		band = as.integer(1),
-		bandorder = 'BIL'
+		bandorder = 'BIL',
+		driver = 'raster'
 	),
 	validity = function(object) {
 		c1 <- datanotation %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S')
@@ -93,7 +93,8 @@ setClass('SingleLayerData',
 		haveminmax = 'logical',
 		min = 'vector',
 		max = 'vector',
-		source='character' # ram, disk
+		source='character', # ram, disk
+		band = 'integer'
 		),
 	prototype (	
 		values=vector(),
@@ -103,7 +104,8 @@ setClass('SingleLayerData',
 		haveminmax = FALSE,
 		min = c(Inf),
 		max = c(-Inf),
-		source='ram'
+		source='ram',
+		band = as.integer(1)		
 	),	
 	validity = function(object) {
 	}

@@ -18,6 +18,7 @@ setMethod('raster', signature(x='missing'),
 	}
 )
 
+
 setMethod('raster', signature(x='matrix'), 
 	function(x, xmn=0, xmx=1, ymn=0, ymx=1, projs=NA) {
 		r <- raster(ncols=ncol(x), nrows=nrow(x), projs=projs, xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx)
@@ -28,55 +29,10 @@ setMethod('raster', signature(x='matrix'),
 
 
 setMethod('raster', signature(x='character'), 
-	function(x, values=FALSE, band=1, proj=NULL, type='RasterLayer', ...) {
-		fileext <- toupper(ext(x)) 
-		if ( fileext == ".GRD" | fileext == ".GRI" | fileext == "" ) {
-			if (fileext == "" & file.exists(x)) {
-				r <- .rasterFromGDAL(x, band) 
-			} else {
-				grifile <- .setFileExtensionValues(x)
-				grdfile <- .setFileExtensionHeader(x)
-				if (file.exists( grdfile) ) {
-					if (file.exists( grifile)) {
-						if (fileext != '.grd') { ext(x) <- '.grd' }
-						r <- .rasterFromRasterFile(x, band, type) 
-					} else {
-					# TODO check if this is a valid rater .grd but the problem is that the .gri is missing?
-					
-						if (fileext == ".GRD" ) {
-							# check if this is a netcdf file
-							fcon <- file(x, "rb")
-							w <- readBin(fcon, what='character', n=1)
-							close(fcon)
-							if (substr(w, 1, 3) == "CDF") { 
-								r <- .rasterCDF(x, ...) 
-							} else {
-							# perhaps a surfer grid...
-								r <- .rasterFromGDAL(x, band) 
-							}
-						} else {
-					# what would this be? A gri, but no grd. 
-							stop('unknown file type; .gri file found but .grd is missing')
-						}
-					}
-				} else {
-					r <- .rasterFromGDAL(x, band) 
-				}
-			}
-		} else if (file.exists( x )){
-		    if (fileext == '.NC') {
-				r <- .rasterCDF(x, ...) 
-			} else {
-				r <- .rasterFromGDAL(x, band) 
-			}
-		} else {
-			stop(paste('file', x, 'does not exist'))
-		}
+	function(x, values=FALSE, band=1, proj=NULL, ...) {
+		r <- .rasterObjectFromFile(x, band=band, values=values, proj=proj, objecttype='RasterLayer', ...)
 		if (values) {
 			r <- readAll(r)
-		}
-		if (!is.null(proj)) {
-			projection(r) <- proj
 		}
 		return(r)
 	}
@@ -110,6 +66,7 @@ setMethod('raster', signature(x='RasterStack'),
 	}
 )
 
+
 setMethod('raster', signature(x='RasterBrick'), 
 	function(x, index=1){
 		if (nlayers(x) > 0) {
@@ -130,7 +87,6 @@ setMethod('raster', signature(x='RasterBrick'),
 		return(r)
 	}
 )
-
 
 
 setMethod('raster', signature(x='Extent'), 
@@ -178,6 +134,3 @@ setMethod('raster', signature(x='SpatialPixels'),
 		return(r)
 	}
 )
-
-
-

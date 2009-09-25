@@ -48,58 +48,50 @@
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
 		else if (ini[i,2] == "LAYERNAME") {layernames <- ini[i,3]} 
     }  
+	
 	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
 	
-	shortname <- basename(filename)
-	ext(shortname) <- ""
-	shortname <- gsub(" ", "_", shortname)
-
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
 		x@data@nlayers <-  as.integer(nbands)
-		x@layernames <- rep("", nbands)
-		ln <- unlist(strsplit(layernames, ':'))
-		minl <- max(1, min(length(ln), nbands))
-		for (i in 1:minl) {
-			x@layernames[i] <- ln[[i]]
-		}
-		for (i in 1:nbands) {
-			if (x@layernames[i] == "") {
-				x@layernames[i] <- paste(shortname, '_', i, sep='')
-			}
-		}
-		x@data@min <- minval
-		x@data@max <- maxval
-		x@file@band <- as.integer(-1)
 	} else {
 		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
-		x@layernames <- strsplit(layernames, ':')[band]
-		x@data@min <- minval[1]
-		x@data@max <- maxval[1]
-		x@file@band <- as.integer(band)
+		x@data@band <- as.integer(band)
 	}
-	
+
 	x@file@nbands <- as.integer(nbands)
+
 	# check if   0 < band  <= nbands 
 
 	if (bandorder %in% c("BSQ", "BIP", "BIL")) {
 		x@file@bandorder <- bandorder 
 	}
 
-	x@file@name <- filename
+	if (nchar(layernames) > 1) {
+		layernames <- unlist(strsplit(layernames, ':'))
+	}
+	x@layernames <- layernames
+	shortname <- gsub(" ", "_", ext(basename(filename), ""))
+	x <- .enforceGoodLayerNames(x, shortname)
+	
+	x@file@name <- .fullFilename(filename)
 	x@data@haveminmax <- TRUE
 	x@file@nodatavalue <- nodataval
 
-	#	raster@file@driver <- "raster"
-	
+	minval <- minval[1:nbands]
+	maxval <- maxval[1:nbands]
+	minval[is.na(minval)] <- Inf
+	maxval[is.na(maxval)] <- -Inf
+	x@data@min <- minval
+	x@data@max <- maxval
+
 	dataType(x) <- inidatatype
 	
 	if ((byteorder == "little") | (byteorder == "big")) { 
 		x@file@byteorder <- byteorder 
 	} 	
 	x@data@source <- 'disk'
-
-#	attr(raster@file, "con") <- file(grifile, "rb")
-
+	x@file@driver <- "raster"
+	
     return(x)
 }

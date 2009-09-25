@@ -5,7 +5,11 @@
 # Licence GPL v3
 
    
-ext <- function(filename) {
+ext <- function(filename, value=NULL) {
+	if (!is.null(value)) {
+		ext(filename) <- value
+		return(filename)
+	}
 	lfn <- nchar(filename)
 	extstart <- -1
     for (i in lfn : 2) {
