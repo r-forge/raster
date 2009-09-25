@@ -23,6 +23,9 @@ setMethod('brick', signature(x='missing'),
 setMethod('brick', signature(x='character'), 
 	function(x, values=FALSE, proj=NULL, ...) {
 		b <- raster(x, type='RasterBrick')
+		if (class(b) == 'RasterLayer') {
+			b <- brick(b)
+		}
 		if (values) {
 			b <- readAll(b)
 		}
@@ -38,12 +41,14 @@ setMethod('brick', signature(x='Raster'),
 	function(x) {
 		b <- brick(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
 		b@file <- x@file
+		b@data@nlayers <- nbands(x)
 		f <- trim(filename(x))
 		if (f != '') {
 			b@data@source <- 'disk'
 		} else {
+			b@data@nlayers <- as.integer(1)
 			if (dataContent(x) == 'all') {
-				b <- addLayer(b)
+				b <- setValues(b, as.matrix(values(x)), rownr=-1, layer=1)
 			}
 		}
 		return(b)
