@@ -145,7 +145,7 @@ worldFile <- function(raster, extension=".wld") {
 	ext(hdrfile) <- ".hdr"
 	thefile <- file(hdrfile, "w") 
 	cat("ENVI\n", file = thefile)
-	cat("description = {", raster@file@shortname, "}", "\n", file = thefile)
+	cat("description = {", raster@layernames, "}", "\n", file = thefile)
 	cat("samples = ", ncol(raster), "\n", file = thefile)		
 	cat("lines = ", nrow(raster), "\n", file = thefile)		
 	cat("bands = ", raster@file@nbands, "\n", file = thefile)		

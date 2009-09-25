@@ -54,7 +54,7 @@
 	} else 	if (bandorder=='BSQ') {
 		nrow(rout) <- nrow(rout) * nl
 		if (dataContent(object) == 'all') {
-			rout <- setValues(rout, as.vector(rv))
+			rout <- setValues(rout, as.vector(values(object)))
 			rout <- writeRaster(rout, overwrite=overwrite)			
 		} else {
 			fakerow <- 0
@@ -62,7 +62,7 @@
 				sr <- raster(object, i)
 				for (r in 1:nrow(sr)) {
 					fakerow <- fakerow + 1
-					sr <- getValues(sr, r)
+					rv <- getValues(sr, r)
 					rout <- setValues(rout, rv, fakerow)
 					rout <- writeRaster(rout, overwrite=overwrite)
 					.doProgressBar(pb, r, starttime) 				
@@ -75,7 +75,8 @@
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)
 	rout@data@max <- maxValue(object, -1)
-	writeHeader(rout, type='raster')
+	rout@layernames <- object@layernames
+	writeHeader(rout, type=filetype)
 	return(invisible(brick(filename(rout))))
 }
 

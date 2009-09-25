@@ -28,7 +28,7 @@ setMethod('raster', signature(x='matrix'),
 
 
 setMethod('raster', signature(x='character'), 
-	function(x, values=FALSE, band=1, proj=NULL, ...) {
+	function(x, values=FALSE, band=1, proj=NULL, type='RasterLayer', ...) {
 		fileext <- toupper(ext(x)) 
 		if ( fileext == ".GRD" | fileext == ".GRI" | fileext == "" ) {
 			if (fileext == "" & file.exists(x)) {
@@ -39,7 +39,7 @@ setMethod('raster', signature(x='character'),
 				if (file.exists( grdfile) ) {
 					if (file.exists( grifile)) {
 						if (fileext != '.grd') { ext(x) <- '.grd' }
-						r <- .rasterFromRasterFile(x, band) 
+						r <- .rasterFromRasterFile(x, band, type) 
 					} else {
 					# TODO check if this is a valid rater .grd but the problem is that the .gri is missing?
 					

@@ -31,7 +31,7 @@ function(x, filename, bandorder='BIL', ...) {
 	if (substr(dataContent(x), 1, 3) == 'row' ) {
 		stop('Row by row writing has not yet been implemented for multiband files')
 	}
-	return( .writeBrick(x, filename=filename, bandorder='BIL', datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
+	return( .writeBrick(x, filename=filename, bandorder=bandorder, datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
 }
 )
 
@@ -51,7 +51,7 @@ function(x, filename, bandorder='BIL', ...) {
 		stop('Only "raster" format is currently supported for writing multiband files')
 	}
 	
-	return( .writeStack(x, filename, bandorder='BIL', datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
+	return( .writeStack(x, filename, bandorder=bandorder, datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
 }
 )
 

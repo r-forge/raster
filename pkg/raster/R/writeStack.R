@@ -31,7 +31,7 @@
 		ncol(rout) <- ncol(rout) * nl
 		for (r in 1:nrow(object)) {
 			vals <- getValues(object, r)
-			rout <- setValues(rout, as.vector(t(vals), r))
+			rout <- setValues(rout, as.vector(t(vals)), r)
 			rout <- writeRaster(rout, overwrite=overwrite)
 			.doProgressBar(pb, r, starttime) 				
 		}
@@ -54,7 +54,11 @@
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)
 	rout@data@max <- maxValue(object, -1)
-	writeHeader(rout, type='raster')
+
+	rout@layernames <- object@layernames
+
+	writeHeader(rout, type=filetype)
+
 	return(invisible(brick(filename(rout))))
 }
 

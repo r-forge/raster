@@ -9,6 +9,7 @@ if (!isGeneric("brick")) {
 }	
 
 
+
 setMethod('brick', signature(x='missing'), 
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84") {
 		extent <- newExtent(xmn, xmx, ymn, ymx)
@@ -18,12 +19,27 @@ setMethod('brick', signature(x='missing'),
 )
 
 
+
+setMethod('brick', signature(x='character'), 
+	function(x, values=FALSE, proj=NULL, ...) {
+		b <- raster(x, type='RasterBrick')
+		if (values) {
+			b <- readAll(b)
+		}
+		if (!is.null(proj)) {
+			projection(b) <- proj
+		}
+		return(b)
+	}
+)
+
+
 setMethod('brick', signature(x='Raster'), 
 	function(x) {
 		b <- brick(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
+		b@file <- x@file
 		f <- trim(filename(x))
 		if (f != '') {
-			filename(b) <- f
 			b@data@source <- 'disk'
 		} else {
 			if (dataContent(x) == 'all') {
@@ -92,23 +108,4 @@ setMethod('brick', signature(x='SpatialPixels'),
 	}
 )
 
-
-
-setMethod('brick', signature(x='character'), 
-	function(x, values=FALSE, proj=NULL, ...) {
-		band <- 1
-		r <- raster(x, band=band)
-		b <- brick(r)
-		filename(b) <- filename(r)
-		b@data@nlayers <- nbands(r)
-		if (values) {
-			b <- readAll(b)
-		}
-		
-		if (!is.null(proj)) {
-			projection(b) <- proj
-		}
-		return(b)
-	}
-)
 

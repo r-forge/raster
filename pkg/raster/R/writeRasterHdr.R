@@ -10,7 +10,7 @@
 	cat("[general]", "\n", file = thefile)
 	cat("creator=R package:raster", "\n", file = thefile)
 	cat("created=", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n", file = thefile)
-	cat("title=", raster@file@shortname, "\n", file = thefile)
+	cat("layername=", paste(layerNames(raster), collapse=':'), "\n", file = thefile)
 	cat("[georeference]", "\n", file = thefile)
 	cat("nrows=",  nrow(raster), "\n", file = thefile)
 	cat("ncols=",  ncol(raster), "\n", file = thefile)

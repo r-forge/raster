@@ -39,8 +39,8 @@ values <- function(object, format='', names=FALSE) {
 
 .values.as.dataframe <- function(raster) {
 	m <- as.data.frame(.values.as.matrix(raster, FALSE))
-	if (isTRUE(length(raster@data@colnames) == dim(m)[2])) { 
-		colnames(m) <- raster@data@colnames 
+	if (isTRUE(length(raster@layernames) == dim(m)[2])) { 
+		colnames(m) <- raster@layernames 
 	} else {
 		colnames(m) <- seq(1:ncol(m))
 	}	

@@ -36,11 +36,13 @@ setClass ('BasicRaster',
 		extent = 'Extent',
 		ncols ='integer',
 		nrows ='integer',
-		crs = 'CRS'
+		crs = 'CRS',
+		layernames = 'vector'
 	),
 	prototype (	
 		ncols= as.integer(1),
 		nrows= as.integer(1),
+		layernames=c(""),
 		crs = CRS(as.character(NA))
 	),
 	validity = function(object) {
@@ -59,7 +61,6 @@ setClass ('Raster', contains = c('BasicRaster', 'VIRTUAL') )
 setClass('RasterFile', 
 	representation (
 		name ='character',
-		shortname ='character', # short name
 		datanotation='character',
 		byteorder ='character',
 		nodatavalue ='numeric', # on disk, in ram it is NA
@@ -69,7 +70,6 @@ setClass('RasterFile',
 		),
 	prototype (	
 	    name = '',
-		shortname ='',
 		datanotation='FLT4S',
 		byteorder = .Platform$endian,
 		nodatavalue = -3.4E38,
@@ -145,7 +145,6 @@ setClass('MultipleRasterData',
 		values='matrix', 
 		content='character', #nodata, all, row, block, sparse
 		indices = 'vector',
-		colnames = 'vector',
 		nlayers='integer',
 		haveminmax = 'logical',
 		min = 'vector',
@@ -156,7 +155,6 @@ setClass('MultipleRasterData',
 		values=matrix(NA,0,0),
 		content='nodata', 
 		indices =vector(mode='numeric'),
-		colnames =vector(mode='character'),
 		nlayers=as.integer(0),
 		haveminmax = FALSE,
 		min = c(Inf),
@@ -193,14 +191,11 @@ setClass ('RasterStack',
 	contains = 'Raster',
 	representation (
 	    filename ='character',
-		layers ='list',
-		layernames = 'vector'
-		#data = 'MultipleRasterData'	
+		layers ='list'
 		),
 	prototype (
 		filename='',
-		layers = list(),
-		layernames = vector(mode='character')
+		layers = list()
 		),
 	validity = function(object) {
 		if (length(object@layers) > 1) {
@@ -221,7 +216,6 @@ setClass ('RasterList',
 	representation (
 	    filename ='character',
 		layers ='list'
-		#data = 'MultipleRasterData'	
 		),
 	prototype (
 		filename='',

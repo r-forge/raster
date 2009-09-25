@@ -37,7 +37,7 @@
 	if (!require(rgdal)) { stop() }
 
 	colrow <- matrix(ncol=5, nrow=length(cells))
-#	valuename <- raster@file@shortname
+#	valuename <- raster@layernames
 #	if (valuename == "") {valuename <- "value" }
 #	colnames(colrow) <- c("id", "colnr", "rownr", "cell", valuename)
 	for  (i in 1:length(cells)) {
@@ -70,9 +70,9 @@
 	
 	if (nbands(raster) > 1) {
 		if (.bandOrder(raster) == 'BIL') {
-			cells <- cells + (rowFromCell(raster, cells)-1) * ncol(raster) * nbands(raster) + (band(raster)-1) * ncol(raster)
+			cells <- cells + (rowFromCell(raster, cells)-1) * ncol(raster) * (nbands(raster)-1) + (band(raster)-1) * ncol(raster)
 		} else if (.bandOrder(raster) == 'BIP') {
-			cells <- cells + (cells - 1) * nbands(raster) + (band(raster) - 1)
+			cells <- cells + (cells - 1) * (nbands(raster)-1) + (band(raster) - 1)
 		} else if (.bandOrder(raster) == 'BSQ') {	
 			cells <- cells + (band(raster)-1) * ncell(raster)
 		}

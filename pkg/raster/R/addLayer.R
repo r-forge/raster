@@ -32,8 +32,8 @@ function(x, ...) {
 				stop('Cannot add a RasterLayer with no associated data in memory or on disk to a RasterStack')
 			} else {
 				nl <- 1
-					if (trim(r@file@shortname) != "") {
-					cname <- trim(r@file@shortname)
+					if (trim(r@layernames) != "") {
+					cname <- trim(r@layernames)
 				} else {
 					cname <- "layer1"
 				}
@@ -51,7 +51,7 @@ function(x, ...) {
 			}
 			nl <- nlayers(x) + 1 
 			count <- 1
-			cname <- trim(r@file@shortname)
+			cname <- trim(r@layernames)
 			if (cname == "") {
 				cname <- paste("layer", nl, sep="")
 			}
@@ -95,12 +95,12 @@ function(x, ...) {
 				stop('Cannot add a RasterLayer with no associated data in memory or on disk to a RasterBrick')
 			} 
 			nl <- 1
-			if (trim(r@file@shortname) != "") {
-				cname <- trim(r@file@shortname)
+			if (trim(r@layernames) != "") {
+				cname <- trim(r@layernames)
 			} else {
 				cname <- "layer1"
 			}
-			x@data@colnames <- cname
+			x@layernames <- cname
 			x@data@values <- as.matrix(getValues(r))
 			x@data@nlayers <- as.integer(1)
 			x@data@content <- 'all'
@@ -120,7 +120,7 @@ function(x, ...) {
 				
 			nl <- nlayers(x) + 1 
 			count <- 1
-			cname <- trim(r@file@shortname)
+			cname <- trim(r@layernames)
 			if (cname == "") {
 				cname <- paste("layer", nl, sep="")
 			}
@@ -131,7 +131,7 @@ function(x, ...) {
 				cn <- paste(cname, "_", count, sep="")
 				}
 			}	
-			x@data@colnames[nl] <- cn
+			x@layernames[nl] <- cn
 			x@data@nlayers <- as.integer(nl)
 
 		}

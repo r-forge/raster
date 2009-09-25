@@ -39,7 +39,7 @@
 		result <- cbind(result, v)
 	}
 	if (!(is.null(dim(result)))) {
-		colnames(result) <- object@data@colnames
+		colnames(result) <- object@layernames
 	}	
 	return(result)
 }

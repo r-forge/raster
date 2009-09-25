@@ -24,7 +24,7 @@
 				result <- v
 			} else {
 				result <- cbind(result, v)
-	#			colnames(result)[length(result[1,])] <- rstack@layers[[i]]@file@shortname
+	#			colnames(result)[length(result[1,])] <- rstack@layers[[i]]@layernames
 			}
 		}
 		if (!(is.null(dim(result)))) {
