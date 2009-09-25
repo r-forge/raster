@@ -1,19 +1,20 @@
 \name{disaggregate}
+
 \alias{disaggregate}
+\alias{disaggregate,RasterLayer,numeric-method}
 
 \title{Disaggregate}
 
 \description{
-Disaggregate a RasterLayer to create a new RasterLayer with a higher resolution (smaller cells)
+Disaggregate a RasterLayer to create a new RasterLayer with a higher resolution (smaller cells). The values in the new RasterLayer are the same as in the larger original cells unless you specify \code{method="bilinear"}, in which case values are locally interpolated.
 }
 
 \usage{
-disaggregate(raster, fact=2, filename="", ...) 
+disaggregate(x, fact, ...) 
 }
 
 \arguments{
-  \item{raster}{a RasterLayer object}
-  \item{filename}{filename for the output RasterLayer}
+  \item{x}{a RasterLayer object}
   \item{fact}{degree of aggregation or disaggregation expressed as number of cells (horizontally and vertically). See details}
   \item{...}{additional arguments. See Details.}  
 }
@@ -26,9 +27,9 @@ If no filename is specified, and the resulting RasterLayer is too large to hold 
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{filename}  \tab filename for the output RasterLayer \cr
   \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{overwrite} \tab if \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
 }

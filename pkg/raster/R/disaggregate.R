@@ -1,16 +1,32 @@
-# Author: Robert J. Hijmans
-# r.hijmans@gmail.com
+# raster package
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
 
+.hasmethod <- function(method, ...) {
+	res <- FALSE
+	if (!missing(method)) { 
+		if (method=='bilinear') {
+			res <- TRUE
+		}
+	}
+	return(res)
+}
 
-disaggregate <- function(raster, fact=2, filename='', ...) {
 
-	datatype <- .datatype(...)
+if (!isGeneric("disaggregate")) {
+	setGeneric("disaggregate", function(x, fact, ...)
+		standardGeneric("disaggregate"))
+}	
+
+setMethod('disaggregate', signature(x='RasterLayer', fact='numeric'), 
+function(x, fact, filename='', ...) {
+
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
 	inMemory <- .inMemory(...)
+	hasmethod <- .hasmethod(...)
 	
 	if (length(fact)==1) {
 		fact <- round(fact)
@@ -26,13 +42,17 @@ disaggregate <- function(raster, fact=2, filename='', ...) {
 	}
 
 	filename <- trim(filename)
-	outraster <- raster(raster)
-	dataType(outraster) <- datatype
-	rowcol(outraster) <- c(nrow(raster) * yfact, ncol(raster) * xfact) 
+	outraster <- raster(x)
+	rowcol(outraster) <- c(nrow(x) * yfact, ncol(x) * xfact) 
 
-	if (dataContent(raster) != 'all' & dataSource(raster) == 'ram') {
+	if (dataContent(x) != 'all' & dataSource(x) == 'ram') {
 		return(outraster)
 	}
+	
+	if (hasmethod) {
+		return(resample(x, outraster, ...))
+	}
+	
 	
 	if ((!canProcessInMemory(outraster, 3) | !inMemory) && filename == '') {
 		filename <- rasterTmpFile()
@@ -41,24 +61,24 @@ disaggregate <- function(raster, fact=2, filename='', ...) {
 	filename(outraster) <- filename
 	
 	if ( filename == ""  & inMemory ) {
-		if (dataContent(raster) != 'all') {
-			raster <- readAll(raster)
+		if (dataContent(x) != 'all') {
+			x <- readAll(x)
 		}
-		cols <- rep(rep(1:ncol(raster), each=xfact), times=nrow(raster)*yfact)
-		rows <- rep(1:nrow(raster), each=ncol(raster)*xfact*yfact)
-		cells <- cellFromRowCol(raster, rows, cols)
-		outraster <- setValues(outraster, values(raster)[cells])
+		cols <- rep(rep(1:ncol(x), each=xfact), times=nrow(x)*yfact)
+		rows <- rep(1:nrow(x), each=ncol(x)*xfact*yfact)
+		cells <- cellFromRowCol(x, rows, cols)
+		outraster <- setValues(outraster, values(x)[cells])
 		
 	} else { 
 		# to speed up valuesRow
-		if (dataContent(raster) != 'all') { raster <- clearValues(raster) }
+		if (dataContent(x) != 'all') { x <- clearValues(x) }
 		v <- vector(length=0)
-		cols <- rep(1:ncol(raster), each=xfact)
+		cols <- rep(1:ncol(x), each=xfact)
 
 		starttime <- proc.time()		
-		pb <- .setProgressBar(nrow(raster), type=.progress(...))
-		for (r in 1:nrow(raster)) {
-			vals <- getValues(raster, r)
+		pb <- .setProgressBar(nrow(x), type=.progress(...))
+		for (r in 1:nrow(x)) {
+			vals <- getValues(x, r)
 			for (i in 1:yfact) {
 				outraster <- setValues(outraster, vals[cols], (r-1) * xfact + i)
 				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
@@ -69,3 +89,4 @@ disaggregate <- function(raster, fact=2, filename='', ...) {
 	}
 	return(outraster)
 }
+)

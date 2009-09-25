@@ -29,7 +29,7 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 	rowCells <- 1:ncol(to)
 
 	starttime <- proc.time()		
-	pb <- .setProgressBar(nrow(raster), type=.progress(...))
+	pb <- .setProgressBar(nrow(to), type=.progress(...))
 
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
