@@ -6,7 +6,7 @@
 \title{Disaggregate}
 
 \description{
-Disaggregate a RasterLayer to create a new RasterLayer with a higher resolution (smaller cells). The values in the new RasterLayer are the same as in the larger original cells unless you specify \code{method="bilinear"}, in which case values are locally interpolated.
+Disaggregate a RasterLayer to create a new RasterLayer with a higher resolution (smaller cells). The values in the new RasterLayer are the same as in the larger original cells unless you specify \code{method="bilinear"}, in which case values are locally interpolated (using the \code{\link[raster]{resample}) function).
 }
 
 \usage{
@@ -47,6 +47,9 @@ r <- raster(ncols=10, nrows=10)
 rd <- disaggregate(r, fact=c(10, 5))
 ncol(rd)
 nrow(rd)
+r[] <- 1:ncell(r)
+rd <- disaggregate(r, fact=c(10, 5), method='bilinear')
+
 }
 
 \keyword{spatial}
