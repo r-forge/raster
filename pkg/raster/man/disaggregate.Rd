@@ -6,7 +6,7 @@
 \title{Disaggregate}
 
 \description{
-Disaggregate a RasterLayer to create a new RasterLayer with a higher resolution (smaller cells). The values in the new RasterLayer are the same as in the larger original cells unless you specify \code{method="bilinear"}, in which case values are locally interpolated (using the \code{\link[raster]{resample}) function).
+Disaggregate a RasterLayer to create a new RasterLayer with a higher resolution (smaller cells). The values in the new RasterLayer are the same as in the larger original cells unless you specify \code{method="bilinear"}, in which case values are locally interpolated (using the \code{\link[raster]{resample}} function).
 }
 
 \usage{
