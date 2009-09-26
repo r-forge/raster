@@ -51,8 +51,7 @@ a RasterLayer object
 # A simple model to predict the location of the R in the R-logo using 20 presence points 
 # and 50 (random) pseudo-absence points. This type of model is often used to predict species distributions
 
-# create a RasterStack (i.e. a pointer to a set of predictor rasters)
-
+# create a RasterStack (a set of predictor rasters)
 require(rgdal)
 logo <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"), bands=-1)
 r <- sqrt(raster(logo,1) * raster(logo,2))
@@ -64,22 +63,14 @@ presence <- matrix(c(48.243420, 48.243420, 47.985820, 52.880230, 49.531423, 46.1
 # random absence
 absence <- cbind(runif(50)*(xmax(logo)-xmin(logo))+xmin(logo), runif(50)*(ymax(logo)-ymin(logo))+ymin(logo))
 
-#par(mfrow=c(1,2))
-#plot(r)
-#points(presence)
-#points(absence, col='red')
-
-#extract values from stack
+#extract values for points from stack
 xy <- rbind(cbind(1, presence), cbind(0, absence))
 v <- cbind(xy[,1], xyValues(logo, xy[,2:3]))
 colnames(v)[1] <- 'presabs'
 
-#build model, e.g. with glm or randomforest
+#build model, e.g. with glm or randomForest
 formula <- as.formula(paste(colnames(v)[1], '~', paste(colnames(v)[2:ncol(v)], collapse=" + ")))
 model <- glm(formula, data=data.frame(v))
-# also try:
-# require(randomForest)
-# model <- randomForest(formula, data=data.frame(v))
 
 #predict to a raster
 r <- predict(logo, model, progress='text')
@@ -87,6 +78,11 @@ r <- predict(logo, model, progress='text')
 plot(r>0.3)
 points(presence, bg='blue', pch=21)
 points(absence, bg='red', pch=21)
+
+# also try:
+# require(randomForest)
+# model <- randomForest(formula, data=data.frame(v))
+# r2 <- predict(logo, model, progress='text')
 
 
 ## Thin plate spline interpolation with x and y only
