@@ -6,7 +6,7 @@
 \alias{image,RasterLayer-method}
 \alias{image,RasterStack-method}
 
-\title{image}
+\title{Image}
 
 \description{
 Create an "image" type plot of a RasterLayer. This is an implementation of a generic function in the graphics package. In most cases the 

@@ -3,7 +3,7 @@
 \alias{NAvalue<-}
 \alias{NAvalue}
 
-\title{set the NA value of a RasterLayer }
+\title{Set the NA value of a RasterLayer }
 
 \description{
 NAvalue returns the value that is used to write NA values to disk (in 'raster' type files). 

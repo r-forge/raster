@@ -5,7 +5,7 @@
 \alias{Math-methods}
 \alias{Math,RasterLayer-method}
 
-\title{mathematical functions}
+\title{Mathematical functions}
 
 \description{
   Standard mathematical functions that can be used with a RasterLayer object as argument:   

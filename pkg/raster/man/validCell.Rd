@@ -5,10 +5,10 @@
 \alias{validRow}
 
   
-\title{validity}
+\title{Validity of a cell, column or row number}
 
 \description{
-Simple helper functions to determine if a row, column or cell number is valid 
+Simple helper functions to determine if a row, column or cell number is valid for a certain Raster* object
 }
 
 \usage{

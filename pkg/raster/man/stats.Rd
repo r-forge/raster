@@ -9,7 +9,7 @@
 \alias{cv,ANY-method}
 \alias{cv,Raster-method}
 
-\title{Miscekkaneous statistical functions}
+\title{Miscellaneous statistical functions}
 
 \description{
   mode and coefficient of variation

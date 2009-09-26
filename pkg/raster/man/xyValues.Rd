@@ -10,7 +10,7 @@
 \alias{xyValues,RasterStack,matrix-method}
 \alias{xyValues,RasterBrick,matrix-method}
 
-\title{ values at xy coordinates }
+\title{ Extract values at xy coordinates }
 
 \description{
 These methods return the values of a RasterLayer or RasterStack for a set of xy coordinates (points).

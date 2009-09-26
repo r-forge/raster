@@ -2,10 +2,10 @@
 
 \alias{readIniFile}
 
-\title{read ini file}
+\title{Read an ini file}
 
 \description{
-This function reads  '.ini' files. These are text file databases that are orginized in [sections] pairs of "name = value".
+This function reads a \code{'.ini'} files. These are text file databases that are orginized in [sections] pairs of "name = value".
 }
 
 \usage{

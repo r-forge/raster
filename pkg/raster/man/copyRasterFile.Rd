@@ -1,10 +1,10 @@
-\name{moveRasterFile}
+\name{copyRasterFile}
 
-\alias{moveRasterFile}
 \alias{copyRasterFile}
+\alias{moveRasterFile}
 \alias{removeRasterFile}
 
-\title{move or copy a raster file}
+\title{Copy or move a raster file}
 
 \description{
 Move, copy or remove 'raster' format files that are associated with the RasterLayer object.
