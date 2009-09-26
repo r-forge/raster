@@ -60,7 +60,7 @@ this function is used for the side-effect of setting global options
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[base]{options}}, \code{\link[raster]{tmpFile}} }  
+\seealso{ \code{\link[base]{options}}, \code{\link[raster]{rasterTmpFile}} }  
 
 
 \keyword{ spatial }
