@@ -7,10 +7,12 @@
 
 \title{Class "Extent" }
 
-\description{Object of class Extent are used to define the geographic extenmt (extremes) of a Raster* object}
+\description{Object of class Extent are used to define the geographic extent (extremes) of objects of the BasicRaster and Raster* classes}
 
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("Extent", ...)}.
+
+Objects can be created by with the \code{\link[raster]{extent}} function or via a calls to \code{new("Extent", ...)}.
+
 }
 \section{Slots}{
 	 \describe{
@@ -20,18 +22,21 @@ Objects can be created by calls of the form \code{new("Extent", ...)}.
     \item{\code{ymax}:}{maximum y coordinate}
   }
 }
+
 \section{Methods}{
   \describe{
- \item{show}{\code{signature(object = "Extent")}: display values of a Extent object }
+ \item{show}{display values of a Extent object }
  }
 }
+
 \author{ Robert J. Hijmans}
 
 
 \seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{setExtent}} }
 
 \examples{
-showClass("Extent")
+ext <- extent(-180,180,-90,90)
+ext
 }
 
 \keyword{classes}
