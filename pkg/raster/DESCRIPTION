@@ -1,7 +1,7 @@
 Package: raster
 Type: Package
 Title: Raster data handling for geographic data analysis and modeling
-Version: 0.9.7-12
+Version: 0.9.7-13
 Date: 25-September-2009
 Depends: methods, sp, R (>= 2.8.0)
 Suggests: rgdal (>= 0.5-33), RNetCDF, tcltk

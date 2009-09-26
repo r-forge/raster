@@ -15,7 +15,7 @@ zoom(x, extent=drawBox(), new=TRUE, ...)
 \arguments{
   \item{x}{ a RasterStack or RasterBrick object }
   \item{extent}{Extent object}  
-  \item{new}{Logical. If \code{TRUE}, the zoomed in map will appear in a new window }  
+  \item{new}{Logical. If \code{TRUE}, the zoomed in map will appear on a new device (window) }  
   \item{...}{Raster* objects or filenames (character) }
 }
 

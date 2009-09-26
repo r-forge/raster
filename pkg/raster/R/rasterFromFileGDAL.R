@@ -42,7 +42,7 @@
 		band <- as.integer(band)
 		if ( band > nbands(x) ) {
 			warning("band too high. Set to nbands")
-			band <- nbands(raster) 
+			band <- nbands(x) 
 		}
 		if ( band < 1) { 
 			warning("band too low. Set to 1")
@@ -50,10 +50,16 @@
 		}
 		x@data@band <- as.integer(band)
 	}
+
+	shortname <- gsub(" ", "_", ext(basename(filename), ""))
+	x <- .enforceGoodLayerNames(x, shortname)
 	filename(x) <- filename
 	dataType(x) <- "FLT4S"
 	
 	x@file@driver <- 'gdal' 
+
+	x@data@min <- rep(Inf, nlayers(x))
+	x@data@max <- rep(-Inf, nlayers(x))
 
 	projection(x) <- attr(gdalinfo, "projection")
 	

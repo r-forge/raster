@@ -45,7 +45,9 @@
 	}
 	raster@data@source <- 'disk'
 	raster@data@content <- 'nodata'
+	raster@file@driver <- 'raster'
 	raster@data@values <- vector(length=0)
+
 	return(raster)
 }		
  

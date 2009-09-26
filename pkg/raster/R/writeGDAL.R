@@ -99,6 +99,7 @@
 			rasterout@data@max <- raster@data@max
 		}
 		rasterout@data@haveminmax <- TRUE
+		raster@file@driver <- 'gdal'
 		
 		.writeStx(rasterout) 
 		return(rasterout)
@@ -129,9 +130,9 @@
 	.writeStx(raster) 
 
 	tempras <- raster(filename(raster) )
-#	raster@file@driver <- 'gdal'
-#	attr(raster@file, "con") <- tempras@file@con
+	raster@file@driver <- 'gdal'
 	raster@data@source <- 'disk'
+	
 	return(raster)
 }
 

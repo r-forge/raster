@@ -16,7 +16,9 @@
 \title{ Create a Rasterbrick object}
 
 \description{
-A RasterBrick is a multi-layered RasterLayer. A RasterBrick can be created from RasterLayer objects, or from a file. The can also be created from SpatialPixels or SpatialGrid objects.
+A RasterBrick is a multi-layered RasterLayer. They are typically created from a multi-band file; but they can also exist entirely in memory. They are similar to a RasterStack, but processing time should be shorter. Yet they are less flexible as they can only point to a single file.
+
+A RasterBrick can be created from RasterLayer objects, or from a file. The can also be created from SpatialPixels or SpatialGrid objects.
 }
 
 \section{Methods}{
@@ -43,6 +45,10 @@ If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted.
 
 \examples{
   b <- brick(system.file("pictures/Rlogo.jpg", package="rgdal"))
+  b
+  nlayers(b)
+  layerNames(b)
+  cellValues(b, 870)
 }
 
 \keyword{methods}

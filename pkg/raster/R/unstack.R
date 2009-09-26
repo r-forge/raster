@@ -19,7 +19,8 @@ function(x) {
 setMethod("unstack", signature(x='RasterBrick'), 
 function(x) {
 	rlist <- list()
-	for (i in seq(along=nlayers(x))) {
+	if (nlayers(x) == 0) { return(rlist) }
+	for (i in 1:nlayers(x)) {
 		rlist <- c(rlist, raster(x, i))
 	}
 	return(rlist)

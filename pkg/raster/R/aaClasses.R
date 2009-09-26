@@ -75,7 +75,7 @@ setClass('RasterFile',
 		nodatavalue = -3.4E38,
 		nbands = as.integer(1),
 		bandorder = 'BIL',
-		driver = 'raster'
+		driver = '' #'raster'
 	),
 	validity = function(object) {
 		c1 <- datanotation %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S')

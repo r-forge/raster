@@ -5,6 +5,12 @@
 # Licence GPL v3
 
 
+if (!isGeneric("plot")) {
+	setGeneric("plot", function(x,y,...)
+		standardGeneric("plot"))
+}	
+
+
 setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
 	function(x, y, col=rev(terrain.colors(255)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
 		if (missing(y)) {

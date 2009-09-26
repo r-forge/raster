@@ -44,10 +44,14 @@ raster(x, ...)
 \tab \code{values} \tab logical. If \code{TRUE}, RasterLayer values are read into memory with \code{\link[raster]{readAll}} \cr
 \tab \code{band} \tab integer. Band number in case of a file of multiple bands, default = 1 \cr
 \tab \code{projs} \tab character. PROJ4 type description of a Coordinate Reference System (map projection). If NULL, the value stored on disk (if any and recognised) is used \cr
-\tab \code{xvar} \tab character. For netCDF files only: identify the x variable (e.g. 'longitude' or 'x') \cr
-\tab \code{yvar} \tab character. For netCDF files only: identify the y variable (e.g. 'latitude' or 'y')\cr
-\tab \code{zvar} \tab character. For netCDF files only: identify the z variable (e.g. 'altitide' or 'precipitation')\cr
-\tab \code{time} \tab integer > 0. For netCDF files only: identify which of the time variables you want (default=NA)\cr
+}
+
+Further arguments that can be used for netCDF files only:
+\tabular{rll}{
+\tab \code{xvar} \tab character. The x variable (e.g. 'longitude' or 'x') \cr
+\tab \code{yvar} \tab character. The y variable (e.g. 'latitude' or 'y')\cr
+\tab \code{zvar} \tab character. The z variable (e.g. 'altitide' or 'precipitation')\cr
+\tab \code{time} \tab integer > 0. The 'time' variable (if there are any) (default=NA)\cr
 }
 
 If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 'native' raster package format and those that can be read via rgdal. See \code{\link[rgdal]{readGDAL}} help for supported file types.
@@ -147,9 +151,7 @@ RasterLayer object
 \examples{
 #from file
 r <- raster(system.file("external/test.ag", package="sp"))
-if (require(rgdal)) {
-logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE)
-}
+logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE) 
 
 #from scratch
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)

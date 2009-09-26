@@ -84,6 +84,7 @@
 		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 	}
 
+	raster@file@driver <- 'raster'
 	return(raster)
 }
  

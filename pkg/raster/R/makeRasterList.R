@@ -6,12 +6,13 @@
 .addToList <- function(x, r) {
 	if (class(r) == 'character') {
 		r <- raster(r)
+		# or r <- unstack(stack(r, -1)) ???
 		return( c(x, r) )
 	} else if (! extends(class(r), 'Raster')) {
 		stop('... arguments must be a filename or objects that extend the Raster class')
 	} else if (class(r) == 'RasterLayer') {
 		return( c(x, r) )
-	} else if (class(r) == 'RasterStackBrick') {
+	} else {
 		return( c(x, unstack(r)) )
 	} 
 }
