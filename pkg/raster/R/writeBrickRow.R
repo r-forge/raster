@@ -1,0 +1,90 @@
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Date :  September 2009
+# Version 0.9
+# Licence GPL v3
+
+
+.startBrickRowWriting <- function(x, bandorder, filename, datatype, overwrite) {
+	if (bandorder == 'BSQ') {
+		stop('no BSQ in row by row writing')
+	}
+	if (!bandorder %in% c('BIL', 'BIP')) {
+		stop("invalid bandorder, should be 'BIL' or 'BIP'")
+	}
+	x@file@bandorder <- bandorder
+	x@file@nbands <- nlayers(x)
+	dataType(rout) <- datatype
+
+	filename <- trim(filename)
+	if (filename == "") {
+		filename <- trim(filename(x))
+		if (filename == "") {
+			stop('no filename')
+		}
+	}
+	fnamevals <- .setFileExtensionValues(filename)
+	
+	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
+		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+	}
+	
+	attr(x@file, "con") <- file(fnamevals, "wb")
+	attr(x@file, "dsize") <- dataSize(x@file@datanotation)
+	attr(x@file, "dtype") <- .shortDataType(x@file@datanotation)
+
+	x@file@driver <- 'raster'
+
+	x@data@min <- c(Inf, rep=(nbands(x)))
+	x@data@max <- c(-Inf, rep=(nbands(x)))
+	x@data@haveminmax <- FALSE
+	
+
+	return(x)
+}
+
+
+.stopBrickRowWriting <- function(x) {
+	.writeRasterHdr(x) 
+	close(x@file@con)
+	fnamevals <- .setFileExtensionValues(x@file@name)
+	x@data@haveminmax <- TRUE
+	if (x@file@dtype == "INT") {
+		x@data@min <- round(x@data@min)
+		x@data@max <- round(x@data@max)
+	} else if ( x@file@dtype =='LOG' ) { 
+#		x@data@min <- as.logical(x@data@min)
+#		x@data@max <- as.logical(x@data@max)
+	}
+	x@data@source <- 'disk'
+	x@data@content <- 'nodata'
+	x@data@values <- vector(length=0)
+	return(x)
+}		
+
+
+.writeBrickRow <- function(object, filename, bandorder, filetype, datatype, overwrite, progress='') {
+	if (dataIndices(object)[1] == 1) { 
+		object <- .startBrickRowWriting(object, bandorder=bandorder, filename=filename, datatype=datatype, overwrite=overwrite)
+ 	} 
+
+	ncols <- object@ncol
+	object@ncol <- object@ncol * nlayers(object)
+	if (bandorder=='BIL') {
+		object@data@values <- as.vector(values(object))
+	} else 	if (bandorder=='BIP') {
+		object@data@values <- as.vector(t(values(object)))
+	}
+	object <- writeRaster(object, overwrite=overwrite)
+	object@ncol <- ncols
+
+	if (dataIndices(object)[2] >= ncell(object)) {
+		object <- .stopRowWriting(object)
+		if (dataIndices(object)[2] > ncell(object)) {
+			warning(paste('You have written beyond the end of file. last cell:', dataIndices(object)[2], '>', ncell(object)))
+		}
+		return(brick(filename(object)))
+	}
+	return(object)
+
+}
+

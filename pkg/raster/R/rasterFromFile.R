@@ -50,18 +50,33 @@
     }  
 	
 	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
+
+	if (band < 1) {
+		band <- 1
+		warning('band set to 1')
+	} else if  (band > nbands) {
+		band <- nbands
+		warning('band set to ', nbands)
+	}
+	
+	minval <- minval[1:nbands]
+	maxval <- maxval[1:nbands]
+	minval[is.na(minval)] <- Inf
+	maxval[is.na(maxval)] <- -Inf
 	
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
 		x@data@nlayers <-  as.integer(nbands)
+		x@data@min <- minval
+		x@data@max <- maxval
 	} else {
 		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
 		x@data@band <- as.integer(band)
+		x@data@min <- minval[band]
+		x@data@max <- maxval[band]
 	}
 
 	x@file@nbands <- as.integer(nbands)
-
-	# check if   0 < band  <= nbands 
 
 	if (bandorder %in% c("BSQ", "BIP", "BIL")) {
 		x@file@bandorder <- bandorder 
@@ -78,12 +93,6 @@
 	x@data@haveminmax <- TRUE
 	x@file@nodatavalue <- nodataval
 
-	minval <- minval[1:nbands]
-	maxval <- maxval[1:nbands]
-	minval[is.na(minval)] <- Inf
-	maxval[is.na(maxval)] <- -Inf
-	x@data@min <- minval
-	x@data@max <- maxval
 
 	dataType(x) <- inidatatype
 	

@@ -31,12 +31,7 @@ setMethod("Math", signature(x='RasterLayer'),
 		} else {
 			filetype <- .filetype()
 			overwrite <- .overwrite()
-		
-			filename(rst) <- .filename()
-			if (filename(rst) == "") { 
-				filename(rst) <- rasterTmpFile() 
-			}
-
+			filename(rst) <- rasterTmpFile() 
 			starttime <- proc.time()
 			pb <- .setProgressBar(nrow(rst), type=.progress())			
 			for (r in 1:nrow(rst)) {
@@ -69,10 +64,7 @@ setMethod("Math2", signature(x='RasterLayer'),
 			filetype <- .filetype()
 			overwrite <- .overwrite()
 
-			filename(rst) <- .filename()
-			if (filename(rst) == "") { 
-				filename(rst) <- rasterTmpFile() 
-			}
+			filename(rst) <- rasterTmpFile() 
 			
 			starttime <- proc.time()
 			pb <- .setProgressBar(nrow(x), type=.progress() )

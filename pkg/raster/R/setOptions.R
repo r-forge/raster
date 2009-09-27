@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-setOptions <- function(filename, filetype, overwrite, datatype, tmpdir, progress) {
+setOptions <- function(filetype, overwrite, datatype, tmpdir, progress) {
 	if (!missing(filename)) { .setFilename(filename) }
 	if (!missing(filetype)) { .setFiletype(filetype) }
 	if (!missing(overwrite)) { .setOverwrite(overwrite) }

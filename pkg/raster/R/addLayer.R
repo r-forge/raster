@@ -17,7 +17,7 @@ if (!isGeneric("addLayer")) {
 setMethod('addLayer', signature(x='RasterStack'), 
 function(x, ...) {
 #x is a list of r objects
-	
+
 	rasters <- .makeRasterList(...)
 	
 	for (i in seq(along=rasters)) { 
@@ -26,6 +26,7 @@ function(x, ...) {
 			x@nrows <- nrow(r)
 			x@ncols <- ncol(r)
 			x@extent <- extent(r)
+			
 			projection(x) <- projection(r)
 
 			if (dataSource(r) == 'ram' & dataContent(r) != 'all') {
@@ -65,9 +66,10 @@ function(x, ...) {
 			x@layernames[nl] <- cn
 			
 			if (dataSource(r) == 'disk') {
-					r <- clearValues(r)
+				r <- clearValues(r)
 			}
 			x@layers[nl] <- r 
+
 		}	
 	}
 	return(x)
@@ -82,8 +84,10 @@ function(x, ...) {
 #x is a list of r objects
 
 	rasters <- .makeRasterList(...)
+	if (length(rasters)==0) { return(x) }
 	
-	for (i in 1:length(x)) { 
+	for (i in 1:length(rasters)) { 
+
 		r <- rasters[[i]]
 
 		if (nlayers(x) == 0) {
@@ -104,8 +108,17 @@ function(x, ...) {
 			x@data@values <- as.matrix(getValues(r))
 			x@data@nlayers <- as.integer(1)
 			x@data@content <- 'all'
+			x@data@min <- r@data@min
+			x@data@max <- r@data@max			
 			
 		} else {
+			if (dataContent(x) != 'all') { x <- readAll(x) }
+			
+			if (x@file@driver != '') {
+				x@file@driver <- ''
+				filename(x) <- ''
+			}
+	
 			if (!compare(c(x, r))) { 
 				stop(paste("could not add r:", filename(r))) 
 			}
@@ -115,14 +128,11 @@ function(x, ...) {
 					stop('Cannot add a RasterLayer with no associated data in memory or on disk to a RasterStack')
 				}
 			}
-
-			if (dataContent(x) != 'all') { 
-				x <- readAll(x)
-			}
-
+			
 			x@data@values <- cbind(x@data@values, getValues(r))
 				
-			nl <- nlayers(x) + 1 
+			nl <- x@data@nlayers + 1 
+			x@data@nlayers <- as.integer(nl)
 			count <- 1
 			cname <- trim(r@layernames)
 			if (cname == "") {
@@ -136,8 +146,9 @@ function(x, ...) {
 				}
 			}	
 			x@layernames[nl] <- cn
-			x@data@nlayers <- as.integer(nl)
-
+			x@data@min[nl] <- r@data@min
+			x@data@max[nl] <- r@data@max			
+			
 		}
 	}	
 	return(x)

@@ -35,32 +35,17 @@ setMethod('brick', signature(x='character'),
 
 
 setMethod('brick', signature(x='Raster'), 
-	function(x) {
-		b <- brick(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
-		b@file <- x@file
-		b@data@nlayers <- nbands(x)
-		f <- trim(filename(x))
-		if (f != '') {
-			b@data@source <- 'disk'
-		} else {
-			b@data@nlayers <- as.integer(1)
-			if (dataContent(x) == 'all') {
-				b <- setValues(b, as.matrix(values(x)), rownr=-1, layer=1)
-			}
-		}
-		return(b)
+	function(x, ...) {
+		b <- new('RasterBrick')
+		return(addLayer(b, c(x, ...)))
 	}
 )
 
 
 setMethod('brick', signature(x='RasterStack'), 
 	function(x){
-		b <- brick(extent(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
-		if (nlayers(x) > 0) {
-			for (i in 1:nlayers(x)) {
-				b <- addLayer(b, raster(x, i))
-			}
-		}
+		b <- new('RasterBrick')
+		b <- addLayer(b, x@layers)
 		layerNames(b) <- layerNames(x)
 		return(b)
 	}

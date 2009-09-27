@@ -16,10 +16,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 				filetype <- .filetype()
 				overwrite <- .overwrite()
 
-				filename(r) <- .filename()
-				if (filename(r) == "") { 
-					filename(r) <- rasterTmpFile() 
-				}
+				filename(r) <- rasterTmpFile() 
 				
 				starttime <- proc.time()
 				pb <- .setProgressBar(nrow(e1), type=.progress() )
@@ -49,10 +46,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 			filetype <- .filetype()
 			overwrite <- .overwrite()
 			
-			filename(r) <- .filename()
-			if (filename(r) == "") { 
-				filename(r) <- rasterTmpFile() 
-			}
+			filename(r) <- rasterTmpFile() 
 			
 			starttime <- proc.time()
 			pb <- .setProgressBar(nrow(e1), type=.progress())
@@ -80,10 +74,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			filetype <- .filetype()
 			overwrite <- .overwrite()
 			progress <- .progress()
-			filename(r) <- .filename()
-			if (filename(r) == "") { 
-				filename(r) <- rasterTmpFile() 
-			}
+			filename(r) <- rasterTmpFile() 
 			starttime <- proc.time()
 			pb <- .setProgressBar(nrow(e1), type=progress)
 			for (row in 1:nrow(e2)) {

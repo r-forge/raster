@@ -22,20 +22,11 @@
 
 	if (bandorder=='BIL') {
 		ncol(rout) <- ncol(rout) * nl
-		if (dataContent(object) == 'all') {
-			for (r in 1:nrow(object)) {
-				rv <- getValues(object, r)
-				rout <- setValues(rout, as.vector(rv), r)
-				rout <- writeRaster(rout,  overwrite=overwrite)	
-				.doProgressBar(pb, r, starttime) 				
-			}
-		} else {
-			for (r in 1:nrow(object)) {
-				rv <- getValues(object, r)
-				rout <- setValues(rout, as.vector(rv), r)
-				rout <- writeRaster(rout,  overwrite=overwrite)
-				.doProgressBar(pb, r, starttime) 				
-			}
+		for (r in 1:nrow(object)) {
+			rv <- getValues(object, r)
+			rout <- setValues(rout, as.vector(rv), r)
+			rout <- writeRaster(rout,  overwrite=overwrite)
+			.doProgressBar(pb, r, starttime) 				
 		}
 	} else 	if (bandorder=='BIP') {
 		ncol(rout) <- ncol(rout) * nl
@@ -70,6 +61,8 @@
 			}
 		}		
 	}
+	
+	
 	.closeProgressBar(pb, starttime)
 	nrow(rout) <- nrow(object)
 	ncol(rout) <- ncol(object)

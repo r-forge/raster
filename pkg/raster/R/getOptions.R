@@ -5,12 +5,6 @@
 
 
 showOptions <- function() {
-	ft <- .filename()
-	if (ft == '') {	
-		cat('filename : ""\n')
-	} else {
-		cat('filename :', ft, '\n')
-	}
 	cat('filetype :', .filetype(), '\n' )
 	cat('datatype :', .datatype(), '\n')
 	cat('overwrite:', .overwrite(), '\n')
@@ -31,19 +25,6 @@ showOptions <- function() {
 	return(d)
 }
 
-
-.filename <- function(filename, ...) {
-	if (missing(filename)) { 
-		filename <- getOption('rasterFilename')
-		if (is.null(filename)) {
-			return('') 
-		} else {
-			return(filename)
-		}
-	} else { 
-		return(filename)
-	}
-}
 
 .overwrite <- function(overwrite, ...) {
 	if (missing(overwrite)) { 

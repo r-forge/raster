@@ -25,14 +25,13 @@ To permanentely set any of these options, you can add them to \code{<your R inst
 }
 
 \usage{
-setOptions(filename, filetype, overwrite, datatype, tmpdir, progress)
+setOptions(filetype, overwrite, datatype, tmpdir, progress)
 showOptions()
 saveOptions()
 clearOptions()
 }
 
 \arguments{
-\item{filename}{Character. The default filename to write to; only used by raster algebra functions (to which you cannot supply a filename or other argument)}
 \item{filetype}{Character. The default file format to use. See \code{\link[raster]{writeFormats}}}
 \item{overwrite}{Logical. The default value for overwriting existing files. If \code{TRUE}, existing files will be overwritten}
 \item{datatype}{Character. The default data type to use. See \code{\link[raster]{dataType}}}
@@ -41,8 +40,6 @@ clearOptions()
 }
 
 \details{
-argument \code{filename} sets global option \code{rasterFilename}. This value is only used by raster algebra functions (e.g., \code{\link[raster]{Math-methods}} and \code{\link[raster]{Arith-methods}}) that cannot take a 'filename' argument (or any other additional argument).
-
 argument \code{filetype} sets global option \code{rasterFiletype}. The option is ignored by a function if you pass \code{filetype} as an argument to that function.
 
 argument \code{overwrite} sets global option \code{rasterOverwrite}. The option is ignored by a function if you pass \code{overwrite} as an argument to that function.
