@@ -81,8 +81,10 @@ points(absence, bg='red', pch=21)
 
 # also try:
 # require(randomForest)
+# formula <- as.factor(presabs) ~.
 # model <- randomForest(formula, data=data.frame(v))
-# r2 <- predict(logo, model, progress='text')
+# r2 <- predict(logo, type='response', model, progress='text')
+# note the additional argument "type='response'" that is passed to predict.randomForest
 
 
 ## Thin plate spline interpolation with x and y only

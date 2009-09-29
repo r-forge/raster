@@ -31,7 +31,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		}
 		
 			
-		dataclasses <- attr(model$terms, "dataClasses")
+		dataclasses <- attr(model$terms, "dataClasses")[-1]
 		f <- names( which(dataclasses == 'factor') )
 		if (length(f) > 0) { 
 			haveFactor <- TRUE 
@@ -58,7 +58,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 					rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
 				}
 			}
-			predv <- as.vector( predict(model, rowvals, ...) )
+			predv <- as.vector( as.numeric ( predict(model, rowvals, ...) ))
 			if (filename == '') {
 				v <- c(v, predv)
 			} else {
