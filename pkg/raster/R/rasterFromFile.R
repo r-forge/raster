@@ -37,8 +37,8 @@
 		else if (ini[i,2] == "NROWS") {nr <- as.integer(ini[i,3])} 
 		else if (ini[i,2] == "NCOLS") {nc <- as.integer(ini[i,3])} 
 		
-		else if (ini[i,2] == "MINVALUE") { try ( minval <-  as.numeric(unlist(strsplit(ini[i,3], ':')))[band], silent = TRUE ) }
-		else if (ini[i,2] == "MAXVALUE") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':')))[band], silent = TRUE ) }
+		else if (ini[i,2] == "MINVALUE") { try ( minval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+		else if (ini[i,2] == "MAXVALUE") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 		else if (ini[i,2] == "NODATAVALUE") {nodataval <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "DATATYPE") {inidatatype <- ini[i,3]} 
 		else if (ini[i,2] == "BYTEORDER") {byteorder <- ini[i,3]} 

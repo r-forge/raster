@@ -34,8 +34,8 @@
 
 	x@file@driver <- 'raster'
 
-	x@data@min <- c(Inf, rep=(nlayers(x)))
-	x@data@max <- c(-Inf, rep=(nlayers(x)))
+	x@data@min <- rep(Inf, nlayers(x))
+	x@data@max <- rep(-Inf, nlayers(x))
 	x@data@haveminmax <- FALSE
 	return(x)
 }
@@ -55,7 +55,7 @@
 	}
 	x@data@source <- 'disk'
 	x@data@content <- 'nodata'
-	x@data@values <- vector(length=0)
+#	x@data@values <- matrix(nrow=0, ncol=0)
 	return(x)
 }		
 
@@ -77,9 +77,9 @@
 	object@data@values[is.infinite(object@data@values)] <- NA
 	values <- object@data@values
 	values[is.na(values)] <- Inf
-	object@data@min <- pmin(object@data@min,  apply(values, 1, function(x){min(x, na.rm=T)}))
+	object@data@min <- pmin(object@data@min,  apply(values, 2, function(x){min(x, na.rm=T)}))
 	values[!is.finite(values)] <- -Inf
-	object@data@max <- pmax(object@data@max,  apply(values, 1, function(x){max(x, na.rm=T)}))
+	object@data@max <- pmax(object@data@max,  apply(values, 2, function(x){max(x, na.rm=T)}))
 	
 	if (bandorder=='BIL') {
 		values <- as.vector(values(object))

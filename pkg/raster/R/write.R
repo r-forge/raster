@@ -12,7 +12,7 @@ if (!isGeneric('writeRaster')) {
     
 
 setMethod('writeRaster', signature(x='RasterBrick'), 
-function(x, filename, bandorder='BIL', ...) {
+function(x, filename='', bandorder='BIL', ...) {
     filename <- trim(filename)
 	if (filename == '') {
 		filename <- filename(x)

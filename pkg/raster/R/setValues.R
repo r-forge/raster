@@ -81,19 +81,26 @@ setMethod('setValues', signature(object='RasterBrick'),
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
 		stop('values must be numeric, integer or logical.')	
 	}
+
 	rownr <- round(rownr)
-	
+
 	if (layer < 1) {
 		if (!is.matrix(values)) {
 			values <- matrix(values)
 		}
 		if (nrow(values) == ncell(object)) {
+			if (rownr > 0) {
+				stop("when setting all values, rownr must be < 1")
+			}
 			object@data@nlayers <- ncol(values)
 			object@data@content <- 'all'
 			object@data@indices <- c(1, ncell(object))
 			object@data@values <- values
 			object <- setMinMax(object)
 		} else if (nrow(values) == ncol(object)) {
+			if (!validRow(object, rownr)) {
+				stop(paste("rownumber out of bounds:", rownr))
+			}
 			if (object@data@nlayers != ncol(values)) {
 				if (rownr==1) {
 					object@data@nlayers <- ncol(values)
@@ -114,9 +121,9 @@ setMethod('setValues', signature(object='RasterBrick'),
 		layer <- round(layer)
 		if (layer > nlayers(object)) {stop('layer number too high')}
 		
-		if (length(values) == ncell(object) & nrow(object) > 1) { 
+		if (length(values) == ncell(object)) { 
 			if (rownr > 0) {
-				stop("if setting all values, rownr must be < 1")
+				stop("when setting all values, rownr must be < 1")
 			}
 			if (dataContent(object) != 'all') { 
 				atry <- try(object <- readAll(object), silent=T)
@@ -125,9 +132,10 @@ setMethod('setValues', signature(object='RasterBrick'),
 				}
 			}
 			object@data@values[,layer] <- values
-	#		object <- setMinMax(object)
+			object <- setMinMax(object)
+			
 		} else if (length(values) == ncol(object)) {
-			if (rownr < 1 | rownr > nrow(object)) {
+			if (!validRow(object, rownr)) {
 				stop(paste("rownumber out of bounds:", rownr))
 			}
 			object@data@values <- values

@@ -116,8 +116,7 @@ setClass('SingleLayerData',
 setClass ('RasterLegend',
 	representation (
 		type = 'character',
-		begin = 'vector',
-		end = 'vector',
+		values = 'vector',
 		color = 'vector'
 		),
 	prototype (
