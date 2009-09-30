@@ -77,7 +77,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		if (!canProcessInMemory(outRaster, 2) && filename == '') {
 			filename <- rasterTmpFile()
 			filename(outRaster) <- filename
-			if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
+			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 		}
 		
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)

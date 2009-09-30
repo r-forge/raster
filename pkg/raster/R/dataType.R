@@ -6,6 +6,10 @@
 
 
 'dataType<-' <- function(x, value) {
+	if (class(x) == 'RasterStack') {
+		stop('Cannot set datatype of a RasterStack')
+	}
+
 # for backward compatibility issues and non fatal mistakes.
 	datatype <- substr( toupper( trim(value) ), 1, 5)
 	if (datatype=='LOGIC') {datatype <- 'LOG1S'}
@@ -44,7 +48,11 @@
 	
 	if (type == "FLT") {
 		if (dataContent(x) != 'nodata') { 
-			x@data@values <- as.numeric(values(x))
+			if (class(x)  == 'RasterLayer') {
+				x@data@values <- as.numeric(values(x))
+			} else {
+				x@data@values <- matrix(as.numeric(values(x)), ncol=nlayers(x))
+			}
 		}
 		if (size == '4') {
 			x@file@datanotation <- 'FLT4S'
@@ -59,8 +67,13 @@
 		x@data@min <- round(minValue(x))
 		x@data@max <- round(maxValue(x))
 		if (dataContent(x) != 'nodata') { 
-			x@data@values <- as.integer(round(values(x)))
+			if (class(x)  == 'RasterLayer') {
+				x@data@values <- as.integer(round(values(x)))
+			} else {
+				x@data@values <- matrix(as.integer(round(values(x))), ncol=nlayers(x))
+			}                  
 		}
+		
 		if (size == '4') {
 			if (signed) {
 				x@file@datanotation <- 'INT4S'

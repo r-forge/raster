@@ -8,8 +8,8 @@
 if (!isGeneric('writeRaster')) {
 	setGeneric('writeRaster', function(x, ...)
 		standardGeneric('writeRaster')) 
-	}	
-
+	}
+    
 
 setMethod('writeRaster', signature(x='RasterBrick'), 
 function(x, filename, bandorder='BIL', ...) {
@@ -30,8 +30,10 @@ function(x, filename, bandorder='BIL', ...) {
 	}
 	if (substr(dataContent(x), 1, 3) == 'row' ) {
 		return( .writeBrickRow(x, filename=filename, bandorder=bandorder, datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
-	} else {
+	} else if (substr(dataContent(x), 1, 3) == 'all' ) {
 		return( .writeBrick(x, filename=filename, bandorder=bandorder, datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
+	} else {
+		return('cannot write data')
 	}
 }
 )

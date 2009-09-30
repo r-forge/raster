@@ -13,7 +13,7 @@
 	}
 	x@file@bandorder <- bandorder
 	x@file@nbands <- nlayers(x)
-	dataType(rout) <- datatype
+	dataType(x) <- datatype
 
 	filename <- trim(filename)
 	if (filename == "") {
@@ -27,18 +27,16 @@
 	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
 		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
-	
+
 	attr(x@file, "con") <- file(fnamevals, "wb")
 	attr(x@file, "dsize") <- dataSize(x@file@datanotation)
 	attr(x@file, "dtype") <- .shortDataType(x@file@datanotation)
 
 	x@file@driver <- 'raster'
 
-	x@data@min <- c(Inf, rep=(nbands(x)))
-	x@data@max <- c(-Inf, rep=(nbands(x)))
+	x@data@min <- c(Inf, rep=(nlayers(x)))
+	x@data@max <- c(-Inf, rep=(nlayers(x)))
 	x@data@haveminmax <- FALSE
-	
-
 	return(x)
 }
 
@@ -63,28 +61,47 @@
 
 
 .writeBrickRow <- function(object, filename, bandorder, filetype, datatype, overwrite, progress='') {
+	if (missing(filename) | filename == '') {
+		filename <- filename(object)
+		if ( filename == '' ) {
+			stop('provide a filename')
+		}
+	}
+	
 	if (dataIndices(object)[1] == 1) { 
 		object <- .startBrickRowWriting(object, bandorder=bandorder, filename=filename, datatype=datatype, overwrite=overwrite)
  	} 
 
-	ncols <- object@ncol
-	object@ncol <- object@ncol * nlayers(object)
+	
+	object@data@values[is.nan(object@data@values)] <- NA
+	object@data@values[is.infinite(object@data@values)] <- NA
+	values <- object@data@values
+	values[is.na(values)] <- Inf
+	object@data@min <- pmin(object@data@min,  apply(values, 1, function(x){min(x, na.rm=T)}))
+	values[!is.finite(values)] <- -Inf
+	object@data@max <- pmax(object@data@max,  apply(values, 1, function(x){max(x, na.rm=T)}))
+	
 	if (bandorder=='BIL') {
-		object@data@values <- as.vector(values(object))
+		values <- as.vector(values(object))
 	} else 	if (bandorder=='BIP') {
-		object@data@values <- as.vector(t(values(object)))
+		values <- as.vector(t(values(object)))
 	}
-	object <- writeRaster(object, overwrite=overwrite)
-	object@ncol <- ncols
+	if (object@file@dtype == "INT" || object@file@dtype =='LOG' ) { 
+		values <- as.integer(round(object@data@values))  
+		values[is.na(values)] <- as.integer(object@file@nodatavalue)		
+	} else { 
+		values  <- as.numeric( object@data@values ) 
+	}
+	
+	writeBin(values, object@file@con, size=object@file@dsize )
 
 	if (dataIndices(object)[2] >= ncell(object)) {
-		object <- .stopRowWriting(object)
+		object <- .stopBrickRowWriting(object)
 		if (dataIndices(object)[2] > ncell(object)) {
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(object)[2], '>', ncell(object)))
 		}
 		return(brick(filename(object)))
 	}
 	return(object)
-
 }
 

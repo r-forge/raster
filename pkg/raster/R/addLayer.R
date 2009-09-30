@@ -96,21 +96,21 @@ function(x, ...) {
 			x@extent <- extent(r)
 			projection(x) <- projection(r)
 			if (dataSource(r) == 'ram' & dataContent(r) != 'all') {
-				stop('Cannot add a RasterLayer with no associated data in memory or on disk to a RasterBrick')
-			} 
-			nl <- 1
-			if (trim(r@layernames) != "") {
-				cname <- trim(r@layernames)
+				# done
 			} else {
-				cname <- "layer1"
+				nl <- 1
+				if (trim(r@layernames) != "") {
+					cname <- trim(r@layernames)
+				} else {
+					cname <- "layer1"
+				}
+				x@layernames <- cname
+				x@data@values <- as.matrix(getValues(r))
+				x@data@nlayers <- as.integer(1)
+				x@data@content <- 'all'
+				x@data@min <- r@data@min
+				x@data@max <- r@data@max			
 			}
-			x@layernames <- cname
-			x@data@values <- as.matrix(getValues(r))
-			x@data@nlayers <- as.integer(1)
-			x@data@content <- 'all'
-			x@data@min <- r@data@min
-			x@data@max <- r@data@max			
-			
 		} else {
 			if (dataContent(x) != 'all') { x <- readAll(x) }
 			

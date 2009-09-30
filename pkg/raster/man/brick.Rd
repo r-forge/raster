@@ -7,6 +7,7 @@
 \alias{brick,character-method}
 \alias{brick,Raster-method}
 \alias{brick,RasterStack-method}
+\alias{brick,RasterBrick-method}
 \alias{brick,Extent-method}
 \alias{brick,list-method}
 \alias{brick,missing-method}

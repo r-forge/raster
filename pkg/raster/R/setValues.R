@@ -27,8 +27,8 @@ if (!isGeneric('setValues')) {
 		standardGeneric('setValues')) 
 	}	
 
+	
 setMethod('setValues', signature(object='RasterLayer'), 
-  
 function(object, values, rownr=-1, layer=-1) {
   
 	if (!is.vector(values)) {stop('values must be a vector')}
@@ -73,7 +73,7 @@ function(object, values, rownr=-1, layer=-1) {
 	
 
 
-setMethod('setValues', signature(object='RasterStackBrick'), 
+setMethod('setValues', signature(object='RasterBrick'), 
   function(object, values, rownr=-1, layer=-1) {
 	if (!(is.vector(values) | is.matrix(values))) {
 		stop('values must be a vector or a matrix')
@@ -83,47 +83,47 @@ setMethod('setValues', signature(object='RasterStackBrick'),
 	}
 	rownr <- round(rownr)
 	
-	if (is.matrix(values)) {
-		if (ncol(values) == nlayers(object)) {
-			if (nrow(values) == ncell(object)) {
-				object@data@content <= 'all'
-				object@data@indices <- c(1, ncell(object))
-				object@data@values <- values
-			} else if (nrow(values) == nrow(object)) {
-				object@data@content <= 'row'
-				firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
-				lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
-				object@data@indices <- c(firstcell, lastcell)				
-				object@data@values <- values
-			} else {
-				stop('either set all data or a single row')
-			}
-		} else if (ncol(values) == 1) {
-			values <- as.vector(values)
+	if (layer < 1) {
+		if (!is.matrix(values)) {
+			values <- matrix(values)
+		}
+		if (nrow(values) == ncell(object)) {
+			object@data@nlayers <- ncol(values)
+			object@data@content <- 'all'
+			object@data@indices <- c(1, ncell(object))
+			object@data@values <- values
+			object <- setMinMax(object)
+		} else if (nrow(values) == ncol(object)) {
+			if (object@data@nlayers != ncol(values)) {
+				if (rownr==1) {
+					object@data@nlayers <- ncol(values)
+				} else {
+					stop('ncol does not match nlayers' )
+				}
+			}	
+			object@data@content <- 'row'
+			firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
+			lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
+			object@data@indices <- c(firstcell, lastcell)				
+			object@data@values <- values
 		} else {
-			stop('either set values for all layers or for a single layer')
+			stop('either set all data or a single row')
 		}
-	}
-	
-	if (is.vector(values)) {
+	} else {
+		if (nlayers(object)==0) {object@data@nlayers <- 1 }
 		layer <- round(layer)
-		if (layer < 1) { 
-			if (nlayers(object) == 1) {
-				layer <- 1
-			} else {
-				print(class(object))
-				stop('specify layer')	
-			}
-		}
 		if (layer > nlayers(object)) {stop('layer number too high')}
-		
 		
 		if (length(values) == ncell(object) & nrow(object) > 1) { 
 			if (rownr > 0) {
 				stop("if setting all values, rownr must be < 1")
 			}
 			if (dataContent(object) != 'all') { 
-				stop(" you can only setValues with these values if the dataContent = 'all'") }
+				atry <- try(object <- readAll(object), silent=T)
+				if (class(atry) == "try-error") {
+					stop(" you can only setValues for a single layer if all values are in memory. But values could not be loaded")				
+				}
+			}
 			object@data@values[,layer] <- values
 	#		object <- setMinMax(object)
 		} else if (length(values) == ncol(object)) {
@@ -134,13 +134,15 @@ setMethod('setValues', signature(object='RasterStackBrick'),
 			object@data@content <- 'row' 
 			firstcell <- cellFromRowCol(object, rownr=rownr, colnr=1)
 			lastcell <- cellFromRowCol(object, rownr=rownr, colnr=ncol(object))
-			object@data@indices <- c(firstcell, lastcell)
+			if (object@data@indices != c(firstcell, lastcell)) {
+				stop('setting values for the wrong row number')
+			}
 		} else {
 			stop("length(values) is not equal to ncell(object) or ncol(object)") 
 		}
 	}
 	return(object)
- }
+}
 )
 	
 	

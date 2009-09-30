@@ -2,7 +2,7 @@
 
 \alias{setValues}
 \alias{setValues,RasterLayer-method}
-\alias{setValues,RasterStackBrick-method}
+\alias{setValues,RasterBrick-method}
 \alias{setValuesBlock}
 \alias{setValuesRows}
 \alias{setValuesSparse}
@@ -11,7 +11,7 @@
 \title{Set values}
 
 \description{
-Use these functions to assign values to a RasterLayer object. While you can access the slots of the object directly, you would do that at your own peril because when setting values,
+Use these functions to assign values to a RasterLayer or RasterBrick object. While you can access the slots of the object directly, you would do that at your own peril because when setting values,
 multiple slots need to be changed. 
 }
 

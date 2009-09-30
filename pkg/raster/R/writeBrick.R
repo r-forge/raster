@@ -32,7 +32,9 @@
 		ncol(rout) <- ncol(rout) * nl
 		if (dataContent(object) == 'all') {
 			sv <- as.vector(t(getValues(object)))
+			object <- clearValues(object)
 			rout <- setValues(rout, sv)
+			rm(sv)
 			rout <- writeRaster(rout, overwrite=overwrite)			
 		} else {
 			for (r in 1:nrow(object)) {
@@ -46,6 +48,7 @@
 		nrow(rout) <- nrow(rout) * nl
 		if (dataContent(object) == 'all') {
 			rout <- setValues(rout, as.vector(values(object)))
+			object <- clearValues(object)
 			rout <- writeRaster(rout, overwrite=overwrite)			
 		} else {
 			fakerow <- 0

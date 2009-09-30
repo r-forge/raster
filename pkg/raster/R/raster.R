@@ -52,7 +52,7 @@ setMethod('raster', signature(x='Raster'),
 
 
 setMethod('raster', signature(x='RasterStack'), 
-	function(x, index=1){
+	function(x, index=0){
 		if (nlayers(x) > 0 & index > 0) {
 			dindex <- max(1, min(nlayers(x), index))
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
@@ -68,8 +68,9 @@ setMethod('raster', signature(x='RasterStack'),
 
 
 setMethod('raster', signature(x='RasterBrick'), 
-	function(x, index=1){
-		if (nlayers(x) > 0) {
+	function(x, index=0){
+		index <- round(index)
+		if (nlayers(x) > 0 & index > 0) {
 			dindex <- max(1, min(nlayers(x), index))
 			if (filename(x) != '') {
 				if (dindex != index) { warning(paste("index was changed to", dindex))}

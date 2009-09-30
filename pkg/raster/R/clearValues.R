@@ -29,11 +29,12 @@ clearValues <- function(object) {
 			}
 		}
 	} else if (class(object) == 'RasterBrick') {
-		if (dataSource(object) == 'disk') {
-			object@data@values <- matrix(NA,0,0)
-			object@data@content <- 'nodata'
-			object@data@indices = vector(mode='numeric')
-		}
+		object@data@values <- matrix(NA,0,0)
+		object@data@content <- 'nodata'
+		object@data@indices = vector(mode='numeric')
+		object@data@min <- rep(Inf, nlayers(object))
+		object@data@max <- rep(-Inf, nlayers(object))
+		object@data@haveminmax <- FALSE
 	} 
 	return(object)
 }
