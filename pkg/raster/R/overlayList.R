@@ -53,13 +53,9 @@
 
 		for (r in 1:nrow(outraster)) {
 			for (i in 1:length(x)) {
-				x[i] <- getValues(x[[i]], r)
+				vallist[[i]] <- getValues(x[[i]], r)
 			}	
-			
-			for (i in 1:length(x)) {
-				vallist[[i]] <- values(x[[i]])
-			#	clearValues(rasters[[i]])
-			}
+	
 			vals <- do.call(fun, vallist)
 			
 			if (r == 1) {
