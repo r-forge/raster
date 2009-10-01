@@ -6,14 +6,14 @@
 \description{  Convert points to a RasterLayer object }
 
 \usage{
-pointsToRaster(raster, xy, values=rep(1, length(xy[,1])), fun=length, background=NA, filename="", ...)
+pointsToRaster(raster, xy, values=1, fun=length, background=NA, filename="", ...)
 }
 
 \arguments{
   \item{raster}{ a RasterLayer object }
-  \item{xy}{ a matrix of x and y coordinates (in the same map reference system as the raster) }
-  \item{values}{a vector of length xy[,1] with the values to be used}  
-  \item{fun}{ the function to be applied}
+  \item{xy}{ a matrix of x and y coordinates (in the same map reference system as the raster) or a SpatialPoints* object}
+  \item{values}{a vector of length of the number of points (i.e., dim(xy)[1] if xy is a matrix) with the values to be used; alternatively you can supply a single value which is then assigned to each point}  
+  \item{fun}{ the function to be applied, on a cell by cell basis, to the points a cell; the default function is \code{length}, i.e. it returns the number of points in a cell. Typical examples of other functions that can be used are mean, sum, max and \code{function(x)length(unique(x))} to get the number of unique values ('richeness')}
   \item{background}{the value to be applied to the cells in which no points fall (typically \code{NA} or \code{0})}
   \item{filename}{ output filename }
   \item{...}{additional arguments. See Details.}  

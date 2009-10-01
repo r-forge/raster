@@ -10,30 +10,17 @@ if (!isGeneric('writeRaster')) {
 		standardGeneric('writeRaster')) 
 	}
     
+	
 
 setMethod('writeRaster', signature(x='RasterBrick'), 
 function(x, filename='', bandorder='BIL', ...) {
-    filename <- trim(filename)
-	if (filename == '') {
-		filename <- filename(x)
-		if (filename == '') {
-			stop('RasterBrick has no filename; and no filename specified as argument to writeRaster')
-		}
-	}
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-	progress <- .progress(...)
 
-	if (filetype != 'raster') {
-		stop('Only "raster" format is currently supported for writing multiband files')
-	}
 	if (substr(dataContent(x), 1, 3) == 'row' ) {
-		return( .writeBrickRow(x, filename=filename, bandorder=bandorder, datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
+		return( .writeBrickRow(x, filename=filename, bandorder=bandorder, ...) )
 	} else if (substr(dataContent(x), 1, 3) == 'all' ) {
-		return( .writeBrick(x, filename=filename, bandorder=bandorder, datatype=datatype, filetype=filetype, overwrite=overwrite, progress=progress) )
+		return( .writeBrick(x, filename=filename, bandorder=bandorder, ...) )
 	} else {
-		return('cannot write data')
+		stop('cannot write data')
 	}
 }
 )
@@ -61,54 +48,38 @@ function(x, filename, bandorder='BIL', ...) {
 
 	
 setMethod('writeRaster', signature(x='RasterLayer'), 
-function(x, filename='', assign=FALSE, ...) {
+function(x, filename='', ...) {
 
-	dataType(x) <- .datatype(...)
 	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-	
-	
-	if (assign){ 
-		raster_name <- deparse(substitute(x))
-	}
 
-	if (filename != '') {
-		filename(x) <- filename
-	}
-	if (filename(x) == '') {
-		stop('RasterLayer has no filename; and no filename specified as argument to writeRaster')
-	}
-	
 	if (! dataContent(x) %in% c('row', 'rows', 'all', 'sparse') ) {
 		stop('No usable data available for writing.')
 	}
 	
 	if (filetype=='raster') {
 		if (substr(dataContent(x), 1, 3) == 'row' ) {
-			x <- .writeRasterRow(x, overwrite=overwrite)
+			x <- .writeRasterRow(x, ...)
 		} else {
+			overwrite <- .overwrite(...)
 			x <- .writeRasterAll(x, overwrite=overwrite)
 		}  
 	} else if (filetype=='ascii') {
+		overwrite <- .overwrite(...)
 		x <- .writeAscii(x, overwrite=overwrite)
 		
 	} else if (filetype=='CDF') {
+		overwrite <- .overwrite(...)
 		x <- .writeRasterCDF(x, overwrite=overwrite)
 		
 	} else { 
-		.isSupportedGDALFormat(filetype)
+		overwrite <- .overwrite(...)
 		if (dataContent(x) == 'row' ) {
 			x <- .writeGDALrow(x, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
 		} else {
 			x <- .writeGDALall(x, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
 		}  
 	}
-	if (assign) {
-		assign(raster_name, x, envir=parent.frame())
-		return(invisible())	
-	} else {
-		return(x)
-	}
+	return(x)
 }	
 )
 

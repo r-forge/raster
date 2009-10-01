@@ -4,7 +4,23 @@
 # Licence GPL v3
 
 
-.startBrickRowWriting <- function(x, bandorder, filename, datatype, overwrite) {
+.startBrickRowWriting <- function(x, bandorder, filename, ...) {
+	filetype <- .filetype(...)  # not used
+	datatype <- .datatype(...)
+	overwrite <- .overwrite(...)
+
+	if (filetype != 'raster') {
+		stop('Only "raster" format is currently supported for writing multiband files')
+	}
+
+
+	if (missing(filename) | filename == '') {
+		filename <- filename(x)
+		if ( filename == '' ) {
+			stop('provide a filename')
+		}
+	}
+
 	if (bandorder == 'BSQ') {
 		stop('no BSQ in row by row writing')
 	}
@@ -60,16 +76,11 @@
 }		
 
 
-.writeBrickRow <- function(object, filename, bandorder, filetype, datatype, overwrite, progress='') {
-	if (missing(filename) | filename == '') {
-		filename <- filename(object)
-		if ( filename == '' ) {
-			stop('provide a filename')
-		}
-	}
+.writeBrickRow <- function(object, filename='', bandorder, ...) {
+
 	
 	if (dataIndices(object)[1] == 1) { 
-		object <- .startBrickRowWriting(object, bandorder=bandorder, filename=filename, datatype=datatype, overwrite=overwrite)
+		object <- .startBrickRowWriting(object, bandorder=bandorder, filename=filename, ...)
  	} 
 
 	

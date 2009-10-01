@@ -16,7 +16,7 @@
 }
  
 
-.writeRasterAll <- function(raster, overwrite=FALSE) {
+.writeRasterAll <- function(raster, overwrite) {
 
 	fname <- trim(raster@file@name)
 	if (fname == "") {

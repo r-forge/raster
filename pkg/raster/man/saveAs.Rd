@@ -57,7 +57,7 @@ see \code{writeFormats} for the complete list
 \examples{ 
 r1 <- raster(system.file("external/test.ag", package="sp"))
 r2 <- saveAs(r1, 'test.tif', filetype='GTiff')
- 
+
 }
 
 \keyword{ spatial }

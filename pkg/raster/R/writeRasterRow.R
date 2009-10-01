@@ -5,11 +5,22 @@
 # Licence GPL v3
 
  
- .startRowWriting <- function(raster, overwrite) {
+.startRowWriting <- function(raster, ...) {
  	fname <- trim(raster@file@name)
 	if (fname == "") {
 		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')
 	}
+	
+	overwrite <- .overwrite(...)
+	
+	if (fname != '') {
+		filename(raster) <- fname
+	}
+	if (filename(raster) == '') {
+		stop('RasterLayer has no filename; and no filename specified as argument to writeRaster')
+	}
+	
+	
 	fname <- .setFileExtensionHeader(fname)
 	filename(raster) <- fname
 	fnamevals <- .setFileExtensionValues(fname)
@@ -52,10 +63,10 @@
 }		
  
  
-.writeRasterRow <- function(raster, overwrite=FALSE) {
+.writeRasterRow <- function(raster, ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- .startRowWriting(raster, overwrite=overwrite)
+		raster <- .startRowWriting(raster, ...)
  	} 
 
 	raster@data@values[is.nan(raster@data@values)] <- NA

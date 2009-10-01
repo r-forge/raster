@@ -4,8 +4,24 @@
 # Licence GPL v3
 
 
-.writeBrick <- function(object, filename, bandorder, filetype, datatype, overwrite, progress='') {
+.writeBrick <- function(object, filename, bandorder, ...) {
+	if (missing(filename) | filename == '') {
+		filename <- filename(object)
+		if ( filename == '' ) {
+			stop('provide a filename')
+		}
+	}
 
+	filetype <- .filetype(...)  # not used
+	datatype <- .datatype(...)
+	overwrite <- .overwrite(...)
+	progress <- .progress(...)
+
+	if (filetype != 'raster') {
+		stop('Only "raster" format is currently supported for writing multiband files')
+	}
+
+	
 	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) {
 		stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'")
 	}
@@ -52,6 +68,7 @@
 			rout <- writeRaster(rout, overwrite=overwrite)			
 		} else {
 			fakerow <- 0
+			pb <- .setProgressBar(nrow(rout), type=progress)
 			for (i in 1:nl) {
 				sr <- raster(object, i)
 				for (r in 1:nrow(sr)) {
@@ -59,8 +76,8 @@
 					rv <- getValues(sr, r)
 					rout <- setValues(rout, rv, fakerow)
 					rout <- writeRaster(rout, overwrite=overwrite)
-					.doProgressBar(pb, r, starttime) 				
-				}
+					.doProgressBar(pb, fakerow, starttime) 				
+				}				
 			}
 		}		
 	}

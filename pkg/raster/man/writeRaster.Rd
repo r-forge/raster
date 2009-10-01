@@ -26,11 +26,10 @@ writeRaster(x, ...)
 \describe{
 \bold{Full function call when \code{x} is a RasterLayer object}
 
-\code{writeRaster(x, filename='', assign=FALSE, filetype, datatype, overwrite) }
+\code{writeRaster(x, filename='', filetype, datatype, overwrite) }
  
 \tabular{rll}{
 \tab \code{x} \tab RasterLayer object \cr
-\tab \code{assign} \tab Logical. If \code{TRUE} the function does not return a new object but overwrites the existing object \cr
 \tab \code{filename} \tab Character. output filename \cr
 \tab \code{filetype} \tab Character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}} \cr
 \tab \code{datatype} \tab Character. output data type; see \code{\link[raster]{dataType}} \cr
@@ -44,7 +43,6 @@ writeRaster(x, ...)
  
 \tabular{rll}{
 \tab \code{x} \tab RasterLayer object \cr
-\tab \code{assign} \tab Logical. If \code{TRUE} the function does not return a new object but overwrites the existing object \cr
 \tab \code{filename} \tab Character. Output filename. Can be missing if \code{x} is a RasterBrick that has a filename \cr
 \tab \code{bandorder} \tab Character. 'BIL', 'BIP', or 'BSQ' \cr
 \tab \code{filetype} \tab Character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}} \cr
@@ -109,9 +107,6 @@ rst <- readAll(rst)
 filename(rst) <- "binall.grd"
 rst <- writeRaster(rst, overwrite=TRUE)
 
-# equivalent to:
-writeRaster(rst, overwrite=TRUE, assign=TRUE)
-
 
 # write all to a new ERDAS .img file
 filename(rst) <- "binall.img"
@@ -157,8 +152,9 @@ for (r in 1:nrow(rst)) {
 
 # write to netcdf 
 if (require(RNetCDF)) {	
-   rst <- readAll(rst)
-   writeRaster(rst, filetype="CDF", filename="netCDF.nc", overwrite=TRUE)   
+    rst <- readAll(rst)
+	filename(rst) <- "netCDF.nc"
+    writeRaster(rst, filetype="CDF", overwrite=TRUE)   
 }
 
 }
