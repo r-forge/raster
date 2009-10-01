@@ -24,12 +24,11 @@ distanceFromPoints <- function(object, xy, filename="", ...) {
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
 
-	filetype <- 'raster'
-	overwrite <- TRUE
+#	filetype <- 'raster'
+#	overwrite <- TRUE
 	
-	if (isLatLon(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Eucledian' }
-	
-	
+	if (isLatLon(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
+	                                                                        
 	rst <- raster(object)
 	if (!canProcessInMemory(rst, 2) && filename == '') {
 		filename <- rasterTmpFile()
