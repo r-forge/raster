@@ -1,6 +1,7 @@
 \name{expand}
 
 \alias{expand}
+\alias{expand,RasterLayer,Extent-method}
 
 \title{Expand}
 
@@ -11,13 +12,12 @@ Thus, all of the cells of the original raster are included.
 }
 
 \usage{
-expand(raster, bndbox, filename=NULL, ...)
+expand(x, extent, ...)
 }
 
 \arguments{
-  \item{raster}{a RasterLayer object}
-  \item{bndbox}{Extent object, or any object that is or has a bounding box (see below)}
-  \item{filename}{filename for the output RasterLayer}
+  \item{x}{a RasterLayer object}
+  \item{extent}{Extent object, or any object that is or has an Extent object or an object from which it can be extracted (such as sp objects)}
   \item{...}{additional arguments. See Details.}  
 }
 
@@ -29,6 +29,7 @@ A new RasterLayer object, and in some cases the side effect of a new file on dis
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
+  \tab \code{filename} \tab filename for the output RasterLayer \cr
   \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
   \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr

@@ -3,31 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-band <- function(object) {
-	if (class(object) == "RasterLayer") {
-		return(object@data@band)
-	} else {
-		stop(paste("not implemented for:", class(object), "objects"))
-	}
-}
-
-nbands <- function(object) {
-	if (class(object) == "RasterLayer") {
-		return(object@file@nbands)
-	} else {
-		stop(paste("not implemented for", class(object), "objects"))
-	}	
-}
-
-.bandOrder <- function(object) {
-	if (class(object) == "RasterStack") {
-		stop(paste("not implemented for RasterStack objects"))
-	} else {
-		return(paste(object@file@bandorder))
-	}
-}
-
-
 
 .driver <- function(object) {
 	fn <- filename(object)
@@ -36,6 +11,18 @@ nbands <- function(object) {
 	} else {
 		return(object@file@driver)
 	}
+}
+
+
+
+.nodatavalue <- function(object) {
+	if (class(object) == 'RasterStack') {
+		stop("no such thing exist for an entire 'RasterStack'")
+	}
+	return(object@file@nodatavalue)
+}	
+
+
 	
 #	fileext <- toupper(ext(fn)) 
 #	if ( fileext == ".GRD" | fileext == ".GRI" ) {
@@ -43,7 +30,7 @@ nbands <- function(object) {
 #	} else {
 #		return('gdal')
 #	}
-	
+
 #	fcon <- class(try( object@file@con, silent = T ))[1]
 #	if (fcon == 'file') {
 #		return('raster')
@@ -55,11 +42,5 @@ nbands <- function(object) {
 #		stop('unknown driver')
 #	}
 
-}	
+	
 
-.nodatavalue <- function(object) {
-	if (class(object) == 'RasterStack') {
-		stop("no such thing exist for an entire 'RasterStack'")
-	}
-	return(object@file@nodatavalue)
-}	

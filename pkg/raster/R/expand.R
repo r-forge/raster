@@ -1,20 +1,24 @@
-# R code for changing rasters (spatial data)
-# Authors: Robert J. Hijmans and Jacob van Etten
-# r.hijmans@gmail.com
+# raster package
+# Authors: Robert J. Hijmans and Jacob van Etten, r.hijmans@gmail.com
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
 
 
-expand <- function(raster, bndbox, filename=NULL, ...)  {
-	if (is.null(filename)) { filename <- "" }
-	
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
+if (!isGeneric("expand")) {
+	setGeneric("expand", function(x, extent, ...)
+		standardGeneric("expand"))
+}	
+
+setMethod('expand', signature(x='RasterLayer', extent='Extent'), 
+function(x, extent, filename='', ...) {
+
+#	filetype <- .filetype(...)
+#	overwrite <- .overwrite(...)
 
 	
-	bndbox <- extent(bndbox)
-	res <- res(raster)
+	bndbox <- extent(extent)
+	res <- res(x)
 # snap points to pixel boundaries
 	xmn <- round(xmin(bndbox) / res[1]) * res[1]
 	xmx <- round(xmax(bndbox) / res[1]) * res[1]
@@ -22,50 +26,50 @@ expand <- function(raster, bndbox, filename=NULL, ...)  {
 	ymx <- round(ymax(bndbox) / res[2]) * res[2]
 	
 # only expanding here, not cutting
-	xmn <- min(xmn, xmin(raster))
-	xmx <- max(xmx, xmax(raster))
-	ymn <- min(ymn, ymin(raster))
-	ymx <- max(ymx, ymax(raster))
+	xmn <- min(xmn, xmin(x))
+	xmx <- max(xmx, xmax(x))
+	ymn <- min(ymn, ymin(x))
+	ymx <- max(ymx, ymax(x))
 	
-	outraster <- raster(raster, filename)
+	outraster <- raster(x, filename)
 	bndbox <- newExtent(xmn, xmx, ymn, ymx)
 	outraster <- setExtent(outraster, bndbox, keepres=TRUE)
 
-	startrow <- rowFromY(outraster, ymax(raster))
-	startcol <- colFromX(outraster, xmin(raster))
+	startrow <- rowFromY(outraster, ymax(x))
+	startcol <- colFromX(outraster, xmin(x))
 	
-	if (dataContent(raster) == 'all')  {
+	if (dataContent(x) == 'all')  {
 
 		d <- vector(length=ncell(outraster))
 		d[] <- NA
-		for (r in 1:nrow(raster)) {
-			vals <- getValues(raster, r) 
+		for (r in 1:nrow(x)) {
+			vals <- getValues(x, r) 
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
-			d[startcell:(startcell+ncol(raster)-1)] <- vals
+			d[startcell:(startcell+ncol(x)-1)] <- vals
 			outraster <- setValues(outraster, d)
 			if (outraster@file@name != "") {
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}
 		}
 
-	} else if ( dataSource(raster) == 'disk' ) { 
+	} else if ( dataSource(x) == 'disk' ) { 
 		if (!canProcessInMemory(outraster, 4) && filename == '') {
 			filename <- rasterTmpFile()
 			filename(outraster) <- filename
-			if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
+			if (getOption('verbose')) { cat('writing raster to:', filename(x))	}						
 		}
 		starttime <- proc.time()		
-		pb <- .setProgressBar(nrow(raster), type=.progress(...))
+		pb <- .setProgressBar(nrow(x), type=.progress(...))
 
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
-		for (r in 1:nrow(raster)) {
+		for (r in 1:nrow(x)) {
 		
-			raster <- readRow(raster, r)
-			vals <- values(raster)
+			x <- readRow(x, r)
+			vals <- values(x)
 			d[] <- NA
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
-			d[startcell:(startcell+ncol(raster)-1)] <- vals
+			d[startcell:(startcell+ncol(x)-1)] <- vals
 
 			if (outraster@file@name != '') {
 				outraster <- setValues(outraster, d, r)
@@ -84,4 +88,6 @@ expand <- function(raster, bndbox, filename=NULL, ...)  {
 	} 
 	return(outraster)
 }
+)
+
 

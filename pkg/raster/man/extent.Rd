@@ -29,7 +29,7 @@ extent(x, ...)
 }
  
 \value{
-A Extent object
+An Extent object
 }
   
 \author{Robert J. Hijmans}
