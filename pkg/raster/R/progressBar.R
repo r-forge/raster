@@ -25,7 +25,7 @@
 	return(pb)
 }
 
-.doProgressBar <- function(pb, r, starttime) {
+.doProgressBar <- function(pb, r) {
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
 		setTxtProgressBar(pb, r)

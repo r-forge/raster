@@ -7,6 +7,7 @@
 
 
 rasterToPoints <- function(raster, fun=NULL, asSpatialPoints=FALSE) {
+
 	if (dataSource(raster) == 'ram' & dataContent(raster) != 'all') {
 		if (asSpatialPoints) {
 			coords <- xyFromCell(raster, 1:ncell(raster))
@@ -18,9 +19,8 @@ rasterToPoints <- function(raster, fun=NULL, asSpatialPoints=FALSE) {
 	}
 	
 	if (dataContent(raster) == 'all') {
-		v <- values(raster)
+		xyv <- cbind(xyFromCell(raster, 1:ncell(raster)), values(raster))
 		raster <- clearValues(raster)
-		xyv <- cbind(xyFromCell(raster, 1:ncell(raster)), v)
 		xyv <- subset(xyv, !(is.na(xyv[,3])))
 		if (!is.null(fun)) {
 			xyv <- subset(xyv, fun(xyv[,3]))

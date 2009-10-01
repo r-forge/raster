@@ -114,7 +114,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 			}
 		
-			.doProgressBar(pb, r, starttime) 
+			.doProgressBar(pb, r) 
 		} 
 		.closeProgressBar(pb, starttime)
 		if (outRaster@file@name == "") { 

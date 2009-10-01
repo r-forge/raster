@@ -42,7 +42,7 @@
 			rv <- getValues(object, r)
 			rout <- setValues(rout, as.vector(rv), r)
 			rout <- writeRaster(rout,  overwrite=overwrite)
-			.doProgressBar(pb, r, starttime) 				
+			.doProgressBar(pb, r) 				
 		}
 	} else 	if (bandorder=='BIP') {
 		ncol(rout) <- ncol(rout) * nl
@@ -57,7 +57,7 @@
 				rv <- getValues(object, r)
 				rout <- setValues(rout, as.vector(t(rv)), r)
 				rout <- writeRaster(rout, overwrite=overwrite)
-				.doProgressBar(pb, r, starttime) 				
+				.doProgressBar(pb, r) 				
 			}
 		}
 	} else 	if (bandorder=='BSQ') {
@@ -76,7 +76,7 @@
 					rv <- getValues(sr, r)
 					rout <- setValues(rout, rv, fakerow)
 					rout <- writeRaster(rout, overwrite=overwrite)
-					.doProgressBar(pb, fakerow, starttime) 				
+					.doProgressBar(pb, fakerow) 				
 				}				
 			}
 		}		

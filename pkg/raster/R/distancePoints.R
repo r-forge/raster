@@ -4,17 +4,6 @@
 # Licence GPL v3
 
 
-distance <- function(object, filename="", ...) {
-
-	test <- try( pts <- rasterToPoints(object)[,1:2] )
-	if (class(test) == "try-error") {
-		return( .distanceRows(object, filename, ...) )
-	}
-	return( distanceFromPoints(object=object, xy=pts, filename=filename, ...) )
-}
-
-
-
 distanceFromPoints <- function(object, xy, filename="", ...) {
 
 	pts <- .pointsToMatrix(xy)
@@ -64,6 +53,5 @@ distanceFromPoints <- function(object, xy, filename="", ...) {
 	}
 	return(rst)
 }
-
 
 

@@ -1,35 +1,30 @@
-\name{distance-methods}
-\docType{methods}
-\alias{distance-methods}
-\alias{distance}
+\name{distance}
 
-\alias{distance,RasterLayer-method}
+\alias{distance}
+\alias{distanceFromPoints}
+
 
 \title{Distance}
 
 \description{
- The function calculates the distance to cells of a RasterLayer.
+The function calculates the distance to cells of a RasterLayer. Function \code{distance} computes the distance for all cells that are \code{NA} to the nearest cell that is not \code{NA}.
+function \code{distanceFromPoints} computes the distance for all cells to the nearest point in a set of points.
  
- Origin cells should have value TRUE (or 1), destination cells should be \code{NA} and cells that can not be traversed should be set to FALSE (or 0).
- 
- The distance is in meters if the RasterLayer is not projected (\code{+proj=longlat})
- and in map units (typically meters) when it is projected.
- 
- Distances are calculated by summing local distances between cells, which are connected with their neighbours in 8 directions.
+The distance unit is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically meters) when it is projected.
 }
 
 \usage{
 distance(object, filename = "", ...) 
+distanceFromPoints(object, xy, filename = "", ...) 
 }
 
 \arguments{
 \item{object}{a RasterLayer object}
-\item{filename}{character. output filename}
+\item{filename}{Character. output filename}
+\item{xy}{matrix of x and y coordinates, or a SpatialPoints* object}
 \item{...}{additional arguments. See Details.}  
 }
 
-
-\seealso{ For more options (directions, cost-distance) see the \code{ \link[gdistance]{gdistance}} package } 
 
 \details{
 The following additional arguments can be passed, to replace default values for this function
@@ -41,12 +36,16 @@ The following additional arguments can be passed, to replace default values for 
  }
 }
 
+\author{Robert J. Hijmans }
+
+\value{A RasterLayer object}
+
 \examples{
 r1 <- raster(ncol=36,nrow=18)
 r1[] <- NA
 r1[345:355] <- 1
-distmap <- distance(r1) 
-#plot(distmap)
+dist <- distance(r1) 
+#plot(dist)
 }
-\keyword{methods}
+
 \keyword{spatial}
