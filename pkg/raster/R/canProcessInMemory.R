@@ -1,36 +1,37 @@
 # Authors: Robert J. Hijmans, r.hijmans@gmail.com 
-# International Rice Research Institute
 # Date :  January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
 canProcessInMemory <- function(raster, n=4) {
 	gc()
 
-	if (ncell(raster) > 2147483647) {
+	if (ncell(raster) > 200000000) {
 		return(FALSE) 
 	}
-	cells <- round(1.05 * ncell(raster))
+	cells <- round(1.1 * ncell(raster))
 	
-	if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
-	# windows, function memory.size  available
-		memneed <- cells * 8 * n / (1024 * 1024)
-		if (memneed > memory.size(max = T)) {
-			return(FALSE)
-		} else {
-			return(TRUE)
-		}
-	} else {
+#	if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
+#	# windows, function memory.size  available
+#		memneed <- cells * 8 * n / (1024 * 1024)
+#		memavail <- 0.5 * (memory.size(NA)-memory.size(FALSE))
+#		if (memneed > memavail) {
+#			return(FALSE)
+#		} else {
+#			return(TRUE)
+#		}
+#	} else {
+
 		w <- getOption('warn')
 		options('warn'=-1) 
-		r <- try( matrix(NA, ncol=n, nrow=cells), silent=TRUE )
+		r <- try( matrix(0.1, ncol=n, nrow=cells), silent=TRUE )
 		options('warn'= w) 
 		if (class(r) == "try-error") {
 			return( FALSE )
 		} else {
 			return( TRUE ) 
 		}
-	}
+#	}
 }
 
