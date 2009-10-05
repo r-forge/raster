@@ -5,8 +5,6 @@
 
 
 canProcessInMemory <- function(raster, n=4) {
-	gc()
-
 	if (ncell(raster) > 200000000) {
 		return(FALSE) 
 	}
@@ -14,24 +12,25 @@ canProcessInMemory <- function(raster, n=4) {
 	
 #	if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
 #	# windows, function memory.size  available
-#		memneed <- cells * 8 * n / (1024 * 1024)
-#		memavail <- 0.5 * (memory.size(NA)-memory.size(FALSE))
-#		if (memneed > memavail) {
-#			return(FALSE)
-#		} else {
-#			return(TRUE)
-#		}
+#	memneed <- cells * 8 * n / (1024 * 1024)
+#	memavail <- 0.5 * (memory.size(NA)-memory.size(FALSE))
+#	if (memneed > memavail) {
+#		return(FALSE)
 #	} else {
-
-		w <- getOption('warn')
-		options('warn'=-1) 
-		r <- try( matrix(0.1, ncol=n, nrow=cells), silent=TRUE )
-		options('warn'= w) 
-		if (class(r) == "try-error") {
-			return( FALSE )
-		} else {
-			return( TRUE ) 
-		}
+#		return(TRUE)
 #	}
+#   } else {
+
+	w <- getOption('warn')
+	options('warn'=-1) 
+	r <- try( matrix(0.1, ncol=n, nrow=cells), silent=TRUE )
+	options('warn'= w) 
+	if (class(r) == "try-error") {
+		return( FALSE )
+	} else {
+		rm(r)
+		g <- gc()
+		return( TRUE ) 
+	}
 }
 

@@ -16,8 +16,7 @@
 		if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
 			pb <- winProgressBar(title = "progress bar", min = 0, max = nrows, width = 300)
 		} else {
-			warning('windows progress bar is only availble on the Windows Operating System')
-			pb <- txtProgressBar(min = 0, max = nrows, style = 3)
+			pb <- tkProgressBar(title = "progress bar", min = 0, max = nrows, width = 300)
 		}
 	} else {
 		pb <- 'none'
