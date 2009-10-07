@@ -6,7 +6,7 @@
 
 
 
-setMethod('overlay', signature(x='RasterStack', y='missing'), 
+setMethod('overlay', signature(x='RasterStackBrick', y='missing'), 
 function(x, y, fun, indices=1:nlayers(x), filename="", ...){ 
 	
 	datatype <- .datatype(...)

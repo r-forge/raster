@@ -5,18 +5,17 @@
 \alias{overlay}
 \alias{overlay,RasterLayer,RasterLayer-method}
 \alias{overlay,RasterLayer,missing-method}
-\alias{overlay,RasterStack,missing-method}
+\alias{overlay,RasterStackBrick,missing-method}
 \alias{overlay,list,missing-method}
 
-\title{overlay}
+\title{Overlay}
 
 \description{
-Calculate values for a new RasterLayer object, based on two or more existing and RasterLayers of the same extent and resolution. 
-overlay is a generic functon used in the sp and raster packages. This help file describes its use in the raster package. 
+Create a new RasterLayer object, based on two or more existing and RasterLayers (possibly as part of a RasterStack or RasterBrick) of the same extent and resolution. 
 
 You should supply a function \code{fun} to set the way that the RasterLayers are combined. The number of arguments in the function must match the number of RasterLayer objects.
-For example, if you merge two RasterLayers you could use multiply: \code{fun=function(x,y){return(x*y)}} percentage: \code{fun=function(x,y){return(100 * x / y)}}. 
-The default function \code{sum} always works because its first argument is \code{...}
+For example, if you combine two RasterLayers you could use multiply: \code{fun=function(x,y){return(x*y)}} percentage: \code{fun=function(x,y){return(100 * x / y)}}. If you combine three layers you could use \code{fun=function(x,y,z){return((x + y) * z)}}
+You can also supply a function such as \code{sum}, that takes \code{n} arguments.
 }
 
 \section{Methods}{
@@ -27,7 +26,7 @@ Formal definition of the overlay method (in the sp package)
 
 \bold{1) x and y are Raster* objects}
 
-\code{overlay(x, y, ..., fun=sum, datatype, filetype, overwrite, progress)}
+\code{overlay(x, y, ..., fun, datatype, filetype, overwrite, progress)}
 
 \tabular{rll}{
 \tab \code{x} \tab a RasterLayer object \cr
@@ -40,9 +39,10 @@ Formal definition of the overlay method (in the sp package)
 \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
 }
   
+  
 \bold{2) x is a Raster* object, y is missing (this is equivalent to \code{\link[raster]{calc}})}
 
-\code{overlay(x, fun=sum, overwrite, filetype, datatype, progress)}
+\code{overlay(x, fun, overwrite, filetype, datatype, progress)}
 
 \tabular{rll}{
   \tab \code{x}  \tab a RasterLayer object \cr
@@ -51,15 +51,13 @@ Formal definition of the overlay method (in the sp package)
   \tab \code{overwrite}  \tab logical. If \code{TRUE}, existing files will be overwritten \cr
   \tab \code{filetype}  \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
 }
-  
-
 }
 }
 
 \details{
-In stead of the overlay function you can also use normal artimic functions such as *, /, +, - with RasterLayer objects (see examples), 
-but then you cannot specifiy an output filename, filetype or datatype. Overlay should be more efficient when using large data files that 
-cannot be loaded into memory.
+You can also supply functions such as \code{sum} or \code{mean}; but it would be more direct to use the Raster* objects are arguments to those functions (e.g. \code{sum(r1,r2,r3)})  
+In stead of the overlay function you can also use normal artimic functions such as \code{*, /, +, -} with RasterLayer objects (see examples), but then you cannot specifiy an output filename. 
+However using the overlay should be more efficient when using large data files that cannot be loaded into memory, as the use of the arithmic functions might cause the creation of many temporary files.
 }
 
 \value{
@@ -93,7 +91,6 @@ r6 <- overlay(r1, fun=function(x){return(sqrt(x))} )
 r7 <- overlay(r1, r2, r3, r4, fun=function(a,b,c,d){return(a*b+c*d)} )  
 # equivalent function, efficient if values can be loaded in memory
 r8 <- r1 * r2 + r3 * r4
-
 }
  
 \keyword{methods}

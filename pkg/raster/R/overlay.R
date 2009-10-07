@@ -5,18 +5,15 @@
 # Licence GPL v3
 
 
-
 setMethod('overlay', signature(x='RasterLayer', y='missing'), 
 function(x, y, fun=sum, filename="", ...){ 
-
 	return(calc(x, fun=fun, filename=filename, ...))
-	
 }
 )
 
 
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
-function(x, y, ..., fun=sum, filename="", datatype, filetype, overwrite, progress){ 
+function(x, y, ..., fun, filename="", datatype, filetype, overwrite, progress){ 
 	if (missing(datatype)) {
 		datatype <- .datatype(datatype)
 	}

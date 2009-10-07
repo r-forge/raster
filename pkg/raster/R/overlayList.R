@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 
-.overlayList <- function(x, fun=sum, filename="", ...){ 
+.overlayList <- function(x, fun, filename="", ...){ 
 	
 	compare(x)
 
@@ -51,18 +51,40 @@
 		starttime <- proc.time()
 		pb <- .setProgressBar(nrow(outraster), type=.progress(...))
 
-		for (r in 1:nrow(outraster)) {
-			for (i in 1:length(x)) {
-				vallist[[i]] <- getValues(x[[i]], r)
-			}	
-	
-			vals <- do.call(fun, vallist)
-			
-			if (r == 1) {
-				if (length(vals) == 1 && ncol(outraster) > 1) {
-					stop('single value returned for a row; inappropriate formula used')
-				}
+		a <- rep(1,100)
+		for (i in 1:length(x)) {
+			vallist[[i]] <- a
+		}	
+		vals <- do.call(fun, vallist)
+		if (length(vals) == 1 && ncol(outraster) > 1) {
+			m <- matrix(rep(a,length(x)), ncol=length(x), nrow=length(a))
+			vals <- apply(m, 1, fun)
+			if (length(vals) == length(a)) {
+				applymethod = TRUE
+			} else {
+				stop('cannot use this formula')
 			}
+		} else {
+			applymethod = FALSE
+		}
+		
+		
+		
+		for (r in 1:nrow(outraster)) {
+	
+			if (applymethod) {
+				valmat <- vector()
+				for (i in 1:length(x)) {
+					valmat <- cbind(valmat, getValues(x[[i]], r))
+				}	
+				vals <- apply(valmat, 1, fun)
+			} else {
+				for (i in 1:length(x)) {
+					vallist[[i]] <- getValues(x[[i]], r)
+				}	
+				vals <- do.call(fun, vallist)
+			}
+			
 			
 			if (outraster@file@name == "") {
 #				v <- c(v, vals)

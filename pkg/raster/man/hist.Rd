@@ -3,35 +3,29 @@
 \docType{methods}
 
 \alias{hist}
-\alias{hist,Raster-method}
-\alias{hist,RasterStack-method}
-
+\alias{hist,RasterLayer-method}
+\alias{hist,RasterStackBrick-method}
 
 \title{Histogram}
 
 \description{
-Create a histogram of the values of a RasterLayer. NA values are ignored. 
+Create a histogram of the values of a RasterLayer. NA values are ignored. Large datasets are sampled using \code{maxsamp}.
 }
-
 
 \usage{
 hist(x, ...) 
 }
-
 
 \arguments{
   \item{x}{A Raster* object}
   \item{...}{Additional arguments. See \code{?hist}}  
 }
 
-
 \section{Methods}{
 \describe{
-
 \code{hist(x, maxsamp=100000, ...)}
 
 maxsamp is the maximum number of (randomly selected) grid cells to use for creating the histogram
-
 }}
 
 
@@ -46,10 +40,9 @@ rp <- r1 * r2
 par(mfrow=c(2,2))
 plot(rs, main='sum')
 plot(rp, main='product')
-hist(rs, main='')
-hist(rp, main='')
+hist(rs)
+hist(rp)
 }
-
 
 \keyword{methods}
 \keyword{spatial}
