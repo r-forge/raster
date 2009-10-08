@@ -49,7 +49,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			dna <- vector(length=ncol(rs))
 			dna[] <- background
 		} else {
-			rs <- brick(rs)  #  return a'RasterBrdsick'
+			rs <- brick(rs)  #  return a'RasterBrick'
 			filename(rs) <- filename
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 		}

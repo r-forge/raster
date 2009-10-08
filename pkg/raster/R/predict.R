@@ -59,6 +59,21 @@ setMethod('predict', signature(object='RasterStackBrick'),
 				}
 			}
 			predv <- as.vector( as.numeric ( predict(model, rowvals, ...) ))
+			
+			if (length(predv) != nrow(rowvals)) {
+				# perhaps no prediction for rows with NA ? 
+				rowvals <- na.omit( cbind(1:nrow(rowvals), rowvals) )
+				indices <- rowvals[,1]
+				if (length(indices) == length(predv)) {
+					pr <- 1:ncol(object)
+					pr[] <- NA
+					pr[indices] <- predv
+					predv <- pr
+				} else {
+					stop('length of predict vector does not match lenght of input vectors')
+				}
+			}
+			
 			if (filename == '') {
 				v <- c(v, predv)
 			} else {
