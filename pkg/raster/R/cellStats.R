@@ -19,6 +19,7 @@ cellStats <- function(raster, stat='mean', ...) {
 		}
 	} else {
 
+		st  <- NULL
 		counts <- FALSE
 		if (stat == 'sum') {
 			fun <- sum
@@ -26,6 +27,9 @@ cellStats <- function(raster, stat='mean', ...) {
 			fun <- min
 		} else if (stat == 'max') {
 			fun <- max
+		} else if (stat == 'countNA') {
+			st <- 0		
+			nc <- ncol(raster)
 		} else if (stat == 'mean' | stat == 'sd') {
 			# do nothing
 		} else { 
@@ -34,7 +38,6 @@ cellStats <- function(raster, stat='mean', ...) {
 
 		cnt <- 0
 		sumsq <- 0
-		st  <- NULL
 		starttime <- proc.time()
 		pb <- .setProgressBar(nrow(raster), type=.progress(...))
 		for (r in 1:nrow(raster)) {
@@ -47,6 +50,8 @@ cellStats <- function(raster, stat='mean', ...) {
 			} else if (stat=='mean') {
 				st <- sum(d, st)
 				cnt <- cnt + length(d)
+			} else if (stat=='countNA') {
+				st <- st + (nc - length(d))
 			} else {
 				st <- fun(c(d, st))
 			}
