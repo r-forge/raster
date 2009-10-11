@@ -34,7 +34,7 @@ setClass('RasterLayerSummary',
 
 setMethod('show', signature(object='RasterLayerSummary'), 	
 	function(object) {
-		cat ("Cells: " , ncell(object), "\n")
+		cat ("Cells: " , object@ncell, "\n")
 		if ( object@dataContent == "all") {
 			cat("NAs  : ", object@NAs, "\n")
 			cat("\nValues")
@@ -52,6 +52,7 @@ setMethod('summary', signature(object='RasterLayer'),
 		sumobj <- new("RasterLayerSummary")
 		sumobj@ncell <- ncell(object)
 		sumobj@dataContent <- dataContent(object) 
+		sumobj@NAs <- NA
 		if ( sumobj@dataContent == "all") {
 			sumobj@NAs <- sum(is.na(values(object)))
 			sumobj@values <- as.matrix( summary(values(object)) )
