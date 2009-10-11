@@ -33,7 +33,7 @@ cellStats <- function(raster, stat='mean', ...) {
 		} else if (stat == 'mean' | stat == 'sd') {
 			# do nothing
 		} else { 
-			stop("invalid 'stat', should be 'sum', 'min', 'max', 'sd' or 'mean'") 
+			stop("invalid 'stat'. Should be 'sum', 'min', 'max', 'sd', 'mean' or 'countNA'") 
 		}
 
 		cnt <- 0
@@ -67,6 +67,4 @@ cellStats <- function(raster, stat='mean', ...) {
 		return(st)
 	}
 }
-
-
 
