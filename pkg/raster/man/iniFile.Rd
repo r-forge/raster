@@ -9,15 +9,17 @@ This function reads a \code{'.ini'} files. These are text file databases that ar
 }
 
 \usage{
-readIniFile(filename)
+readIniFile(filename, token='=', commenttoken=';')
 }
 
 \arguments{
   \item{filename}{filename of the .ini file}
+  \item{token}{Character. The character that seperates the "name" from the "value"}
+  \item{commenttoken}{Character. This token and everything that follows on the same line is considered a 'comment' that is not for machine consumption and is ignored in processing} 
 }
 
 \details{
-This function allows for using inistrings that have "=" as part of a value 
+This function allows for using inistrings that have "=" as part of a value (but the token cannot be part of the 'name' of a variable!)
 }
 
 

@@ -1,0 +1,158 @@
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Date : June 2008
+# Version 0.9
+# Licence GPL v3
+
+
+.rasterFromBILFile <- function(filename, band=1, type='RasterLayer') {
+	valuesfile <- .setFileExtensionValues(filename)
+	if (!file.exists( valuesfile )){
+		stop( paste(valuesfile,  "does not exist"))
+	}	
+	filename <- .setFileExtensionHeader(filename, "raster")
+	
+	ini <- readIniFile(filename)
+	ini[,2] = toupper(ini[,2]) 
+
+	byteorder <- .Platform$endian
+	nbands <- as.integer(1)
+	band <- as.integer(band)
+	bandorder <- "BIL"
+	projstring <- ""
+	minval <- Inf
+	maxval <- -Inf
+	nodataval <- -Inf
+	layernames <- ''
+	
+	gaps <- 0
+
+	xx <- NULL
+	xn <- NULL
+	yx <- NULL
+	yn <- NULL
+	yd <- NULL
+	xd <- NULL
+	
+	for (i in 1:length(ini[,1])) {
+		if (ini[i,2] == "LLXMAP") {xx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "LLYMAP") {yn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "ULYMAP") {yx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "ULXMAP") {xn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "XDIM") {xd <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "YDIM") {yd <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "YMAX") {yx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "ROWS") {nr <- as.integer(ini[i,3])} 
+		else if (ini[i,2] == "COLUMNS") {nc <- as.integer(ini[i,3])} 
+		else if (ini[i,2] == "NROWS") {nr <- as.integer(ini[i,3])} 
+		else if (ini[i,2] == "NCOLS") {nc <- as.integer(ini[i,3])} 
+		
+		else if (ini[i,2] == "NODATA") {nodataval <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "NBITS") {nbits <- ini[i,3]} 
+		else if (ini[i,2] == "PIXELTYPE") {pixtype <- ini[i,3]} 
+		else if (ini[i,2] == "BANDGAPBYTES") {gaps <- ini[i,3]} 
+		
+		else if (ini[i,2] == "BYTEORDER") {byteorder <- ini[i,3]} 
+		else if (ini[i,2] == "NBANDS") {nbands <- ini[i,3]} 
+		else if (ini[i,2] == "LAYOUT") {bandorder <- ini[i,3]} 
+		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
+    }  
+	
+	if (!is.null(xn)) {
+		if (is.null(xx)) {
+			xx <- xn + nc * xd
+		} 
+	} else {
+		xn <- xx - nc * xd
+	} 
+	
+	if (!is.null(yn)) {
+		if (is.null(yx)) {
+			yx <- yn + nr * yd
+		} 
+	} else {
+		yn <- yx - nr * yd
+	}
+	if (is.null(xd)) {
+		xd <- (xx - xn) / (nc - 1)
+	}
+	if (is.null(yd)) {
+		yd <- (yx - yn) / (nr - 1)
+	}
+	xx <- xx + 0.5 * xd
+	xn <- xn - 0.5 * xd
+	yx <- yx + 0.5 * yd
+	yn <- yn - 0.5 * yd
+	
+	if (gaps > 0) { stop('bil raster with gaps not supported') }
+
+	
+	if (band < 1) {
+		band <- 1
+		warning('band set to 1')
+	} else if  (band > nbands) {
+		band <- nbands
+		warning('band set to ', nbands)
+	}
+	
+	minval <- minval[1:nbands]
+	maxval <- maxval[1:nbands]
+	minval[is.na(minval)] <- Inf
+	maxval[is.na(maxval)] <- -Inf
+	
+	if (type == 'RasterBrick') {
+		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
+		x@data@nlayers <-  as.integer(nbands)
+		x@data@min <- minval
+		x@data@max <- maxval
+	} else {
+		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
+		x@data@band <- as.integer(band)
+		x@data@min <- minval[band]
+		x@data@max <- maxval[band]
+	}
+
+	x@file@nbands <- as.integer(nbands)
+
+	if (bandorder %in% c("BSQ", "BIP", "BIL")) {
+		x@file@bandorder <- bandorder 
+	}
+
+	shortname <- gsub(" ", "_", ext(basename(filename), ""))
+	x <- .enforceGoodLayerNames(x, shortname)
+	
+	x@file@name <- .fullFilename(filename)
+	x@data@haveminmax <- FALSE
+	x@file@nodatavalue <- nodataval
+
+	if (nbits == 8) {
+		if (pixtype == 'SIGNEDINT') {
+			dataType(x) <- 'INT1S'
+		} else {
+			dataType(x) <- 'INT1U'		
+		}
+	} else if (nbits == 16) {
+		if (pixtype == 'SIGNEDINT') {
+			dataType(x) <- 'INT2S'
+		} else {
+			dataType(x) <- 'INT2U'		
+		}
+	} else if (nbits == 32) {
+		if (pixtype == 'SIGNEDINT') {
+			dataType(x) <- 'INT4S'
+		} else {
+			dataType(x) <- 'INT4U'		
+		}
+	} else {
+		stop(paste('unknown nbits in BIL:', nbits))
+	}
+	
+	if (byteorder == "I") { 
+		x@file@byteorder <- 'little'
+	} 	
+	x@data@source <- 'disk'
+	x@file@driver <- "BIL"
+	
+    return(x)
+}
+
+

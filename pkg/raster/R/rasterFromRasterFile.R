@@ -5,10 +5,12 @@
 
 
 .rasterFromRasterFile <- function(filename, band=1, type='RasterLayer') {
-	grifile <- .setFileExtensionValues(filename)
-	if (!file.exists( grifile )){
-		stop("no '.gri' file")
+	valuesfile <- .setFileExtensionValues(filename)
+	if (!file.exists( valuesfile )){
+		stop( paste(valuesfile,  "does not exist"))
 	}	
+	filename <- .setFileExtensionHeader(filename, "raster")
+	
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
 
@@ -16,7 +18,6 @@
 	nbands <- as.integer(1)
 	band <- as.integer(band)
 	bandorder <- "BIL"
-	ncellvals <- -9
 	projstring <- ""
 	minval <- NA
 	maxval <- NA
@@ -39,12 +40,13 @@
 		
 		else if (ini[i,2] == "MINVALUE") { try ( minval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 		else if (ini[i,2] == "MAXVALUE") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+		else if (ini[i,2] == "VALUEUNIT") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+		
 		else if (ini[i,2] == "NODATAVALUE") {nodataval <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "DATATYPE") {inidatatype <- ini[i,3]} 
 		else if (ini[i,2] == "BYTEORDER") {byteorder <- ini[i,3]} 
 		else if (ini[i,2] == "NBANDS") {nbands <- ini[i,3]} 
 		else if (ini[i,2] == "BANDORDER") {bandorder <- ini[i,3]} 
-#		else if (ini[i,2] == "NCELLVALS") {ncellvals <- ini[i,3]} 
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
 		else if (ini[i,2] == "LAYERNAME") {layernames <- ini[i,3]} 
     }  
@@ -90,7 +92,7 @@
 	x <- .enforceGoodLayerNames(x, shortname)
 	
 	x@file@name <- .fullFilename(filename)
-	x@data@haveminmax <- TRUE
+	x@data@haveminmax <- TRUE  # should check?
 	x@file@nodatavalue <- nodataval
 
 

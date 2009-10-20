@@ -66,6 +66,8 @@ setClass('RasterFile',
 		nodatavalue ='numeric', # on disk, in ram it is NA
 		nbands ='integer',
 		bandorder ='character',
+		offset='integer',
+		toptobottom='logical',
 		driver ='character'
 		),
 	prototype (	
@@ -75,6 +77,8 @@ setClass('RasterFile',
 		nodatavalue = -3.4E38,
 		nbands = as.integer(1),
 		bandorder = 'BIL',
+		offset = as.integer(0),
+		toptobottom = TRUE,
 		driver = '' #'raster'
 	),
 	validity = function(object) {

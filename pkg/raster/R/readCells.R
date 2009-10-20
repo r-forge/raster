@@ -67,6 +67,10 @@
 	} else { 
 		dtype <- "integer"
 	}
+
+	if (! raster@file@toptobottom) {
+		cells <- ncell(raster) - cells + 1
+	}
 	
 	if (nbands(raster) > 1) {
 		if (.bandOrder(raster) == 'BIL') {
@@ -77,6 +81,7 @@
 			cells <- cells + (band(raster)-1) * ncell(raster)
 		}
 	}
+	
 	raster <- openConnection(raster)
 	for (i in seq(along=cells)) {
 		seek(raster@file@con, (cells[i]-1) * dsize)

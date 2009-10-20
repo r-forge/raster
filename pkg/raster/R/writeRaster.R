@@ -5,17 +5,6 @@
 # Licence GPL v3
 
 
-.setFileExtensionValues <- function(fname) {
-	ext(fname) <- ".gri"
-	return(fname)
-}
- 
-.setFileExtensionHeader <- function(fname) {
-	ext(fname) <- ".grd"
-	return(fname)
-}
- 
-
 .writeRasterAll <- function(raster, overwrite) {
 
 	fname <- trim(raster@file@name)

@@ -6,12 +6,20 @@
 
 .getRasterData <- function(raster, rownr, startcol, ncolumns, dtype, dsize, dsign, offset=0) {
 	raster <- openConnection(raster)
+	offset <- offset + raster@file@offset
 	if (rownr > 0) {
+		if (! raster@file@toptobottom ) {
+			rownr <- nrow(raster) - rownr + 1
+		}
 		seek(raster@file@con, ((rownr-1) * ncol(raster) + (startcol-1) + offset) * dsize)
 		result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder) 
 	} else {	
 		seek(raster@file@con, offset)
 		result <- readBin(raster@file@con, what=dtype, n=ncell(raster), dsize, dsign, endian=raster@file@byteorder)
+		if (! raster@file@toptobottom ) {
+			result <- matrix(result, ncol=ncol(raster), byrow=TRUE)
+			result <- as.vector( t (result[nrow(raster):1,] ) )
+		}
 	}
 	raster <- closeConnection(raster)
 	return(result)
@@ -90,9 +98,8 @@
 			stop('there are no values associated with this RasterLayer')
 		}
 		
-	} else if (.driver(raster) == 'raster') {
+	} else if (.driver(raster) %in% c('raster', 'SAGA')) {
 		
-		rastergri <- .setFileExtensionValues(filename(raster))
 		if (!file.exists( filename(raster))) { 
 			stop(paste(filename(raster)," does not exist"))
 		}
