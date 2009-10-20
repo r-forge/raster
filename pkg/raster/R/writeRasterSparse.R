@@ -1,13 +1,13 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 .writeSparse <- function(raster, overwrite=FALSE) {
 
 #	raster@file@driver <- 'raster'
-	filename(raster) <- .setFileExtensionHeader(raster@file@name)
+	filename(raster) <- .setFileExtensionHeader(raster@file@name, 'raster')
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -31,6 +31,6 @@
 	raster <- closeConnection(raster)
 
 	# add the 'sparse' key word to the hdr file!!!
-	.writeRasterHdr(raster) 
+	writeRasterHdr(raster) 
 	return(raster)
 } 

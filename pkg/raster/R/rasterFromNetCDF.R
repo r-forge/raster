@@ -55,7 +55,7 @@
 }
 
 
-.rasterCDF <- function(filename, type, xvar='', yvar='', zvar='', time=NA) {
+.rasterFromCDF <- function(filename, type, xvar='', yvar='', zvar='', time=NA) {
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
 

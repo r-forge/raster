@@ -58,7 +58,7 @@
 
 
 .stopBrickRowWriting <- function(x) {
-	.writeRasterHdr(x) 
+	writeRasterHdr(x, 'raster') 
 	close(x@file@con)
 	fnamevals <- .setFileExtensionValues(x@file@name)
 	x@data@haveminmax <- TRUE

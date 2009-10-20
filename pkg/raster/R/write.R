@@ -56,12 +56,12 @@ function(x, filename='', ...) {
 		stop('No usable data available for writing.')
 	}
 	
-	if (filetype=='raster') {
+	if (filetype %in% c('raster', 'BIL', 'IDRISI', 'SAGA')) {
 		if (substr(dataContent(x), 1, 3) == 'row' ) {
-			x <- .writeRasterRow(x, ...)
+			x <- .writeRasterRow(x, filetype, ...)
 		} else {
 			overwrite <- .overwrite(...)
-			x <- .writeRasterAll(x, overwrite=overwrite)
+			x <- .writeRasterAll(x, filetype, overwrite=overwrite)
 		}  
 	} else if (filetype=='ascii') {
 		overwrite <- .overwrite(...)

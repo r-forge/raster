@@ -1,18 +1,16 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
  
-.startRowWriting <- function(raster, ...) {
+.startRowWriting <- function(raster, filetype, ...) {
  	fname <- trim(raster@file@name)
+	
 	if (fname == "") {
 		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')
 	}
-	
-	overwrite <- .overwrite(...)
-	
+	overwrite <- .overwrite(filetype, ...)
 	if (fname != '') {
 		filename(raster) <- fname
 	}
@@ -20,11 +18,17 @@
 		stop('RasterLayer has no filename; and no filename specified as argument to writeRaster')
 	}
 	
-	
-	fname <- .setFileExtensionHeader(fname)
+	fname <- .setFileExtensionHeader(fname, filetype)
 	filename(raster) <- fname
 	fnamevals <- .setFileExtensionValues(fname)
 	
+	if (filetype %in% c('SAGA')) {
+		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
+		if (resdif > 0.01) {
+			stop(paste("raster has unequal horizontal and vertical resolutions. Such data cannot be stored in arc-ascii format"))
+		}
+	}
+
 	if (!overwrite & (file.exists(fname) | file.exists(fnamevals))) {
 		stop(paste(fname,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -36,13 +40,13 @@
 	raster@data@min <- Inf
 	raster@data@max <- -Inf
 	raster@data@haveminmax <- FALSE
-	raster@file@driver <- 'raster'
+	raster@file@driver <- filetype
 	return(raster)
 }
 
 
 .stopRowWriting <- function(raster) {
-	.writeRasterHdr(raster) 
+	writeRasterHdr(raster, .driver(raster)) 
 	close(raster@file@con)
 	fnamevals <- .setFileExtensionValues(raster@file@name)
 #	attr(raster@file, "con") <- file(fnamevals, "rb")
@@ -63,10 +67,10 @@
 }		
  
  
-.writeRasterRow <- function(raster, ...) {
+.writeRasterRow <- function(raster, filetype='raster', ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- .startRowWriting(raster, ...)
+		raster <- .startRowWriting(raster, filetype, ...)
  	} 
 
 	raster@data@values[is.nan(raster@data@values)] <- NA

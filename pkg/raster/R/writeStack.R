@@ -57,7 +57,7 @@
 
 	rout@layernames <- layerNames(object)
 
-	writeHeader(rout, type=filetype)
+	writeRasterHdr(rout, filetype)
 
 	return(invisible(brick(filename(rout))))
 }

@@ -5,13 +5,15 @@
 # Licence GPL v3
 
 
-.writeRasterAll <- function(raster, overwrite) {
+.writeRasterAll <- function(raster, filetype='raster', overwrite) {
+
+	raster@file@driver <- filetype
 
 	fname <- trim(raster@file@name)
 	if (fname == "") {
 		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')
 	}
-	fname <- .setFileExtensionHeader(fname)
+	fname <- .setFileExtensionHeader(fname, filetype)
 	filename(raster) <- fname
 	fnamevals <- .setFileExtensionValues(fname)
 
@@ -60,20 +62,17 @@
 	} else {
 		dsize <- dataSize(raster@file@datanotation)
 		writeBin( values(raster), raster@file@con, size = dsize ) 
-		.writeRasterHdr(raster) 
+		writeRasterHdr(raster, filetype) 
 	}
 	close(raster@file@con)
-#	attr(raster@file, "con") <- file(fnamevals, "rb")
-	
-	# put logical values back to T/F
+#attr(raster@file, "con") <- file(fnamevals, "rb")
+# put logical values back to T/F
 	if ( dtype =='logical' ) {
 		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 		raster@data@values <- as.logical(values(raster))
 	} else if ( dtype =='integer' ) {
 		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA
 	}
-
-	raster@file@driver <- 'raster'
 	return(raster)
 }
  

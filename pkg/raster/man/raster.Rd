@@ -36,17 +36,22 @@ raster(x, ...)
 
 1) Create a RasterLayer object from a file
 
-\code{raster(x, values=FALSE, band=1, projs=NULL)}
+\code{raster(x, values=FALSE, band=1, ...)}
 
 
 \tabular{rll}{
 \tab \code{x} \tab character. Name of raster file  \cr
 \tab \code{values} \tab logical. If \code{TRUE}, RasterLayer values are read into memory with \code{\link[raster]{readAll}} \cr
 \tab \code{band} \tab integer. Band number in case of a file of multiple bands, default = 1 \cr
-\tab \code{projs} \tab character. PROJ4 type description of a Coordinate Reference System (map projection). If NULL, the value stored on disk (if any and recognised) is used \cr
+\tab \code{...} \tab additional arguments.  \cr
 }
 
-Further arguments that can be used for netCDF files only:
+Additional arguments:
+\tabular{rll}{
+\tab \code{forcegdal} \tab Logical. Force using rgdal for all file types \cr
+}
+
+More additional arguments, that can be used for netCDF files only:
 \tabular{rll}{
 \tab \code{xvar} \tab character. The x variable (e.g. 'longitude' or 'x') \cr
 \tab \code{yvar} \tab character. The y variable (e.g. 'latitude' or 'y')\cr

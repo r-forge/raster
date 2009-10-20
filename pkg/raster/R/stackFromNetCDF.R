@@ -30,7 +30,7 @@
 		}
 	} else if (length(dims)== 3) { tsteps <- 1
 	} else if (length(dims)== 2) { 
-		return(stack(.rasterCDF(filename, xvar, yvar, zvar)))
+		return(stack(.rasterFromCDF(filename, xvar, yvar, zvar)))
 	} else { stop(paste('data has an unexpected number of dimensions', dims)) }
 	
 

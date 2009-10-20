@@ -89,7 +89,7 @@
 	rout@data@min <- minValue(object, -1)
 	rout@data@max <- maxValue(object, -1)
 	rout@layernames <- layerNames(object)
-	writeHeader(rout, type=filetype)
+	writeRasterHdr(rout, filetype=filetype)
 	return(invisible(brick(filename(rout))))
 }
 

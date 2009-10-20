@@ -1,15 +1,15 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# Date : June 2008
+# Date : October 2009
 # Version 0.9
 # Licence GPL v3
 
 
-.rasterFromBILFile <- function(filename, band=1, type='RasterLayer') {
+.rasterFromGenericFile <- function(filename, band=1, type='RasterLayer') {
 	valuesfile <- .setFileExtensionValues(filename)
 	if (!file.exists( valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
 	}	
-	filename <- .setFileExtensionHeader(filename, "raster")
+	filename <- .setFileExtensionHeader(filename, "BIL")
 	
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
