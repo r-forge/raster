@@ -5,11 +5,11 @@
 
 
 .nativeDrivers <- function() {
-	return(  c("raster", "SAGA", "IDRISI", "BIL", "surfer") )
+	return(  c("raster", "SAGA", "IDRISI", "BIL") )
 }
 
 .nativeDriversLong <- function() {
-	return(  c("raster package format", "SAGA GIS", "IDRISI", "Band Interleaved by Line", "surfer" ) )
+	return(  c("raster package format", "SAGA GIS", "IDRISI", "Band Interleaved by Line") )
 }
 
 

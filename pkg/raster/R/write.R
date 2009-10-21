@@ -70,7 +70,7 @@ function(x, filename='', ...) {
 		overwrite <- .overwrite(...)
 		x <- .writeRasterCDF(x, overwrite=overwrite)
 		
-	} else { 
+	} else { # try rgdal
 		overwrite <- .overwrite(...)
 		if (dataContent(x) == 'row' ) {
 			x <- .writeGDALrow(x, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
