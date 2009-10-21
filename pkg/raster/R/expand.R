@@ -59,7 +59,7 @@ function(x, extent, filename='', ...) {
 			if (getOption('verbose')) { cat('writing raster to:', filename(x))	}						
 		}
 		starttime <- proc.time()		
-		pb <- .setProgressBar(nrow(x), type=.progress(...))
+		pb <- pbSet(nrow(x), type=.progress(...))
 
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
@@ -78,9 +78,9 @@ function(x, extent, filename='', ...) {
 				v <- c(v, d)
 			}
 
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 
 		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 

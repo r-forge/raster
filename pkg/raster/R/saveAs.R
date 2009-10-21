@@ -27,15 +27,15 @@ saveAs <- function(raster, filename, filetype, datatype, overwrite, progress, re
 	dataType(newr) <- datatype
 	
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(newr), type=progress)
+	pb <- pbSet(nrow(newr), type=progress)
 	
 	for (r in 1:nrow(newr)) {
 		raster <- readRow(raster, r)
 		newr <- setValues(newr, values(raster), r)
 		newr <- writeRaster(newr, filetype=filetype, overwrite=overwrite)
-		.doProgressBar(pb, r) 
+		pbDo(pb, r) 
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 		
 	if (result) {
 		return(newr)

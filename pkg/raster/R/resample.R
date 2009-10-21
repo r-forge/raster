@@ -29,7 +29,7 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 	rowCells <- 1:ncol(to)
 
 	starttime <- proc.time()		
-	pb <- .setProgressBar(nrow(to), type=.progress(...))
+	pb <- pbSet(nrow(to), type=.progress(...))
 
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
@@ -46,9 +46,9 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
 
-		.doProgressBar(pb, r)
+		pbDo(pb, r)
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 
 	if (inMemory) {
 		to <- setValues(to, v) 

@@ -19,13 +19,13 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 				filename(r) <- rasterTmpFile() 
 				
 				starttime <- proc.time()
-				pb <- .setProgressBar(nrow(e1), type=.progress() )
+				pb <- pbSet(nrow(e1), type=.progress() )
 				for (row in 1:nrow(e1)) {
 					r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), getValues(e2, row) ), row)
 					r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
-					.doProgressBar(pb, row) 
+					pbDo(pb, row) 
 				}
-				.closeProgressBar(pb, starttime)
+				pbClose(pb, starttime)
 				if (getOption('verbose')) {
 					cat('values were written to:', raster@file@name)
 				}
@@ -49,13 +49,13 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 			filename(r) <- rasterTmpFile() 
 			
 			starttime <- proc.time()
-			pb <- .setProgressBar(nrow(e1), type=.progress())
+			pb <- pbSet(nrow(e1), type=.progress())
 			for (row in 1:nrow(e1)) {
 				r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), e2) , row) 
 				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
-				.doProgressBar(pb, row) 
+				pbDo(pb, row) 
 			}
-			.closeProgressBar(pb, starttime)
+			pbClose(pb, starttime)
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
 			}			
@@ -76,13 +76,13 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			progress <- .progress()
 			filename(r) <- rasterTmpFile() 
 			starttime <- proc.time()
-			pb <- .setProgressBar(nrow(e1), type=progress)
+			pb <- pbSet(nrow(e1), type=progress)
 			for (row in 1:nrow(e2)) {
 				r <- setValues(r, callGeneric(as.numeric(e1), getValues(e2, row)) , row)
 				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
-				.doProgressBar(pb, row) 
+				pbDo(pb, row) 
 			}
-			.closeProgressBar(pb, starttime)
+			pbClose(pb, starttime)
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
 			}

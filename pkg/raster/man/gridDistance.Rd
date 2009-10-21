@@ -26,7 +26,7 @@ gridDistance(object, filename = "", ...)
 }
 
 
-\seealso{ For more options (directions, cost-distance) see the \code{ \link[gdistance]{gdistance}} package } 
+\seealso{ For more options (directions, cost-distance) see the gdistance package on R-forge} 
 
 \details{
 The following additional arguments can be passed, to replace default values for this function

@@ -74,7 +74,7 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 		}
 
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(raster), type=.progress(...))
+		pb <- pbSet(nrow(raster), type=.progress(...))
 		if (update) {
 			for (r in 1:nrow(raster)) {
 				res <- getValues(raster, r)
@@ -86,7 +86,7 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
-				.doProgressBar(pb, r)
+				pbDo(pb, r)
 			}
 		} else {
 			for (r in 1:nrow(raster)) {
@@ -99,9 +99,9 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
-				.doProgressBar(pb, r)
+				pbDo(pb, r)
 			}
-			.closeProgressBar(pb, starttime)
+			pbClose(pb, starttime)
 		}
 		return(outRaster)
 	}

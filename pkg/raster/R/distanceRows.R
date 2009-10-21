@@ -39,7 +39,7 @@
 	v <- vector()
 	
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(rst1) * chunks, type=.progress(...))
+	pb <- pbSet(nrow(rst1) * chunks, type=.progress(...))
 
 	for (k in 1:chunks) {
 		startrow <- (k-1)*nrows+1
@@ -56,7 +56,7 @@
 					rst1 <- setValues(rst1, values(rst2), r)
 					rst1 <- writeRaster(rst1, overwrite=TRUE, filetype='raster')			
 				}	
-			.doProgressBar(pb, r) 	
+			pbDo(pb, r) 	
 			}
 		} else {
 			for (r in 1:nrow(rst1)) {	
@@ -75,14 +75,14 @@
 					rst1 <- setValues(rst1, vals, r)
 					rst1 <- writeRaster(rst1, overwrite=TRUE, filetype='raster')			
 				}
-			.doProgressBar(pb, r) 	
+			pbDo(pb, r) 	
 			}
 		}
 		tmp <- filename(rst2)
 		rst2 <- rst1
 		filename(rst1) <- tmp
 	}	
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
     return(rst2)
 	return( saveAs(rst2, filename, filetype=filetype, datatype=datatype, overwrite=overwrite, progress=.progress(...)) )
 }

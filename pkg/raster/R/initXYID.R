@@ -33,7 +33,7 @@ initXYID <- function(raster, v='id', filename="", ...) {
 		outraster <- setValues(outraster, vals) 
 	} else  {
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(raster), type=.progress(...))
+		pb <- pbSet(nrow(raster), type=.progress(...))
 
 		n <- ncol(raster)
 		arow <- 1:n
@@ -48,9 +48,9 @@ initXYID <- function(raster, v='id', filename="", ...) {
 			} 		
 			outraster <- setValues(outraster, vals, r) 
 			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 	}	
 	return(outraster)
 }

@@ -88,7 +88,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		nrows = yfact
 
 		starttime <- proc.time()
-		pb <- .setProgressBar(rsteps, type=.progress(...))
+		pb <- pbSet(rsteps, type=.progress(...))
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
@@ -114,9 +114,9 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
 			}
 		
-			.doProgressBar(pb, r) 
+			pbDo(pb, r) 
 		} 
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 		if (outRaster@file@name == "") { 
 			outRaster <- setValues(outRaster, v) 
 		}

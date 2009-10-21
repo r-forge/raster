@@ -90,7 +90,7 @@
 		}	
 
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(outraster), type=.progress(...))
+		pb <- pbSet(nrow(outraster), type=.progress(...))
 		
 		for (r in 1:nrow(outraster)) {
 	
@@ -116,9 +116,9 @@
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 		
 		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 

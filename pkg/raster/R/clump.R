@@ -36,7 +36,7 @@ clump <- function(raster, filename=NULL, ...) {
 	rcl <- matrix(NA, nrow=0, ncol=2)
 	
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(x1), type = progress)
+	pb <- pbSet(nrow(x1), type = progress)
 
 	for (r in 1:nrow(x1)) {
 		c1 <- c2
@@ -79,10 +79,10 @@ clump <- function(raster, filename=NULL, ...) {
 		}	
 		
 		rcl <- unique(rcl)
-		.doProgressBar(pb, r) 			
+		pbDo(pb, r) 			
 
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 
 	if (tmpfile1 == "") {
 		x1 <- setValues(x1, v)

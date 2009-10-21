@@ -76,16 +76,16 @@ function(x, fact, filename='', ...) {
 		cols <- rep(1:ncol(x), each=xfact)
 
 		starttime <- proc.time()		
-		pb <- .setProgressBar(nrow(x), type=.progress(...))
+		pb <- pbSet(nrow(x), type=.progress(...))
 		for (r in 1:nrow(x)) {
 			vals <- getValues(x, r)
 			for (i in 1:yfact) {
 				outraster <- setValues(outraster, vals[cols], (r-1) * xfact + i)
 				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}	
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 	}
 	return(outraster)
 }

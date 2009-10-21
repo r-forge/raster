@@ -99,7 +99,7 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	}
 	
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(to), type=.progress(...))
+	pb <- pbSet(nrow(to), type=.progress(...))
 	
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
@@ -113,9 +113,9 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 			to <- setValues(to, vals, r)
 			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
-		.doProgressBar(pb, r)
+		pbDo(pb, r)
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 	if (inMemory) {
 		to <- setValues(to, as.vector(v))
 	}

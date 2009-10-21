@@ -22,15 +22,15 @@ init <- function(raster, fun=runif, filename="", ...) {
 		outraster <- setValues(outraster, fun(n)) 
 	} else  {
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(raster), type=.progress(...))
+		pb <- pbSet(nrow(raster), type=.progress(...))
 		
 		n <- ncol(raster)
 		for (r in 1:nrow(raster)) {
 			outraster <- setValues(outraster, fun(n), r) 
 			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}	
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 	}
 	return(outraster)
 }

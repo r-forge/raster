@@ -157,7 +157,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	holes1 <- rep(FALSE, ncol(raster))
 
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(raster), type=.progress(...))
+	pb <- pbSet(nrow(raster), type=.progress(...))
 
 	for (r in 1:nrow(raster)) {
 		rv <- rv1
@@ -251,9 +251,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
 		}
 		
-		.doProgressBar(pb, r)
+		pbDo(pb, r)
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 
 	if (filename == "") {
 		raster <- setValues(raster, v)

@@ -41,7 +41,7 @@ distanceFromPoints <- function(object, xy, filename="", ...) {
 	v <- vector()
 	
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(rst), type=.progress(...))
+	pb <- pbSet(nrow(rst), type=.progress(...))
 	for (r in 1:nrow(rst)) {	
 		vals <- arow
 		y <- yFromRow(rst, r)
@@ -55,9 +55,9 @@ distanceFromPoints <- function(object, xy, filename="", ...) {
 			rst <- setValues(rst, vals, r)
 			rst <- writeRaster(rst, overwrite=overwrite, filetype=filetype)
 		}
-		.doProgressBar(pb, r) 	
+		pbDo(pb, r) 	
 	}	
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 	if (rst@file@name == "") { 
 		rst <- setValues(rst, v) 
 	}

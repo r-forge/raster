@@ -6,17 +6,17 @@
 
 
 
-.setProgressBar <- function(nrows, type) {
+pbSet <- function(nsteps, type, style=3) {
 	if (type=='text') {
-		pb <- txtProgressBar(min = 0, max = nrows, style = 3)
+		pb <- txtProgressBar(min = 0, max = nsteps, style=style)
 	} else if (type == 'tcltk') {
 		require(tcltk)
-		pb <- tkProgressBar(title = "progress bar", min = 0, max = nrows, width = 300)
+		pb <- tkProgressBar(title = "progress bar", min = 0, max = nsteps, width = 300)
 	} else if (type == 'windows') {
 		if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
-			pb <- winProgressBar(title = "progress bar", min = 0, max = nrows, width = 300)
+			pb <- winProgressBar(title = "progress bar", min = 0, max = nsteps, width = 300)
 		} else {
-			pb <- tkProgressBar(title = "progress bar", min = 0, max = nrows, width = 300)
+			pb <- tkProgressBar(title = "progress bar", min = 0, max = nsteps, width = 300)
 		}
 	} else {
 		pb <- 'none'
@@ -24,18 +24,18 @@
 	return(pb)
 }
 
-.doProgressBar <- function(pb, r) {
+pbDo <- function(pb, step, label='row', value=step) {
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
-		setTxtProgressBar(pb, r)
+		setTxtProgressBar(pb, step)
 	} else if (pbclass=="tkProgressBar") {
-		setTkProgressBar(pb, r, label=paste( 'row', r))	
+		setTkProgressBar(pb, step, label=paste(label, value))	
 	} else if (pbclass=="winProgressBar") {
-		setWinProgressBar(pb, r, title=paste( 'row', r))	
+		setWinProgressBar(pb, step, title=paste(label, value))	
 	} 
 }
 
-.closeProgressBar <- function(pb, type, starttime) {
+pbClose <- function(pb, starttime) {
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
 		cat("\n")
@@ -45,4 +45,8 @@
 	} else if (pbclass=="winProgressBar") {
 		close(pb)
 	} 
+	if (! missing(starttime)) {
+		elapsed <- (proc.time() - starttime)[3]
+		cat('finished in ', elapsed, ' seconds')
+	}
 }

@@ -49,7 +49,7 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
 		cnttab <- alltab
 	
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(raster), type=progress)
+		pb <- pbSet(nrow(raster), type=progress)
 		
 		for (r in 1:nrow(raster)) {
 			d <- cbind(getValues(raster, r), as.integer(getValues(zones, r)))
@@ -68,9 +68,9 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
 					cnttab <- tapply(as.vector(cnttab), groups, sum)
 				}
 			}
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 			
 		groups <- as.integer(names(alltab))
 		alltab <- tapply(as.vector(alltab), groups, fun)

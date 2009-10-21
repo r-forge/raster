@@ -53,7 +53,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			filename(rs) <- filename
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 		}
-		pb <- .setProgressBar(nrow(raster), type=.progress(...))
+		pb <- pbSet(nrow(raster), type=.progress(...))
 		for (r in 1:rs@nrows) {
 			d <- dna
 			if (r %in% urows) {
@@ -77,9 +77,9 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			}
 			rs <- setValues(rs, d, r)
 			rs <- writeRaster(rs, filetype=filetype, overwrite=overwrite) 
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 	} else {
 		v = tapply(values, cells, fun)
 		cells <- as.numeric(rownames(v))

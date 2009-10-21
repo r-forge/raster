@@ -45,7 +45,7 @@ function(x, fun, filename="", ...) {
 		v <- vector(length=0)
 
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(x), type=.progress(...))
+		pb <- pbSet(nrow(x), type=.progress(...))
 		
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
@@ -55,9 +55,9 @@ function(x, fun, filename="", ...) {
 				outraster <- setValues(outraster, fun(values(x)), r)
 				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
 			}
-			.doProgressBar(pb, r)
+			pbDo(pb, r)
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 		
 		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 

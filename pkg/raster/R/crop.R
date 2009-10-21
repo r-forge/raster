@@ -48,7 +48,7 @@ crop <- function(raster, extent, filename="", ...) {
 		v <- vector(length=0)
 
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(outraster), type=.progress(...))
+		pb <- pbSet(nrow(outraster), type=.progress(...))
 		for (r in first_row:last_row) {
 			raster <- readPartOfRow( raster, r, first_col, ncol(outraster) )
 			if (outraster@file@name == "") {
@@ -59,12 +59,12 @@ crop <- function(raster, extent, filename="", ...) {
 			}	
 			rownr <- rownr + 1
 
-			.doProgressBar(pb, r) 			
+			pbDo(pb, r) 			
 		} 
 		if (outraster@file@name == '') { 
 			outraster <- setValues(outraster, v) 
 		}
-		.closeProgressBar(pb, r)
+		pbClose(pb, r)
 		
 	}
 	return(outraster)

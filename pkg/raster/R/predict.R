@@ -47,7 +47,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		v <- vector()
 
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(object), type=.progress(...))
+		pb <- pbSet(nrow(object), type=.progress(...))
 
 		for (r in 1:nrow(object)) {
 			rowvals <- getValues(object, r)
@@ -80,9 +80,9 @@ setMethod('predict', signature(object='RasterStackBrick'),
 				predrast <- setValues(predrast, predv, r)
 				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
 			}
-			.doProgressBar(pb, r) 
+			pbDo(pb, r) 
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 		
 		if (filename == '') {
 			predrast <- setValues(predrast, v)
@@ -108,7 +108,7 @@ setMethod('predict', signature(object='RasterLayer'),
 
 		arow <- 1:ncol(object)
 		starttime <- proc.time()
-		pb <- .setProgressBar(nrow(object), type=.progress(...))
+		pb <- pbSet(nrow(object), type=.progress(...))
 
 		for (r in 1:nrow(object)) {
 			xy <- as.data.frame(xyFromCell(object, arow + (r-1) * ncol(object)) )
@@ -119,9 +119,9 @@ setMethod('predict', signature(object='RasterLayer'),
 				predrast <- setValues(predrast, predv, r)			
 				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
 			}
-			.doProgressBar(pb, r) 
+			pbDo(pb, r) 
 		}
-		.closeProgressBar(pb, starttime)
+		pbClose(pb, starttime)
 		if (filename == '') {
 			predrast <- setValues(predrast, v)
 		}

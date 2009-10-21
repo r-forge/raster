@@ -34,7 +34,7 @@
 	dataType(rout) <- datatype
 
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(rout), type=progress)
+	pb <- pbSet(nrow(rout), type=progress)
 
 	if (bandorder=='BIL') {
 		ncol(rout) <- ncol(rout) * nl
@@ -42,7 +42,7 @@
 			rv <- getValues(object, r)
 			rout <- setValues(rout, as.vector(rv), r)
 			rout <- writeRaster(rout,  overwrite=overwrite)
-			.doProgressBar(pb, r) 				
+			pbDo(pb, r) 				
 		}
 	} else 	if (bandorder=='BIP') {
 		ncol(rout) <- ncol(rout) * nl
@@ -57,7 +57,7 @@
 				rv <- getValues(object, r)
 				rout <- setValues(rout, as.vector(t(rv)), r)
 				rout <- writeRaster(rout, overwrite=overwrite)
-				.doProgressBar(pb, r) 				
+				pbDo(pb, r) 				
 			}
 		}
 	} else 	if (bandorder=='BSQ') {
@@ -68,7 +68,7 @@
 			rout <- writeRaster(rout, overwrite=overwrite)			
 		} else {
 			fakerow <- 0
-			pb <- .setProgressBar(nrow(rout), type=progress)
+			pb <- pbSet(nrow(rout), type=progress)
 			for (i in 1:nl) {
 				sr <- raster(object, i)
 				for (r in 1:nrow(sr)) {
@@ -76,14 +76,14 @@
 					rv <- getValues(sr, r)
 					rout <- setValues(rout, rv, fakerow)
 					rout <- writeRaster(rout, overwrite=overwrite)
-					.doProgressBar(pb, fakerow) 				
+					pbDo(pb, fakerow) 				
 				}				
 			}
 		}		
 	}
 	
 	
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 	nrow(rout) <- nrow(object)
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)

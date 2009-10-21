@@ -17,7 +17,7 @@
 	dataType(rout) <- datatype
 
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(rout), type=progress)
+	pb <- pbSet(nrow(rout), type=progress)
 
 	if (bandorder=='BIL') {
 		ncol(rout) <- ncol(rout) * nl
@@ -25,7 +25,7 @@
 			vals <- getValues(object, r)
 			rout <- setValues(rout, as.vector(vals), r)
 			rout <- writeRaster(rout,  overwrite=overwrite)
-			.doProgressBar(pb, r) 				
+			pbDo(pb, r) 				
 		}
 	} else 	if (bandorder=='BIP') {
 		ncol(rout) <- ncol(rout) * nl
@@ -33,7 +33,7 @@
 			vals <- getValues(object, r)
 			rout <- setValues(rout, as.vector(t(vals)), r)
 			rout <- writeRaster(rout, overwrite=overwrite)
-			.doProgressBar(pb, r) 				
+			pbDo(pb, r) 				
 		}
 	} else 	if (bandorder=='BSQ') {
 		nrow(rout) <- nrow(rout) * nl
@@ -45,11 +45,11 @@
 				vals <- getValues(sr, r)
 				rout <- setValues(rout, vals, fakerow)
 				rout <- writeRaster(rout, overwrite=overwrite)
-				.doProgressBar(pb, r) 				
+				pbDo(pb, r) 				
 			}
 		}		
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 	nrow(rout) <- nrow(object)
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)

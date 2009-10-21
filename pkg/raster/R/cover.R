@@ -72,7 +72,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	starttime <- proc.time()
 
 	v <- vector(length=0)
-	pb <- .setProgressBar(nrow(outRaster), type=.progress(...))
+	pb <- pbSet(nrow(outRaster), type=.progress(...))
 	
 	for (r in 1:nrow(outRaster)) {
 		v1 <- getValues(rasters[[1]], r)
@@ -86,9 +86,9 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 			outRaster <- setValues(outRaster, v1, r)
 			outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
 		}
-		.doProgressBar(pb, r) 
+		pbDo(pb, r) 
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 
 	if (outRaster@file@name == "") {
 		outRaster <- setValues(outRaster, v)

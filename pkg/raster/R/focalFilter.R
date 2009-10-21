@@ -55,7 +55,7 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 
 	v <- vector(length=0)
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(ngbgrid), type=.progress(...))
+	pb <- pbSet(nrow(ngbgrid), type=.progress(...))
 
 	for (r in 1:nrow(ngbgrid)) {		
 		rr <- r + limrow
@@ -82,9 +82,9 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 		} else {
 			v <- c(v, ngbvals)
 		}
-		.doProgressBar(pb, r)
+		pbDo(pb, r)
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 	
 	if (filename == "") { 
 		ngbgrid <- setValues(ngbgrid, v) 

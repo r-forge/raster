@@ -33,11 +33,11 @@ setMethod("Math", signature(x='RasterLayer'),
 			overwrite <- .overwrite()
 			filename(rst) <- rasterTmpFile() 
 			starttime <- proc.time()
-			pb <- .setProgressBar(nrow(rst), type=.progress())			
+			pb <- pbSet(nrow(rst), type=.progress())			
 			for (r in 1:nrow(rst)) {
 				rst <- setValues(rst, callGeneric( getValues(x, r) ), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
-				.doProgressBar(pb, rst) 
+				pbDo(pb, rst) 
 			}
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
@@ -67,11 +67,11 @@ setMethod("Math2", signature(x='RasterLayer'),
 			filename(rst) <- rasterTmpFile() 
 			
 			starttime <- proc.time()
-			pb <- .setProgressBar(nrow(x), type=.progress() )
+			pb <- pbSet(nrow(x), type=.progress() )
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, callGeneric(getValues(x, r), digits), r)
 				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
-				.doProgressBar(pb, r) 
+				pbDo(pb, r) 
 				
 			}
 			return(rst)

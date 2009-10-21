@@ -155,7 +155,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 
 	starttime <- proc.time()
-	pb <- .setProgressBar(nrow(raster), type=.progress(...))
+	pb <- pbSet(nrow(raster), type=.progress(...))
 
 	for (r in 1:nrow(raster)) {
 		rv <- rep(NA, ncol(raster))
@@ -205,9 +205,9 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 			raster <- writeRaster(raster, filetype=filetype)
 		}
 		
-		.doProgressBar(pb, r)
+		pbDo(pb, r)
 	}
-	.closeProgressBar(pb, starttime)
+	pbClose(pb, starttime)
 
 	if (filename == "") {
 		raster <- setValues(raster, v)
