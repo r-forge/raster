@@ -47,8 +47,15 @@ function(x, bands=NULL) {
 			if (is.null(bands)) {
 				r[j] <- raster(x[[i]])
 			} else if (bands[[i]] > 0) {
-					r[j] <- raster(x[[i]], band=bands[[i]])
+				r[j] <- raster(x[[i]], band=bands[[i]])
+				if (length(bands) > 1 & length(x) == 1) {
+					# single file, multuple bands
+					for (q in 2:length(bands)) {
+						r[q] <- raster(x[[i]], band=bands[[q]])
+					}
+				}
 			} else {
+				# all bands
 				r[j] <- raster(x[[i]], band=1)
 				bds <- nbands(r[[j]])
 				if (bds > 1) {

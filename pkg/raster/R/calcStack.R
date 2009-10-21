@@ -18,8 +18,7 @@ function(x, fun, filename="", ...) {
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
 	
-	outraster <- raster(x)
-	filename(outraster) <- trim(filename)
+	outraster <- raster(x, filename)
 	dataType(outraster) <- datatype
 
 	if (!canProcessInMemory(x, 4) & filename == '') {

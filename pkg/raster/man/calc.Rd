@@ -10,7 +10,7 @@
 \title{Calculate}
 
 \description{
- Calculate values for a new RasterLayer, from a single RasterLayer or from a RasterStack
+ Calculate values for a new RasterLayer, from a single RasterLayer or from a RasterStack. 
 }
 
 \usage{
@@ -24,6 +24,15 @@ calc(x, fun, ...)
   \item{...}{Additional arguments. See Details}  
 }
 
+
+\details{
+if \code{x = "RasterLayer"}, \code{fun} should be a function that can take a single value as input, and returns a single value (e.g. \code{sqrt}). 
+if \code{x = "RasterStack"}, \code{fun} should be a function that takes a vector of values as input, and returns a single value (e.g. \code{sum}).
+
+See (\code{link[raster]{overlay}}) to use functions that refer to specific layers, like (\code{function(a,b,c){a + sqrt(b) / c}})
+}
+
+
 \section{Methods}{
 \describe{
  
@@ -35,10 +44,11 @@ calc(x, fun, ...)
   \tab  \code{x} \tab a RasterLayer object \cr
   \tab  \code{fun}  \tab The function to be applied\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
+  \tab  \code{...} \tab Additional arguments. See below \cr  
 }
 
 
-\bold{2) \code{x} is a RasterLayer object; \code{fun} is a function}
+\bold{2) \code{x} is a RasterStack object; \code{fun} is a function}
 
 \code{calc(x, fun, filename='', ...)}
   
@@ -47,7 +57,7 @@ calc(x, fun, ...)
 }
 Other items as above
 
-\bold{3) \code{x} is a RasterLayer object; \code{fun} is a list of functions}
+\bold{3) \code{x} is a RasterStack object; \code{fun} is a list of functions}
 
 \code{calc(x, fun, filename='', ...)}
   
@@ -57,11 +67,6 @@ Other items as above
 }
 Other items as above
 
-}}
-
-\details{
-if \code{x = "RasterLayer"}, \code{fun} should be a function that takes a single value as input, and returns a single value.
-if \code{x = "RasterStack"}, \code{fun} should be a function that takes a vector of value as input, and returns a single value.
 
 
 The following additional arguments can be passed, to replace default values for this function
@@ -71,7 +76,8 @@ The following additional arguments can be passed, to replace default values for 
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
-}
+
+}}
 
 
 \value{
@@ -99,6 +105,11 @@ rc <- calc(r, fun)
 # set NA values to -9999
 fun <- function(x) { x[is.na(x)] <- -9999; return(x)} 
 rc <- calc(rc, fun)
+
+r2 <- r * 2
+s <- stack(r, r2)
+rs <- calc(s, sum)
+
 }
 
 \keyword{methods}

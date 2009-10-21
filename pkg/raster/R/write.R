@@ -56,7 +56,7 @@ function(x, filename='', ...) {
 		stop('No usable data available for writing.')
 	}
 	
-	if (filetype %in% c('raster', 'BIL', 'IDRISI', 'SAGA')) {
+	if (.isNativeDriver(filetype)) {
 		if (substr(dataContent(x), 1, 3) == 'row' ) {
 			x <- .writeRasterRow(x, filetype, ...)
 		} else {
@@ -66,7 +66,6 @@ function(x, filename='', ...) {
 	} else if (filetype=='ascii') {
 		overwrite <- .overwrite(...)
 		x <- .writeAscii(x, overwrite=overwrite)
-		
 	} else if (filetype=='CDF') {
 		overwrite <- .overwrite(...)
 		x <- .writeRasterCDF(x, overwrite=overwrite)

@@ -7,6 +7,7 @@
 
 .overlayList <- function(x, fun, filename="", ...){ 
 	
+	if (length(x) < 1) { stop('no RasterLayers') }
 	compare(x)
 
 	outraster <- raster(x[[1]], filename)
@@ -22,15 +23,54 @@
 		} 
 	}	
 	if (!canProcessInMemory(outraster,2)) {inram <- FALSE }
-	
+
+# what kind of function is this... 
+# I must be overlooking a simpler approach here	
+	a <- rep(1,10)
+	tr <- try ( vals <- do.call(fun, list(a)), silent=TRUE )
+	if (class(tr) == "try-error") {
+		applymethod = FALSE
+		vlist <- list()
+		for (i in 1:length(x)) {
+			vlist[[i]] <- a
+		}
+		tr <- try ( vals <- do.call(fun, vlist), silent=TRUE ) 
+		if (class(tr) == "try-error") {
+			stop('cannot use this formula')
+		} 
+		if (length(vals) != length(a)) {
+			stop('cannot use this formula; lenghts do not match')	
+		}
+		
+	} else {
+		if (length(vals) == 1 && ncol(outraster) > 1) {
+			m <- matrix(rep(a,length(x)), ncol=length(x), nrow=length(a))
+			vals <- apply(m, 1, fun)
+			if (length(vals) == length(a)) {
+				applymethod = TRUE
+			} else {
+				stop('cannot use this formula')
+			}
+		}
+	}
+
 	vallist <- list()
 
 	if ( inram ) {
-		for (i in 1:length(x)) {
-			vallist[[i]] <- values(x[[i]])
-			clearValues(x[[i]])
+		if (applymethod) {
+			valmat <- vector()
+			for (i in 1:length(x)) {
+				valmat <- cbind(valmat, values(x[[i]]))
+				x[[i]] <- clearValues(x[[i]])
+			}	
+			vals <- apply(valmat, 1, fun)
+		} else {
+			for (i in 1:length(x)) {
+				vallist[[i]] <- values(x[[i]])
+				x[[i]] <- clearValues(x[[i]])
+			}
+			vals <- do.call(fun, vallist)
 		}
-		vals <- do.call(fun, vallist)
 		
 		outraster <- setValues(outraster, vals)
 		if (outraster@file@name != "") { 
@@ -48,27 +88,9 @@
 				endcells <- cellFromCol(outraster, ncol(outraster))
 			}
 		}	
+
 		starttime <- proc.time()
 		pb <- .setProgressBar(nrow(outraster), type=.progress(...))
-
-		a <- rep(1,100)
-		for (i in 1:length(x)) {
-			vallist[[i]] <- a
-		}	
-		vals <- do.call(fun, vallist)
-		if (length(vals) == 1 && ncol(outraster) > 1) {
-			m <- matrix(rep(a,length(x)), ncol=length(x), nrow=length(a))
-			vals <- apply(m, 1, fun)
-			if (length(vals) == length(a)) {
-				applymethod = TRUE
-			} else {
-				stop('cannot use this formula')
-			}
-		} else {
-			applymethod = FALSE
-		}
-		
-		
 		
 		for (r in 1:nrow(outraster)) {
 	

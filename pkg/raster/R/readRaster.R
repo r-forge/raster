@@ -98,7 +98,7 @@
 			stop('there are no values associated with this RasterLayer')
 		}
 		
-	} else if (.driver(raster) %in% c('raster', 'SAGA')) {
+	} else if (.isNativeDriver( .driver(raster)) ) {
 		
 		if (!file.exists( filename(raster))) { 
 			stop(paste(filename(raster)," does not exist"))

@@ -58,9 +58,9 @@ setMethod('raster', signature(x='RasterStack'),
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
 			r <- x@layers[[dindex]]
 		} else {
-			r <- new("RasterLayer")
-			extent(r) <- extent(x)
+			r <- raster(extent(x))
 			rowcol(r) <- c(nrow(x), ncol(x))
+			projection(r) <- projection(x)
 		}
 		return(r)
 	}

@@ -69,8 +69,12 @@
 	}
 
 	if (! raster@file@toptobottom) {
-		cells <- ncell(raster) - cells + 1
+		rows <- rowFromCell(raster, cells)
+		cols <- colFromCell(raster, cells)
+		rows <- nrow(raster) - rows + 1
+		cells <- cellFromRowCol(raster, rows, cols)
 	}
+	cells <- cells + raster@file@offset
 	
 	if (nbands(raster) > 1) {
 		if (.bandOrder(raster) == 'BIL') {

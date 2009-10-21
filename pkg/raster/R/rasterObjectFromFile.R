@@ -39,22 +39,18 @@
 		grdfile <- .setFileExtensionHeader(x, 'raster')
 		if (file.exists( grdfile) ) {
 			if (file.exists( grifile)) {
-				if (fileext != '.grd') { ext(x) <- '.grd' }
-				return ( .rasterFromRasterFile(x, band, objecttype) )
+				return ( .rasterFromRasterFile(grdfile, band, objecttype) )
 			} else {
 				if (.isNetCDF(x)) {
 					return ( .rasterFromCDF(x, objecttype, ...) )
+				} else if ( isTRUE(.isSurferFile(x)) ) {
+					return ( .rasterFromSurferFile(x) )
 				} else {
-					# perhaps a surfer grid...
-					# if (.isSurferGrid(x)) 
-					# for now try this:
-					return ( .rasterFromGDAL(x, band, objecttype) )
-					# or warn "gri file missing"
+					stop("Cannot create RasterLayer object. There is a '.grd' file but no '.gri' file. It is not a netcdf or surfer6 file. You can try again with 'forcegdal=TRUE'")
 				} 
 			}
 		} else {
-		# ? what would this be?
-			return ( .rasterFromGDAL(x, band, objecttype) )
+			stop("Cannot create RasterLayer object. There is a '.gri' file but no '.grd' file. You can try again with 'forcegdal=TRUE'")
 		}
 	} 
 	stop(paste('file', x, 'does not exist'))

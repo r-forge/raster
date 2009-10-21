@@ -4,16 +4,29 @@
 # Licence GPL v3
 
 
+.nativeDrivers <- function() {
+	return(  c("raster", "SAGA", "IDRISI", "BIL", "surfer") )
+}
+
+.nativeDriversLong <- function() {
+	return(  c("raster package format", "SAGA GIS", "IDRISI", "Band Interleaved by Line", "surfer" ) )
+}
+
+
+.isNativeDriver <- function(d) {
+	return ( (d %in% .nativeDrivers() ) )
+}
+
 writeFormats <- function() {
 	if (require(rgdal)) { 
 		gd <- gdalDrivers()
 		gd <- as.matrix(subset(gd, gd[,3] == T))
-		short <- c("raster", "ascii", "SAGA", "IDRISI", "BIL", as.vector(gd[,1]))
-		long <- c("raster package format", "Arc ascii", "SAGA GIS", "IDRISI", "Band Interleaved by Line", as.vector(gd[,2]))
+		short <- c(.nativeDrivers(), 'ascii',  as.vector(gd[,1]))
+		long <- c(.nativeDriversLong(), 'Arc ASCII', as.vector(gd[,2]))
 		m <- cbind(short, long)
 	} else {
-		short <- c("raster", "ascii", "SAGA", "IDRISI", "BIL", "")
-		long <- c("raster package format", "Arc ascii", "SAGA GIS", "IDRISI", "Band Interleaved by Line", "rgdal not installed")
+		short <- c(.nativeDrivers(), 'ascii', "")
+		long <- c(.nativeDriversLong(), "Arc ASCII", "rgdal not installed")
 	}
 	m <- cbind(short, long)
 	colnames(m) <- c("name", "long_name")
