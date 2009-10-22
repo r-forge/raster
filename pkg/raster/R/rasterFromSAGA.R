@@ -57,12 +57,11 @@
 	x <- .enforceGoodLayerNames(x, shortname)
 	
 	x@file@name <- .fullFilename(filename)
-	x@file@name <- (filename)
 	x@data@haveminmax <- FALSE
 	x@file@nodatavalue <- nodataval
 
 	if (inidatatype == 'FLOAT') {
-		dataType(x) <- 'FLT4S'
+		.setDataType(x) <- 'FLT4S'
 	}
 	
 	if (byteorder) { 

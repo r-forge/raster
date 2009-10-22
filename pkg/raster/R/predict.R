@@ -15,8 +15,8 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		filetype <- .filetype(...)
 		overwrite <- .overwrite(...)
 
-		filename(predrast) <- filename
-		dataType(predrast) <- datatype
+		.setFilename(predrast) <- filename
+		.setDataType(predrast) <- datatype
 			
 		v <- (attr(model$terms, "factors"))
 		varnames <- attr(v, "dimnames")[[2]]
@@ -41,13 +41,13 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()
-			filename(outRaster) <- filename
+			.setFilename(outRaster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 		} 
 		v <- vector()
 
-		starttime <- proc.time()
-		pb <- pbSet(nrow(object), type=.progress(...))
+		
+		pb <- pbCreate(nrow(object), type=.progress(...))
 
 		for (r in 1:nrow(object)) {
 			rowvals <- getValues(object, r)
@@ -80,9 +80,9 @@ setMethod('predict', signature(object='RasterStackBrick'),
 				predrast <- setValues(predrast, predv, r)
 				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
 			}
-			pbDo(pb, r) 
+			pbStep(pb, r) 
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 		
 		if (filename == '') {
 			predrast <- setValues(predrast, v)
@@ -96,8 +96,8 @@ setMethod('predict', signature(object='RasterStackBrick'),
 setMethod('predict', signature(object='RasterLayer'), 
 	function(object, model, filename="",  ...) {
 		predrast <- raster(object)
-		filename(predrast) <- filename
-		dataType(predrast) <- datatype
+		.setFilename(predrast) <- filename
+		.setDataType(predrast) <- datatype
 
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()
@@ -107,8 +107,8 @@ setMethod('predict', signature(object='RasterLayer'),
 		v <- vector()
 
 		arow <- 1:ncol(object)
-		starttime <- proc.time()
-		pb <- pbSet(nrow(object), type=.progress(...))
+		
+		pb <- pbCreate(nrow(object), type=.progress(...))
 
 		for (r in 1:nrow(object)) {
 			xy <- as.data.frame(xyFromCell(object, arow + (r-1) * ncol(object)) )
@@ -119,9 +119,9 @@ setMethod('predict', signature(object='RasterLayer'),
 				predrast <- setValues(predrast, predv, r)			
 				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
 			}
-			pbDo(pb, r) 
+			pbStep(pb, r) 
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 		if (filename == '') {
 			predrast <- setValues(predrast, v)
 		}

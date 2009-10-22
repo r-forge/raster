@@ -43,7 +43,7 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 
 	filename <- trim(filename)
 	ngbgrid <- raster(raster, filename=filename)
-	dataType(ngbgrid) <- datatype
+	.setDataType(ngbgrid) <- datatype
 
 # first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	res <- vector(length=length(ncol(ngbgrid)))
@@ -63,8 +63,8 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 	res <- vector(length=ncol(ngbdata))
 
 	v <- vector(length=0)
-	starttime <- proc.time()
-	pb <- pbSet(nrow(ngbgrid), type=.progress(...))
+	
+	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
 
 	for (r in 1:nrow(ngbgrid)) {		
 		rr <- r + limrow
@@ -87,9 +87,9 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 		} else {
 			v <- c(v, ngbvals)
 		}
-		pbDo(pb, r)
+		pbStep(pb, r)
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 
 	if (filename == "") { 
 		ngbgrid <- setValues(ngbgrid, v) 

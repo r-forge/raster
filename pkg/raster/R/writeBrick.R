@@ -4,15 +4,17 @@
 # Licence GPL v3
 
 
-.writeBrick <- function(object, filename, bandorder, ...) {
-	if (missing(filename) | filename == '') {
-		filename <- filename(object)
-		if ( filename == '' ) {
-			stop('provide a filename')
-		}
+.writeBrick <- function(object, bandorder='BIL', ...) {
+#.writeBrick <- function(object, filename='', bandorder, ...) {
+	
+	filetype <- .filetype(...)
+	if (filetype != 'raster') {
+		stop('Only "raster" format is currently supported for writing multiband files')
 	}
 
-	filetype <- .filetype(...)  # not used
+	filename <- .writefilename(object, ...)
+	
+#	filetype <- .filetype(...)  # not used
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
 	progress <- .progress(...)
@@ -28,21 +30,20 @@
 
 	nl <- nlayers(object)
 	rout <- raster(object)
-	filename(rout) <- filename
 	rout@file@nbands <- nl
 	rout@file@bandorder <- bandorder
-	dataType(rout) <- datatype
+	.setDataType(rout) <- datatype
 
-	starttime <- proc.time()
-	pb <- pbSet(nrow(rout), type=progress)
+	
+	pb <- pbCreate(nrow(rout), type=progress)
 
 	if (bandorder=='BIL') {
 		ncol(rout) <- ncol(rout) * nl
 		for (r in 1:nrow(object)) {
 			rv <- getValues(object, r)
 			rout <- setValues(rout, as.vector(rv), r)
-			rout <- writeRaster(rout,  overwrite=overwrite)
-			pbDo(pb, r) 				
+			rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)
+			pbStep(pb, r) 				
 		}
 	} else 	if (bandorder=='BIP') {
 		ncol(rout) <- ncol(rout) * nl
@@ -51,13 +52,13 @@
 			object <- clearValues(object)
 			rout <- setValues(rout, sv)
 			rm(sv)
-			rout <- writeRaster(rout, overwrite=overwrite)			
+			rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)			
 		} else {
 			for (r in 1:nrow(object)) {
 				rv <- getValues(object, r)
 				rout <- setValues(rout, as.vector(t(rv)), r)
-				rout <- writeRaster(rout, overwrite=overwrite)
-				pbDo(pb, r) 				
+				rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)
+				pbStep(pb, r) 				
 			}
 		}
 	} else 	if (bandorder=='BSQ') {
@@ -65,25 +66,27 @@
 		if (dataContent(object) == 'all') {
 			rout <- setValues(rout, as.vector(values(object)))
 			object <- clearValues(object)
-			rout <- writeRaster(rout, overwrite=overwrite)			
+			rout <- writeRaster(rout, filename=filename, overwrite=overwrite)			
 		} else {
 			fakerow <- 0
-			pb <- pbSet(nrow(rout), type=progress)
+			pb <- pbCreate(nrow(rout), type=progress)
+			rr <- 0
 			for (i in 1:nl) {
 				sr <- raster(object, i)
 				for (r in 1:nrow(sr)) {
 					fakerow <- fakerow + 1
 					rv <- getValues(sr, r)
 					rout <- setValues(rout, rv, fakerow)
-					rout <- writeRaster(rout, overwrite=overwrite)
-					pbDo(pb, fakerow) 				
+					rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)
+					rr <- rr + 1
+					pbStep(pb, rr) 				
 				}				
 			}
 		}		
 	}
 	
 	
-	pbClose(pb, starttime)
+	pbClose(pb)
 	nrow(rout) <- nrow(object)
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)

@@ -12,7 +12,7 @@
 
 	outraster <- raster(x[[1]], filename)
 	
-	dataType(outraster) <- .datatype(...)
+	.setDataType(outraster) <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
 
@@ -81,7 +81,7 @@
 		if (outraster@file@name == "") {
 			if (!canProcessInMemory(outraster, 4)) {
 				filename <- rasterTmpFile()
-				filename(outraster) <- filename
+				.setFilename(outraster) <- filename
 			} else {
 				v  <- vector(length=ncell(outraster))
 				startcells <- cellFromCol(outraster, 1)
@@ -89,8 +89,8 @@
 			}
 		}	
 
-		starttime <- proc.time()
-		pb <- pbSet(nrow(outraster), type=.progress(...))
+		
+		pb <- pbCreate(nrow(outraster), type=.progress(...))
 		
 		for (r in 1:nrow(outraster)) {
 	
@@ -116,9 +116,9 @@
 				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
 			}	
 			
-			pbDo(pb, r)
+			pbStep(pb, r)
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 		
 		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 

@@ -3,12 +3,9 @@
 # Version 0.9
 # Licence GPL v3
 
-reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
-	if (is.null(filename)) { filename <- "" }
+reclass <- function(raster, rclmat, update=FALSE, ...)  {
 	
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
+	filename <- .filename(...)
 
 	if (class(raster) != 'RasterLayer' ) {
 		stop('first argument should be an object of class "RasterLayer"')
@@ -32,7 +29,6 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 	}
 	
 	outRaster <- raster(raster, filename=filename)
-	dataType(outRaster) <- datatype
 
 	res <- vector(length = ncol(raster))
 	
@@ -73,8 +69,8 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 			}
 		}
 
-		starttime <- proc.time()
-		pb <- pbSet(nrow(raster), type=.progress(...))
+		
+		pb <- pbCreate(nrow(raster), type=.progress(...))
 		if (update) {
 			for (r in 1:nrow(raster)) {
 				res <- getValues(raster, r)
@@ -85,8 +81,8 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 					res[ is.na(res) ] <- namat[1, 3] 				
 				}	
 				outRaster <- setValues(outRaster, res, r)
-				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
-				pbDo(pb, r)
+				outRaster <- writeRaster(outRaster, filename=filename, ...)
+				pbStep(pb, r)
 			}
 		} else {
 			for (r in 1:nrow(raster)) {
@@ -98,10 +94,10 @@ reclass <- function(raster, rclmat, update=FALSE, filename="", ...)  {
 					res[ is.na(res) ] <- namat[1, 3] 				
 				}	
 				outRaster <- setValues(outRaster, res, r)
-				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
-				pbDo(pb, r)
+				outRaster <- writeRaster(outRaster, filename=filename, ...)
+				pbStep(pb, r)
 			}
-			pbClose(pb, starttime)
+			pbClose(pb)
 		}
 		return(outRaster)
 	}

@@ -30,7 +30,7 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	
 	filename <- trim(filename)
 	ngbgrid <- raster(raster, filename=filename)
-	dataType(ngbgrid) <- datatype
+	.setDataType(ngbgrid) <- datatype
 
 	res <- vector(length=length(ncol(ngbgrid)))
 
@@ -54,8 +54,8 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	res <- vector(length=ncol(ngbdata))
 
 	v <- vector(length=0)
-	starttime <- proc.time()
-	pb <- pbSet(nrow(ngbgrid), type=.progress(...))
+	
+	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
 
 	for (r in 1:nrow(ngbgrid)) {		
 		rr <- r + limrow
@@ -82,9 +82,9 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 		} else {
 			v <- c(v, ngbvals)
 		}
-		pbDo(pb, r)
+		pbStep(pb, r)
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 	
 	if (filename == "") { 
 		ngbgrid <- setValues(ngbgrid, v) 

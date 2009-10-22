@@ -1,16 +1,14 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
-
-.writeAscii <- function(raster, overwrite=FALSE) {
-	filename <- trim(raster@file@name)
-	if (filename == "") {
-		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')
-	}
+.writeAscii <- function(raster, ...) {
+ 	filename <- .writefilename(raster, ...)
+	raster@file@name <- filename
+	overwrite <- .overwrite(...)
+	dtype  <- .shortDataType(.datatype(...))
 	
 	if (dataIndices(raster)[1] == 1) {
 		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
@@ -36,8 +34,11 @@
 		stop(paste('writing beyond end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 	}
 
-	
+	if (dtype == 'INT') {
+		raster@data@values <- round(raster@data@values)
+	}
 	raster@data@values[is.na(values(raster))] <- .nodatavalue(raster)
+	
 	if (dataContent(raster) == 'all') {
 		for (r in 1:nrow(raster)) {
 			write.table(t(getValues(raster, r)), filename, append = TRUE, quote = FALSE, 

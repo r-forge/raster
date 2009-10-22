@@ -35,7 +35,7 @@ Formal definition of the overlay method (in the sp package)
 \tab \code{fun} \tab the function to be applied. This should be a function that takes two numbers as an argument  \cr
 \tab \code{filename} \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
 \tab \code{overwrite}\tab logical. If \code{TRUE}, existing files will be overwritten \cr
-\tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+\tab \code{filetype} \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
 \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
 }
   
@@ -49,7 +49,7 @@ Formal definition of the overlay method (in the sp package)
   \tab \code{fun}  \tab the function to be appliepd. This should be a function that takes two numbers as an argument \cr
   \tab \code{filename}  \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
   \tab \code{overwrite}  \tab logical. If \code{TRUE}, existing files will be overwritten \cr
-  \tab \code{filetype}  \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
 }
 }
 }

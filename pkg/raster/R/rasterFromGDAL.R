@@ -53,8 +53,8 @@
 
 	shortname <- gsub(" ", "_", ext(basename(filename), ""))
 	x <- .enforceGoodLayerNames(x, shortname)
-	filename(x) <- filename
-	dataType(x) <- "FLT4S"
+	.setFilename(x) <- filename
+	.setDataType(x) <- "FLT4S"
 	
 	x@file@driver <- 'gdal' 
 

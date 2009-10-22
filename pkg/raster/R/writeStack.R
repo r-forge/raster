@@ -3,53 +3,67 @@
 # Version 0.9
 # Licence GPL v3
 
-.writeStack <- function(object, filename, bandorder, filetype, datatype, overwrite, progress='') {
+.writeStack <- function(object, bandorder='BIL', ...) {
 
+    filename <- .filename(...)
+	if (filename == '') {
+		stop('you must supply a filename')
+	}
+	
+	datatype <- .datatype(...)
+	filetype <- .filetype(...)
+	overwrite <- .overwrite(...)
+	progress <- .progress(...)
+
+	if (filetype != 'raster') {
+		stop('Only "raster" format is currently supported for writing multiband files')
+	}
 	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) {
 		stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'")
 	}
 
 	nl <- nlayers(object)
-	rout <- raster(raster(object)) 
-	filename(rout) <- filename
+	rout <- raster(raster(object), filename=filename) 
 	rout@file@nbands <- nl
 	rout@file@bandorder <- bandorder
-	dataType(rout) <- datatype
+	.setDataType(rout) <- datatype
 
-	starttime <- proc.time()
-	pb <- pbSet(nrow(rout), type=progress)
+	
+	pb <- pbCreate(nrow(rout), type=progress)
 
 	if (bandorder=='BIL') {
 		ncol(rout) <- ncol(rout) * nl
 		for (r in 1:nrow(object)) {
 			vals <- getValues(object, r)
 			rout <- setValues(rout, as.vector(vals), r)
-			rout <- writeRaster(rout,  overwrite=overwrite)
-			pbDo(pb, r) 				
+			rout <- writeRaster(rout, filename=filename, datatype=datatype, filetype=filetype, overwrite=overwrite)
+			pbStep(pb, r) 				
 		}
 	} else 	if (bandorder=='BIP') {
 		ncol(rout) <- ncol(rout) * nl
 		for (r in 1:nrow(object)) {
 			vals <- getValues(object, r)
 			rout <- setValues(rout, as.vector(t(vals)), r)
-			rout <- writeRaster(rout, overwrite=overwrite)
-			pbDo(pb, r) 				
+			rout <- writeRaster(rout, filename=filename, datatype=datatype,  filetype=filetype,  overwrite=overwrite)
+			pbStep(pb, r) 				
 		}
 	} else 	if (bandorder=='BSQ') {
 		nrow(rout) <- nrow(rout) * nl
 		fakerow <- 0
+		rr <- 0
 		for (i in 1:nl) {
 			sr <- raster(object, i)
 			for (r in 1:nrow(sr)) {
 				fakerow <- fakerow + 1
 				vals <- getValues(sr, r)
 				rout <- setValues(rout, vals, fakerow)
-				rout <- writeRaster(rout, overwrite=overwrite)
-				pbDo(pb, r) 				
+				rout <- writeRaster(rout, filename=filename, datatype=datatype,  filetype=filetype,  overwrite=overwrite)
+				rr <- rr + 1
+				pbStep(pb, rr) 				
 			}
 		}		
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 	nrow(rout) <- nrow(object)
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)

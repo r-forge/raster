@@ -12,22 +12,13 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 			if (canProcessInMemory(e1, 4)) {
 				return( setValues(r, values=callGeneric( as.numeric(getValues(e1)), getValues(e2))) )
 			} else {
-				dataType(r) <- .datatype()
-				filetype <- .filetype()
-				overwrite <- .overwrite()
-
-				filename(r) <- rasterTmpFile() 
-				
-				starttime <- proc.time()
-				pb <- pbSet(nrow(e1), type=.progress() )
+				filename <- rasterTmpFile()
 				for (row in 1:nrow(e1)) {
 					r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), getValues(e2, row) ), row)
-					r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
-					pbDo(pb, row) 
+					r <- writeRaster(r, filename=filename, doPB=TRUE)
 				}
-				pbClose(pb, starttime)
 				if (getOption('verbose')) {
-					cat('values were written to:', raster@file@name)
+					cat('values were written to:', filename(raster))
 				}
 				return(r)
 			}
@@ -42,20 +33,11 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 		if (canProcessInMemory(e1, 4)) {
 			return ( setValues(r,  callGeneric(as.numeric(getValues(e1)), e2) ) )
 		} else {
-			dataType(r) <- .datatype()
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			
-			filename(r) <- rasterTmpFile() 
-			
-			starttime <- proc.time()
-			pb <- pbSet(nrow(e1), type=.progress())
+			filename <- rasterTmpFile()
 			for (row in 1:nrow(e1)) {
 				r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), e2) , row) 
-				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
-				pbDo(pb, row) 
+				r <- writeRaster(r, filename=filename, doPB=TRUE)
 			}
-			pbClose(pb, starttime)
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
 			}			
@@ -70,19 +52,11 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 		if (canProcessInMemory(e2, 4)) {
 			return( setValues(r, callGeneric(as.numeric(e1), getValues(e2))) )
 		} else {
-			dataType(r) <- .datatype()
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			progress <- .progress()
-			filename(r) <- rasterTmpFile() 
-			starttime <- proc.time()
-			pb <- pbSet(nrow(e1), type=progress)
+			filename <- rasterTmpFile()
 			for (row in 1:nrow(e2)) {
 				r <- setValues(r, callGeneric(as.numeric(e1), getValues(e2, row)) , row)
-				r <- writeRaster(r, filetype=filetype, overwrite=overwrite)
-				pbDo(pb, row) 
+				r <- writeRaster(r, filename=filename, doPB=TRUE)
 			}
-			pbClose(pb, starttime)
 			if (getOption('verbose')) {
 				cat('values were written to:', filename(raster))
 			}

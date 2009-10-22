@@ -10,69 +10,40 @@ if (!isGeneric("cover")) {
 }	
 
 setMethod('cover', signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, ..., filename="", filetype, datatype,  overwrite, progress) {
+	function(x, y, ..., datatype=NULL) {
 
-	if (missing(filetype)) { filetype <- .filetype()	} 
-	if (missing(overwrite)) { overwrite <- .overwrite() }
-	if (missing(progress)) { progress <- .progress() }
-
-	outRaster <- raster(x, filename)
-
-	rasters <- c(x, y)
-	obs <- list(...)
-	if (isTRUE(length(obs) > 0)) {
-		for (i in 1:length(obs)) {
-			if (extends(class(obs[[i]]), "RasterLayer")) {
-				if (!(dataContent(obs[[i]]) != 'all'  &  dataSource(obs[[i]]) == 'ram' )) {
-					rasters <- c(rasters, obs[[i]])
-				}
-			}
-		}
-	}
-	
-	if (length(rasters) < 2) { 
-		if (length(rasters) == 1) {
-			warning('Only a single useable RasterLayer')
-			return(rasters[[1]])
-		} else {
-			stop('No useable RasterLayers')		
-		}
-	}
+	rasters <- .makeRasterList(x, y, ...)
 	compare(rasters)
 		
+	outRaster <- raster(x)
 
-	if (!missing(datatype)) {
-		dataType(outRaster) <- datatype
-	} else {
-		dtp <-  getOption('rasterDatatype')
-		if (!is.null(dtp)) {
-			dataType(outRaster) <- dtp
-		} else {
-			isInt <- TRUE
-			for (i in 1:length(rasters)) {
-				dtype <- .shortDataType(rasters[[i]]@file@datanotation)
-				if (dtype != 'INT') {
-					isInt <- FALSE
-				}
-			}
-			if (isInt) { 
-				dataType(outRaster) <- 'INT4S'
-			} else { 
-				dataType(outRaster) <- 'FLT4S'
+	if (is.null(datatype)) {
+# check for boolean data?
+		isInt <- TRUE
+		for (i in 1:length(rasters)) {
+			dtype <- .shortDataType(rasters[[i]]@file@datanotation)
+			if (dtype != 'INT') {
+				isInt <- FALSE
 			}
 		}
+		if (isInt) { 
+			datatype  <- 'INT4S'
+		} else { 
+			datatype <- 'FLT4S'
+		}
 	}
-	
+	.setDataType(outRaster) <- datatype
 		
+	filename <- .filename(...)	
 	if (!canProcessInMemory(x, 4) && filename == '') {
 		filename <- rasterTmpFile()
-		filename(outRaster) <- filename
+		.setFilename(outRaster) <- filename
 		if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 	}
-	starttime <- proc.time()
+	
 
 	v <- vector(length=0)
-	pb <- pbSet(nrow(outRaster), type=.progress(...))
+	pb <- pbCreate(nrow(outRaster), type=.progress(...))
 	
 	for (r in 1:nrow(outRaster)) {
 		v1 <- getValues(rasters[[1]], r)
@@ -84,11 +55,11 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 			v <- c(v, v1)
 		} else {
 			outRaster <- setValues(outRaster, v1, r)
-			outRaster <- writeRaster(outRaster, filetype=filetype, overwrite=overwrite)
+			outRaster <- writeRaster(outRaster, filename=filename, datatype=datatype, ...)
 		}
-		pbDo(pb, r) 
+		pbStep(pb, r) 
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 
 	if (outRaster@file@name == "") {
 		outRaster <- setValues(outRaster, v)

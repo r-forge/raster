@@ -79,7 +79,7 @@ gridDistance <- function(object, filename="", ...) {
 			m <- c(-Inf, Inf, 0)
 			rsl1 <- reclass(object, m, filename=rasterTmpFile(), overwrite=TRUE)
 			rsl2 <- raster(rsl1)
-			filename(rsl2) <- rasterTmpFile()
+			.setFilename(rsl2) <- rasterTmpFile()
 			
 			if(isLatLon(object)){
 				remainingCells <- TRUE

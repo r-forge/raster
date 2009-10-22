@@ -21,7 +21,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 	raster <- raster(raster)
 	rs <- raster(raster, filename)
 	
-	dataType(rs) <- .datatype(...)
+	.setDataType(rs) <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
 	
@@ -32,13 +32,13 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 	if (!canProcessInMemory(rs, 2 * nres))  {
 		if (filename == '') {
 			filename <- rasterTmpFile()
-			filename(rs) <- filename
+			.setFilename(rs) <- filename
 			if (getOption('verbose')) { cat('writing results to:', filename(rs))	}						
 		}
 		todisk <- TRUE
 	}	
 	
-	starttime <- proc.time()
+	
 	if (todisk) {
 		rows <- rowFromCell(rs, cells)
 		cols <- colFromCell(rs, cells)
@@ -50,10 +50,10 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			dna[] <- background
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
-			filename(rs) <- filename
+			.setFilename(rs) <- filename
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 		}
-		pb <- pbSet(nrow(raster), type=.progress(...))
+		pb <- pbCreate(nrow(raster), type=.progress(...))
 		for (r in 1:rs@nrows) {
 			d <- dna
 			if (r %in% urows) {
@@ -77,9 +77,9 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			}
 			rs <- setValues(rs, d, r)
 			rs <- writeRaster(rs, filetype=filetype, overwrite=overwrite) 
-			pbDo(pb, r)
+			pbStep(pb, r)
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 	} else {
 		v = tapply(values, cells, fun)
 		cells <- as.numeric(rownames(v))
@@ -92,7 +92,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			vv <- matrix(background, nrow=ncell(rs), ncol=dim(v)[2])
 			vv[cells, ] <- v
 		    rs <- brick(rs)  #  return a'RasterBrick'
-			filename(rs) <- filename
+			.setFilename(rs) <- filename
 			
 		} else {
 			vv <- 1:ncell(rs)

@@ -8,29 +8,28 @@
 init <- function(raster, fun=runif, filename="", ...) {
 
 	outraster <- raster(raster, filename)
-	dataType(outraster) <- .datatype(...)
+	.setDataType(outraster) <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
 	
 	if (!canProcessInMemory(outraster, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		filename(outraster) <- filename
 		if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 	}
 	if ( filename == '') {
 		n <- ncell(raster)
 		outraster <- setValues(outraster, fun(n)) 
 	} else  {
-		starttime <- proc.time()
-		pb <- pbSet(nrow(raster), type=.progress(...))
+		
+		pb <- pbCreate(nrow(raster), type=.progress(...))
 		
 		n <- ncol(raster)
 		for (r in 1:nrow(raster)) {
 			outraster <- setValues(outraster, fun(n), r) 
-			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
-			pbDo(pb, r)
+			outraster <- writeRaster(outraster, filename=filename, filetype=filetype, overwrite=overwrite)
+			pbStep(pb, r)
 		}	
-		pbClose(pb, starttime)
+		pbClose(pb)
 	}
 	return(outraster)
 }

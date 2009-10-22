@@ -1,12 +1,12 @@
 \name{filename}
 
-\alias{filename<-}
 \alias{filename}
+\alias{filename<-}
 
 \title{filename}
 
 \description{
-Get or set the filename of a Raster* object 
+Get the filename of a Raster* object. You can set the filename of a new RasterLayer with \code{\link[raster]{raster}} with a RasterLayer object as first argument (and similarly for a RasterBrick. 
 }
 
 \usage{
@@ -16,7 +16,8 @@ filename(x) <- value
 
 \arguments{
   \item{x}{A Raster* object }
-  \item{value}{filename, including path, can be an empty string \code{""} }
+  \item{value}{A filename (only for RasterStack objects }
+  
 }
 
 \value{
@@ -27,8 +28,7 @@ a Raster* object
 \author{ Robert J. Hijmans }
 
 \examples{ 
-r <- raster()
-filename(r) <- "c:/test.grd"
+r <- raster( system.file("external/test.ag", package="sp") )
 filename(r)
 }
 

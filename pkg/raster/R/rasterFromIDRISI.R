@@ -51,18 +51,17 @@
 	x <- .enforceGoodLayerNames(x, shortname)
 	
 	x@file@name <- .fullFilename(filename)
-	x@file@name <- (filename)
 	x@data@min <- minval
 	x@data@max <- maxval
 	x@data@haveminmax <- TRUE
 	x@file@nodatavalue <- nodataval
 
 	if (inidatatype == 'BYTE') {
-		dataType(x) <- 'INT1U'
+		.setDataType(x) <- 'INT1U'
 	} else if (inidatatype == 'INTEGER') {
-		dataType(x) <- 'INT2S'
+		.setDataType(x) <- 'INT2S'
 	} else if (inidatatype == 'REAL') {
-		dataType(x) <- 'INT4S'
+		.setDataType(x) <- 'INT4S'
 	} else {
 		stop(paste('unsupported IDRISI data type:', inidatatype))
 	}

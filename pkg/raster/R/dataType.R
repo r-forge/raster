@@ -1,18 +1,17 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
-'dataType<-' <- function(x, value) {
+'.setDataType<-' <- function(x, value) {
 	if (class(x) == 'RasterStack') {
 		stop('Cannot set datatype of a RasterStack')
 	}
 
 # for backward compatibility issues and non fatal mistakes.
 	datatype <- substr( toupper( trim(value) ), 1, 5)
-	if (datatype=='LOGIC') {datatype <- 'LOG1S'}
+	if (datatype == 'LOGIC') {datatype <- 'LOG1S'}
 	if (datatype == 'BYTE') {datatype <- 'INT1U'}
 	if (datatype == 'INTEG') {datatype <- 'INT4S'}
 	if (datatype == 'NUMER') {datatype <- 'FLT4S'}

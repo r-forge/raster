@@ -41,9 +41,9 @@ function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, progress){
 		}
 	}
 	if (isInt) { 
-		dataType(outraster) <- 'INT4S'
+		.setDataType(outraster) <- 'INT4S'
 	} else { 
-		dataType(outraster) <- 'FLT4S'
+		.setDataType(outraster) <- 'FLT4S'
 	}
 	
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
@@ -59,12 +59,12 @@ function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, progress){
 	
 	if (!canProcessInMemory(x, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		filename(outraster) <- filename
+		.setFilename(outraster) <- filename
 		if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 	}
 
-	starttime <- proc.time()
-	pb <- pbSet(nrow(outraster), type=.progress(...))
+	
+	pb <- pbCreate(nrow(outraster), type=.progress(...))
 	
 	for (r in 1:nrow(outraster)) {
 		rd <- as.vector(matrix(NA, nrow=1, ncol=ncol(outraster))) 
@@ -93,9 +93,9 @@ function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, progress){
 			v <- c(v, rd)
 		}
 
-		pbDo(pb, r)
+		pbStep(pb, r)
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 
 	if (outraster@file@name == "") { 
 		outraster <- setValues(outraster, v) 

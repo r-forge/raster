@@ -126,21 +126,21 @@
 
 	if (nbits == 8) {
 		if (pixtype == 'SIGNEDINT') {
-			dataType(x) <- 'INT1S'
+			.setDataType(x) <- 'INT1S'
 		} else {
-			dataType(x) <- 'INT1U'		
+			.setDataType(x) <- 'INT1U'		
 		}
 	} else if (nbits == 16) {
 		if (pixtype == 'SIGNEDINT') {
-			dataType(x) <- 'INT2S'
+			.setDataType(x) <- 'INT2S'
 		} else {
-			dataType(x) <- 'INT2U'		
+			.setDataType(x) <- 'INT2U'		
 		}
 	} else if (nbits == 32) {
 		if (pixtype == 'SIGNEDINT') {
-			dataType(x) <- 'INT4S'
+			.setDataType(x) <- 'INT4S'
 		} else {
-			dataType(x) <- 'INT4U'		
+			.setDataType(x) <- 'INT4U'		
 		}
 	} else {
 		stop(paste('unknown nbits in BIL:', nbits))

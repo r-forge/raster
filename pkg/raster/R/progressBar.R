@@ -5,8 +5,7 @@
 # Licence GPL v3
 
 
-
-pbSet <- function(nsteps, type, style=3) {
+pbCreate <- function(nsteps, type, style=3) {
 	if (type=='text') {
 		pb <- txtProgressBar(min = 0, max = nsteps, style=style)
 	} else if (type == 'tcltk') {
@@ -21,10 +20,11 @@ pbSet <- function(nsteps, type, style=3) {
 	} else {
 		pb <- 'none'
 	}
+	attr(pb, "starttime") <- proc.time()
 	return(pb)
 }
 
-pbDo <- function(pb, step, label='row', value=step) {
+pbStep <- function(pb, step, label='row', value=step) {
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
 		setTxtProgressBar(pb, step)
@@ -35,7 +35,7 @@ pbDo <- function(pb, step, label='row', value=step) {
 	} 
 }
 
-pbClose <- function(pb, starttime) {
+pbClose <- function(pb, time=FALSE) {
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
 		cat("\n")
@@ -45,8 +45,8 @@ pbClose <- function(pb, starttime) {
 	} else if (pbclass=="winProgressBar") {
 		close(pb)
 	} 
-	if (! missing(starttime)) {
-		elapsed <- (proc.time() - starttime)[3]
-		cat('finished in ', elapsed, ' seconds')
+	if (time) {
+		elapsed <- (proc.time() - 	attr(pb, "starttime"))[3]
+		cat('Finished in ', elapsed, ' seconds\n')
 	}
 }

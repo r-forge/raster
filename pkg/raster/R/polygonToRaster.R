@@ -78,10 +78,10 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 		}
 	}
 	raster <- raster(raster)
-	filename(raster) <- filename
-	dataType(raster) <- datatype
+	.setFilename(raster) <- filename
+	.setDataType(raster) <- datatype
 
-	starttime <- proc.time()
+	
 
 # check if bbox of raster and spPolys overlap
 	spbb <- bbox(spPolys)
@@ -156,8 +156,8 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	rv1 <- rep(NA, ncol(raster))
 	holes1 <- rep(FALSE, ncol(raster))
 
-	starttime <- proc.time()
-	pb <- pbSet(nrow(raster), type=.progress(...))
+	
+	pb <- pbCreate(nrow(raster), type=.progress(...))
 
 	for (r in 1:nrow(raster)) {
 		rv <- rv1
@@ -251,17 +251,14 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
 		}
 		
-		pbDo(pb, r)
+		pbStep(pb, r)
 	}
-	pbClose(pb, starttime)
+	pbClose(pb, TRUE)
 
 	if (filename == "") {
 		raster <- setValues(raster, v)
 	}
 	
-	elapsed <- (proc.time() - starttime)[3]
-	tpr <- round((elapsed /r), digits=2)
-	print(paste('finished in ', round(elapsed/60, digits=1), 'minutes, at', tpr, 'seconds/row'))
 	return(raster)
 }
 
@@ -275,7 +272,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 # check if bbox of raster and spPolys overlap
 	filename <- trim(filename)
 	raster <- raster(raster, filename)
-	dataType(raster) <- datatype
+	.setDataType(raster) <- datatype
 	
 
 	spbb <- bbox(spPolys)

@@ -8,14 +8,13 @@
 Reclassify values of a RasterLayer
 }
 \usage{
-reclass(raster, rclmat, update=FALSE, filename="", ...) 
+reclass(raster, rclmat, update=FALSE, ...) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{rclmat}{Matrix (or vector) for reclassifcation. (see below)}
   \item{update}{Logical. If \code{TRUE} reclass updates previously reclassed values (see details)}
-  \item{filename}{Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot}
   \item{...}{additional arguments. See Details.}  
 }
 
@@ -32,10 +31,11 @@ For example if row 1 has \code{1, 10, 15} and row 2 has \code{11, 20, 25}, all t
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
+  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
+  \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype}  \tab output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
-  \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
-  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+  \tab \code{progress}  \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
 }
 

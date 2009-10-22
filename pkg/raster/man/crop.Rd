@@ -1,6 +1,8 @@
 \name{crop}
 
 \alias{crop}
+\alias{crop,RasterLayer-method}
+\alias{crop,RasterLayer,ANY-method}
 
 \title{Crop}
 
@@ -10,29 +12,27 @@ Areas in the bounding box outside of the intput RasterLayer are ignored, and the
 }
 
 \usage{
-crop(raster, extent, filename="", ...) 
+crop(x, y, ...) 
 }
 
 \arguments{
-  \item{raster}{A RasterLayer object}
-  \item{extent}{Extent object, or any object that contain an Extent object (see below)}
-  \item{filename}{Character. Output filename for a new raster}
+  \item{x}{A RasterLayer object}
+  \item{y}{Extent object, or any object from which an Extent object can be extracted (see below)}
   \item{...}{additional arguments. See Details.}  
 }
 
 \details{
- Objects that have a Extent object include RasterLayer, RasterStack. 
- They can also be extracted from objects descending from the Spatial class in the sp package. 
+ Objects that have a Extent object include RasterLayer, RasterStack.  They can also be extracted from objects descending from the Spatial class in the sp package. 
  You can check this with the \code{\link[raster]{extent}} function. New Extent objects can be created with \code{newExtent}.
  
  If no filename is specified, and the resulting RasterLayer is too large to hold in memory, it is saved to a temporary file.  
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
+  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
+  \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
-  \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
-  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+  \tab \code{progress}  \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  } 
 }
 

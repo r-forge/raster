@@ -3,24 +3,17 @@
 # Version 0.9
 # Licence GPL v3
 
- 
-.startRowWriting <- function(raster, filetype, ...) {
- 	fname <- trim(raster@file@name)
-	
-	if (fname == "") {
-		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')
-	}
-	overwrite <- .overwrite(filetype, ...)
-	if (fname != '') {
-		filename(raster) <- fname
-	}
-	if (filename(raster) == '') {
+.startRowWriting <- function(raster, doPB=FALSE, ...) {
+ 	filename <- .writefilename(raster, ...)
+	if (filename == "") {
 		stop('RasterLayer has no filename; and no filename specified as argument to writeRaster')
 	}
-	
-	fname <- .setFileExtensionHeader(fname, filetype)
-	filename(raster) <- fname
-	fnamevals <- .setFileExtensionValues(fname)
+	filetype <- .filetype(...)
+	filename <- .setFileExtensionHeader(filename, filetype)
+	.setFilename(raster) <- filename
+	fnamevals <- .setFileExtensionValues(filename)
+	datatype <- .datatype(...)
+	.setDataType(raster) <- datatype
 	
 	if (filetype %in% c('SAGA')) {
 		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )
@@ -29,8 +22,9 @@
 		}
 	}
 
-	if (!overwrite & (file.exists(fname) | file.exists(fnamevals))) {
-		stop(paste(fname,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+	overwrite <- .overwrite( ...)
+	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
+		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
 	
 	attr(raster@file, "con") <- file(fnamevals, "wb")
@@ -41,11 +35,14 @@
 	raster@data@max <- -Inf
 	raster@data@haveminmax <- FALSE
 	raster@file@driver <- filetype
+	
+	if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress() ) }
+	
 	return(raster)
 }
 
 
-.stopRowWriting <- function(raster) {
+.stopRowWriting <- function(raster, doPB=FALSE) {
 	writeRasterHdr(raster, .driver(raster)) 
 	close(raster@file@con)
 	fnamevals <- .setFileExtensionValues(raster@file@name)
@@ -63,14 +60,19 @@
 	raster@file@driver <- 'raster'
 	raster@data@values <- vector(length=0)
 
+	if (doPB) {
+		pbClose( attr(raster@file, "pb") )
+		attr(raster@file, "pb") <- ''
+	}
+
 	return(raster)
 }		
  
  
-.writeRasterRow <- function(raster, filetype='raster', ...) {
+.writeRasterRow <- function(raster, doPB=FALSE, ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- .startRowWriting(raster, filetype, ...)
+		raster <- .startRowWriting(raster, ...)
  	} 
 
 	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -96,6 +98,10 @@
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 		}
 	}
+	if (doPB) {
+		pbStep( attr(raster@file, "pb"), row )
+	}
+
 	return(raster)	
 }
 

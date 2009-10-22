@@ -5,13 +5,12 @@
 # Licence GPL v3
 
 .hasmethod <- function(method, ...) {
-	res <- FALSE
 	if (!missing(method)) { 
 		if (method=='bilinear') {
-			res <- TRUE
+			return( TRUE )
 		}
 	}
-	return(res)
+	return(FALSE)
 }
 
 
@@ -21,10 +20,8 @@ if (!isGeneric("disaggregate")) {
 }	
 
 setMethod('disaggregate', signature(x='RasterLayer', fact='numeric'), 
-function(x, fact, filename='', ...) {
+function(x, fact, ...) {
 
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
 	inMemory <- .inMemory(...)
 	hasmethod <- .hasmethod(...)
 	
@@ -41,7 +38,7 @@ function(x, fact, filename='', ...) {
 		stop('length(fact) should be 1 or 2')
 	}
 
-	filename <- trim(filename)
+	filename <- .filename(...)
 	outraster <- raster(x)
 	rowcol(outraster) <- c(nrow(x) * yfact, ncol(x) * xfact) 
 
@@ -58,7 +55,6 @@ function(x, fact, filename='', ...) {
 		filename <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
-	filename(outraster) <- filename
 	
 	if ( filename == ""  & inMemory ) {
 		if (dataContent(x) != 'all') {
@@ -75,17 +71,17 @@ function(x, fact, filename='', ...) {
 		v <- vector(length=0)
 		cols <- rep(1:ncol(x), each=xfact)
 
-		starttime <- proc.time()		
-		pb <- pbSet(nrow(x), type=.progress(...))
+				
+		pb <- pbCreate(nrow(x), type=.progress(...))
 		for (r in 1:nrow(x)) {
 			vals <- getValues(x, r)
 			for (i in 1:yfact) {
 				outraster <- setValues(outraster, vals[cols], (r-1) * xfact + i)
-				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+				outraster <- writeRaster(outraster, filename=filename, ...)
 			}	
-			pbDo(pb, r)
+			pbStep(pb, r)
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 	}
 	return(outraster)
 }

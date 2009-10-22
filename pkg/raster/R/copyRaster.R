@@ -37,7 +37,7 @@ copyRasterFile <- function(raster, filename, overwrite=FALSE) {
 		ext(f) <- ".gri"
 		res <- file.copy(f, fgri, overwrite)
 		if (!res) { stop('could not copy gri file') } 
-		filename(raster) <- fgrd
+		.setFilename(raster) <- fgrd
 		return(raster)
 	} else {
 		stop('only implemented for raster format files')

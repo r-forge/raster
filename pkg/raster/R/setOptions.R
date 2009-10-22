@@ -5,7 +5,7 @@
 
 
 setOptions <- function(filetype, overwrite, datatype, tmpdir, progress) {
-	if (!missing(filename)) { .setFilename(filename) }
+#	if (!missing(filename)) { .setFilename(filename) }
 	if (!missing(filetype)) { .setFiletype(filetype) }
 	if (!missing(overwrite)) { .setOverwrite(overwrite) }
 	if (!missing(datatype)) { .setDatatype(datatype) }
@@ -15,17 +15,17 @@ setOptions <- function(filetype, overwrite, datatype, tmpdir, progress) {
 
 
 
-.setFilename <- function(filename) {
-	if (is.character(filename)) {
-		if (length(filename) == 1) {
-			options(rasterFilename = filename)
-		} else {
-			warning(paste('Could not set filename. It should not be a vector with length > 1'))	
-		}
-	} else {
-		warning(paste('Could not set filename. It should a character type variable'))	
-	}
-}
+#.setFilename <- function(filename) {
+#	if (is.character(filename)) {
+#		if (length(filename) == 1) {
+#			options(rasterFilename = filename)
+#		} else {
+#			warning(paste('Could not set filename. It should not be a vector with length > 1'))	
+#		}
+#	} else {
+#		warning(paste('Could not set filename. It should a character type variable'))	
+#	}
+#}
 
 .setOverwrite <- function(overwrite) {
 	if (is.logical(overwrite)) {

@@ -4,25 +4,23 @@
 # Licence GPL v3
 
 
-distance <- function(object, filename="", ...) {
+distance <- function(object, ...) {
 
 	test <- try( pts <- rasterToPoints(object)[,1:2] )
 	if (class(test) == "try-error") {
-		return( .distanceRows(object, filename, ...) )
+		return( .distanceRows(object, ...) )
 	}
 	return( distanceFromPoints(object=object, xy=pts, filename=filename, ...) )
 }
 
 
 
-distanceFromPoints <- function(object, xy, filename="", ...) {
+distanceFromPoints <- function(object, xy,  ...) {
 
 	pts <- .pointsToMatrix(xy)
 	rm(xy)
 
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
+	filename <- .filename(...)
 
 #	filetype <- 'raster'
 #	overwrite <- TRUE
@@ -34,14 +32,13 @@ distanceFromPoints <- function(object, xy, filename="", ...) {
 		filename <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
-	filename(rst) <- filename
 
 	x <- xFromCol(rst, 1:ncol(rst))
 	arow <- rep(NA, ncol(rst))
 	v <- vector()
 	
-	starttime <- proc.time()
-	pb <- pbSet(nrow(rst), type=.progress(...))
+	
+	pb <- pbCreate(nrow(rst), type=.progress(...))
 	for (r in 1:nrow(rst)) {	
 		vals <- arow
 		y <- yFromRow(rst, r)
@@ -53,12 +50,13 @@ distanceFromPoints <- function(object, xy, filename="", ...) {
 			v <- c(v, vals)
 		} else {
 			rst <- setValues(rst, vals, r)
-			rst <- writeRaster(rst, overwrite=overwrite, filetype=filetype)
+			rst <- writeRaster(rst, filename=filename, ...)
 		}
-		pbDo(pb, r) 	
+		pbStep(pb, r) 	
 	}	
-	pbClose(pb, starttime)
-	if (rst@file@name == "") { 
+	pbClose(pb)
+	
+	if (filename == "") { 
 		rst <- setValues(rst, v) 
 	}
 	return(rst)

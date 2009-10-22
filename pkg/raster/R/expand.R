@@ -55,11 +55,11 @@ function(x, extent, filename='', ...) {
 	} else if ( dataSource(x) == 'disk' ) { 
 		if (!canProcessInMemory(outraster, 4) && filename == '') {
 			filename <- rasterTmpFile()
-			filename(outraster) <- filename
+			.setFilename(outraster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename(x))	}						
 		}
-		starttime <- proc.time()		
-		pb <- pbSet(nrow(x), type=.progress(...))
+				
+		pb <- pbCreate(nrow(x), type=.progress(...))
 
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
@@ -78,9 +78,9 @@ function(x, extent, filename='', ...) {
 				v <- c(v, d)
 			}
 
-			pbDo(pb, r)
+			pbStep(pb, r)
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 
 		if (outraster@file@name == "") { 
 			outraster <- setValues(outraster, v) 

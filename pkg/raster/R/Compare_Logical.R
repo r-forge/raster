@@ -43,17 +43,14 @@ setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 setMethod('!', signature(x='RasterLayer'),
 	function(x){
 		if (canProcessInMemory(x, 3)) {
+			.setDataType(x) <- 'LOG1S'
 			return(setValues(x, !values(x)))
 		} else {
-			rst <- raster(x, filename=rasterTmpFile())
-			dataType(rst) <- 'LOG1S'
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			filename(rst) <- rasterTmpFile() 
-			
+			rst <- raster(x)
+			filename <- rasterTmpFile()
 			for (r in 1:nrow(x)) {
 				rst <- setValues(rst, !getValues(x, r), r)
-				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				rst <- writeRaster(rst, filename=filename, datatype='LOG1S', doPB=TRUE)				
 			}
 			return(rst)		
 		}
@@ -68,17 +65,15 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 			stop('second argument should be a single number')
 		}
 		rst <- raster(e1)
-		dataType(rst) <- 'LOG1S'
+		.setDataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
 			rst <- setValues(rst, values=callGeneric(getValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			filename(rst) <- rasterTmpFile() 
 			rowrep <- rep(e2, ncol(e1))
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( getValues(e1, r), rowrep ), r)
-				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				rst <- writeRaster(rst, filename=rasterTmpFile(), datatype='LOG1S', doPB=TRUE)
+				
 			}
 		}
 		return(rst)
@@ -92,17 +87,14 @@ setMethod("Compare", signature(e1='RasterLayer', e2='logical'),
 			stop('second argument should be a single logical value')
 		}
 		rst <- raster(e1)
-		dataType(rst) <- 'LOG1S'
+		.setDataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
 			rst <- setValues(rst, values=callGeneric(getValues(e1), e2 ) )			
 		} else {
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			filename(rst) <- rasterTmpFile() 
+			filename <- rasterTmpFile()
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( getValues(e1, r), e2 ), r)
-				rst
-				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				rst <- writeRaster(rst, filename=filename, datatype='LOG1S', doPB=TRUE)
 			}
 		}
 		return(rst)
@@ -117,16 +109,14 @@ setMethod("Compare", signature(e1='logical', e2='RasterLayer'),
 			stop('first argument should be a single logical value')
 		}
 		rst <- raster(e2)
-		dataType(rst) <- 'LOG1S'
+		.setDataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e2, 3)) {
 			rst <- setValues(rst, values=callGeneric(getValues(e2), e1 ) )			
 		} else {
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			filename(rst) <- rasterTmpFile() 
+			filename <- rasterTmpFile()
 			for (r in 1:nrow(e2)) {
 				rst <- setValues(rst, callGeneric( getValues(e2, r), e1 ), r)
-				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				rst <- writeRaster(rst, filename=filename, datatype='LOG1S', doPB=TRUE)
 			}
 		}
 		return(rst)
@@ -141,18 +131,16 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 			stop('first argument should be a single number')
 		}
 		rst <- raster(e2)
-		dataType(rst) <- 'LOG1S'
+		.setDataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e2, 3)) {
-			dataType(rst) <- 'LOG1S'
+			.setDataType(rst) <- 'LOG1S'
 			rst <- setValues(rst, callGeneric(getValues(e2), rep(e1, ncell(e2)) ) )
 		} else {
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			filename(rst) <- rasterTmpFile() 
 			rowrep <- rep(e1, ncol(e2))
+			filename <- rasterTmpFile()
 			for (r in 1:nrow(e2)) {
 				rst <- setValues(rst, callGeneric( getValues(e2, r), rowrep ), r)
-				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				rst <- writeRaster(rst, filename=filename, datatype='LOG1S', doPB=TRUE)
 			}
 		}
 		return(rst)
@@ -166,16 +154,14 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See compare()")
 		}	
 		rst <- raster(e1) 
-		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
+			.setDataType(rst) <- 'LOG1S'
 			rst <- setValues(rst, callGeneric(getValues(e1), getValues(e2) ) ) 
 		} else {
-			filetype <- .filetype()
-			overwrite <- .overwrite()
-			filename(rst) <- rasterTmpFile() 
+			filename <- rasterTmpFile()
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( getValues(e1, r), getValues(e2, r) ), r)
-				rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+				rst <- writeRaster(rst, filename=filename, datatype='LOG1S', doPB=TRUE)
 			}
 		}
 		return(rst)
@@ -190,16 +176,14 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if ( compare(c(e1, e2)) ) {
 			rst <- raster(e1)
-			dataType(rst) <- 'LOG1S'
 			if (canProcessInMemory(e1, 3)) {
+				.setDataType(rst) <- 'LOG1S'
 				rst <- setValues(rst, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
 			} else {
-				filetype <- .filetype()
-				overwrite <- .overwrite()
-				filename(rst) <- rasterTmpFile() 
+				filename <- rasterTmpFile()
 				for (r in 1:nrow(e1)) {
 					rst <- setValues(rst, callGeneric( .getLogicalRowValues(e1, r), .getLogicalRowValues(e2, r) ), r)
-					rst <- writeRaster(rst, filetype=filetype, overwrite=overwrite)
+					rst <- writeRaster(rst, filename=filename, datatype='LOG1S', doPB=TRUE)
 				}
 			}	
 			return(rst)

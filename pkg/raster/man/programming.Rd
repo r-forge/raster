@@ -3,8 +3,8 @@
 \alias{closeConnection}
 \alias{openConnection}
 \alias{canProcessInMemory}
-\alias{pbSet} 
-\alias{pbDo} 
+\alias{pbCreate} 
+\alias{pbStep} 
 \alias{pbClose} 
 
 \title{ These are helper functions to use in new functions you develop}
@@ -20,9 +20,9 @@ openConnection opens a file connection for reading, closeConnection removes it.
 canProcessInMemory(raster, n=4)
 closeConnection(raster)
 openConnection(raster)
-pbSet(nsteps, type, style=3)
-pbDo(pb, step, label='row', value=step)
-pbClose(pb, starttime)
+pbCreate(nsteps, type, style=3)
+pbStep(pb, step, label='row', value=step)
+pbClose(pb, time=FALSE)
 }
 
 \arguments{
@@ -35,7 +35,7 @@ pbClose(pb, starttime)
   \item{step}{which step is this ( 1 <= step <= nsteps ) }
   \item{label}{for the non-text progress bars: a label}
   \item{value}{for the non-text progress bars: what value to paste after the label}
-  \item{starttime}{Object of class "proc_time". If provided, the time to completion will be printed}
+  \item{time}{Logical. If \code{TRUE}, time to completion will be printed}
 }
 
 \value{

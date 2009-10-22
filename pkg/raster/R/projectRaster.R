@@ -75,16 +75,15 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }
 	filename <- trim(filename)
-	to <- raster(to)
+	to <- raster(to, filename=filename)
 
-	filename(to) <- filename
-	dataType(to) <- datatype
+	.setDataType(to) <- datatype
 
 	rowCells <- 1:ncol(to)
 
 	if (!canProcessInMemory(to, 1) && filename(to) == "") {
 		filename <- rasterTmpFile()
-		filename(to) <- filename
+		.setFilename(to) <- filename
 		if (getOption('verbose')) { cat('writing raster to:', filename(to))	}
 	}
 	inMemory <- filename(to) == ""
@@ -98,8 +97,8 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 		xymethod <- 'bilinear' 	
 	}
 	
-	starttime <- proc.time()
-	pb <- pbSet(nrow(to), type=.progress(...))
+	
+	pb <- pbCreate(nrow(to), type=.progress(...))
 	
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
@@ -113,9 +112,9 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 			to <- setValues(to, vals, r)
 			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
 		}
-		pbDo(pb, r)
+		pbStep(pb, r)
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 	if (inMemory) {
 		to <- setValues(to, as.vector(v))
 	}

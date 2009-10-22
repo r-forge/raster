@@ -5,37 +5,35 @@
 
 
 saveAs <- function(raster, filename, filetype, datatype, overwrite, progress, result=TRUE) {
-	
+
+	if ( trim(filename(raster)) == trim(filename) ) {
+		stop('filenames should be different')
+	}
+
 	if (missing(filetype)) { filetype <- .filetype()	} 
 	if (missing(datatype)) { datatype <- .datatype() }
 	if (missing(overwrite)) { overwrite <- .overwrite() }
 	if (missing(progress)) { progress <- .progress() }
 	
 	if (dataContent(raster) == 'all') {
-		dataType(raster) <- datatype
-		filename(raster) <- filename
-		raster <- writeRaster(raster, filetype=filetype, overwrite=overwrite)
+		raster <- writeRaster(raster, filename=filename, datatype=datatype, filetype=filetype, overwrite=overwrite)
 		return(raster)
 	} 
 
-	if ( trim(filename(raster)) == trim(filename) ) {
-		stop('filenames should be different')
-	}
-
+	
 # if filetype and datatype are the same, then use copyRasterfile 
 	newr <- raster(raster, filename)
-	dataType(newr) <- datatype
 	
-	starttime <- proc.time()
-	pb <- pbSet(nrow(newr), type=progress)
+	
+	pb <- pbCreate(nrow(newr), type=progress)
 	
 	for (r in 1:nrow(newr)) {
 		raster <- readRow(raster, r)
 		newr <- setValues(newr, values(raster), r)
-		newr <- writeRaster(newr, filetype=filetype, overwrite=overwrite)
-		pbDo(pb, r) 
+		newr <- writeRaster(newr, filename=filename, datatype=datatype, filetype=filetype, overwrite=overwrite)
+		pbStep(pb, r) 
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 		
 	if (result) {
 		return(newr)

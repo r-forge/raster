@@ -3,29 +3,27 @@
 # Version 0.9
 # Licence GPL v3
 
-clump <- function(raster, filename=NULL, ...) {
 
+	
+if (!isGeneric("clump")) {
+	setGeneric("clump", function(x, ...)
+		standardGeneric("clump"))
+}	
+
+setMethod('clump', signature(x='RasterLayer'), 
+function(x, ...) {
 	warning('clump function is under development; results are approximate')
 
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
-	progress <- .progress(...)
-
-	if (is.null(filename)) { filename <- "" }
+	filename <- .filename(...)
 	if (filename != ""  & file.exists(filename) & overwrite==FALSE) {
 		stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
 	}
 	tmpfile1 <- ""
-	x1 <- raster(raster)
-	dataType(x1) <- datatype
+	x1 <- raster(x)
 	if (!canProcessInMemory(x1, 3)) {
 		tmpfile1 <- rasterTmpFile()
-		filename(x1) <- tmpfile1
-		if (filename == "") {
-			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}								
-		}
+		.setFilename(x1) <- tmpfile1
 	}
 
 	nc <- ncol(x1)
@@ -35,13 +33,12 @@ clump <- function(raster, filename=NULL, ...) {
 	c2[] <- 0
 	rcl <- matrix(NA, nrow=0, ncol=2)
 	
-	starttime <- proc.time()
-	pb <- pbSet(nrow(x1), type = progress)
+	pb <- pbCreate(nrow(x1), type = .progress(...))
 
 	for (r in 1:nrow(x1)) {
 		c1 <- c2
 		c2[] <- 0
-		b <- getValues(raster, r)
+		b <- getValues(x, r)
 		b <- which(b > 0)
 
 		for ( cc in b ) {
@@ -75,14 +72,14 @@ clump <- function(raster, filename=NULL, ...) {
 			v <- c(v, c2)
 		} else {
 			x1 <- setValues(x1, c2, r)
-			x1 <- writeRaster(x1)
+			x1 <- writeRaster(x1, filetype='raster', datatype='INT4U')
 		}	
 		
 		rcl <- unique(rcl)
-		pbDo(pb, r) 			
+		pbStep(pb, r) 			
 
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 
 	if (tmpfile1 == "") {
 		x1 <- setValues(x1, v)
@@ -117,7 +114,7 @@ clump <- function(raster, filename=NULL, ...) {
 	} else {
 		rclm <- c(0, 0, NA)
 	}
-	x2 <- reclass(x1, rclm, update=TRUE, filename=filename, datatype=datatype, overwrite=overwrite, progress=progress)
+	x2 <- reclass(x1, rclm, update=TRUE, ...)
 
 	if (tmpfile1 != "") { 	
 		removeRasterFile(x1) 
@@ -125,5 +122,5 @@ clump <- function(raster, filename=NULL, ...) {
 	# return(list(x1, x2, rcl1, rclm))
 	return(x2)
 }	
-
+)
 

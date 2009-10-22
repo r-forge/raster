@@ -1,30 +1,31 @@
 \name{clump}
 
 \alias{clump}
+\alias{clump,RasterLayer-method}
 
 \title{Detect clumps}
 
 \description{
-Detect clumps (patches) of connected cells. Each clump gets a unique integer ID.
+Detect clumps (patches) of connected cells. Each clump gets a unique ID.
 }
 
 \usage{
-clump(raster, filename=NULL, ...) 
+clump(x, ...) 
 }
 
 \arguments{
-  \item{raster}{A RasterLayer object}
-  \item{filename}{Output filename for a new raster}
+  \item{x}{A RasterLayer object}
   \item{...}{additional arguments. See Details.}  
 }
 
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
+  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
+  \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype}  \tab output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
-  \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
-  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+  \tab \code{progress}  \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
 }
 

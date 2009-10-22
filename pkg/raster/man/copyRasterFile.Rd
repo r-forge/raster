@@ -36,9 +36,9 @@ a RasterLayer
 
 \examples{ 
 r <- raster(system.file("external/test.ag", package="sp"))
-r <- saveAs(r, 'test.grd', filetype='raster', overwrite=TRUE)
-rc <- copyRasterFile(r, 'test2.grd', overwrite=TRUE)
-rm <- moveRasterFile(r, 'test3.grd', overwrite=TRUE)
+r <- saveAs(r, filename='test.grd', filetype='raster', overwrite=TRUE)
+rc <- copyRasterFile(r, filename='test2.grd', overwrite=TRUE)
+rm <- moveRasterFile(r, filename='test3.grd', overwrite=TRUE)
 }
 
 \keyword{ spatial }

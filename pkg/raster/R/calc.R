@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 if (!isGeneric("calc")) {
@@ -11,17 +10,15 @@ if (!isGeneric("calc")) {
 
 setMethod('calc', signature(x='RasterLayer', fun='function'), 
 
-function(x, fun, filename="", ...) {
+function(x, fun, ...) {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
 	
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-	
+	filename <- .filename(...)
 	outraster <- raster(x, filename)
-	dataType(outraster) <- datatype
+	datatype <- .datatype(...)
+	.setDataType(outraster) <- datatype
 	
 	if (!(dataContent(x) == 'all' | dataContent(x) == 'sparse' | dataSource(x) == 'disk')) {
 		stop('RasterLayer has no data on disk, nor a complete set of values in memory')
@@ -30,22 +27,22 @@ function(x, fun, filename="", ...) {
 	if ( dataContent(x) == 'all') {
 		outraster <- setValues(outraster, fun(values(x))) 
 		if (filename(outraster) != "") {
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			outraster <- writeRaster(outraster, filename=filename, ...)
 		}
 	} else if ( dataContent(x) == 'sparse') {
 		outraster <- setValuesSparse(outraster, fun(values(x)),  dataIndices(x)) 
 		if (filename(outraster) != "") { 
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+			outraster <- writeRaster(outraster, filename=filename, ...)
 		}
 	} else if (dataSource(x) == 'disk') {
 		if (!canProcessInMemory(x, 3) & filename == '') {
 			filename <- rasterTmpFile()
-			filename(outraster) <- filename
+			.setFilename(outraster) <- filename
 		}
 		v <- vector(length=0)
 
-		starttime <- proc.time()
-		pb <- pbSet(nrow(x), type=.progress(...))
+		
+		pb <- pbCreate(nrow(x), type=.progress(...))
 		
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
@@ -53,11 +50,11 @@ function(x, fun, filename="", ...) {
 				v <- c(v, fun(values(x)))
 			} else {
 				outraster <- setValues(outraster, fun(values(x)), r)
-				outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype)
+				outraster <- writeRaster(outraster, filename=filename, ...)
 			}
-			pbDo(pb, r)
+			pbStep(pb, r)
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 		
 		if (filename(outraster) == "") { 
 			outraster <- setValues(outraster, v) 

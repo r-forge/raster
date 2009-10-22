@@ -29,7 +29,7 @@
 	}
 	x@file@bandorder <- bandorder
 	x@file@nbands <- nlayers(x)
-	dataType(x) <- datatype
+	.setDataType(x) <- datatype
 
 	filename <- trim(filename)
 	if (filename == "") {
@@ -76,8 +76,14 @@
 }		
 
 
-.writeBrickRow <- function(object, filename='', bandorder, ...) {
+.writeBrickRow <- function(object, bandorder='BIL', ...) {
 
+	filetype <- .filetype(...)
+	if (filetype != 'raster') {
+		stop('Only "raster" format is currently supported for writing multiband files')
+	}
+
+	filename <- .writefilename(object, ...)
 	
 	if (dataIndices(object)[1] == 1) { 
 		object <- .startBrickRowWriting(object, bandorder=bandorder, filename=filename, ...)

@@ -6,9 +6,9 @@
 
 
 # Not used
-.writeRasterAssign <- function(raster, filetype='raster', overwrite=FALSE) {
-	name <- deparse(substitute(raster))
-	raster <- writeRaster(raster, filetype=filetype, overwrite=overwrite)
-	assign(name, raster, envir=parent.frame())
+.writeRasterAssign <- function(x, ...) {
+	name <- deparse(substitute(x))
+	x <- writeRaster(x, ...)
+	assign(name, x, envir=parent.frame())
 	return(invisible())
 }

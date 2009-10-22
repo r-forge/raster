@@ -7,7 +7,7 @@
 .writeSparse <- function(raster, overwrite=FALSE) {
 
 #	raster@file@driver <- 'raster'
-	filename(raster) <- .setFileExtensionHeader(raster@file@name, 'raster')
+	.setFilename(raster) <- .setFileExtensionHeader(raster@file@name, 'raster')
 	if (!overwrite & file.exists(filename(raster))) {
 		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -19,7 +19,7 @@
 		raster@data@values <- as.integer(values(raster)) 
 	}
 	if (class(values(raster))=='integer') {
-		dataType(raster) <- 'INT4S'
+		.setDataType(raster) <- 'INT4S'
 	}	
 	raster <- setMinMax(raster)
 

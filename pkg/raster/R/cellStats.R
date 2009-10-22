@@ -38,8 +38,8 @@ cellStats <- function(raster, stat='mean', ...) {
 
 		cnt <- 0
 		sumsq <- 0
-		starttime <- proc.time()
-		pb <- pbSet(nrow(raster), type=.progress(...))
+		
+		pb <- pbCreate(nrow(raster), type=.progress(...))
 		for (r in 1:nrow(raster)) {
 			d <- na.omit(getValues(raster, r))
 			if (length(d) == 0) { next }
@@ -55,7 +55,7 @@ cellStats <- function(raster, stat='mean', ...) {
 			} else {
 				st <- fun(c(d, st))
 			}
-			pbDo(pb, r) 
+			pbStep(pb, r) 
 		}
 		if (stat == 'sd') {
 			meansq <- (st/cnt)^2
@@ -63,7 +63,7 @@ cellStats <- function(raster, stat='mean', ...) {
 		} else if (stat == 'mean') {
 			st <- st / cnt
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 		return(st)
 	}
 }

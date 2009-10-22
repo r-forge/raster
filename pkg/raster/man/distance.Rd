@@ -14,13 +14,12 @@ The distance unit is in meters if the RasterLayer is not projected (\code{+proj=
 }
 
 \usage{
-distance(object, filename = "", ...) 
-distanceFromPoints(object, xy, filename = "", ...) 
+distance(object, ...) 
+distanceFromPoints(object, xy, ...) 
 }
 
 \arguments{
 \item{object}{a RasterLayer object}
-\item{filename}{Character. output filename}
 \item{xy}{matrix of x and y coordinates, or a SpatialPoints* object}
 \item{...}{additional arguments. See Details.}  
 }
@@ -29,9 +28,10 @@ distanceFromPoints(object, xy, filename = "", ...)
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
-  \tab \code{filetype} \tab output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
+  \tab \code{filetype} \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
 }

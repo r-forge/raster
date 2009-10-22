@@ -38,19 +38,18 @@ See (\code{link[raster]{overlay}}) to use functions that refer to specific layer
  
 \bold{1) \code{x} is a RasterLayer object; \code{fun} is a function}
 
-\code{calc(x, fun, filename='', overwrite=FALSE, filetype='raster', datatype='FLT4S')}
+\code{calc(x, fun, ...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterLayer object \cr
   \tab  \code{fun}  \tab The function to be applied\cr
-  \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
   \tab  \code{...} \tab Additional arguments. See below \cr  
 }
 
 
 \bold{2) \code{x} is a RasterStack object; \code{fun} is a function}
 
-\code{calc(x, fun, filename='', ...)}
+\code{calc(x, fun, ...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterStack object \cr
@@ -59,7 +58,7 @@ Other items as above
 
 \bold{3) \code{x} is a RasterStack object; \code{fun} is a list of functions}
 
-\code{calc(x, fun, filename='', ...)}
+\code{calc(x, fun, ...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterStack object \cr
@@ -71,9 +70,10 @@ Other items as above
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
-  \tab \code{filetype} \tab Characer. Output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeRaster}} \cr
+  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
+  \tab \code{filetype} \tab Characer. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
 

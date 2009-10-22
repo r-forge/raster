@@ -26,16 +26,13 @@ writeRaster(x, ...)
 \describe{
 \bold{Full function call when \code{x} is a RasterLayer object}
 
-\code{writeRaster(x, filename='', filetype, datatype, overwrite) }
+\code{writeRaster(x, filename='', ...) }
  
 \tabular{rll}{
 \tab \code{x} \tab RasterLayer object \cr
 \tab \code{filename} \tab Character. output filename \cr
-\tab \code{filetype} \tab Character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}} \cr
-\tab \code{datatype} \tab Character. output data type; see \code{\link[raster]{dataType}} \cr
-\tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
+\tab \code{..} \tab Additional arguments. See below \cr
 }
-
 
 \bold{Full function call when \code{x} is a RasterBrick or RasterStack object}
 
@@ -45,12 +42,17 @@ writeRaster(x, ...)
 \tab \code{x} \tab RasterLayer object \cr
 \tab \code{filename} \tab Character. Output filename. Can be missing if \code{x} is a RasterBrick that has a filename \cr
 \tab \code{bandorder} \tab Character. 'BIL', 'BIP', or 'BSQ' \cr
-\tab \code{filetype} \tab Character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}} \cr
-\tab \code{datatype} \tab Character. output data type; see \code{\link[raster]{dataType}} \cr
+\tab \code{..} \tab Additional arguments. See below \cr
+}
+
+\bold{Additional arguments}
+\tabular{rll}{
+\tab \code{filetype} \tab Character. Output file type. See \code{\link[raster]{writeFormats}} \cr
+\tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
 \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
 }
-}
-}
+
+}}
 
 \details{
 Values in a \code{RasterLayer} object are written to a file. Relatively small datasets can be loaded into memory, manipulated, and saved to disk in their entirety. Large datasets can be read and written row by row. 
@@ -104,28 +106,20 @@ rst <- raster(system.file("external/test.ag", package="sp"))
 rst <- readAll(rst)
 
 # write all to a new binary file
-filename(rst) <- "binall.grd"
-rst <- writeRaster(rst, overwrite=TRUE)
-
+rst <- writeRaster(rst, filename="binall.grd", overwrite=TRUE)
 
 # write all to a new ERDAS .img file
-filename(rst) <- "binall.img"
-rst <- writeRaster(rst, filetype="HFA", overwrite=TRUE)
+rst <- writeRaster(rst, filename="binall.img", filetype="HFA", overwrite=TRUE)
 
- 
 # write all to an integer binary file
-filename(rst) <- "binallint.grd"
-dataType(rst) <- "INT4S"
-rst <- writeRaster(rst, overwrite=TRUE)
+rst <- writeRaster(rst, filename="binallint.grd", datatype='INT4S', overwrite=TRUE)
  
 # write all to ascii file
-filename(rst) <- "ascall.asc"
-rst <- writeRaster(rst, filetype='ascii', overwrite=TRUE)
+rst <- writeRaster(rst, filename="ascall.asc", filetype='ascii', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
 rst <- raster(system.file("external/test.ag", package="sp"))
-ascras <- raster(rst)
-filename(ascras) <- "ascrow.asc"
+ascras <- raster(rst, filename="ascrow.asc")
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	v <- values(rst) * 10
@@ -142,8 +136,7 @@ for (r in 1:nrow(rst)) {
 }
 
 # read and write row by row; write to GeoTiff binary file
-binras <- raster(rst)
-filename(binras) <- "binbyrow2.tif"
+binras <- raster(rst, filename="binbyrow2.tif")
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
@@ -153,8 +146,7 @@ for (r in 1:nrow(rst)) {
 # write to netcdf 
 if (require(RNetCDF)) {	
     rst <- readAll(rst)
-	filename(rst) <- "netCDF.nc"
-    writeRaster(rst, filetype="CDF", overwrite=TRUE)   
+    writeRaster(rst, filename='netCDF.nc', filetype="CDF", overwrite=TRUE)   
 }
 
 }

@@ -18,7 +18,7 @@
     nbands = nlayers(raster)
 
 	
-	filename(raster) <- trim(raster@file@name)
+	raster@file@name <- trim(raster@file@name)
 	if (filename(raster) == "") {	
 		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')	
 	}

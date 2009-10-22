@@ -4,12 +4,17 @@
 # Licence GPL v3
 
 
-.writeRasterCDF <- function(x, overwrite=FALSE){ 
+.writeRasterCDF <- function(x, ...){ 
+	
+	if (!require(RNetCDF)) { stop() }	
 
-		if (!require(RNetCDF)) { stop() }	
+ 	filename <- .writefilename(raster, ...)	
+	cat(filename, '\n')
+	
+	overwrite <- .overwrite(...)
 		
-		xvar <- (xmin(x) + 1:ncol(x) * xres(x)) - 0.5 * xres(x)
-		yvar <- (ymin(x) + 1:nrow(x) * yres(x)) - 0.5 * yres(x)
+	xvar <- (xmin(x) + 1:ncol(x) * xres(x)) - 0.5 * xres(x)
+	yvar <- (ymin(x) + 1:nrow(x) * yres(x)) - 0.5 * yres(x)
 		if (dataContent(x) != 'all') {
 			x <- readAll(x)
 		}
@@ -23,7 +28,7 @@
 		zvar <- matrix(zvar, ncol=ncol(x), nrow=nrow(x), byrow=TRUE)
 		zvar <- t(zvar[nrow(zvar):1, ])
 		
-		nc <- create.nc(filename(x), clobber=overwrite)
+		nc <- create.nc(filename, clobber=overwrite)
 		dim.def.nc(nc, "x", ncol(x))
 		dim.def.nc(nc, "y", nrow(x))
 		

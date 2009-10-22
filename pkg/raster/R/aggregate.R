@@ -10,10 +10,6 @@ setMethod('aggregate', signature(x='RasterLayer'),
 
 function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-	
 	if (length(fact)==1) {
 		fact <- as.integer(round(fact))
 		if (fact < 2) { stop('fact should be > 1') }
@@ -41,7 +37,6 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	xmx <- xmin(x) + csteps * xfact * xres(x)
 		
 	outRaster <- raster(x, filename)
-	dataType(outRaster) <- datatype
 	bndbox <- newExtent(xmin(x), xmx, ymn, ymax(x))
 	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
 	rowcol(outRaster) <- c(rsteps, csteps) 
@@ -69,14 +64,14 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		} else {
 			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
 		}
-		if (outRaster@file@name != "") {
-			outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+		if (filename != "") {
+			outRaster <- writeRaster(outRaster, filename=filename, ...)
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
 		if (!canProcessInMemory(outRaster, 2) && filename == '') {
 			filename <- rasterTmpFile()
-			filename(outRaster) <- filename
+			.setFilename(outRaster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 		}
 		
@@ -87,8 +82,8 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
-		starttime <- proc.time()
-		pb <- pbSet(rsteps, type=.progress(...))
+		
+		pb <- pbCreate(rsteps, type=.progress(...))
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
@@ -107,16 +102,16 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			}
 			vals <- as.vector(vals)
 
-			if (outRaster@file@name == "") {
+			if (filename == "") {
 				v <- c(v, vals)
 			} else {
 				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writeRaster(outRaster, overwrite=overwrite, filetype=filetype)
+				outRaster <- writeRaster(outRaster, filename=filename, ...)
 			}
 		
-			pbDo(pb, r) 
+			pbStep(pb, r) 
 		} 
-		pbClose(pb, starttime)
+		pbClose(pb)
 		if (outRaster@file@name == "") { 
 			outRaster <- setValues(outRaster, v) 
 		}

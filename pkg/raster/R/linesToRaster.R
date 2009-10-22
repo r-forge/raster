@@ -102,8 +102,8 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 		}
 	}
 	raster <- raster(raster)
-	filename(raster) <- filename
-	dataType(raster) <- datatype
+	.setFilename(raster) <- filename
+	.setDataType(raster) <- datatype
 
 	
 	if (class(spLines) == 'SpatialPolygons') {
@@ -154,8 +154,8 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 	rxmn <- xmin(raster) + 0.1 * xres(raster)
 	rxmx <- xmax(raster) - 0.1 * xres(raster)
 
-	starttime <- proc.time()
-	pb <- pbSet(nrow(raster), type=.progress(...))
+	
+	pb <- pbCreate(nrow(raster), type=.progress(...))
 
 	for (r in 1:nrow(raster)) {
 		rv <- rep(NA, ncol(raster))
@@ -205,9 +205,9 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 			raster <- writeRaster(raster, filetype=filetype)
 		}
 		
-		pbDo(pb, r)
+		pbStep(pb, r)
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 
 	if (filename == "") {
 		raster <- setValues(raster, v)

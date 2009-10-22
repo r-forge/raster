@@ -26,7 +26,7 @@ showOptions <- function() {
 }
 
 
-.overwrite <- function(overwrite, ...) {
+.overwrite <- function(..., overwrite) {
 	if (missing(overwrite)) { 
 		overwrite <- getOption('rasterOverwrite')
 		if (is.null(overwrite)) {
@@ -48,7 +48,7 @@ showOptions <- function() {
 }
 
 
-.datatype <- function(datatype, ...) {
+.datatype <- function(..., datatype) {
 	if (missing(datatype)) { 
 		datatype <- getOption('rasterDatatype')
 		if (is.null(datatype)) {
@@ -61,7 +61,7 @@ showOptions <- function() {
 	}
 }
 
-.filetype <- function(filetype, ...) {
+.filetype <- function(..., filetype) {
 	if (missing(filetype)) { 
 	filetype <- getOption('rasterFiletype')
 		if (is.null(filetype)) {
@@ -74,7 +74,7 @@ showOptions <- function() {
 	}
 }
 
-.progress <- function(progress, ...) {
+.progress <- function(..., progress) {
 	if (missing(progress)) { 
 		progress <- getOption('rasterProgress')
 		if (is.null(progress)) {
@@ -104,7 +104,7 @@ showOptions <- function() {
 }
 
 
-.inMemory <- function(inMemory, ...) {
+.inMemory <- function(..., inMemory) {
 	if (missing(inMemory)) { 
 		inMemory <- getOption('rasterProcessInMemory')
 		if (is.null(inMemory)) {

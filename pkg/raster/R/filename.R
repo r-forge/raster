@@ -1,8 +1,30 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
+
+
+.filename <- function(filename, ...) {
+	if (missing(filename)) { 
+		return('')
+	} else {
+		return(trim(filename))
+	}
+}
+
+
+.writefilename <- function(raster, ...) {
+	filename <- .filename(...) 
+	if (filename == '') {
+		filename <- trim(filename(raster))
+	}
+	if (filename == '') {
+		stop('provide a filename')
+	} else {
+		return(filename)
+	}
+}
+
 
 
 filename <- function(x) {
@@ -13,6 +35,15 @@ filename <- function(x) {
 }
 
 'filename<-' <- function(x, value) {
+	if (class(x) == 'RasterStack') {
+		.setFilename(x) <- value
+		return(x)
+	} else {
+		stop('error')
+	}
+}
+
+'.setFilename<-' <- function(x, value) {
 	filename <- trim(value)
 	if (is.na(filename) | is.null(filename) | !is.character(value)) {
 		filename <- ""

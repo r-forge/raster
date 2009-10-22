@@ -8,38 +8,36 @@
 
 setMethod('calc', signature(x='RasterStack', fun='function'), 
 
-function(x, fun, filename="", ...) {
+function(x, fun, ...) {
 
 	if (length(fun(seq(1:5))) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
 
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-	
+	filename <- .filename(...)
 	outraster <- raster(x, filename)
-	dataType(outraster) <- datatype
+	datatype <- .datatype(...)
+	.setDataType(outraster) <- datatype
 
 	if (!canProcessInMemory(x, 4) & filename == '') {
-		filename=rasterTmpFile()
-		filename(outraster) <- filename
+		filename <- rasterTmpFile()
+		.setFilename(outraster) <- filename
 	}
 	v <- vector(length=0)
 
-	starttime <- proc.time()
-	pb <- pbSet(nrow(x), type=.progress(...))
+	
+	pb <- pbCreate(nrow(x), type=.progress(...))
 	for (r in 1:nrow(x)) {
 		sv <- apply(getValues(x, r), 1, fun)
 		if (outraster@file@name == "") {
 			v <- c(v, sv)
 		} else {
 			outraster <- setValues(outraster, sv, r) 
-			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+			outraster <- writeRaster(outraster, filename=filename, ...)
 		}
-		pbDo(pb, r) 
+		pbStep(pb, r) 
 	}
-	pbClose(pb, starttime)
+	pbClose(pb)
 	if (outraster@file@name == "") { 
 		outraster <- setValues(outraster, v) 
 	}

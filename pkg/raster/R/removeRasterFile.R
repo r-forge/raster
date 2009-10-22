@@ -10,7 +10,7 @@ removeRasterFile <- function(raster) {
 		fname <- filename(raster)
 #  need to close the connection in the object in the Global environement; not here	 ????
 #		raster <- closeConnection(raster)
-		filename(raster) <- ''
+		.setFilename(raster) <- ''
 	} else {
 		fname <- trim(raster)
 	}

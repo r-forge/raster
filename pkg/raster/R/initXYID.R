@@ -7,7 +7,7 @@
 initXYID <- function(raster, v='id', filename="", ...) {
 	
 	outraster <- raster(raster, filename)
-	dataType(outraster) <- .datatype(...)
+	.setDataType(outraster) <- .datatype(...)
 	filetype <- .filetype(...)
 	overwrite <- .overwrite(...)
 	
@@ -16,7 +16,7 @@ initXYID <- function(raster, v='id', filename="", ...) {
 	}
 	if (!canProcessInMemory(outraster, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		filename(outraster) <- filename
+		.setFilename(outraster) <- filename
 		if (getOption('verbose')) { 
 			cat('writing raster to:', filename(raster))	
 		}
@@ -32,8 +32,8 @@ initXYID <- function(raster, v='id', filename="", ...) {
 		} 		
 		outraster <- setValues(outraster, vals) 
 	} else  {
-		starttime <- proc.time()
-		pb <- pbSet(nrow(raster), type=.progress(...))
+		
+		pb <- pbCreate(nrow(raster), type=.progress(...))
 
 		n <- ncol(raster)
 		arow <- 1:n
@@ -48,9 +48,9 @@ initXYID <- function(raster, v='id', filename="", ...) {
 			} 		
 			outraster <- setValues(outraster, vals, r) 
 			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
-			pbDo(pb, r)
+			pbStep(pb, r)
 		}
-		pbClose(pb, starttime)
+		pbClose(pb)
 	}	
 	return(outraster)
 }
