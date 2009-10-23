@@ -5,7 +5,6 @@
 
 
 .writeBrick <- function(object, filename, bandorder='BIL', ...) {
-#.writeBrick <- function(object, filename='', bandorder, ...) {
 	
 	filetype <- .filetype(...)
 	if (filetype != 'raster') {

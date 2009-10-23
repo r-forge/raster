@@ -6,14 +6,21 @@
 
 
 if (!isGeneric("expand")) {
-	setGeneric("expand", function(x, extent, ...)
+	setGeneric("expand", function(x, y, ...)
 		standardGeneric("expand"))
 }	
 
-setMethod('expand', signature(x='RasterLayer', extent='Extent'), 
-function(x, extent, filename='', ...) {
+setMethod('expand', signature(x='RasterLayer', y='ANY'), 
+function(x, y, filename='', ...) {
+
+	test <- try ( y <- extent(y), silent=TRUE )
+	if (class(test) == "try-error") {
+		stop('Cannot get an Extent object from argument y')
+	}
+
+	filename <- trim(filename)
 	
-	bndbox <- extent(extent)
+	bndbox <- extent(y)
 	res <- res(x)
 # snap points to pixel boundaries
 	xmn <- round(xmin(bndbox) / res[1]) * res[1]
@@ -27,32 +34,48 @@ function(x, extent, filename='', ...) {
 	ymn <- min(ymn, ymin(x))
 	ymx <- max(ymx, ymax(x))
 	
-	outraster <- raster(x, filename)
+	outraster <- raster(x)
 	bndbox <- newExtent(xmn, xmx, ymn, ymx)
 	outraster <- setExtent(outraster, bndbox, keepres=TRUE)
 
 	startrow <- rowFromY(outraster, ymax(x))
 	startcol <- colFromX(outraster, xmin(x))
 	
+	if ((dataContent(x) == 'all') | ( dataSource(x) == 'disk' ))  {
+		todisk <- FALSE
+		if (!canProcessInMemory(outraster, 2) && filename == '') {
+			filename <- rasterTmpFile()
+			todisk <- TRUE
+			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+		}
+	}
+	
 	if (dataContent(x) == 'all')  {
 
-		d <- vector(length=ncell(outraster))
-		d[] <- NA
-		for (r in 1:nrow(x)) {
-			vals <- getValues(x, r) 
-			startcell <- (r + startrow -2) * ncol(outraster) + startcol
-			d[startcell:(startcell+ncol(x)-1)] <- vals
-			outraster <- setValues(outraster, d)
-			if (filename != "") {
+		if (todisk) {
+			v <- vector(length=ncol(outraster))
+			v[] <- NA		
+			for (r in 1:nrow(x)) {
+				vals <- getValues(x, r) 
+				if (todisk) {
+					vv <- v
+					vv[startcol:(startcol+ncol(x)-1)] <- vals
+					outraster <- setValues(outraster, vv, r)	
+					outraster <- writeRaster(outraster, filename=filename, datatype=dataType(x), ...)
+				}
+			}
+		} else {
+			d <- vector(length=ncell(outraster))
+			d[] <- NA
+			cells <- cellsFromExtent(outraster, extent(x))
+			d[cells] <- values(x)
+			outraster <- setValues(outraster, d)	
+			if (filename != '') {
 				outraster <- writeRaster(outraster, filename=filename, datatype=dataType(x), ...)
 			}
 		}
-
+		
 	} else if ( dataSource(x) == 'disk' ) { 
-		if (!canProcessInMemory(outraster, 4) && filename == '') {
-			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename(x))	}						
-		}
 				
 		pb <- pbCreate(nrow(x), type=.progress(...))
 
