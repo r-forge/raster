@@ -1,5 +1,5 @@
 # raster package
-# Authors: Robert J. Hijmans and Jacob van Etten, r.hijmans@gmail.com
+# Authors: Robert J. Hijmans,  r.hijmans@gmail.com
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
@@ -42,26 +42,27 @@ function(x, y, filename='', ...) {
 	startcol <- colFromX(outraster, xmin(x))
 	
 	if ((dataContent(x) == 'all') | ( dataSource(x) == 'disk' ))  {
-		todisk <- FALSE
+		forcetodisk <- FALSE
 		if (!canProcessInMemory(outraster, 2) && filename == '') {
 			filename <- rasterTmpFile()
-			todisk <- TRUE
+			forcetodisk <- TRUE
 			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		}
 	}
 	
 	if (dataContent(x) == 'all')  {
 
-		if (todisk) {
+		if (forcetodisk) {
 			v <- vector(length=ncol(outraster))
 			v[] <- NA		
+			datatype <- datatype(x)
 			for (r in 1:nrow(x)) {
 				vals <- getValues(x, r) 
 				if (todisk) {
 					vv <- v
 					vv[startcol:(startcol+ncol(x)-1)] <- vals
 					outraster <- setValues(outraster, vv, r)	
-					outraster <- writeRaster(outraster, filename=filename, datatype=dataType(x), ...)
+					outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)
 				}
 			}
 		} else {
@@ -81,6 +82,7 @@ function(x, y, filename='', ...) {
 
 		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
+		datatype <- datatype(x)
 		for (r in 1:nrow(x)) {
 		
 			x <- readRow(x, r)
@@ -91,7 +93,7 @@ function(x, y, filename='', ...) {
 
 			if (filename != '') {
 				outraster <- setValues(outraster, d, r)
-				outraster <- outraster <- writeRaster(outraster, filename=filename, datatype=dataType(x), ...)
+				outraster <- outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)
 			} else {
 				v <- c(v, d)
 			}
