@@ -12,15 +12,12 @@
 	if (filetype != 'raster') {
 		stop('Only "raster" format is currently supported for writing multiband files')
 	}
-
-
-	if (missing(filename) | filename == '') {
-		filename <- filename(x)
-		if ( filename == '' ) {
-			stop('provide a filename')
-		}
+	
+	filename <- trim(filename)
+	if (filename == '') {
+		stop('provide a filename')
 	}
-
+	
 	if (bandorder == 'BSQ') {
 		stop('no BSQ in row by row writing')
 	}
@@ -31,15 +28,8 @@
 	x@file@nbands <- nlayers(x)
 	.setDataType(x) <- datatype
 
-	filename <- trim(filename)
-	if (filename == "") {
-		filename <- trim(filename(x))
-		if (filename == "") {
-			stop('no filename')
-		}
-	}
+	.setFilename(x) <- filename
 	fnamevals <- .setFileExtensionValues(filename)
-	
 	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
 		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -76,14 +66,14 @@
 }		
 
 
-.writeBrickRow <- function(object, bandorder='BIL', ...) {
+.writeBrickRow <- function(object, filename, bandorder='BIL', ...) {
 
 	filetype <- .filetype(...)
 	if (filetype != 'raster') {
 		stop('Only "raster" format is currently supported for writing multiband files')
 	}
 
-	filename <- .writefilename(object, ...)
+	filename <- trim(filename)
 	
 	if (dataIndices(object)[1] == 1) { 
 		object <- .startBrickRowWriting(object, bandorder=bandorder, filename=filename, ...)

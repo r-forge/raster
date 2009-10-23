@@ -12,10 +12,6 @@ if (!isGeneric("expand")) {
 
 setMethod('expand', signature(x='RasterLayer', extent='Extent'), 
 function(x, extent, filename='', ...) {
-
-#	filetype <- .filetype(...)
-#	overwrite <- .overwrite(...)
-
 	
 	bndbox <- extent(extent)
 	res <- res(x)
@@ -47,15 +43,14 @@ function(x, extent, filename='', ...) {
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(x)-1)] <- vals
 			outraster <- setValues(outraster, d)
-			if (outraster@file@name != "") {
-				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+			if (filename != "") {
+				outraster <- writeRaster(outraster, filename=filename, datatype=dataType(x), ...)
 			}
 		}
 
 	} else if ( dataSource(x) == 'disk' ) { 
 		if (!canProcessInMemory(outraster, 4) && filename == '') {
 			filename <- rasterTmpFile()
-			.setFilename(outraster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename(x))	}						
 		}
 				
@@ -71,9 +66,9 @@ function(x, extent, filename='', ...) {
 			startcell <- (r + startrow -2) * ncol(outraster) + startcol
 			d[startcell:(startcell+ncol(x)-1)] <- vals
 
-			if (outraster@file@name != '') {
+			if (filename != '') {
 				outraster <- setValues(outraster, d, r)
-				outraster <- outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				outraster <- outraster <- writeRaster(outraster, filename=filename, datatype=dataType(x), ...)
 			} else {
 				v <- c(v, d)
 			}
@@ -82,7 +77,7 @@ function(x, extent, filename='', ...) {
 		}
 		pbClose(pb)
 
-		if (outraster@file@name == "") { 
+		if (filename == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	} 

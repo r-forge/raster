@@ -64,7 +64,7 @@ gridDistance <- function(object, filename="", ...) {
 			
 			outRaster <- setValues(outRaster, accDist)	
 			if (filename != "") {
-				outRaster <- writeRaster(outRaster)
+				outRaster <- writeRaster(outRaster, filename)
 			}
 			return(outRaster)
 			
@@ -77,20 +77,19 @@ gridDistance <- function(object, filename="", ...) {
 			ncols <- ncol(object)
 
 			m <- c(-Inf, Inf, 0)
-			rsl1 <- reclass(object, m, filename=rasterTmpFile(), overwrite=TRUE)
-			rsl2 <- raster(rsl1)
-			.setFilename(rsl2) <- rasterTmpFile()
+			r1 <- reclass(object, m, filename=rasterTmpFile(), overwrite=TRUE)
+			r2 <- raster(r1, rasterTmpFile())
 			
 			if(isLatLon(object)){
 				remainingCells <- TRUE
 				while (remainingCells) {
 					remainingCells <- FALSE
-					rsl1 <- readRow(rsl1, rownr=1)
-					rowWindow <- values(rsl1)
+					r1 <- readRow(r1, rownr=1)
+					rowWindow <- values(r1)
 					for(r in 1:nrows){
 						if(r < nrows-1) {
-							rsl1 <- readRow(rsl1, rownr=r+1)
-							rowWindow <- c(rowWindow, values(rsl1))
+							r1 <- readRow(r1, rownr=r+1)
+							rowWindow <- c(rowWindow, values(r1))
 						}
 						adj <- adjacency(object, fromCells=(((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols)), toCells=((r-1)*ncols+1):(r*ncols),directions=8)
 						coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
@@ -106,25 +105,25 @@ gridDistance <- function(object, filename="", ...) {
 						} else if(newValues != rowWindow[index]){ 
 							remainingCells<-TRUE
 						}						
-						rsl2 <- setValues(rsl2, newValues, r)
-						rsl2 <- writeRaster(rsl2, overwrite=TRUE)
+						r2 <- setValues(r2, newValues, r)
+						r2 <- writeRaster(r2, filename(r2), overwrite=TRUE)
 						if(r > 1){
 							rowWindow <- rowWindow[-1:ncols]
 						}
 					} 
-					rtmp <- rsl1
-					rsl1 <- rsl2
-					rsl2 <- rtmp
+					rtmp <- r1
+					r1 <- r2
+					r2 <- rtmp
 				}
 			} else {
 				remainingCells <- TRUE
 				while(remainingCells){
 					remainingCells <- FALSE
-					rsl1 <- readRow(rsl1, rownr=1)
-					rowWindow <- values(rsl1)
+					r1 <- readRow(r1, rownr=1)
+					rowWindow <- values(r1)
 					for(r in 1:nrows){
 						if(r < nrows-1){
-							rsl1 <- readRow(rsl1, rownr=r+1)
+							r1 <- readRow(r1, rownr=r+1)
 							rowWindow <- c(rowWindow, values(outRaster))
 						}
 						fromCells <- (((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols))
@@ -142,20 +141,20 @@ gridDistance <- function(object, filename="", ...) {
 						if(newValues != rowWindow[index]){
 							remainingCells<-TRUE
 						}
-						rsl2 <- setValues(rsl2, newValues, r)
-						rsl2 <- writeRaster(rsl2, overwrite=TRUE)
+						r2 <- setValues(r2, newValues, r)
+						r2 <- writeRaster(r2,  filename(r2), overwrite=TRUE)
 						if(r > 1){
 							rowWindow <- rowWindow[-1:ncols]
 						}
 					}
-					rtmp <- rsl1
-					rsl1 <- rsl2
-					rsl2 <- rtmp
+					rtmp <- r1
+					r1 <- r2
+					r2 <- rtmp
 				}
 			}
-			outRaster <- saveAs(rsl1, filename, overwrite=overwrite, filetype=filetype, datatype=datatype)
-			removeRasterFile(rsl1)
-			removeRasterFile(rsl2)
+			outRaster <- saveAs(r1, filename, overwrite=overwrite, filetype=filetype, datatype=datatype)
+			removeRasterFile(r1)
+			removeRasterFile(r2)
 		}
 	}
 #)

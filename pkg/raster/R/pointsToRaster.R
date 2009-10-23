@@ -17,13 +17,8 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 		stop('number of points does not match the number of values')
 	}
 	
-	
 	raster <- raster(raster)
-	rs <- raster(raster, filename)
-	
-	.setDataType(rs) <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
+	rs <- raster(raster)
 	
 	cells <- cellFromXY(rs, xy)
 	
@@ -32,8 +27,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 	if (!canProcessInMemory(rs, 2 * nres))  {
 		if (filename == '') {
 			filename <- rasterTmpFile()
-			.setFilename(rs) <- filename
-			if (getOption('verbose')) { cat('writing results to:', filename(rs))	}						
+			if (getOption('verbose')) { cat('writing results to:', filename)	}						
 		}
 		todisk <- TRUE
 	}	
@@ -50,7 +44,6 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			dna[] <- background
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
-			.setFilename(rs) <- filename
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 		}
 		pb <- pbCreate(nrow(raster), type=.progress(...))
@@ -76,7 +69,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 				}
 			}
 			rs <- setValues(rs, d, r)
-			rs <- writeRaster(rs, filetype=filetype, overwrite=overwrite) 
+			rs <- writeRaster(rs, filename=filename, ...) 
 			pbStep(pb, r)
 		}
 		pbClose(pb)
@@ -92,7 +85,6 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			vv <- matrix(background, nrow=ncell(rs), ncol=dim(v)[2])
 			vv[cells, ] <- v
 		    rs <- brick(rs)  #  return a'RasterBrick'
-			.setFilename(rs) <- filename
 			
 		} else {
 			vv <- 1:ncell(rs)
@@ -102,7 +94,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 		rs <- setValues(rs, vv)
 		
 		if (filename != "") {
-			rs <- writeRaster(rs, filetype=filetype, overwrite=overwrite)
+			rs <- writeRaster(rs, filename=filename, ...)
 		}
 	}
 	return(rs)	

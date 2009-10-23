@@ -4,23 +4,23 @@
 # Licence GPL v3
 
 
-distance <- function(object, ...) {
+distance <- function(object, filename='', ...) {
 
 	test <- try( pts <- rasterToPoints(object)[,1:2] )
 	if (class(test) == "try-error") {
-		return( .distanceRows(object, ...) )
+		return( .distanceRows(object, filename=filename, ...) )
 	}
 	return( distanceFromPoints(object=object, xy=pts, filename=filename, ...) )
 }
 
 
 
-distanceFromPoints <- function(object, xy,  ...) {
+distanceFromPoints <- function(object, xy, filename='', ...) {
 
 	pts <- .pointsToMatrix(xy)
 	rm(xy)
 
-	filename <- .filename(...)
+	filename <- trim(filename)
 
 #	filetype <- 'raster'
 #	overwrite <- TRUE
@@ -46,7 +46,7 @@ distanceFromPoints <- function(object, xy,  ...) {
 		for (c in 1:length(xy[,1])) {
 			vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
 		}
-		if (rst@file@name == "") {
+		if (filename == "") {
 			v <- c(v, vals)
 		} else {
 			rst <- setValues(rst, vals, r)

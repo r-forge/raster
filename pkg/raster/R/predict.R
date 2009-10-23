@@ -11,12 +11,7 @@ if (!isGeneric("predict")) {
 setMethod('predict', signature(object='RasterStackBrick'), 
 	function(object, model, filename="", ...) {
 		predrast <- raster(object)
-		datatype <- .datatype(...)
-		filetype <- .filetype(...)
-		overwrite <- .overwrite(...)
-
-		.setFilename(predrast) <- filename
-		.setDataType(predrast) <- datatype
+		filename <- trim(filename)
 			
 		v <- (attr(model$terms, "factors"))
 		varnames <- attr(v, "dimnames")[[2]]
@@ -41,8 +36,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()
-			.setFilename(outRaster) <- filename
-			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
+			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		} 
 		v <- vector()
 
@@ -78,7 +72,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 				v <- c(v, predv)
 			} else {
 				predrast <- setValues(predrast, predv, r)
-				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
+				predrast <- writeRaster(predrast, filename=filename, ...)
 			}
 			pbStep(pb, r) 
 		}
@@ -96,13 +90,12 @@ setMethod('predict', signature(object='RasterStackBrick'),
 setMethod('predict', signature(object='RasterLayer'), 
 	function(object, model, filename="",  ...) {
 		predrast <- raster(object)
-		.setFilename(predrast) <- filename
-		.setDataType(predrast) <- datatype
+		filename <- trim(filename)
 
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()
 			filename(outRaster) <- filename
-			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
+			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		} 
 		v <- vector()
 
@@ -117,7 +110,7 @@ setMethod('predict', signature(object='RasterLayer'),
 				v <- c(v, predv)
 			} else {
 				predrast <- setValues(predrast, predv, r)			
-				predrast <- writeRaster(predrast, filetype=filetype, overwrite=overwrite)
+				predrast <- writeRaster(predrast, filename=filename, ...)
 			}
 			pbStep(pb, r) 
 		}

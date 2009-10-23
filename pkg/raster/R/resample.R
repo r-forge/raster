@@ -7,18 +7,18 @@
 resample <- function(from, to, method="ngb", filename="", ...)  {
 	
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
-		
+	filename <- trim(filename)
+	
 	bb <- intersectExtent(from, to)
 	validObject(bb)
 	if (is.null(filename)){filename <- ""}
-	to <- raster(to, filename)
+	to <- raster(to)
 	
-	if (!canProcessInMemory(to, 1) && filename(to) == '') {
+	if (!canProcessInMemory(to, 1) && filename == '') {
 		filename <- rasterTmpFile()
-		to@file@name <- filename
-		if (getOption('verbose')) { cat('writing raster to:', filename(to))	}
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}
 	}
-	inMemory <- (filename(to) == "")
+	inMemory <- (filename == "")
 
 	v <- vector(length=0)
 	rowCells <- 1:ncol(to)
@@ -38,7 +38,7 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 			v <- c(v, vals)
 		} else {
 			to <- setValues(to, vals, r)
-			to <- writeRaster(to, ...)
+			to <- writeRaster(to, filename, ...)
 		}
 
 		pbStep(pb, r)

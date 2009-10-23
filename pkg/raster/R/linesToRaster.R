@@ -89,11 +89,6 @@
 
 linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FALSE, updateValue="NA", ...) {
 
-
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-
 	filename <- trim(filename)
 	if (updateRaster) {
 		oldraster <- raster 
@@ -102,9 +97,6 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 		}
 	}
 	raster <- raster(raster)
-	.setFilename(raster) <- filename
-	.setDataType(raster) <- datatype
-
 	
 	if (class(spLines) == 'SpatialPolygons') {
 		spLines <- as(spLines, "SpatialLines")
@@ -202,7 +194,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 			v <- c(v, rv)
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
-			raster <- writeRaster(raster, filetype=filetype)
+			raster <- writeRaster(raster, filename=filename, ...)
 		}
 		
 		pbStep(pb, r)

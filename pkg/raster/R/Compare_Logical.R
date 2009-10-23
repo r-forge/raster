@@ -70,9 +70,10 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 			rst <- setValues(rst, values=callGeneric(getValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
 			rowrep <- rep(e2, ncol(e1))
+			filename <- rasterTmpFile()
 			for (r in 1:nrow(e1)) {
 				rst <- setValues(rst, callGeneric( getValues(e1, r), rowrep ), r)
-				rst <- writeRaster(rst, filename=rasterTmpFile(), datatype='LOG1S', doPB=TRUE)
+				rst <- writeRaster(rst, filename=filename, datatype='LOG1S', doPB=TRUE)
 				
 			}
 		}

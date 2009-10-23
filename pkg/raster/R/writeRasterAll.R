@@ -5,15 +5,14 @@
 # Licence GPL v3
 
 
-.writeRasterAll <- function(raster, filetype, ... ) {
+.writeRasterAll <- function(raster, filename, ... ) {
 
+	filetype <- .filetype(...)
 	raster@file@driver <- filetype
-
- 	filename <- .writefilename(raster, ...)
+ 	filename <- trim(filename)
 	filename <- .setFileExtensionHeader(filename, filetype)
 	.setFilename(raster) <- filename
 	fnamevals <- .setFileExtensionValues(filename)
-
 	
 	overwrite <- .overwrite(...)
 	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {

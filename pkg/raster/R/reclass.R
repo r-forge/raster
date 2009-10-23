@@ -3,9 +3,9 @@
 # Version 0.9
 # Licence GPL v3
 
-reclass <- function(raster, rclmat, update=FALSE, ...)  {
+reclass <- function(raster, rclmat, update=FALSE, filename='', ...)  {
 	
-	filename <- .filename(...)
+	filename <- trim(filename)
 
 	if (class(raster) != 'RasterLayer' ) {
 		stop('first argument should be an object of class "RasterLayer"')

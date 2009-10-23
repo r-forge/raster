@@ -10,12 +10,9 @@
 	if (length(x) < 1) { stop('no RasterLayers') }
 	compare(x)
 
-	outraster <- raster(x[[1]], filename)
+	filename <- trim(filename)
+	outraster <- raster(x[[1]])
 	
-	.setDataType(outraster) <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-
 	inram <- TRUE
 	for (i in 1:length(x)) {
 		if (dataContent(x[[i]]) != 'all') {
@@ -73,22 +70,20 @@
 		}
 		
 		outraster <- setValues(outraster, vals)
-		if (outraster@file@name != "") { 
-			outraster <- writeRaster(outraster, overwrite=overwrite, filetype=filetype) 
+		if (filename != "") { 
+			outraster <- writeRaster(outraster, filename=filename, ...) 
 		}
 		
 	} else {
-		if (outraster@file@name == "") {
+		if (filename == "") {
 			if (!canProcessInMemory(outraster, 4)) {
 				filename <- rasterTmpFile()
-				.setFilename(outraster) <- filename
 			} else {
 				v  <- vector(length=ncell(outraster))
 				startcells <- cellFromCol(outraster, 1)
 				endcells <- cellFromCol(outraster, ncol(outraster))
 			}
 		}	
-
 		
 		pb <- pbCreate(nrow(outraster), type=.progress(...))
 		
@@ -108,19 +103,19 @@
 			}
 			
 			
-			if (outraster@file@name == "") {
+			if (filename == "") {
 #				v <- c(v, vals)
 				v[startcells[r]:endcells[r]] <- vals
 			} else {
 				outraster <- setValues(outraster, vals, r)
-				outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+				outraster <- writeRaster(outraster, filename=filename, ...)
 			}	
 			
 			pbStep(pb, r)
 		}
 		pbClose(pb)
 		
-		if (outraster@file@name == "") { 
+		if (filename == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	} 

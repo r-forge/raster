@@ -10,12 +10,11 @@ if (!isGeneric("calc")) {
 
 setMethod('calc', signature(x='RasterLayer', fun='function'), 
 
-function(x, fun, ...) {
+function(x, fun, filename='', ...) {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
 	
-	filename <- .filename(...)
 	outraster <- raster(x, filename)
 	datatype <- .datatype(...)
 	.setDataType(outraster) <- datatype
@@ -26,18 +25,17 @@ function(x, fun, ...) {
 	
 	if ( dataContent(x) == 'all') {
 		outraster <- setValues(outraster, fun(values(x))) 
-		if (filename(outraster) != "") {
+		if (filename != "") {
 			outraster <- writeRaster(outraster, filename=filename, ...)
 		}
 	} else if ( dataContent(x) == 'sparse') {
 		outraster <- setValuesSparse(outraster, fun(values(x)),  dataIndices(x)) 
-		if (filename(outraster) != "") { 
+		if (filename != "") { 
 			outraster <- writeRaster(outraster, filename=filename, ...)
 		}
 	} else if (dataSource(x) == 'disk') {
 		if (!canProcessInMemory(x, 3) & filename == '') {
 			filename <- rasterTmpFile()
-			.setFilename(outraster) <- filename
 		}
 		v <- vector(length=0)
 
@@ -46,7 +44,7 @@ function(x, fun, ...) {
 		
 		for (r in 1:nrow(x)) {
 			x <- readRow(x, r)
-			if (filename(outraster) == "") {
+			if (filename == "") {
 				v <- c(v, fun(values(x)))
 			} else {
 				outraster <- setValues(outraster, fun(values(x)), r)
@@ -56,7 +54,7 @@ function(x, fun, ...) {
 		}
 		pbClose(pb)
 		
-		if (filename(outraster) == "") { 
+		if (filename == "") { 
 			outraster <- setValues(outraster, v) 
 		}
 	}

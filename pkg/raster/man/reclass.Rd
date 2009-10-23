@@ -8,13 +8,14 @@
 Reclassify values of a RasterLayer
 }
 \usage{
-reclass(raster, rclmat, update=FALSE, ...) 
+reclass(raster, rclmat, update=FALSE, filename='', ...) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{rclmat}{Matrix (or vector) for reclassifcation. (see below)}
   \item{update}{Logical. If \code{TRUE} reclass updates previously reclassed values (see details)}
+  \item{filename}{Output filename (can be absent for RasterLayers that can be stored in memory)}
   \item{...}{additional arguments. See Details.}  
 }
 
@@ -31,7 +32,6 @@ For example if row 1 has \code{1, 10, 15} and row 2 has \code{11, 20, 25}, all t
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
   \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype}  \tab output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr

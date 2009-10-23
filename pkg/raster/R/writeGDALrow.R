@@ -7,12 +7,12 @@
 
 
 
-.writeGDALrow <- function(raster, gdalfiletype, overwrite, mvFlag, options ) {
+.writeGDALrow <- function(raster, filename, mvFlag=NA, options=NULL, ... ) {
 	if (!require(rgdal)) { stop() }
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {
-		transient <- .getGDALtransient(raster, gdalfiletype, overwrite, mvFlag, options)
+		transient <- .getGDALtransient(raster, filename=filename, mvFlag, options, ...)
 		attr(raster@file, "transient") <- transient
 		raster@file@driver <- 'gdal'
 		raster@data@source <- 'disk'		
@@ -39,11 +39,11 @@
 		x <- putRasterData(raster@file@transient, values(raster, rownr), band, c((rownr-1), 0)) 
 	}
 	if ( rownr == nrow(raster)) {
-		saveDataset(raster@file@transient, filename(raster) )
+		saveDataset(raster@file@transient, filename )
 		GDAL.close(raster@file@transient) 
 		
 		# establish the handle:
-		rasterout <- raster(filename(raster))
+		rasterout <- raster(filename)
 		
 		if (!raster@data@haveminmax) {
 			rasterout@data@min <- raster@data@min

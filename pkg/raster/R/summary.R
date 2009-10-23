@@ -4,16 +4,15 @@
 # Licence GPL v3
 
 
-.summaryRasters <- function(rasters, fun, funname, na.rm) {
+.summaryRasters <- function(rasters, fun, funname, na.rm, ...) {
 
 	if (!canProcessInMemory(rasters[[1]], 4)) {
 		filename <- rasterTmpFile()
-		raster <- raster(rasters[[1]], filename)
 	} else {
 		filename <- ""
-		raster <- raster(rasters[[1]])
 		v <- vector(length=0)
 	}
+	raster <- raster(rasters[[1]])
 
 	m <- matrix(NA, nrow=ncol(rasters[[1]]), ncol=length(rasters))
 	
@@ -47,7 +46,7 @@
 			v <- c(v, vv)
 		} else {
 			raster <- setValues(raster, vv, r)
-			raster <- writeRaster(raster)
+			raster <- writeRaster(raster, filename=filename, ...)
 		}
 	}
 	if (filename == "") {

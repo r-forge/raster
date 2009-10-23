@@ -4,8 +4,11 @@
 # Licence GPL v3
 
 
-.writeAscii <- function(raster, ...) {
- 	filename <- .writefilename(raster, ...)
+.writeAscii <- function(raster, filename, ...) {
+ 	filename <- trim(filename)
+	if (filename == '') {
+		stop('provide a filename')
+	}
 	raster@file@name <- filename
 	overwrite <- .overwrite(...)
 	dtype  <- .shortDataType(.datatype(...))

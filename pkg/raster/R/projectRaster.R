@@ -81,12 +81,11 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 
 	rowCells <- 1:ncol(to)
 
-	if (!canProcessInMemory(to, 1) && filename(to) == "") {
+	if (!canProcessInMemory(to, 1) && filename == "") {
 		filename <- rasterTmpFile()
-		.setFilename(to) <- filename
-		if (getOption('verbose')) { cat('writing raster to:', filename(to))	}
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}
 	}
-	inMemory <- filename(to) == ""
+	inMemory <- filename == ""
 	if (inMemory) {
 		v <- matrix(NA, nrow=ncol(to), ncol=nrow(to))
 	}
@@ -110,7 +109,7 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 			v[,r] <- vals
 		} else {
 			to <- setValues(to, vals, r)
-			to <- writeRaster(to, overwrite=overwrite, filetype=filetype)
+			to <- writeRaster(to, filename=filename, ...)
 		}
 		pbStep(pb, r)
 	}

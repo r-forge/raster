@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.writeBrick <- function(object, bandorder='BIL', ...) {
+.writeBrick <- function(object, filename, bandorder='BIL', ...) {
 #.writeBrick <- function(object, filename='', bandorder, ...) {
 	
 	filetype <- .filetype(...)
@@ -12,7 +12,7 @@
 		stop('Only "raster" format is currently supported for writing multiband files')
 	}
 
-	filename <- .writefilename(object, ...)
+	filename <- trim(filename)
 	
 #	filetype <- .filetype(...)  # not used
 	datatype <- .datatype(...)

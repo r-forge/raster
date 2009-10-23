@@ -3,9 +3,9 @@
 # Version 0.9
 # Licence GPL v3
 
-.writeStack <- function(object, bandorder='BIL', ...) {
+.writeStack <- function(object, filename, bandorder='BIL', ...) {
 
-    filename <- .filename(...)
+    filename <- trim(filename)
 	if (filename == '') {
 		stop('you must supply a filename')
 	}

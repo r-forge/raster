@@ -63,10 +63,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 						
 	filename <- trim(filename)
 
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-	
 	
 	if (!(overlap %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
 		stop('invalid value for overlap')
@@ -78,8 +74,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 		}
 	}
 	raster <- raster(raster)
-	.setFilename(raster) <- filename
-	.setDataType(raster) <- datatype
 
 	
 
@@ -248,7 +242,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 			v <- c(v, rv)
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
-			raster <- writeRaster(raster, overwrite=overwrite, filetype=filetype)
+			raster <- writeRaster(raster, filename=filename, ...)
 		}
 		
 		pbStep(pb, r)
@@ -263,7 +257,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 }
 
 
-.polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", datatype='FLT4S', overwrite=FALSE) {
+.polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", ...) {
 #  This is based on sampling by points. Should be slower except when  polygons very detailed and raster  has low resolution
 # but it could be optimized further
 # currently not used. Perhaps it should be used under certain conditions. 
@@ -271,8 +265,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 
 # check if bbox of raster and spPolys overlap
 	filename <- trim(filename)
-	raster <- raster(raster, filename)
-	.setDataType(raster) <- datatype
+	raster <- raster(raster)
 	
 
 	spbb <- bbox(spPolys)
@@ -310,7 +303,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 			v <- c(v, vals)
 		} else {
 			raster <- setValues(raster, vals, r)
-			raster <- writeRaster(raster, overwrite=overwrite)
+			raster <- writeRaster(raster, filename=filename, ...)
 		}
 	}
 	if (filename == "") {

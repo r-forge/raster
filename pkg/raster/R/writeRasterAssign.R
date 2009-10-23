@@ -6,9 +6,9 @@
 
 
 # Not used
-.writeRasterAssign <- function(x, ...) {
+.writeRasterAssign <- function(x, filename, ...) {
 	name <- deparse(substitute(x))
-	x <- writeRaster(x, ...)
+	x <- writeRaster(x, filename, ...)
 	assign(name, x, envir=parent.frame())
 	return(invisible())
 }

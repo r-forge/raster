@@ -11,11 +11,10 @@ if (!isGeneric("clump")) {
 }	
 
 setMethod('clump', signature(x='RasterLayer'), 
-function(x, ...) {
+function(x, filename='', ...) {
 	warning('clump function is under development; results are approximate')
 
 	overwrite <- .overwrite(...)
-	filename <- .filename(...)
 	if (filename != ""  & file.exists(filename) & overwrite==FALSE) {
 		stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
 	}
@@ -23,7 +22,6 @@ function(x, ...) {
 	x1 <- raster(x)
 	if (!canProcessInMemory(x1, 3)) {
 		tmpfile1 <- rasterTmpFile()
-		.setFilename(x1) <- tmpfile1
 	}
 
 	nc <- ncol(x1)
@@ -72,7 +70,7 @@ function(x, ...) {
 			v <- c(v, c2)
 		} else {
 			x1 <- setValues(x1, c2, r)
-			x1 <- writeRaster(x1, filetype='raster', datatype='INT4U')
+			x1 <- writeRaster(x1, filename=tmpfile1, filetype='raster', datatype='INT4U')
 		}	
 		
 		rcl <- unique(rcl)

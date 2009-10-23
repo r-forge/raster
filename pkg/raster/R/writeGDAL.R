@@ -9,8 +9,12 @@
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
 
-.getGDALtransient <- function(raster, gdalfiletype, overwrite, mvFlag,  options)  {
+.getGDALtransient <- function(raster, filename, mvFlag=NA,  options=NULL, ...)  {
 
+	overwrite <- .overwrite(...)
+	gdalfiletype <- .filetype(...)
+	datatype <- .datatype(...)
+	
 	.isSupportedFormat(gdalfiletype)
 	
 # this is a RasterLayer hence nbands = 1:
@@ -18,21 +22,20 @@
     nbands = nlayers(raster)
 
 	
-	raster@file@name <- trim(raster@file@name)
-	if (filename(raster) == "") {	
-		stop('first provide a filename. E.g.: filename(raster) <- "c:/myfile"')	
+	if (filename == "") {	
+		stop('provide a filename')	
 	}
 
-	if (file.exists( filename(raster) )) {
+	if (file.exists( filename))  {
 		if (!overwrite) {
 			stop("filename exists; use overwrite=TRUE")
-		} else if (!file.remove( filename(raster) )) {
+		} else if (!file.remove( filename)) {
 			stop("cannot delete existing file. permissin denied.")
 		}
 	}	
 
 # this needs to get fancier; depending on object and the abilties of the drivers
-	dataformat <- .getGdalDType(raster@file@datanotation)
+	dataformat <- .getGdalDType(datatype)
 	driver = new("GDALDriver", gdalfiletype)
 	
     gdoptions <- NULL
@@ -55,10 +58,10 @@
 #}
 
 
-.writeGDALall <- function(raster, gdalfiletype, overwrite, mvFlag, options) {
+.writeGDALall <- function(raster, filename, mvFlag=NA, options=NULL, ...) {
 	if (!require(rgdal)) { stop() }
 
-	transient <- .getGDALtransient(raster, gdalfiletype, overwrite, mvFlag, options)
+	transient <- .getGDALtransient(raster, filename=filename, mvFlag, options, ...)
     for (band in 1:nlayers(raster)) {
 		x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
 	}	
@@ -66,7 +69,7 @@
 #            transient_b <- getRasterBand(dataset = transient, band = band)
 #            .Call("RGDAL_SetNoDataValue", transient_b, as.double(mvFlag), PACKAGE = "rgdal")
 #       }
-	saveDataset(transient, filename(raster) )
+	saveDataset(transient, filename )
 	GDAL.close(transient) 
 	.writeStx(raster) 
 

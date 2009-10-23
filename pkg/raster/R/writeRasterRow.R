@@ -3,8 +3,8 @@
 # Version 0.9
 # Licence GPL v3
 
-.startRowWriting <- function(raster, doPB=FALSE, ...) {
- 	filename <- .writefilename(raster, ...)
+.startRowWriting <- function(raster, filename, doPB=FALSE, ...) {
+ 	filename <- trim(filename)
 	if (filename == "") {
 		stop('RasterLayer has no filename; and no filename specified as argument to writeRaster')
 	}
@@ -69,10 +69,10 @@
 }		
  
  
-.writeRasterRow <- function(raster, doPB=FALSE, ...) {
+.writeRasterRow <- function(raster, filename, doPB=FALSE, ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- .startRowWriting(raster, ...)
+		raster <- .startRowWriting(raster, filename, ...)
  	} 
 
 	raster@data@values[is.nan(raster@data@values)] <- NA

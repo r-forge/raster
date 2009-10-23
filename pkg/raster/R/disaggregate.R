@@ -20,7 +20,7 @@ if (!isGeneric("disaggregate")) {
 }	
 
 setMethod('disaggregate', signature(x='RasterLayer', fact='numeric'), 
-function(x, fact, ...) {
+function(x, fact, filename='', ...) {
 
 	inMemory <- .inMemory(...)
 	hasmethod <- .hasmethod(...)
@@ -38,7 +38,7 @@ function(x, fact, ...) {
 		stop('length(fact) should be 1 or 2')
 	}
 
-	filename <- .filename(...)
+	filename <- trim(filename)
 	outraster <- raster(x)
 	rowcol(outraster) <- c(nrow(x) * yfact, ncol(x) * xfact) 
 

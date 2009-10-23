@@ -18,7 +18,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 					r <- writeRaster(r, filename=filename, doPB=TRUE)
 				}
 				if (getOption('verbose')) {
-					cat('values were written to:', filename(raster))
+					cat('values were written to:', filename)
 				}
 				return(r)
 			}
@@ -39,7 +39,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 				r <- writeRaster(r, filename=filename, doPB=TRUE)
 			}
 			if (getOption('verbose')) {
-				cat('values were written to:', filename(raster))
+				cat('values were written to:', filename)
 			}			
 			return(r)
 		}		
@@ -58,7 +58,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 				r <- writeRaster(r, filename=filename, doPB=TRUE)
 			}
 			if (getOption('verbose')) {
-				cat('values were written to:', filename(raster))
+				cat('values were written to:', filename)
 			}
 			return(r)
 		}		

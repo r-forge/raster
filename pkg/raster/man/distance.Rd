@@ -14,12 +14,13 @@ The distance unit is in meters if the RasterLayer is not projected (\code{+proj=
 }
 
 \usage{
-distance(object, ...) 
-distanceFromPoints(object, xy, ...) 
+distance(object, filename='', ...) 
+distanceFromPoints(object, xy, filename='', ...) 
 }
 
 \arguments{
 \item{object}{a RasterLayer object}
+\item{filename}{Output filename (can be absent for RasterLayers that can be stored in memory)}
 \item{xy}{matrix of x and y coordinates, or a SpatialPoints* object}
 \item{...}{additional arguments. See Details.}  
 }
@@ -28,7 +29,6 @@ distanceFromPoints(object, xy, ...)
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
   \tab \code{filetype} \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr

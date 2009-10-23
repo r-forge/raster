@@ -1,8 +1,8 @@
 \name{writeRaster}
 
-\alias{writeRaster,RasterLayer-method}
-\alias{writeRaster,RasterStack-method}
-\alias{writeRaster,RasterBrick-method}
+\alias{writeRaster,RasterLayer,character-method}
+\alias{writeRaster,RasterStack,character-method}
+\alias{writeRaster,RasterBrick,character-method}
 
 \alias{writeRaster}
 
@@ -14,11 +14,12 @@ You can write an entire raster dataset at once, or by row.
 }
 
 \usage{
-writeRaster(x, ...)
+writeRaster(x, filename, ...)
 }
 
 \arguments{
   \item{x}{Raster* object}
+  \item{filename}{Output filename}
   \item{...}{Additional arguments. See below, under Methods}    
 }
 
@@ -30,17 +31,17 @@ writeRaster(x, ...)
  
 \tabular{rll}{
 \tab \code{x} \tab RasterLayer object \cr
-\tab \code{filename} \tab Character. output filename \cr
-\tab \code{..} \tab Additional arguments. See below \cr
+\tab \code{filename} \tab Output filename \cr
+\tab \code{...} \tab Additional arguments. See below \cr
 }
 
 \bold{Full function call when \code{x} is a RasterBrick or RasterStack object}
 
-\code{writeRaster(x, filename='', bandorder, filetype, datatype, overwrite) }
+\code{writeRaster(x, filename='', bandorder='BIL', ...) }
  
 \tabular{rll}{
 \tab \code{x} \tab RasterLayer object \cr
-\tab \code{filename} \tab Character. Output filename. Can be missing if \code{x} is a RasterBrick that has a filename \cr
+\tab \code{filename} \tab Output filename \cr
 \tab \code{bandorder} \tab Character. 'BIL', 'BIP', or 'BSQ' \cr
 \tab \code{..} \tab Additional arguments. See below \cr
 }
@@ -116,31 +117,35 @@ rst <- writeRaster(rst, filename="binallint.grd", datatype='INT4S', overwrite=TR
  
 # write all to ascii file
 rst <- writeRaster(rst, filename="ascall.asc", filetype='ascii', overwrite=TRUE)
+
+# make a brick and save multi-band file
+b <- brick(rst, sqrt(rst))
+rst <- writeRaster(b, filename="mutli.grd", bandorder='BIL', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
 rst <- raster(system.file("external/test.ag", package="sp"))
-ascras <- raster(rst, filename="ascrow.asc")
+ascras <- raster(rst)
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	v <- values(rst) * 10
 	ascras <- setValues(ascras, v, r)
-	ascras <- writeRaster(ascras, filetype='ascii', overwrite=TRUE) 
+	ascras <- writeRaster(ascras, filename='ascrow.asc', filetype='ascii', overwrite=TRUE) 
 }
 	
 # read and write row by row; write to binary file
-binras <- raster(rst, filename="binbyrow")
+binras <- raster(rst)
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
-	binras <- writeRaster(binras, overwrite=TRUE) 
+	binras <- writeRaster(binras, 'binbyrow', overwrite=TRUE) 
 }
 
 # read and write row by row; write to GeoTiff binary file
-binras <- raster(rst, filename="binbyrow2.tif")
+binras <- raster(rst)
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
-	binras <- writeRaster(binras, filetype="GTiff", overwrite=TRUE) 
+	binras <- writeRaster(binras, 'binbyrow2.tif', filetype="GTiff", overwrite=TRUE) 
 }
 
 # write to netcdf 

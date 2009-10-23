@@ -4,29 +4,6 @@
 # Licence GPL v3
 
 
-.filename <- function(filename, ...) {
-	if (missing(filename)) { 
-		return('')
-	} else {
-		return(trim(filename))
-	}
-}
-
-
-.writefilename <- function(raster, ...) {
-	filename <- .filename(...) 
-	if (filename == '') {
-		filename <- trim(filename(raster))
-	}
-	if (filename == '') {
-		stop('provide a filename')
-	} else {
-		return(filename)
-	}
-}
-
-
-
 filename <- function(x) {
 	if (class(x) == 'RasterStack') { 
 		return(x@filename) 
@@ -39,7 +16,7 @@ filename <- function(x) {
 		.setFilename(x) <- value
 		return(x)
 	} else {
-		stop('error')
+		stop('you can only set the filename of a RasterStack. You can set a filename as an arguments to a function that will write a file')
 	}
 }
 
@@ -68,3 +45,24 @@ filename <- function(x) {
 	return(x)	
 }
 
+
+#.filename <- function(..., filename) {
+#	if (missing(filename)) { 
+#		return('')
+#	} else {
+#		return(trim(filename))
+#	}
+#}
+
+
+#.writefilename <- function(raster, ...) {
+#	filename <- .filename(...) 
+#	if (filename == '') {
+#		filename <- trim(filename(raster))
+#	}
+#	if (filename == '') {
+#		stop('provide a filename')
+#	} else {
+#		return(filename)
+#	}
+#}

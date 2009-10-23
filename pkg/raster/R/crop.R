@@ -13,7 +13,7 @@ if (!isGeneric("crop")) {
 
 
 setMethod('crop', signature(x='RasterLayer', y='ANY'), 
-function(x, y, ...) {
+function(x, y, filename='', ...) {
 	test <- try ( y <- extent(y), silent=TRUE )
 	if (class(test) == "try-error") {
 		stop('Cannot get an Extent object from argument y')
@@ -24,7 +24,7 @@ function(x, y, ...) {
 	bb <- alignExtent(bb, x)
 	outraster <- raster(x)
 	outraster <- setExtent(outraster, bb, keepres=TRUE)
-	filename <- .filename(...)
+	filename <- trim(filename)
 	
 	if (dataContent(x) == 'all')  {
 		first_start_cell <- cellFromXY(x, c(xmin(outraster) + 0.5 * xres(x), ymax(outraster) - 0.5 * yres(x) ))	

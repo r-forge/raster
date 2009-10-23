@@ -10,7 +10,7 @@ if (!isGeneric("cover")) {
 }	
 
 setMethod('cover', signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, ..., datatype=NULL) {
+	function(x, y, ..., filename='', datatype=NULL) {
 
 	rasters <- .makeRasterList(x, y, ...)
 	compare(rasters)
@@ -32,12 +32,9 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 			datatype <- 'FLT4S'
 		}
 	}
-	.setDataType(outRaster) <- datatype
-		
-	filename <- .filename(...)	
+	filename <- trim(filename	)
 	if (!canProcessInMemory(x, 4) && filename == '') {
 		filename <- rasterTmpFile()
-		.setFilename(outRaster) <- filename
 		if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
 	}
 	
@@ -61,7 +58,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	}
 	pbClose(pb)
 
-	if (outRaster@file@name == "") {
+	if (filename == "") {
 		outRaster <- setValues(outRaster, v)
 	}
 	return(outRaster)

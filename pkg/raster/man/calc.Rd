@@ -17,13 +17,11 @@
 calc(x, fun, ...) 
 }
 
-
 \arguments{
   \item{x}{a Raster* object}
   \item{fun}{a function}
   \item{...}{Additional arguments. See Details}  
 }
-
 
 \details{
 if \code{x = "RasterLayer"}, \code{fun} should be a function that can take a single value as input, and returns a single value (e.g. \code{sqrt}). 
@@ -38,18 +36,19 @@ See (\code{link[raster]{overlay}}) to use functions that refer to specific layer
  
 \bold{1) \code{x} is a RasterLayer object; \code{fun} is a function}
 
-\code{calc(x, fun, ...)}
+\code{calc(x, fun, filename='', ...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterLayer object \cr
   \tab  \code{fun}  \tab The function to be applied\cr
+  \tab  \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
   \tab  \code{...} \tab Additional arguments. See below \cr  
 }
 
 
 \bold{2) \code{x} is a RasterStack object; \code{fun} is a function}
 
-\code{calc(x, fun, ...)}
+\code{calc(x, fun, filename='',...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterStack object \cr
@@ -58,7 +57,7 @@ Other items as above
 
 \bold{3) \code{x} is a RasterStack object; \code{fun} is a list of functions}
 
-\code{calc(x, fun, ...)}
+\code{calc(x, fun, filename='', ...)}
   
 \tabular{rll}{  
   \tab  \code{x} \tab a RasterStack object \cr
@@ -70,7 +69,6 @@ Other items as above
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
   \tab \code{filetype} \tab Characer. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr

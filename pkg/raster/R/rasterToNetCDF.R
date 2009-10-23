@@ -4,11 +4,12 @@
 # Licence GPL v3
 
 
-.writeRasterCDF <- function(x, ...){ 
+.writeRasterCDF <- function(x, filename, ...){ 
 	
 	if (!require(RNetCDF)) { stop() }	
 
- 	filename <- .writefilename(raster, ...)	
+ 	filename <- trim(filename)
+	
 	cat(filename, '\n')
 	
 	overwrite <- .overwrite(...)

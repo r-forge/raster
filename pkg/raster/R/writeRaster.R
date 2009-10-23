@@ -6,14 +6,14 @@
  
 
 if (!isGeneric('writeRaster')) {
-	setGeneric('writeRaster', function(x, ...)
+	setGeneric('writeRaster', function(x, filename, ...)
 		standardGeneric('writeRaster')) 
 	}
     
 	
 
-setMethod('writeRaster', signature(x='RasterLayer'), 
-function(x, ...) {
+setMethod('writeRaster', signature(x='RasterLayer', filename='character'), 
+function(x, filename, ...) {
 
 	filetype <- .filetype(...)
 	
@@ -23,21 +23,20 @@ function(x, ...) {
 	
 	if (.isNativeDriver(filetype)) {
 		if (substr(dataContent(x), 1, 3) == 'row' ) {
-			x <- .writeRasterRow(x, ...)
+			x <- .writeRasterRow(x, filename=filename, ...)
 		} else {
-			x <- .writeRasterAll(x, filetype=filetype, ...)
+			x <- .writeRasterAll(x, filename=filename, ...)
 		}  
 	} else if (filetype=='ascii') {
-		x <- .writeAscii(x, ...)
+		x <- .writeAscii(x, filename=filename, ...)
 	} else if (filetype=='CDF') {
-		x <- .writeRasterCDF(x, ...)
+		x <- .writeRasterCDF(x, filename=filename, ...)
 		
-	} else { # try rgdal
-		overwrite <- .overwrite(...)
+	} else { 
 		if (dataContent(x) == 'row' ) {
-			x <- .writeGDALrow(x, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
+			x <- .writeGDALrow(x, filename=filename, ...)
 		} else {
-			x <- .writeGDALall(x, gdalfiletype=filetype, overwrite=overwrite, mvFlag=NA, options=NULL)
+			x <- .writeGDALall(x, filename=filename, ...)
 		}  
 	}
 	return(x)
@@ -45,12 +44,12 @@ function(x, ...) {
 )
 
 
-setMethod('writeRaster', signature(x='RasterBrick'), 
-function(x, ...) {
+setMethod('writeRaster', signature(x='RasterBrick', filename='character'), 
+function(x, filename, bandorder='BIL', ...) {
 	if (substr(dataContent(x), 1, 3) == 'row' ) {
-		return( .writeBrickRow(object=x, ...) )
+		return( .writeBrickRow(object=x, filename=filename, bandorder=bandorder, ...) )
 	} else if (substr(dataContent(x), 1, 3) == 'all' ) {
-		return( .writeBrick(object=x, ...) )
+		return( .writeBrick(object=x, filename=filename, bandorder=bandorder, ...) )
 	} else {
 		stop('cannot write data')
 	}
@@ -58,9 +57,8 @@ function(x, ...) {
 )
 
 
-setMethod('writeRaster', signature(x='RasterStack'), 
-function(x, ...) {
-	return( .writeStack(x, ...) )
+setMethod('writeRaster', signature(x='RasterStack', filename='character'), 
+function(x, filename, bandorder='BIL', ...) {
+	return( .writeStack(x, filename=filename, bandorder=bandorder, ...) )
 }
 )
-

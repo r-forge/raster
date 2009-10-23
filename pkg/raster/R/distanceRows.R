@@ -14,12 +14,11 @@
 
 
 
-.distanceRows <- function(object, ...) {
+.distanceRows <- function(object, filename, ...) {
 
 	nrows <- min(100, floor(nrow(object)/2))  # arbitrary right now...
 	chunks <- ceiling(nrow(object) / nrows)
 	
-	filename <- .filename(...)
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
 	
@@ -36,7 +35,6 @@
 	arow <- rep(NA, ncol(rst1))
 	v <- vector()
 	
-	
 	pb <- pbCreate(nrow(rst1) * chunks, type=.progress(...))
 
 	for (k in 1:chunks) {
@@ -48,13 +46,13 @@
 			for (r in 1:nrow(rst1)) {	
 				if (k==1) {
 					rst1 <- setValues(rst1, arow, r)
-					rst1 <- writeRaster(rst1, datatype=datatype, overwrite=TRUE, filetype='raster')
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')
 				} else {
 					rst2 <- readRow(rst2, r)
 					rst1 <- setValues(rst1, values(rst2), r)
-					rst1 <- writeRaster(rst1, datatype=datatype, overwrite=TRUE, filetype='raster')			
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')			
 				}	
-			pbStep(pb, r) 	
+				pbStep(pb, r) 	
 			}
 		} else {
 			for (r in 1:nrow(rst1)) {	
@@ -66,19 +64,19 @@
 				}
 				if (k==1) {
 					rst1 <- setValues(rst1, vals, r)
-					rst1 <- writeRaster(rst1, datatype=datatype, overwrite=TRUE, filetype='raster')
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')
 				} else {
 					rst2 <- readRow(rst2, r)
 					vals <- pmin(values(rst2), vals)
 					rst1 <- setValues(rst1, vals, r)
-					rst1 <- writeRaster(rst1, datatype=datatype, overwrite=TRUE, filetype='raster')			
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')			
 				}
 			pbStep(pb, r) 	
 			}
 		}
-		tmp <- filename(rst2)
+		tmp <- rst2
 		rst2 <- rst1
-		rst1 <- raster(tmp)
+		rst1 <- tmp
 	}	
 	pbClose(pb)
     return(rst2)

@@ -21,7 +21,7 @@ clump(x, ...)
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{filename}  \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
+  \tab \code{filename}  \tab Output filename. Default = '' \cr
   \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype}  \tab output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr

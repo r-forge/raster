@@ -6,19 +6,17 @@
 
 initXYID <- function(raster, v='id', filename="", ...) {
 	
-	outraster <- raster(raster, filename)
+	filename <- trim(filename)
+	outraster <- raster(raster)
 	.setDataType(outraster) <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
 	
 	if (!( v %in% c()) ) {
 		stop('v should be x, y, or id')
 	}
 	if (!canProcessInMemory(outraster, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		.setFilename(outraster) <- filename
 		if (getOption('verbose')) { 
-			cat('writing raster to:', filename(raster))	
+			cat('writing raster to:', filename)	
 		}
 	}
 	if ( filename == '') {
@@ -47,7 +45,7 @@ initXYID <- function(raster, v='id', filename="", ...) {
 				vals <- yFromCell(outraster, cells)
 			} 		
 			outraster <- setValues(outraster, vals, r) 
-			outraster <- writeRaster(outraster, filetype=filetype, overwrite=overwrite)
+			outraster <- writeRaster(outraster, filename=filename, ...)
 			pbStep(pb, r)
 		}
 		pbClose(pb)

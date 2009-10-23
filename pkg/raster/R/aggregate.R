@@ -1,10 +1,8 @@
 # Authors: Robert J. Hijmans and Jacob van Etten
-#contact: r.hijmans@gmail.com
+# contact: r.hijmans@gmail.com
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
-
-
 
 setMethod('aggregate', signature(x='RasterLayer'), 
 
@@ -71,8 +69,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	} else if ( dataSource(x) == 'disk') { 
 		if (!canProcessInMemory(outRaster, 2) && filename == '') {
 			filename <- rasterTmpFile()
-			.setFilename(outRaster) <- filename
-			if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
+			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		}
 		
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
@@ -112,7 +109,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			pbStep(pb, r) 
 		} 
 		pbClose(pb)
-		if (outRaster@file@name == "") { 
+		if (filename == "") { 
 			outRaster <- setValues(outRaster, v) 
 		}
 	}

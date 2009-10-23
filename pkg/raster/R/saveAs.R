@@ -6,7 +6,8 @@
 
 saveAs <- function(raster, filename, filetype, datatype, overwrite, progress, result=TRUE) {
 
-	if ( trim(filename(raster)) == trim(filename) ) {
+	filename <- trim(filename)
+	if ( trim(filename(raster)) == filename ) {
 		stop('filenames should be different')
 	}
 
@@ -20,20 +21,14 @@ saveAs <- function(raster, filename, filetype, datatype, overwrite, progress, re
 		return(raster)
 	} 
 
-	
 # if filetype and datatype are the same, then use copyRasterfile 
 	newr <- raster(raster, filename)
-	
-	
-	pb <- pbCreate(nrow(newr), type=progress)
 	
 	for (r in 1:nrow(newr)) {
 		raster <- readRow(raster, r)
 		newr <- setValues(newr, values(raster), r)
-		newr <- writeRaster(newr, filename=filename, datatype=datatype, filetype=filetype, overwrite=overwrite)
-		pbStep(pb, r) 
+		newr <- writeRaster(newr, filename=filename, datatype=datatype, filetype=filetype, overwrite=overwrite, doPB=TRUE)
 	}
-	pbClose(pb)
 		
 	if (result) {
 		return(newr)
