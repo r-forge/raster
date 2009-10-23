@@ -47,11 +47,14 @@
 			} else {
 				if (.isNetCDF(x)) {
 					return ( .rasterFromCDF(x, objecttype, ...) )
-				} else if ( isTRUE(.isSurferFile(x)) ) {
-					return ( .rasterFromSurferFile(x) )
-				} else {
-					stop("Cannot create RasterLayer object. There is a '.grd' file but no '.gri' file. It is not a netcdf or surfer6 file. You can try again with 'forcegdal=TRUE'")
-				} 
+				} else  {
+					test <- try ( r <- .rasterFromGDAL(x, band, objecttype), silent=TRUE )
+					if (class(test) == "try-error") {
+						stop("Cannot create RasterLayer object. There is a '.grd' file but no '.gri' file. It is not a netcdf or surfer6/7 file. ")
+					} else {
+						return(r)
+					}
+				}
 			}
 		} else {
 			stop("Cannot create RasterLayer object. There is a '.gri' file but no '.grd' file. You can try again with 'forcegdal=TRUE'")
