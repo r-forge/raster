@@ -19,7 +19,7 @@
 
 .rasterObjectFromFile <- function(x, band=1, objecttype='RasterLayer', forcegdal=FALSE, ...) {
 	x <- trim(x)
-	if (x=='' | x=='.') # etc? {
+	if (x=='' | x=='.') { # etc? 
 		stop('provide a valid filename')
 	}
 	fileext <- toupper(ext(x)) 
