@@ -7,13 +7,15 @@
 
 
 
-.writeGDALrow <- function(raster, filename, mvFlag=NA, options=NULL, ... ) {
+.writeGDALrow <- function(raster, filename, mvFlag=NA, options=NULL, doPB=FALSE, ... ) {
 	if (!require(rgdal)) { stop() }
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {
 		transient <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
 		attr(raster@file, "transient") <- transient
+		if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress(...) ) }
+		
 		raster@file@driver <- 'gdal'
 		raster@data@source <- 'disk'		
 		.setFilename(raster) <- filename
@@ -39,19 +41,28 @@
     for (band in 1:nlayers(raster)) {
 		x <- putRasterData(raster@file@transient, values(raster, rownr), band, c((rownr-1), 0)) 
 	}
+
+	if (doPB) {	pbStep( attr(raster@file, "pb"), rownr ) 	}
+
+	
 	if ( rownr == nrow(raster)) {
 		saveDataset(raster@file@transient, filename )
 		GDAL.close(raster@file@transient) 
 		
 		# establish the handle:
+
+		if (doPB) {
+			pbClose( attr(raster@file, "pb") )
+			attr(raster@file, "pb") <- ''
+		}
+
 		rasterout <- raster(filename)
-		
 		if (!raster@data@haveminmax) {
 			rasterout@data@min <- raster@data@min
 			rasterout@data@max <- raster@data@max
 		}
 		rasterout@data@haveminmax <- TRUE
-		raster@file@driver <- 'gdal'
+#		rasterout@file@driver <- 'gdal'
 		
 		.writeStx(rasterout) 
 		return(rasterout)

@@ -36,8 +36,7 @@
 	raster@data@haveminmax <- FALSE
 	raster@file@driver <- filetype
 	
-	if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress() ) }
-	
+	if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress(...) ) }
 	return(raster)
 }
 
@@ -72,7 +71,7 @@
 .writeRasterRow <- function(raster, filename, doPB=FALSE, ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- .startRowWriting(raster, filename, ...)
+		raster <- .startRowWriting(raster, filename, doPB, ...)
  	} 
 
 	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -91,15 +90,14 @@
 	}	
 	
 	writeBin(values, raster@file@con, size = raster@file@dsize )
+
+	if (doPB) {	pbStep( attr(raster@file, "pb"), row ) 	}
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
-		raster <- .stopRowWriting(raster)
+		raster <- .stopRowWriting(raster, doPB)
 		if (dataIndices(raster)[2] > ncell(raster)) {
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 		}
-	}
-	if (doPB) {
-		pbStep( attr(raster@file, "pb"), row )
 	}
 
 	return(raster)	
