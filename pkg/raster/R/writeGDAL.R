@@ -9,7 +9,7 @@
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
 
-.getGDALtransient <- function(raster, filename, mvFlag=NA,  options=NULL, ...)  {
+.getGDALtransient <- function(raster, filename, mvFlag=NA, options, ...)  {
 
 	overwrite <- .overwrite(...)
 	gdalfiletype <- .filetype(...)
@@ -21,7 +21,6 @@
 # but we keep this for later (RasterStack / Brick)
     nbands = nlayers(raster)
 
-	
 	if (filename == "") {	
 		stop('provide a filename')	
 	}
@@ -36,11 +35,16 @@
 
 # this needs to get fancier; depending on object and the abilties of the drivers
 	dataformat <- .getGdalDType(datatype)
+
+	if (gdalfiletype=='GTiff') {
+		bytes <- ncell(raster) * dataSize(datatype)
+		if (bytes > (4 * 1024 * 1024 * 1000) ) {  # ~ 4GB
+			options <- c(options, 'BIGTIFF=YES')
+		}
+	}
+
 	driver = new("GDALDriver", gdalfiletype)
-	
-    gdoptions <- NULL
-	
-    transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=gdoptions, handle=NULL)
+    transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=options, handle=NULL)
  
 	gt <- c(xmin(raster), xres(raster), 0, ymax(raster), 0, -yres(raster))
     .Call("RGDAL_SetGeoTransform", transient, gt, PACKAGE = "rgdal")
@@ -61,7 +65,7 @@
 .writeGDALall <- function(raster, filename, mvFlag=NA, options=NULL, ...) {
 	if (!require(rgdal)) { stop() }
 
-	transient <- .getGDALtransient(raster, filename=filename, mvFlag, options, ...)
+	transient <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
     for (band in 1:nlayers(raster)) {
 		x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
 	}	
@@ -73,9 +77,8 @@
 	GDAL.close(transient) 
 	.writeStx(raster) 
 
-	raster@file@driver <- 'gdal'
-	raster@data@source <- 'disk'
-	
+	raster <- raster(filename)
+	raster <- readAll(raster)
 	return(raster)
 }
 

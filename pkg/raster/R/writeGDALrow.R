@@ -12,10 +12,11 @@
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {
-		transient <- .getGDALtransient(raster, filename=filename, mvFlag, options, ...)
+		transient <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
 		attr(raster@file, "transient") <- transient
 		raster@file@driver <- 'gdal'
 		raster@data@source <- 'disk'		
+		.setFilename(raster) <- filename
 	}	
 	
 #	raster@data@values[is.nan(raster@data@values)] <- NA
