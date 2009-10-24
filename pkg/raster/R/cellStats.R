@@ -5,6 +5,8 @@
 # Licence GPL v3
 
 cellStats <- function(raster, stat='mean', ...) {
+	getzmean <- function(..., zmean) {if (missing(zmean)) { stop("'zmean' is missing") } else return(zmean)	}
+	getzsd <- function(..., zsd) {if (missing(zsd)) { stop("'zsd' is missing") } else return(zsd)	}
 
 	if (class(stat) != 'character') {
 		if (dataContent(raster) == 'all') { n <- 1 } else {n <- 2}
@@ -30,16 +32,21 @@ cellStats <- function(raster, stat='mean', ...) {
 		} else if (stat == 'countNA') {
 			st <- 0		
 			nc <- ncol(raster)
+		} else if (stat == 'skew') {
+			st <- 0
+			z <- 0
+			zsd <- getzsd(...)
+			zmean <- getzmean(...)
 		} else if (stat == 'mean' | stat == 'sd') {
 			# do nothing
 		} else { 
-			stop("invalid 'stat'. Should be 'sum', 'min', 'max', 'sd', 'mean' or 'countNA'") 
+			stop("invalid 'stat'. Should be 'sum', 'min', 'max', 'sd', 'mean', 'skew' or 'countNA'") 
 		}
 
 		cnt <- 0
 		sumsq <- 0
 		
-		pb <- pbCreate(nrow(raster), type=.progress(...))
+		pb <- pbCreate(nrow(raster), type='texst') #.progress(...))
 		for (r in 1:nrow(raster)) {
 			d <- na.omit(getValues(raster, r))
 			if (length(d) == 0) { next }
@@ -52,6 +59,9 @@ cellStats <- function(raster, stat='mean', ...) {
 				cnt <- cnt + length(d)
 			} else if (stat=='countNA') {
 				st <- st + (nc - length(d))
+			} else if (stat=='skew') {
+				st <- st + sum((d - zmean) ^3)
+				z <- z + length(d)
 			} else {
 				st <- fun(c(d, st))
 			}
@@ -62,6 +72,8 @@ cellStats <- function(raster, stat='mean', ...) {
 			st <- sqrt( (1 / cnt) * sumsq - meansq )
 		} else if (stat == 'mean') {
 			st <- st / cnt
+		} else if (stat == 'skew') {
+			st <- ((st / zsd)^3)/ z
 		}
 		pbClose(pb)
 		return(st)
