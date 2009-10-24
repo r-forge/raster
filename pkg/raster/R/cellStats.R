@@ -5,9 +5,20 @@
 # Licence GPL v3
 
 cellStats <- function(raster, stat='mean', ...) {
-	getzmean <- function(..., zmean) {if (missing(zmean)) { stop("'zmean' is missing") } else return(zmean)	}
-	getzsd <- function(..., zsd) {if (missing(zsd)) { stop("'zsd' is missing") } else return(zsd)	}
-
+	getzmean <- function(raster, ..., zmean) {
+		if (missing(zmean)) { 
+			cellStats(raster, 'mean')
+		} else {
+			return(zmean)	
+		}
+	}
+	getzsd <- function(raster, ..., zsd) {
+		if (missing(zsd)) { 
+			cellStats(raster, 'sd')
+		} else {
+			return(zsd)	
+		}
+	}
 	if (class(stat) != 'character') {
 		if (dataContent(raster) == 'all') { n <- 1 } else {n <- 2}
 		if (canProcessInMemory(raster, n)) {
@@ -35,8 +46,8 @@ cellStats <- function(raster, stat='mean', ...) {
 		} else if (stat == 'skew') {
 			st <- 0
 			z <- 0
-			zsd <- getzsd(...)
-			zmean <- getzmean(...)
+			zsd <- getzsd(raster, ...)
+			zmean <- getzmean(raster, ...)
 		} else if (stat == 'mean' | stat == 'sd') {
 			# do nothing
 		} else { 
