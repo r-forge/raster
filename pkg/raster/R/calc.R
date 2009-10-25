@@ -14,10 +14,9 @@ function(x, fun, filename='', ...) {
 	if (length(fun(5)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
-	
-	outraster <- raster(x, filename)
-	datatype <- .datatype(...)
-	.setDataType(outraster) <- datatype
+
+	filename <- trim(filename)
+	outraster <- raster(x)
 	
 	if (!(dataContent(x) == 'all' | dataContent(x) == 'sparse' | dataSource(x) == 'disk')) {
 		stop('RasterLayer has no data on disk, nor a complete set of values in memory')

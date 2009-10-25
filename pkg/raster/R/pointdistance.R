@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans  and Jacob van Etten
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 .pointsToMatrix <- function(p) {

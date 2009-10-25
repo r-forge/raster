@@ -1,7 +1,7 @@
 # Author: Jacob van Etten jacobvanetten@yahoo.com
 # International Rice Research Institute
 # Date :  January 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 .cs <- function(a,b) {

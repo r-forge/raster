@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # International Rice Research Institute
 # Date :  February 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 

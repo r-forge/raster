@@ -10,7 +10,7 @@
 
  	filename <- trim(filename)
 	
-	cat(filename, '\n')
+#	cat(filename, '\n')
 	
 	overwrite <- .overwrite(...)
 		

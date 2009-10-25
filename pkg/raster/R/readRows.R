@@ -1,6 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date : June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 

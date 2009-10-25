@@ -14,9 +14,10 @@ setMethod('clump', signature(x='RasterLayer'),
 function(x, filename='', ...) {
 	warning('clump function is under development; results are approximate')
 
-	overwrite <- .overwrite(...)
-	if (filename != ""  & file.exists(filename) & overwrite==FALSE) {
-		stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
+	if (filename != ""  & file.exists(filename)) {
+		if (.overwrite(...)==FALSE) {
+			stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
+		}
 	}
 	tmpfile1 <- ""
 	x1 <- raster(x)

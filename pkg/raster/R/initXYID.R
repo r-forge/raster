@@ -8,7 +8,6 @@ initXYID <- function(raster, v='id', filename="", ...) {
 	
 	filename <- trim(filename)
 	outraster <- raster(raster)
-	.setDataType(outraster) <- .datatype(...)
 	
 	if (!( v %in% c()) ) {
 		stop('v should be x, y, or id')

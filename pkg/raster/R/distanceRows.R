@@ -21,6 +21,7 @@
 	
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
+	filename <- trim(filename)
 	
 	if( (!overwrite) & file.exists(filename)) {
 		stop('file exists; use overwrite=TRUE to overwrite it')

@@ -2,7 +2,7 @@
 # International Rice Research Institute
 # contact: r.hijmans@gmail.com
 # Date : March 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 

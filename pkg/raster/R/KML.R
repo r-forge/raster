@@ -2,7 +2,7 @@
 # in the maptools package. These were written by Duncan Golicher, David Forrest and Roger Bivand 
 # Adaptation for the raster packcage by Robert J. Hijmans, r.hijmans@gmail.com
 # Date : March 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 KML <- function (raster, filename, col=rainbow(255), maxdim=1000) {

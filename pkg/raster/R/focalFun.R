@@ -27,10 +27,6 @@
 
 focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 	
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-
 	ngb <- as.integer(round(ngb))
 	if (length(ngb) == 1) {
 		ngb <- c(ngb, ngb)
@@ -42,8 +38,8 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 #	if (ngb[1] %% 2 == 0 | ngb[2] %% 2 == 0) { stop("only odd neighborhoods are supported") }
 
 	filename <- trim(filename)
-	ngbgrid <- raster(raster, filename=filename)
-	.setDataType(ngbgrid) <- datatype
+	
+	ngbgrid <- raster(raster)
 
 # first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	res <- vector(length=length(ncol(ngbgrid)))
@@ -83,7 +79,7 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 		ngbvals <- .calcNGB(ngbdata, colnrs, res, fun, keepdata)
 		if (filename != "") {
 			ngbgrid <- setValues(ngbgrid, ngbvals, r)
-			ngbgrid <- writeRaster(ngbgrid, overwrite=overwrite, filetype=filetype)
+			ngbgrid <- writeRaster(ngbgrid, filename=filename, ...)
 		} else {
 			v <- c(v, ngbvals)
 		}

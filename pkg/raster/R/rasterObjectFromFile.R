@@ -27,7 +27,7 @@
 		return( .rasterFromGDAL(x, band, objecttype) )
 	} 
 	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {
-		return ( .rasterFromCDF(x, band, objecttype) )
+		return ( .rasterFromCDF(x, objecttype, ...) )
 	}
 	if ( fileext %in% c(".RST", ".RDC") ) {
 		return ( .rasterFromIDRISIFile(x) )

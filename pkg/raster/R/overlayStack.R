@@ -1,7 +1,7 @@
 # Author: Robert J. Hijmans and Reinhard Krug
 # International Rice Research Institute
 # Date :  June 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
@@ -9,10 +9,6 @@
 setMethod('overlay', signature(x='RasterStackBrick', y='missing'), 
 function(x, y, fun, indices=1:nlayers(x), filename="", ...){ 
 	
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
-	progress <- .progress(...)
 	
 	indices <- round(indices)
 	if (min(indices) < 1) {	stop('indices should be >= 1') }
@@ -28,8 +24,8 @@ function(x, y, fun, indices=1:nlayers(x), filename="", ...){
 	}
 	
 	if (length(fun) == 1) {
-	
-		return(.overlayList(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, progress=progress))
+
+		return(.overlayList(rasters, fun=fun, filename=filename, ...))
 	
 	} else {
 		if (filename != "" &&  (length(filename) != length(fun)) ) {
@@ -39,7 +35,7 @@ function(x, y, fun, indices=1:nlayers(x), filename="", ...){
 		# the idea is to optimize this, by reading all (row) data only once.... 
 		res <- list()
 		for (i in 1:length(fun)) {
-			res[i] <- ( .overlayList(rasters, fun=fun, overwrite=overwrite, filetype=filetype, datatype=datatype, progress=progress))
+			res[i] <- ( .overlayList(rasters, fun=fun, filename=filename, ...))
 		}
 		return(res)
 	}

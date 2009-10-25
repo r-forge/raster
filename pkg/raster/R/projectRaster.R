@@ -55,9 +55,6 @@ projectExtent <- function(object, projs) {
 projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	if (!require(rgdal)) { stop() }
 	
-	datatype <- .datatype(...)
-	filetype <- .filetype(...)
-	overwrite <- .overwrite(...)
 	
 	if (dataContent(from) != 'all' & dataSource(from) == 'ram') { stop('no vales for "from". Nothing to do') }
 
@@ -76,8 +73,6 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }
 	filename <- trim(filename)
 	to <- raster(to, filename=filename)
-
-	.setDataType(to) <- datatype
 
 	rowCells <- 1:ncol(to)
 

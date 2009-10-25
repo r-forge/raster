@@ -1,12 +1,11 @@
 # Authors: Robert J. Hijmans 
-# International Rice Research Institute
-#contact: r.hijmans@gmail.com
+# contact: r.hijmans@gmail.com
 # Date : October 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 setMethod('merge', signature(x='RasterLayer', y='RasterLayer'), 
-function(x,y,...,tolerance=0.05, filename="", filetype, overwrite, progress){ 
+function(x,y,..., tolerance=0.05, filename="", filetype, overwrite, progress){ 
 	
 	if (missing(filetype)) {
 		filetype <- .filetype()
