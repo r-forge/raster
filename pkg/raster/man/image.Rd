@@ -4,7 +4,7 @@
 
 \alias{image}
 \alias{image,RasterLayer-method}
-\alias{image,RasterStack-method}
+\alias{image,RasterStackBrick-method}
 
 \title{Image}
 

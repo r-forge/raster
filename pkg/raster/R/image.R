@@ -27,7 +27,7 @@ setMethod("image", signature(x='RasterLayer'),
 )
 
 
-setMethod("image", signature(x='RasterStack'), 
+setMethod("image", signature(x='RasterStackBrick'), 
 	function(x, y=1, maxdim=1000, ...)  {
 		if (y < 1) { y <- 1 }
 		if (y > nlayers(x)) { y <- nlayers(x) }

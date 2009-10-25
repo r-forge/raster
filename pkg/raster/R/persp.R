@@ -26,7 +26,7 @@ setMethod("persp", signature(x='RasterLayer'),
 	}
 )
 
-setMethod("persp", signature(x='RasterStack'), 
+setMethod("persp", signature(x='RasterStackBrick'), 
 	function(x, y=1, maxdim=1000, ...)  {
 		if (y < 1) { y <- 1 }
 		if (y > nlayers(x)) { y <- nlayers(x) }

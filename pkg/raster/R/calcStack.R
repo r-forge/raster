@@ -6,7 +6,7 @@
 
 #mCalc <- function(...) { stop('mCalc has been replaced by generic function "calc"')}
 
-setMethod('calc', signature(x='RasterStack', fun='function'), 
+setMethod('calc', signature(x='RasterStackBrick', fun='function'), 
 
 function(x, fun, filename='', ...) {
 

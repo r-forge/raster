@@ -24,19 +24,19 @@
 		if (!overwrite) {
 			stop("filename exists; use overwrite=TRUE")
 		} else if (!file.remove( filename)) {
-			stop("cannot delete existing file. permissin denied.")
+			stop("cannot delete existing file. permission denied.")
 		}
 	}	
 # this needs to get fancier; depending on object and the abilties of the drivers
 	dataformat <- .getGdalDType(datatype)
 
+    nbands = nlayers(raster)
 	if (gdalfiletype=='GTiff') {
-		bytes <- ncell(raster) * dataSize(datatype)
+		bytes <- ncell(raster) * dataSize(datatype) * nbands
 		if (bytes > (4 * 1024 * 1024 * 1000) ) {  # ~ 4GB
 			options <- c(options, 'BIGTIFF=YES')
 		}
 	}
-    nbands = nlayers(raster)
 	driver = new("GDALDriver", gdalfiletype)
     transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=options, handle=NULL)
  

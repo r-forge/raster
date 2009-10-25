@@ -24,7 +24,7 @@ setMethod("contour", signature(x='RasterLayer'),
 )
 
 
-setMethod("contour", signature(x='RasterStack'), 
+setMethod("contour", signature(x='RasterStackBrick'), 
 	function(x, y=1, maxdim=1000, ...)  {
 		if (y < 1) { y <- 1 }
 		if (y > nlayers(x)) { y <- nlayers(x) }

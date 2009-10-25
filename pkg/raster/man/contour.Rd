@@ -4,7 +4,7 @@
 
 \alias{contour}
 \alias{contour,RasterLayer-method}
-\alias{contour,RasterStack-method}
+\alias{contour,RasterStackBrick-method}
 
 \title{Contour plot}
 

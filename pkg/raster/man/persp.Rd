@@ -4,7 +4,7 @@
 
 \alias{persp}
 \alias{persp,RasterLayer-method}
-\alias{persp,RasterStack-method}
+\alias{persp,RasterStackBrick-method}
 
 \title{Perspective plot}
 
