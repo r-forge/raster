@@ -5,37 +5,19 @@
 
 
 .writeBrick <- function(object, filename, bandorder='BIL', ...) {
-	
-	filetype <- .filetype(...)
-	if (filetype != 'raster') {
-		stop('Only "raster" format is currently supported for writing multiband files')
-	}
-
 	filename <- trim(filename)
+	if (filename == '') {	stop('you must supply a filename') 	}
+	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) { stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'") }
 	
-#	filetype <- .filetype(...)  # not used
+	filetype <- .filetype(...)  
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
 	progress <- .progress(...)
-
-	if (filetype != 'raster') {
-		stop('Only "raster" format is currently supported for writing multiband files')
-	}
-
 	
-	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) {
-		stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'")
-	}
-
 	nl <- nlayers(object)
-	rout <- raster(object)
-	rout@file@nbands <- nl
-	rout@file@bandorder <- bandorder
-	.setDataType(rout) <- datatype
-
+	rout <- brick(object)
 	
 	pb <- pbCreate(nrow(rout), type=progress)
-
 	if (bandorder=='BIL') {
 		ncol(rout) <- ncol(rout) * nl
 		for (r in 1:nrow(object)) {
@@ -83,15 +65,20 @@
 			}
 		}		
 	}
-	
-	
 	pbClose(pb)
+
+	f <- filename(rout)
+	rout <- brick(rout)
+	rout@file@name <- f
 	nrow(rout) <- nrow(object)
 	ncol(rout) <- ncol(object)
 	rout@data@min <- minValue(object, -1)
 	rout@data@max <- maxValue(object, -1)
+	rout@data@nlayers <- nl
+	rout@file@bandorder <- bandorder
 	rout@layernames <- layerNames(object)
 	writeRasterHdr(rout, filetype=filetype)
+
 	return(invisible(brick(filename(rout))))
 }
 

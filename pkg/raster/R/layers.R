@@ -4,6 +4,12 @@
 # Version 0.8
 # Licence GPL v3
 
+#'nlayers<-' <- function(x, value) {
+#	if (class(x) != 'RasterBrick') {
+#		stop('only for RasterBrick objects')
+#	}
+#	x@data@nlayers <- value
+#}
 
 if (!isGeneric("nlayers")) {
 	setGeneric("nlayers", function(object)

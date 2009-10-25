@@ -5,28 +5,17 @@
 
 
 .startBrickRowWriting <- function(x, bandorder, filename, ...) {
-	filetype <- .filetype(...)  # not used
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
-
-	if (filetype != 'raster') {
-		stop('Only "raster" format is currently supported for writing multiband files')
-	}
 	
 	filename <- trim(filename)
-	if (filename == '') {
-		stop('provide a filename')
-	}
+	if (filename == '') { stop('provide a filename') }
 	
-	if (bandorder == 'BSQ') {
-		stop('no BSQ in row by row writing')
-	}
-	if (!bandorder %in% c('BIL', 'BIP')) {
-		stop("invalid bandorder, should be 'BIL' or 'BIP'")
-	}
+	if (bandorder == 'BSQ') { stop('cannot use BSQ in row by row writing')	}
+	if (!bandorder %in% c('BIL', 'BIP')) { stop("invalid bandorder, should be 'BIL' or 'BIP'") }
+	
 	x@file@bandorder <- bandorder
 	x@file@nbands <- nlayers(x)
-	.setDataType(x) <- datatype
 
 	.setFilename(x) <- filename
 	fnamevals <- .setFileExtensionValues(filename)
@@ -47,8 +36,9 @@
 }
 
 
-.stopBrickRowWriting <- function(x) {
-	writeRasterHdr(x, 'raster') 
+.stopBrickRowWriting <- function(x, ...) {
+	filetype <- .filetype(...)  # not used
+	writeRasterHdr(x, filetype) 
 	close(x@file@con)
 	fnamevals <- .setFileExtensionValues(x@file@name)
 	x@data@haveminmax <- TRUE
@@ -67,18 +57,9 @@
 
 
 .writeBrickRow <- function(object, filename, bandorder='BIL', ...) {
-
-	filetype <- .filetype(...)
-	if (filetype != 'raster') {
-		stop('Only "raster" format is currently supported for writing multiband files')
-	}
-
-	filename <- trim(filename)
-	
 	if (dataIndices(object)[1] == 1) { 
 		object <- .startBrickRowWriting(object, bandorder=bandorder, filename=filename, ...)
  	} 
-
 	
 	object@data@values[is.nan(object@data@values)] <- NA
 	object@data@values[is.infinite(object@data@values)] <- NA
@@ -103,7 +84,7 @@
 	writeBin(values, object@file@con, size=object@file@dsize )
 
 	if (dataIndices(object)[2] >= ncell(object)) {
-		object <- .stopBrickRowWriting(object)
+		object <- .stopBrickRowWriting(object, ...)
 		if (dataIndices(object)[2] > ncell(object)) {
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(object)[2], '>', ncell(object)))
 		}

@@ -80,10 +80,9 @@ function(x, ...) {
 
 
 setMethod('addLayer', signature(x='RasterBrick'), 
-function(x, ...) {
-#x is a list of r objects
+function(x, ..., keepone=FALSE) {
 
-	rasters <- .makeRasterList(...)
+	rasters <- .makeRasterList(..., keepone=keepone)
 	if (length(rasters)==0) { return(x) }
 	
 	for (i in 1:length(rasters)) { 

@@ -11,9 +11,9 @@ if (!isGeneric("brick")) {
 
 
 setMethod('brick', signature(x='missing'), 
-	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84") {
+	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84", nlayers=1) {
 		extent <- newExtent(xmn, xmx, ymn, ymx)
-		b <- brick(extent, nrows=nrows, ncols=ncols, projs=projs)
+		b <- brick(extent, nrows=nrows, ncols=ncols, projs=projs, nlayers=nlayers)
 		return(b)
 	}
 )
@@ -37,7 +37,7 @@ setMethod('brick', signature(x='character'),
 setMethod('brick', signature(x='Raster'), 
 	function(x, ...) {
 		b <- new('RasterBrick')
-		return(addLayer(b, c(x, ...)))
+		return( addLayer(b, x, ..., keepone=TRUE) )
 	}
 )
 
@@ -61,10 +61,8 @@ setMethod('brick', signature(x='RasterBrick'),
 
 
 
-
-
 setMethod('brick', signature(x='Extent'), 
-	function(x, nrows=10, ncols=10, projs=NA) {
+	function(x, nrows=10, ncols=10, projs=NA, nlayers=1) {
 		bb <- extent(x)
 		nr = as.integer(round(nrows))
 		nc = as.integer(round(ncols))
@@ -72,6 +70,7 @@ setMethod('brick', signature(x='Extent'),
 		if (nr < 1) { stop("nrows should be > 0") }
 		b <- new("RasterBrick", extent=bb, ncols=nc, nrows=nr)
 		projection(b) <- projs
+		b@data@nlayers <- as.integer(nlayers)
 		return(b) 
 	}
 )

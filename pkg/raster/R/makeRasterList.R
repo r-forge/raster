@@ -15,12 +15,7 @@
 			return(x)
 		}
 	} else if (class(r) == 'RasterLayer') {
-		if (dataContent(r) != 'all'  &  dataSource(r) == 'ram' ) {
-			warning('RasterLayer with no data ignored')
-			return(x)
-		} else {
-			return( c(x, r) )	
-		}
+		return( c(x, r) )	
 	} else {
 		return( c(x, unstack(r)) )
 	} 
@@ -28,7 +23,7 @@
 
 
 
-.makeRasterList <- function(..., giveError=FALSE) {
+.makeRasterList <- function(..., giveError=FALSE, keepone=FALSE) {
 	arg <- list(...)
 	x <- list()
 	for (i in seq(along=arg)) {
@@ -40,7 +35,14 @@
 			x <- .addToList(x, arg[[i]], giveError) 
 		}
 	}
+	for (i in rev(seq(along=x))) {
+		if (dataContent(x[[i]]) != 'all'  &  dataSource(x[[i]]) == 'ram' ) {
+			if (length(x) > 1 | keepone==FALSE ) {
+				x <- x[[-i]]
+				warning('RasterLayer with no data ignored')
+			} 
+		} 
+	}		
 	return(x)
 }
 
-			

@@ -7,11 +7,12 @@
 
 
 
-.writeGDALrow <- function(raster, filename, mvFlag=NA, options=NULL, doPB=FALSE, ... ) {
+.writeGDALrow <- function(raster, filename,  options=NULL, doPB=FALSE, ... ) {
 	if (!require(rgdal)) { stop() }
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {
+		mvFlag <- NA
 		transient <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
 		attr(raster@file, "transient") <- transient
 		if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress(...) ) }
@@ -38,12 +39,16 @@
 		}	
 	}
 	
-    for (band in 1:nlayers(raster)) {
-		x <- putRasterData(raster@file@transient, values(raster, rownr), band, c((rownr-1), 0)) 
+    nl <- nlayers(raster)
+	if (nl == 1) {
+		x <- putRasterData(raster@file@transient, values(raster, rownr), band=1, c((rownr-1), 0)) 	
+	} else {
+		for (i in 1:nl) {
+			x <- putRasterData(raster@file@transient, values(raster, rownr)[,i], band=i, c((rownr-1), 0)) 
+		}
 	}
 
 	if (doPB) {	pbStep( attr(raster@file, "pb"), rownr ) 	}
-
 	
 	if ( rownr == nrow(raster)) {
 		saveDataset(raster@file@transient, filename )

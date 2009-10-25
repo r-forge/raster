@@ -9,18 +9,13 @@
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
 
-.getGDALtransient <- function(raster, filename, mvFlag=NA, options, ...)  {
-
+.getGDALtransient <- function(raster, filename, options, ...)  {
+	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
 	gdalfiletype <- .filetype(...)
-	datatype <- .datatype(...)
-	
+
 	.isSupportedFormat(gdalfiletype)
 	
-# this is a RasterLayer hence nbands = 1:
-# but we keep this for later (RasterStack / Brick)
-    nbands = nlayers(raster)
-
 	if (filename == "") {	
 		stop('provide a filename')	
 	}
@@ -32,7 +27,6 @@
 			stop("cannot delete existing file. permissin denied.")
 		}
 	}	
-
 # this needs to get fancier; depending on object and the abilties of the drivers
 	dataformat <- .getGdalDType(datatype)
 
@@ -42,7 +36,7 @@
 			options <- c(options, 'BIGTIFF=YES')
 		}
 	}
-
+    nbands = nlayers(raster)
 	driver = new("GDALDriver", gdalfiletype)
     transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=options, handle=NULL)
  
@@ -62,22 +56,29 @@
 #}
 
 
-.writeGDALall <- function(raster, filename, mvFlag=NA, options=NULL, ...) {
+.writeGDALall <- function(raster, filename, options=NULL, ...) {
 	if (!require(rgdal)) { stop() }
 
+	mvFlag <- NA
 	transient <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
-    for (band in 1:nlayers(raster)) {
-		x <- putRasterData(transient, t(values(raster, format='matrix')), band, c(0, 0)) 
+	nl <- nlayers(raster)
+	if (nl == 1) {
+		x <- putRasterData(transient, t(values(raster, format='matrix')), band=1, c(0, 0)) 
+	} else {
+	    for (i in 1:nl) {
+			v <- matrix(values(raster)[,i], nrow=nrow(raster), ncol=ncol(raster), byrow=TRUE)
+			x <- putRasterData(transient, t(v), band=i, c(0, 0)) 
+		}
 	}	
-#        if (!is.na(mvFlag)) {
-#            transient_b <- getRasterBand(dataset = transient, band = band)
-#            .Call("RGDAL_SetNoDataValue", transient_b, as.double(mvFlag), PACKAGE = "rgdal")
-#       }
 	saveDataset(transient, filename )
 	GDAL.close(transient) 
 	.writeStx(raster) 
 
-	raster <- raster(filename)
+	if (nl==1) {
+		raster <- raster(filename)
+	} else {
+		raster <- brick(filename)
+	}
 	raster <- readAll(raster)
 	return(raster)
 }

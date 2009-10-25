@@ -16,13 +16,14 @@ setMethod('writeRaster', signature(x='RasterLayer', filename='character'),
 function(x, filename, ...) {
 
 	filetype <- .filetype(...)
-	
-	if (! dataContent(x) %in% c('row', 'rows', 'all', 'sparse') ) {
+
+	dc <- dataContent(x)
+	if (! dc %in% c('row', 'rows', 'all', 'sparse') ) {
 		stop('No usable data available for writing.')
 	}
 	
 	if (.isNativeDriver(filetype)) {
-		if (substr(dataContent(x), 1, 3) == 'row' ) {
+		if (substr(dc, 1, 3) == 'row' ) {
 			x <- .writeRasterRow(x, filename=filename, ...)
 		} else {
 			x <- .writeRasterAll(x, filename=filename, ...)
@@ -33,11 +34,13 @@ function(x, filename, ...) {
 		x <- .writeRasterCDF(x, filename=filename, ...)
 		
 	} else { 
-		if (dataContent(x) == 'row' ) {
+		if (substr(dc, 1, 3) == 'row' ) {
 			x <- .writeGDALrow(x, filename=filename, ...)
-		} else {
+		} else if (dc == 'all') {
 			x <- .writeGDALall(x, filename=filename, ...)
-		}  
+		} else {
+			stop('cannot write data')
+		}		
 	}
 	return(x)
 }	
@@ -46,12 +49,23 @@ function(x, filename, ...) {
 
 setMethod('writeRaster', signature(x='RasterBrick', filename='character'), 
 function(x, filename, bandorder='BIL', ...) {
-	if (substr(dataContent(x), 1, 3) == 'row' ) {
-		return( .writeBrickRow(object=x, filename=filename, bandorder=bandorder, ...) )
-	} else if (substr(dataContent(x), 1, 3) == 'all' ) {
-		return( .writeBrick(object=x, filename=filename, bandorder=bandorder, ...) )
+	dc <- dataContent(x)
+	if (! dc %in% c('row', 'all') ) {
+		stop('No usable data available for writing.')
+	}
+	filetype <- .filetype(...)
+	if (filetype=='raster') {
+		if (dc == 'row' ) {
+			return( .writeBrickRow(object=x, filename=filename, bandorder=bandorder, ...) )
+		} else {
+			return( .writeBrick(object=x, filename=filename, bandorder=bandorder, ...) )
+		}
 	} else {
-		stop('cannot write data')
+		if (dc == 'row' ) {
+			x <- .writeGDALrow(x, filename=filename, ...)
+		} else {
+			x <- .writeGDALall(x, filename=filename, ...)
+		}
 	}
 }
 )
@@ -59,6 +73,18 @@ function(x, filename, bandorder='BIL', ...) {
 
 setMethod('writeRaster', signature(x='RasterStack', filename='character'), 
 function(x, filename, bandorder='BIL', ...) {
-	return( .writeStack(x, filename=filename, bandorder=bandorder, ...) )
+	test <- try( b <- brick(x) )
+	if (class(test) != "try-error") {
+		b <- writeRaster(b, filename=filename, bandorder=bandorder, ...)
+		return(invisible(b))
+	}
+
+	b <- brick(raster(x))
+	for (r in 1:nrow(x)) {
+		v <- getValues(x, r)
+		b <- setValues(b, v, r)
+		b <- writeRaster(b, filename=filename, bandorder=bandorder, ...)
+	}
+	return(invisible(b))
 }
 )
