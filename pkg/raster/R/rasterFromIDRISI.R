@@ -57,11 +57,11 @@
 	x@file@nodatavalue <- nodataval
 
 	if (inidatatype == 'BYTE') {
-		.setDataType(x) <- 'INT1U'
+		dataType(x) <- 'INT1U'
 	} else if (inidatatype == 'INTEGER') {
-		.setDataType(x) <- 'INT2S'
+		dataType(x) <- 'INT2S'
 	} else if (inidatatype == 'REAL') {
-		.setDataType(x) <- 'INT4S'
+		dataType(x) <- 'INT4S'
 	} else {
 		stop(paste('unsupported IDRISI data type:', inidatatype))
 	}

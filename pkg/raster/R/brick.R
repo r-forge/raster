@@ -54,7 +54,7 @@ setMethod('brick', signature(x='RasterStack'),
 setMethod('brick', signature(x='RasterBrick'), 
 	function(x){
 		x <- clearValues(x)
-		.setFilename(x) <- ''
+		filename(x) <- ''
 		return(x)
 	}
 )

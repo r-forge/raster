@@ -13,7 +13,7 @@
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
      
-	r <- .getraster(nc, vars, xvar, yvar) 
+	r <- .nctoraster(nc, vars, xvar, yvar) 
 	stk <- stack( r )
 	
 	zvar <- .getzvar(zvar, vars) 

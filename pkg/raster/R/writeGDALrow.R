@@ -19,7 +19,7 @@
 		
 		raster@file@driver <- 'gdal'
 		raster@data@source <- 'disk'		
-		.setFilename(raster) <- filename
+		raster@file@name <- filename
 	}	
 	
 #	raster@data@values[is.nan(raster@data@values)] <- NA

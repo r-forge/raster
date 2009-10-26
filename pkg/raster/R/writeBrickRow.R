@@ -17,7 +17,8 @@
 	x@file@bandorder <- bandorder
 	x@file@nbands <- nlayers(x)
 
-	.setFilename(x) <- filename
+	filename(x) <- filename
+	
 	fnamevals <- .setFileExtensionValues(filename)
 	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
 		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 

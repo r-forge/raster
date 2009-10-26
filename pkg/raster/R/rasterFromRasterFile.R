@@ -96,7 +96,7 @@
 	x@file@nodatavalue <- nodataval
 
 
-	.setDataType(x) <- inidatatype
+	dataType(x) <- inidatatype
 	
 	if ((byteorder == "little") | (byteorder == "big")) { 
 		x@file@byteorder <- byteorder 

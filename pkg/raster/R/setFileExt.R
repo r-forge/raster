@@ -28,7 +28,7 @@
 	} else if (type == 'IDRISI') {
 		ext(fname) <- ".rdc"
 	} else if (type == 'BIL') {
-		ext(fname) <- ".bil"
+		ext(fname) <- ".hdr"
 	} else {
 		stop('unknown filetype')
 	}

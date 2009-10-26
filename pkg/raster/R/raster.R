@@ -42,7 +42,7 @@ setMethod('raster', signature(x='character'),
 setMethod('raster', signature(x='Raster'), 
 	function(x, filename="", values=NULL) {
 		r <- raster(xmn=xmin(x), xmx=xmax(x), ymn=ymin(x), ymx=ymax(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))
-		.setFilename(r) <- filename
+		filename(r) <- filename
 		if (!is.null(values)) {
 			x <- setValues(x, values)
 		}

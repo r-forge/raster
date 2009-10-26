@@ -57,7 +57,7 @@
 	close(con)
 	r@file@offset <- 56
 	r@file@toptobottom <- FALSE
-	.setDataType(r) <- 'FLT4S'
+	dataType(r) <- 'FLT4S'
 	r@data@source <- 'disk'
 	r@file@driver <- "surfer"
 	return(r)
@@ -102,9 +102,9 @@
 	r@file@offset <- offset + 8
 	r@file@toptobottom <- FALSE
 	if (ncell(r) / size == 4) {
-		.setDataType(r) <- 'FLT4S'
+		dataType(r) <- 'FLT4S'
 	} else 	if (ncell(r) / size == 8) {
-		.setDataType(r) <- 'FLT8S'
+		dataType(r) <- 'FLT8S'
 	} else {
 		stop('sorry; cannot process this file')
 	}

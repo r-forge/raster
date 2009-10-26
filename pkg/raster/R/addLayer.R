@@ -115,7 +115,7 @@ function(x, ..., keepone=FALSE) {
 			
 			if (x@file@driver != '') {
 				x@file@driver <- ''
-				.setFilename(x) <- ''
+				filename(x) <- ''
 			}
 	
 			if (!compare(c(x, r))) { 

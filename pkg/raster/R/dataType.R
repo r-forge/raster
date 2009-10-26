@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-'.setDataType<-' <- function(x, value) {
+'dataType<-' <- function(x, value) {
 	if (class(x) == 'RasterStack') {
 		stop('Cannot set datatype of a RasterStack')
 	}
@@ -43,7 +43,7 @@
 	}
 	type <- substr(datatype,1,3)
 	size <- substr(datatype,4,4)
-	signed <- substr(datatype,1,3) != 'U'
+	signed <- substr(datatype,5,5) != 'U'
 	
 	if (type == "FLT") {
 		if (dataContent(x) != 'nodata') { 

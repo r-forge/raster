@@ -5,17 +5,14 @@
 
 
 setOptions <- function(filetype, overwrite, datatype, tmpdir, progress) {
-#	if (!missing(filename)) { .setFilename(filename) }
 	if (!missing(filetype)) { .setFiletype(filetype) }
 	if (!missing(overwrite)) { .setOverwrite(overwrite) }
-	if (!missing(datatype)) { .setDatatype(datatype) }
+	if (!missing(datatype)) { .setDataType(datatype) }
 	if (!missing(progress)) { .setProgress(progress) }
 	if (!missing(tmpdir)) { .setTmpdir(tmpdir) }
 }
 
-
-
-#.setFilename <- function(filename) {
+#file <- function(filename) {
 #	if (is.character(filename)) {
 #		if (length(filename) == 1) {
 #			options(rasterFilename = filename)
@@ -75,7 +72,7 @@ setOptions <- function(filetype, overwrite, datatype, tmpdir, progress) {
 }
 
 
-.setDatatype <- function(datatype) {
+.setDataType <- function(datatype) {
 	if (datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S')) {
 		options(rasterDatatype = datatype)
 	} else {

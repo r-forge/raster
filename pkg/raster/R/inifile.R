@@ -7,8 +7,6 @@
 
 readIniFile <- function(filename, token='=', commenttoken=';') {
 
-
-token='='; commenttoken=';';
 	strSplitOnFirstToken <- function(s, token="=") {
 		pos <- which(strsplit(s, '')[[1]]==token)[1]
 		if (is.na(pos)) {
@@ -21,7 +19,6 @@ token='='; commenttoken=';';
 	}
 
 	strsp <- function(s){strSplitOnFirstToken(s, token=token)}
-
 	
 	strSplitComment <- function(s,  token=";") { 
 		# ";" is the start of a comment .

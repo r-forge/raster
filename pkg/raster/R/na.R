@@ -8,7 +8,7 @@
 setMethod("is.na", signature(x='RasterLayer'),
 	function(x) {
 		rst <- raster(x)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		return(setValues(rst, is.na(getValues(x))))
 	}
 )	
@@ -16,7 +16,7 @@ setMethod("is.na", signature(x='RasterLayer'),
 setMethod("is.nan", signature(x='RasterLayer'),
 	function(x) {
 		rst <- raster(x)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		return(setValues(rst, is.nan(getValues(x))))
 	}
 )	
@@ -24,7 +24,7 @@ setMethod("is.nan", signature(x='RasterLayer'),
 setMethod("is.infinite", signature(x='RasterLayer'),
 	function(x) {
 		rst <- raster(x)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		return(setValues(rst, values=is.infinite(getValues(x))))
 	}
 )	
@@ -32,7 +32,7 @@ setMethod("is.infinite", signature(x='RasterLayer'),
 setMethod("is.finite", signature(x='RasterLayer'),
 	function(x) {
 		rst <- raster(x)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		return(setValues(rst, values=is.finite(getValues(x))))
 	}
 )	

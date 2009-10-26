@@ -12,15 +12,6 @@ filename <- function(x) {
 }
 
 'filename<-' <- function(x, value) {
-	if (class(x) == 'RasterStack') {
-		.setFilename(x) <- value
-		return(x)
-	} else {
-		stop('you can only set the filename of a RasterStack. You can set a filename as an arguments to a function that will write a file')
-	}
-}
-
-'.setFilename<-' <- function(x, value) {
 	filename <- trim(value)
 	if (is.na(filename) | is.null(filename) | !is.character(value)) {
 		filename <- ""

@@ -43,7 +43,7 @@ setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 setMethod('!', signature(x='RasterLayer'),
 	function(x){
 		if (canProcessInMemory(x, 3)) {
-			.setDataType(x) <- 'LOG1S'
+			dataType(x) <- 'LOG1S'
 			return(setValues(x, !values(x)))
 		} else {
 			rst <- raster(x)
@@ -65,7 +65,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='numeric'),
 			stop('second argument should be a single number')
 		}
 		rst <- raster(e1)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
 			rst <- setValues(rst, values=callGeneric(getValues(e1), rep(e2, ncell(e1)) ) )			
 		} else {
@@ -88,7 +88,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='logical'),
 			stop('second argument should be a single logical value')
 		}
 		rst <- raster(e1)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e1, 3)) {
 			rst <- setValues(rst, values=callGeneric(getValues(e1), e2 ) )			
 		} else {
@@ -110,7 +110,7 @@ setMethod("Compare", signature(e1='logical', e2='RasterLayer'),
 			stop('first argument should be a single logical value')
 		}
 		rst <- raster(e2)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e2, 3)) {
 			rst <- setValues(rst, values=callGeneric(getValues(e2), e1 ) )			
 		} else {
@@ -132,9 +132,9 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 			stop('first argument should be a single number')
 		}
 		rst <- raster(e2)
-		.setDataType(rst) <- 'LOG1S'
+		dataType(rst) <- 'LOG1S'
 		if (canProcessInMemory(e2, 3)) {
-			.setDataType(rst) <- 'LOG1S'
+			dataType(rst) <- 'LOG1S'
 			rst <- setValues(rst, callGeneric(getValues(e2), rep(e1, ncell(e2)) ) )
 		} else {
 			rowrep <- rep(e1, ncol(e2))
@@ -156,7 +156,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 		}	
 		rst <- raster(e1) 
 		if (canProcessInMemory(e1, 3)) {
-			.setDataType(rst) <- 'LOG1S'
+			dataType(rst) <- 'LOG1S'
 			rst <- setValues(rst, callGeneric(getValues(e1), getValues(e2) ) ) 
 		} else {
 			filename <- rasterTmpFile()
@@ -178,7 +178,7 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 		if ( compare(c(e1, e2)) ) {
 			rst <- raster(e1)
 			if (canProcessInMemory(e1, 3)) {
-				.setDataType(rst) <- 'LOG1S'
+				dataType(rst) <- 'LOG1S'
 				rst <- setValues(rst, callGeneric(.getLogicalValues(e1), .getLogicalValues(e2)))
 			} else {
 				filename <- rasterTmpFile()

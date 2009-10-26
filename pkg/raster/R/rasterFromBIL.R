@@ -11,7 +11,7 @@
 	}	
 	filename <- .setFileExtensionHeader(filename, "BIL")
 	
-	ini <- readIniFile(filename)
+	ini <- readIniFile(filename, token=' ')
 	ini[,2] = toupper(ini[,2]) 
 
 	byteorder <- .Platform$endian
@@ -23,6 +23,7 @@
 	maxval <- -Inf
 	nodataval <- -Inf
 	layernames <- ''
+	pixtype <- ''
 	
 	gaps <- 0
 
@@ -34,10 +35,14 @@
 	xd <- NULL
 	
 	for (i in 1:length(ini[,1])) {
-		if (ini[i,2] == "LLXMAP") {xx <- as.numeric(ini[i,3])} 
+		if (ini[i,2] == "LLXMAP") {xn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "ULXMAP") {xn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "LRXMAP") {xx <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "URXMAP") {xx <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "LLYMAP") {yn <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "ULYMAP") {yx <- as.numeric(ini[i,3])} 
-		else if (ini[i,2] == "ULXMAP") {xn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "LRYMAP") {yn <- as.numeric(ini[i,3])} 
+		else if (ini[i,2] == "URYMAP") {yx <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "XDIM") {xd <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "YDIM") {yd <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "YMAX") {yx <- as.numeric(ini[i,3])} 
@@ -57,34 +62,34 @@
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
     }  
 	
-	if (!is.null(xn)) {
-		if (is.null(xx)) {
-			xx <- xn + nc * xd
-		} 
-	} else {
-		xn <- xx - nc * xd
-	} 
-	
-	if (!is.null(yn)) {
-		if (is.null(yx)) {
-			yx <- yn + nr * yd
-		} 
-	} else {
-		yn <- yx - nr * yd
-	}
 	if (is.null(xd)) {
 		xd <- (xx - xn) / (nc - 1)
 	}
 	if (is.null(yd)) {
 		yd <- (yx - yn) / (nr - 1)
 	}
-	xx <- xx + 0.5 * xd
-	xn <- xn - 0.5 * xd
-	yx <- yx + 0.5 * yd
-	yn <- yn - 0.5 * yd
-	
-	if (gaps > 0) { stop('bil raster with gaps not supported') }
 
+	if (!is.null(xn)) {
+		xn <- xn - 0.5 * xd
+		if (is.null(xx)) {
+			xx <- xn + nc * xd
+		} 
+	} else {
+		xx <- xx + 0.5 * xd
+		xn <- xx - nc * xd
+	} 
+	
+	if (!is.null(yn)) {
+		yn <- yn - 0.5 * yd
+		if (is.null(yx)) {
+			yx <- yn + nr * yd
+		} 
+	} else {
+		yx <- yx + 0.5 * yd
+		yn <- yx - nr * yd
+	}
+	
+	if (gaps > 0) { stop('generic raster with gaps not supported') }
 	
 	if (band < 1) {
 		band <- 1
@@ -122,25 +127,24 @@
 	
 	x@file@name <- .fullFilename(filename)
 	x@data@haveminmax <- FALSE
-	x@file@nodatavalue <- nodataval
 
 	if (nbits == 8) {
 		if (pixtype == 'SIGNEDINT') {
-			.setDataType(x) <- 'INT1S'
+			dataType(x) <- 'INT1S'
 		} else {
-			.setDataType(x) <- 'INT1U'		
+			dataType(x) <- 'INT1U'		
 		}
 	} else if (nbits == 16) {
 		if (pixtype == 'SIGNEDINT') {
-			.setDataType(x) <- 'INT2S'
+			dataType(x) <- 'INT2S'
 		} else {
-			.setDataType(x) <- 'INT2U'		
+			dataType(x) <- 'INT2U'		
 		}
 	} else if (nbits == 32) {
 		if (pixtype == 'SIGNEDINT') {
-			.setDataType(x) <- 'INT4S'
+			dataType(x) <- 'INT4S'
 		} else {
-			.setDataType(x) <- 'INT4U'		
+			dataType(x) <- 'INT4U'		
 		}
 	} else {
 		stop(paste('unknown nbits in BIL:', nbits))
@@ -149,6 +153,7 @@
 	if (byteorder == "I") { 
 		x@file@byteorder <- 'little'
 	} 	
+	x@file@nodatavalue <- nodataval
 	x@data@source <- 'disk'
 	x@file@driver <- "BIL"
 	

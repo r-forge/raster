@@ -61,7 +61,7 @@
 	x@file@nodatavalue <- nodataval
 
 	if (inidatatype == 'FLOAT') {
-		.setDataType(x) <- 'FLT4S'
+		dataType(x) <- 'FLT4S'
 	}
 	
 	if (byteorder) { 

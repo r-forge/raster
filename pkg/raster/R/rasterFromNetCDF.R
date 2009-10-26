@@ -3,6 +3,19 @@
 # Version 0.9
 # Licence GPL v3
 
+
+.isNetCDF <- function(x) {
+	fcon <- file(x, "rb")
+	w <- readBin(fcon, what='character', n=1)
+	close(fcon)
+	if (substr(w, 1, 3) == "CDF") {
+		return(TRUE) 
+	} else {
+		return(FALSE)
+	}
+}
+
+
 .getxvar <- function(xvar, vars) {
 	if (xvar == '') {
 		if ('x' %in% vars) { xvar <- 'x'
@@ -31,21 +44,30 @@
 	return(zvar)
 }
 
-.getraster <- function(nc, vars, xvar, yvar) {
+.nctoraster <- function(nc, vars, xvar, yvar) {
 	xvar <- .getxvar(xvar, vars) 
 	yvar <- .getyvar(yvar, vars) 
 	# to do: also consider "lat_bnds" and "lat_bnds"
 	
 	ncols <- dim.inq.nc(nc, xvar)$length
 	nrows <- dim.inq.nc(nc, yvar)$length
+
 	xx <- as.vector(var.get.nc(nc, xvar))
+	rs <- xx[-length(xx)] - xx[-1]
+	if (! isTRUE ( all.equal( min(rs), max(rs) ) ) ) {
+		stop('cells are not equally spaced; extract as points') }
 	xrange <- c(min(xx), max(xx))
-	rm(xx)
-	yy <- as.vector(var.get.nc(nc, yvar))
-	yrange <- c(min(yy), max(yy))
-	rm(yy)
 	resx <- (xrange[2] - xrange[1]) / (ncols-1)
+	rm(xx)
+
+	yy <- as.vector(var.get.nc(nc, yvar))
+	rs <- yy[-length(yy)] - yy[-1]
+	if (! isTRUE ( all.equal( min(rs), max(rs) ) ) ) {
+		stop('cells are not equally spaced; extract as points') }
+	yrange <- c(min(yy), max(yy))
 	resy <- (yrange[2] - yrange[1]) / (nrows-1)
+	rm(yy)
+
 	xrange[1] <- xrange[1] - 0.5 * resx
 	xrange[2] <- xrange[2] + 0.5 * resx
 	yrange[1] <- yrange[1] - 0.5 * resy
@@ -73,7 +95,7 @@
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
 	zvar <- .getzvar(zvar, vars) 
-	r <- .getraster(nc, vars, xvar, yvar)
+	r <- .nctoraster(nc, vars, xvar, yvar)
 	
 	if (is.na(time) ) {
 		d <- var.get.nc(nc, variable=zvar)

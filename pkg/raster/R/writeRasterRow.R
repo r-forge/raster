@@ -10,10 +10,10 @@
 	}
 	filetype <- .filetype(...)
 	filename <- .setFileExtensionHeader(filename, filetype)
-	.setFilename(raster) <- filename
+	raster@file@name <- filename
 	fnamevals <- .setFileExtensionValues(filename)
 	datatype <- .datatype(...)
-	.setDataType(raster) <- datatype
+	dataType(raster) <- datatype
 	
 	if (filetype %in% c('SAGA')) {
 		resdif <- abs((yres(raster) - xres(raster)) / yres(raster) )

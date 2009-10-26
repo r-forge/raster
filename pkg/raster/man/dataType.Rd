@@ -1,19 +1,23 @@
 \name{dataType}
 
 \alias{dataType}
+\alias{dataType<-}
 
 \title{Data type }
 
 \description{
-Get the datatype of a RasterLayer object. The datatype determines how values are stored on or written to disk. You can set as an argument to the functions that write values to disk. It does not directly affect the way they are stored in memory.
+Get the datatype of a RasterLayer object. The datatype determines how values are stored on or written to disk. You set the datatype of a file, you can give a 'datatype' argument to the functions that write values to disk. 
+Changing the datatype of a Raster* object does not directly affect the way they are stored in memory; but it does affect how values are read from file (unless values are read via rgdal).
 }
 
 \usage{
 dataType(x)
+dataType(x) <- value
 }
 
 \arguments{
   \item{x}{ A \code{RasterLayer} object }
+  \item{value}{ A data type (see below) }
 }
 
 \details{
