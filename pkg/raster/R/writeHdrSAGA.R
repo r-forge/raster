@@ -37,7 +37,7 @@
 	cat("CELLCOUNT_X\t= ",  ncol(raster), "\n", file = thefile)
 	cat("CELLSIZE\t= ",  xres(raster), "\n", file = thefile)
 	cat("Z_FACTOR\t= 1.000000\n", file = thefile)
-    cat("NODATA_VALUE", .nodatavalue(raster), "\n", file = thefile)	
+    cat("NODATA_VALUE\t", .nodatavalue(raster), "\n", file = thefile)	
     cat("TOPBOTTOM\t= TRUE", .nodatavalue(raster), "\n", file = thefile)	
 	close(thefile)
 	

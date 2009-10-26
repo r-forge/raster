@@ -30,6 +30,8 @@ readIniFile <- function(filename, token='=', commenttoken=';') {
     if (!file.exists(filename)) { stop(paste(filename, " does not exist")) }
 	
 	Lines <- readLines(filename,  warn = FALSE)
+	Lines <- trim(Lines)
+	
 	ini <- lapply(Lines, strspcom) 
 	
 	Lines <- matrix(unlist(ini), ncol=2, byrow=TRUE)[,1]
