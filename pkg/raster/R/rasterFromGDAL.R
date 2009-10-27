@@ -54,10 +54,14 @@
 	shortname <- gsub(" ", "_", ext(basename(filename), ""))
 	x <- .enforceGoodLayerNames(x, shortname)
 	filename(x) <- filename
-	dataType(x) <- "FLT4S"
+	
+	
+	datatype <- "FLT4S"
+	try ( datatype <- .getRasterDType ( attr(gdalinfo, 'df')[1] ) )
+	
+	dataType(x) <- datatype
 	
 	x@file@driver <- 'gdal' 
-
 	x@data@min <- rep(Inf, nlayers(x))
 	x@data@max <- rep(-Inf, nlayers(x))
 

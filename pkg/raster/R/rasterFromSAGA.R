@@ -21,7 +21,7 @@
 	nodataval <- -Inf
 	layernames <- ''
 	toptobottom <- FALSE
-	dfoffset <- 0
+	dfoffset <- as.integer(0)
 	
 	for (i in 1:length(ini[,1])) {
 		if (ini[i,2] == "POSITION_XMIN") {xn <- as.numeric(ini[i,3])} 

@@ -24,7 +24,7 @@
 	} else { 
 		pixtype <- "FLOAT" 
 	}
-	cat("DATAFORMAT\t= \n", pixtype, file = thefile)
+	cat("DATAFORMAT\t=", pixtype, "\n", file = thefile)
 	
 	cat("DATAFILE_OFFSET\t= 0\n", file = thefile)
     if (.Platform$endian == 'little') { bo <- 'FALSE' } else { bo <- 'TRUE' }
@@ -37,8 +37,8 @@
 	cat("CELLCOUNT_X\t= ",  ncol(raster), "\n", file = thefile)
 	cat("CELLSIZE\t= ",  xres(raster), "\n", file = thefile)
 	cat("Z_FACTOR\t= 1.000000\n", file = thefile)
-    cat("NODATA_VALUE\t", .nodatavalue(raster), "\n", file = thefile)	
-    cat("TOPBOTTOM\t= TRUE", .nodatavalue(raster), "\n", file = thefile)	
+    cat("NODATA_VALUE\t=", .nodatavalue(raster), "\n", file = thefile)	
+    cat("TOPTOBOTTOM\t= TRUE", "\n", file = thefile)	
 	close(thefile)
 	
 	return(invisible(TRUE))

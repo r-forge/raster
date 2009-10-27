@@ -23,7 +23,7 @@
 
 
 #.GDALDataTypes <- c('Unknown', 'Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', '
-# what are these?  CInt16', 'CInt32',   'CFloat32', 'CFloat64')	
+# what are these?  CInt16', 'CInt32',   'CFloat32', 'CFloat64')	 "as in C"?
 # this needs to get fancier; depending on object and the abilties of the drivers
 .getGdalDType <- function(dtype) {
 	if (!(dtype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S'))) {
@@ -51,3 +51,26 @@
 	return(paste(type, size, sep=''))
 }
 
+
+.getRasterDType <- function(dtype) {
+	if (!(dtype %in% c('Byte', 'UInt16', 'Int16', 'UInt32','Int32', 'Float32', 'Float64', 'CInt16', 'CInt32', 'CFloat32', 'CFloat64'))) {
+		return ('FLT4S')
+	} else if  (dtype == 'Byte') {
+		return('INT1U')
+	} else if  (dtype == 'UInt16') {
+		return('INT2U')
+	} else if  (dtype == 'Int16' | dtype == 'CInt16') {
+		return('INT2S')
+	} else if  (dtype == 'UInt32') {
+		return('INT4U')
+	} else if  (dtype == 'Int32' | dtype == 'CInt32') {
+		return('INT4S')
+	} else if  (dtype == 'Float32' | dtype == 'CFloat32' ) {
+		return('FLT4')
+	} else if  (dtype == 'Float64' | dtype == 'CFloat64' )  {
+		return('FLT8')
+	} else {
+		return('FLT4')	
+	}
+}
+	
