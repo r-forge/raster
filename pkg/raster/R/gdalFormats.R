@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 .isSupportedFormat <- function(dname) {
-	res <- dname %in% c('raster', 'ascii')
+	res <- dname %in% c(.nativeDrivers, 'ascii')
 	if (!res) { 
 		res <- .isSupportedGDALFormat(dname) 
 	} 

@@ -5,11 +5,11 @@
 
 
 .nativeDrivers <- function() {
-	return(  c("raster", "SAGA", "IDRISI", "BIL") )
+	return(  c("raster", "SAGA", "IDRISI", "BIL", "BSQ", "BIP") )
 }
 
 .nativeDriversLong <- function() {
-	return(  c("raster package format", "SAGA GIS", "IDRISI", "Band Interleaved by Line") )
+	return(  c("R-raster", "SAGA GIS", "IDRISI", "Band by Line", "Band Sequential", "Band by Pixel") )
 }
 
 
@@ -21,7 +21,7 @@ writeFormats <- function() {
 	if (require(rgdal)) { 
 		gd <- gdalDrivers()
 		gd <- as.matrix(subset(gd, gd[,3] == T))
-		short <- c(.nativeDrivers(), 'ascii',  as.vector(gd[,1]))
+		short <- c(.nativeDrivers(),  'ascii', as.vector(gd[,1]))
 		long <- c(.nativeDriversLong(), 'Arc ASCII', as.vector(gd[,2]))
 		m <- cbind(short, long)
 	} else {

@@ -32,7 +32,6 @@ function(x, filename, ...) {
 		x <- .writeAscii(x, filename=filename, ...)
 	} else if (filetype=='CDF') {
 		x <- .writeRasterCDF(x, filename=filename, ...)
-		
 	} else { 
 		if (substr(dc, 1, 3) == 'row' ) {
 			x <- .writeGDALrow(x, filename=filename, ...)

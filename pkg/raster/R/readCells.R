@@ -15,6 +15,8 @@
 		} else if (dataSource(raster) == 'disk') {
 			if (.driver(raster) == 'gdal') {
 				vals <- .readCellsGDAL(raster, uniquecells)
+			} else if (.driver(raster) == 'ascii') {
+				vals <- .readCellsAscii(raster, uniquecells)			
 			} else {
 				vals <- cbind(uniquecells, .readCellsRaster(raster, uniquecells))
 			}	
@@ -37,15 +39,11 @@
 	if (!require(rgdal)) { stop() }
 
 	colrow <- matrix(ncol=5, nrow=length(cells))
-#	valuename <- raster@layernames
-#	if (valuename == "") {valuename <- "value" }
-#	colnames(colrow) <- c("id", "colnr", "rownr", "cell", valuename)
-	for  (i in 1:length(cells)) {
-		colrow[i,1] <- colFromCell(raster, cells[i])
-		colrow[i,2] <- rowFromCell(raster, cells[i])
-		colrow[i,3] <- cells[i]
-		colrow[i,4] <- NA
-	}	
+	colrow[,1] <- colFromCell(raster, cells)
+	colrow[,2] <- rowFromCell(raster, cells)
+	colrow[,3] <- cells
+	colrow[,4] <- NA
+	
 	rows <- na.omit(unique(colrow[order(colrow[,2]), 2]))
 	for (i in 1:length(rows)) {
 		raster <- .rasterRead(raster, rows[i])

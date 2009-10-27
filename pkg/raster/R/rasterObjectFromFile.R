@@ -11,23 +11,26 @@
 	if (x=='' | x=='.') { # etc? 
 		stop('provide a valid filename')
 	}
-	fileext <- toupper(ext(x)) 
 	if (gdalonly) {
 		return( .rasterFromGDAL(x, band, objecttype) )
 	} 
-	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {
-		return ( .rasterFromCDF(x, objecttype, ...) )
+	fileext <- toupper(ext(x)) 
+	if ( fileext == ".ASC" ) {
+		return ( .rasterFromASCIIFile(x) )
 	}
-	if ( fileext %in% c(".BIL", ".BIP", ".BSQ" )) {
-		return ( .rasterFromGenericFile(x) )
+	if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
+		return ( .rasterFromGenericFile(x, ...) )
 	}
+	if ( fileext %in% c(".RST", ".RDC") ) {
 #  not tested
-#	if ( fileext %in% c(".RST", ".RDC") ) {
-#		return ( .rasterFromIDRISIFile(x) )
-#	}
+		return ( .rasterFromIDRISIFile(x) )
+	}
 	if ( fileext %in% c(".SGRD", ".SDAT") ) {
 # barely tested
 		return ( .rasterFromSAGAFile(x) )
+	}
+	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {
+		return ( .rasterFromCDF(x, objecttype, ...) )
 	}
 	if ( (! fileext %in% c(".GRD", ".GRI")) & file.exists(x)) {
 		return ( .rasterFromGDAL(x, band, objecttype) )

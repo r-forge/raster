@@ -14,6 +14,10 @@
 		ext(fname) <- ".rst"
 	} else if (type == 'BIL') {
 		ext(fname) <- ".bil"
+	} else if (type == 'BIP') {
+		ext(fname) <- ".bip"
+	} else if (type == 'BSQ') {
+		ext(fname) <- ".bsq"
 	} else {
 		stop('unknown filetype')
 	}
@@ -27,7 +31,7 @@
 		ext(fname) <- "sgrd"
 	} else if (type == 'IDRISI') {
 		ext(fname) <- ".rdc"
-	} else if (type == 'BIL') {
+	} else if (type %in% c('BIL', 'BSQ', 'BIP')) {
 		ext(fname) <- ".hdr"
 	} else {
 		stop('unknown filetype')

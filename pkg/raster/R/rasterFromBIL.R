@@ -4,17 +4,13 @@
 # Licence GPL v3
 
 
-.rasterFromGenericFile <- function(filename, band=1, type='RasterLayer') {
-	valuesfile <- .setFileExtensionValues(filename)
-	if (!file.exists( valuesfile )){
-		stop( paste(valuesfile,  "does not exist"))
-	}	
-	filename <- .setFileExtensionHeader(filename, "BIL")
+.rasterFromGenericFile <- function(filename, band=1, SIGNEDINT=NULL, type='RasterLayer', ...) {
+	hdrfname <- .setFileExtensionHeader(filename, "BIL")
 	
-	ini <- readIniFile(filename, token=' ')
+	ini <- readIniFile(hdrfname, token=' ')
 	ini[,2] = toupper(ini[,2]) 
 
-	byteorder <- .Platform$endian
+	byteorder <- ''
 	nbands <- as.integer(1)
 	band <- as.integer(band)
 	bandorder <- "BIL"
@@ -24,15 +20,8 @@
 	nodataval <- -Inf
 	layernames <- ''
 	pixtype <- ''
-	
 	gaps <- 0
-
-	xx <- NULL
-	xn <- NULL
-	yx <- NULL
-	yn <- NULL
-	yd <- NULL
-	xd <- NULL
+	xx <- xn <- xd <- yx <- yn <- yd <- NULL
 	
 	for (i in 1:length(ini[,1])) {
 		if (ini[i,2] == "LLXMAP") {xn <- as.numeric(ini[i,3])} 
@@ -104,6 +93,10 @@
 	minval[is.na(minval)] <- Inf
 	maxval[is.na(maxval)] <- -Inf
 	
+	if (projstring == 'GEOGRAPHIC') {
+		projstring <- "+proj=longlat +datum=WGS84"
+	}
+	
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs=projstring)
 		x@data@nlayers <-  as.integer(nbands)
@@ -128,36 +121,55 @@
 	x@file@name <- .fullFilename(filename)
 	x@data@haveminmax <- FALSE
 
+	if (!is.null(SIGNEDINT)) {
+		if(SIGNEDINT) { pixtype <- 'SIGNEDINT' 
+		} else { pixtype <- 'UNSIGNEDINT' 
+		}
+	}
 	if (nbits == 8) {
 		if (pixtype == 'SIGNEDINT') {
 			dataType(x) <- 'INT1S'
 		} else {
+			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT2S"')
 			dataType(x) <- 'INT1U'		
 		}
 	} else if (nbits == 16) {
 		if (pixtype == 'SIGNEDINT') {
 			dataType(x) <- 'INT2S'
 		} else {
+			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT2S"')
 			dataType(x) <- 'INT2U'		
 		}
 	} else if (nbits == 32) {
 		if (pixtype == 'SIGNEDINT') {
 			dataType(x) <- 'INT4S'
 		} else {
+			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT4S"')
 			dataType(x) <- 'INT4U'		
 		}
+	} else if (nbits == 64) {
+		if (pixtype == 'SIGNEDINT') {
+			dataType(x) <- 'INT8S'
+		} else {
+			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT8S"')
+			dataType(x) <- 'INT8U'		
+		}
 	} else {
-		stop(paste('unknown nbits in BIL:', nbits))
+		stop(paste('unexpected nbits in BIL:', nbits))
 	}
 	
 	if (byteorder == "I") { 
 		x@file@byteorder <- 'little'
-	} 	
-	x@file@nodatavalue <- nodataval
-	x@data@source <- 'disk'
-	x@file@driver <- "BIL"
+	} else if (byteorder == "M") { 
+		x@file@byteorder <- 'big'
+	} else {
+		x@file@byteorder <- .Platform$endian
+	}
 	
+	x@data@source <- 'disk'
+	x@file@driver <- bandorder
+	x@file@nodatavalue <- nodataval
+
     return(x)
 }
-
 
