@@ -1,5 +1,7 @@
 \name{saveAs}
 
+\alias{saveAs,RasterLayer,character-method}
+\alias{saveAs,RasterBrick,character-method}
 \alias{saveAs}
 
 \title{Save a raster file to a different format}
@@ -9,11 +11,11 @@ Save a raster file to a file of another type (format).
 }
 
 \usage{
-saveAs(raster, filename, ...)
+saveAs(x, filename, ...)
 }
 
 \arguments{
-  \item{raster}{RasterLayer object}
+  \item{x}{RasterLayer or RasterBrick object}
   \item{filename}{Character. Output filename}  
   \item{...}{additional arguments. See Details.}  
 }
@@ -31,7 +33,7 @@ The following additional arguments can be passed, to replace default values for 
 
 
 \value{
-A RasterLayer object. This primary use of this function is its side-effect of writing a file to disk.
+A RasterLayer or RasterBrick object. This primary use of this function is its side-effect of writing a file to disk.
 }
 
 
@@ -42,7 +44,6 @@ A RasterLayer object. This primary use of this function is its side-effect of wr
 \examples{ 
 r1 <- raster(system.file("external/test.ag", package="sp"))
 r2 <- saveAs(r1, 'test.tif', filetype='GTiff')
-
 }
 
 \keyword{ spatial }

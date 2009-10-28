@@ -4,26 +4,54 @@
 # Licence GPL v3
 
 
-saveAs <- function(raster, filename, ...) {
+if (!isGeneric("saveAs")) {
+	setGeneric("saveAs", function(x, filename, ...)
+		standardGeneric("saveAs"))
+}	
+
+
+setMethod('saveAs', signature(x='RasterLayer', filename='character'), 
+function(x, filename, ...) {
 
 	filename <- trim(filename)
-	if ( trim(filename(raster)) == filename ) {
+	if ( trim(filename(x)) == filename ) {
 		stop('filenames of source and destination should be different')
 	}
 	
-	if (dataContent(raster) == 'all') {
-		raster <- writeRaster(raster, filename=filename, ...)
-		return(raster)
+	if (dataContent(x) == 'all') {
+		x <- writeRaster(x, filename=filename, ...)
+		return(x)
 	} 
-
 # to do: if filetype and datatype are the same, then just copy the file .... 
-
-	newr <- raster(raster)
+	newr <- raster(x)
 	for (r in 1:nrow(newr)) {
-		raster <- readRow(raster, r)
-		newr <- setValues(newr, values(raster), r)
+		x <- readRow(x, r)
+		newr <- setValues(newr, values(x), r)
 		newr <- writeRaster(newr, filename=filename, ..., doPB=TRUE)
 	}
 	return(newr)
 }
+)
 
+setMethod('saveAs', signature(x='RasterBrick', filename='character'), 
+function(x, filename, ...) {
+
+	filename <- trim(filename)
+	if ( trim(filename(x)) == filename ) {
+		stop('filenames of source and destination should be different')
+	}
+	
+	if (dataContent(x) == 'all') {
+		x <- writeRaster(x, filename=filename, ...)
+		return(x)
+	} 
+# to do: if filetype and datatype are the same, then just copy the file .... 
+	newr <- brick(x)
+	for (r in 1:nrow(newr)) {
+		x <- readRow(x, r)
+		newr <- setValues(newr, values(x), r)
+		newr <- writeRaster(newr, filename=filename, ..., doPB=TRUE)
+	}
+	return(newr)
+}
+)
