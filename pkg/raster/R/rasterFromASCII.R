@@ -7,6 +7,7 @@
 .rasterFromASCIIFile <- function(filename) {
 	
 	splitasc <- function(s) {
+		s <- trim(s)
 		spl <- unlist(strsplit(s, ''))
 		pos <- which(spl==' ')[1]
 		first <- substr(s, 1, (pos-1))
