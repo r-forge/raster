@@ -1,13 +1,14 @@
 \name{saveAs}
 
+\alias{saveAs}
 \alias{saveAs,RasterLayer,character-method}
 \alias{saveAs,RasterBrick,character-method}
-\alias{saveAs}
+\alias{saveAs,RasterStack,character-method}
 
-\title{Save a raster file to a different format}
+\title{Save a Raster* object to a new file}
 
 \description{
-Save a raster file to a file of another type (format). 
+Save a RasterLayer or RasterBrick to a new file; for example a file of another filetype (format). You can also use this function to save a RasterStack to a single (muti-band) file.
 }
 
 \usage{
@@ -20,7 +21,6 @@ saveAs(x, filename, ...)
   \item{...}{additional arguments. See Details.}  
 }
 
-
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
@@ -31,15 +31,13 @@ The following additional arguments can be passed, to replace default values for 
  }
 }
 
-
 \value{
 A RasterLayer or RasterBrick object. This primary use of this function is its side-effect of writing a file to disk.
 }
 
+\seealso{ \code{\link[raster]{writeFormats}},  \code{\link[raster]{writeRaster}} }
 
 \author{Robert J. Hijmans}
-
-\seealso{ \code{\link[raster]{writeRaster}} }  
 
 \examples{ 
 r1 <- raster(system.file("external/test.ag", package="sp"))

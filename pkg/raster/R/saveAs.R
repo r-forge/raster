@@ -55,3 +55,16 @@ function(x, filename, ...) {
 	return(newr)
 }
 )
+
+
+
+setMethod('saveAs', signature(x='RasterStack', filename='character'), 
+function(x, filename, ...) {
+	newr <- brick(x)
+	for (r in 1:nrow(newr)) {
+		newr <- setValues(newr, getValues(x, r), r)
+		newr <- writeRaster(newr, filename=filename, ..., doPB=TRUE)
+	}
+	return(newr)
+}
+)
