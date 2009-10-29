@@ -51,6 +51,12 @@ y <- runif(n)* 180 - 90
 xy <- cbind(x, y)
 vals <- rep(1, n)
 r <- pointsToRaster(r, xy, vals)
+
+# now with an sp SpatialPointsDataFrame object
+p <- as.data.frame(cbind(xy, vals))
+coordinates(p) <- ~x+y
+r <- pointsToRaster(r, p, p@data[,'vals'])
+
 }
 
 \keyword{ spatial }
