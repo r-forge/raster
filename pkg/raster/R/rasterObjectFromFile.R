@@ -52,12 +52,12 @@
 				}
 			}
 		}
-	} else {
+	} else if (file.exists( grifile)) {
 		test <- try ( r <- .rasterFromGDAL(x, band, objecttype), silent=TRUE )
-		if (class(test) == "try-error") {
-			stop("Cannot create RasterLayer object. There is a '.gri' file but no '.grd' file. GDAL does not recognize the '.gri' file" )
-		} else {
-			return(r)
+			if (class(test) == "try-error") {
+				stop("Cannot create RasterLayer object. There is a '.gri' file but no '.grd' file. What is it?")
+			} else {
+				return(r)
 		}
 	}
 	stop(paste('file', x, 'does not exist'))
