@@ -19,7 +19,7 @@ openConnection opens a file connection for reading, closeConnection removes it.
 \usage{
 canProcessInMemory(raster, n=4)
 closeConnection(raster)
-openConnection(raster)
+openConnection(raster, silent=FALSE)
 pbCreate(nsteps, type, style=3)
 pbStep(pb, step, label='row', value=step)
 pbClose(pb, time=FALSE)
@@ -28,6 +28,7 @@ pbClose(pb, time=FALSE)
 \arguments{
   \item{raster}{a RasterLayer object}
   \item{n}{the number of copies of a RasterLayer object with values that a function needs to store in memory}  
+  \item{silent}{Logical. passed on to GDAL.open}  
   \item{nsteps}{Integer. Number of steps the progress bar will make from start to end (e.g. nrow(raster)) }
   \item{type}{Character. 'txt', 'tcltk', or 'windows'}
   \item{style}{style for text progress bar. See \code{\link[utils]{txtProgressBar}} }

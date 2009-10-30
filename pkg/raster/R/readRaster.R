@@ -81,7 +81,7 @@
 			}
 		}
 		
-		raster <- openConnection(raster)
+		raster <- openConnection(raster, silent=TRUE)
 		result <- getRasterData(raster@file@con, offset=offs, region.dim=reg, band = raster@data@band)
 		raster <- closeConnection(raster)
 	

@@ -6,11 +6,11 @@
 
 
 
-openConnection <- function(raster) {
+openConnection <- function(raster, silent=FALSE) {
 	fn <- trim(filename(raster))
 	driver <- .driver(raster)
 	if (driver == "gdal") {
-		attr(raster@file, "con") <- GDAL.open(fn)
+		attr(raster@file, "con") <- GDAL.open(fn, silent=silent)
 	} else {
 		fn <- .setFileExtensionValues(fn, driver)
 		attr(raster@file, "con") <- file(fn, "rb")
