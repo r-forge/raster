@@ -22,7 +22,6 @@ if (!isGeneric("disaggregate")) {
 setMethod('disaggregate', signature(x='RasterLayer', fact='numeric'), 
 function(x, fact, filename='', ...) {
 
-	inMemory <- .inMemory(...)
 	hasmethod <- .hasmethod(...)
 	
 	if (length(fact)==1) {
@@ -51,12 +50,12 @@ function(x, fact, filename='', ...) {
 	}
 	
 	
-	if ((!canProcessInMemory(outraster, 3) | !inMemory) && filename == '') {
+	if ((!canProcessInMemory(outraster, 3)) && filename == '') {
 		filename <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
 	
-	if ( filename == ""  & inMemory ) {
+	if ( filename == "" ) {
 		if (dataContent(x) != 'all') {
 			x <- readAll(x)
 		}

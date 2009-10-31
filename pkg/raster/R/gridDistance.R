@@ -10,8 +10,6 @@
 
 gridDistance <- function(object, filename="", ...) {
 
-	inMemory <- .inMemory(...)
-#	inMemory=TRUE
 		
 	filename <- trim(filename)
 	n <- ncell(object)
@@ -20,7 +18,7 @@ gridDistance <- function(object, filename="", ...) {
 		stop('cannot compute distance on a RasterLayer with no data')
 	}
 		
-	if((inMemory) & (canProcessInMemory(object, 5))){
+	if(canProcessInMemory(object, 5)){
 		if (dataContent(object) != 'all' ) { 
 			object <- readAll(object) 
 		}

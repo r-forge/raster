@@ -9,7 +9,7 @@ rasterTmpFile <- function()  {
 	d <- .tmpdir()
 	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
-	d <- paste(d, f, '.grd', sep="")
+	d <- paste(d, 'raster', f, '.grd', sep="")
 	return(d)
 }
 
@@ -23,7 +23,13 @@ removeTmpFiles <- function() {
 }
 
 showTmpFiles <- function() {
+	removeTrailingSlash <- function(d) {
+		if (substr(d, nchar(d), nchar(d)) == '/') { d <- substr(d, 1, nchar(d)-1) }
+		if (substr(d, nchar(d), nchar(d)) == '\\') { d <- substr(d, 1, nchar(d)-1) }
+		return(d)
+	}
 	d <- .tmpdir()
+	d <- removeTrailingSlash(d)
 	if (file.exists(d)) {
 		list.files(d, '.grd')
 	} else {

@@ -19,13 +19,13 @@ To permanentely set any of these options, you can add them to \code{<your R inst
 
 \code{showOptions} shows the current options
 
-\code{saveOptions} attempts to save the current options to file to make them persistent (they will be set when starting a new R session).
+\code{saveOptions} attempts to save the current options (with the exception of the 'todisk' option) to the  \code{/etc/Rprofile.site} file to make them persistent (they will be set when starting a new R session).
 
 \code{clearOptions} resets the options to their default values.
 }
 
 \usage{
-setOptions(filetype, overwrite, datatype, tmpdir, progress)
+setOptions(filetype, overwrite, datatype, tmpdir, progress, todisk)
 showOptions()
 saveOptions()
 clearOptions()
@@ -37,6 +37,7 @@ clearOptions()
 \item{datatype}{Character. The default data type to use. See \code{\link[raster]{dataType}}}
 \item{tmpdir}{Character. The default location for writing temporary files}
 \item{progress}{Character. Valid values are "text", "tcltk" (requirs the tcltk package), "windows" (on that platform only) and "" (the default in most functions, no progress bar)}
+\item{todisk}{Logical. For debugging only. Should normally be used. Default is \code{FALSE}. If \code{TRUE}, results are always written to disk, even if no filename is supplied (a temporary filename is used)}
 }
 
 \details{

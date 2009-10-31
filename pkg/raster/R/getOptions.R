@@ -10,8 +10,8 @@ showOptions <- function() {
 	cat('overwrite:', .overwrite(), '\n')
 	cat('tmpdir   :', .tmpdir(), '\n')
 	cat('progress :', .progress(), '\n')
-	if (!.inMemory()) {
-		cat('inMemory : FALSE\n')
+	if (.toDisk()) {
+		cat('toDisk   : TRUE\n')
 	}
 }
 
@@ -104,23 +104,23 @@ showOptions <- function() {
 }
 
 
-.inMemory <- function(..., inMemory) {
-	if (missing(inMemory)) { 
-		inMemory <- getOption('rasterProcessInMemory')
-		if (is.null(inMemory)) {
-			return(TRUE)
+.toDisk <- function(..., todisk) {
+	if (missing(todisk)) { 
+		todisk <- getOption('rasterToDisk')
+		if (is.null(todisk)) {
+			return(FALSE)  # the default
 		} else {
-			if (is.logical(inMemory)) {
-				return(inMemory)
+			if (is.logical(todisk)) {
+				return(todisk)
 			} else {
-				return(TRUE)
+				return(FALSE)
 			}
 		}
 	} else { 
-		if (is.logical(inMemory)) {
-			return(inMemory)
+		if (is.logical(todisk)) {
+			return(todisk)
 		} else {
-			return(TRUE)
+			return(FALSE)
 		}
 	}
 }

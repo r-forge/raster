@@ -5,6 +5,8 @@
 
 
 canProcessInMemory <- function(raster, n=4) {
+	if (.toDisk()) { return(FALSE) } 
+
 	if (ncell(raster) > 200000000) {
 		return(FALSE) 
 	}
