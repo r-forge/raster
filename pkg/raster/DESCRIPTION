@@ -1,6 +1,6 @@
 Package: raster
 Type: Package
-Title: Raster data handling for geographic data analysis and modeling
+Title: Geogrpahic analysis and modeling with raster data
 Version: 0.9.8-13
 Date: 30-October-2009
 Depends: methods, sp, R (>= 2.8.0)
