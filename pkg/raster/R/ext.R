@@ -1,28 +1,31 @@
-# R miscellaneouse file name related functions
+# return or change file extensions
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
 
-   
 ext <- function(filename, value=NULL) {
 	if (!is.null(value)) {
 		ext(filename) <- value
 		return(filename)
-	}
+	}   
 	lfn <- nchar(filename)
-	extstart <- -1
-    for (i in lfn : 2) {
-		if (substr(filename, i, i) == ".") {
-			extstart <- i
-			break
+	ext <- list()
+	for (f in 1:length(filename)) {
+		extstart <- -1
+		for (i in lfn[f] : 2) {
+			if (substr(filename[f], i, i) == ".") {
+				extstart <- i
+				break
+			}
 		}
+		if (extstart > 0) {
+			ext[f] <- substr(filename[f], extstart, lfn[f])
+		} else { 
+			ext[f] <- "" 
+		}   
 	}
-    if (extstart > 0) {
-		ext <- substr(filename, extstart, lfn)
-		}
-	else { ext <- "" }   
-	return(ext)  
+	return(unlist(ext) )
 }   
 
 
@@ -32,18 +35,21 @@ ext <- function(filename, value=NULL) {
 	if (value != "" & substr(value, 1, 1) != ".") {
 		value <- paste(".", value, sep="") 
 	}
-	extstart <- -1
-	for (i in lfn : 2) {
-		if (substr(filename, i, i) == ".") {
-			extstart <- i
-			break 
+	fname <- list()
+	for (f in 1:length(filename)) {
+		extstart <- -1
+		for (i in lfn[f] : 2) {
+			if (substr(filename[f], i, i) == ".") {
+				extstart <- i
+				break 
+			}
+		}
+		if (extstart > 0) {
+			fname[f] <- paste(substr(filename[f], 1, extstart-1), value, sep="")
+		} else { 
+			fname[f] <- paste(filename[f], value, sep="")  
 		}
 	}
-    if (extstart > 0) {
-	   fname <- paste(substr(filename, 1, extstart-1), value, sep="")
-	   }
-	else { fname <- paste(filename, value, sep="")   
-	}
-  return(fname)  
+	return( unlist(fname) ) 
 }   
 

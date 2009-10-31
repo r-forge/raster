@@ -4,22 +4,20 @@
 # Licence GPL v3
 
 
-
 rasterTmpFile <- function()  {
 	d <- .tmpdir()
 	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
-	d <- paste(d, 'raster', f, '.grd', sep="")
+	d <- paste(d, 'raster_', f, '.grd', sep="")
 	return(d)
 }
 
 removeTmpFiles <- function() {
 	d <- .tmpdir()
-#	unlink(paste(d,'/*', sep=""))
-	gri <- Sys.glob(paste(d, '*.gri'))
-	file.remove(gri)
-	grd <- Sys.glob(paste(d, '*.grd'))
-	file.remove(grd)
+	f <- c(list.files(d, pattern="^raster_.*gri$", full.names=TRUE), list.files(d, pattern="^raster_.*grd$", full.names=TRUE))
+	if (length(f) > 0) {
+		r <- file.remove(f)
+	}
 }
 
 showTmpFiles <- function() {
@@ -31,7 +29,14 @@ showTmpFiles <- function() {
 	d <- .tmpdir()
 	d <- removeTrailingSlash(d)
 	if (file.exists(d)) {
-		list.files(d, '.grd')
+		f <- c(list.files(d, '.grd'), list.files(d, '.gri'))
+		if (length(f) == 0) {
+			cat('--- none ---\n')
+		} else {
+			ext(f) <- ''
+			f <- unique(f)
+			cat(f, "\n")
+		}
 	} else {
 		cat('--- none ---\n')
 	}
