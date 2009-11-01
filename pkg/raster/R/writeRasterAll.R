@@ -25,7 +25,6 @@
 	raster <- setMinMax(raster)
 
 	datatype <- .datatype(...)
-	cat(datatype, '\n')
 	
 	dtype <- .shortDataType(datatype)
 	
