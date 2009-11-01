@@ -25,10 +25,11 @@
 	raster <- setMinMax(raster)
 
 	datatype <- .datatype(...)
+	cat(datatype, '\n')
 	
 	dtype <- .shortDataType(datatype)
 	
-	if ( datatype =='INT') {
+	if ( dtype =='INT') {
 	# optimize the number of bytes within the datatype
 		intround <- TRUE
 		if (xmin(raster) > -128 & xmax(raster) < 128) {
@@ -50,20 +51,21 @@
 		} else {
 			intround <- FALSE
 			dataType(raster) <- 'FLT8S'
-			raster@data@values <- as.numeric(values(raster))
+			raster@data@values <- as.numeric(raster@data@values )
 		}
 		if (intround) {
-			raster@data@values <- as.integer(round(values(raster)))
+			raster@data@values <- as.integer(round(raster@data@values ))
 			raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)				
 		}
-	} else if ( datatype =='FLT') {
+	} else if ( dtype =='FLT') {
+		raster@data@values <- as.numeric(raster@data@values)
 		if (xmin(raster) < -3.4E38 | xmax(raster) > 3.4E38) {
 			dataType(raster) <- 'FLT8S'
 		} else {
 			dataType(raster) <- 'FLT4S'
 		}	
 	} else if ( dtype =='LOG') {
-		raster@data@values <- as.integer(values(raster))
+		raster@data@values <- as.integer(raster@data@values)
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	}
 
@@ -72,7 +74,7 @@
 		raster <- .writeSparse(raster, overwrite=overwrite) 
 	} else {
 		dsize <- dataSize(raster@file@datanotation)
-		writeBin( values(raster), raster@file@con, size = dsize ) 
+		writeBin(raster@data@values , raster@file@con, size = dsize ) 
 		writeRasterHdr(raster, filetype) 
 	}
 	close(raster@file@con)
