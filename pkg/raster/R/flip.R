@@ -23,7 +23,7 @@ flip <- function(raster, direction='y', filename='', ...)  {
 		} else {
 			v <- values(raster, format='matrix')
 		}
-		if (direction == 'h') {
+		if (direction == 'y') {
 			v <- v[nrow(v):1,]
 		} else {
 			v <- v[,ncol(v):1]
@@ -33,7 +33,7 @@ flip <- function(raster, direction='y', filename='', ...)  {
 	
 		pb <- pbCreate(nrow(outRaster), type=.progress(...))
 
-		if (direction == 'h') {
+		if (direction == 'y') {
 			for (r in nrow(raster):1) {
 				res <- getValues(raster, r)
 				nr <- nrow(outRaster) - r + 1
