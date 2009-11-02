@@ -37,11 +37,9 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 	
 #	if (ngb[1] %% 2 == 0 | ngb[2] %% 2 == 0) { stop("only odd neighborhoods are supported") }
 
-	filename <- trim(filename)
-	
 	ngbgrid <- raster(raster)
 
-# first create an empty matrix with nrows = ngb and ncols = raster@ncols
+	# first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	res <- vector(length=length(ncol(ngbgrid)))
 	limcol <- floor(ngb[2] / 2)
 	colnrs <- (-limcol+1):(ncol(ngbgrid)+limcol)
@@ -58,7 +56,17 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 
 	res <- vector(length=ncol(ngbdata))
 
-	v <- vector(length=0)
+	filename <- trim(filename)
+	if (!canProcessInMemory(ngbgrid, 2) && filename == '') {
+		filename <- rasterTmpFile()
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+	}
+
+	if (filename == '') {
+		v <- matrix(NA, ncol=nrow(ngbgrid), nrow=ncol(ngbgrid))
+	} else {
+		v <- vector(length=0)
+	}
 	
 	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
 
@@ -74,21 +82,20 @@ focal <- function(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) {
 		} else {
 			ngbdata <- ngbdata[-1, ,drop=FALSE]
 		}
-
 		
 		ngbvals <- .calcNGB(ngbdata, colnrs, res, fun, keepdata)
 		if (filename != "") {
 			ngbgrid <- setValues(ngbgrid, ngbvals, r)
 			ngbgrid <- writeRaster(ngbgrid, filename=filename, ...)
 		} else {
-			v <- c(v, ngbvals)
+			v[,r] <- ngbvals
 		}
 		pbStep(pb, r)
 	}
 	pbClose(pb)
 
 	if (filename == "") { 
-		ngbgrid <- setValues(ngbgrid, v) 
+		ngbgrid <- setValues(ngbgrid, as.vector(v)) 
 	}
 	return(ngbgrid)
 }

@@ -7,10 +7,13 @@
 canProcessInMemory <- function(raster, n=4) {
 	if (.toDisk()) { return(FALSE) } 
 
-	if (ncell(raster) > 200000000) {
-		return(FALSE) 
-	}
 	cells <- round(1.1 * ncell(raster))
+
+	if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
+		if (cells > 200000000) {
+			return(FALSE) 
+		}
+	}
 	
 #	if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
 #	# windows, function memory.size  available

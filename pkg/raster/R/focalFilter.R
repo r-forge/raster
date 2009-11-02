@@ -24,10 +24,7 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	if (!is.matrix(filter)) {stop('filter must be a matrix')}
 	ngb <- dim(filter)
 
-	filename <- trim(filename)
-	ngbgrid <- raster(raster, filename=filename)
-
-	res <- vector(length=length(ncol(ngbgrid)))
+	ngbgrid <- raster(raster)
 
 	limcol <- floor(ngb[2] / 2)
 	colnrs <- (-limcol+1):(ncol(ngbgrid)+limcol)
@@ -48,7 +45,18 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 
 	res <- vector(length=ncol(ngbdata))
 
-	v <- vector(length=0)
+	filename <- trim(filename)
+	if (!canProcessInMemory(ngbgrid, 2) && filename == '') {
+		filename <- rasterTmpFile()
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+	}
+	
+	if (filename == '') {
+		v <- matrix(NA, ncol=nrow(ngbgrid), nrow=ncol(ngbgrid))
+	} else {
+		v <- vector(length=0)
+	}
+
 	
 	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
 
@@ -75,14 +83,14 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 			ngbgrid <- setValues(ngbgrid, ngbvals, r)
 			ngbgrid <- writeRaster(ngbgrid, filename=filename, ...)
 		} else {
-			v <- c(v, ngbvals)
+			v[,r] <- ngbvals
 		}
 		pbStep(pb, r)
 	}
 	pbClose(pb)
 	
 	if (filename == "") { 
-		ngbgrid <- setValues(ngbgrid, v) 
+		ngbgrid <- setValues(ngbgrid, as.vector(v)) 
 	}
 	return(ngbgrid)
 }
