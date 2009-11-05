@@ -1,7 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date : March 2009
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {

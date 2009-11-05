@@ -1,28 +1,23 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  October 2008
-# Version 0.8
+# Version 0.9
 # Licence GPL v3
 
 
 xmin <- function(object) {
-	object <- extent(object)
-	return(object@xmin)
+	return(extent(object)@xmin)
 }
 
 xmax <- function(object) {
-	object <- extent(object)
-	return(object@xmax)
+	return(extent(object)@xmax)
 }
 
 ymin <- function(object) {
-	object <- extent(object)
-	return( object@ymin)
+	return( extent(object)@ymin)
 }
 
 ymax <- function(object) {
-	object <- extent(object)
-	return (object@ymax)
+	return (extent(object)@ymax)
 }
 
 xres <- function(object) {
