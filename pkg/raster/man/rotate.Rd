@@ -20,6 +20,8 @@ rotate(raster)
 a RasterLayer
 }
 
+\seealso{ \code{\link[raster]{flip}} }
+
 \author{Robert J. Hijmans }
 \examples{
 
@@ -28,7 +30,6 @@ m <- matrix(1:ncell(r), nrow=18)
 r[] <- as.vector(t(m))
 extent(r) <- newExtent(0, 360, -90, 90)
 rr <- rotate(r)
-
 }
 
 \keyword{spatial}

@@ -5,10 +5,10 @@
 # Licence GPL v3
 
 setMethod('merge', signature(x='RasterLayer', y='RasterLayer'), 
-function(x,y,..., tolerance=0.05, filename="", filetype, overwrite, progress){ 
+function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){ 
 	
-	if (missing(filetype)) {
-		filetype <- .filetype()
+	if (missing(format)) {
+		format <- .filetype()
 	} 
 	if (missing(overwrite)) {
 		overwrite <- .overwrite()
@@ -86,7 +86,7 @@ function(x,y,..., tolerance=0.05, filename="", filetype, overwrite, progress){
 		
 		if (filename != '') {
 			outraster <- setValues(outraster, rd, r)
-			outraster <- writeRaster(outraster, filename=filename, datatype=datatype, overwrite=overwrite, filetype=filetype)
+			outraster <- writeRaster(outraster, filename=filename, datatype=datatype, overwrite=overwrite, format=format)
 		} else {
 			v <- c(v, rd)
 		}

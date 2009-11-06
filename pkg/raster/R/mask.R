@@ -16,7 +16,7 @@ function(x, mask, filename="", ...){
 	if (dataContent(x) == 'all' & dataContent(mask)=='all') {
 		x[is.na(mask)] <- NA
 		return(x)
-	} else if (!canProcessInMemory(x, 3)) {
+	} else if (canProcessInMemory(x, 3)) {
 		if (dataContent(x) != 'all') { x <- readAll(x) }
 		if (dataContent(mask) != 'all') { x <- readAll(mask) }
 		x[is.na(mask)] <- NA
@@ -25,14 +25,14 @@ function(x, mask, filename="", ...){
 		out <- raster(x)
 		vv <- matrix(ncol=nrow(out), nrow=ncol(out))
 		filename <- trim(filename)
-		if (!canProcessInMemory(x, 1) & filename=='') {
+		if (!canProcessInMemory(out, 1) & filename=='') {
 			filename <- rasterTmpFile()
 		}
 		for (r in 1:nrow(out)) {
 			v <- getValues(x, r)
 			m <- getValues(mask, r)
 			v[is.na(m)] <- NA
-			out <- setValues(out, r)
+			out <- setValues(out, v, r)
 			if (filename != '') {
 				out <- writeRaster(out, filename, ...)
 			} else {

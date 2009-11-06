@@ -27,7 +27,7 @@ a RasterLayer
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{filetype} \tab Characer. Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
@@ -35,8 +35,11 @@ The following additional arguments can be passed, to replace default values for 
 }
 
 \author{Robert J. Hijmans }
-\examples{
 
+\seealso{ \code{\link[raster]{rotate}} }
+
+
+\examples{
 r <- raster(nrow=18, ncol=36)
 m <- matrix(1:ncell(r), nrow=18)
 r[] <- as.vector(t(m))

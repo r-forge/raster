@@ -77,7 +77,7 @@
 	rout@data@nlayers <- nl
 	rout@file@bandorder <- bandorder
 	rout@layernames <- layerNames(object)
-	writeRasterHdr(rout, filetype=filetype)
+	writeRasterHdr(rout, format=filetype)
 
 	return(invisible(brick(filename(rout))))
 }

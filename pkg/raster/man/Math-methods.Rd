@@ -15,7 +15,7 @@
 
 \section{Note}{
  If the values of the output RasterLayer cannot be held in memory, they will be saved to a temporary file. 
- If you want to set the filename (and perhaps filetype and datatype), use \code{\link[raster]{calc}} instead of the Math-methods.
+ If you want to set the filename (and perhaps format and datatype), use \code{\link[raster]{calc}} instead of the Math-methods.
 }
 
 \seealso{ \code{\link[raster]{Arith-methods}}, \code{\link[raster]{overlay}}, \code{\link[raster]{calc}} }

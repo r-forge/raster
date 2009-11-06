@@ -41,6 +41,10 @@ focal <- function(raster, fun=mean, ngb=3, keepdata=TRUE, filename="", ...) {
 	
 	ngbgrid <- raster(raster)
 
+# to do: if proj is latlon & between -180 to 180, then use cells from other side..
+#	global <- .isGlobalLatLon(raster)
+#	if (global) {}
+	
 	# first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	res <- vector(length=length(ncol(ngbgrid)))
 	limcol <- floor(ngb[2] / 2)

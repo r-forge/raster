@@ -10,6 +10,18 @@
 	return(out)
 }
 
+
+.isGlobalLatLon <- function(raster) {
+	if (isLatLon(raster)) {
+		tolerance <- 0.1
+		scale <- xres(raster)
+		if (isTRUE(all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale)) & isTRUE(all.equal(xmax(raster), 180, tolerance=tolerance, scale=scale))) {
+			return(TRUE)
+		}
+	}
+	return(FALSE)
+}
+
 #Costumized (internal) functions can be created for each number of directions and for upper, middle and lower rows to optimize the code for row-level processing. 32 directions can be created if higher precision is needed.
 #adjraster <- function(raster, directions, outerMeridianConnect) {
 #	adjacency(raster, !is.na(cbind(1:ncell(raster),values(raster)))[,1], 1:ncell(raster), directions, outerMeridianConnect)
@@ -20,16 +32,10 @@
 #	return(raster)
 #}
 
+
 adjacency <- function(raster, fromCells, toCells, directions) {
 
-	outerMeridianConnect <- FALSE
-	if (isLatLon(raster)) {
-		tolerance <- 0.1
-		scale <- xres(raster)
-		if (isTRUE(all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale)) & isTRUE(all.equal(xmax(raster), 180, tolerance=tolerance, scale=scale))) {
-			outerMeridianConnect <- TRUE
-		}
-	}
+	outerMeridianConnect <- .isGlobalLatLon(raster)
 
 	if (directions=="Bishop") { return(.adjBishop(raster, fromCells, toCells, outerMeridianConnect)) }
 

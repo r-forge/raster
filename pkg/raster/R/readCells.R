@@ -90,7 +90,13 @@
 		res[i] <- readBin(raster@file@con, what=dtype, n=1, size=dsize, endian=raster@file@byteorder) 
 	}
 	raster <- closeConnection(raster)
-	res[res <=  max(-3e+38, .nodatavalue(raster))] <- NA
+	
+	if (dtype == "numeric") {
+		res[is.nan(res)] <- NA
+		res[res <= raster@file@nodatavalue] <- NA
+	} else {
+		res[res == raster@file@nodatavalue] <- NA
+	}
 	return(res)
 }
 

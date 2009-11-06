@@ -25,14 +25,14 @@ To permanentely set any of these options, you can add them to \code{<your R inst
 }
 
 \usage{
-setOptions(filetype, overwrite, datatype, tmpdir, progress, todisk)
+setOptions(format, overwrite, datatype, tmpdir, progress, todisk)
 showOptions()
 saveOptions()
 clearOptions()
 }
 
 \arguments{
-\item{filetype}{Character. The default file format to use. See \code{\link[raster]{writeFormats}}}
+\item{format}{Character. The default file format to use. See \code{\link[raster]{writeFormats}}}
 \item{overwrite}{Logical. The default value for overwriting existing files. If \code{TRUE}, existing files will be overwritten}
 \item{datatype}{Character. The default data type to use. See \code{\link[raster]{dataType}}}
 \item{tmpdir}{Character. The default location for writing temporary files}
@@ -41,7 +41,7 @@ clearOptions()
 }
 
 \details{
-argument \code{filetype} sets global option \code{rasterFiletype}. The option is ignored by a function if you pass \code{filetype} as an argument to that function.
+argument \code{format} sets global option \code{rasterFiletype}. The option is ignored by a function if you pass \code{format} as an argument to that function.
 
 argument \code{overwrite} sets global option \code{rasterOverwrite}. The option is ignored by a function if you pass \code{overwrite} as an argument to that function.
 

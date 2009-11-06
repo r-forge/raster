@@ -4,7 +4,8 @@
 # Licence GPL v3
 
 
-focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, filename="", ...) {
+focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filename="", ...) {
+	allNA <- TRUE
 	ngb <- .checkngb(ngb)
 	ngbgrid <- raster(raster)
 
@@ -28,17 +29,25 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, filename="", ...) 
 
 	res <- vector(length=ncol(ngbdata))
 
-	keepgoing <- FALSE
+	keepGoing <- FALSE
 	
 	filename <- trim(filename)
-	finalfilename <- filename
-	if (filename != '' & recursive) {filename <- rasterTmpFile()}
-	if (!canProcessInMemory(ngbgrid, 2) && filename == '') {
-		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+    if (recursive) {
+		fn <- ''
+		ovwr <- .overwrite(...)
+		if (filename != '' & file.exists(filename) & !ovwr) {
+			stop('file exists, use overwrite=TRUE to overwrite it')
+		}
+	} else {
+		fn <- filename
+	}
+	
+	if (!canProcessInMemory(ngbgrid, 2) && fn == '') {
+		fn <- rasterTmpFile()
+		if (getOption('verbose')) { cat('writing raster to:', fn)	}						
 	}
 
-	if (filename == '') {
+	if (fn == '') {
 		v <- matrix(NA, ncol=nrow(ngbgrid), nrow=ncol(ngbgrid))
 	} else {
 		v <- vector(length=0)
@@ -63,12 +72,20 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, filename="", ...) 
 		if (sum(is.na(vals)) > 0) {
 			ngbvals <- .calcNGB(ngbdata, colnrs, res, fun, keepdata=TRUE)
 			vals[is.na(vals)] <- ngbvals[is.na(vals)]
-			if (sum(is.na(vals)) > 0) { keepGoing <- TRUE }
+			nas <- sum(is.na(vals))
+			if (nas > 0) { keepGoing <- TRUE }
+			if (allNA) {
+				if (nas < ncol(ngbgrid)) {
+					allNA <- FALSE
+				}
+			}
+		} else { 
+			allNA <- FALSE
 		}
 		
-		if (filename != "") {
+		if (fn != "") {
 			ngbgrid <- setValues(ngbgrid, vals, r)
-			ngbgrid <- writeRaster(ngbgrid, filename=filename, ...)
+			ngbgrid <- writeRaster(ngbgrid, filename=fn, ...)
 		} else {
 			v[,r] <- vals
 		}
@@ -76,14 +93,30 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, filename="", ...) 
 	}
 	pbClose(pb)
 
-	if (filename == "") { 
+	if (fn == "") { 
 		ngbgrid <- setValues(ngbgrid, as.vector(v)) 
 	}
 	
-	if (recursive & keepGoing) {
-		ngbgrid <- focalNA(ngbgrid, fun=fun, ngb=ngb, filename="", recursive=TRUE, ...) 
+	if (recursive) {
+		if (allNA) {
+			stop('all values are NA')
+		}
+		#test <- try (iter <- iter + 1, silent=TRUE )
+		#if (class(test) == "try-error") { iter <- 1 }
+		if (iterator >= 0) {
+			iterator <- 1 + iterator
+			cat('iteration', iterator, '\n')
+			flush.console()
+		}
+		if (keepGoing) {
+			ngbgrid <- focalNA(ngbgrid, fun=fun, ngb=ngb, recursive=TRUE, filename=filename, iterator=iterator, ...) 
+		} else {
+			if (filename != '') {
+				ngbgrid <- saveAs(ngbgrid, filename=filename, ...)
+			}
+			return(ngbgrid)
+		}
 	} else {
-		ngbgrid <- saveAs(ngbgrid, finalfilename, ...)
 		return(ngbgrid)
 	}
 }

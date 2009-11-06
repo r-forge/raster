@@ -26,7 +26,7 @@ Formal definition of the overlay method (in the sp package)
 
 \bold{1) x and y are Raster* objects}
 
-\code{overlay(x, y, ..., fun, datatype, filetype, overwrite, progress)}
+\code{overlay(x, y, ..., fun, datatype, format, overwrite, progress)}
 
 \tabular{rll}{
 \tab \code{x} \tab a RasterLayer object \cr
@@ -35,21 +35,21 @@ Formal definition of the overlay method (in the sp package)
 \tab \code{fun} \tab the function to be applied. This should be a function that takes two numbers as an argument  \cr
 \tab \code{filename} \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
 \tab \code{overwrite}\tab logical. If \code{TRUE}, existing files will be overwritten \cr
-\tab \code{filetype} \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
+\tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
 \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
 }
   
   
 \bold{2) x is a Raster* object, y is missing (this is equivalent to \code{\link[raster]{calc}})}
 
-\code{overlay(x, fun, overwrite, filetype, datatype, progress)}
+\code{overlay(x, fun, overwrite, format, datatype, progress)}
 
 \tabular{rll}{
   \tab \code{x}  \tab a RasterLayer object \cr
   \tab \code{fun}  \tab the function to be appliepd. This should be a function that takes two numbers as an argument \cr
   \tab \code{filename}  \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
   \tab \code{overwrite}  \tab logical. If \code{TRUE}, existing files will be overwritten \cr
-  \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{format}  \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
 }
 }
 }

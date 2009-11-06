@@ -4,8 +4,8 @@
 # Licence GPL v3
 
  
-writeRasterHdr <- function(raster, filetype) {
-	type <- toupper(filetype)
+writeRasterHdr <- function(raster, format) {
+	type <- toupper(format)
 	if (type=="RASTER") {
 		.writeHdrRaster(raster)
 	} else if (type=="BIL") {
@@ -22,7 +22,7 @@ writeRasterHdr <- function(raster, filetype) {
 	} else 	if (type=="IDRISI") {
 		.writeHdrIDRISI(raster)
 	} else {
-		stop("This format is not supported")
+		stop("This file format is not supported")
 	}
  }
 

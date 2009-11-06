@@ -71,7 +71,7 @@ function(x, filename='', ...) {
 			v <- c(v, c2)
 		} else {
 			x1 <- setValues(x1, c2, r)
-			x1 <- writeRaster(x1, filename=tmpfile1, filetype='raster', datatype='INT4U')
+			x1 <- writeRaster(x1, filename=tmpfile1, format='raster', datatype='INT4U')
 		}	
 		
 		rcl <- unique(rcl)

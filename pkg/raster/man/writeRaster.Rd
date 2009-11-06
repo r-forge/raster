@@ -48,8 +48,8 @@ writeRaster(x, filename, ...)
 
 \bold{Additional arguments}
 \tabular{rll}{
-\tab \code{filetype} \tab Character. Output file type. See \code{\link[raster]{writeFormats}} \cr
-\tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
+\tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeFormats}} \cr
+\tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
 \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
 }
 
@@ -110,13 +110,13 @@ rst <- readAll(rst)
 rst <- writeRaster(rst, filename="binall.grd", overwrite=TRUE)
 
 # write all to a new ERDAS .img file
-rst <- writeRaster(rst, filename="binall.img", filetype="HFA", overwrite=TRUE)
+rst <- writeRaster(rst, filename="binall.img", format="HFA", overwrite=TRUE)
 
 # write all to an integer binary file
 rst <- writeRaster(rst, filename="binallint.grd", datatype='INT4S', overwrite=TRUE)
  
 # write all to ascii file
-rst <- writeRaster(rst, filename="ascall.asc", filetype='ascii', overwrite=TRUE)
+rst <- writeRaster(rst, filename="ascall.asc", format='ascii', overwrite=TRUE)
 
 # make a brick and save multi-band file
 b <- brick(rst, sqrt(rst))
@@ -129,7 +129,7 @@ for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	v <- values(rst) * 10
 	ascras <- setValues(ascras, v, r)
-	ascras <- writeRaster(ascras, filename='ascrow.asc', filetype='ascii', overwrite=TRUE) 
+	ascras <- writeRaster(ascras, filename='ascrow.asc', format='ascii', overwrite=TRUE) 
 }
 	
 # read and write row by row; write to binary file
@@ -145,13 +145,13 @@ binras <- raster(rst)
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)
 	binras <- setValues(binras, values(rst), r)
-	binras <- writeRaster(binras, 'binbyrow2.tif', filetype="GTiff", overwrite=TRUE) 
+	binras <- writeRaster(binras, 'binbyrow2.tif', format="GTiff", overwrite=TRUE) 
 }
 
 # write to netcdf 
 if (require(RNetCDF)) {	
     rst <- readAll(rst)
-    writeRaster(rst, filename='netCDF.nc', filetype="CDF", overwrite=TRUE)   
+    writeRaster(rst, filename='netCDF.nc', format="CDF", overwrite=TRUE)   
 }
 
 }

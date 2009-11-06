@@ -4,11 +4,11 @@
 # Licence GPL v3
 
 
-setOptions <- function(filetype, overwrite, datatype, tmpdir, progress, todisk) {
+setOptions <- function(format, overwrite, datatype, tmpdir, progress, todisk) {
 	
-	setFiletype <- function(filetype) {
-		if (.isSupportedFormat(filetype)) {	options(rasterFiletype = filetype)	
-		} else { warning(paste('Cannot set filetype to unknown or unsupported type:', filetype, '. See writeFormats()'))	}
+	setFiletype <- function(format) {
+		if (.isSupportedFormat(format)) {	options(rasterFiletype = format)	
+		} else { warning(paste('Cannot set filetype to unknown or unsupported file format:', format, '. See writeFormats()'))	}
 	}
 	
 	setOverwrite <- function(overwrite) {
@@ -59,7 +59,7 @@ setOptions <- function(filetype, overwrite, datatype, tmpdir, progress, todisk) 
 	}
  
 	
-	if (!missing(filetype)) { setFiletype(filetype) }
+	if (!missing(format)) { setFiletype(format) }
 	if (!missing(overwrite)) { setOverwrite(overwrite) }
 	if (!missing(datatype)) { setDataType(datatype) }
 	if (!missing(progress)) { setProgress(progress) }

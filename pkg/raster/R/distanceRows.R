@@ -47,11 +47,11 @@
 			for (r in 1:nrow(rst1)) {	
 				if (k==1) {
 					rst1 <- setValues(rst1, arow, r)
-					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, format='raster')
 				} else {
 					rst2 <- readRow(rst2, r)
 					rst1 <- setValues(rst1, values(rst2), r)
-					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')			
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, format='raster')			
 				}	
 				pbStep(pb, r) 	
 			}
@@ -65,12 +65,12 @@
 				}
 				if (k==1) {
 					rst1 <- setValues(rst1, vals, r)
-					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, format='raster')
 				} else {
 					rst2 <- readRow(rst2, r)
 					vals <- pmin(values(rst2), vals)
 					rst1 <- setValues(rst1, vals, r)
-					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, filetype='raster')			
+					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, format='raster')			
 				}
 			pbStep(pb, r) 	
 			}
@@ -81,6 +81,6 @@
 	}	
 	pbClose(pb)
     return(rst2)
-	return( saveAs(rst2, filename=filename, filetype=.filetype(...), datatype=datatype, overwrite=overwrite, progress=.progress(...)) )
+	return( saveAs(rst2, filename=filename, format=.filetype(...), datatype=datatype, overwrite=overwrite, progress=.progress(...)) )
 }
 

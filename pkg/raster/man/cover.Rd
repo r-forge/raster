@@ -23,8 +23,8 @@
 The function returns a RasterLayer with the values of the second RasterLayer (\code{y}) where the first RasterLayer (\code{x}) has \code{NA} values, and the values of the first RasterLayer elsewhere.
 
 \tabular{rll}{
-  \tab \code{filetype} \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab If \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }

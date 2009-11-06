@@ -5,7 +5,7 @@
 
 
 showOptions <- function() {
-	cat('filetype :', .filetype(), '\n' )
+	cat('format :', .filetype(), '\n' )
 	cat('datatype :', .datatype(), '\n')
 	cat('overwrite:', .overwrite(), '\n')
 	cat('tmpdir   :', .tmpdir(), '\n')
@@ -61,16 +61,16 @@ showOptions <- function() {
 	}
 }
 
-.filetype <- function(..., filetype) {
-	if (missing(filetype)) { 
-	filetype <- getOption('rasterFiletype')
-		if (is.null(filetype)) {
+.filetype <- function(..., format) {
+	if (missing(format)) { 
+		format <- getOption('rasterFiletype')
+		if (is.null(format)) {
 			return('raster') 
 		} else {
-			return(filetype)
+			return(format)
 		}
 	} else { 
-		return(filetype)
+		return(format)
 	}
 }
 

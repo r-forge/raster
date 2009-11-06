@@ -28,7 +28,7 @@ If no filename is specified, and the resulting RasterLayer is too large to hold 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
   \tab \code{filename}  \tab filename for the output RasterLayer \cr
-  \tab \code{filetype} \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{overwrite} \tab if \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }

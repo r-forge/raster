@@ -19,7 +19,7 @@
 	} else if (type == 'BSQ') {
 		ext(fname) <- ".bsq"
 	} else {
-		stop('unknown filetype')
+		stop('unknown file format')
 	}
 	return(fname)
 }
@@ -34,7 +34,7 @@
 	} else if (type %in% c('BIL', 'BSQ', 'BIP')) {
 		ext(fname) <- ".hdr"
 	} else {
-		stop('unknown filetype')
+		stop('unknown file format')
 	}
 	return(fname)
 }

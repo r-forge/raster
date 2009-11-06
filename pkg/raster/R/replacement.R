@@ -43,6 +43,7 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 			x@data@source <- 'ram'
 			filename(x) <- ""
 			x <- setMinMax(x)
+			return(x)
 		} else {
 			filename <- rasterTmpFile()
 			outras <- raster(x)
@@ -50,29 +51,54 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 				i <- vector(length=ncol(outras))
 				i[] <- TRUE
 			}
+			
 			for (r in 1:nrow(outras)) {
+				nrs <- cellFromRow(outras, r)
+				start <- nrs[1]
+				end <- nrs[length(nrs)]
 				if (class(i) == "RasterLayer") {
 					ind <- as.logical( getValues(i, r) ) 
 				} else if (is.logical(i)) {
 					if (length(i) == ncol(outras)) {
 						ind <- i
 					} else if (length(i) == ncell(outras)) {
-						ind <- i[(cellFromRow(r,1)[1]):(cellFromRow(r,1)[ncol(r)])]
+						ind <- i[start:end]
 					} else {
 						stop('cannot recycle logical indices for large rasters')
 					}
 				} else {
-					ind <- subset(i, i <= cellFromRow(r,1)[1])
-					ind <- subset(ind, ind >= cellFromRow(r,1)[ncol(r)])
+					ind <- subset(i, i >= start)
+					ind <- subset(ind, ind <= end)
 				}
-				v <- getValues(x, r)
 				if (length(ind) > 0) {
-					v[ind] <- values[ind]
-					outras <- setvalues(outras, v)
-					outras <- writeRaster(outras, filename)
+					if (length(value) == ncell(outras)) {
+						val <- value[start:end]
+					} else {
+						val <- value
+					}
+				} else {
+					if (length(value)==1) {
+						val <- rep(value, times=ncol(outras))
+					} else {
+						val <- value
+					}
+				} 
+				
+				if (length(val) != ncol(outras) | length(ind) != ncol(outras)) {
+					if (dataSource(x) == 'disk') {
+						v <- getValues(x, r)
+					} else {
+						v <- rep(NA, ncol(outras))
+					}
+					v[ind] <- val
+				} else {
+					v <- val
 				}
+				outras <- setValues(outras, v, r)
+				outras <- writeRaster(outras, filename)
 			}
+		return(outras)
 		}
-		return(x)
 	}
 )
+

@@ -21,9 +21,6 @@ distanceFromPoints <- function(object, xy, filename='', ...) {
 	rm(xy)
 
 	filename <- trim(filename)
-
-#	filetype <- 'raster'
-#	overwrite <- TRUE
 	
 	if (isLatLon(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 	                                                                        

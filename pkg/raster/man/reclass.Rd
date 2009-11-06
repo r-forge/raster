@@ -32,9 +32,9 @@ For example if row 1 has \code{1, 10, 15} and row 2 has \code{11, 20, 25}, all t
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{filetype}  \tab Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype}  \tab output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr
-  \tab \code{overwrite} \tab if TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{format}  \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype}  \tab Character. Output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr
+  \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress}  \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
 }
