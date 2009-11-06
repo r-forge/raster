@@ -56,7 +56,7 @@
 
 #		result[is.nan(result)] <- NA
 		if (dtype == 'numeric') {
-			result[result <=  (0.999999 * .nodatavalue(raster)) ] <- NA 	
+			result[result <=  (0.999999 * raster@file@nodatavalue)] <- NA 	
 			result[is.nan(result)] <- NA
 		} else {
 			result[result == raster@file@nodatavalue ] <- NA 			

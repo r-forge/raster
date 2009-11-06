@@ -7,16 +7,28 @@
 
 setMethod("[", c("RasterLayer","ANY", "missing"),
 function(x,i,j,...,drop=TRUE) {
-
-	if (!missing(i) && class(i) == "RasterLayer") {
-		i <- as.logical( getValues(i) ) 
-	}
-
+	
 	if (dataContent(x) != 'all') {
 		if (dataSource(x) != 'disk') {
 			stop('no data associated with this RasterLayer object')
+		}
+	}
+	
+	if (missing(i)) {
+		if (dataContent(x) == 'all') {
+			return(values(x))
 		} else {
-			if (canProcessInMemory(x, 1)) {
+			return(values(readAll(x)))
+		}
+	}
+
+	if (class(i) == "RasterLayer") {
+		i <- as.logical( getValues(i) ) 
+	}
+	
+	if (dataContent(x) != 'all') {
+		if (canProcessInMemory(x, 2)) {
+			if (length(i) > 0.5 * ncell(x)) {
 				x <- readAll(x)
 			}
 		}
@@ -25,12 +37,7 @@ function(x,i,j,...,drop=TRUE) {
 	if (dataContent(x) == 'all') {
 		values(x)[i, drop=drop]
 	} else {
-		if (missing(i)) {
-			stop('raster too large.')
-		} else {
-			print('hello')
-			return(cellValues(x, i))
-		}
+		return(cellValues(x, i))
 	}
 }
 )

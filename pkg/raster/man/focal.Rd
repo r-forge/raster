@@ -1,23 +1,26 @@
 \name{focal}
 
 \alias{focal}
+\alias{focalNA}
 
 \title{Focal}
 
 \description{
-Calculate values for the neighborhood of focal cells 
+Calculate values for the neighborhood of focal cells. focalNA keeps original values except where these are NA. 
 }
 
 \usage{
-focal(raster, fun=mean, filename="", ngb=3, keepdata=TRUE, ...) 
+focal(raster, fun=mean, ngb=3, keepdata=TRUE, filename="", ...) 
+focalNA(raster, fun=mean, ngb=3, recursive=FALSE, filename="", ...) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{fun}{The function to be applied}
-  \item{filename}{Output filename for a new raster}
   \item{ngb}{Neighborhood size. See Details.}
   \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
+  \item{recursive}{Logical. If \code{TRUE}, the function will continue recursively untill there are no more cells with NA}  
+  \item{filename}{Output filename for a new raster}
   \item{...}{additional arguments. See Details.}  
 }
 
