@@ -28,6 +28,8 @@ function(x, mask, filename="", ...){
 		if (!canProcessInMemory(out, 1) & filename=='') {
 			filename <- rasterTmpFile()
 		}
+		pb <- pbCreate(nrow(out), type=.progress(...))
+
 		for (r in 1:nrow(out)) {
 			v <- getValues(x, r)
 			m <- getValues(mask, r)
@@ -38,7 +40,10 @@ function(x, mask, filename="", ...){
 			} else {
 				vv[,r] <- v
 			}
-		}
+			pbStep(pb, r) 
+		} 
+		pbClose(pb)			
+
 		if (filename == '') {
 			out <- setValues(out, vv)
 		}
