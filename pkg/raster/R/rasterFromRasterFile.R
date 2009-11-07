@@ -91,13 +91,12 @@
 	shortname <- gsub(" ", "_", ext(basename(filename), ""))
 	x <- .enforceGoodLayerNames(x, shortname)
 	
+	dataType(x) <- inidatatype
+
 	x@file@name <- .fullFilename(filename)
 	x@data@haveminmax <- TRUE  # should check?
 	x@file@nodatavalue <- nodataval
 
-
-	dataType(x) <- inidatatype
-	
 	if ((byteorder == "little") | (byteorder == "big")) { 
 		x@file@byteorder <- byteorder 
 	} 	

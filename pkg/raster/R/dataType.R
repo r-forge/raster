@@ -13,6 +13,7 @@
 	datatype <- substr( toupper( trim(value) ), 1, 5)
 	if (datatype == 'LOGIC') {datatype <- 'LOG1S'}
 	if (datatype == 'BYTE') {datatype <- 'INT1U'}
+	if (datatype == 'SMALL') {datatype <- 'INT2S'}
 	if (datatype == 'INTEG') {datatype <- 'INT4S'}
 	if (datatype == 'NUMER') {datatype <- 'FLT4S'}
 	if (datatype == 'FLOAT') {datatype <- 'FLT4S'}
