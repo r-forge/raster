@@ -28,7 +28,7 @@ reclass <- function(raster, rclmat, update=FALSE, filename='', ...)  {
 		if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
 	}
 	
-	outRaster <- raster(raster, filename=filename)
+	outRaster <- raster(raster)
 
 	res <- vector(length = ncol(raster))
 	
@@ -87,11 +87,12 @@ reclass <- function(raster, rclmat, update=FALSE, filename='', ...)  {
 		} else {
 			for (r in 1:nrow(raster)) {
 				res <- getValues(raster, r)
+				vals <- res
 				for (i in 1:length(rclmat[,1])) {
-					res[ (res >= rclmat[i,1]) & ( res <= rclmat[i,2]) ] <- rclmat[i , 3] 
+					res[ (vals >= rclmat[i,1]) & ( vals <= rclmat[i,2]) ] <- rclmat[i , 3] 
 				}
 				if (hasNA) {
-					res[ is.na(res) ] <- namat[1, 3] 				
+					res[ is.na(vals) ] <- namat[1, 3] 				
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, filename=filename, ...)
