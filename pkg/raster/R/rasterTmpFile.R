@@ -17,7 +17,7 @@ removeTmpFiles <- function() {
 	f <- NULL
 	try ( f <- c(list.files(d, pattern="^raster_.*gri$", full.names=TRUE), list.files(d, pattern="^raster_.*grd$", full.names=TRUE)) , silent=TRUE )
 	if (length(f) > 0) {
-		r <- file.remove(f, showWarnings=FALSE)
+		r <- file.remove(f)
 	}
 }
 

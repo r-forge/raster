@@ -63,22 +63,39 @@ reclass <- function(raster, rclmat, update=FALSE, filename='', ...)  {
 		hasNA <- FALSE
 		for (i in 1:length(rclmat[,1])) {
 			if (is.na(rclmat[i,1]) | is.na(rclmat[i,2])) {
-				namat <- rclmat[i,]
+				naVAL <- rclmat[i,3]
 				rclmat <- rclmat[-i,]
 				hasNA <- TRUE
 			}
 		}
 
+		onlyNA <- FALSE
+		if (dim(rclmat)[1] == 0) {
+			if (hasNA) {
+				onlyNA <- TRUE
+			} else {
+				stop('I do not understand this reclass matrix')
+			}
+		}
+
 		
 		pb <- pbCreate(nrow(raster), type=.progress(...))
-		if (update) {
+		if (onlyNA) {
+			for (r in 1:nrow(raster)) {
+				res <- getValues(raster, r)
+				res[ is.na(res) ] <- naVAL	
+				outRaster <- setValues(outRaster, res, r)
+				outRaster <- writeRaster(outRaster, filename=filename, ...)
+				pbStep(pb, r)
+			}
+		} else if (update) {
 			for (r in 1:nrow(raster)) {
 				res <- getValues(raster, r)
 				for (i in 1:length(rclmat[,1])) {
 					res[ (res >= rclmat[i,1]) & (res <= rclmat[i,2]) ] <- rclmat[i,3] 
 				}
 				if (hasNA) {
-					res[ is.na(res) ] <- namat[1, 3] 				
+					res[ is.na(res) ] <- naVAL
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, filename=filename, ...)
@@ -92,7 +109,7 @@ reclass <- function(raster, rclmat, update=FALSE, filename='', ...)  {
 					res[ (vals >= rclmat[i,1]) & ( vals <= rclmat[i,2]) ] <- rclmat[i , 3] 
 				}
 				if (hasNA) {
-					res[ is.na(vals) ] <- namat[1, 3] 				
+					res[ is.na(vals) ] <- naVAL
 				}	
 				outRaster <- setValues(outRaster, res, r)
 				outRaster <- writeRaster(outRaster, filename=filename, ...)

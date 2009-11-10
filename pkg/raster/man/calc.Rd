@@ -83,7 +83,7 @@ a RasterLayer object
 }
 
 
-\seealso{ \code{ \link[raster]{overlay}} , \link[raster]{Arith-methods}, \link[raster]{Math-methods}} 
+\seealso{ \code{ \link[raster]{overlay}} ,  \code{ \link[raster]{reclass}},  \link[raster]{Arith-methods}, \link[raster]{Math-methods}} 
 
 
 \author{ Robert J. Hijmans}

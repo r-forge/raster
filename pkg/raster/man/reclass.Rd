@@ -43,6 +43,9 @@ The following additional arguments can be passed, to replace default values for 
 A new RasterLayer object, and in some cases the side effect of a new file on disk.
 }
 
+\seealso{ \code{ \link[raster]{calc}} } 
+
+
 \author{Robert J. Hijmans}
 
 \examples{
@@ -56,8 +59,7 @@ rclmat <- matrix(m, ncol=3, byrow=TRUE)
 rc <- reclass(r, rclmat)
 
 # equivalent to
-m <- c(-Inf, 0.25, 1,  0.25, 0.5, 2,  0.5, Inf, 3)
-rc <- reclass(r, m)
+rc <- reclass(r, c(-Inf,0.25,1, 0.25,0.5,2, 0.5,Inf,3))
 }
 
 \keyword{spatial}
