@@ -22,6 +22,10 @@ showOptions <- function() {
 	if (is.null(d)) {
 		d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
 	}
+	if (!file.exists(d)) {
+		d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
+		dir.create(d, showWarnings=FALSE )
+	}
 	return(d)
 }
 
