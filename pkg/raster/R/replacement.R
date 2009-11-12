@@ -10,7 +10,7 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 	function(x, i, j, value) {
 		
 		if (dataContent(x) != 'all') {
-			if (canProcessInMemory(x, 3)) {
+			if (canProcessInMemory(x, 2)) {
 				if (dataSource(x) == 'disk') {
 					x <- readAll(x)
 				} else {

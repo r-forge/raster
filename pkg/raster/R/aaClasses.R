@@ -132,7 +132,6 @@ setClass ('RasterLegend',
 setClass ('RasterLayer',
 	contains = 'Raster',
 	representation (
-		title = 'character',
 		file = 'RasterFile',
 		data = 'SingleLayerData',
 		legend = 'RasterLegend',
