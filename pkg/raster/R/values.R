@@ -62,15 +62,15 @@ values <- function(object, format='', names=FALSE) {
 		}	
 		return(mdata)
 
-	} else if (dataContent(raster)=="sparse") {
-		mdata <- matrix(NA, nrow=nrow(raster), ncol=ncol(raster), byrow=TRUE)
-		vals <- cbind(dataIndices(raster), values(raster))
-		mdata[vals[,1]] <- vals[1,2]
-		if (names) {
-			colnames(mdata) <- seq(1:ncol(raster))
-			rownames(mdata) <- seq(1:nrow(raster))
-		}	
-		return(mdata)
+#	} else if (dataContent(raster)=="sparse") {
+#		mdata <- matrix(NA, nrow=nrow(raster), ncol=ncol(raster), byrow=TRUE)
+#		vals <- cbind(dataIndices(raster), values(raster))
+#		mdata[vals[,1]] <- vals[1,2]
+#		if (names) {
+#			colnames(mdata) <- seq(1:ncol(raster))
+#			rownames(mdata) <- seq(1:nrow(raster))
+#		}	
+#		return(mdata)
 		
 	} else if (dataContent(raster)=="row") {
 		mdata <- matrix(values(raster), nrow=1, ncol=ncol(raster), byrow=TRUE)

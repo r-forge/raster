@@ -14,9 +14,9 @@ if (!isGeneric('setMinMax')) {
 setMethod('setMinMax', signature(x='RasterLayer'), 
 function(x) {
 	clear <- FALSE
-	if (dataContent(x) != 'all' & dataContent(x) != 'sparse') {
+	if (dataContent(x) != 'all') {
 		if (dataSource(x) == 'ram') {
-			stop('no values associated with this xLayer')
+			stop('no, or not enough, values associated with this Layer')
 		}
 		if (canProcessInMemory(x, 2)) {
 			x <- readAll(x)
@@ -24,7 +24,7 @@ function(x) {
 		}
 	}
 	
-	if (dataContent(x)=='all' | dataContent(x)=='sparse') {
+	if (dataContent(x)=='all' ) {
 		vals <- na.omit(values(x)) # min and max values
 		if (clear) {x <- clearValues(x)}
 		if (length(vals) > 0) {

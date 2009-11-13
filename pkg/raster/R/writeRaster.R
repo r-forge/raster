@@ -3,13 +3,10 @@
 # Version 0.9
 # Licence GPL v3
 
- 
-
 if (!isGeneric('writeRaster')) {
 	setGeneric('writeRaster', function(x, filename, ...)
 		standardGeneric('writeRaster')) 
-	}
-    
+}  
 	
 
 setMethod('writeRaster', signature(x='RasterLayer', filename='character'), 
@@ -18,8 +15,12 @@ function(x, filename, ...) {
 	filetype <- .filetype(...)
 
 	dc <- dataContent(x)
-	if (! dc %in% c('row', 'rows', 'all', 'sparse') ) {
-		stop('No usable data available for writing.')
+	if (! dc %in% c('row', 'rows', 'all') ) {
+		if (dataSource(x) == 'disk') {
+			return( saveAs(x, filename, ...) )
+		} else {
+			stop('No usable data available for writing.')
+		}
 	}
 	
 	if (.isNativeDriver(filetype)) {
@@ -50,7 +51,11 @@ setMethod('writeRaster', signature(x='RasterBrick', filename='character'),
 function(x, filename, bandorder='BIL', ...) {
 	dc <- dataContent(x)
 	if (! dc %in% c('row', 'all') ) {
-		stop('No usable data available for writing.')
+		if (dataSource(x) == 'disk') {
+			return( saveAs(x, filename, ...) )
+		} else {
+			stop('No usable data available for writing.')
+		}
 	}
 	filetype <- .filetype(...)
 	if (filetype=='raster') {

@@ -91,7 +91,7 @@ setClass('RasterFile',
 setClass('SingleLayerData', 
 	representation (
 		values='vector', 
-		content='character', #nodata, all, row, block, sparse
+		content='character', #nodata, all, row, block
 		indices = 'vector',
 		colname = 'character',
 		haveminmax = 'logical',
@@ -143,11 +143,24 @@ setClass ('RasterLayer',
 	)
 
 
+setClass ('RasterLayerSparse',
+	contains = 'Raster',
+	representation (
+		file = 'RasterFile',
+		data = 'SingleLayerData',
+		legend = 'RasterLegend',
+		history = 'vector'
+		),
+	prototype (
+		history = vector(mode='character')
+		)
+	)
+	
 
 setClass('MultipleRasterData', 
 	representation (
 		values='matrix', 
-		content='character', #nodata, all, row, block, sparse
+		content='character', #nodata, all, row, block
 		indices = 'vector',
 		nlayers='integer',
 		haveminmax = 'logical',
@@ -177,11 +190,9 @@ setClass ('RasterBrick',
 		file = 'RasterFile',
 		data = 'MultipleRasterData',
 		legend = 'RasterLegend',
-#		sparse = 'logical',
 		history = 'vector'
 		),
 	prototype (
-#		sparse = FALSE,
 		history = vector(mode='character')
 		),
 	validity = function(object)

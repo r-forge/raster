@@ -15,10 +15,10 @@
 		vals <- as.data.frame(vals)
 	}
 	if (type=='pixel') {
-		object <- makeSparse(object)
-		pts <- SpatialPoints(xyFromCell(object,  dataIndices(object)))
+		vals <- na.omit( cbind(1:ncell(object), getValues(object)) )
+		pts <- SpatialPoints(xyFromCell(object,  vals[,1]))
 		if (dataframe) {
-			sp <- SpatialPixelsDataFrame(points=pts, data=vals, proj4string=projection(object, FALSE)) 	
+			sp <- SpatialPixelsDataFrame(points=pts, data=vals[,2], proj4string=projection(object, FALSE)) 	
 		} else {
 			sp <- SpatialPixels(points=pts, proj4string=projection(object, FALSE))
 		}

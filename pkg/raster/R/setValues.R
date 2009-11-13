@@ -155,19 +155,21 @@ setMethod('setValues', signature(object='RasterBrick'),
 	
 	
 	
-
-setValuesSparse <- function(raster, sparsevalues, cellnumbers) {
-	if (!(isTRUE(length(cellnumbers) == (length(sparsevalues))))) {
-		stop()
-	}
-	raster@data@content <- 'sparse'
-	raster@data@values <- sparsevalues
-	raster@data@indices <- cellnumbers
-	raster@data@source <- 'ram'
-	raster <- setMinMax(raster)
-	return(raster)
-}
-
+#setMethod('setValues', signature(object='RasterLayerSparse'), 
+#  function(object, values, rownr=-1, layer=-1) {
+# setValuesSparse <- function(raster, sparsevalues, cellnumbers) {
+#	cellnumbers <- rownr
+#	if (!(isTRUE(length(cellnumbers) == (length(sparsevalues))))) {
+#		stop()
+#	}
+#	object@data@content <- 'sparse'
+#	object@data@values <- values
+#	object@data@indices <- cellnumbers
+#	object@data@source <- 'ram'
+#	object <- setMinMax(object)
+#	return(object)
+#}
+#)
 
 
 setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {

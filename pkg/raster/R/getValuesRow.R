@@ -80,8 +80,6 @@ function(x, row, format='vector', names=FALSE) {
 				res <- x@data@values[startcell:endcell]
 			}
 		}
-	} else if (dataContent(x) == 'sparse') {
-		res <- .values.sparse(x, row)
 	} else {
 		stop('something is wrong with the RasterLayer dataContent')
 	}
@@ -151,8 +149,8 @@ function(x, row, format='matrix', names=FALSE) {
 				res <- x@data@values[startcell:endcell,]
 			}
 		}
-	} else if (dataContent(x) == 'sparse') {
-		res <- .values.sparse(x, row)
+#	} else if (dataContent(x) == 'sparse') {
+#		res <- .values.sparse(x, row)
 	} else {
 		stop('something is wrong with the RasterLayer dataContent')
 	}

@@ -18,19 +18,25 @@ function(x, fun, filename='', ...) {
 	filename <- trim(filename)
 	outraster <- raster(x)
 	
-	if (!(dataContent(x) == 'all' | dataContent(x) == 'sparse' | dataSource(x) == 'disk')) {
+	if (!(dataContent(x) == 'all' | dataSource(x) == 'disk')) {
 		stop('RasterLayer has no data on disk, nor a complete set of values in memory')
 	}
+
+	if (dataSource(x) == 'disk') {
+		if (!canProcessInMemory(x, 3) & filename == '') {
+			filename <- rasterTmpFile()
+		} else {
+			if ( dataContent(x) != 'all') {
+				x <- readAll(x)
+			}
+		}
+	}
 	
-	if ( dataContent(x) == 'all') {
+	if ( dataContent(x) == 'all' ) {
 		outraster <- setValues(outraster, fun(values(x))) 
 		if (filename != "") {
 			outraster <- writeRaster(outraster, filename=filename, ...)
-		}
-	} else if ( dataContent(x) == 'sparse') {
-		outraster <- setValuesSparse(outraster, fun(values(x)),  dataIndices(x)) 
-		if (filename != "") { 
-			outraster <- writeRaster(outraster, filename=filename, ...)
+			outraster <- clearValues(outraster) 
 		}
 	} else if (dataSource(x) == 'disk') {
 		if (!canProcessInMemory(x, 3) & filename == '') {

@@ -5,7 +5,6 @@
 \alias{setValues,RasterBrick-method}
 \alias{setValuesBlock}
 \alias{setValuesRows}
-\alias{setValuesSparse}
 \alias{clearValues}
 
 \title{Set values}
@@ -19,7 +18,6 @@ multiple slots need to be changed.
 setValues(object, values, rownr=-1, layer=-1) 
 setValuesRows(object, values, firstcell, lastcell) 
 setValuesBlock(raster, blockvalues, firstcell, lastcell) 
-setValuesSparse(raster, sparsevalues, cellnumbers) 
 clearValues(object)
 }
 
@@ -32,8 +30,6 @@ clearValues(object)
   \item{blockvalues}{Data values to associate with the RasterLayer object for a block of data, i.e. a rectangular area within the entire raster }
   \item{firstcell}{First cell (upper left corner) of the block values }
   \item{lastcell}{Last cell (upper left corner) of the block values }
-  \item{sparsevalues}{Not implemented yet -- sparse data values. I.e. values for a number of raster cells }
-  \item{cellnumbers}{The cell numbers corresponding to the sparse data}
 }
 
 
@@ -46,12 +42,12 @@ a Raster* object
 \author{ Robert J. Hijmans }
 
 \examples{ 
-	rs <- raster(ncol=10, nrow=10)
-	vals <- 1:ncell(rs)
-	rs <- setValues(rs, vals)
-	rs <- clearValues(rs)
-	rowvals <- 1:ncol(rs)
-	rs <- setValues(rs, rowvals, 3)
+rs <- raster(ncol=10, nrow=10)
+vals <- 1:ncell(rs)
+rs <- setValues(rs, vals)
+rs <- clearValues(rs)
+rowvals <- 1:ncol(rs)
+rs <- setValues(rs, rowvals, 3)
 }
 
 \keyword{ spatial }

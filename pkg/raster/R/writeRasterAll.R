@@ -69,13 +69,13 @@
 	}
 
 	attr(raster@file, "con") <- file(fnamevals, "wb")
-	if (raster@data@content == 'sparse') { 
-		raster <- .writeSparse(raster, overwrite=overwrite) 
-	} else {
-		dsize <- dataSize(raster@file@datanotation)
-		writeBin(raster@data@values , raster@file@con, size = dsize ) 
-		writeRasterHdr(raster, filetype) 
-	}
+#	if (raster@data@content == 'sparse') { 
+#		raster <- .writeSparse(raster, overwrite=overwrite) 
+#	} else {
+	dsize <- dataSize(raster@file@datanotation)
+	writeBin(raster@data@values , raster@file@con, size = dsize ) 
+	writeRasterHdr(raster, filetype) 
+
 	close(raster@file@con)
 #attr(raster@file, "con") <- file(fnamevals, "rb")
 # put logical values back to T/F
