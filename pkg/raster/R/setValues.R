@@ -4,19 +4,20 @@
 # Licence GPL v3
 
 
-setValuesRows <- function(object, values, firstcell, lastcell) {
+setValuesRows <- function(object, values, startrow, nrows) {
 	if (!is.vector(values)) {stop('values must be a vector')}
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
 		stop('values must be numeric, integer or logical.')	
 	}
-	if (firstcell > lastcell) {stop()}
-	if (firstcell < 1 | lastcell > ncell(object)) {
-		stop(paste("indices out of bounds"))
+	if (startrow < 1 | (startrow + nrows - 1) > nrow(object)) {
+		stop("rownumbers out of bounds")
 	}
 	object@data@values <- values
 	object@data@content <- 'rows' 
-	object@data@indices <- c(firstcell, lastcell)
-	if (length(values) != (lastcell-firstcell + 1)) {stop('wrong length')}
+	c1 <- cellFromRowCol(object, startrow, 1)
+	c2 <- cellFromRowCol(object, startrow+nrows-1, ncol(object))
+	object@data@indices <- c(c1, c2)
+	if (length(values) != (c2-c1 + 1)) {stop('wrong length')}
 	return(object)
 }
 

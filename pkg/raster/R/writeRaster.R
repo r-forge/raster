@@ -15,7 +15,7 @@ function(x, filename, ...) {
 	filetype <- .filetype(...)
 
 	dc <- dataContent(x)
-	if (! dc %in% c('row', 'rows', 'all') ) {
+	if (dc == 'nodata') {
 		if (dataSource(x) == 'disk') {
 			return( saveAs(x, filename, ...) )
 		} else {

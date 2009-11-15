@@ -16,7 +16,7 @@ multiple slots need to be changed.
 
 \usage{
 setValues(object, values, rownr=-1, layer=-1) 
-setValuesRows(object, values, firstcell, lastcell) 
+setValuesRows(object, values, startrow, nrows) 
 setValuesBlock(raster, blockvalues, firstcell, lastcell) 
 clearValues(object)
 }
@@ -27,6 +27,8 @@ clearValues(object)
   \item{values}{Data values to associate with the RasterLayer object. There should be values for all cells or for a single row}
   \item{layer}{Layer number (only relevant for RasterStack objects) }
   \item{rownr}{Row number, between 1 and nrow(raster) }
+  \item{startrow}{First row for which values are added}
+  \item{nrows}{Number of rows}
   \item{blockvalues}{Data values to associate with the RasterLayer object for a block of data, i.e. a rectangular area within the entire raster }
   \item{firstcell}{First cell (upper left corner) of the block values }
   \item{lastcell}{Last cell (upper left corner) of the block values }
