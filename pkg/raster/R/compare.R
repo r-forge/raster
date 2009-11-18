@@ -10,6 +10,7 @@
 
 compare <- function(object, ..., bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE, showwarning=FALSE) {
 	result <- TRUE
+	firstproj <- NA
 	objects <- c(object, list(...))
 	if (!isTRUE(length(objects) > 1)) {
 		warning('There should be at least 2 Raster* objects to compare')
@@ -37,10 +38,14 @@ compare <- function(object, ..., bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig
 			}
 		}
 		if (prj) {
-			if ( !(identical(projection(objects[[1]]), projection(objects[[i]]))))  {
+			if ( is.na( projection(objects[[i]] )) ) {
+				# skip
+			} else if (is.na(firstproj)) {
+				firstproj <- projection(objects[[i]])
+			} else if ( !(identical(firstproj, projection(objects[[i]]))))  {
 				result <- F
 				if (stopiffalse) {stop('different projection')}
-				if (showwarning) { warning('different projection')}
+				if (showwarning) { warning('different projection') }
 			}
 		}
 # Can also check res through bb & rowcol

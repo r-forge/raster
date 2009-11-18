@@ -33,7 +33,8 @@
 		} else if (ini[i,2] == "DATA TYPE") {inidatatype <- toupper(ini[i,3])
 		} else if (ini[i,2] == "FILE TYPE") {filetype <- toupper(ini[i,3])
 		} else if (ini[i,2] == "FILE TITLE") {layernames <- ini[i,3]
-		} else if (ini[i,2] == "FLAG VALUE") { try (nodataval <- as.numeric(ini[i,3]), silent=TRUE)
+		} else if (ini[i,2] == "FLAG VALUE") { nodataval <- try(as.numeric(ini[i,3], silent=TRUE))
+											   if (!is.numeric(nodataval)) {nodataval <- -Inf}
 		}
     }  
 	
@@ -61,7 +62,7 @@
 	} else if (inidatatype == 'INTEGER') {
 		dataType(x) <- 'INT2S'
 	} else if (inidatatype == 'REAL') {
-		dataType(x) <- 'INT4S'
+		dataType(x) <- 'FLT4S'
 	} else {
 		stop(paste('unsupported IDRISI data type:', inidatatype))
 	}

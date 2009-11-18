@@ -22,11 +22,11 @@ click <- function(object, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 		}
 	}
 
-	if (dataContent(object) != 'all') {
-		value <- xyValues(object, xyCoords)
+	if (class(object) == 'RasterStack') {
+		value <- cellValues(object, cells)
 	} else {
-		if (class(object) == 'RasterStack') {
-			value <- values(object)[cells,]
+		if (dataContent(object) != 'all') {
+			value <- cellValues(object, cells)
 		} else {
 			value <- values(object)[cells]
 		}
