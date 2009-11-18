@@ -6,29 +6,31 @@
 
 
 
-.rasterObjectFromFile <- function(x, band=1, objecttype='RasterLayer', gdalonly=FALSE, ...) {
+.rasterObjectFromFile <- function(x, band=1, objecttype='RasterLayer', native=FALSE, ...) {
 	x <- trim(x)
 	if (x=='' | x=='.') { # etc? 
 		stop('provide a valid filename')
 	}
-	if (gdalonly) {
-		return( .rasterFromGDAL(x, band, objecttype) )
-	} 
+	if (!(require(rgdal))) { native <- TRUE }  
+	
 	fileext <- toupper(ext(x)) 
-	if ( fileext == ".ASC" ) {
-		return ( .rasterFromASCIIFile(x) )
-	}
-	if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
-		return ( .rasterFromGenericFile(x, ...) )
-	}
-	if ( fileext %in% c(".RST", ".RDC") ) {
+	if (native) {
+		if ( fileext == ".ASC" ) {
+			return ( .rasterFromASCIIFile(x) )
+		}
+		if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
+			return ( .rasterFromGenericFile(x, ...) )
+		}
+		if ( fileext %in% c(".RST", ".RDC") ) {
 #  not tested
-		return ( .rasterFromIDRISIFile(x) )
-	}
-	if ( fileext %in% c(".SGRD", ".SDAT") ) {
+			return ( .rasterFromIDRISIFile(x) )
+		}
+		if ( fileext %in% c(".SGRD", ".SDAT") ) {
 # barely tested
-		return ( .rasterFromSAGAFile(x) )
+			return ( .rasterFromSAGAFile(x) )
+		}
 	}
+	
 	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {
 		return ( .rasterFromCDF(x, objecttype, ...) )
 	}

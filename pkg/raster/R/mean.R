@@ -4,36 +4,14 @@
 # Version 0.9
 # Licence GPL v3
 
-
-
-
 setMethod("mean", signature(x='Raster'),
-	function(x, ..., na.rm=FALSE){
-
-		rasters <- list(...)
-
-		if (class(x) == 'RasterLayer') {
-			if (length(rasters)==0) { 
-				return(x) 
-			}
-		}
-		rasters <- c(x, rasters)
+	function(x, ..., trim = 0, na.rm=FALSE){
+		rasters <- .makeRasterList(x, ...)
+		add <- .addArgs(...)
+		if (length(rasters) == 1 & length(add)==0) { return(x) }
 		rm(x)
-
-		newrasters <- list()
-		for (i in 1:length(rasters)) {
-			if (class(rasters[[i]]) == 'RasterLayer') {
-				newrasters <- c(newrasters, rasters[[i]])
-			}
-			if (class(rasters[[i]]) == 'RasterStack') {
-				newrasters <- c(newrasters, unstack(rasters[[i]]))
-			} else {
-				stop('not yet implemented for a Brick')
-			}
-		}
-		rm(rasters)
-		
-		return( .summaryRasters(newrasters, mean, 'mean', na.rm=na.rm) )
+		fun <- function(...){ mean(..., trim=trim, na.rm=na.rm) }
+		return( .summaryRasters(rasters=rasters, add=add, fun=fun, ...) )		
 	}
 )
 

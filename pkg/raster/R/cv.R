@@ -38,24 +38,13 @@ function(x, ..., aszero=FALSE, na.rm=FALSE) {
 
 setMethod("cv", signature(x='Raster'),
 	function(x, ..., aszero=FALSE, na.rm=FALSE){
-		rasters <- list(...)
-		if (class(x) == 'RasterLayer') {
-			if (length(rasters)==0) { 
-				return(x) 
-			}
-		}
-		rasters <- c(x, rasters)
+		rasters <- .makeRasterList(x, ...)
+		add <- .addArgs(...)
+		if (length(rasters) == 1 & length(add)==0) { return(x) }
 		rm(x)
-		for (i in 1:length(rasters)) {
-			if (class(rasters[[i]]) == 'RasterStack') {
-				r <- rasters[[i]]
-				rasters <- rasters[-i]
-				rasters <- c(rasters, unstack(r))
-				rm(r)
-			}
-		}
-		fun <- function(x){modal(x, aszero=aszero)}
-		return( .summaryRasters(rasters, fun, 'cv', na.rm=na.rm) )
+		fun <- function(...){ cv(..., aszero=aszero, na.rm=na.rm) }
+		return( .summaryRasters(rasters=rasters, add=add, fun=fun, ...) )
+		
 	}
 )
 

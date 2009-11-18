@@ -4,68 +4,113 @@
 # Licence GPL v3
 
 
-.summaryRasters <- function(rasters, fun, funname, na.rm, ...) {
 
-	if (!canProcessInMemory(rasters[[1]], 4)) {
+setMethod("Summary", signature(x='Raster'),
+	function(x, ..., na.rm=FALSE){
+		rasters <- .makeRasterList(x, ...)
+		add <- .addArgs(...)
+		
+# from callGeneric BEGIN
+		frame <- sys.parent()
+		envir <- parent.frame()
+		call <- sys.call(frame)
+		localArgs <- FALSE
+		if (exists(".Generic", envir = envir, inherits = FALSE)) {
+			fname <- get(".Generic", envir = envir)
+		} else {
+			localArgs <- identical(as.character(call[[1L]]), ".local")
+			if (localArgs) { call <- sys.call(sys.parent(2)) }
+			fname <- as.character(call[[1L]])
+		}
+		fdef <- get(fname, envir = envir)
+# from callGeneric END		
+		
+		if (length(rasters)==1 & length(add)==0) {
+			if (fname == 'min' | fname=='max' | fname=='sum' | fname=='prod') {
+				return(x)
+			} 
+			if (fname == 'range') {
+				stop('a single layer does not have a range')
+			}
+		}
+		
+		rm(x)
+		
+		if (fname == 'any' | fname == 'all') {
+			fun <- function(...){ fdef(as.logical(...), na.rm=na.rm) }
+		} else {
+			fun <- function(...){ fdef(..., na.rm=na.rm) }
+		}
+		
+		.summaryRasters(rasters, add, fun, funname=fname, ...) 
+	}
+)
+
+.summaryRasters <- function(rasters, add, fun, funname='', ...) {
+	
+	outRaster <- raster(rasters[[1]])
+
+	if (!canProcessInMemory(outRaster, length(rasters)+1)) {
 		filename <- rasterTmpFile()
 	} else {
 		filename <- ""
 		v <- vector(length=0)
 	}
-	raster <- raster(rasters[[1]])
-
-	m <- matrix(NA, nrow=ncol(rasters[[1]]), ncol=length(rasters))
 	
-	for (i in 2:length(rasters)) {
-		if (extends(class(rasters[[i]]), "Raster")) {
-			compare(c(rasters[[1]], rasters[[i]]))
-		}
+	
+	m <- matrix(NA, nrow=ncol(outRaster), ncol=length(rasters))
+	if (length(add) > 0) {
+		add <- matrix(rep(add, each=nrow(m)), nrow=nrow(m))
+		m <- cbind(m, add)
 	}
-
 	
-	for (r in 1:nrow(rasters[[1]])) {
-		m[] <- NA
+	
+	pb <- pbCreate(nrow(outRaster), type=.progress(...))
+	for (r in 1:nrow(outRaster)) {
 		for (i in 1:length(rasters)) {
-			if (is.atomic(rasters[[i]])) {
-				m[,i] <- rasters[[i]]
-			} else {
-				m[,i] <- getValues(rasters[[i]], r)
-			}
+			m[,i] <- getValues(rasters[[i]], r)
 		}
-		if (funname == 'any' || funname == 'all') {
-			m[m != 0] <- 1
-		}
-
-		vv <- apply(m, 1, fun, na.rm=na.rm)
-
-		if (funname == 'range') {
+		
+		vv <- apply(m, 1, fun)
+		
+		if (class(vv) == 'matrix') { # range
 			vv <- vv[2,] - vv[1,]
 		}
-
+		
 		if (filename == "") {
 			v <- c(v, vv)
 		} else {
-			raster <- setValues(raster, vv, r)
-			raster <- writeRaster(raster, filename=filename, ...)
+			outRaster <- setValues(outRaster, vv, r)
+			outRaster <- writeRaster(outRaster, filename=filename, ...)
 		}
-	}
+		pbStep(pb, r) 
+	} 
+	pbClose(pb)			
 	if (filename == "") {
-		raster <- setValues(raster, v)
+		outRaster <- setValues(outRaster, v)
 	}
-	return(raster)
+	return(outRaster)
 }
 
 
-
-setMethod("Summary", signature(x='Raster'),
-	function(x, ..., na.rm=FALSE){
-		rasters <- .makeRasterList(x, ...)
-		if (length(rasters) == 1) { return(x) }
-		rm(x)
-		fun <- sys.call(sys.parent())[[1]]
-		funname <- as.character(sys.call(sys.parent())[[1]])
-		return( .summaryRasters(rasters, fun, funname, na.rm) )
+.addArgs <- function(...) {
+	lst <- list(...)
+	add <- list()
+	if (length(lst) > 0 ) {
+		cnt <- 0
+		for (i in 1:length(lst)) {
+		# is.atomic ?
+			if (class(lst[[i]]) %in% c('logical', 'integer', 'numeric')) {
+				cnt <- cnt + 1
+				if (length(lst[[i]]) > 1) {
+					stop('only single numbers can be added as additional arguments')
+				} else {
+					add[cnt] <- lst[[i]]
+				}
+			}
+		}
 	}
-)
-
+	add <- unlist(add)
+	return(add)
+}
 

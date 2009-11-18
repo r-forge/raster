@@ -33,8 +33,12 @@
 		} else if (ini[i,2] == "DATA TYPE") {inidatatype <- toupper(ini[i,3])
 		} else if (ini[i,2] == "FILE TYPE") {filetype <- toupper(ini[i,3])
 		} else if (ini[i,2] == "FILE TITLE") {layernames <- ini[i,3]
-		} else if (ini[i,2] == "FLAG VALUE") { nodataval <- try(as.numeric(ini[i,3], silent=TRUE))
-											   if (!is.numeric(nodataval)) {nodataval <- -Inf}
+		} else if (ini[i,2] == "FLAG VALUE") { 
+			w <- getOption('warn')
+			options('warn'=-1) 
+			nodataval <- try(as.numeric(ini[i,3], silent=TRUE))
+			if (!is.numeric(nodataval)) {nodataval <- -Inf}
+			options('warn'= w) 
 		}
     }  
 	

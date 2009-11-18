@@ -8,9 +8,14 @@
 .plotraster <- function(object, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes, xlab, ylab, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 
-	
 	if (class(object) != 'RasterLayer') { stop("class of 'object' should be RasterLayer") }
 
+	if ( dataContent(object) != 'all') { 
+		if (canProcessInMemory(object, 2)) {
+			object <- readAll(object)
+		}
+	}
+	
 	maxdim <- max(1, maxdim)
 	if ( dataContent(object) == 'all') {
 		if (round(max(ncol(object), nrow(object)) < maxdim)) { subsample <- FALSE }
