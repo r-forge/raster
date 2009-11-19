@@ -57,7 +57,7 @@ A new RasterLayer object (in the R environment), and in some cases the side effe
 
 r <- raster(ncols=36, nrows=18)
 r[] <- runif(ncell(r)) 
-rf <- focal(r, fun=sum, ngb=3) 
+rf <- focal(r, fun=mean, ngb=3) 
 
 }
 \keyword{spatial}

@@ -42,7 +42,7 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filena
 		fn <- filename
 	}
 	
-	if (!canProcessInMemory(ngbgrid, 2) && fn == '') {
+	if (!canProcessInMemory(ngbgrid, 4) && fn == '') {
 		fn <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', fn)	}						
 	}
@@ -96,6 +96,9 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filena
 	if (fn == "") { 
 		ngbgrid <- setValues(ngbgrid, as.vector(v)) 
 	}
+	# perhaps useful to avoid clogging up ram when used recursively?
+	rm(v)
+	rm(raster)
 	
 	if (recursive) {
 		if (allNA) {

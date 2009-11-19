@@ -18,8 +18,14 @@
 		d <- as.vector(rows[, colnrs[i, ]])
 		if (keepdata) {
 			d <- na.omit(d)
+			if (length(d) > 0) {
+				res[i] <- fun(d)
+			} else {  # for sum because sum(NULL) = 0
+				res[i] <- NA 
+			}	
+		} else {
+			res[i] <- fun(d)
 		}
-		res[i] <- fun(d)
 	}	
 	return(res)
 }
