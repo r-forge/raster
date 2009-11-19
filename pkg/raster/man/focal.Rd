@@ -11,7 +11,7 @@ Calculate values for the neighborhood of focal cells. focalNA keeps original val
 
 \usage{
 focal(raster, fun=mean, ngb=3, keepdata=TRUE, filename="", ...) 
-focalNA(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filename="", ...) 
+focalNA(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename="", ...) 
 }
 
 \arguments{
@@ -20,7 +20,7 @@ focalNA(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filename="", ...)
   \item{ngb}{Neighborhood size. See Details.}
   \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
   \item{recursive}{Logical. If \code{TRUE}, the function will continue recursively untill there are no more cells with NA}  
-  \item{iterator}{Integer. Used to print iterations to the console of recursive=TRUE. Ignored if iterator < 0}  
+  \item{maxrec}{Integer. Maximum number of recursions (if \code{recursive=TRUE})}  
   \item{filename}{Output filename for a new raster}
   \item{...}{additional arguments. See Details.}  
 }
@@ -36,12 +36,11 @@ cell is centered, but even numbers are permitted in this function.
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
-  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
-  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
- }
-
+\tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
+\tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
+\tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
+\tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+}
 }
 
 \value{

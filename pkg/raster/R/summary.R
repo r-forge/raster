@@ -60,10 +60,10 @@ setMethod("Summary", signature(x='Raster'),
 	
 	m <- matrix(NA, nrow=ncol(outRaster), ncol=length(rasters))
 	if (length(add) > 0) {
-		add <- matrix(rep(add, each=nrow(m)), nrow=nrow(m))
-		m <- cbind(m, add)
+		for (i in 1:length(add)) {
+			m <- cbind(m, add[[i]]) 
+		}
 	}
-	
 	
 	pb <- pbCreate(nrow(outRaster), type=.progress(...))
 	for (r in 1:nrow(outRaster)) {
@@ -102,15 +102,10 @@ setMethod("Summary", signature(x='Raster'),
 		# is.atomic ?
 			if (class(lst[[i]]) %in% c('logical', 'integer', 'numeric')) {
 				cnt <- cnt + 1
-				if (length(lst[[i]]) > 1) {
-					stop('only single numbers can be added as additional arguments')
-				} else {
-					add[cnt] <- lst[[i]]
-				}
+				add[[cnt]] <- lst[[i]]
 			}
 		}
 	}
-	add <- unlist(add)
 	return(add)
 }
 

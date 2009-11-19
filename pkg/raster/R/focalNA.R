@@ -4,7 +4,39 @@
 # Licence GPL v3
 
 
-focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filename="", ...) {
+focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename="", ...) {
+	filename <- trim(filename)
+	if (recursive) {
+		fn <- ''
+		ovwr <- .overwrite(...)
+		if (filename != '' & file.exists(filename) & !ovwr) {
+			stop('file exists, use overwrite=TRUE to overwrite it')
+		}
+		iterator <- 0
+		keepGoing <-  TRUE
+		raster <- list(raster)
+		while (keepGoing) {
+			iterator <- 1 + iterator
+			cat('iteration', iterator, '- memory use:', memory.size(max=T) , '\n')
+			flush.console()
+			raster <- .focNA(raster[[1]], fun=fun, ngb=ngb, recursive=TRUE, filename=fn) 
+			if (raster[[2]]) {
+				stop('all values are NA')
+			}
+			keepGoing <- raster[[3]]	
+			if (iterator == maxrec) { keepGoing <- FALSE }
+		} 
+		if (filename != '') {
+			raster[[1]] <- saveAs(raster[[1]], filename=filename, ...)
+		}
+		return(raster[[1]])
+	} else {
+		return( .focNA(raster, fun=fun, ngb=ngb, recursive=FALSE, filename=filename, ...) )
+	}
+}
+
+
+.focNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, filename="", ...) {
 	allNA <- TRUE
 	ngb <- .checkngb(ngb)
 	ngbgrid <- raster(raster)
@@ -21,7 +53,6 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filena
 	ngbdata <- matrix(NA, nrow=0, ncol=ncol(ngbgrid))
 # add all rows needed for first ngb, minus 1 that will be read in first loop	
 
-
 	for (r in 1:limrow) {
 		rowdata <- getValues(raster, r)
 		ngbdata <- rbind(ngbdata, rowdata)
@@ -31,23 +62,12 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filena
 
 	keepGoing <- FALSE
 	
-	filename <- trim(filename)
-    if (recursive) {
-		fn <- ''
-		ovwr <- .overwrite(...)
-		if (filename != '' & file.exists(filename) & !ovwr) {
-			stop('file exists, use overwrite=TRUE to overwrite it')
-		}
-	} else {
-		fn <- filename
-	}
-	
-	if (!canProcessInMemory(ngbgrid, 4) && fn == '') {
-		fn <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', fn)	}						
+	if (!canProcessInMemory(ngbgrid, 4) && filename == '') {
+		filename <- rasterTmpFile()
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
 
-	if (fn == '') {
+	if (filename == '') {
 		v <- matrix(NA, ncol=nrow(ngbgrid), nrow=ncol(ngbgrid))
 	} else {
 		v <- vector(length=0)
@@ -83,9 +103,9 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filena
 			allNA <- FALSE
 		}
 		
-		if (fn != "") {
+		if (filename != "") {
 			ngbgrid <- setValues(ngbgrid, vals, r)
-			ngbgrid <- writeRaster(ngbgrid, filename=fn, ...)
+			ngbgrid <- writeRaster(ngbgrid, filename=filename, ...)
 		} else {
 			v[,r] <- vals
 		}
@@ -93,34 +113,13 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, iterator=0, filena
 	}
 	pbClose(pb)
 
-	if (fn == "") { 
+	if (filename == "") { 
 		ngbgrid <- setValues(ngbgrid, as.vector(v)) 
 	}
-	# perhaps useful to avoid clogging up ram when used recursively?
-	rm(v)
-	rm(raster)
 	
 	if (recursive) {
-		if (allNA) {
-			stop('all values are NA')
-		}
-		#test <- try (iter <- iter + 1, silent=TRUE )
-		#if (class(test) == "try-error") { iter <- 1 }
-		if (iterator >= 0) {
-			iterator <- 1 + iterator
-			cat('iteration', iterator, '\n')
-			flush.console()
-		}
-		if (keepGoing) {
-			ngbgrid <- focalNA(ngbgrid, fun=fun, ngb=ngb, recursive=TRUE, filename=filename, iterator=iterator, ...) 
-		} else {
-			if (filename != '') {
-				ngbgrid <- saveAs(ngbgrid, filename=filename, ...)
-			}
-			return(ngbgrid)
-		}
-	} else {
-		return(ngbgrid)
+		return(list(ngbgrid, allNA, keepGoing))
 	}
+	return(ngbgrid)
 }
 
