@@ -11,7 +11,10 @@
 	if (x=='' | x=='.') { # etc? 
 		stop('provide a valid filename')
 	}
-	if (!(require(rgdal))) { native <- TRUE }  
+	
+	if(!native) {
+		if (!(require(rgdal))) { native <- TRUE }  
+	}
 	
 	fileext <- toupper(ext(x)) 
 	if (native) {

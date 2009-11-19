@@ -17,7 +17,7 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename
 		raster <- list(raster)
 		while (keepGoing) {
 			iterator <- 1 + iterator
-			cat('iteration', iterator, '- memory use:', memory.size(max=T) , '\n')
+			cat('iteration', iterator , '\n')
 			flush.console()
 			raster <- .focNA(raster[[1]], fun=fun, ngb=ngb, recursive=TRUE, filename=fn) 
 			if (raster[[2]]) {
