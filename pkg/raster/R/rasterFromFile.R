@@ -11,12 +11,43 @@
 	if (x=='' | x=='.') { # etc? 
 		stop('provide a valid filename')
 	}
-	
+	fileext <- toupper(ext(x)) 
+
+	if (fileext %in% c(".GRD", ".GRI")) {
+		grifile <- .setFileExtensionValues(x, 'raster')
+		grdfile <- .setFileExtensionHeader(x, 'raster')
+		if ( file.exists( grdfile) & file.exists( grifile)) {
+			return ( .rasterFromRasterFile(grdfile, band, objecttype) )
+		} 
+	}
+	if (! file.exists(x)) {
+		grifile <- .setFileExtensionValues(x, 'raster')
+		grdfile <- .setFileExtensionHeader(x, 'raster')
+		if ( file.exists( grdfile) & file.exists( grifile)) {
+			return ( .rasterFromRasterFile(grdfile, band, objecttype) )
+		} else {
+			stop('file:', x, 'does not exist')
+		}
+	}
+
+	if ( fileext %in% c(".SGRD", ".SDAT") ) {
+# barely tested
+		return ( .rasterFromSAGAFile(x) )
+	}
+	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {
+		return ( .rasterFromCDF(x, objecttype, ...) )
+	}
+	if ( fileext == ".GRD") {
+		if (require(RNetCDF)) {
+			if (.isNetCDF(x)) {
+				return ( .rasterFromCDF(x, objecttype, ...) )
+			}
+		}
+	}
+
 	if(!native) {
 		if (!(require(rgdal))) { native <- TRUE }  
 	}
-	
-	fileext <- toupper(ext(x)) 
 	if (native) {
 		if ( fileext == ".ASC" ) {
 			return ( .rasterFromASCIIFile(x) )
@@ -30,42 +61,14 @@
 		}
 	}
 	
-	if ( fileext %in% c(".SGRD", ".SDAT") ) {
-# barely tested
-		return ( .rasterFromSAGAFile(x) )
+	if (!require(rgdal)) {
+		stop("Cannot create RasterLayer object from this file; perhaps you need to install rgdal first")
 	}
-	
-	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {
-		return ( .rasterFromCDF(x, objecttype, ...) )
+	test <- try ( r <- .rasterFromGDAL(x, band, objecttype), silent=TRUE )
+	if (class(test) == "try-error") {
+		stop("Cannot create a RasterLayer object from this file.")
+	} else {
+		return(r)
 	}
-	if ( (! fileext %in% c(".GRD", ".GRI")) & file.exists(x)) {
-		return ( .rasterFromGDAL(x, band, objecttype) )
-	}
-	grifile <- .setFileExtensionValues(x, 'raster')
-	grdfile <- .setFileExtensionHeader(x, 'raster')
-	if (file.exists( grdfile) ) {
-		if (file.exists( grifile)) {
-			return ( .rasterFromRasterFile(grdfile, band, objecttype) )
-		} else {
-			if (.isNetCDF(x)) {
-				return ( .rasterFromCDF(x, objecttype, ...) )
-			} else  {
-				test <- try ( r <- .rasterFromGDAL(x, band, objecttype), silent=TRUE )
-				if (class(test) == "try-error") {
-					stop("Cannot create RasterLayer object. There is a '.grd' file but no '.gri' file. It does not seem to be a netcdf or surfer6/7 file. What is it?")
-				} else {
-					return(r)
-				}
-			}
-		}
-	} else if (file.exists( grifile)) {
-		test <- try ( r <- .rasterFromGDAL(x, band, objecttype), silent=TRUE )
-			if (class(test) == "try-error") {
-				stop("Cannot create RasterLayer object. There is a '.gri' file but no '.grd' file. What is it?")
-			} else {
-				return(r)
-		}
-	}
-	stop(paste('file', x, 'does not exist'))
 }
 

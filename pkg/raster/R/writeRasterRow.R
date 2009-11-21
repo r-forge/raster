@@ -11,7 +11,7 @@
 	filetype <- .filetype(...)
 	filename <- .setFileExtensionHeader(filename, filetype)
 	raster@file@name <- filename
-	fnamevals <- .setFileExtensionValues(filename)
+	fnamevals <- .setFileExtensionValues(filename, filetype)
 	datatype <- .datatype(...)
 	dataType(raster) <- datatype
 	
@@ -44,7 +44,7 @@
 .stopRowWriting <- function(raster, doPB=FALSE) {
 	writeRasterHdr(raster, .driver(raster)) 
 	close(raster@file@con)
-	fnamevals <- .setFileExtensionValues(raster@file@name)
+#	fnamevals <- .setFileExtensionValues(raster@file@name)
 #	attr(raster@file, "con") <- file(fnamevals, "rb")
 	raster@data@haveminmax <- TRUE
 	if (raster@file@dtype == "INT") {

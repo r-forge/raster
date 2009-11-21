@@ -19,7 +19,7 @@
 
 	filename(x) <- filename
 	
-	fnamevals <- .setFileExtensionValues(filename)
+	fnamevals <- .setFileExtensionValues(filename, "raster")
 	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
 		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
@@ -41,7 +41,6 @@
 	filetype <- .filetype(...)  # not used
 	writeRasterHdr(x, filetype) 
 	close(x@file@con)
-	fnamevals <- .setFileExtensionValues(x@file@name)
 	x@data@haveminmax <- TRUE
 	if (x@file@dtype == "INT") {
 		x@data@min <- round(x@data@min)

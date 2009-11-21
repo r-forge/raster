@@ -5,7 +5,6 @@
 
 
 distance <- function(object, filename='', ...) {
-
 	test <- try( pts <- rasterToPoints(object)[,1:2] )
 	if (class(test) == "try-error") {
 		return( .distanceRows(object, filename=filename, ...) )

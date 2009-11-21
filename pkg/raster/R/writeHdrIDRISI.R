@@ -9,7 +9,6 @@
 
 	dtype <- .shortDataType(raster@file@datanotation)
 	dsize <- dataSize(raster)
-	# assuming SAGA supports BYTE, INTEGER (32), FLOAT
 	if (dataType(raster) == 'INT1U') {
 		pixtype <- 'byte'
 	} else if (dataType(raster) == 'INT2S') {

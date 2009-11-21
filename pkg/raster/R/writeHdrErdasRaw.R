@@ -9,7 +9,7 @@
 	ext(hdrfile) <- ".raw"
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
 	cat("IMAGINE_RAW_FILE\n", file = thefile)
-	cat("PIXEL_FILES ", .setFileExtensionValues(filename(raster)), "\n", file = thefile)
+	cat("PIXEL_FILES ", .setFileExtensionValues(raster@file@name), "\n", file = thefile)
 # this may not work. Some implementations may ignore this keyword and expect the pixelfile to have the same file name, no extension.		
 
 	cat("HEIGHT ",  nrow(raster), "\n", file = thefile)

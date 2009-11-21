@@ -12,7 +12,7 @@
  	filename <- trim(filename)
 	filename <- .setFileExtensionHeader(filename, filetype)
 	raster@file@name <- filename
-	fnamevals <- .setFileExtensionValues(filename)
+	fnamevals <- .setFileExtensionValues(filename, filetype)
 	
 	overwrite <- .overwrite(...)
 	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
@@ -70,7 +70,7 @@
 
 	attr(raster@file, "con") <- file(fnamevals, "wb")
 #	if (raster@data@content == 'sparse') { 
-#		raster <- .writeSparse(raster, overwrite=overwrite) 
+#		raster <- .writeSparse(raster, filename=filename, overwrite=overwrite) 
 #	} else {
 	dsize <- dataSize(raster@file@datanotation)
 	writeBin(raster@data@values , raster@file@con, size = dsize ) 

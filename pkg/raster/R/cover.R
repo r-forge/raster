@@ -35,7 +35,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	filename <- trim(filename	)
 	if (!canProcessInMemory(x, 4) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename(raster))	}						
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
 	
 

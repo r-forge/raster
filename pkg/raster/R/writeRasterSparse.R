@@ -4,12 +4,11 @@
 # Version 0.9
 # Licence GPL v3
 
-.writeSparse <- function(raster, overwrite=FALSE) {
+.writeSparse <- function(raster, filename, overwrite=FALSE) {
 
 #	raster@file@driver <- 'raster'
-	filename(raster) <- .setFileExtensionHeader(raster@file@name, 'raster')
-	if (!overwrite & file.exists(filename(raster))) {
-		stop(paste(filename(raster), "exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
+	if (!overwrite & file.exists(filename)) {
+		stop(filename, "exists. Use 'overwrite=TRUE' if you want to overwrite it") 
 	}
 
 	raster@data@values[is.nan(values(raster))] <- NA
@@ -23,7 +22,7 @@
 	}	
 	raster <- setMinMax(raster)
 
-	binraster <- .setFileExtensionValues(filename(raster))
+	binraster <- .setFileExtensionValues(raster@file@name, 'raster')
 
 	raster <- openConnection(raster)
 	writeBin( as.vector(dataIndices(raster)), raster@file@con, size = as.integer(4)) 
@@ -34,3 +33,4 @@
 	writeRasterHdr(raster) 
 	return(raster)
 } 
+

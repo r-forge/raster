@@ -9,7 +9,7 @@
 	c1 <- cellFromRowCol(object, startrow, 1)
 	c2 <- cellFromRowCol(object, endrow, ncol(object))
 	xyv <- cbind(xyFromCell(object, c1:c2), values(object))
-	return( subset(xyv, !(is.na(xyv[,3]))) )
+	return( subset(xyv, !(is.na(xyv[,3]))) ) 
 }
 
 

@@ -5,7 +5,7 @@
 
 
 .rasterFromRasterFile <- function(filename, band=1, type='RasterLayer') {
-	valuesfile <- .setFileExtensionValues(filename)
+	valuesfile <- .setFileExtensionValues(filename, "raster")
 	if (!file.exists( valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
 	}	
