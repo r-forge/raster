@@ -52,7 +52,6 @@ setMethod('summary', signature(object='RasterLayer'),
 		sumobj <- new("RasterLayerSummary")
 		sumobj@ncell <- ncell(object)
 		sumobj@dataContent <- dataContent(object) 
-		sumobj@NAs <- NA
 		if ( sumobj@dataContent == "all") {
 			sumobj@NAs <- sum(is.na(values(object)))
 			sumobj@values <- as.matrix( summary(values(object)) )

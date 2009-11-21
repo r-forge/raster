@@ -28,10 +28,11 @@
 #  not tested
 			return ( .rasterFromIDRISIFile(x) )
 		}
-		if ( fileext %in% c(".SGRD", ".SDAT") ) {
+	}
+	
+	if ( fileext %in% c(".SGRD", ".SDAT") ) {
 # barely tested
-			return ( .rasterFromSAGAFile(x) )
-		}
+		return ( .rasterFromSAGAFile(x) )
 	}
 	
 	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {

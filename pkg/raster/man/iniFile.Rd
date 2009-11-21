@@ -2,10 +2,10 @@
 
 \alias{readIniFile}
 
-\title{Read an ini file}
+\title{Read a .ini file}
 
 \description{
-This function reads a \code{'.ini'} files. These are text file databases that are orginized in [sections] pairs of "name = value".
+This function reads  \code{'.ini'}  files. These are text file databases that are organized in [sections] containing pairs of "name = value".
 }
 
 \usage{
@@ -14,17 +14,17 @@ readIniFile(filename, token='=', commenttoken=';')
 
 \arguments{
   \item{filename}{filename of the .ini file}
-  \item{token}{Character. The character that seperates the "name" from the "value"}
+  \item{token}{Character. The character that seperates the "name" (variable name) from the "value"}
   \item{commenttoken}{Character. This token and everything that follows on the same line is considered a 'comment' that is not for machine consumption and is ignored in processing} 
 }
 
 \details{
-This function allows for using inistrings that have "=" as part of a value (but the token cannot be part of the 'name' of a variable!)
+This function allows for using inistrings that have "=" as part of a value (but the token cannot be part of the 'name' of a variable!). Sections can be missing. 
 }
 
 
 \value{
-	a n*3 matrix of characters with columns: section, name, value
+A n*3 matrix of characters with columns: section, name, value
 }
 
 \author{Robert J. Hijmans}
