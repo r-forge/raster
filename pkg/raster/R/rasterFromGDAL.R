@@ -57,7 +57,7 @@
 	
 	
 	datatype <- "FLT4S"
-	try ( datatype <- .getRasterDType ( attr(gdalinfo, 'df')[1] ) )
+	try ( datatype <- .getRasterDType ( attr(gdalinfo, 'df')[1] ), silent=TRUE )
 	
 	dataType(x) <- datatype
 	
