@@ -7,7 +7,7 @@
 \title{Distance}
 
 \description{
-The function calculates the distance to cells of a RasterLayer. Function \code{distance} computes the distance for all cells that are \code{NA} to the nearest cell that is not \code{NA}.
+The function calculates the distance to cells of a RasterLayer. Function \code{distance} computes the distance, for all cells that are \code{NA}, to the nearest cell that is not \code{NA}.
 function \code{distanceFromPoints} computes the distance for all cells to the nearest point in a set of points.
  
 The distance unit is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically meters) when it is projected.

@@ -13,7 +13,6 @@
 }
 
 
-
 .distanceRows <- function(object, filename, ...) {
 
 	nrows <- min(100, floor(nrow(object)/2))  # arbitrary right now...
@@ -68,7 +67,7 @@
 					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, format='raster')
 				} else {
 					rst2 <- readRow(rst2, r)
-					vals <- pmin(values(rst2), vals)
+					vals <- pmin(values(rst2), vals, na.rm = TRUE)
 					rst1 <- setValues(rst1, vals, r)
 					rst1 <- writeRaster(rst1, filename(rst1), datatype=datatype, overwrite=TRUE, format='raster')			
 				}
@@ -80,7 +79,10 @@
 		rst1 <- tmp
 	}	
 	pbClose(pb)
-    return(rst2)
-	return( saveAs(rst2, filename=filename, format=.filetype(...), datatype=datatype, overwrite=overwrite, progress=.progress(...)) )
+	if (filename=='') {  
+		return(rst2)
+	} else {
+		return( saveAs(rst2, filename=filename, ...) )
+	}
 }
 

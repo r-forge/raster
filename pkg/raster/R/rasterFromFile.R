@@ -26,7 +26,7 @@
 		if ( file.exists( grdfile) & file.exists( grifile)) {
 			return ( .rasterFromRasterFile(grdfile, band, objecttype) )
 		} else {
-			stop('file:', x, 'does not exist')
+			stop('file: ', x, ' does not exist')
 		}
 	}
 
@@ -56,11 +56,10 @@
 			return ( .rasterFromGenericFile(x, ...) )
 		}
 		if ( fileext %in% c(".RST", ".RDC") ) {
-#  not tested
+#  not tested much
 			return ( .rasterFromIDRISIFile(x) )
 		}
 	}
-	
 	if (!require(rgdal)) {
 		stop("Cannot create RasterLayer object from this file; perhaps you need to install rgdal first")
 	}
