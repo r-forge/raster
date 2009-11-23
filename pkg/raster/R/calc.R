@@ -27,9 +27,9 @@ function(x, fun, filename='', ...) {
 		if (!canProcessInMemory(x, 4) & filename == '') {
 			filename <- rasterTmpFile()
 		} else {
-			if ( dataContent(x) != 'all') {
-				x <- readAll(x)
-			}
+		#	if ( dataContent(x) != 'all') {
+		#		x <- readAll(x)
+		#	}
 		}
 	}
 	
