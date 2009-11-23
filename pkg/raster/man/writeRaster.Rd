@@ -79,16 +79,13 @@ Supported file types include:
 	\tab \bold{File type} \tab \bold{Long name} \tab \bold{Multiband support} \cr
     \tab \code{raster} \tab 'Native' raster package format \tab Yes \cr
     \tab \code{ascii}  \tab ESRI Ascii \tab No \cr
+    \tab \code{SAGA}  \tab SAGA GIS \tab No \cr
+    \tab \code{IDRISI}  \tab IDRISI \tab No \cr
     \tab \code{CDF}  \tab netCDF (requires RNetCDF) \tab pending \cr
-    \tab \code{GTiff}  \tab GeoTiff (requires rgdal) \tab pending  \cr
-    \tab \code{ENVI}   \tab ENVI .hdr Labelled \tab pending  \cr
-    \tab \code{EHdr}   \tab ESRI .hdr Labelled \tab pending  \cr
-    \tab \code{ERS}  \tab ERMapper .ers Labelled \tab pending  \cr
-    \tab \code{HFAErdas}  \tab Imagine Images (.img) \tab pending  \cr
-    \tab \code{ILWIS}   \tab ILWIS Raster Map \tab pending  \cr
-    \tab \code{PAux}   \tab PCI .aux Labelled \tab pending  \cr
-    \tab \code{PCIDSK}   \tab PCIDSK Database File \tab pending  \cr
-    \tab \code{RST}  \tab  Idrisi Raster A.1 \tab  No  \cr
+    \tab \code{GTiff}  \tab GeoTiff (requires rgdal) \tab Yes  \cr
+    \tab \code{ENVI}   \tab ENVI .hdr Labelled \tab Yes  \cr
+    \tab \code{EHdr}   \tab ESRI .hdr Labelled \tab Yes  \cr
+    \tab \code{HFA}  \tab Erdas Imagine Images (.img) \tab Yes  \cr
 }
 }
 
