@@ -38,8 +38,12 @@ setMethod('predict', signature(object='RasterStackBrick'),
 			filename <- rasterTmpFile()
 			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		} 
-		v <- vector()
 
+		if (filename == '') {
+			v <- matrix(NA, ncol=nrow(predrast), nrow=ncol(predrast))
+		} 
+
+		napred <- rep(NA, ncol(predrast))
 		
 		pb <- pbCreate(nrow(object), type=.progress(...))
 
@@ -52,24 +56,35 @@ setMethod('predict', signature(object='RasterStackBrick'),
 					rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
 				}
 			}
-			predv <- as.vector( as.numeric ( predict(model, rowvals, ...) ))
 			
-			if (length(predv) != nrow(rowvals)) {
+			# patch for predict.gam
+			# perhaps speeds it up too?
+			if ( sum(!is.na(rowvals)) == 0 ) {
+				
+				predv <- napred
+				
+			} else {
+			
+				predv <- as.vector( as.numeric ( predict(model, rowvals, ...) ))
+			
+				if (length(predv) != nrow(rowvals)) {
 				# perhaps no prediction for rows with NA ? 
-				rowvals <- na.omit( cbind(1:nrow(rowvals), rowvals) )
-				indices <- rowvals[,1]
-				if (length(indices) == length(predv)) {
-					pr <- 1:ncol(object)
-					pr[] <- NA
-					pr[indices] <- predv
-					predv <- pr
-				} else {
-					stop('length of predict vector does not match lenght of input vectors')
+				# this was a problem with predict.rf, now fixed
+					rowvals <- na.omit( cbind(1:nrow(rowvals), rowvals) )
+					indices <- rowvals[,1]
+					if (length(indices) == length(predv)) {
+						pr <- 1:ncol(object)
+						pr[] <- NA
+						pr[indices] <- predv
+						predv <- pr
+					} else {
+						stop('length of predict vector does not match lenght of input vectors')
+					}
 				}
 			}
 			
 			if (filename == '') {
-				v <- c(v, predv)
+				v[,r] <- predv
 			} else {
 				predrast <- setValues(predrast, predv, r)
 				predrast <- writeRaster(predrast, filename=filename, ...)
@@ -79,7 +94,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		pbClose(pb)
 		
 		if (filename == '') {
-			predrast <- setValues(predrast, v)
+			predrast <- setValues(predrast, as.vector(v))
 		}
 		return(predrast)
 	}
