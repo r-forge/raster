@@ -40,10 +40,13 @@
 	}
 	for (i in rev(seq(along=x))) {
 		if (dataContent(x[[i]]) != 'all'  &  dataSource(x[[i]]) == 'ram' ) {
-			if (length(x) > 1 | keepone==FALSE ) {
-				x <- x[[-i]]
+			if (length(x) > 1 ) {
+				x <- x[[-i]] 
 				warning('RasterLayer with no data ignored')
-			} 
+			} else if (keepone==FALSE ) {
+				x <- list()
+				warning('RasterLayer with no data ignored')
+			}
 		} 
 	}		
 	return(x)
