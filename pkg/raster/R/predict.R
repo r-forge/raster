@@ -60,9 +60,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 			# patch for predict.gam
 			# perhaps speeds it up too?
 			if ( sum(!is.na(rowvals)) == 0 ) {
-				
 				predv <- napred
-				
 			} else {
 			
 				predv <- as.vector( as.numeric ( predict(model, rowvals, ...) ))
@@ -78,7 +76,7 @@ setMethod('predict', signature(object='RasterStackBrick'),
 						pr[indices] <- predv
 						predv <- pr
 					} else {
-						stop('length of predict vector does not match lenght of input vectors')
+						stop('length of predict vector does not match lenght of input vectors; please submit a bug report')
 					}
 				}
 			}
@@ -112,7 +110,9 @@ setMethod('predict', signature(object='RasterLayer'),
 			filename(outRaster) <- filename
 			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		} 
-		v <- vector()
+		if (filename == '') {
+			v <- matrix(NA, ncol=nrow(predrast), nrow=ncol(predrast))
+		} 
 
 		arow <- 1:ncol(object)
 		
@@ -122,7 +122,7 @@ setMethod('predict', signature(object='RasterLayer'),
 			xy <- as.data.frame(xyFromCell(object, arow + (r-1) * ncol(object)) )
 			predv <- as.vector( predict(model, xy, ...) )
 			if (filename == '') {
-				v <- c(v, predv)
+				v[,r] <- predv
 			} else {
 				predrast <- setValues(predrast, predv, r)			
 				predrast <- writeRaster(predrast, filename=filename, ...)
@@ -131,7 +131,7 @@ setMethod('predict', signature(object='RasterLayer'),
 		}
 		pbClose(pb)
 		if (filename == '') {
-			predrast <- setValues(predrast, v)
+			predrast <- setValues(predrast, as.vector(v))
 		}
 		return(predrast)
 	}

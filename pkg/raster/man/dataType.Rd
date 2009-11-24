@@ -6,8 +6,10 @@
 \title{Data type }
 
 \description{
-Get the datatype of a RasterLayer object. The datatype determines how values are stored on or written to disk. You set the datatype of a file, you can give a 'datatype' argument to the functions that write values to disk. 
+Get the datatype of a RasterLayer object. The datatype determines the interpretation of values written to disk. 
 Changing the datatype of a Raster* object does not directly affect the way they are stored in memory; but it does affect how values are read from file (unless values are read via rgdal).
+If you change the datatype of a RasterLayer and then read values from disk these may be completely wrong, so only do this for debugging or when the information in the header file was wrong.
+To set the datatype of a new file, you can give a 'datatype' argument to the functions that write values to disk (e.g. writeRaster). 
 }
 
 \usage{
