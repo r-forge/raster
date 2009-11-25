@@ -51,28 +51,37 @@ a RasterLayer object
 interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring values associated wtih the first argument ('object')
 }
 
-\seealso{ \code{\link[raster]{predict}} }
+\seealso{ \code{\link[raster]{predict}}, \code{\link[gstat]{predict.gstat}}, \code{\link[fields]{Tps}} }
 
 \author{ Robert J. Hijmans}
 
 \examples{
 ## Thin plate spline interpolation with x and y only
+#require(fields)
 #r <- raster(system.file("external/test.ag", package="sp"))
 #ra <- aggregate(r, 10)
-#require(fields)
 #tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), values(ra) )
 #p <- interpolate(r, tps)
 #p[is.na(r)] <- NA
 #plot(p)
 ## 
 
-
-#library(gstat)
+##gstat examples
+#require(gstat)
+## inverse distance weighted interpolation with gstat
 #r <- raster(system.file("external/test.ag", package="sp"))
 #r <- raster(r)
 #data(meuse)
 #mg <- gstat(id = "zinc", formula = zinc ~ 1, locations = ~ x + y, data = meuse, nmax = 7, set = list(idp = .5))
 #z <- interpolate(r, mg)
+#z[is.na(r)] <- NA
+#
+## kriging
+#coordinates(meuse) = ~x+y
+#v <- variogram(log(zinc)~1, meuse)
+#m <- fit.variogram(v, vgm(1, "Sph", 300, 1))
+#g <- gstat(NULL, "log.zinc", log(zinc)~1, meuse, model = m)
+#x <- interpolate(r, g)
 }
 
 \keyword{methods}

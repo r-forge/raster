@@ -6,12 +6,12 @@ if (!isGeneric("interpolate")) {
 
 
 setMethod('interpolate', signature(object='Raster'), 
-	function(object, model, filename="", newdata=NULL, ...) {
+	function(object, model, filename="", newdata=NULL, index=1, ...) {
 		if (is.null(newdata)) { 
 			object <- raster(object)
 		} else { 
 			object <- newdata 
 		}
-		predict(object, model, filename, xy=TRUE, ...)
+		predict(object, model, filename, xy=TRUE, index=index, ...)
 	}
 )

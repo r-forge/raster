@@ -99,7 +99,7 @@ setMethod('predict', signature(object='Raster'),
 				}
 				if (xy) {
 					p <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
-					rowvals <- cbind(x=p[,1], y=p[,2], rowvals)
+					rowvals <- cbind(data.frame( x=p[,1], y=p[,2]), rowvals) 
 				}
 			} 
 			# patch for predict.gam
@@ -117,9 +117,15 @@ setMethod('predict', signature(object='Raster'),
 					} else { predv <- predict(model, rowvals, debug.level=0, ...) }
 					if (sp) { predv <- predv@data[,index] }
 					else { predv <- predv[,index+2] }
+				} else if (inherits(model, "Krig")) {  
+					rowv <- na.omit(rowvals)
+					predv <- napred
+					if (nrow(rowv) > 0) {
+						naind <- as.vector(attr(rowv, "na.action"))
+						predv[-naind] <- predict(model, rowv)
+					}
 				} else {
-					predv <- predict(model, rowvals, ...) 
-					predv <- as.vector( as.numeric ( predv ))
+					predv <- predict(model, rowvals)			
 				}
 			
 				if (length(predv) != nrow(rowvals)) {
