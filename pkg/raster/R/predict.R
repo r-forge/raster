@@ -8,8 +8,8 @@ if (!isGeneric("predict")) {
 		standardGeneric("predict"))
 }	
 
-setMethod('predict', signature(object='RasterStackBrick'), 
-	function(object, model, filename="", ...) {
+setMethod('predict', signature(object='Raster'), 
+	function(object, model, filename="", xy=FALSE, ...) {
 		predrast <- raster(object)
 		filename <- trim(filename)
 			
@@ -44,19 +44,39 @@ setMethod('predict', signature(object='RasterStackBrick'),
 		} 
 
 		napred <- rep(NA, ncol(predrast))
+		xyOnly <- FALSE
+		if (xy) { 
+			arow <- 1:ncol(object) 
+			if (class(object) == 'RasterStack') {
+				if (nlayers(object)==0) { xyOnly <- TRUE }
+			} else {
+				if (dataSource(object) == 'ram') {
+					if (dataContent(object) != 'all') {
+						xyOnly <- TRUE 
+					}
+				}				
+			}
+		}
+		lns <- layerNames(object)
 		
 		pb <- pbCreate(nrow(object), type=.progress(...))
-
+		
+		
 		for (r in 1:nrow(object)) {
-			rowvals <- getValues(object, r)
-			rowvals <- as.data.frame(rowvals)
-			colnames(rowvals) <- layerNames(object)
-			if (haveFactor) {
-				for (i in 1:length(f)) {
-					rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
+			if (xyOnly) {
+				rowvals <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
+			} else {
+				rowvals <- as.data.frame( getValues(object, r) )
+				colnames(rowvals) <- lns
+				if (haveFactor) {
+					for (i in 1:length(f)) {
+						rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
+					}
 				}
-			}
-			
+				if (xy) {
+					rowvals <- cbind(rowvals, xyFromCell(predrast, arow + (r-1) * ncol(predrast)) )
+				}
+			} 
 			# patch for predict.gam
 			# perhaps speeds it up too?
 			if ( sum(!is.na(rowvals)) == 0 ) {
@@ -98,42 +118,4 @@ setMethod('predict', signature(object='RasterStackBrick'),
 	}
 )
 
-
-
-setMethod('predict', signature(object='RasterLayer'), 
-	function(object, model, filename="",  ...) {
-		predrast <- raster(object)
-		filename <- trim(filename)
-
-		if (!canProcessInMemory(predrast) && filename == '') {
-			filename <- rasterTmpFile()
-			filename(outRaster) <- filename
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
-		} 
-		if (filename == '') {
-			v <- matrix(NA, ncol=nrow(predrast), nrow=ncol(predrast))
-		} 
-
-		arow <- 1:ncol(object)
-		
-		pb <- pbCreate(nrow(object), type=.progress(...))
-
-		for (r in 1:nrow(object)) {
-			xy <- as.data.frame(xyFromCell(object, arow + (r-1) * ncol(object)) )
-			predv <- as.vector( predict(model, xy, ...) )
-			if (filename == '') {
-				v[,r] <- predv
-			} else {
-				predrast <- setValues(predrast, predv, r)			
-				predrast <- writeRaster(predrast, filename=filename, ...)
-			}
-			pbStep(pb, r) 
-		}
-		pbClose(pb)
-		if (filename == '') {
-			predrast <- setValues(predrast, as.vector(v))
-		}
-		return(predrast)
-	}
-)
 

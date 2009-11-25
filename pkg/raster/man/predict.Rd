@@ -3,15 +3,12 @@
 \docType{methods}
 
 \alias{predict}
-\alias{predict,RasterLayer-method}
-\alias{predict,RasterStackBrick-method}
+\alias{predict,Raster-method}
 
 \title{Model predictions}
 
 \description{
-Make a RasterLayer with a prediction based on a a fitted model object. If only x and y are independent variables provide a RasterLayer for which you want predictions.
-
-If there are additional independent variables, provide a RasterStack with these. The layerNames in the RasterStack should match those expected by the model. This will be the case if the RasterStack was used (via xyValues) to obtain the values to fit the model. Any type of model (e.g. glm) for which a predict method has been implemented can be used. 
+Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should match those expected by the model. This will be the case if the RasterStack was used (via xyValues) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. 
 }
 
 \usage{
@@ -20,24 +17,31 @@ predict(object, ...)
 
 
 \arguments{
-  \item{object}{a RasterStack object}
+  \item{object}{a RasterStack, RasterBrick or RasterLayer object}
   \item{...}{Additional arguments. See below, under Methods}  
 }
 
 \section{Methods}{
 \describe{
  
-\code{predict(object, ...,  model, filename='', overwrite=FALSE, format='raster', datatype='FLT4S')}
+\code{predict(object, model, filename='', xy=FALSE, ...)}
   
 \tabular{rll}{  
-  \tab  \code{object} \tab a RasterStack or RasterLayer object \cr
+  \tab  \code{object} \tab a RasterStack, RasterBrick or RasterLayer object \cr
   \tab  \code{model}  \tab A fitted model\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
-  \tab  \code{overwrite}  \tab Logical to indicate whether an existing output file should be overwritten \cr
-  \tab  \code{format}  \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab  \code{datatype}  \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
-  \tab  \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+  \tab  \code{xy}  \tab Logical. If \code{TRUE}, 'x' and 'y' (in lowercase), i.e. the location of each cell, are added to the predictor variables (in object) \cr
+  \tab  \code{...}  \tab Additional arguments \cr
 }
+
+
+The following additional arguments can be passed, to replace default values
+\tabular{rll}{
+  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
+  \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
+ }
 
 }}
 
@@ -59,7 +63,9 @@ logo <- addLayer(logo, r)
 layerNames(logo) <- c('band1', 'band2', 'band3', 'interaction')
 
 #get presence and absence points
-presence <- matrix(c(48.243420, 48.243420, 47.985820, 52.880230, 49.531423, 46.182616, 54.168232, 69.624263, 83.792291, 85.337894, 74.261072, 83.792291, 95.126713, 84.565092, 66.275456, 41.803408, 25.832176, 3.936132, 18.876962, 17.331359,7.048974, 13.648543, 26.093446, 28.544714, 39.104026, 44.572240, 51.171810, 56.262906, 46.269272, 38.161230, 30.618865, 21.945145, 34.390047, 59.656971, 69.839163, 73.233228, 63.239594, 45.892154, 43.252326, 28.356155), ncol=2)
+presence <- matrix(c(48.243420, 48.243420, 47.985820, 52.880230, 49.531423, 46.182616, 54.168232, 69.624263, 83.792291, 85.337894, 74.261072, 83.792291, 95.126713, 84.565092, 66.275456, 41.803408, 25.832176,
+ 3.936132, 18.876962, 17.331359,7.048974, 13.648543, 26.093446, 28.544714, 39.104026, 44.572240, 51.171810, 56.262906, 46.269272, 38.161230, 30.618865, 21.945145, 34.390047, 59.656971, 69.839163, 73.233228, 
+ 63.239594, 45.892154, 43.252326, 28.356155), ncol=2)
 # random absence
 absence <- cbind(runif(50)*(xmax(logo)-xmin(logo))+xmin(logo), runif(50)*(ymax(logo)-ymin(logo))+ymin(logo))
 
@@ -85,17 +91,6 @@ points(absence, bg='red', pch=21)
 # model <- randomForest(formula, data=data.frame(v))
 # r2 <- predict(logo, type='response', model, progress='text')
 # note the additional argument "type='response'" that is passed to predict.randomForest
-
-
-## Thin plate spline interpolation with x and y only
-#r <- raster(system.file("external/test.ag", package="sp"))
-#ra <- aggregate(r, 10)
-#require(fields)
-#tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), values(ra) )
-#p <- predict(r, tps)
-#p[is.na(r)] <- NA
-## 
-
 }
 
 \keyword{methods}
