@@ -64,30 +64,13 @@ plot(s)
 
 The command \verb@r <- raster(filename)@ creates a raster object describing the data on file, but not reading the actual raster cell values. \verb@readRow@ reads the values of a specified row of a raster file into memory. \verb@readAll@ reads all values, but this may not be possible if the file is very large. \verb@values(r)@ returns the values that are currently in memory (i.e. those of row 50). \verb@s <- sqrt(r) - r + 1@ is an example of raster algebra. \verb@s@ is a new RasterLayer, its values are the square root of r minus 5. The computation was done for the entire raster, not just for the values that were in memory. The new values are available in memory and can be inspected via \verb@plot@, @values(r)@, or via indexing. 
 
-\section{Indexing}
+\section{Classes}
 
-The values of a RasterLayer are normally repersented as a (one dimensional) vector, starting in the upper left corner and then increasing to the right and then down row by row from left to right untill the last cell in the lower-right corner. Values can be inspected by using the standard x[] notation. You can also this notation to replace values, but only when the whole dataset can be loaded into memory. But note that if you replace a value in a RasterLayer, the connection to the original file is lost.
+\subsection{RasterLayer}
+\subsection{RasterStack}
+A RasterStack is a collection of RasterLayer objects with the same spatial extent and resolution.
+\subsection{RasterBrick}
 
-
-<<raster-3>>=
-r <- raster(system.file("external/test.ag", package="sp"))
-r[1]
-dataContent(r)
-filename(r)
-r[1] <- 5
-dataContent(r)
-filename(r)
-@
-
-Values can also be inspected using a two-dimensional notation. To do so you need to use double brackets.
-
-<<raster-4>>=
-r[[1,1]]
-r[[1:3,1:3]]
-r[[75:90, 15]]
-@
-
-\section{Low level functions}
 
 
 \section{High level functions}
@@ -120,24 +103,50 @@ s[!r] <- 5
 s[s == 5] <- runif(length(s[s == 5]))
 @
 
+\section{Indexing}
+
+The values of a RasterLayer are normally repersented as a (one dimensional) vector, starting in the upper left corner and then increasing to the right and then down row by row from left to right untill the last cell in the lower-right corner. Values can be inspected by using the standard x[] notation. You can also this notation to replace values, but only when the whole dataset can be loaded into memory. But note that if you replace a value in a RasterLayer, the connection to the original file is lost.
+
+
+<<raster-3>>=
+r <- raster(system.file("external/test.ag", package="sp"))
+r[1]
+dataContent(r)
+filename(r)
+r[1] <- 5
+dataContent(r)
+filename(r)
+@
+
+Values can also be inspected using a two-dimensional notation. To do so you need to use double brackets.
+
+<<raster-4>>=
+r[[1,1]]
+r[[1:3,1:3]]
+r[[75:90, 15]]
+@
+
+
+\section{Reading and writing files}
+
+
+\subsection{File format}
+Raster can read most, and write several raster file formats, via the rgdal package. However, it directly reads and writes a native 'rasterfile' format. A rasterfile consists of two files: a binary sequential data file and a text header file. The header file is of the "windows .ini" type. When reading, you do not have to specify the file format, but you do need to do that when wriring (except when using the default native format). This file format is also used in DIVA-GIS (\url{http://www.diva-gis.org/}).
+
+\subsection{Large files}
+The raster package can work with extremely large files because it does not load the files into memory. When a RasterLayer object is created form a file, the object stores some information about the data on disk (number of rows and columns, spatial extent), and it contains a pointer to that file, to read parts of the data as needed. In computations such as raster algebra or the 'higher level functions', data will normally be read in chunks, processed, and written to disk again. If there is no output filename specified (or if that is not possible such as is the case with raster algebra), the results will be written to a temporary file. If you want to keep that file you should move it another location, e.g. using the copyRasterFile or moveRasterFile functions. At the start of each session, the raster package will attempt to delete temporary files it has created in previous sessions. 
+
+
 
 \section{Session options}
 
 
-
-\section{Large files}
-
-The raster package can work with extremely large files because it does not load the files into memory. When a RasterLayer object is created form a file, the object stores some information about the data on disk (number of rows and columns, spatial extent), and it contains a pointer to that file, to read parts of the data as needed. In computations such as raster algebra or the 'higher level functions', data will normally be read in chunks, processed, and written to disk again. If there is no output filename specified (or if that is not possible such as is the case with raster algebra), the results will be written to a temporary file. If you want to keep that file you should move it another location, e.g. using the copyRasterFile or moveRasterFile functions. At the start of each session, the raster package will attempt to delete temporary files it has created in previous sessions. 
+\section{Maps and other graphics}
 
 
-\section{File format}
 
-Raster can read most, and write several raster file formats, via the rgdal package. However, it directly reads and writes a native 'rasterfile' format. A rasterfile consists of two files: a binary sequential data file and a text header file. The header file is of the "windows .ini" type. When reading, you do not have to specify the file format, but you do need to do that when wriring (except when using the default native format). This file format is also used in DIVA-GIS (\url{http://www.diva-gis.org/}).
+\section{Generic functions implemented for Raster* objects}
 
-
-\section{RasterStack}
-
-A RasterStack is a collection of RasterLayers with the same spatial extent and resolution.
 
 
 \section{Coercion to sp objects}
