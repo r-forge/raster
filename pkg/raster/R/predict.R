@@ -15,14 +15,14 @@ setMethod('predict', signature(object='Raster'),
 			
 		v <- (attr(model$terms, "factors"))
 		varnames <- attr(v, "dimnames")[[2]]
-		stacknames <- layerNames(object)
+		lyrnames <- layerNames(object)
 		
-		if (length( varnames[(varnames %in% stacknames)] ) != length(varnames)) {
-			stop('variable in model that is not in Raster* object: \nIn model: ', paste(varnames, collapse='; '), '\n', 'In Raster object: ', paste(stacknames, collapse='; '))
+		if (length( varnames[(varnames %in% lyrnames)] ) != length(varnames)) {
+			stop('variable in model that is not in Raster* object: \nIn model: ', paste(varnames, collapse='; '), '\n', 'In Raster object: ', paste(lyrnames, collapse='; '))
 		}
 
-		if ( length( unique(stacknames[(stacknames %in% varnames)] )) != length(stacknames[(stacknames %in% varnames)] )) {
-			stop('duplicate names in Raster* object: ', stacknames)
+		if ( length( unique(lyrnames[(lyrnames %in% varnames)] )) != length(lyrnames[(lyrnames %in% varnames)] )) {
+			stop('duplicate names in Raster* object: ', lyrnames)
 		}
 		
 			
@@ -67,8 +67,19 @@ setMethod('predict', signature(object='Raster'),
 				}				
 			}
 		}
-		lns <- layerNames(object)
 		
+		if (inherits(model, "gstat")) { 
+			gstatmod <- TRUE 
+			if (!is.null(model$locations) && inherits(model$locations, "formula"))  {
+				# should be ~x + y  ; need to check if it is ~lon + lat; or worse ~y+x
+				sp <- FALSE
+			} else {
+				sp <- TRUE
+			}
+		} else { 
+			gstatmod <- FALSE 
+		}
+
 		pb <- pbCreate(nrow(object), type=.progress(...))
 		
 		#print(xy)
@@ -76,19 +87,19 @@ setMethod('predict', signature(object='Raster'),
 		
 		for (r in 1:nrow(object)) {
 			if (xyOnly) {
-				xy <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
-				rowvals <- data.frame(x=xy[,1], y=xy[,2])
+				p <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
+				rowvals <- data.frame(x=p[,1], y=p[,2])
 			} else {
 				rowvals <- as.data.frame( getValues(object, r) )
-				colnames(rowvals) <- lns
+				colnames(rowvals) <- lyrnames
 				if (haveFactor) {
 					for (i in 1:length(f)) {
 						rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
 					}
 				}
 				if (xy) {
-					xy <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
-					rowvals <- cbind(x=xy[,1], y=xy[,2], rowvals)
+					p <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
+					rowvals <- cbind(x=p[,1], y=p[,2], rowvals)
 				}
 			} 
 			# patch for predict.gam
@@ -97,7 +108,21 @@ setMethod('predict', signature(object='Raster'),
 				predv <- napred
 			} else {
 			
-				predv <- as.vector( as.numeric ( predict(model, rowvals, ...) ))
+				if (gstatmod) { 
+					if (sp) { 
+						row.names(p) <- 1:nrow(p)
+						rowvals <- SpatialPointsDataFrame(coords=p, data = rowvals, proj4string = projection(predrast, asText = FALSE))
+					}
+					predv <- predict(model, rowvals, ...) 
+					if (sp) {
+						predv <- predv@data[,1]
+					} else {
+						predv <- predv[,3] 
+					}
+				} else {
+					predv <- predict(model, rowvals, ...) 
+					predv <- as.vector( as.numeric ( predv ))
+				}
 			
 				if (length(predv) != nrow(rowvals)) {
 				# perhaps no prediction for rows with NA ? 

@@ -30,7 +30,7 @@ predict(object, ...)
   \tab  \code{object} \tab a RasterStack, RasterBrick or RasterLayer object \cr
   \tab  \code{model}  \tab A fitted model\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
-  \tab  \code{xy}  \tab Logical. If \code{TRUE}, 'x' and 'y' (in lowercase), i.e. the location of each cell, are added to the predictor variables (in object) \cr
+  \tab  \code{xy}  \tab Logical. If \code{TRUE}, 'x' and 'y' (in lowercase), i.e. the location of each cell, are added to the predictor variables (in object); see \link[raster]{predict} \cr
   \tab  \code{...}  \tab Additional arguments \cr
 }
 
@@ -91,19 +91,6 @@ points(absence, bg='red', pch=21)
 # model <- randomForest(formula, data=data.frame(v))
 # r2 <- predict(logo, type='response', model, progress='text')
 # note the additional argument "type='response'" that is passed to predict.randomForest
-
-
-## Thin plate spline interpolation with x and y only
-#r <- raster(system.file("external/test.ag", package="sp"))
-#ra <- aggregate(r, 10)
-#require(fields)
-# xy <- xyFromCell(ra, 1:ncell(ra))
-#tps <- Tps(as.data.frame(xy, values(ra)))
-#p <- raster(r) 
-#p <- predict(p, tps)
-#p[is.na(r)] <- NA
-#plot(p)
-# 
 
 }
 
