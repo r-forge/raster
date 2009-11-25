@@ -56,15 +56,28 @@ setMethod('predict', signature(object='Raster'),
 					}
 				}				
 			}
+		} else {
+			if (class(object) == 'RasterStack') {
+				if (nlayers(object)==0) { stop('empty RasterStack') }
+			} else {
+				if (dataSource(object) == 'ram') {
+					if (dataContent(object) != 'all') {
+						{ stop('No values associated with this Raster object') }
+					}
+				}				
+			}
 		}
 		lns <- layerNames(object)
 		
 		pb <- pbCreate(nrow(object), type=.progress(...))
 		
+		#print(xy)
+		#print(xyOnly)
 		
 		for (r in 1:nrow(object)) {
 			if (xyOnly) {
-				rowvals <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
+				xy <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
+				rowvals <- data.frame(x=xy[,1], y=xy[,2])
 			} else {
 				rowvals <- as.data.frame( getValues(object, r) )
 				colnames(rowvals) <- lns
@@ -74,7 +87,8 @@ setMethod('predict', signature(object='Raster'),
 					}
 				}
 				if (xy) {
-					rowvals <- cbind(rowvals, xyFromCell(predrast, arow + (r-1) * ncol(predrast)) )
+					xy <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
+					rowvals <- cbind(x=xy[,1], y=xy[,2], rowvals)
 				}
 			} 
 			# patch for predict.gam

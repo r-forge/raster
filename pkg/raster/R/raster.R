@@ -57,6 +57,7 @@ setMethod('raster', signature(x='RasterStack'),
 			dindex <- max(1, min(nlayers(x), index))
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
 			r <- x@layers[[dindex]]
+			layerNames(r) <- layerNames(x)[index]
 		} else {
 			r <- raster(extent(x))
 			rowcol(r) <- c(nrow(x), ncol(x))
@@ -75,6 +76,7 @@ setMethod('raster', signature(x='RasterBrick'),
 			if (filename(x) != '') {
 				if (dindex != index) { warning(paste("index was changed to", dindex))}
 				r <- raster(filename(x), band=dindex)
+				layerNames(r) <- layerNames(x)[index]
 			} else {
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))	
 				if (dataContent(x) == 'all') {

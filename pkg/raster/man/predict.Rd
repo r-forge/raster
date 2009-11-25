@@ -8,7 +8,7 @@
 \title{Model predictions}
 
 \description{
-Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should match those expected by the model. This will be the case if the RasterStack was used (via xyValues) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. 
+Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should exactely match those expected by the model. This will be the case if the RasterStack was used (via xyValues) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. If you have 'x' and 'y' as independent variables (i.e. the location of grid cells, xy=TRUE.
 }
 
 \usage{
@@ -63,9 +63,9 @@ logo <- addLayer(logo, r)
 layerNames(logo) <- c('band1', 'band2', 'band3', 'interaction')
 
 #get presence and absence points
-presence <- matrix(c(48.243420, 48.243420, 47.985820, 52.880230, 49.531423, 46.182616, 54.168232, 69.624263, 83.792291, 85.337894, 74.261072, 83.792291, 95.126713, 84.565092, 66.275456, 41.803408, 25.832176,
- 3.936132, 18.876962, 17.331359,7.048974, 13.648543, 26.093446, 28.544714, 39.104026, 44.572240, 51.171810, 56.262906, 46.269272, 38.161230, 30.618865, 21.945145, 34.390047, 59.656971, 69.839163, 73.233228, 
- 63.239594, 45.892154, 43.252326, 28.356155), ncol=2)
+presence <- matrix(c(48.243420, 48.243420, 47.985820, 52.880230, 49.531423, 46.182616, 54.168232, 69.624263, 83.792291, 85.337894, 74.261072, 83.792291, 95.126713,
+ 84.565092, 66.275456, 41.803408, 25.832176, 3.936132, 18.876962, 17.331359,7.048974, 13.648543, 26.093446, 28.544714, 39.104026, 44.572240, 51.171810, 56.262906,
+ 46.269272, 38.161230, 30.618865, 21.945145, 34.390047, 59.656971, 69.839163, 73.233228, 63.239594, 45.892154, 43.252326, 28.356155), ncol=2)
 # random absence
 absence <- cbind(runif(50)*(xmax(logo)-xmin(logo))+xmin(logo), runif(50)*(ymax(logo)-ymin(logo))+ymin(logo))
 
@@ -91,6 +91,20 @@ points(absence, bg='red', pch=21)
 # model <- randomForest(formula, data=data.frame(v))
 # r2 <- predict(logo, type='response', model, progress='text')
 # note the additional argument "type='response'" that is passed to predict.randomForest
+
+
+## Thin plate spline interpolation with x and y only
+#r <- raster(system.file("external/test.ag", package="sp"))
+#ra <- aggregate(r, 10)
+#require(fields)
+# xy <- xyFromCell(ra, 1:ncell(ra))
+#tps <- Tps(as.data.frame(xy, values(ra)))
+#p <- raster(r) 
+#p <- predict(p, tps)
+#p[is.na(r)] <- NA
+#plot(p)
+# 
+
 }
 
 \keyword{methods}
