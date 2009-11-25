@@ -8,7 +8,7 @@
 \title{Interpolate}
 
 \description{
-Make a RasterLayer with interpolated values based on a a fitted model object of classes such as 'gstat' or 'Krige'. You must have 'x' and 'y' as independent variables. If x and y are the only independent variables provide an (empty) RasterLayer for which you want predictions. If there are more spatial predictor variables provide these as a Raster* object. If you do not have x and y locations as predictors you should use \code{\link[raster]{predict}} instead.
+Make a RasterLayer with interpolated values based on a a fitted model object of classes such as 'gstat' or 'Krige'. You must have 'x' and 'y' as independent variables. If x and y are the only independent variables provide an (empty) RasterLayer for which you want predictions. If there are more spatial predictor variables provide these as a Raster* object in the "newdata" argument of the function. If you do not have x and y locations as predictors in your model you should use \code{\link[raster]{predict}} instead.
 }
 
 \usage{
@@ -23,12 +23,14 @@ interpolate(object, ...)
 \section{Methods}{
 \describe{
  
-\code{predict(object, model, filename='', ...)}
+\code{predict(object, model, filename='', newdata=NULL, index=1, ...)}
   
 \tabular{rll}{  
   \tab  \code{object} \tab a RasterLayer object \cr
   \tab  \code{model}  \tab A fitted model\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
+  \tab  \code{newdata}  \tab A Raster* object to pass additional independent variables (beyond x and y) \cr
+  \tab  \code{index}  \tab Which gstat variable do you want (see predict.gstat). In the case of kriging, 1=prediction and 2=prediction variance. \cr
   \tab  \code{...}  \tab Additional arguments, see below \cr
 }
 
@@ -46,7 +48,7 @@ a RasterLayer object
 }
 
 \details{
-interpolate is a wrapper of raster::predict with argument xy=TRUE
+interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring values associated wtih the first argument ('object')
 }
 
 \seealso{ \code{\link[raster]{predict}} }
@@ -70,8 +72,7 @@ interpolate is a wrapper of raster::predict with argument xy=TRUE
 #r <- raster(r)
 #data(meuse)
 #mg <- gstat(id = "zinc", formula = zinc ~ 1, locations = ~ x + y, data = meuse, nmax = 7, set = list(idp = .5))
-#z <- interpolate(r, mg, xy=T)
-
+#z <- interpolate(r, mg)
 }
 
 \keyword{methods}

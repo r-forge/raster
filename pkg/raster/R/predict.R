@@ -9,7 +9,7 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", xy=FALSE, ...) {
+	function(object, model, filename="", xy=FALSE, index=1, debug.level=1, ...) {
 		predrast <- raster(object)
 		filename <- trim(filename)
 			
@@ -113,12 +113,10 @@ setMethod('predict', signature(object='Raster'),
 						row.names(p) <- 1:nrow(p)
 						rowvals <- SpatialPointsDataFrame(coords=p, data = rowvals, proj4string = projection(predrast, asText = FALSE))
 					}
-					predv <- predict(model, rowvals, ...) 
-					if (sp) {
-						predv <- predv@data[,1]
-					} else {
-						predv <- predv[,3] 
-					}
+					if (r == nrow(predrast)) { predv <- predict(model, rowvals, debug.level=debug.level, ...) 
+					} else { predv <- predict(model, rowvals, debug.level=0, ...) }
+					if (sp) { predv <- predv@data[,index] }
+					else { predv <- predv[,index+2] }
 				} else {
 					predv <- predict(model, rowvals, ...) 
 					predv <- as.vector( as.numeric ( predv ))
