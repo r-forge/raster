@@ -34,24 +34,24 @@
 		if (datatype == 'INT') {
 		# optimize the number of bytes within the datatype
 			if (mn > -128 & mx < 128) {
-				dataType(raster) <- 'INT1S'
+				datatype <- 'INT1S'
 			} else if (mn >=0 & mx < 256) {
-				dataType(raster) <- 'INT1U'
+				datatype <- 'INT1U'
 			} else if (mn > -32767 & mx < 32768) {
-				dataType(raster) <- 'INT2S'
+				datatype <- 'INT2S'
 			} else if (mn >= 0 & mx < 65534 ) {
-				dataType(raster) <- 'INT2U'
+				datatype <- 'INT2U'
 			} else if (mn > -2147483647 & mx < 2147483648 ) {
-				dataType(raster) <- 'INT4S'
+				datatype <- 'INT4S'
 			} else if (mn >= 0 & mx < 4294967294 ) {
-				dataType(raster) <- 'INT4U'
+				datatype <- 'INT4U'
 			} else if (mn > -(2^63/2) & mx < (2^64/2)) {
-				dataType(raster) <- 'INT8S'
+				datatype <- 'INT8S'
 			} else if (mn >= 0 & mx < 2^64) {
-				dataType(raster) <- 'INT8U'
+				datatype <- 'INT8U'
 			} else {
 				intround <- FALSE
-				dataType(raster) <- 'FLT8S'
+				datatype <- 'FLT8S'
 				raster@data@values <- as.numeric(raster@data@values )
 			}
 		}
@@ -63,26 +63,29 @@
 		raster@data@values <- as.numeric(raster@data@values)
 		if (datatype == 'FLT') {
 			if (mn < -3.4E38 | mx > 3.4E38) {
-				dataType(raster) <- 'FLT8S'
+				datatype <- 'FLT8S'
 			} else {
-				dataType(raster) <- 'FLT4S'
+				datatype <- 'FLT4S'
 			}
 		}	
 	} else if ( dtype =='LOG') {
+		datatype <- 'LOG1S'
 		raster@data@values <- as.integer(raster@data@values)
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	}
+
 
 	attr(raster@file, "con") <- file(fnamevals, "wb")
 #	if (raster@data@content == 'sparse') { 
 #		raster <- .writeSparse(raster, filename=filename, overwrite=overwrite) 
 #	} else {
+
+	dataType(raster) <- datatype
 	dsize <- dataSize(raster@file@datanotation)
 	writeBin(raster@data@values , raster@file@con, size = dsize ) 
 	writeRasterHdr(raster, filetype) 
-
 	close(raster@file@con)
-#attr(raster@file, "con") <- file(fnamevals, "rb")
+	
 # put logical values back to T/F
 	if ( dtype =='LOG' ) {
 		raster@data@values[raster@data@values <=  raster@file@nodatavalue]  <- NA

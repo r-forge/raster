@@ -6,6 +6,7 @@
 
 .startBrickRowWriting <- function(x, bandorder, filename, ...) {
 	datatype <- .datatype(...)
+	dataType(x) <- datatype
 	overwrite <- .overwrite(...)
 	
 	filename <- trim(filename)
@@ -29,7 +30,7 @@
 	attr(x@file, "dtype") <- .shortDataType(x@file@datanotation)
 
 	x@file@driver <- 'raster'
-
+	
 	x@data@min <- rep(Inf, nlayers(x))
 	x@data@max <- rep(-Inf, nlayers(x))
 	x@data@haveminmax <- FALSE

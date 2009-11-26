@@ -1,11 +1,8 @@
  
-.writeRasterRows <- function(raster, overwrite=FALSE) {
-#	if (dataContent(raster) != 'row') { 
-#		stop('raster does not contain a row') 
-#	}
+.writeRasterRows <- function(raster, filename, ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- .startRowWriting(raster, overwrite=overwrite)
+		raster <- .startRowWriting(raster, filename, ...)
  	} 
 
 	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -26,7 +23,7 @@
 	writeBin(values, raster@file@con, size = raster@file@dsize )
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
-		raster <- .stopRowWriting(raster)
+		raster <- .stopRowWriting(raster, ...)
 		if (dataIndices(raster)[2] > ncell(raster)) {
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 		}
