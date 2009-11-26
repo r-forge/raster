@@ -56,7 +56,7 @@ a Raster* object
 \author{ Robert J. Hijmans }
 
 \examples{ 
-r <- raster(system.file("external/test.ag", package="sp"))
+r <- raster(system.file("external/test.grd", package="raster"))
 dataType(r)
 s <- saveAs(r, 'test.grd', datatype='INT2U')
 dataType(s)

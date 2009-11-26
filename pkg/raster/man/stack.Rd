@@ -45,7 +45,7 @@ If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted, 
 \seealso{ \code{\link[raster]{addLayer}}, \code{\link[raster]{dropLayer}}, \code{\link[raster]{raster}} }
 
 \examples{
-  fn <- system.file("external/test.ag", package="sp")
+  fn <- system.file("external/test.grd", package="raster")
   s <- stack(fn, fn)
   r <- raster(fn)
   s <- stack(r, fn) 

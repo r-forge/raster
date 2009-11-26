@@ -13,7 +13,11 @@ if (!isGeneric("minValue")) {
 
 setMethod('minValue', signature(x='RasterLayer'), 
 	function(x, layer=-1) {
-		return(x@data@min)
+		if ( x@data@haveminmax ) {
+			return(x@data@min)
+		} else {
+			return(NA)
+		}
 	}
 )
 
@@ -58,7 +62,11 @@ if (!isGeneric("maxValue")) {
 
 setMethod('maxValue', signature(x='RasterLayer'), 
 	function(x, layer=-1) {
-		return(x@data@max)
+		if ( x@data@haveminmax ) {
+			return(x@data@max)
+		} else {
+			return(NA)
+		}
 	}
 )
 

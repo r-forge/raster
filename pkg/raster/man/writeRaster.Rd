@@ -98,7 +98,7 @@ This function is used for the side-effect of writing values to a file.
 \seealso{ writeFormats \code{\link[raster]{writeFormats}} }  
 
 \examples{ 
-rst <- raster(system.file("external/test.ag", package="sp"))
+rst <- raster(system.file("external/test.grd", package="raster"))
  
 # read all data
 rst <- readAll(rst)
@@ -120,7 +120,7 @@ b <- brick(rst, sqrt(rst))
 rst <- writeRaster(b, filename="mutli.grd", bandorder='BIL', overwrite=TRUE)
  
 # read and write row by row; write to ascii file
-rst <- raster(system.file("external/test.ag", package="sp"))
+rst <- raster(system.file("external/test.grd", package="raster"))
 ascras <- raster(rst)
 for (r in 1:nrow(rst)) {
 	rst <- readRow(rst, r)

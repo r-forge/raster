@@ -44,7 +44,7 @@ r <- setValues(r, round(100 * runif(ncell(r)) + 0.5))
 minValue(r)
 maxValue(r)
 
-r <- raster(system.file("external/test.ag", package="sp"))
+r <- raster(system.file("external/test.grd", package="raster"))
 # this raster is from an 'external' format, so min and maxValue are not known
 minValue(r)
 maxValue(r)

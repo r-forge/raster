@@ -42,7 +42,7 @@ The value(s) of \code{object} at the point(s) clicked on; and the coordinates of
 \author{ Robert J. Hijmans }
 
 \examples{
- r <- raster(system.file("external/test.ag", package="sp"))
+ r <- raster(system.file("external/test.grd", package="raster"))
 #plot(r)
 #click(r)
 #now click on the plot (map)

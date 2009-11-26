@@ -28,7 +28,7 @@ A list of RasterLayer objects
 \seealso{ \code{\link[raster]{stack}}}
 
 \examples{
-  file <- system.file("external/test.ag", package="sp")
+  file <- system.file("external/test.grd", package="raster")
   s <- stack(file, file)
   list1 <- unstack(s)
   b <- brick(s)

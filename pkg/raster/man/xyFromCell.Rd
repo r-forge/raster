@@ -54,7 +54,7 @@ xyFromCell(r, 10000)
 xyFromCell(r, c(0, 1, 32581, ncell(r), ncell(r)+1))
 
 #using a file from disk
-r <- raster(system.file("external/test.ag", package="sp"))
+r <- raster(system.file("external/test.grd", package="raster"))
 r
 cellFromXY(r, c(180000, 330000))
 #xy for corners of a raster:

@@ -33,7 +33,7 @@ stackSave(rstack)
 \seealso{ \code{\link[raster]{filename}}, \code{\link[raster]{stack}}, \code{\link[raster]{changeStack}}}
 
 \examples{
-  rasterfile <- system.file("external/test.ag", package="sp")
+  rasterfile <- system.file("external/test.grd", package="raster")
   st <- stack(c(rasterfile, rasterfile))
   filename(st) <- "mystack"
   st <- stackSave(st)

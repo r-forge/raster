@@ -27,8 +27,10 @@ function(x, fun, filename='', ...) {
 		if (!canProcessInMemory(x, 4) & filename == '') {
 			filename <- rasterTmpFile()
 		} else {
+		# 	clear <- FALSE
 		#	if ( dataContent(x) != 'all') {
 		#		x <- readAll(x)
+		# 		clear <- TRUE	
 		#	}
 		}
 	}
@@ -37,7 +39,7 @@ function(x, fun, filename='', ...) {
 		outraster <- setValues(outraster, fun(values(x))) 
 		if (filename != "") {
 			outraster <- writeRaster(outraster, filename=filename, ...)
-			outraster <- clearValues(outraster) 
+			# if (clear) outraster <- clearValues(outraster) 
 		}
 		return(outraster)
 	} 
@@ -46,9 +48,9 @@ function(x, fun, filename='', ...) {
 		v <- matrix(NA, ncol=nrow(outraster), nrow=ncol(outraster))
 	} 
 		
-	pb <- pbCreate(nrow(x), type=.progress(...))
+	pb <- pbCreate(nrow(outraster), type=.progress(...))
 		
-	for (r in 1:nrow(x)) {
+	for (r in 1:nrow(outraster)) {
 		x <- readRow(x, r)
 		if (filename == "") {
 			v[,r] <- fun(values(x))

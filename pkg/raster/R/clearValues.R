@@ -32,9 +32,11 @@ clearValues <- function(object) {
 		object@data@values <- matrix(NA,0,0)
 		object@data@content <- 'nodata'
 		object@data@indices = vector(mode='numeric')
-		object@data@min <- rep(Inf, nlayers(object))
-		object@data@max <- rep(-Inf, nlayers(object))
-		object@data@haveminmax <- FALSE
+		if (dataSource(object) == 'ram') {
+			object@data@min <- rep(Inf, nlayers(object))
+			object@data@max <- rep(-Inf, nlayers(object))
+			object@data@haveminmax <- FALSE
+		}
 	} 
 	return(object)
 }

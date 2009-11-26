@@ -26,7 +26,7 @@ You can use saveAs to save a existing file in another format. You can also speci
 \seealso{ \code{\link[raster]{saveAs}}, \code{\link[raster]{writeRaster}}, \code{\link[rgdal]{writeGDAL}} }
 
 \examples{ 
-r <- raster(system.file("external/test.ag", package="sp"))
+r <- raster(system.file("external/test.grd", package="raster"))
 r <- raster(r, filename='export.grd')
 writeRasterHdr(r, format="ENVI") 
 }

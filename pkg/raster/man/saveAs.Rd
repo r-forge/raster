@@ -40,7 +40,7 @@ A RasterLayer or RasterBrick object. This primary use of this function is its si
 \author{Robert J. Hijmans}
 
 \examples{ 
-r1 <- raster(system.file("external/test.ag", package="sp"))
+r1 <- raster(system.file("external/test.grd", package="raster"))
 r2 <- saveAs(r1, 'test.tif', format='GTiff')
 }
 

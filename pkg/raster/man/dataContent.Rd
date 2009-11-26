@@ -43,7 +43,7 @@ dataSource(rs)
 dataContent(rs)
 dataIndices(rs)
 
-rs <- raster(system.file("external/test.ag", package="sp"))
+rs <- raster(system.file("external/test.grd", package="raster"))
 rs <- readAll(rs)
 rs
 dataSource(rs)

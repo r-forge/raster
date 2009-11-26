@@ -33,7 +33,7 @@ dataSigned(object)
 \author{Robert J. Hijmans }
 
 \examples{
-r <- raster(system.file("external/test.ag", package="sp"))
+r <- raster(system.file("external/test.grd", package="raster"))
 dataSize(r)
 dataSigned(r)
 dataType(r)

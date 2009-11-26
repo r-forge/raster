@@ -40,7 +40,7 @@ contour(x, ...)
 \author{ Robert J. Hijmans }
 
 \examples{ 
-r <- raster(system.file("external/test.ag", package="sp"))
+r <- raster(system.file("external/test.grd", package="raster"))
 plot(r)
 contour(r, add=TRUE)
 }
