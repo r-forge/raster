@@ -33,13 +33,13 @@ stackSave(rstack)
 \seealso{ \code{\link[raster]{filename}}, \code{\link[raster]{stack}}, \code{\link[raster]{changeStack}}}
 
 \examples{
-  rasterfile <- system.file("external/test.grd", package="raster")
-  st <- stack(c(rasterfile, rasterfile))
-  filename(st) <- "mystack"
-  st <- stackSave(st)
+rasterfile <- system.file("external/test.grd", package="raster")
+st <- stack(c(rasterfile, rasterfile))
+filename(st) <- "mystack"
+st <- stackSave(st)
 # note that filename adds an extension .stk to a stackfile  
-  st2 <- stackOpen("mystack.stk")
-  st2
+#st2 <- stackOpen("mystack.stk")
+#st2
 }
 \keyword{ spatial }
 

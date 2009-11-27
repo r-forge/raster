@@ -17,6 +17,11 @@ filename <- function(x) {
 		filename <- ""
 	}
 	filename <- path.expand(filename)
+	p <- dirname(filename)
+	if (p == '.') {  #current directory
+		filename <- paste(getwd(), '/', filename, sep='')
+	}
+	
 # could also throw in normalizePath(utils) 
 	if (class(x)=='RasterStack') {
 		ext(filename) <- ".stk"
@@ -36,24 +41,3 @@ filename <- function(x) {
 	return(x)	
 }
 
-
-#.filename <- function(..., filename) {
-#	if (missing(filename)) { 
-#		return('')
-#	} else {
-#		return(trim(filename))
-#	}
-#}
-
-
-#.writefilename <- function(raster, ...) {
-#	filename <- .filename(...) 
-#	if (filename == '') {
-#		filename <- trim(filename(raster))
-#	}
-#	if (filename == '') {
-#		stop('provide a filename')
-#	} else {
-#		return(filename)
-#	}
-#}
