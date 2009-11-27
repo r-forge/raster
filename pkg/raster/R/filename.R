@@ -16,10 +16,12 @@ filename <- function(x) {
 	if (is.na(filename) | is.null(filename) | !is.character(value)) {
 		filename <- ""
 	}
-	filename <- path.expand(filename)
-	p <- dirname(filename)
-	if (p == '.') {  #current directory
-		filename <- paste(getwd(), '/', filename, sep='')
+	if (filename != '') {
+		filename <- path.expand(filename)
+		p <- dirname(filename)
+		if (p == '.') {  #current directory
+			filename <- paste(getwd(), '/', filename, sep='')
+		}
 	}
 	
 # could also throw in normalizePath(utils) 
