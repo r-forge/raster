@@ -3,13 +3,13 @@
 # Version 0.9
 # Licence GPL v3
 
-
 filename <- function(x) {
 	if (class(x) == 'RasterStack') { 
 		return(x@filename) 
 	} 
 	return(x@file@name)
 }
+
 
 'filename<-' <- function(x, value) {
 	filename <- trim(value)
