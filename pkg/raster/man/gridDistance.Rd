@@ -13,6 +13,9 @@
  The distance is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically meters) when it is projected.
  
  Distances are calculated by summing local distances between cells, which are connected with their neighbours in 8 directions.
+ 
+ For data on disk we provide only a highly inaccurate proof of concept version.
+
 }
 
 \usage{
@@ -45,11 +48,20 @@ The following additional arguments can be passed, to replace default values for 
 
 
 \examples{
+#File in memory
 r1 <- raster(ncol=36,nrow=18)
 r1[] <- NA
 r1[345:355] <- 1
-dist <- gridDistance(r1) 
-#plot(dist)
+distRaster <- gridDistance(r1) 
+plot(distRaster)
+
+#File on disk -- proof of concept only, highly inaccurate!
+rs <- raster(system.file("external/test.ag", package="sp"))
+rs[which(!is.na(getValues(rs)))] <- TRUE
+rs <- writeRaster(rs, rasterTmpFile())
+rs <- raster(filename(rs))
+distRaster <- gridDistance(rs, rasterTmpFile())
+plot(distRaster)
 }
 
 

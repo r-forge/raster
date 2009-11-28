@@ -57,7 +57,7 @@ writeRaster(x, filename, ...)
 
 \details{
 Values in a \code{RasterLayer} object are written to a file. Relatively small datasets can be loaded into memory, manipulated, and saved to disk in their entirety. Large datasets can be read and written row by row. 
-When writing by row, you must write all rows, and you must write them in sequence. Start at row=1, and end at row=nrow(raster). You cannot overwrite a single row in an existing raster file.
+When writing by row, you must write all rows, and you must write them in sequence. Start at row=1, and end at row=nrow(raster). Only when all rows have been appended to the data file on disk, the file becomes readable. You cannot overwrite an isolated single row in an existing raster file. 
 
 multi-band files (i.e. files saved from RasterStack or RasterBrick objects) can be saved as 
 

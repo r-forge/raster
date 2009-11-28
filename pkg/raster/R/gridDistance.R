@@ -1,28 +1,32 @@
 # Author: Jacob van Etten and Robert J. Hijmans
 # email jacobvanetten@yahoo.com
-# Date :  January 2009
+# Date :  November 2009
 # Version 0.9
 # Licence GPL v3
+
+#for data on disk only proof of concept version. In reality, we need Dijkstra´s algorithm (igraph) and read/write a couple of row at once to gain some speed
 
 #setGeneric("distance", function(object, ...) standardGeneric("distance"))
 
 #setMethod("distance", signature(object = "RasterLayer"), def =	
 
-gridDistance <- function(object, filename="", ...) {
+gridDistance <- function(object, filenm="", ...) {
 
 		
-	filename <- trim(filename)
+	filenm <- trim(filenm)
 	n <- ncell(object)
-
-	if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) {
+	
+	if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) 
+	{
 		stop('cannot compute distance on a RasterLayer with no data')
 	}
 		
-	if(canProcessInMemory(object, 5)){
+	if(canProcessInMemory(object, n=10) & filenm == "")
+	{
 		if (dataContent(object) != 'all' ) { 
 			object <- readAll(object) 
 		}
-		outRaster <- raster(object, filename=filename)
+		outRaster <- raster(object, filename=filenm)
 
 		fromCells <- which(!is.na(values(object)))
 		fromCells <- fromCells[which(values(object)[fromCells] == TRUE)]
@@ -59,96 +63,79 @@ gridDistance <- function(object, filename="", ...) {
 		}
 			
 		outRaster <- setValues(outRaster, accDist)	
-		if (filename != "") {
-			outRaster <- writeRaster(outRaster, filename=filename, ...)
+		if (filenm != "") {
+			outRaster <- writeRaster(outRaster, filename=filenm, ...)
 		}
-		return(outRaster)
+		
 
-	} else { 
-		stop('not yet implemented for large rasters')
-
+	} 
+	else { 
+		#stop('not yet implemented for large rasters')
+		maxDist <- pointDistance(xyFromCell(object,1),xyFromCell(object,ncell(object)), type='GreatCircle')
 		nrows <- nrow(object)
 		ncols <- ncol(object)
-
-			m <- c(-Inf, Inf, 0)
-			r1 <- reclass(object, m, filename=rasterTmpFile(), overwrite=TRUE)
-			r2 <- raster(r1, rasterTmpFile())
-			
-			if(isLatLon(object)){
-				remainingCells <- TRUE
-				while (remainingCells) {
-					remainingCells <- FALSE
-					r1 <- readRow(r1, rownr=1)
-					rowWindow <- values(r1)
-					for(r in 1:nrows){
-						if(r < nrows-1) {
-							r1 <- readRow(r1, rownr=r+1)
-							rowWindow <- c(rowWindow, values(r1))
-						}
-						adj <- adjacency(object, fromCells=(((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols)), toCells=((r-1)*ncols+1):(r*ncols),directions=8)
-						coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
+			func <- function(x) 
+			{
+				x[is.na(x)] <- maxDist
+				x[x==0] <- NA
+				x[x==1] <- 0
+				return(x)
+			}
+			r1 <- calc(object, func, filename=rasterTmpFile(), overwrite=TRUE, datatype="FLT8S")
+			r2 <- raster(r1, filename=rasterTmpFile())
+			remainingCells <- TRUE
+			while (remainingCells) 
+			{
+				remainingCells <- FALSE
+				r1 <- readRow(r1, rownr=1) #or getValues(row=)
+				rowWindow <- values(r1)
+				for(r in 1:(nrows-1))
+				{
+					r1 <- readRow(r1, rownr=r+1) #or getValues(row=)
+					rowWindow <- c(rowWindow, values(r1))
+					fromCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow) & !((maxDist - rowWindow) < 1e-60)] 
+					toCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow)] 
+					if(isLatLon(object))
+					{						
+						adj <- adjacency(object, fromCells=fromCells, toCells=toCells, directions=8)
+						coord <- cbind(xyFromCell(object,adj[,1]), xyFromCell(object, adj[,2]))
 						distance <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
-						adj <- adj-((r-1)*ncols+1)
-						transitionValues <- as.vector(rowWindow)[adj[,1]] + distance
-						transitionValues <- tapply(transitionValues,adj[,2],min)
-						transitionValues <- transitionValues[transitionValues < Inf]
-						index <- as.integer(names(transitionValues))
-						newValues <- pmin(transitionValues, rowWindow[index])
-						if (sum(is.na(newValues)) > 0) {
-							remainingCells<-TRUE
-						} else if(newValues != rowWindow[index]){ 
-							remainingCells<-TRUE
-						}						
-						r2 <- setValues(r2, newValues, r)
-						r2 <- writeRaster(r2, filename(r2), overwrite=TRUE)
-						if(r > 1){
-							rowWindow <- rowWindow[-1:ncols]
-						}
-					} 
-					rtmp <- r1
-					r1 <- r2
-					r2 <- rtmp
-				}
-			} else {
-				remainingCells <- TRUE
-				while(remainingCells){
-					remainingCells <- FALSE
-					r1 <- readRow(r1, rownr=1)
-					rowWindow <- values(r1)
-					for(r in 1:nrows){
-						if(r < nrows-1){
-							r1 <- readRow(r1, rownr=r+1)
-							rowWindow <- c(rowWindow, values(outRaster))
-						}
-						fromCells <- (((max(1,r-1))*ncols)+1):(min(nrows,(r+2)*ncols))
-						toCells <- ((r-1)*ncols+1):(r*ncols)
+					} else
+					{
 						adj1 <- adjacency(object,fromCells=fromCells,toCells=toCells,directions=4)
 						adj2 <- adjacency(object,fromCells=fromCells,toCells=toCells,directions="Bishop")
 						distance <- c(rep(1,length=length(adj1[,1])),rep(sqrt(2),length=length(adj2[,1])))
 						adj <- rbind(adj1,adj2)
-						adj <- adj-((r-1)*ncols+1)
+					}
+					if(length(adj[,1]) > 0)
+					{
+						adj <- adj-(r-1)*ncols
 						transitionValues <- as.vector(rowWindow)[adj[,1]] + distance
 						transitionValues <- tapply(transitionValues,adj[,2],min)
-						transitionValues <- transitionValues[transitionValues < Inf]
+						transitionVal <- rowWindow
 						index <- as.integer(names(transitionValues))
-						newValues <- pmin(transitionValues,rowWindow[index])
-						if(newValues != rowWindow[index]){
-							remainingCells<-TRUE
+						transitionVal[index] <- transitionValues
+						newValues <- as.vector(pmin(transitionVal,rowWindow))
+ 						if (sum(newValues) < sum(rowWindow) - 1e-3) #in reality, this should be 0 with floating point precision. Given the terrible inefficiency of the current algorithm, we choose a high value.
+						{
+							remainingCells <- TRUE
 						}
-						r2 <- setValues(r2, newValues, r)
-						r2 <- writeRaster(r2,  filename(r2), overwrite=TRUE)
-						if(r > 1){
-							rowWindow <- rowWindow[-1:ncols]
-						}
-					}
-					rtmp <- r1
-					r1 <- r2
-					r2 <- rtmp
+					} else {newValues <- rowWindow}
+					r2 <- setValues(r2, newValues[1:ncols], r)
+					r2 <- writeRaster(r2, filename(r2), overwrite=TRUE)
+					rowWindow <- newValues[-(1:ncols)]
 				}
+				r2 <- setValues(r2, rowWindow, r+1)
+				r2 <- writeRaster(r2, filename(r2), overwrite=TRUE)
+				#plot(r2) #for some reason this doesn´t work, why?
+				r2fname <- filename(r2)
+				rm(r2)
+				r1 <- raster(r2fname)
+				r2 <- raster(r1,filename=rasterTmpFile()) 
 			}
-			outRaster <- saveAs(r1, filename=filename, ...)
-			removeRasterFile(r1)
-			removeRasterFile(r2)
+			outRaster <- saveAs(r1, filename=filenm, ...)
 		}
+		return(outRaster)
 	}
 #)
+
