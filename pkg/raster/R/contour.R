@@ -11,14 +11,7 @@ if (!isGeneric("contour")) {
 
 setMethod("contour", signature(x='RasterLayer'), 
 	function(x, maxdim=1000, ...)  {
-		if (dataContent(x) != 'all') { 
-#	to do: should  test if can read, else sample
-			if (canProcessInMemory(x, 2)) {
-				x <- readAll(x) 
-			} else {
-				x <- sampleSkip(x, maxdim, asRaster=TRUE)
-			}
-		}
+		x <- sampleSkip(x, maxdim, asRaster=TRUE)
 		contour(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
 	}
 )
@@ -32,3 +25,32 @@ setMethod("contour", signature(x='RasterStackBrick'),
 	}	
 )
 
+
+rasterToContour <- function(x,maxdim=500,...) {
+	x <- sampleSkip(x, maxdim, asRaster=TRUE)
+	cL <- contourLines(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
+	
+# The below was taken from ContourLines2SLDF(maptools), by Roger Bivand & Edzer Pebesma 
+	.contourLines2LineList <- function(cL) {
+		n <- length(cL)
+		res <- vector(mode="list", length=n)
+		for (i in 1:n) {
+			crds <- cbind(cL[[i]][[2]], cL[[i]][[3]])
+			res[[i]] <- Line(coords=crds)
+		}
+		res
+	}
+	
+    if (length(cL) < 1) stop("no contour lines")
+    cLstack <- tapply(1:length(cL), sapply(cL, function(x) x[[1]]), function(x) x, simplify = FALSE)
+    df <- data.frame(level = names(cLstack))
+    m <- length(cLstack)
+    res <- vector(mode = "list", length = m)
+    IDs <- paste("C", 1:m, sep = "_")
+    row.names(df) <- IDs
+    for (i in 1:m) {
+        res[[i]] <- Lines(.contourLines2LineList(cL[cLstack[[i]]]), ID = IDs[i])
+    }
+    SL <- SpatialLines(res, proj4string = projection(x, asText=FALSE))
+    SpatialLinesDataFrame(SL, data = df)
+}

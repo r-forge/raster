@@ -16,7 +16,6 @@ Plot (that is, make a map of) the values of a RasterLayer or RasterStack, or mak
 }
 
 
-
 \section{Methods}{
 \describe{
 \bold{x=RasterLayer}

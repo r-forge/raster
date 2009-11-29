@@ -10,10 +10,10 @@
 
 #setMethod("distance", signature(object = "RasterLayer"), def =	
 
-gridDistance <- function(object, filenm="", ...) {
+gridDistance <- function(object, filename="", ...) {
 
 		
-	filenm <- trim(filenm)
+	filenm <- trim(filename)
 	n <- ncell(object)
 	
 	if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) 
@@ -66,7 +66,7 @@ gridDistance <- function(object, filenm="", ...) {
 		if (filenm != "") {
 			outRaster <- writeRaster(outRaster, filename=filenm, ...)
 		}
-		
+		return(outRaster)
 
 	} 
 	else { 
@@ -74,15 +74,17 @@ gridDistance <- function(object, filenm="", ...) {
 		maxDist <- pointDistance(xyFromCell(object,1),xyFromCell(object,ncell(object)), type='GreatCircle')
 		nrows <- nrow(object)
 		ncols <- ncol(object)
-			func <- function(x) 
-			{
-				x[is.na(x)] <- maxDist
-				x[x==0] <- NA
-				x[x==1] <- 0
-				return(x)
-			}
-			r1 <- calc(object, func, filename=rasterTmpFile(), overwrite=TRUE, datatype="FLT8S")
-			r2 <- raster(r1, filename=rasterTmpFile())
+		func <- function(x) 
+		{
+			x[is.na(x)] <- maxDist
+			x[x==0] <- NA
+			x[x==1] <- 0
+			return(x)
+		}
+			f1 <- rasterTmpFile()
+			f2 <- rasterTmpFile()
+			r1 <- calc(object, func, filename=f1, overwrite=TRUE, datatype="FLT8S")
+			r2 <- raster(r1)
 			remainingCells <- TRUE
 			while (remainingCells) 
 			{
@@ -122,20 +124,22 @@ gridDistance <- function(object, filenm="", ...) {
 						}
 					} else {newValues <- rowWindow}
 					r2 <- setValues(r2, newValues[1:ncols], r)
-					r2 <- writeRaster(r2, filename(r2), overwrite=TRUE)
+					r2 <- writeRaster(r2, f2, overwrite=TRUE)
 					rowWindow <- newValues[-(1:ncols)]
 				}
 				r2 <- setValues(r2, rowWindow, r+1)
-				r2 <- writeRaster(r2, filename(r2), overwrite=TRUE)
+				r2 <- writeRaster(r2, f2, overwrite=TRUE)
 				#plot(r2) #for some reason this doesn´t work, why?
-				r2fname <- filename(r2)
-				rm(r2)
-				r1 <- raster(r2fname)
-				r2 <- raster(r1,filename=rasterTmpFile()) 
+				ftmp <- f2
+				f2 <- f1
+				f1 <- ftmp
+				r1 <- raster(f1)
 			}
 			outRaster <- saveAs(r1, filename=filenm, ...)
+			removeRasterFile(f1)	 
+            removeRasterFile(f2)
+			return(outRaster)
 		}
-		return(outRaster)
 	}
 #)
 

@@ -161,10 +161,9 @@ logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE)
 #from scratch
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
 
-#from a Extent
+#from an Extent object
 bb <- extent(r)
 r2 <- raster(bb)
-r2[] <- runif(ncell(r2))
 
 #from another Raster* object
 r3 <- raster(r)
