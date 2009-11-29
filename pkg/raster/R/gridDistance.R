@@ -83,7 +83,7 @@ gridDistance <- function(object, filename="", ...) {
 		}
 			f1 <- rasterTmpFile()
 			f2 <- rasterTmpFile()
-			r1 <- calc(object, func, filename=f1, overwrite=TRUE, datatype="FLT8S")
+			r1 <- calc(object, func, filename=f1, overwrite=TRUE, datatype="FLT4S")
 			r2 <- raster(r1)
 			remainingCells <- TRUE
 			while (remainingCells) 
@@ -134,6 +134,7 @@ gridDistance <- function(object, filename="", ...) {
 				f2 <- f1
 				f1 <- ftmp
 				r1 <- raster(f1)
+				r2 <- raster(r1)
 			}
 			outRaster <- saveAs(r1, filename=filenm, ...)
 			removeRasterFile(f1)	 
