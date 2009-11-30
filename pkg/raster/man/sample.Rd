@@ -1,33 +1,37 @@
 \name{Sample}
 
 \alias{sampleRandom}
-\alias{sampleSkip}
+\alias{sampleRegular}
 
 \title{Sample values of a RasterLayer}
 
 \description{
-read a sample from a RasterLayer, either systematic or random
+Take a sample from a RasterLayer, either systematic or random
 }
 
 \usage{
-sampleSkip(raster, maxdim=500, bndbox=NA, asRaster=FALSE)
-sampleRandom(raster, n=500, na.rm = TRUE)
+sampleRandom(raster, n, na.rm = TRUE)
+sampleRegular(raster, n, extent=NULL, asRaster=FALSE, corners=FALSE)
 }
 
 \arguments{
   \item{raster}{a RasterLayer object}
-  \item{maxdim}{sets the density for regular sampling}  
-  \item{bndbox}{sets a bouding box within the raster, for regular sampling within that box}  
-  \item{asRaster}{Logical. If \code{TRUE}, a rasterLayer is returned, rather then the sampled values}  
-  \item{n}{size of random sample}  
+  \item{n}{sample size}  
   \item{na.rm}{Logical. If \code{TRUE} NA values are removed from random sample}  
+  \item{extent}{Extent. To limit regular sampling to the area within that box}  
+  \item{asRaster}{Logical. If \code{TRUE}, a rasterLayer is returned, rather then the sampled values}  
+  \item{corners}{Logical. If \code{TRUE}, the extreme corner cells are always included. This makes for rather irregular sampling when n is small; but it can be useful when asRaster = TRUE, to maintain the same extent as the input RasterLayer}
+}
+
+\details{
+Sample size is approximate for sampleRegular and for sampleRandom with na.rm=TRUE
 }
 
 \author{Robert J. Hijmans}
 
 \examples{
  r <- raster(system.file("external/test.grd", package="raster"))
- v <- sampleSkip(r, 10)
+ v <- sampleRegular(r, n=100)
 }
 
 \keyword{spatial}

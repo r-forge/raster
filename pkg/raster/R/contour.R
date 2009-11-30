@@ -10,24 +10,24 @@ if (!isGeneric("contour")) {
 }	
 
 setMethod("contour", signature(x='RasterLayer'), 
-	function(x, maxdim=1000, ...)  {
-		x <- sampleSkip(x, maxdim, asRaster=TRUE)
+	function(x, maxpixels=100000, ...)  {
+		x <- sampleRegular(x, maxpixels, asRaster=TRUE)
 		contour(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
 	}
 )
 
 
 setMethod("contour", signature(x='RasterStackBrick'), 
-	function(x, y=1, maxdim=1000, ...)  {
+	function(x, y=1, maxpixels=100000, ...)  {
 		if (y < 1) { y <- 1 }
 		if (y > nlayers(x)) { y <- nlayers(x) }
-		contour(x=x, y=y, maxdim=maxdim, ...)
+		contour(x=x, y=y, maxpixels=maxpixels, ...)
 	}	
 )
 
 
-rasterToContour <- function(x,maxdim=500,...) {
-	x <- sampleSkip(x, maxdim, asRaster=TRUE)
+rasterToContour <- function(x,maxpixels=100000,...) {
+	x <- sampleRegular(x, n=maxpixels, asRaster=TRUE)
 	cL <- contourLines(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
 	
 # The below was taken from ContourLines2SLDF(maptools), by Roger Bivand & Edzer Pebesma 

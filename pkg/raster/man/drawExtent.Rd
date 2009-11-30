@@ -1,12 +1,12 @@
-\name{drawBox}
-\alias{drawBox}
+\name{drawExtent}
+\alias{drawExtent}
 
-\title{ Draw Bounding Box }
+\title{ Draw extet }
 \description{
-  Click on two points of a plot (map) to obtain an Extent object  
+  Click on two points of a plot (map) to obtain an object of class Extent ('bounding box')  
 }
 \usage{
-drawBox(show = TRUE, col = "red") 
+drawExtent(show=TRUE, col="red") 
 }
 
 \arguments{
@@ -25,11 +25,8 @@ drawBox(show = TRUE, col = "red")
 r1 <- raster(nrow=10, ncol=10)
 r1[] <- runif(ncell(r1))
 #plot(r1)
-#bb <- drawBox()
-#mean(values(crop(r1, drawBox())))
-
-
-
+#bb <- drawExtent()
+#mean(values(crop(r1, drawExtent())))
 }
 
 

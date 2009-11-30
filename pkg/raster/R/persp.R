@@ -9,13 +9,13 @@ if (!isGeneric("persp")) {
 }	
 
 setMethod("persp", signature(x='RasterLayer'), 
-	function(x, maxdim=500, ...)  {
+	function(x, maxpixels=100000, ...)  {
 		if (dataContent(x) != 'all') { 
 #	to do: should  test if can read, else sample
 			if (canProcessInMemory(x, 2)) {
 				x <- readAll(x) 
 			} else {
-				x <- sampleSkip(x, maxdim, asRaster=TRUE)
+				x <- sampleRegular(x, n=maxpixels, asRaster=TRUE, corners=TRUE)
 			}
 		}
 		value <- t((values(x, format='matrix'))[nrow(x):1,])
@@ -26,10 +26,10 @@ setMethod("persp", signature(x='RasterLayer'),
 )
 
 setMethod("persp", signature(x='RasterStackBrick'), 
-	function(x, y=1, maxdim=1000, ...)  {
+	function(x, y=1, maxpixels=1000, ...)  {
 		if (y < 1) { y <- 1 }
 		if (y > nlayers(x)) { y <- nlayers(x) }
-		persp(x=x, y=y, maxdim=maxdim, ...)
+		persp(x=x, y=y, maxpixels=maxpixels, ...)
 	}	
 )
 

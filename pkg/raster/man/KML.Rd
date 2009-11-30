@@ -9,14 +9,14 @@ Export raster to a KML file
 }
 
 \usage{
-KML(raster, filename, col=rainbow(255), maxdim=1000) 
+KML(raster, filename, col=rainbow(255), maxpixels=100000) 
 }
 
 \arguments{
 \item{raster}{RasterLayer}
 \item{filename}{output filename}
 \item{col}{color scheme to be used}
-\item{maxdim}{sampling scheme}
+\item{maxpixels}{maximum number of pixels. If ncell(raster) > maxpixels, sampleRegular is used to reduce the number of pixels}
 }
 
 

@@ -5,11 +5,11 @@
 # Version 0.9
 # Licence GPL v3
 
-KML <- function (raster, filename, col=rainbow(255), maxdim=1000) {
+KML <- function (raster, filename, col=rainbow(255), maxpixels=100000) {
     if (!isLatLon(raster)) { 
         stop("raster must be in geographical coordinates")
 	}
-	raster <- sampleSkip(raster, maxdim=maxdim,  asRaster = TRUE)
+	raster <- sampleRegular(raster, n=maxpixels, asRaster = TRUE, corners=TRUE)
 
 	imagefile <- filename
 	ext(imagefile) <- '.png'

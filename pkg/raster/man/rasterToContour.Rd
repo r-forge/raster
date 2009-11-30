@@ -9,12 +9,12 @@ RasterLayer to contour lines. This is a wrapper around \code{\link[grDevices]{co
 }
 
 \usage{
-rasterToContour(x, maxdim=500, ...)
+rasterToContour(x, maxpixels=100000, ...)
 }
 
 \arguments{
  \item{x}{ a RasterLayer object }
- \item{maxdim}{ Maximum number of raster cells to use (either vertical or horizontal); this function fails when too many cells are used}
+ \item{maxpixels}{ Maximum number of raster cells to use; this function fails when too many cells are used}
  \item{...}{Any argument that can be passed to \code{\link[grDevices]{contourLines}} }  
 }
 

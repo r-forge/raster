@@ -5,7 +5,7 @@
 
 
 
-.plotraster <- function(object, col = rev(terrain.colors(25)), subsample=TRUE, maxdim=500, addbox=TRUE, axes, xlab, ylab, ...) {
+.plotraster <- function(object, col = rev(terrain.colors(25)), maxpixels=500, addbox=TRUE, axes, xlab, ylab, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 
 	if (class(object) != 'RasterLayer') { stop("class of 'object' should be RasterLayer") }
@@ -16,41 +16,16 @@
 		}
 	}
 	
-	maxdim <- max(1, maxdim)
-	if ( dataContent(object) == 'all') {
-		if (round(max(ncol(object), nrow(object)) < maxdim)) { subsample <- FALSE }
-		if (subsample)  {
-			skip <- round(max(ncol(object), nrow(object)) / maxdim)
-			cols <- (0:round(ncol(object)/skip)) * skip + 1
-			cols <- cols[ cols <= ncol(object) ]
-			rows <- (0:round(nrow(object)/skip)) * skip + 1
-			rows <- rows[ rows <= nrow(object) ]
-			
-			m <- values(object, format='matrix')[rows, cols]
-
-			sampraster <- raster(object)
-			rowcol(sampraster) <- c(dim(m)[1], dim(m)[2])
-			xmax(sampraster) <- xmax(object) - (ncol(object) - cols[length(cols)]) * xres(object)
-			ymin(sampraster) <- ymin(object) + (nrow(object) - rows[length(rows)]) * yres(object)
-			object <- sampraster
- 		} else { 
-			m <- values(object, format='matrix')
-			subsample=FALSE
-		}
-	} else if (dataSource(object) != 'disk') {
-		stop('no, or insufficient, values associated with this RasterLayer')
+	maxixels <- max(1, maxpixels)
+	if ( dataContent(object) != 'all' & dataSource(object) != 'disk') {
+		stop('no values associated with this RasterLayer')
 	}
-	else {
-		if (subsample) {
-			object <- sampleSkip(object, maxdim=maxdim, asRaster=TRUE)
-		} else {
-			object <- readAll(object)
-		}
-		m <- values(object, format='matrix')
-	} 
+
+	object <- sampleRegular(object, n=maxpixels, asRaster=TRUE, corners=TRUE)
+	
+	m <- values(object, format='matrix')
 	x <- (0:ncol(object)) * xres(object) + xmin(object) 
 	y <- (0:nrow(object)) * yres(object) + ymin(object) 		
-
 	z <- t(m[nrow(m):1,])
 	
 	z[is.infinite(z)] <- NA

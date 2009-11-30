@@ -9,7 +9,7 @@
 }
 
 \usage{
-zoom(x, extent=drawBox(), new=TRUE, ...) 
+zoom(x, extent=drawExtent(), new=TRUE, ...) 
 }
 
 \arguments{
@@ -22,6 +22,6 @@ zoom(x, extent=drawBox(), new=TRUE, ...)
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{drawBox}}, \code{\link[raster]{plot}}}
+\seealso{ \code{\link[raster]{drawExtent}}, \code{\link[raster]{plot}}}
 
 \keyword{ spatial }

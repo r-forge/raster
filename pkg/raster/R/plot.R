@@ -12,7 +12,7 @@ if (!isGeneric("plot")) {
 
 
 setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
+	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
 		if (missing(y)) {
 			nl <- nlayers(x)
 			if (nl > 12) {
@@ -23,7 +23,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			nr <- ceiling(nl / nc)
 			par(mfrow=c(nr, nc))
 			for (i in 1:nl) {
-				.plotraster(raster(x, i), col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+				.plotraster(raster(x, i), col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 			}
 		} else if (is.numeric(y)) {
 			y <- unique(as.integer(round(y)))
@@ -34,10 +34,10 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				par(mfrow=c(nr, nc))
 				par(mfrow=c(nr, nc))
 				for (i in 1:length(y)) {
-					.plotraster(raster(x, y[i]), col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+					.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 				}
 			} else {
-				.plotraster(raster(x, y), col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 			}		
 		}
 	}
@@ -45,18 +45,18 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), subsample=TRUE, maxdim=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
-		.plotraster(x, col=col, subsample=subsample, maxdim=maxdim, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+	function(x, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
+		.plotraster(x, col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 	}
 )	
 
 
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, maxdim=10000, cex=0.1, ...)  {
+	function(x, y, maxpixels=100000, cex=0.1, ...)  {
 		comp <- compare(c(x, y), bb=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
 		nc <- ncell(x)
-		x <- sampleSkip(x, maxdim=maxdim)
-		y <- sampleSkip(y, maxdim=maxdim)
+		x <- sampleRegular(x, n=maxpixels)
+		y <- sampleRegular(y, n=maxpixels)
 		if (length(x) < nc) {
 			warning(paste('plot used a sample of ', round(100*length(x)/nc), "% of the cells", sep=""))
 		}
