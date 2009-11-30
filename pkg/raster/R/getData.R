@@ -5,19 +5,47 @@
 # October 2008
 
 
-getData <- function(name='GADM', download=TRUE, ...) {
+getData <- function(name='GADM', download=TRUE, path='', ...) {
 	if (name=='GADM') {
 		.GADM(download=download, ...)
 	} else if (name=='SRTM') {
 		.SRTM(download=download, ...)
+	} else if (name=='SRTM') {
+		.worldclim(download=download, ...)
 	}
 }
 
 
-.GADM <- function(country="ABW", level=0, download=TRUE) {
-	path <- getwd()
+.getDataPath <- function(path) {
+	path <- trim(path)
+	if (path=='') {
+		path <- trim(getOption('rasterData'))
+		if (is.null(path) | isTRUE(path=='')) {
+			path <- getwd()
+		}
+	} else {
+		if (substr(path, nchar(path)-1, nchar(path)) == '//' ) {
+			p <- substr(path, 1, nchar(path)-2)		
+		} else if (substr(path, nchar(path), nchar(path)) == '/'  | substr(path, nchar(path), nchar(path)) == '\\') {
+			p <- substr(path, 1, nchar(path)-1)
+		} else {
+			p <- path
+		}
+		if (!file.exists(p)) {
+			stop('path does not exist: ', p)
+		}
+	}
+	if (substr(path, nchar(path), nchar(path)) != '/' & substr(path, nchar(path), nchar(path)) != '\\') {
+		path <- paste(path, "/", sep="")
+	}
+	return(path)
+}
+
+
+.GADM <- function(country="ABW", level=0, download=TRUE, path='') {
+	path <- .getDataPath(path)
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
-	path <- paste(path, "/", sep="")
+
 	
 	filename <- paste(path, country, '_adm', level, ".RData", sep="")
 	theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
@@ -38,10 +66,26 @@ getData <- function(name='GADM', download=TRUE, ...) {
 	} 
 }
 
+.worldclim <- function(res, x=0, y=0, download=TRUE) {
 
-.SRTM <- function(x=106, y=-6, download=TRUE) {
-	varname <- 'srtm'
-	path <- getwd()
+	stop('not yet implemented')
+	
+	if (!res %in% c(0.5, 2,5, 5, 10)) {
+		stop('resolution not available')
+	}
+	if (res > 0.5) {
+		
+	
+	} else {
+		# 30s tile
+	
+	
+	}
+}
+
+
+.SRTM <- function(x=106, y=-6, download=TRUE, path='') {
+	path <- .getDataPath()
 	
 	x <- min(180, max(-180, x))
 	y <- min(60, max(-60, y))
@@ -51,7 +95,7 @@ getData <- function(name='GADM', download=TRUE, ...) {
 	if (row < 10) { row <- paste('0', row, sep='') }
 	if (col < 10) { col <- paste('0', col, sep='') }
 	
-	f <- paste(varname, '_', col, '_', row, sep="")
+	f <- paste('srtm_', col, '_', row, sep="")
 	zipfilename <- paste(path, "/", f, ".ZIP", sep="")
 	tiffilename <- paste(path, "/", f, ".TIF", sep="")
 	
