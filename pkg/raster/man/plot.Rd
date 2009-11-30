@@ -25,7 +25,7 @@ Plot (that is, make a map of) the values of a RasterLayer or RasterStack, or mak
 \tabular{rll}{
 \tab \code{x} \tab a RasterLayer object \cr
 \tab \code{col}  \tab  A color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making \cr
-\tab \code{maxpixels}  \tab  Maximum requested number of pixels in the map display   \cr
+\tab \code{maxpixels}  \tab  Maximum requested number of pixels used for the map  \cr
 \tab \code{addbox}  \tab  Logical. If \code{TRUE} a box is drawn around the map \cr
 \tab \code{...}  \tab  Any argument that can be passed to \code{\link[fields]{image.plot}} and to \code{\link[graphics]{plot}}  \cr
 }
@@ -41,7 +41,7 @@ Plot (that is, make a map of) the values of a RasterLayer or RasterStack, or mak
 \tab \code{y} \tab The index of a RasterLayer in a RasterStack to be plotted. Either a single number between 1 and nlayers(rstack), a vector of numbers, or missing. If y is missing, all RasterLayers in the RasterStack will be plotted.\cr
 \tab \code{col}  \tab  A color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making \cr
 \tab \code{subsample}  \tab  Logical. If \code{TRUE}, the image is resampled using maxpixels \cr
-\tab \code{maxpixels}  \tab  Maximum requested number of pixels in the map display (either vertical or horizontal)  \cr
+\tab \code{maxpixels}  \tab  Maximum number of pixels used for the map  \cr
 \tab \code{addbox}  \tab  Logical. If \code{TRUE} a box is drawn around the map \cr
 \tab \code{axes}  \tab  see \code{?image} \cr
 \tab \code{xlab}  \tab  see \code{?image} \cr
