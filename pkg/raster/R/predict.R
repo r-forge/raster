@@ -118,11 +118,19 @@ setMethod('predict', signature(object='Raster'),
 					if (sp) { predv <- predv@data[,index] }
 					else { predv <- predv[,index+2] }
 				} else if (inherits(model, "Krig")) {  
-					rowv <- na.omit(rowvals)
-					predv <- napred
-					if (nrow(rowv) > 0) {
-						naind <- as.vector(attr(rowv, "na.action"))
-						predv[-naind] <- predict(model, rowv)
+					if (xyOnly) {
+						predv <- predict(model, rowvals)
+					} else {
+						rowv <- na.omit(rowvals)
+						predv <- napred
+						if (nrow(rowv) > 0) {
+							naind <- as.vector(attr(rowv, "na.action"))
+							if (!is.null(naind)) {
+								predv[-naind] <- predict(model, rowv)
+							} else {
+								predv[] <- predict(model, rowv)
+							}
+						}
 					}
 				} else {
 					predv <- predict(model, rowvals)			

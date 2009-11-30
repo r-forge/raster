@@ -18,7 +18,7 @@ function(x, mask, filename="", ...){
 		return(x)
 	} else if (canProcessInMemory(x, 3)) {
 		if (dataContent(x) != 'all') { x <- readAll(x) }
-		if (dataContent(mask) != 'all') { x <- readAll(mask) }
+		if (dataContent(mask) != 'all') { mask <- readAll(mask) }
 		x[is.na(mask)] <- NA
 		return(x)
 	} else {

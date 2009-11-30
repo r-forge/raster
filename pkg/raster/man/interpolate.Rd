@@ -62,7 +62,7 @@ interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring 
 #ra <- aggregate(r, 10)
 #tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), values(ra) )
 #p <- interpolate(r, tps)
-#p[is.na(r)] <- NA
+#p <- mask(p, r)
 #plot(p)
 ## 
 
@@ -74,13 +74,15 @@ interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring 
 #data(meuse)
 #mg <- gstat(id = "zinc", formula = zinc ~ 1, locations = ~ x + y, data = meuse, nmax = 7, set = list(idp = .5))
 #z <- interpolate(r, mg)
-#z[is.na(r)] <- NA
+#z <- mask(z, r)
 #
 ## kriging
+#data(meuse)
 #coordinates(meuse) = ~x+y
 #v <- variogram(log(zinc)~1, meuse)
 #m <- fit.variogram(v, vgm(1, "Sph", 300, 1))
 #g <- gstat(NULL, "log.zinc", log(zinc)~1, meuse, model = m)
+#projection(r) <- projection(meuse)
 #x <- interpolate(r, g)
 }
 
