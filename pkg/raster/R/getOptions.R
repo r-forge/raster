@@ -16,6 +16,14 @@ showOptions <- function() {
 }
 
 
+.dataloc <- function(){
+	d <- trim(getOption('rasterDataLocation'))	
+	if (is.null(d)) {
+		d <- ''
+	}
+	return(d)
+}	
+
 
 .tmpdir <- function() {
 	d <- getOption('rasterTmpDir')

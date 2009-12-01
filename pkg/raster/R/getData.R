@@ -10,7 +10,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		.GADM(download=download, ...)
 	} else if (name=='SRTM') {
 		.SRTM(download=download, ...)
-	} else if (name=='SRTM') {
+	} else if (name=='worldclim') {
 		.worldclim(download=download, ...)
 	}
 }
@@ -19,7 +19,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 .getDataPath <- function(path) {
 	path <- trim(path)
 	if (path=='') {
-		path <- trim(getOption('rasterData'))
+		path <- .dataloc()
 		if (is.null(path) | isTRUE(path=='')) {
 			path <- getwd()
 		}
@@ -46,10 +46,9 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	path <- .getDataPath(path)
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
 
-	
 	filename <- paste(path, country, '_adm', level, ".RData", sep="")
-	theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
-	
+#	theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
+	theurl <- paste("http://gadm.org/data/rda/", country, '_adm', level, ".RData", sep="")
 	if (!file.exists(filename)) {
 		if (download) {
 			download.file(url=theurl, destfile=filename, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
@@ -66,20 +65,19 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	} 
 }
 
-.worldclim <- function(res, x=0, y=0, download=TRUE) {
-
+.worldclim <- function(res, var,  x=0, y=0, download=TRUE) {
 	stop('not yet implemented')
-	
-	if (!res %in% c(0.5, 2,5, 5, 10)) {
-		stop('resolution not available')
+	if (!res %in% c(0.5, 2.5, 5, 10)) {
+		stop('resolution should be one of: 0.5, 2.5, 5, 10')
+	}
+	if (!var %in% c('tmin', 'tmax', 'prec', 'bio')) {
+		stop('var should be one of: tmin, tmax, prec, bio')
 	}
 	if (res > 0.5) {
-		
 	
 	} else {
 		# 30s tile
-	
-	
+		
 	}
 }
 

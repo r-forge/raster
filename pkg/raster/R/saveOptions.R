@@ -20,6 +20,7 @@ clearOptions <- function() {
 	options(rasterProgress = 'none')
 	options(rasterTmpDir = .tmpdir())
 	options(rasterFilename = '')
+	options(rasterDataLocation = '')
 		
 	fn <- paste(R.home(component="etc"), '/', 'Rprofile.site', sep='')
 	lst <- readLines(fn)
@@ -41,6 +42,9 @@ saveOptions <- function() {
 	lst <- c(lst, paste("options(rasterOverwrite=", .overwrite(), ')', sep=''))
 	lst <- c(lst, paste("options(rasterProgress='", .progress(), "')", sep=''))
 	lst <- c(lst, paste("options(rasterTmpDir='", .tmpdir(), "')", sep=''))
+	lst <- c(lst, paste("options(rasterTmpDir='", .dataloc(), "')", sep=''))
+	options(rasterDataLocation = '')
+
 	r <- try( write(unlist(lst), fn), silent = TRUE )
 #	if (class(r) == "try-error") { cat('Cannot save options. No write access to: ', fn, '\n')	}
 }
