@@ -74,9 +74,8 @@ xy <- rbind(cbind(1, presence), cbind(0, absence))
 v <- cbind(xy[,1], xyValues(logo, xy[,2:3]))
 colnames(v)[1] <- 'presabs'
 
-#build model, e.g. with glm or randomForest
-formula <- as.formula(paste(colnames(v)[1], '~', paste(colnames(v)[2:ncol(v)], collapse=" + ")))
-model <- glm(formula, data=data.frame(v))
+#build a model, here an example with glm 
+model <- glm(formula=presabs~., data=data.frame(v))
 
 #predict to a raster
 r <- predict(logo, model, progress='text')
