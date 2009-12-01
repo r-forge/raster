@@ -37,21 +37,30 @@
 
 .readCellsGDAL <- function(raster, cells) {
 	if (!require(rgdal)) { stop() }
-
 	colrow <- matrix(ncol=5, nrow=length(cells))
 	colrow[,1] <- colFromCell(raster, cells)
 	colrow[,2] <- rowFromCell(raster, cells)
 	colrow[,3] <- cells
 	colrow[,4] <- NA
-	
 	rows <- na.omit(unique(colrow[order(colrow[,2]), 2]))
+
+	con <- GDAL.open(raster@file@name, silent=TRUE)
+	nc <- ncol(raster)
+
 	for (i in 1:length(rows)) {
-		raster <- .rasterRead(raster, rows[i])
+		offs <- c(rows[i]-1, 0) 
+		values <- getRasterData(con, offset=offs, region.dim=c(1, nc), band = raster@data@band)
 		thisrow <- subset(colrow, colrow[,2] == rows[i])
-		for (j in 1:length(thisrow[,1])) {
-			colrow[colrow[,3]==thisrow[j,3],4] <- raster@data@values[thisrow[j,1]]
-		}	
+		colrow[colrow[,2]==rows[i],4] <- values[thisrow[,1]]
 	}
+	closeDataset(con)
+
+	# if  NAvalue() has been used.....
+	if (raster@file@nodatavalue < 0) {
+		colrow[colrow[,4] <= raster@file@nodatavalue, 4] <- NA 			
+	} else {
+		colrow[colrow[,4] == raster@file@nodatavalue, 4] <- NA 					
+	}		
 	return(colrow[,3:4]) 
 }	
 
