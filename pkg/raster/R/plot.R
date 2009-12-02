@@ -45,7 +45,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
+	function(x, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes=TRUE, xlab="", ylab="", ...)  {
 		.plotraster(x, col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 	}
 )	

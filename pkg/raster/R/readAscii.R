@@ -65,9 +65,9 @@
 	for (i in 1:length(rows)) {
 		v <- .readRowAscii(raster, rows[i])
 		thisrow <- subset(colrow, colrow[,2] == rows[i])
-		for (j in 1:length(thisrow[,1])) {
-			colrow[colrow[,3]==thisrow[j,3],4] <- v[thisrow[j,1]]
-		}	
+		colrow[colrow[,2]==rows[i],4] <- v[thisrow[,1]]
 	}
-	return(colrow[,3:4]) 
+	return(colrow[,4]) 
 }
+
+

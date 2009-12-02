@@ -8,30 +8,32 @@
 .readCells <- function(raster, cells) {
 	uniquecells <- na.omit(unique(cells[order(cells)]))
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncell(raster))]
-	res <- cbind(cells, NA)
 	if (length(uniquecells) > 0) {
+		#if (dataContent(raster) != 'all') {
+		#	if canProcessInMemory(raster, 4) {
+		#		raster <- readAll(raster)
+		#	}
+		#}
 		if (dataContent(raster) == 'all') {
-			vals <- cbind(uniquecells, values(raster)[uniquecells])
+			vals <- values(raster)[uniquecells]
 		} else if (dataSource(raster) == 'disk') {
 			if (.driver(raster) == 'gdal') {
 				vals <- .readCellsGDAL(raster, uniquecells)
 			} else if (.driver(raster) == 'ascii') {
 				vals <- .readCellsAscii(raster, uniquecells)			
 			} else {
-				vals <- cbind(uniquecells, .readCellsRaster(raster, uniquecells))
+				vals <- .readCellsRaster(raster, uniquecells)
 			}	
 		} else { 
-			vals <- cbind(uniquecells, NA)
+			stop('no data on disk or in memory')
 		}	
-		if (length(vals) == 2) {
-			res[res[,1]==vals[1],2] <- vals[2] 
-		} else {
-			for (i in 1:length(vals[,1])) {
-				res[res[,1]==vals[i,1],2] <- vals[i,2] 
-			}	
-		}
-	}	
-	return(res[,2])
+		vals <- cbind(uniquecells, vals)
+	} else {
+		vals <- matrix(c(1,NA), ncol=2)
+	}
+	vals <- as.matrix(merge(x=cells, y=vals, by=1, all.x=TRUE, sort=FALSE))
+	colnames(vals)[2] <- ''
+	return(vals[,2]) 
 }
 
 
@@ -44,9 +46,8 @@
 	colrow[,4] <- NA
 	rows <- na.omit(unique(colrow[order(colrow[,2]), 2]))
 
-	con <- GDAL.open(raster@file@name, silent=TRUE)
 	nc <- ncol(raster)
-
+	con <- GDAL.open(raster@file@name, silent=TRUE)
 	for (i in 1:length(rows)) {
 		offs <- c(rows[i]-1, 0) 
 		values <- getRasterData(con, offset=offs, region.dim=c(1, nc), band = raster@data@band)
@@ -61,7 +62,7 @@
 	} else {
 		colrow[colrow[,4] == raster@file@nodatavalue, 4] <- NA 					
 	}		
-	return(colrow[,3:4]) 
+	return(colrow[,4]) 
 }	
 
 

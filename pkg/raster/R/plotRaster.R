@@ -27,10 +27,10 @@
 	} else {
 		object <- sampleRegular(object, n=maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
 	}
-	m <- values(object, format='matrix')
 	x <- (0:ncol(object)) * xres(object) + xmin(object) 
 	y <- (0:nrow(object)) * yres(object) + ymin(object) 		
-	z <- t(m[nrow(m):1,])
+	z <- values(object, format='matrix')
+	z <- t(z[nrow(z):1,])
 	z[is.infinite(z)] <- NA
 	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, ...)
 	if (addbox) {box()}
