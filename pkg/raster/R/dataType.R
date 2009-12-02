@@ -64,8 +64,8 @@
 			stop("invalid datasize for a FLT (should be 4 or 8)") 
 		}
 	} else if (type == "INT") {
-		x@data@min <- round(minValue(x))
-		x@data@max <- round(maxValue(x))
+		x@data@min <- round(x@data@min)
+		x@data@max <- round(x@data@max)
 		if (dataContent(x) != 'nodata') { 
 			if (class(x)  == 'RasterLayer') {
 				x@data@values <- as.integer(round(values(x)))

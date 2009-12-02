@@ -6,14 +6,14 @@
 
 #read data on the raster for cell numbers
 .readCells <- function(raster, cells) {
-	uniquecells <- na.omit(unique(cells[order(cells)]))
+	uniquecells <- sort(na.omit(unique(cells)))
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncell(raster))]
 	if (length(uniquecells) > 0) {
-		#if (dataContent(raster) != 'all') {
-		#	if canProcessInMemory(raster, 4) {
-		#		raster <- readAll(raster)
-		#	}
-		#}
+#		if (dataContent(raster) != 'all') {
+#			if (length(uniquecells > 1000) & canProcessInMemory(raster, 5)) {
+#				raster <- readAll(raster)
+#			}
+#		}
 		if (dataContent(raster) == 'all') {
 			vals <- values(raster)[uniquecells]
 		} else if (dataSource(raster) == 'disk') {
@@ -27,10 +27,10 @@
 		} else { 
 			stop('no data on disk or in memory')
 		}	
-		vals <- cbind(uniquecells, vals)
 	} else {
-		vals <- matrix(c(1,NA), ncol=2)
+		return(rep(NA, times=length(cells)))
 	}
+	vals <- cbind(uniquecells, vals)
 	vals <- as.matrix(merge(x=cells, y=vals, by=1, all.x=TRUE, sort=FALSE))
 	colnames(vals)[2] <- ''
 	return(vals[,2]) 
@@ -39,12 +39,11 @@
 
 .readCellsGDAL <- function(raster, cells) {
 	if (!require(rgdal)) { stop() }
-	colrow <- matrix(ncol=5, nrow=length(cells))
+	colrow <- matrix(ncol=3, nrow=length(cells))
 	colrow[,1] <- colFromCell(raster, cells)
 	colrow[,2] <- rowFromCell(raster, cells)
-	colrow[,3] <- cells
-	colrow[,4] <- NA
-	rows <- na.omit(unique(colrow[order(colrow[,2]), 2]))
+	colrow[,3] <- NA
+	rows <- sort(unique(colrow[,2]))
 
 	nc <- ncol(raster)
 	con <- GDAL.open(raster@file@name, silent=TRUE)
@@ -52,17 +51,17 @@
 		offs <- c(rows[i]-1, 0) 
 		values <- getRasterData(con, offset=offs, region.dim=c(1, nc), band = raster@data@band)
 		thisrow <- subset(colrow, colrow[,2] == rows[i])
-		colrow[colrow[,2]==rows[i],4] <- values[thisrow[,1]]
+		colrow[colrow[,2]==rows[i], 3] <- values[thisrow[,1]]
 	}
 	closeDataset(con)
 
 	# if  NAvalue() has been used.....
 	if (raster@file@nodatavalue < 0) {
-		colrow[colrow[,4] <= raster@file@nodatavalue, 4] <- NA 			
+		colrow[colrow[, 3] <= raster@file@nodatavalue, 3] <- NA 			
 	} else {
-		colrow[colrow[,4] == raster@file@nodatavalue, 4] <- NA 					
+		colrow[colrow[, 3] == raster@file@nodatavalue, 3] <- NA 					
 	}		
-	return(colrow[,4]) 
+	return(colrow[, 3]) 
 }	
 
 
