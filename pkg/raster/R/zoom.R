@@ -5,22 +5,22 @@
 # Licence GPL v3
 
 
-.zoom <- function(x, col=rev(terrain.colors(255)), layer=1, maxpixels=500, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...) {
+.zoom <- function(x, layer=1, maxpixels, extent=extent, ...) {
 	if (class(x) != 'RasterLayer') {
 		x <- raster(x,layer)
 	}
-	.plotraster(x, col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+	.plotraster(x, maxpixels=maxpixels, extent=extent, ...) 
 }
 
 
 	
-zoom <- function(x, extent=drawExtent(), new=TRUE, ...) {
-
-	xlim <- c(extent@xmin, extent@xmax)
-	ylim <- c(extent@ymin, extent@ymax)
+zoom <- function(x, extent=drawExtent(), maxpixels=100000, new=TRUE, ...) {
+	ext <- extent
+#	xlim <- c(extent@xmin, extent@xmax)
+#	ylim <- c(extent@ymin, extent@ymax)
 	if (new) { dev.new() }
 	# for reasons beyond me, this fails:
 	# plot(x=x, xlim=xlim, ylim=ylim, ...)
 	# so we have this workaround that will likely fail in some cases.
-	.zoom(x=x, xlim=xlim, ylim=ylim, ...)
+	.zoom(x=x, maxpixels=maxpixels, extent=extent, ...)
 }

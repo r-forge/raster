@@ -1,28 +1,26 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
-# Date : June 2008
+# Date : November 2009
 # Version 0.9
 # Licence GPL v3
 
 
-sampleRegular <- function(raster, n, extent=NULL, asRaster=FALSE, corners=FALSE) {
+sampleRegular <- function(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
 	if (n<1) {stop('n < 1')}
-	if (n >= ncell(raster)) {
-		if (asRaster) {
-			if (is.null(extent)) {
-				if (dataContent(raster) != 'all') { raster <- readAll(raster) }
-				return(raster)
-			} else {
-				return(crop(raster, extent))
-			}
-		} else {
-			if (is.null(extent)) {
-				if (dataContent(raster) != 'all') { raster <- readAll(raster) }
-			} else {
-				raster <- crop(raster, extent)
-				if (dataContent(raster) != 'all') { raster <- readAll(raster) }
-			}			
-			return(values(raster))
+	
+	if (is.null(extent)) {
+		if (n >= ncell(raster)) {
+			if (dataContent(raster) != 'all') { 
+			raster <- readAll(raster) }
+			if (asRaster) { return(raster) 
+			} else { return(values(raster)) }
+		}
+	} else {
+		extent <- alignExtent(extent, raster)
+		rr <- crop(raster(raster), extent)
+		if (n >= ncell(rr)) {
+			raster <- crop(raster, extent)
+			if (asRaster) { return(raster) 
+			} else { return(values(raster)) }
 		}
 	}
 	
@@ -40,26 +38,27 @@ sampleRegular <- function(raster, n, extent=NULL, asRaster=FALSE, corners=FALSE)
 		lastcol <- ncol(rcut)
 	}
 
-	x <- floor(sqrt(ncell(raster)/n))
+	x <- sqrt(ncell(rcut)/n)
 	y <- x
 	nr <- max(1,floor((lastrow - firstrow + 1) / y))
-	rows <- firstrow + y * (0:(nr-1)) 
+	rows <- (lastrow - firstrow + 1)/nr * 1:nr
 	if (corners) {
-		if (rows[length(rows)] != nrow(raster)) {
-			rows <- c(rows, nrow(raster))	
-		}
+		rows <- c(1, rows, nrow(rcut))	
+		rows[length(rows)] <- nrow(rcut) 
 	} else {
-		rows <- rows + floor(y/2) 
+		rows <- rows - (0.5 * (lastrow - firstrow + 1)/nr)
 	}
+	rows <- round(rows)
+	
 	nc <- max(1, floor((lastcol - firstcol + 1) / x))
-	cols <- firstcol + x * (0:(nc-1))
+	cols <- (lastcol - firstcol + 1)/nc * 1:nc
 	if (corners) {
-		if (cols[length(cols)] != ncol(raster)) {
-			cols <- c(cols, ncol(raster))	
-		}
+		cols[length(cols)] <- ncol(rcut) 
+		cols <- c(1, ncol(rcut))
 	} else {
-		cols <- cols + floor(x/2) 
+		cols <- cols - (0.5 * (lastcol - firstcol + 1)/nc)
 	}
+	cols <- round(cols)
 	nr <- length(rows)
 	nc <- length(cols)
 	m <- matrix(ncol=nr, nrow=nc)
@@ -69,10 +68,23 @@ sampleRegular <- function(raster, n, extent=NULL, asRaster=FALSE, corners=FALSE)
 	}	
 	m <- as.vector(m)
 	if (asRaster) {
-		outras <- raster(nrow=nr, ncol=nc, xmn=xmin(raster), xmx=xFromCol(raster, cols[length(cols)])+0.5*xres(raster) , ymn=yFromRow(raster, rows[length(rows)])-0.5*yres(raster), ymx=ymax(raster)) 
+		if (is.null(extent))  {
+			outras <- raster(nrow=nr, ncol=nc, xmn=xmin(raster), xmx=xFromCol(raster, cols[length(cols)])+0.5*xres(raster) , ymn=yFromRow(raster, rows[length(rows)])-0.5*yres(raster), ymx=ymax(raster)) 
+		} else {
+			outras <- raster(extent) 
+			nrow(outras) <- nr
+			ncol(outras) <- nc
+		}
 		outras <- setValues(outras, m)
 		return(outras)
 	} else {
-		return(m)
+		if (cells) {
+			cell <- cellFromRowCol(raster, rep(rows, each=nc), rep(cols, times=nr))
+			cell <- cbind(cell, m)
+			colnames(cell)[2] <- 'value'
+			return(cell)
+		} else {
+			return(m)
+		}
 	}	
 }

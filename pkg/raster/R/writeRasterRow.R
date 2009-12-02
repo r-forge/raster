@@ -85,8 +85,8 @@
 	
 	rsd <- na.omit(raster@data@values) # min and max values
 	if (length(rsd) > 0) {
-		raster@data@min <- min(raster@data@min, min(rsd))
-		raster@data@max <- max(raster@data@max, max(rsd))
+		raster@data@min <- min(raster@data@min, rsd)
+		raster@data@max <- max(raster@data@max, rsd)
 	}	
 	
 	writeBin(values, raster@file@con, size = raster@file@dsize )

@@ -12,7 +12,7 @@ if (!isGeneric("plot")) {
 
 
 setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)  {
+	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes=FALSE, xlab="", ylab="", ...)  {
 		if (missing(y)) {
 			nl <- nlayers(x)
 			if (nl > 12) {
@@ -22,7 +22,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			nc <- ceiling(sqrt(nl))
 			nr <- ceiling(nl / nc)
 			par(mfrow=c(nr, nc))
-			for (i in 1:nl) {
+			for (i in 1:nl) {	
 				.plotraster(raster(x, i), col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
 			}
 		} else if (is.numeric(y)) {
