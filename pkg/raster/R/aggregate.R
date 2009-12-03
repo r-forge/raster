@@ -74,8 +74,11 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
 		rows <- rep(1, each=(ncol(x) * yfact))
-		v <- vector(length=0)
-
+		
+		if (filename == '') {
+			v <- matrix(NA, ncol=nrow(out), nrow=ncol(out))
+		}
+		
 		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
@@ -97,12 +100,10 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			} else { 
 				vals <- tapply(values(x), cells, fun) 
 			}
-			vals <- as.vector(vals)
-
 			if (filename == "") {
-				v <- c(v, vals)
+				v[,r] <- as.vector(vals)
 			} else {
-				outRaster <- setValues(outRaster, vals, r)
+				outRaster <- setValues(outRaster, as.vector(vals), r)
 				outRaster <- writeRaster(outRaster, filename=filename, ...)
 			}
 		
@@ -110,7 +111,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		} 
 		pbClose(pb)
 		if (filename == "") { 
-			outRaster <- setValues(outRaster, v) 
+			outRaster <- setValues(outRaster, as.vector(v) )
 		}
 	}
 	return(outRaster)

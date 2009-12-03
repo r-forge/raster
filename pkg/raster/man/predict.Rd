@@ -8,7 +8,7 @@
 \title{Model predictions}
 
 \description{
-Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should exactely match those expected by the model. This will be the case if the RasterStack was used (via xyValues) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. If you have 'x' and 'y' as independent variables (i.e. the location of grid cells, xy=TRUE.
+Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should exactely match those expected by the model. This will be the case if the RasterStack was used (via xyValues) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. If you have 'x' and 'y' as independent variables (i.e. the location of grid cells), you can use \code{xy=TRUE} to add these to the independent variables, or use \code{\link[raster]{predict}}.
 }
 
 \usage{

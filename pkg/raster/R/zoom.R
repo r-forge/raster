@@ -6,7 +6,10 @@
 
 
 zoom <- function(x, extent=drawExtent(), maxpixels=100000, layer=1, new=TRUE, ...) {
-	extent <- extent  # force to start with drawing
+	if missing(x) {
+		stop('You must provide a Raster* object as first argument to this function')
+	}
+	extent <- extent  # force to start with drawing before creating a new graphics device
 	if (new) { dev.new() }
 	if (class(x) != 'RasterLayer') { x <- raster(x,layer) }
 	.plotraster(x, maxpixels=maxpixels, extent=extent, ...) 	
