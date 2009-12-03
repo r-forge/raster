@@ -112,11 +112,11 @@ but does not copy the filename nor the data associated with the original Raster 
 
 5) Create a RasterLayer object from a RasterStack, RasterBrick, SpatialPixels* or SpatialGrid* object. This copies the parameters of a RasterStack object to the new RasterLayer, and the values of the selected layer (if \code{layer > 0}. 
 
-\code{raster(x, layer=0)}
+\code{raster(x, index=0)}
 
 \tabular{rll}{
  \tab \code{x} \tab a RasterStack, SpatialPixels* or SpatialGrid* object \cr
- \tab \code{layer} \tab The RasterStack layer from which to copy values to the new RasterLayer \cr
+ \tab \code{index} \tab the RasterStack layer from which to copy values to the new RasterLayer \cr
 }
 
 
