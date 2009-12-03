@@ -16,22 +16,21 @@ sampleRegular <- function(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, c
 		}
 	} else {
 		extent <- alignExtent(extent, raster)
-		rr <- crop(raster(raster), extent)
-		if (n >= ncell(rr)) {
+		rcut <- crop(raster(raster), extent)
+		if (n >= ncell(rcut)) {
 			raster <- crop(raster, extent)
 			if (asRaster) { return(raster) 
 			} else { return(values(raster)) }
 		}
 	}
 	
-	rcut <- raster(raster)
 	if (!(is.null(extent))) { 
-		rcut <- crop(rcut, extent) 
 		firstrow <- rowFromY(raster, ymax(rcut))
 		lastrow <- rowFromY(raster, ymin(rcut))
 		firstcol <- colFromX(raster, xmin(rcut))
 		lastcol <- colFromX(raster, xmax(rcut))
 	} else {
+		rcut <- raster(raster)
 		firstrow <- 1
 		lastrow <- nrow(rcut)
 		firstcol <- 1
@@ -41,26 +40,23 @@ sampleRegular <- function(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, c
 	x <- sqrt(ncell(rcut)/n)
 	y <- x
 	nr <- max(1,floor((lastrow - firstrow + 1) / y))
-	rows <- (lastrow - firstrow + 1)/nr * 1:nr
+	rows <- (lastrow - firstrow + 1)/nr * 1:nr + firstrow - 1
 	if (corners) {
-		rows <- c(1, rows)	
-		rows[length(rows)] <- nrow(rcut) 
+		rows <- c(firstrow, rows, lastrow)	
 	} else {
 		rows <- rows - (0.5 * (lastrow - firstrow + 1)/nr)
 	}
 	rows <- round(rows)
 	
 	nc <- max(1, floor((lastcol - firstcol + 1) / x))
-	cols <- (lastcol - firstcol + 1)/nc * 1:nc
+	cols <- (lastcol - firstcol + 1)/nc * 1:nc  + firstcol - 1
 	if (corners) {
-		cols <- c(1, cols)
-		cols[length(cols)] <- ncol(rcut) 
+		cols <- c(firstcol, cols, lastcol)
 	} else {
 		cols <- cols - (0.5 * (lastcol - firstcol + 1)/nc)
 	}
-	cols <- round(cols)
-	cols <- unique(cols)
-	rows <- unique(rows)
+	cols <- unique(round(cols))
+	rows <- unique(round(rows))
 	nr <- length(rows)
 	nc <- length(cols)
 	
