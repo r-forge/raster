@@ -6,7 +6,7 @@
 
 
 zoom <- function(x, extent=drawExtent(), maxpixels=100000, layer=1, new=TRUE, ...) {
-	if missing(x) {
+	if (missing(x)) {
 		stop('You must provide a Raster* object as first argument to this function')
 	}
 	extent <- extent  # force to start with drawing before creating a new graphics device

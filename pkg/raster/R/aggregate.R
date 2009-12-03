@@ -42,7 +42,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	
 	if (na.rm) {
 		# this avoid warning messages 
-		narmfun <- function(x) { 
+		thefun <- function(x) { 
 			x <- na.omit(x)
 			if (length(x) == 0) { 
 				return(NA)
@@ -50,6 +50,8 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				return( fun(x) )
 			}
 		}
+	} else {
+		thefun <- fun
 	}
 	
 	if (dataContent(x) == 'all') {	
@@ -57,11 +59,8 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		rows <- rep(1:rsteps, each=ncol(x) * yfact)[1:ncell(x)]
 		cells <- cellFromRowCol(x, rows, cols)
 		
-		if (na.rm) {
-			outRaster <- setValues(outRaster, as.vector( tapply(values(x), cells, narmfun ))) 
-		} else {
-			outRaster <- setValues(outRaster, as.vector(tapply(values(x), cells, fun))) 
-		}
+		outRaster <- setValues(outRaster, as.vector( tapply(values(x), cells, thefun )))
+		
 		if (filename != "") {
 			outRaster <- writeRaster(outRaster, filename=filename, ...)
 		}
@@ -95,15 +94,12 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			}	
 			x <- readRows(x, startrow = startrow, nrows = nrows)
 			
-			if (na.rm) { 
-				vals <- tapply(values(x), cells, narmfun ) 
-			} else { 
-				vals <- tapply(values(x), cells, fun) 
-			}
+			vals <- as.vector( tapply(values(x), cells, thefun ) )
+			
 			if (filename == "") {
-				v[,r] <- as.vector(vals)
+				v[,r] <- vals
 			} else {
-				outRaster <- setValues(outRaster, as.vector(vals), r)
+				outRaster <- setValues(outRaster, vals, r)
 				outRaster <- writeRaster(outRaster, filename=filename, ...)
 			}
 		
