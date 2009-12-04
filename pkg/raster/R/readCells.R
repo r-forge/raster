@@ -31,9 +31,18 @@
 		return(rep(NA, times=length(cells)))
 	}
 	vals <- cbind(uniquecells, vals)
-	vals <- as.matrix(merge(x=cells, y=vals, by=1, all.x=TRUE, sort=FALSE))
-	colnames(vals)[2] <- ''
-	return(vals[,2]) 
+	
+	res <- cbind(cells, NA)
+	if (length(vals) == 2) {
+			res[res[,1]==vals[1],2] <- vals[2] 
+	} else {
+		for (i in 1:length(vals[,1])) {
+			res[res[,1]==vals[i,1],2] <- vals[i,2] 
+		}	
+	}
+	
+	colnames(res)[2] <- ''
+	return(res[,2]) 
 }
 
 
