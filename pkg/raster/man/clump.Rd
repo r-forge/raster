@@ -6,7 +6,7 @@
 \title{Detect clumps}
 
 \description{
-Detect clumps (patches) of connected cells. Each clump gets a unique ID.
+Detect clumps (patches) of connected cells. Each clump gets a unique ID. NA and zero are used as backaground values (i.e. these values are used to seperate clumps)
 }
 
 \usage{
@@ -36,10 +36,11 @@ A new RasterLayer object (in the R environment), and in some cases the side effe
 \author{Robert J. Hijmans}
 
 \examples{
-r <- raster(ncols=50, nrows=50)
-r[] <- round(runif(ncell(r))*0.75 )
+r <- raster(ncols=10, nrows=10)
+r[] <- round(runif(ncell(r))*0.6 )
 rc <- clump(r) 
-#freq(rc)
+freq(rc)
+#plot(rc)
 }
 \keyword{spatial}
 

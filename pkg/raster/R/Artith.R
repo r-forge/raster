@@ -48,6 +48,9 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 
 setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
     function(e1, e2){ 
+# simpler code, but would this make another copy of the objects?
+#		callGeneric(e2, e1) 
+
 		r <- raster(e2)
 		if (canProcessInMemory(e2, 4)) {
 			return( setValues(r, callGeneric(as.numeric(e1), getValues(e2))) )
