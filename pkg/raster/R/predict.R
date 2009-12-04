@@ -155,7 +155,7 @@ setMethod('predict', signature(object='Raster'),
 			if (filename == '') {
 				v[,r] <- predv
 			} else {
-				predrast <- setValues(predrast, predv, r)
+				predrast <- setValues(predrast, as.numeric(predv), r)
 				predrast <- writeRaster(predrast, filename=filename, ...)
 			}
 			pbStep(pb, r) 
