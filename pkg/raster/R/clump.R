@@ -18,14 +18,25 @@ function(x, filename='', ...) {
 			stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
 		}
 	}
+
 	x1 <- raster(x)
-	v <- matrix(NA, ncol=nrow(x1), nrow=ncol(x1))
+
+	tmpfile <- ""
+	if (!canProcessInMemory(x1, 3)) {
+		tmpfile <- rasterTmpFile()
+	}
+
+	if (tmpfile == '') {
+		v <- matrix(NA, ncol=nrow(x1), nrow=ncol(x1))
+	}	
+
 	nc <- ncol(x1)
 	nextclump <- 1
 	c2 <- vector(length=nc)
 	c2[] <- 0
 	rcl <- matrix(NA, nrow=0, ncol=2)
-		atrcl <- matrix(NA, nrow=0, ncol=2)
+	atrcl <- matrix(NA, nrow=0, ncol=2)
+	pb <- pbCreate(nrow(x1), type = .progress(...))
 	
 	for (r in 1:nrow(x1)) {
 		c1 <- c2
@@ -56,13 +67,18 @@ function(x, filename='', ...) {
 			}
 		}	
 		
+		if (tmpfile == "") {
+			v[,r] <- c2
+		} else {
+			x1 <- setValues(x1, c2, r)
+			x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4U')
+		}	
+				
 		trcl <- unique(trcl)
-		v[,r] <- c2
-		
 		rcl <- unique(rbind(rcl, trcl))
-#		pbStep(pb, r) 			
+		pbStep(pb, r) 			
 	}
-#	pbClose(pb)
+	pbClose(pb)
 
 	x1 <- setValues(x1, as.vector(v))
 	
@@ -98,8 +114,15 @@ function(x, filename='', ...) {
 	} else {
 		rclm <- c(0, 0, NA)
 	}
-	x2 <- reclass(x1, rclm, update=TRUE)
-	return(x2)
+
+	if (tmpfile != '') { tmpfile <- rasterTmpFile() }
+
+	prog = 
+	x1 <- reclass(x1, rclm, update=TRUE, filename=tmpfile, progress=.progress(...))
+	u <- na.omit(unique(x1))
+	u <- cbind(u, u, 1:length(u))
+	x1 <- reclass(x1, u, ...)
+	return(x1)
 }
 )
 
