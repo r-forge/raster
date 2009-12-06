@@ -12,21 +12,18 @@
 
 gridDistance <- function(object, filename="", ...) {
 
-		
-	filenm <- trim(filename)
+	filename <- trim(filename)
 	n <- ncell(object)
 	
-	if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) 
-	{
+	if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) {
 		stop('cannot compute distance on a RasterLayer with no data')
 	}
 		
-	if(canProcessInMemory(object, n=10) & filenm == "")
-	{
+	if(canProcessInMemory(object, n=10)) {
 		if (dataContent(object) != 'all' ) { 
 			object <- readAll(object) 
 		}
-		outRaster <- raster(object, filename=filenm)
+		outRaster <- raster(object)
 
 		fromCells <- which(!is.na(values(object)))
 		fromCells <- fromCells[which(values(object)[fromCells] == TRUE)]
@@ -63,14 +60,13 @@ gridDistance <- function(object, filename="", ...) {
 		}
 			
 		outRaster <- setValues(outRaster, accDist)	
-		if (filenm != "") {
-			outRaster <- writeRaster(outRaster, filename=filenm, ...)
+		if (filename != "") {
+			outRaster <- writeRaster(outRaster, filename=filename, ...)
 		}
 		return(outRaster)
 
-	} 
-	else { 
-		#stop('not yet implemented for large rasters')
+	} else { 
+		stop('not yet implemented for large rasters')
 		maxDist <- pointDistance(xyFromCell(object,1),xyFromCell(object,ncell(object)), type='GreatCircle')
 		nrows <- nrow(object)
 		ncols <- ncol(object)
@@ -89,11 +85,11 @@ gridDistance <- function(object, filename="", ...) {
 			while (remainingCells) 
 			{
 				remainingCells <- FALSE
-				r1 <- readRow(r1, rownr=1) #or getValues(row=)
+				r1 <- getValues(r1, 1)
 				rowWindow <- values(r1)
 				for(r in 1:(nrows-1))
 				{
-					r1 <- readRow(r1, rownr=r+1) #or getValues(row=)
+					r1 <- getValues(r1, r+1)
 					rowWindow <- c(rowWindow, values(r1))
 					fromCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow) & !((maxDist - rowWindow) < 1e-60)] 
 					toCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow)] 
@@ -136,7 +132,7 @@ gridDistance <- function(object, filename="", ...) {
 				r1 <- raster(f1)
 				r2 <- raster(r1)
 			}
-			outRaster <- saveAs(r1, filename=filenm, ...)
+			outRaster <- saveAs(r1, filename=filename, ...)
 			removeRasterFile(f1)	 
             removeRasterFile(f2)
 			return(outRaster)

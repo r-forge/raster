@@ -55,13 +55,10 @@ r1[345:355] <- 1
 distRaster <- gridDistance(r1) 
 plot(distRaster)
 
-#File on disk -- proof of concept only, highly inaccurate!
-rs <- raster(system.file("external/test.ag", package="sp"))
-rs[which(!is.na(getValues(rs)))] <- TRUE
-rs <- writeRaster(rs, rasterTmpFile())
-rs <- raster(filename(rs))
-distRaster <- gridDistance(rs, rasterTmpFile())
-plot(distRaster)
+#row by row processing -- proof of concept only, highly inaccurate!
+#setOptions(todisk=TRUE)
+#distRaster <- gridDistance(r1) 
+
 }
 
 

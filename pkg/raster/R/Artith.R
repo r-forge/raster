@@ -68,3 +68,27 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 	}
 )
 
+
+
+setMethod("Arith", signature(e1='Extent', e2='numeric'),
+	function(e1, e2){ 
+		r <- e1@xmax - e1@xmin
+		d <- callGeneric(r, e2)
+		d <- (d - r) / 2
+		e1@xmax <- e1@xmax + d
+		e1@xmin <- e1@xmin - d
+		r <- e1@ymax - e1@ymin
+		d <- callGeneric(r, e2)
+		d <- (d - r) / 2
+		e1@ymax <- e1@ymax + d
+		e1@ymin <- e1@ymin - d
+		return(e1)
+	}
+)
+
+setMethod("Arith", signature(e1='numeric', e2='Extent'),
+    function(e1, e2){ 
+		callGeneric(e2,e1)
+	}
+)
+

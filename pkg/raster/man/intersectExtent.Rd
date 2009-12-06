@@ -2,10 +2,10 @@
 
 \alias{intersectExtent}
   
-\title{BoundingExtent intersection}
+\title{Extent intersection}
 
 \description{
-intersectExtent returns the instersection of multiple bounding boxes
+intersectExtent returns the intersection (i.e. the area in which they all overlap) of multiple Extent objects
 }
 
 \usage{
@@ -13,12 +13,12 @@ intersectExtent(x, ...)
 }
 
 \arguments{
-  \item{x}{A Extent or Raster* object } 
-  \item{...}{ additional Extent or Raster* objects } 
+  \item{x}{Extent object or object from which it can be coerced via \code{\link[raster]{extent}} (Raster* or Spatial* objects)} 
+  \item{...}{Additional Extent or Raster* or Spatial* objects } 
 }
  
 \value{
-a Extent object
+Extent object
 }
   
 \author{Robert J. Hijmans}

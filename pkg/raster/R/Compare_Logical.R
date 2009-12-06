@@ -171,8 +171,6 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 
 
 
-
-
 setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		if ( compare(c(e1, e2)) ) {
@@ -192,4 +190,14 @@ setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
 	}
 )
 
+
+setMethod("Compare", signature(e1='Extent', e2='Extent'),
+	function(e1,e2){
+		a <- callGeneric(e2@xmin, e1@xmin)
+		b <- callGeneric(e1@xmax, e2@xmax)
+		c <- callGeneric(e2@ymin, e1@ymin)
+		d <- callGeneric(e1@ymax, e2@ymax)
+		a & b & c & d
+	}
+)	
 

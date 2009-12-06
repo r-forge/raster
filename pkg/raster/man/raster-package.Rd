@@ -23,7 +23,7 @@ See the vignette for more information: \code{vignette('raster', 'raster')}
 Package: \tab raster\cr
 Type: \tab Package\cr
 Version: \tab 0.9\cr
-Date: \tab 2009-09-11\cr
+Date: \tab 2009-12-05\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
