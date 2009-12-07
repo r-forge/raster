@@ -4,16 +4,15 @@
 # Licence GPL v3
 
 
+
 #read data on the raster for cell numbers
 .readCells <- function(raster, cells) {
-	uniquecells <- sort(na.omit(unique(cells)))
+	cells <- cbind(1:length(cells), cells)
+	cells <- cells[order(cells[,2]), ,drop=FALSE]
+	uniquecells <- sort(na.omit(unique(cells[,2])))
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncell(raster))]
+
 	if (length(uniquecells) > 0) {
-#		if (dataContent(raster) != 'all') {
-#			if (length(uniquecells > 1000) & canProcessInMemory(raster, 5)) {
-#				raster <- readAll(raster)
-#			}
-#		}
 		if (dataContent(raster) == 'all') {
 			vals <- values(raster)[uniquecells]
 		} else if (dataSource(raster) == 'disk') {
@@ -28,21 +27,14 @@
 			stop('no data on disk or in memory')
 		}	
 	} else {
-		return(rep(NA, times=length(cells)))
+		return(rep(NA, times=length(cells[,1])))
 	}
+	
 	vals <- cbind(uniquecells, vals)
-	
-	res <- cbind(cells, NA)
-	if (length(vals) == 2) {
-			res[res[,1]==vals[1],2] <- vals[2] 
-	} else {
-		for (i in 1:length(vals[,1])) {
-			res[res[,1]==vals[i,1],2] <- vals[i,2] 
-		}	
-	}
-	
-	colnames(res)[2] <- ''
-	return(res[,2]) 
+	vals <- merge(x=cells[,2], y=vals, by=1, all=TRUE)
+	vals <- cbind(cells[,1], vals[,2])
+	vals <- vals[order(cells[,1]), ,drop=FALSE]
+	return(vals[,2])
 }
 
 
