@@ -3,19 +3,13 @@
 # Version 0.9
 # Licence GPL v3
 
-
-
 if (!isGeneric("getValues")) {
 	setGeneric("getValues", function(x, row, ...)
 		standardGeneric("getValues"))
 }	
 
 setMethod("getValues", signature(x='Raster', row='missing'), 
-function(x, format='', names=FALSE) {
-	format <- trim(format)
-	if (format=='') {
-		format <- 'vector'
-	}
+function(x, format='', names=TRUE) {
 	if (dataContent(x) != "all") {
 		x <- readAll(x)
 	}
@@ -31,16 +25,13 @@ function(x, format='', names=FALSE) {
 
 
 setMethod("getValues", signature(x='RasterStack', row='missing'), 
-function(x, format='', names=FALSE) {
-	if (format=='') {
-		format <- 'matrix'
-	}
+function(x, format='', names=TRUE) {
 	m <- matrix(nrow=ncell(x), ncol=nlayers(x))
 	for (i in 1:nlayers(x)) {
 		m[,i] <- getValues(raster(x, i))
 	}
 	if (names) {
-		colnames(m) <- x@layernames
+		colnames(m) <- layerNames(x)
 	} 
 	if (format == 'dataframe') {
 		m <- as.data.frame(m)

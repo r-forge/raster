@@ -17,8 +17,8 @@ setMethod('predict', signature(object='Raster'),
 		varnames <- attr(v, "dimnames")[[2]]
 		lyrnames <- layerNames(object)
 		
-		if (length( varnames[(varnames %in% lyrnames)] ) != length(varnames)) {
-			stop('variable in model that is not in Raster* object: \nIn model: ', paste(varnames, collapse='; '), '\n', 'In Raster object: ', paste(lyrnames, collapse='; '))
+		if (! all(varnames %in% lyrnames)) {
+			stop('variable in model that is not in Raster object: \nIn model: ', paste(varnames, collapse='; '), '\n', 'In Raster object: ', paste(lyrnames, collapse='; '))
 		}
 
 		if ( length( unique(lyrnames[(lyrnames %in% varnames)] )) != length(lyrnames[(lyrnames %in% varnames)] )) {

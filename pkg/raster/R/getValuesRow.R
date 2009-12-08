@@ -5,7 +5,7 @@
 
 
 setMethod('getValues', signature(x='RasterStack', row='numeric'), 
-function(x, row, format='matrix', names=FALSE) {
+function(x, row, format='matrix', names=TRUE) {
 	if (!is.atomic(row)) {
 		stop()
 	}
@@ -19,7 +19,7 @@ function(x, row, format='matrix', names=FALSE) {
 	}
 
 	if (names) {
-		colnames(res) <- layerNames(res)
+		colnames(res) <- layerNames(x)
 	}
 	if (format=='dataframe') {
 		res <- as.data.frame(res)
@@ -33,10 +33,8 @@ function(x, row, format='matrix', names=FALSE) {
 )
 
 
-
-
 setMethod('getValues', signature(x='RasterLayer', row='numeric'), 
-function(x, row, format='vector', names=FALSE) {
+function(x, row, format='vector', names=TRUE) {
 	if (!is.atomic(row)) {
 		stop()
 	}
@@ -105,7 +103,7 @@ function(x, row, format='vector', names=FALSE) {
 
 
 setMethod('getValues', signature(x='RasterBrick', row='numeric'), 
-function(x, row, format='matrix', names=FALSE) {
+function(x, row, format='matrix', names=TRUE) {
 	if (!is.atomic(row)) {
 		stop()
 	}
