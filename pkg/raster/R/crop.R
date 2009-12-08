@@ -13,6 +13,8 @@ if (!isGeneric("crop")) {
 
 setMethod('crop', signature(x='RasterLayer', y='ANY'), 
 function(x, y, filename='', ...) {
+	filename <- trim(filename)
+
 	test <- try ( y <- extent(y), silent=TRUE )
 	if (class(test) == "try-error") {
 		stop('Cannot get an Extent object from argument y')
@@ -23,18 +25,18 @@ function(x, y, filename='', ...) {
 	bb <- alignExtent(bb, x)
 	outraster <- raster(x)
 	outraster <- setExtent(outraster, bb, keepres=TRUE)
-	filename <- trim(filename)
+	col1 <- colFromX(x, xmin(outraster)+0.5*xres(outraster))
+	col2 <- colFromX(x, xmax(outraster)-0.5*xres(outraster))
+	row1 <- rowFromY(x, ymax(outraster)-0.5*yres(outraster))
+	row2 <- rowFromY(x, ymin(outraster)+0.5*yres(outraster))
 	
 	if (dataContent(x) != 'all' & dataSource(x) == 'disk')  {
-		if (canProcessInMemory(outraster, 2)) {
+		if (canProcessInMemory(x, 3)) {
 			x <- readAll(x)
 		}
 	}
+	
 	if (dataContent(x) == 'all')  {
-		col1 <- colFromX(x, xmin(outraster)+0.5*xres(outraster))
-		col2 <- colFromX(x, xmax(outraster)-0.5*xres(outraster))
-		row1 <- rowFromY(x, ymax(outraster)-0.5*yres(outraster))
-		row2 <- rowFromY(x, ymin(outraster)+0.5*yres(outraster))
 		x <- values(x, format='matrix')[(row1:row2), (col1:col2)]
 		outraster <- setValues(outraster, as.vector(t(x)))
 		if (filename != "") { 
@@ -42,36 +44,38 @@ function(x, y, filename='', ...) {
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
-
+		nc <- ncol(outraster)
+		nr <- row2 - row1 + 1
+		if (canProcessInMemory(outraster, 3)) {
+			v <- values(.rasterReadBlock(x, row1, nrows=nr, startcol=col1, ncolumns=nc))
+			outraster <- setValues(outraster, as.vector(v) )
+			if (filename != '') { outraster <- writeRaster(outraster) }
+			return(outraster)
+		}
+	
 		if (!canProcessInMemory(outraster, 2) && filename == '') {
 			filename <- rasterTmpFile()
 			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		}
 		if (filename == '') {
-			v <- matrix(NA, ncol=nrow(out), nrow=ncol(out))
+			v <- matrix(NA, ncol=nrow(outraster), nrow=ncol(outraster))
 		}
 		
-		first_col <- colFromX(x, xmin(outraster) + 0.5 * xres(outraster))
-		first_row <- rowFromY(x, ymax(outraster) - 0.5 * yres(outraster))
-		last_row <- first_row + nrow(outraster) - 1
 		rownr <- 1
-		v <- vector(length=0)
-
 		pb <- pbCreate(nrow(outraster), type=.progress(...))
-		for (r in first_row:last_row) {
-			x <- readPartOfRow( x, r, first_col, ncol(outraster) )
+		for (r in row1:row2) {
+			x <- readPartOfRow( x, r, col1, nc)
 			if (filename == "") {
-				v <- c(v, values(x))
+				v[,r] <- values(x)
 			} else {
 				outraster <- setValues(outraster, values(x), rownr)
 				outraster <- writeRaster(outraster, filename=filename, ...)
 			}	
 			rownr <- rownr + 1
-
 			pbStep(pb, r) 			
 		} 
 		if (filename == '') { 
-			outraster <- setValues(outraster, v) 
+			outraster <- setValues(outraster, as.vector(v) )
 		}
 		pbClose(pb)
 		
