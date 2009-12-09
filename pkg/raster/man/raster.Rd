@@ -84,7 +84,7 @@ netCDF data can only be read if the data are stored in 2 (x and y) or 3 (x, y, a
 
 
   
-3) Create a RasterLayer object from a Extent object
+3) Create a RasterLayer object from an Extent object
   
 \code{raster(x, nrows=10, ncols=10, projs=NA)}
 
@@ -110,18 +110,27 @@ but does not copy the filename nor the data associated with the original Raster 
 
 
 
-5) Create a RasterLayer object from a RasterStack, RasterBrick, SpatialPixels* or SpatialGrid* object. This copies the parameters of a RasterStack object to the new RasterLayer, and the values of the selected layer (if \code{layer > 0}. 
+5) Create a RasterLayer object from a RasterStack or RasterBrick object.
 
 \code{raster(x, index=0)}
 
 \tabular{rll}{
  \tab \code{x} \tab a RasterStack, SpatialPixels* or SpatialGrid* object \cr
- \tab \code{index} \tab the RasterStack layer from which to copy values to the new RasterLayer \cr
+ \tab \code{index} \tab the layer from which to copy values to the new RasterLayer, if \code{layer > 0}.  \cr
 }
 
 
+6) Create a RasterLayer object from a SpatialPixels* or SpatialGrid* object. 
 
-6) Create a RasterLayer object from a matrix. The default extent is set to be between 0 and 1 in the x and y direction but can be changed at creation of the RasterLayer object or later. You can also provide a projection.  
+\code{raster(x, index=0)}
+
+\tabular{rll}{
+ \tab \code{x} \tab a RasterStack, SpatialPixels* or SpatialGrid* object \cr
+ \tab \code{index} \tab the layer from which to copy values to the new RasterLayer, if \code{layer > 0}.\cr
+}
+
+
+7) Create a RasterLayer object from a matrix. The default extent is set to be between 0 and 1 in the x and y direction but can be changed at creation of the RasterLayer object or later. You can also provide a projection.  
 
 \code{function(x, xmn=0, xmx=1, ymn=0, ymx=1, projs=NA)}
 
