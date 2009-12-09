@@ -107,7 +107,7 @@ setMethod('raster', signature(x='Extent'),
 
 
 setMethod('raster', signature(x='SpatialGrid'), 
-	function(x, index=0){
+	function(x, index=1){
 		r <- raster()
 		r <- setExtent(r, extent(x))
 		projection(r) <- x@proj4string
@@ -123,7 +123,7 @@ setMethod('raster', signature(x='SpatialGrid'),
 
 
 setMethod('raster', signature(x='SpatialPixels'), 
-	function(x, index=0){
+	function(x, index=1){
 		r <- raster()
 		r <- setExtent(r, extent(x))
 		projection(r) <- x@proj4string
