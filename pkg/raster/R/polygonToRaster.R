@@ -59,7 +59,7 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, mask=FALSE, updateValue="NA", filename="", ...) {
+polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", ...) {
 						
 	filename <- trim(filename)
 

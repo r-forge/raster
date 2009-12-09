@@ -10,7 +10,7 @@ Holes in polygons are recognized if they are correctly specified.
 }
 
 \usage{
-polygonsToRaster(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, mask=FALSE, updateValue="NA", filename="", ...) 
+polygonsToRaster(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", ...) 
 }
 
 \arguments{
@@ -19,8 +19,8 @@ polygonsToRaster(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, m
   \item{field}{The index (or colname) of the column in the SpatialPolygonsDataFrame to be transfered to the RasterLayer (see Details)}
   \item{overlap}{character. Determines what to do with cells with overlapping polygons. Either 'first', 'last', 'sum', 'min', or 'max'}
   \item{filename}{output filename }
-  \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{mask}{logical. If \code{TRUE} the values of the input RasterLayer are 'masked' by the polygons. I.e. cells overlapping with the polygons retain their values, the other cells become NA }
+  \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either \code{'all'}, \code{'NA'}, \code{'!NA'}, or \code{'zero'} } 
   \item{...}{additional arguments. See Details.}    
 }
