@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Authors: Robert J. Hijmans and Jacob van Etten, 
 # Date : May 2009
 # Version 0.9
 # Licence GPL v3
@@ -25,6 +25,19 @@ function(x, filename='', ...) {
 		tmpfile <- rasterTmpFile()
 	}
 	if (tmpfile=='') { 
+		if (require(igraph) & canProcessInMemory(x1, 8)) {
+			val <- which(getValues(x)==1)
+			adj <- adjacency(x1, val, val, directions=8)
+			adjv <- as.vector(t(adj))
+			g <- graph(adjv, directed=FALSE)
+			cl <- clusters(g)
+			x1[val] <- cl$membership[val+1]
+			d <- unique(x1)
+			rcl <- cbind(d, d, 1:length(d))
+			x1 <- reclass(x1, rcl)
+			return(x1)
+		}
+
 		nc <- ncol(x1)
 		nextclump <- 1
 		v <- matrix(0, ncol=ncol(x1)+1, nrow=nrow(x1)+1)

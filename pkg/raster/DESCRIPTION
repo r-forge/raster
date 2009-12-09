@@ -4,7 +4,7 @@ Title: Geographic analysis and modeling with raster data
 Version: 0.9.8-38
 Date: 7-December-2009
 Depends: methods, sp, R (>= 2.8.0)
-Suggests: rgdal (>= 0.5-33), RNetCDF, tcltk
+Suggests: rgdal (>= 0.5-33), RNetCDF, igraph, tcltk
 Author: Robert J. Hijmans & Jacob van Etten
 Maintainer: Robert J. Hijmans <r.hijmans@gmail.com> 
 Description: Package for reading, writing, and manipulating raster (grid) type spatial data
