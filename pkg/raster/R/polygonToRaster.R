@@ -59,14 +59,16 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, updateValue="NA", filename="", ...) {
+polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRaster=FALSE, mask=FALSE, updateValue="NA", filename="", ...) {
 						
 	filename <- trim(filename)
 
 	
+	
 	if (!(overlap %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
 		stop('invalid value for overlap')
 	}
+	if (mask) { updateRaster <- TRUE }
 	if (updateRaster) {
 		oldraster <- raster 
 		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
@@ -89,7 +91,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	if (length(field) > 1) { 
 		stop('field should be a single value') 
 	}
-	if (is.numeric(field) & field < 0) {
+	if (mask) {
+		putvals <- rep(1, length=npol)	
+	} else if (is.numeric(field) & field < 0) {
 		putvals <- rep(1, length=npol)	
 	} else if (class(spPolys) == 'SpatialPolygons' | field == 0) {
 		putvals <- as.integer(1:npol)
@@ -144,7 +148,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
 		
 	adj <- 0.5 * xres(raster)
-	v <- vector(length=0)
+	
+	v <- matrix(NA, ncol=nrow(raster), nrow=ncol(raster))
+	
 	rxmn <- xmin(raster) 
 	rxmx <- xmax(raster) 
 	rv1 <- rep(NA, ncol(raster))
@@ -204,7 +210,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 							}
 						}
 					}
-					if (overlap=='last') {
+					if (mask) {
+						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
+					} else if (overlap=='last') {
 						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
 					} else if (overlap=='first') {
 						rv[is.na(rv)] <- rvtmp[is.na(rv)]
@@ -223,7 +231,12 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 		}
 		rv[holes] <- NA
 		
-		if (updateRaster) {
+		if (mask) {
+			oldvals <- getValues(oldraster, r)
+			ind <- which(is.na(rv))
+			oldvals[ind] <- NA
+			rv <- oldvals
+		} else if (updateRaster) {
 			oldvals <- getValues(oldraster, r)
 			if (updateValue == "all") {
 				ind <- which(!is.na(rv))
@@ -239,7 +252,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 		}
 
 		if (filename == "") {
-			v <- c(v, rv)
+			v[,r] <- rv
 		} else {
 			raster <- setValues(raster, values=rv, rownr=r)
 			raster <- writeRaster(raster, filename=filename, ...)
@@ -250,7 +263,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', updateRas
 	pbClose(pb, TRUE)
 
 	if (filename == "") {
-		raster <- setValues(raster, v)
+		raster <- setValues(raster, as.vector(v))
 	}
 	
 	return(raster)
