@@ -3,7 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-
 	
 if (!isGeneric("clump")) {
 	setGeneric("clump", function(x, ...)
@@ -11,7 +10,9 @@ if (!isGeneric("clump")) {
 }	
 
 setMethod('clump', signature(x='RasterLayer'), 
-function(x, filename='', ...) {
+function(x, filename='', directions=8, ...) {
+
+	if (! directions %in% c(4,8)) {stop('directions should be 4 or 8')}
 
 	if (filename != ""  & file.exists(filename)) {
 		if (.overwrite(...)==FALSE) {
@@ -25,16 +26,19 @@ function(x, filename='', ...) {
 		tmpfile <- rasterTmpFile()
 	}
 	if (tmpfile=='') { 
-		if (require(igraph) & canProcessInMemory(x1, 8)) {
-			val <- which(getValues(x)==1)
-			adj <- adjacency(x1, val, val, directions=8)
-			adjv <- as.vector(t(adj))
-			g <- graph(adjv, directed=FALSE)
-			cl <- clusters(g)
-			x1[val] <- cl$membership[val+1]
+		igt <- try(library(igraph), silent=TRUE)
+		if (class(igt) != 'try-error' & canProcessInMemory(x1, 6)) {
+			pb <- pbCreate(2, type=.progress(...))
+			val <- which(getValues(x)!=0)
+			if (length(val) == 0) { stop('input raster has not values that are not zero') }
+			pbStep(pb, 1)
+			adjv <- as.vector( t ( adjacency(x1, val, val, directions=directions) ) )
+			cl <- clusters(graph(adjv, directed=FALSE))$membership[val+1]
+			x1[val] <- cl
+			pbStep(pb, 2)
 			d <- unique(x1)
-			rcl <- cbind(d, d, 1:length(d))
-			x1 <- reclass(x1, rcl)
+			pbClose(pb)
+			x1 <- reclass(x1, cbind(d, d, 1:length(d)), ...)
 			return(x1)
 		}
 
@@ -42,31 +46,58 @@ function(x, filename='', ...) {
 		nextclump <- 1
 		v <- matrix(0, ncol=ncol(x1)+1, nrow=nrow(x1)+1)
 		pb <- pbCreate(nrow(x1), type = .progress(...))
-	
-		for (r in 1:nrow(x1)) {
-			rr <- r + 1
-			b <- getValues(x, r)
-			b <- which(b != 0)
-			for ( cc in b ) {
-				vv <- na.omit(c(v[(rr-1),(cc-1):(cc+1)], v[rr, cc-1]))
-				vm <- max(vv)
-				if (vm > 0) {  
-					v[rr, cc] <- vm
-					vvv <- vv[(vv > 0) & (vv < vm)]
-					if (length(vvv) > 0) {
-						vvv <- unique(vvv)
-						for (i in vvv) {
-							v[v==i] <- vm
+
+		if (directions==8) { 
+			for (r in 1:nrow(x1)) {
+				rr <- r + 1
+				b <- getValues(x, r)
+				b <- which(b != 0)
+				for ( cc in b ) {
+					vv <- na.omit(c(v[(rr-1),(cc-1):(cc+1)], v[rr, cc-1]))
+					vm <- max(vv)
+					if (vm > 0) {  
+						v[rr, cc] <- vm
+						vvv <- vv[(vv > 0) & (vv < vm)]
+						if (length(vvv) > 0) {
+							vvv <- unique(vvv)
+							for (i in vvv) {
+								v[v==i] <- vm
+							}
 						}
+					} else {
+						v[rr, cc] <- nextclump
+						nextclump <- nextclump + 1					
 					}
-				} else {
-					v[rr, cc] <- nextclump
-					nextclump <- nextclump + 1					
 				}
+				pbStep(pb, r) 			
 			}
-			pbStep(pb, r) 			
+			pbClose(pb)
+		} else {
+			for (r in 1:nrow(x1)) {
+				rr <- r + 1
+				b <- getValues(x, r)
+				b <- which(b != 0)
+				for ( cc in b ) {
+					vv <- na.omit(c(v[(rr-1),cc], v[rr, cc-1]))
+					vm <- max(vv)
+					if (vm > 0) {  
+						v[rr, cc] <- vm
+						vvv <- vv[(vv > 0) & (vv < vm)]
+						if (length(vvv) > 0) {
+							vvv <- unique(vvv)
+							for (i in vvv) {
+								v[v==i] <- vm
+							}
+						}
+					} else {
+						v[rr, cc] <- nextclump
+						nextclump <- nextclump + 1					
+					}
+				}
+				pbStep(pb, r) 			
+			}
+			pbClose(pb)
 		}
-		pbClose(pb)
 		v[v==0] <- NA
 		rm(x)
 		x1 <- setValues(x1, as.vector(t(v[-1,-ncol(v)])))
@@ -83,43 +114,82 @@ function(x, filename='', ...) {
 		atrcl <- matrix(NA, nrow=0, ncol=2)
 		pb <- pbCreate(nrow(x1), type = .progress(...))
 	
-		for (r in 1:nrow(x1)) {
-			c1 <- c2
-			c2[] <- 0
-			b <- getValues(x, r)
-			b <- which(b != 0)
-			trcl <- atrcl
-			for ( cc in b ) {
-				vv <- na.omit(c(c1[(cc-1):(cc+1)], c2[cc-1]))
-				vm <- max(vv)
-				if (vm > 0) {  
-					c2[cc] <- vm
-					vvv <- vv[(vv > 0) & (vv < vm)]
-					if (length(vvv) > 0) {
-						vvv <- unique(vvv)
-						trcl <- rbind(trcl, cbind(vvv, vm))
-						c1[c1==vvv] <- vm
+		if (directions==8) {
+			for (r in 1:nrow(x1)) {
+				c1 <- c2
+				c2[] <- 0
+				b <- getValues(x, r)
+				b <- which(b != 0)
+				trcl <- atrcl
+				for ( cc in b ) {
+					vv <- na.omit(c(c1[(cc-1):(cc+1)], c2[cc-1]))
+					vm <- max(vv)
+					if (vm > 0) {  
+						c2[cc] <- vm
+						vvv <- vv[(vv > 0) & (vv < vm)]
+						if (length(vvv) > 0) {
+							vvv <- unique(vvv)
+							trcl <- rbind(trcl, cbind(vvv, vm))
+							c1[c1==vvv] <- vm
+						}
+					} else {
+						c2[cc] <- nextclump
+						nextclump <- nextclump + 1					
 					}
-				} else {
-					c2[cc] <- nextclump
-					nextclump <- nextclump + 1					
 				}
-			}
-			if (nrow(trcl) > 0) {
-				for (i in 1:nrow(trcl)) {
-					c2[c2==trcl[i,1]] <- trcl[i,2]
-				}
-			}	
+				if (nrow(trcl) > 0) {
+					for (i in 1:nrow(trcl)) {
+						c2[c2==trcl[i,1]] <- trcl[i,2]
+					}
+				}	
 		
-			x1 <- setValues(x1, c2, r)
-			x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4U')
-				
-			trcl <- unique(trcl)
-			rcl <- unique(rbind(rcl, trcl))
-			pbStep(pb, r) 			
-		}
-		pbClose(pb)
+				x1 <- setValues(x1, c2, r)
+				x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4U')
 
+				trcl <- unique(trcl)
+				rcl <- unique(rbind(rcl, trcl))
+				pbStep(pb, r) 			
+			}
+			pbClose(pb)
+		} else {
+
+			for (r in 1:nrow(x1)) {
+				c1 <- c2
+				c2[] <- 0
+				b <- getValues(x, r)
+				b <- which(b != 0)
+				trcl <- atrcl
+				for ( cc in b ) {
+					vv <- na.omit(c(c1[cc], c2[cc-1]))
+					vm <- max(vv)
+					if (vm > 0) {  
+						c2[cc] <- vm
+						vvv <- vv[(vv > 0) & (vv < vm)]
+						if (length(vvv) > 0) {
+							vvv <- unique(vvv)
+							trcl <- rbind(trcl, cbind(vvv, vm))
+							c1[c1==vvv] <- vm
+						}
+					} else {
+						c2[cc] <- nextclump
+						nextclump <- nextclump + 1					
+					}
+				}
+				if (nrow(trcl) > 0) {
+					for (i in 1:nrow(trcl)) {
+						c2[c2==trcl[i,1]] <- trcl[i,2]
+					}
+				}	
+		
+				x1 <- setValues(x1, c2, r)
+				x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4U')
+				
+				trcl <- unique(trcl)
+				rcl <- unique(rbind(rcl, trcl))
+				pbStep(pb, r) 			
+			}	
+			pbClose(pb)
+		}
 		if (nrow(rcl) > 1) {
 			rcl1 <- unique(rbind(rcl, cbind(rcl[,2], rcl[,1])))
 			rcl <- rcl1[rcl1[,1] > rcl1[,2],]

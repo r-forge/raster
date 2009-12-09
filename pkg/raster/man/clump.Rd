@@ -19,6 +19,8 @@ clump(x, ...)
 }
 
 \details{
+This function is quite slow. It is much quicker for files that can be loaded into memory, particularly when the igraph package is available.
+
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
   \tab \code{filename}  \tab Output filename. Default = '' \cr
@@ -33,7 +35,7 @@ The following additional arguments can be passed, to replace default values for 
 A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
 }
 
-\author{Robert J. Hijmans}
+\author{Robert J. Hijmans and Jacob van Etten}
 
 \examples{
 r <- raster(ncols=10, nrows=10)
