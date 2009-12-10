@@ -5,13 +5,25 @@
 # October 2008
 
 
+.unzip <- function(zipf, files, remove=TRUE) {
+	path <- dirname(zipf)
+	if (path=='') { path <- getwd() }
+	for (f in files) {
+		zip.file.extract(file=f, zipname=zipf, dir=path)
+	}
+	if (remove) { file.remove(zipf) }
+}
+
+
 getData <- function(name='GADM', download=TRUE, path='', ...) {
 	if (name=='GADM') {
-		.GADM(download=download, ...)
+		.GADM(download=download, path=path, ...)
 	} else if (name=='SRTM') {
-		.SRTM(download=download, ...)
+		.SRTM(download=download, path=path, ...)
+	} else if (name=='alt') {
+		.raster(name=name, download=download, path=path, ...)
 	} else if (name=='worldclim') {
-		.worldclim(download=download, ...)
+		.worldclim(download=download, path=path, ...)
 	}
 }
 
@@ -42,15 +54,21 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 
-.GADM <- function(country="ABW", level=0, download=TRUE, path='') {
+.GADM <- function(country, level, download, path) {
 	path <- .getDataPath(path)
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
 
+	if (missing(country)) {
+		stop('provide a 3 letter ISO country code')
+	}
+	if (missing(level)) {
+		stop('provide a "level=" argument; levels can be 0, 1, or 2 for most countries, and higer for some')
+	}
 	filename <- paste(path, country, '_adm', level, ".RData", sep="")
 #	theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
-	theurl <- paste("http://gadm.org/data/rda/", country, '_adm', level, ".RData", sep="")
 	if (!file.exists(filename)) {
 		if (download) {
+			theurl <- paste("http://gadm.org/data/rda/", country, '_adm', level, ".RData", sep="")
 			download.file(url=theurl, destfile=filename, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
 			if (!file.exists(filename))
 				{ cat("\nCould not download file -- perhaps it does not exist \n") }
@@ -65,7 +83,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	} 
 }
 
-.worldclim <- function(res, var,  x=0, y=0, download=TRUE) {
+.worldclim <- function(res, var,  x=0, y=0, download=TRUE, path='') {
 	stop('not yet implemented')
 	if (!res %in% c(0.5, 2.5, 5, 10)) {
 		stop('resolution should be one of: 0.5, 2.5, 5, 10')
@@ -79,6 +97,44 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		# 30s tile
 		
 	}
+}
+
+
+.raster <- function(country, name, path, mask=TRUE, download=TRUE, ...) {
+#	path <- .getDataPath(path)
+	if (mask) {
+		mskname <- '_msk_'
+		mskpath <- 'msk_'
+	} else {
+		mskname<-'_'
+		mskpath <- ''		
+	}
+	filename <- paste(path, country, mskname, name, ".grd", sep="")
+#	theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
+
+	#http://diva-gis.org/data/msk_alt/MEX_msk_alt.zip
+	if (!file.exists(filename)) {
+		zipfilename <- filename
+		ext(zipfilename) <- '.zip'
+		if (!file.exists(zipfilename)) {
+			if (download) {
+				theurl <- paste("http://diva-gis.org/data/", mskpath, name, "/", country, mskname, name, ".zip", sep="")
+				download.file(url=theurl, destfile=zipfilename, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
+				if (!file.exists(zipfilename))	{ cat("\nCould not download file -- perhaps it does not exist \n") }
+			} else {
+				cat("\nFile not available locally. Use 'download = TRUE'\n")
+			}
+		}
+		f <- filename
+		ext(f) <- '.gri'
+		f <- c(f, filename)
+		.unzip(zipfilename, f)
+	}	
+	if (file.exists(filename)) { 
+		rs <- raster(filename)
+		projection(rs) <- "+proj=longlat +datum=WGS84"
+		return(rs)
+	}	
 }
 
 
@@ -105,16 +161,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 			} else {cat('file not available locally, use download=TRUE\n') }	
 		}
 		if (file.exists(zipfilename)) { 
-			wd <- getwd()
-			setwd( path )
-			zipfn <- paste(f, ".ZIP", sep="")
-			fn <- paste(f, ".TIF", sep="")
-			zip.file.extract(file = fn, zipname = zipfn)
-			file.remove(zipfn)
-			setwd(wd)
-			tmpfile <- paste(tempdir(), '/', fn, sep="") 
-			file.copy(tmpfile, tiffilename, overwrite = FALSE)
-			file.remove(tmpfile)
+			.unzip(zipfilename, tiffilename)
 		}	
 	}
 	if (file.exists(tiffilename)) { 
