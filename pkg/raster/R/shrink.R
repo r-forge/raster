@@ -29,13 +29,13 @@ function(x, padding=0, filename='', ...) {
 		if (sum(is.na(v)) < nc) { break }
 	}
 	if ( r == nr) { stop('only NA values found') }
-	firstrow <- max(r+padding, 1)
+	firstrow <- min(max(r-padding, 1), nr)
 	
 	for (r in nr:1) {
 		v <- getValues(x, r)
 		if (sum(is.na(v)) < nc) { break }
 	}
-	lastrow <- min(r+padding, nr)
+	lastrow <- max(min(r+padding, nr), 1)
 	
 	if (lastrow < firstrow) { 
 		tmp <- firstrow
@@ -49,7 +49,7 @@ function(x, padding=0, filename='', ...) {
 		if (sum(is.na(v)) < nr) { break }
 		cells <- cells + 1
 	}
-	firstcol <- max(c+padding, 1) 
+	firstcol <- min(max(c-padding, 1), nc) 
 	
 	cells <- cellFromCol(x, nc)
 	for (c in nc:1) {
@@ -57,7 +57,7 @@ function(x, padding=0, filename='', ...) {
 		if (sum(is.na(v)) < nr) { break }
 		cells <- cells - 1
 	}
-	lastcol <- min(c+padding, nc)
+	lastcol <- max(min(c+padding, nc), 1)
 	
 	if (lastcol < firstcol) { 
 		tmp <- firstcol
