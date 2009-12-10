@@ -67,6 +67,13 @@ sampleRegular <- function(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, c
 #	}	
 #	m <- as.vector(m)
 	cell <- cellFromRowCol(raster, rep(rows, each=nc), rep(cols, times=nr))
+	
+	if ( dataContent(raster) != 'all') { 
+		if (canProcessInMemory(raster, 4)) {
+			raster <- readAll(raster)
+		}
+	}
+	
 	m <- .readCells(raster, cell)
 
 	if (asRaster) {

@@ -11,7 +11,7 @@ if (!isGeneric("plot")) {
 
 
 setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes=FALSE, xlab="", ylab="", ...)  {
+	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, ...)  {
 		if (missing(y)) {
 			nl <- nlayers(x)
 			if (nl > 12) {
@@ -22,7 +22,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			nr <- ceiling(nl / nc)
 			par(mfrow=c(nr, nc))
 			for (i in 1:nl) {	
-				.plotraster(raster(x, i), col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+				.plotraster(raster(x, i), col=col, maxpixels=maxpixels, ...) 
 			}
 		} else if (is.numeric(y)) {
 			y <- unique(as.integer(round(y)))
@@ -33,10 +33,10 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				par(mfrow=c(nr, nc))
 				par(mfrow=c(nr, nc))
 				for (i in 1:length(y)) {
-					.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+					.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, ...) 
 				}
 			} else {
-				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, ...) 
 			}		
 		}
 	}
@@ -44,8 +44,9 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), maxpixels=100000, addbox=TRUE, axes=TRUE, xlab="", ylab="", ...)  {
-		.plotraster(x, col=col, maxpixels=maxpixels, addbox=addbox, axes=axes, xlab=xlab, ylab=ylab, ...) 
+	function(x, col=rev(terrain.colors(255)), maxpixels=100000, levelplot=FALSE, ...)  {
+		if (levelplot) .levelplotraster(x, col=col, maxpixels=maxpixels, ...) 
+		else .plotraster(x, col=col, maxpixels=maxpixels, ...) 
 	}
 )	
 
