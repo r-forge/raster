@@ -3,8 +3,18 @@
 # Version 0.9
 # Licence GPL v3
 
+.couldBeLatLon <- function(x) {
+	if (isLatLon(x)) return(TRUE)
+	if (projection(x)=='NA') {
+		e <- extent(x)
+		if (e@xmin > -400 & e@xmax < 400 & e@ymin > -90.1 & e&ymax < 90.1) { return(TRUE) }
+	} else {
+		return(FALSE)
+	}
+}
+
 area <- function(x, filename='', ...) {
-	if (isLatLon(x) | projection(x)=='NA') {
+	if (.couldBeLatLon(x)){
 		out <- raster(x)
 		filename <- trim(filename)
 		if (!canProcessInMemory(x, 3) & filename == '') {
@@ -43,3 +53,4 @@ area <- function(x, filename='', ...) {
 		stop('This function is only (useful) for layer with a lat/lon CRS')
 	}
 }
+
