@@ -4,7 +4,7 @@
 # Version 0.9
 # Licence GPL v3
 
-	
+
 if (!isGeneric("crop")) {
 	setGeneric("crop", function(x, y, ...)
 		standardGeneric("crop"))
@@ -12,7 +12,7 @@ if (!isGeneric("crop")) {
 
 
 setMethod('crop', signature(x='RasterLayer', y='ANY'), 
-function(x, y, filename='', ...) {
+function(x, y, filename='', datatype=dataType(x), ...) {
 	filename <- trim(filename)
 
 	test <- try ( y <- extent(y), silent=TRUE )
@@ -35,12 +35,13 @@ function(x, y, filename='', ...) {
 			x <- readAll(x)
 		}
 	}
-	
+	datatype=dataType(x)
+
 	if (dataContent(x) == 'all')  {
 		x <- values(x, format='matrix')[(row1:row2), (col1:col2)]
 		outraster <- setValues(outraster, as.vector(t(x)))
 		if (filename != "") { 
-			outraster <- writeRaster(outraster, filename=filename, datatype=dataType(x), ...)
+			outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)
 		}
 
 	} else if ( dataSource(x) == 'disk') { 
@@ -49,7 +50,8 @@ function(x, y, filename='', ...) {
 		if (canProcessInMemory(outraster, 3)) {
 			v <- values(.rasterReadBlock(x, row1, nrows=nr, startcol=col1, ncolumns=nc))
 			outraster <- setValues(outraster, as.vector(v) )
-			if (filename != '') { outraster <- writeRaster(outraster) }
+			if (filename != '') { 
+				outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...) }
 			return(outraster)
 		}
 	
@@ -69,7 +71,7 @@ function(x, y, filename='', ...) {
 				v[,r] <- values(x)
 			} else {
 				outraster <- setValues(outraster, values(x), rownr)
-				outraster <- writeRaster(outraster, filename=filename, ...)
+				outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)
 			}	
 			rownr <- rownr + 1
 			pbStep(pb, r) 			

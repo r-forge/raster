@@ -69,7 +69,7 @@ function(x, padding=0, filename='', ...) {
 	yr <- yres(x)
 	e <- extent(xFromCol(x, firstcol)-0.5*xr, xFromCol(x, lastcol)+0.5*xr, yFromRow(x, lastrow)-0.5*yr, yFromRow(x, firstrow)+0.5*yr)
 	
-	return( crop(x, e, ...) )
+	return( crop(x, e, filename=filename, ...) )
 }
 )
 
