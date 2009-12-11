@@ -5,25 +5,17 @@
 # October 2008
 
 
-.unzip <- function(zipf, files, remove=TRUE) {
-	path <- dirname(zipf)
-	if (path=='') { path <- getwd() }
-	for (f in files) {
-		zip.file.extract(file=f, zipname=zipf, dir=path)
-	}
-	if (remove) { file.remove(zipf) }
-}
-
 
 getData <- function(name='GADM', download=TRUE, path='', ...) {
+	path <- .getDataPath(path)
 	if (name=='GADM') {
-		.GADM(download=download, path=path, ...)
+		.GADM(..., download=download, path=path)
 	} else if (name=='SRTM') {
-		.SRTM(download=download, path=path, ...)
+		.SRTM(..., download=download, path=path, ...)
 	} else if (name=='alt') {
-		.raster(name=name, download=download, path=path, ...)
+		.raster(..., name=name, download=download, path=path)
 	} else if (name=='worldclim') {
-		.worldclim(download=download, path=path, ...)
+		.worldclim(..., download=download, path=path)
 	}
 }
 
@@ -54,8 +46,18 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 
+
+.unzip <- function(zipf, files, remove=TRUE) {
+	path <- dirname(zipf)
+	if (path=='') { path <- getwd() }
+	for (f in files) {
+		zip.file.extract(file=f, zipname=zipf, dir=path)
+	}
+	if (remove) { file.remove(zipf) }
+}
+
+
 .GADM <- function(country, level, download, path) {
-	path <- .getDataPath(path)
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
 
 	if (missing(country)) {
@@ -83,24 +85,70 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	} 
 }
 
-.worldclim <- function(res, var,  x=0, y=0, download=TRUE, path='') {
-	stop('not yet implemented')
+
+.worldclim <- function(var, res, x, y, path, download=TRUE) {
 	if (!res %in% c(0.5, 2.5, 5, 10)) {
 		stop('resolution should be one of: 0.5, 2.5, 5, 10')
 	}
+	if (res==2.5) { res <- '2-5' }
 	if (!var %in% c('tmin', 'tmax', 'prec', 'bio')) {
 		stop('var should be one of: tmin, tmax, prec, bio')
 	}
-	if (res > 0.5) {
-	
+	path <- paste(path, 'wc', res, '/', sep='')
+	dir.create(path, showWarnings=FALSE)
+
+	if (res==0.5) {
+		x <- min(180, max(-180, x))
+		y <- min(90, max(-60, y))
+		rs <- raster(nrows=5, ncols=12, xmn=-180, xmx=180, ymn=-60, ymx=90 )
+		row <- rowFromY(rs, y) - 1
+		col <- colFromX(rs, x) - 1
+		rc <- paste(row, col, sep='') 
+		zip <- paste(var, '_', rc, '.zip', sep='')
+		zipfile <- paste(path, zip, sep='')
+		if (var  != 'bio') {
+			bilfiles <- paste(var, 1:12, '_', rc, '.bil', sep='')
+			hdrfiles <- paste(var, 1:12, '_', rc, '.hdr', sep='')
+		} else {
+			bilfiles <- paste(var, 1:19, '_', rc, '.bil', sep='')
+			hdrfiles <- paste(var, 1:19, '_', rc, '.hdr', sep='')		
+		}
 	} else {
-		# 30s tile
-		
+		zip <- paste(var, '_', res, 'm_bil.zip', sep='')
+		zipfile <- paste(path, zip, sep='')
+		if (var  != 'bio') {
+			bilfiles <- paste(var, 1:12, '.bil', sep='')
+			hdrfiles <- paste(var, 1:12, '.hdr', sep='')
+		} else {
+			bilfiles <- paste(var, 1:19, '.bil', sep='')
+			hdrfiles <- paste(var, 1:19, '.hdr', sep='')	
+		}
 	}
+	theurl <- paste('http://biogeo.berkeley.edu/worldclim1_4/tiles/cur/', zip, sep='')
+	files <- c(paste(path, bilfiles, sep=''), paste(path, hdrfiles, sep=''))
+	fc <- sum(file.exists(files))
+	if (fc < 24) {
+		if (!file.exists(zipfile)) {
+			if (download) {
+				download.file(url=theurl, destfile=zipfile, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
+				if (!file.exists(zipfile))	{ cat("\nCould not download file -- perhaps it does not exist \n") }
+			} else {
+				cat("\nFile not available locally. Use 'download = TRUE'\n")
+			}
+		}	
+		.unzip(zipfile, c(bilfiles, hdrfiles), remove=FALSE)	
+		for (h in paste(path, hdrfiles, sep='')) {
+			x <- readLines(h)
+			x <- c(x[1:14], 'PIXELTYPE     SIGNEDINT', x[15:length(x)])
+			writeLines(x, h)
+		}
+	}
+	st <- stack(paste(path, bilfiles, sep=''))
+	return(st)
 }
 
 
-.raster <- function(country, name, path, mask=TRUE, download=TRUE, ...) {
+.raster <- function(country, name, mask=TRUE, path, download, ...) {
 #	path <- .getDataPath(path)
 	if (mask) {
 		mskname <- '_msk_'
@@ -128,7 +176,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		f <- filename
 		ext(f) <- '.gri'
 		f <- c(f, filename)
-		.unzip(zipfilename, f)
+		.unzip(zipfilename, f, remove=T)
 	}	
 	if (file.exists(filename)) { 
 		rs <- raster(filename)
@@ -138,9 +186,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 
-.SRTM <- function(x=106, y=-6, download=TRUE, path='') {
-	path <- .getDataPath()
-	
+.SRTM <- function(x, y, download, path) {
 	x <- min(180, max(-180, x))
 	y <- min(60, max(-60, y))
 	rs <- raster(nrows=24, ncols=72, xmn=-180, xmx=180, ymn=-60, ymx=60 )
