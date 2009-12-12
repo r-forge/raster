@@ -18,8 +18,10 @@ showOptions <- function() {
 
 .dataloc <- function(){
 	d <- trim(getOption('rasterDataLocation'))	
-	if (is.null(d)) {
-		d <- ''
+	if (is.null(d) ) {
+		d <- getwd()
+	} else if (d=='') {
+		d <- getwd()
 	}
 	return(d)
 }	

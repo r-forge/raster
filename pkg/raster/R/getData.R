@@ -5,7 +5,6 @@
 # October 2008
 
 
-
 getData <- function(name='GADM', download=TRUE, path='', ...) {
 	path <- .getDataPath(path)
 	if (name=='GADM') {
@@ -24,9 +23,6 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	path <- trim(path)
 	if (path=='') {
 		path <- .dataloc()
-		if (is.null(path) | isTRUE(path=='')) {
-			path <- getwd()
-		}
 	} else {
 		if (substr(path, nchar(path)-1, nchar(path)) == '//' ) {
 			p <- substr(path, 1, nchar(path)-2)		
@@ -43,17 +39,6 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		path <- paste(path, "/", sep="")
 	}
 	return(path)
-}
-
-
-
-.unzip <- function(zipf, files, remove=TRUE) {
-	path <- dirname(zipf)
-	if (path=='') { path <- getwd() }
-	for (f in files) {
-		zip.file.extract(file=f, zipname=zipf, dir=path)
-	}
-	if (remove) { file.remove(zipf) }
 }
 
 
@@ -86,7 +71,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 
-.worldclim <- function(var, res, x, y, path, download=TRUE) {
+.worldclim <- function(var, res, lon, lat, path, download=TRUE) {
 	if (!res %in% c(0.5, 2.5, 5, 10)) {
 		stop('resolution should be one of: 0.5, 2.5, 5, 10')
 	}
@@ -98,11 +83,11 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	dir.create(path, showWarnings=FALSE)
 
 	if (res==0.5) {
-		x <- min(180, max(-180, x))
-		y <- min(90, max(-60, y))
+		lon <- min(180, max(-180, lon))
+		lat <- min(90, max(-60, lat))
 		rs <- raster(nrows=5, ncols=12, xmn=-180, xmx=180, ymn=-60, ymx=90 )
-		row <- rowFromY(rs, y) - 1
-		col <- colFromX(rs, x) - 1
+		row <- rowFromY(rs, lat) - 1
+		col <- colFromX(rs, lon) - 1
 		rc <- paste(row, col, sep='') 
 		zip <- paste(var, '_', rc, '.zip', sep='')
 		zipfile <- paste(path, zip, sep='')
@@ -113,6 +98,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 			bilfiles <- paste(var, 1:19, '_', rc, '.bil', sep='')
 			hdrfiles <- paste(var, 1:19, '_', rc, '.hdr', sep='')		
 		}
+		theurl <- paste('http://biogeo.berkeley.edu/worldclim1_4/tiles/cur/', zip, sep='')
 	} else {
 		zip <- paste(var, '_', res, 'm_bil.zip', sep='')
 		zipfile <- paste(path, zip, sep='')
@@ -123,20 +109,22 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 			bilfiles <- paste(var, 1:19, '.bil', sep='')
 			hdrfiles <- paste(var, 1:19, '.hdr', sep='')	
 		}
+		theurl <- paste('http://biogeo.berkeley.edu/worldclim1_4/grid/cur/', zip, sep='')
 	}
-	theurl <- paste('http://biogeo.berkeley.edu/worldclim1_4/tiles/cur/', zip, sep='')
 	files <- c(paste(path, bilfiles, sep=''), paste(path, hdrfiles, sep=''))
 	fc <- sum(file.exists(files))
 	if (fc < 24) {
 		if (!file.exists(zipfile)) {
 			if (download) {
 				download.file(url=theurl, destfile=zipfile, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
-				if (!file.exists(zipfile))	{ cat("\nCould not download file -- perhaps it does not exist \n") }
+				if (!file.exists(zipfile))	{ 
+					cat("\n Could not download file -- perhaps it does not exist \n") 
+				}
 			} else {
 				cat("\nFile not available locally. Use 'download = TRUE'\n")
 			}
 		}	
-		.unzip(zipfile, c(bilfiles, hdrfiles), remove=FALSE)	
+		unzip(zipfile, exdir=dirname(zipfile))
 		for (h in paste(path, hdrfiles, sep='')) {
 			x <- readLines(h)
 			x <- c(x[1:14], 'PIXELTYPE     SIGNEDINT', x[15:length(x)])
@@ -149,7 +137,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 
 
 .raster <- function(country, name, mask=TRUE, path, download, ...) {
-#	path <- .getDataPath(path)
+	path <- .getDataPath(path)
 	if (mask) {
 		mskname <- '_msk_'
 		mskpath <- 'msk_'
@@ -173,10 +161,8 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 				cat("\nFile not available locally. Use 'download = TRUE'\n")
 			}
 		}
-		f <- filename
-		ext(f) <- '.gri'
-		f <- c(f, filename)
-		.unzip(zipfilename, f, remove=T)
+		unzip(zipfilename, exdir=dirname(zipfilename))
+		file.remove(zipfilename)
 	}	
 	if (file.exists(filename)) { 
 		rs <- raster(filename)
@@ -186,12 +172,12 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 
-.SRTM <- function(x, y, download, path) {
-	x <- min(180, max(-180, x))
-	y <- min(60, max(-60, y))
+.SRTM <- function(lon, lat, download, path) {
+	lon <- min(180, max(-180, lon))
+	lat <- min(60, max(-60, lat))
 	rs <- raster(nrows=24, ncols=72, xmn=-180, xmx=180, ymn=-60, ymx=60 )
-	row <- rowFromY(rs, y)
-	col <- colFromX(rs, x)
+	row <- rowFromY(rs, lat)
+	col <- colFromX(rs, lon)
 	if (row < 10) { row <- paste('0', row, sep='') }
 	if (col < 10) { col <- paste('0', col, sep='') }
 	
@@ -207,7 +193,8 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 			} else {cat('file not available locally, use download=TRUE\n') }	
 		}
 		if (file.exists(zipfilename)) { 
-			.unzip(zipfilename, tiffilename)
+			unzip(zipfilename, exdir=dirname(zipfilename))
+			file.remove(zipfilename)
 		}	
 	}
 	if (file.exists(tiffilename)) { 

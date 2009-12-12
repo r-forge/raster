@@ -10,7 +10,7 @@ if (!isGeneric("predict")) {
 
 setMethod('predict', signature(object='Raster'), 
 	function(object, model, filename="", xy=FALSE, index=1, debug.level=1, ...) {
-		if (class(model) %in% c('Bioclim', 'Domain', 'Mahalanobis')) { return ( predict(model, object, filename=filename, ...) ) }
+		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis')) { return ( predict(model, object, filename=filename, ...) ) }
 	
 		predrast <- raster(object)
 		filename <- trim(filename)
