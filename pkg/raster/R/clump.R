@@ -21,6 +21,8 @@ function(x, filename='', directions=8, ...) {
 	}
 
 	x1 <- raster(x)
+	global <- .isGlobalLatLon(x1)
+	
 	tmpfile <- ""
 	if (!canProcessInMemory(x1, 3)) {
 		tmpfile <- rasterTmpFile()
