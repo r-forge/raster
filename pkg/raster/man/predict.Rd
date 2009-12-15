@@ -84,12 +84,13 @@ plot(r>0.3)
 points(presence, bg='blue', pch=21)
 points(absence, bg='red', pch=21)
 
-# also try:
+## also try:
 # require(randomForest)
-# formula <- as.factor(presabs) ~.
+## formula <- as.factor(presabs) ~.
+# formula <- presabs ~.
 # model <- randomForest(formula, data=data.frame(v))
 # r2 <- predict(logo, type='response', model, progress='text')
-# note the additional argument "type='response'" that is passed to predict.randomForest
+## note the additional argument "type='response'" that is passed to predict.randomForest
 
 }
 

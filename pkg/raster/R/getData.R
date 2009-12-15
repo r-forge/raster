@@ -15,7 +15,37 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		.raster(..., name=name, download=download, path=path)
 	} else if (name=='worldclim') {
 		.worldclim(..., download=download, path=path)
+	} else if (name=='ISO3') {
+		.countries()[,c(2,1)]
 	}
+	
+}
+
+.countries <- function() {
+	path <- paste(system.file(package="raster"), "/external", sep='')
+	d <- read.csv(paste(path, "/countries.csv", sep=""), header=T, quote = "!@!")
+	return(as.matrix(d))
+}
+
+
+.getCountry <- function(country) {
+	country <- toupper(trim(country[1]))
+	if (missing(country)) {
+		stop('provide a 3 letter ISO country code')
+	}
+	cs <- toupper(.countries())
+	if (! country %in% cs[,2]) {
+		if (country %in% cs[,3]) {
+			i <- which(country==cs[,3])
+			country <- cs[i,2]
+		} else if (country %in% cs[,1]) {
+			i <- which(country==cs[,1])
+			country <- cs[i,2]
+		} else {
+			stop('provide a valid 3 letter ISO country code')
+		}
+	}
+	return(country)
 }
 
 
@@ -45,12 +75,13 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 .GADM <- function(country, level, download, path) {
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
 
-	if (missing(country)) {
-		stop('provide a 3 letter ISO country code')
-	}
+	country <- .getCountry(country)
+	
 	if (missing(level)) {
 		stop('provide a "level=" argument; levels can be 0, 1, or 2 for most countries, and higer for some')
 	}
+
+	
 	filename <- paste(path, country, '_adm', level, ".RData", sep="")
 #	theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
 	if (!file.exists(filename)) {
@@ -137,6 +168,10 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 
 
 .raster <- function(country, name, mask=TRUE, path, download, ...) {
+
+	country <- .getCountry(country)
+
+	
 	path <- .getDataPath(path)
 	if (mask) {
 		mskname <- '_msk_'
