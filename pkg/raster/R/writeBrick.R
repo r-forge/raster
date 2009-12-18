@@ -15,7 +15,7 @@
 	progress <- .progress(...)
 	
 	nl <- nlayers(object)
-	rout <- brick(object)
+	rout <- raster(object)
 	
 	pb <- pbCreate(nrow(rout), type=progress)
 	if (bandorder=='BIL') {
@@ -33,7 +33,7 @@
 			object <- clearValues(object)
 			rout <- setValues(rout, sv)
 			rm(sv)
-			rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)			
+			rout <- .writeRasterAll(rout, filename=filename, datatype=datatype, overwrite=overwrite)			
 		} else {
 			for (r in 1:nrow(object)) {
 				rv <- getValues(object, r)
@@ -47,7 +47,7 @@
 		if (dataContent(object) == 'all') {
 			rout <- setValues(rout, as.vector(values(object)))
 			object <- clearValues(object)
-			rout <- writeRaster(rout, filename=filename, overwrite=overwrite)			
+			rout <- .writeRasterAll(rout, filename=filename, overwrite=overwrite)			
 		} else {
 			fakerow <- 0
 			pb <- pbCreate(nrow(rout), type=progress)

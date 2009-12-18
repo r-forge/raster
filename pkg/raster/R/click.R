@@ -6,6 +6,7 @@
 # Licence GPL v3
 
 
+
 click <- function(object, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 	loc <- locator(n, type, ...)
 	xyCoords <- cbind(loc$x, loc$y)
@@ -22,7 +23,7 @@ click <- function(object, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 		}
 	}
 
-	if (class(object) == 'RasterStack') {
+	if (class(object) == 'RasterStack' | class(object) == 'RasterBrick') {
 		value <- cellValues(object, cells)
 	} else {
 		if (dataContent(object) != 'all') {
@@ -31,7 +32,7 @@ click <- function(object, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 			value <- values(object)[cells]
 		}
 	}	
-	if (class(object) == 'RasterStack') {
+	if (class(object) == 'RasterStack' | class(object) == 'RasterBrick') {
 		value <- t(matrix(value, nrow=n))
 		rownames(value) <- layerNames(object)
 	} else {

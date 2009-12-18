@@ -57,17 +57,18 @@ interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring 
 
 \examples{
 ## Thin plate spline interpolation with x and y only
-#require(fields)
-#r <- raster(system.file("external/test.grd", package="raster"))
-#ra <- aggregate(r, 10)
-#tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), values(ra) )
-#p <- interpolate(r, tps)
-#p <- mask(p, r)
-#plot(p)
+require(fields)
+r <- raster(system.file("external/test.grd", package="raster"))
+ra <- aggregate(r, 10)
+tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), values(ra) )
+p <- interpolate(r, tps)
+p <- mask(p, r)
+plot(p)
 ## 
 
 ##gstat examples
 #require(gstat)
+
 ## inverse distance weighted interpolation with gstat
 #r <- raster(system.file("external/test.grd", package="raster"))
 #r <- raster(r)
@@ -75,7 +76,7 @@ interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring 
 #mg <- gstat(id = "zinc", formula = zinc ~ 1, locations = ~ x + y, data = meuse, nmax = 7, set = list(idp = .5))
 #z <- interpolate(r, mg)
 #z <- mask(z, r)
-#
+
 ## kriging
 #data(meuse)
 #coordinates(meuse) = ~x+y

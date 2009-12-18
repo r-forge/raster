@@ -43,7 +43,7 @@
 			band <- band(raster)
 			bo <- raster@file@bandorder
 			if (bo == 'BSQ') {
-				offs <- (band-1) * ncell(raster)
+				offs <- (band-1) * ncell(raster) * dsize
 				result <- .getRasterData(raster=raster, rownr=rownr, startcol=startcol, ncolumns=ncolumns, dtype=dtype, dsize=dsize, dsign=dsign, offset=offs) 
 			} else if (bo == 'BIL') {
 				result <- .getBilRasterData(raster=raster, rownr=rownr, startcol=startcol, ncolumns=ncolumns, dtype=dtype, dsize=dsize, dsign=dsign, band=band) 
