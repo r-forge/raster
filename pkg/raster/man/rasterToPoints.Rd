@@ -1,15 +1,17 @@
 \name{rasterToPoints}
 
 \alias{rasterToPoints}
+\alias{rasterToPolygons}
 
 \title{ Raster to points conversion}
 
 \description{
-Raster to point conversion. Cells with NA are not converted. A function can be used to select a subset of the raster cells (by their values).
+Raster to point or polygon conversion. Cells with NA are not converted. A function can be used to select a subset of the raster cells (by their values).
 }
 
 \usage{
 rasterToPoints(raster, fun=NULL, asSpatialPoints=FALSE)
+rasterToPolygons(raster, fun=NULL)
 }
 
 \arguments{
@@ -35,8 +37,10 @@ r[] <- runif(ncell(r)) * 10
 r[r>8] <- NA
 p <- rasterToPoints(r)
 p <- rasterToPoints(r, fun=function(x){x>6})
+pol <- rasterToPolygons(r, fun=function(x){x>6})
 #plot(r)
 #points(p)
+#plot(pol, add=T, col='red')
 }
 
 \keyword{ spatial }

@@ -59,7 +59,7 @@
 
 
 
-polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", ...) {
+polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", silent=FALSE, ...) {
 						
 	filename <- trim(filename)
 
@@ -82,7 +82,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 # check if bbox of raster and spPolys overlap
 	spbb <- bbox(spPolys)
 	rsbb <- bbox(raster)
-	if (spbb[1,1] > rsbb[1,2] | spbb[2,1] > rsbb[2,2]) {
+	if (spbb[1,1] >= rsbb[1,2] | spbb[1,2] <= rsbb[1,1] | spbb[2,1] >= rsbb[2,2] | spbb[2,2] <= rsbb[2,1]) {
 		stop('polygon and raster have no overlapping areas')
 	}
 	
@@ -138,7 +138,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 		}
 	}
 	
-	print(paste('Found', npol, 'regions and ', cnt, 'polygons'))
+	if (! silent) {  cat('Found', npol, 'regions and ', cnt, 'polygons') }
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
 #	polinfo <- polinfo[order(polinfo[,1]),]
 	
@@ -260,7 +260,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 		
 		pbStep(pb, r)
 	}
-	pbClose(pb, TRUE)
+	pbClose(pb)
 
 	if (filename == "") {
 		raster <- setValues(raster, as.vector(v))
