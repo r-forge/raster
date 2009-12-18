@@ -75,7 +75,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		rows <- rep(1, each=(ncol(x) * yfact))
 		
 		if (filename == '') {
-			v <- matrix(NA, ncol=nrow(out), nrow=ncol(out))
+			v <- matrix(NA, ncol=nrow(outRaster), nrow=ncol(outRaster))
 		}
 		
 		cells <- cellFromRowCol(x, rows, cols)
@@ -112,5 +112,4 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	}
 	return(outRaster)
 }
-
 )
