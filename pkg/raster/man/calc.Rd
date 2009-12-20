@@ -27,7 +27,7 @@ calc(x, fun, ...)
 if \code{x = "RasterLayer"}, \code{fun} should be a function that can take a single value as input, and returns a single value (e.g. \code{sqrt}). 
 if \code{x = "RasterStack"}, \code{fun} should be a function that takes a vector of values as input, and returns a single value (e.g. \code{sum}).
 
-See (\code{link[raster]{overlay}}) to use functions that refer to specific layers, like (\code{function(a,b,c){a + sqrt(b) / c}})
+See (\code{\link[raster]{overlay}}) to use functions that refer to specific layers, like (\code{function(a,b,c){a + sqrt(b) / c}})
 }
 
 
