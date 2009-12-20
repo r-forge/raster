@@ -11,27 +11,15 @@
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
 	xn <- gdalinfo[["ll.x"]]
-	if (xn < 0) { ndecs <- 9 } else  { ndecs <- 8 }
-	xn <- as.numeric( substr( as.character(xn), 1, ndecs) )
+	xn <- round(xn, digits=9)
 
 	xx <- xn + gdalinfo[["res.x"]] * nc
-	if (xx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
-	xx <- as.numeric( substr( as.character(xx), 1, ndecs) )
-		
-#	gdalv <- (packageDescription(pkg = "rgdal")$Version)
-#	dif <- compareVersion(gdalv, "0.5-32")
-#	if (dif < 0) {
-#		yx <- gdalinfo[["ll.y"]]
-#		yn <- yx - gdalinfo[["res.y"]] * nr
-#	} else {
-		yn <- gdalinfo[["ll.y"]]
-		yx <- yn + gdalinfo[["res.y"]] * nr
-#	}
-		
-	if (yn < 0) { ndecs <- 9 } else { ndecs <- 8 }
-	yn <- as.numeric( substr( as.character(yn), 1, ndecs) )
-	if (yx < 0) { ndecs <- 9 } else  { ndecs <- 8 }
-	yx <- as.numeric( substr( as.character(yx), 1, ndecs) )
+	xx <- round(xx, digits=9)
+	
+	yn <- gdalinfo[["ll.y"]]
+	yn <- round(yn, digits=9)
+	yx <- yn + gdalinfo[["res.y"]] * nr
+	yx <- round(yx, digits=9)
 
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")

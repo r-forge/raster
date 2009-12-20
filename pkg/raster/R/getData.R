@@ -17,6 +17,8 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		.worldclim(..., download=download, path=path)
 	} else if (name=='ISO3') {
 		.countries()[,c(2,1)]
+	} else {
+		cat(name, 'not recognized as a valid name')
 	}
 	
 }
