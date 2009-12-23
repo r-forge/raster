@@ -47,7 +47,7 @@
 		if (dataContent(object) == 'all') {
 			rout <- setValues(rout, as.vector(values(object)))
 			object <- clearValues(object)
-			rout <- .writeRasterAll(rout, filename=filename, overwrite=overwrite)			
+			rout <- .writeRasterAll(rout, datatype=datatype, filename=filename, overwrite=overwrite)			
 		} else {
 			fakerow <- 0
 			pb <- pbCreate(nrow(rout), type=progress)

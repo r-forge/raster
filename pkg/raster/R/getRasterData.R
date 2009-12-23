@@ -33,8 +33,9 @@
 		result <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder)
 	} else {	
 		result <- vector(length=0)
+		rowoff <- ncol(raster) * nbands(raster)
 		for (rownr in 1:nrow(raster)) {
-			seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) + (band-1) * ncol(raster)) * dsize)
+			seek(raster@file@con, ((rownr-1) * rowoff + startcol) * dsize)
 			res <- readBin(raster@file@con, what=dtype, n=ncolumns, dsize, dsign, endian=raster@file@byteorder)
 			result <- c(result, res)
 		}
@@ -56,9 +57,11 @@
 		result <- result[index]
 	} else {	
 		result <- vector(length=0)
+		nc <- ncolumns * nbands(raster)
+		rowoff <- ncol(raster) * nbands(raster)
+		startcol <- (startcol-1) * nbands(raster) + (startcol-1)
 		for (rownr in 1:nrow(raster)) {
-			seek(raster@file@con, ((rownr-1) * ncol(raster) * nbands(raster) + (startcol-1) * nbands(raster)) * dsize)
-			nc <- ncolumns * nbands(raster)
+			seek(raster@file@con, ((rownr-1) * rowoff + startcol) * dsize)
 			res <- readBin(raster@file@con, what=dtype, n=nc, dsize, dsign, endian=raster@file@byteorder) 
 			res <- res[index]
 			result <- c(result, res)
