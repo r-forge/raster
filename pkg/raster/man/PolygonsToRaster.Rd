@@ -10,7 +10,7 @@ Holes in polygons are recognized if they are correctly specified.
 }
 
 \usage{
-polygonsToRaster(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", silent=FALSE, ...) 
+polygonsToRaster(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", getCover=FALSE, filename="", silent=FALSE, ...) 
 }
 
 \arguments{
@@ -22,6 +22,7 @@ polygonsToRaster(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRas
   \item{mask}{logical. If \code{TRUE} the values of the input RasterLayer are 'masked' by the polygons. I.e. cells overlapping with the polygons retain their values, the other cells become NA }
   \item{updateRaster}{logical. If \code{TRUE} the values of the input RasterLayer are updated where the polygons overlap cells  }
   \item{updateValue}{character. Select cells to be updated (if \code{updateRaster == TRUE}) by their current values. Either \code{'all'}, \code{'NA'}, \code{'!NA'}, or \code{'zero'} } 
+  \item{getCover}{Logical. If \code{TRUE}, the fraction of each grid cell that is covered by the polygons is returned (and the values of \code{field, overlap, mask}, and \code{updateRaster} are ignored}    
   \item{silent}{Logical. If \code{TRUE}, feedback on the polygon count is suppressed}    
   \item{...}{additional arguments. See Details.}    
 }

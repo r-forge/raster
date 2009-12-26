@@ -58,16 +58,25 @@
 
 
 
-
-polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", silent=FALSE, ...) {
+polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", getCover=FALSE, filename="", silent=FALSE, ...) {
 						
 	filename <- trim(filename)
+	if (!canProcessInMemory(raster, 3) && filename == '') {
+		filename <- rasterTmpFile()
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+	}
+	
+	if (getCover) {
+		overlap <- 'first'
+		mask = FALSE
+		updateRaster=FALSE
+		field=-1
+	}
 
-	
-	
 	if (!(overlap %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
 		stop('invalid value for overlap')
 	}
+	
 	if (mask) { updateRaster <- TRUE }
 	if (updateRaster) {
 		oldraster <- raster 
@@ -76,7 +85,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 		}
 	}
 	raster <- raster(raster)
-
 	
 
 # check if bbox of raster and spPolys overlap
@@ -141,24 +149,23 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 	if (! silent) {  cat('Found', npol, 'regions and ', cnt, 'polygons') }
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
 #	polinfo <- polinfo[order(polinfo[,1]),]
-	
 	rm(spPolys)
 
+	if (getCover) { return (.polygoncover(raster, filename, polinfo, spbb, rsbb, pollist, ...)) }
+		
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
-		
 	adj <- 0.5 * xres(raster)
-	
-	v <- matrix(NA, ncol=nrow(raster), nrow=ncol(raster))
-	
+
+	if (filename == "") {
+		v <- matrix(NA, ncol=nrow(raster), nrow=ncol(raster))
+	}
+
 	rxmn <- xmin(raster) 
 	rxmx <- xmax(raster) 
 	rv1 <- rep(NA, ncol(raster))
 	holes1 <- rep(FALSE, ncol(raster))
-
-	
 	pb <- pbCreate(nrow(raster), type=.progress(...))
-
 	for (r in 1:nrow(raster)) {
 		rv <- rv1
 		holes <- holes1
@@ -265,9 +272,106 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 	if (filename == "") {
 		raster <- setValues(raster, as.vector(v))
 	}
-	
 	return(raster)
 }
+
+
+.polygoncover <- function(raster, filename, polinfo, spbb, rsbb, pollist, ...) {
+# percentage cover per grid cell
+	bigraster <- raster(raster)
+	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(bigraster)
+	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(bigraster)
+	adj <- 0.5 * xres(bigraster)
+	if (filename == "") {
+		v <- matrix(NA, ncol=nrow(bigraster), nrow=ncol(bigraster))
+	}
+	rxmn <- xmin(bigraster) 
+	rxmx <- xmax(bigraster) 
+	pb <- pbCreate(nrow(bigraster), type=.progress(...))
+	
+	disras <- disaggregate(bigraster, 10)
+	rv1 <- rep(0, ncol(disras))
+	holes1 <- rep(FALSE, ncol(disras))
+	for (rr in 1:nrow(bigraster)) {
+		y <- yFromRow(bigraster, rr)
+		raster <- crop(disras, extent(xmin(bigraster), xmax(bigraster), y - 0.5 * yres(bigraster), y + 0.5 * yres(bigraster)))
+		vv <- matrix(NA, ncol=nrow(raster), nrow=ncol(raster))
+		rv <- rv1
+		holes <- holes1
+		for (r in 1:nrow(raster)) {
+			ly <- yFromRow(raster, r)
+			myline <- rbind(c(lxmin,ly), c(lxmax,ly))
+			subpol <- subset(polinfo, !(polinfo[,2] > ly | polinfo[,3] < ly), drop=FALSE)
+			if (length(subpol[,1]) > 0) { 		
+				for (i in 1:length(subpol[,1])) {
+					mypoly <- pollist[[subpol[i,1]]]
+					intersection <- .intersectLinePolygon(myline, mypoly@coords)
+					x <- sort(intersection[,1])
+					if (length(x) > 0) {
+						rvtmp <- rv1
+						if ( sum(x[-length(x)] == x[-1]) > 0 ) {
+					# single node intersection going out of polygon ....
+							spPnts <- xyFromCell(raster, cellFromRowCol(raster, rep(r, ncol(raster)), 1:ncol(raster)), TRUE)
+							spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
+							over <- overlay(spPnts, spPol)
+							if ( subpol[i, 4] == 1 ) {
+								holes[over] <- TRUE
+							} else {
+								rvtmp[over] <- subpol[i,4] 
+							}
+						} else {
+							for (k in 1:round(nrow(intersection)/2)) {
+								l <- (k * 2) - 1		
+								x1 <- x[l]
+								x2 <- x[l+1]
+								if (x1 > rxmx) { next }
+								if (x2 < rxmn) { next }
+							# adjust to skip first cell if the center is not covered by this polygon
+								x1a <- x1 + adj
+								x2a <- x2 - adj
+								x1a <- min(rxmx, max(rxmn, x1a))
+								x2a <- min(rxmx, max(rxmn, x2a))
+								col1 <- colFromX(raster, x1a)
+								col2 <- colFromX(raster, x2a)
+								if (col1 > col2) { next }
+								if ( subpol[i, 5] == 1 ) {
+									holes[col1:col2] <- TRUE
+								} else {
+									rvtmp[col1:col2] <- subpol[i,4]
+								}
+							}
+						}
+						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
+					}
+				}
+			}
+			rv[holes] <- NA
+			vv[,r] <- rv
+		}
+		av <- apply(vv, 1, sum)
+		av <- matrix(av, nrow=10)
+		av <- apply(av, 2, sum)
+		
+		if (filename == "") {
+			v[,rr] <- av
+		} else {
+			bigraster <- setValues(bigraster, values=av, rownr=r)
+			bigraster <- writeRaster(bigraster, filename=filename, ...)
+		}
+		pbStep(pb, rr)
+	}
+	pbClose(pb)
+
+	if (filename == "") {
+		bigraster <- setValues(bigraster, as.vector(v))
+	}
+	return(bigraster)
+}
+
+
+
+
+
 
 
 .polygonsToRaster2 <- function(spPolys, raster, field=0, filename="", ...) {
