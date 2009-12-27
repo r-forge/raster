@@ -379,13 +379,13 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 			vv[,r] <- rv
 		}
 		av <- apply(vv, 1, sum)
-		av <- matrix(av, nrow=10)
+		av <- matrix(av, nrow=f)
 		av <- apply(av, 2, sum)
 		
 		if (filename == "") {
 			v[,rr] <- av
 		} else {
-			bigraster <- setValues(bigraster, values=av, rownr=r)
+			bigraster <- setValues(bigraster, values=av, rownr=rr)
 			bigraster <- writeRaster(bigraster, filename=filename, ...)
 		}
 		pbStep(pb, rr)

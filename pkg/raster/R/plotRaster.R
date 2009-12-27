@@ -5,7 +5,7 @@
 
 
 
-.plotraster <- function(object, col = rev(terrain.colors(25)), maxpixels=100000, addbox=TRUE, axes=TRUE, xlab='', ylab='', extent=NULL, ...) {
+.plotraster <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, add=FALSE, box=TRUE, axes=TRUE, xlab='', ylab='', extent=NULL, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 
 	if ( dataContent(object) != 'all') { 
@@ -14,6 +14,7 @@
 		} 
 	}
 
+	if (add) {box <- FALSE}
 	maxpixels <- max(1, maxpixels)
 
 #	if (! missing(xlim) | ! missing(ylim )) {
@@ -43,7 +44,7 @@
 	z <- t(z[nrow(z):1,])
 	z[is.infinite(z)] <- NA
 	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, ...)
-	if (addbox) {box()}
+	if (box) {box()}
 }	
 
 
@@ -64,8 +65,7 @@
 # Copyright 2004-2007, Institute for Mathematics Applied Geosciences
 # University Corporation for Atmospheric Research
 # Licensed under the GPL -- www.gpl.org/licenses/gpl.html
-    legend.shrink = 0.5, legend.width = 0.8, legend.mar = ifelse(horizontal, 
-        3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
+    legend.shrink = 0.5, legend.width = 0.8, legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = heat.colors(nlevel), 
     lab.breaks = NULL, axis.args = NULL, legend.args = NULL, midpoint = FALSE) {
 
@@ -135,8 +135,7 @@
     if (is.null(legend.mar)) {
         legend.mar <- ifelse(horizontal, 3.1, 5.1)
     }
-    temp <- .imageplotplt(add = add, legend.shrink = legend.shrink, 
-        legend.width = legend.width, legend.mar = legend.mar, 
+    temp <- .imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
         horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
     smallplot <- temp$smallplot
     bigplot <- temp$bigplot
@@ -177,22 +176,18 @@
     }
     if (!horizontal) {
         if (is.null(breaks)) {
-            image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", 
-                ylab = "", col = col)
+            image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col)
         }
         else {
-            image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", 
-                ylab = "", col = col, breaks = breaks)
+            image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
         }
     }
     else {
         if (is.null(breaks)) {
-            image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", 
-                ylab = "", col = col)
+            image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col)
         }
         else {
-            image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", 
-                ylab = "", col = col, breaks = breaks)
+            image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
         }
     }
     do.call("axis", axis.args)

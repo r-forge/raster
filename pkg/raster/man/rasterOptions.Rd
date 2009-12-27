@@ -37,7 +37,7 @@ clearOptions()
 \item{datatype}{Character. The default data type to use. See \code{\link[raster]{dataType}}}
 \item{tmpdir}{Character. The default location for writing temporary files}
 \item{progress}{Character. Valid values are "text", "tcltk" (requirs the tcltk package), "windows" (on that platform only) and "" (the default in most functions, no progress bar)}
-\item{todisk}{Logical. For debugging only. Should normally be used. Default is \code{FALSE}. If \code{TRUE}, results are always written to disk, even if no filename is supplied (a temporary filename is used)}
+\item{todisk}{Logical. For debugging only. Default is \code{FALSE} and should normally not be changed. If \code{TRUE}, results are always written to disk, even if no filename is supplied (a temporary filename is used)}
 }
 
 \details{
