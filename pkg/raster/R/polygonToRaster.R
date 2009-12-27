@@ -146,7 +146,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 		}
 	}
 	
-	if (! silent) {  cat('Found', npol, 'region(s) and ', cnt, 'polygon(s)\n') }
+	if (! silent) {  cat('Found', npol, 'region(s) and', cnt, 'polygon(s)\n') }
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
 #	polinfo <- polinfo[order(polinfo[,1]),]
 	rm(spPolys)
@@ -154,7 +154,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 		
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
-	if (getCover) { return (polygoncover(raster, filename, polinfo, lxmin, lxmax, pollist, ...)) }
+	if (getCover) { return (.polygoncover(raster, filename, polinfo, lxmin, lxmax, pollist, ...)) }
 
 	adj <- 0.5 * xres(raster)
 
@@ -290,7 +290,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 }
 
 
-polygoncover <- function(raster, filename, polinfo, lxmin, lxmax, pollist, ...) {
+.polygoncover <- function(raster, filename, polinfo, lxmin, lxmax, pollist, ...) {
 # percentage cover per grid cell
 	bigraster <- raster(raster)
 	if (filename == "") {
@@ -313,9 +313,9 @@ polygoncover <- function(raster, filename, polinfo, lxmin, lxmax, pollist, ...) 
 		yx <- y + hr
 		raster <- raster(xmn=rxmn, xmx=rxmx, ymn=yn, ymx=yx, ncols=nc, nrows=f, projs=prj)
 		vv <- matrix(ncol=f, nrow=nc)
-		rv <- rv1
 		subpol <- subset(polinfo, !(polinfo[,2] > yx | polinfo[,3] < yn), drop=FALSE)
 		for (r in 1:f) {
+			rv <- rv1
 			ly <- yFromRow(raster, r)
 			myline <- rbind(c(lxmin,ly), c(lxmax,ly))
 			holes <- holes1
