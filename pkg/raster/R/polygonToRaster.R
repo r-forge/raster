@@ -1,5 +1,5 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# Date :  January2008
+# Date : January 2008
 # Version 0.9
 # Licence GPL v3
 
@@ -146,15 +146,16 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 		}
 	}
 	
-	if (! silent) {  cat('Found', npol, 'regions and ', cnt, 'polygons') }
+	if (! silent) {  cat('Found', npol, 'region(s) and ', cnt, 'polygon(s)\n') }
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
 #	polinfo <- polinfo[order(polinfo[,1]),]
 	rm(spPolys)
 
-	if (getCover) { return (.polygoncover(raster, filename, polinfo, spbb, rsbb, pollist, ...)) }
 		
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
+	if (getCover) { return (polygoncover(raster, filename, polinfo, lxmin, lxmax, pollist, ...)) }
+
 	adj <- 0.5 * xres(raster)
 
 	if (filename == "") {
@@ -168,13 +169,21 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 	pb <- pbCreate(nrow(raster), type=.progress(...))
 	for (r in 1:nrow(raster)) {
 		rv <- rv1
-		holes <- holes1
 		ly <- yFromRow(raster, r)
 		myline <- rbind(c(lxmin,ly), c(lxmax,ly))
-		
+		holes <- holes1
 		subpol <- subset(polinfo, !(polinfo[,2] > ly | polinfo[,3] < ly), drop=FALSE)
 		if (length(subpol[,1]) > 0) { 		
+			updateHoles = FALSE
+			lastpolnr <- subpol[1,6]
 			for (i in 1:length(subpol[,1])) {
+				if (i == length(subpol[,1])) { 
+					updateHoles = TRUE 
+				} else if (subpol[i+1,6] > lastpolnr) {
+					updateHoles = TRUE 
+					lastpolnr <- subpol[i+1,6]
+				}
+				
 				mypoly <- pollist[[subpol[i,1]]]
 				intersection <- .intersectLinePolygon(myline, mypoly@coords)
 				x <- sort(intersection[,1])
@@ -185,10 +194,10 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 						spPnts <- xyFromCell(raster, cellFromRowCol(raster, rep(r, ncol(raster)), 1:ncol(raster)), TRUE)
 						spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
 						over <- overlay(spPnts, spPol)
-						if ( subpol[i, 4] == 1 ) {
-							holes[over] <- TRUE
+						if ( subpol[i, 5] == 1 ) {
+							holes[!is.na(over)] <- TRUE
 						} else {
-							rvtmp[over] <- subpol[i,4] 
+							rvtmp[!is.na(over)] <- subpol[i,4] 
 						}
 						# print(paste('exit node intersection on row:', r))
 					} else {
@@ -217,6 +226,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 							}
 						}
 					}
+		
 					if (mask) {
 						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
 					} else if (overlap=='last') {
@@ -234,9 +244,13 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 						rv[is.na(rv)] <- rvtmp[is.na(rv)]
 					}
 				}
+				if (updateHoles) {
+					rv[holes] <- NA
+					holes <- holes1
+					updateHoles = FALSE	
+				}
 			}
 		}
-		rv[holes] <- NA
 		
 		if (mask) {
 			oldvals <- getValues(oldraster, r)
@@ -276,34 +290,46 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 }
 
 
-.polygoncover <- function(raster, filename, polinfo, spbb, rsbb, pollist, ...) {
+polygoncover <- function(raster, filename, polinfo, lxmin, lxmax, pollist, ...) {
 # percentage cover per grid cell
 	bigraster <- raster(raster)
-	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(bigraster)
-	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(bigraster)
-	adj <- 0.5 * xres(bigraster)
 	if (filename == "") {
 		v <- matrix(NA, ncol=nrow(bigraster), nrow=ncol(bigraster))
 	}
 	rxmn <- xmin(bigraster) 
 	rxmx <- xmax(bigraster) 
+	f <- 10
+	adj <- 0.5 * xres(bigraster)/f
+	nc <- ncol(bigraster) * f
+	rv1 <- rep(0, nc)
+	holes1 <- rep(FALSE, nc)
+	prj <- projection(bigraster)
+	hr <- 0.5 * yres(bigraster)
+
 	pb <- pbCreate(nrow(bigraster), type=.progress(...))
-	
-	disras <- disaggregate(bigraster, 10)
-	rv1 <- rep(0, ncol(disras))
-	holes1 <- rep(FALSE, ncol(disras))
 	for (rr in 1:nrow(bigraster)) {
 		y <- yFromRow(bigraster, rr)
-		raster <- crop(disras, extent(xmin(bigraster), xmax(bigraster), y - 0.5 * yres(bigraster), y + 0.5 * yres(bigraster)))
-		vv <- matrix(NA, ncol=nrow(raster), nrow=ncol(raster))
+		yn <- y - hr
+		yx <- y + hr
+		raster <- raster(xmn=rxmn, xmx=rxmx, ymn=yn, ymx=yx, ncols=nc, nrows=f, projs=prj)
+		vv <- matrix(ncol=f, nrow=nc)
 		rv <- rv1
-		holes <- holes1
-		for (r in 1:nrow(raster)) {
+		subpol <- subset(polinfo, !(polinfo[,2] > yx | polinfo[,3] < yn), drop=FALSE)
+		for (r in 1:f) {
 			ly <- yFromRow(raster, r)
 			myline <- rbind(c(lxmin,ly), c(lxmax,ly))
-			subpol <- subset(polinfo, !(polinfo[,2] > ly | polinfo[,3] < ly), drop=FALSE)
+			holes <- holes1
 			if (length(subpol[,1]) > 0) { 		
+				updateHoles = FALSE
+				lastpolnr <- subpol[1,6]
 				for (i in 1:length(subpol[,1])) {
+					if (i == length(subpol[,1])) { 
+						updateHoles = TRUE 
+					} else if (subpol[i+1,6] > lastpolnr) {
+						updateHoles = TRUE 
+						lastpolnr <- subpol[i+1,6]
+					}
+					
 					mypoly <- pollist[[subpol[i,1]]]
 					intersection <- .intersectLinePolygon(myline, mypoly@coords)
 					x <- sort(intersection[,1])
@@ -314,10 +340,10 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 							spPnts <- xyFromCell(raster, cellFromRowCol(raster, rep(r, ncol(raster)), 1:ncol(raster)), TRUE)
 							spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
 							over <- overlay(spPnts, spPol)
-							if ( subpol[i, 4] == 1 ) {
-								holes[over] <- TRUE
+							if ( subpol[i, 5] == 1 ) {
+								holes[!is.na(over)] <- TRUE
 							} else {
-								rvtmp[over] <- subpol[i,4] 
+								rvtmp[!is.na(over)] <- subpol[i,4] 
 							}
 						} else {
 							for (k in 1:round(nrow(intersection)/2)) {
@@ -341,11 +367,15 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 								}
 							}
 						}
-						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
+						rv <- pmax(rv, rvtmp)
+					}
+					if (updateHoles) {
+						rv[holes] <- 0
+						holes <- holes1
+						updateHoles = FALSE	
 					}
 				}
 			}
-			rv[holes] <- NA
 			vv[,r] <- rv
 		}
 		av <- apply(vv, 1, sum)
@@ -367,9 +397,6 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 	}
 	return(bigraster)
 }
-
-
-
 
 
 
