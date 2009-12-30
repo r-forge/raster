@@ -31,8 +31,8 @@
 	attr(raster@file, "dsize") <- dataSize(raster@file@datanotation)
 	attr(raster@file, "dtype") <- .shortDataType(raster@file@datanotation)
 	
-	raster@data@min <- Inf
-	raster@data@max <- -Inf
+	raster@data@min <- rep(Inf, nlayers(raster))
+	raster@data@max <- rep(-Inf, nlayers(raster))
 	raster@data@haveminmax <- FALSE
 	raster@file@driver <- filetype
 	
@@ -42,7 +42,6 @@
 
 
 .stopRowWriting <- function(raster, doPB=FALSE) {
-	writeRasterHdr(raster, .driver(raster)) 
 	close(raster@file@con)
 #	fnamevals <- .setFileExtensionValues(raster@file@name)
 #	attr(raster@file, "con") <- file(fnamevals, "rb")
@@ -54,10 +53,12 @@
 #		raster@data@min <- as.logical(raster@data@min)
 #		raster@data@max <- as.logical(raster@data@max)
 	}
+	writeRasterHdr(raster, .driver(raster)) 
+
 	raster@data@source <- 'disk'
 	raster@data@content <- 'nodata'
 	raster@file@driver <- 'raster'
-	raster@data@values <- vector(length=0)
+	raster <- clearValues(raster)
 
 	if (doPB) {
 		pbClose( attr(raster@file, "pb") )
@@ -74,7 +75,6 @@
 		raster <- .startRowWriting(raster, filename, doPB, ...)
  	} 
 
-	raster@data@values[is.nan(raster@data@values)] <- NA
 	raster@data@values[is.infinite(raster@data@values)] <- NA
 	if (raster@file@dtype == "INT" || raster@file@dtype =='LOG' ) { 
 		values <- as.integer(round(raster@data@values))  
@@ -94,10 +94,10 @@
 	if (doPB) {	pbStep( attr(raster@file, "pb"), row ) 	}
 	
 	if (dataIndices(raster)[2] >= ncell(raster)) {
-		raster <- .stopRowWriting(raster, doPB)
 		if (dataIndices(raster)[2] > ncell(raster)) {
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 		}
+		raster <- .stopRowWriting(raster, doPB)
 	}
 
 	return(raster)	

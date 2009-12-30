@@ -33,8 +33,7 @@ Laplacian filter:
 Sobel filter:
 \code{filter=matrix(c(1,2,1,0,0,0,-1,-2,-1) / 4, nrow=3)}
 
-\code{focalFilter} can also be used to use non-rectangular areas. For example a combination of
-
+Another example:
 \code{filter=matrix(c(0,0,0,0,1,1,0,1,1), nrow=3)} and \code{fun=max} returns the max value for the lower-rigth corner of a 3x3 matrix 
 around a focal cell
 

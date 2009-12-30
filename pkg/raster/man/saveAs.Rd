@@ -2,13 +2,13 @@
 
 \alias{saveAs}
 \alias{saveAs,RasterLayer,character-method}
-\alias{saveAs,RasterBrick,character-method}
-\alias{saveAs,RasterStack,character-method}
+\alias{saveAs,RasterStackBrick,character-method}
 
 \title{Save a Raster* object to a new file}
 
 \description{
-Save a RasterLayer or RasterBrick to a new file; for example a file of another format (format). You can also use this function to save a RasterStack to a single (muti-band) file.
+Save a RasterLayer or RasterBrick to a new file; for example a file of another format (format). You can also use this function to save a
+RasterStack to a single (muti-band) file.
 }
 
 \usage{

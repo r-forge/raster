@@ -92,9 +92,9 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				cols <- cols[1:(ncol(x)*nrows)]
 				cells <- cellFromRowCol(x, theserows, cols)
 			}	
-			x <- readRows(x, startrow = startrow, nrows = nrows)
-			
-			vals <- as.vector( tapply(values(x), cells, thefun ) )
+			vals <- values(readRows(x, startrow = startrow, nrows = nrows))
+			vals <- matrix(vals, nrow=nrows, ncol=x@ncols, byrow=TRUE)
+			vals <- as.vector( tapply(vals, cells, thefun ) )
 			
 			if (filename == "") {
 				v[,r] <- vals

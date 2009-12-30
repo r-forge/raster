@@ -9,76 +9,78 @@
 	if (filename == '') {	stop('you must supply a filename') 	}
 	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) { stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'") }
 	
-	filetype <- .filetype(...)  
-	datatype <- .datatype(...)
-	overwrite <- .overwrite(...)
-	progress <- .progress(...)
+	nl <- object@data@nlayers
+	rout <- clearValues(object)
+
+	rout@file@bandorder <- bandorder
 	
-	nl <- nlayers(object)
-	rout <- raster(object)
-	
-	pb <- pbCreate(nrow(rout), type=progress)
-	if (bandorder=='BIL') {
-		ncol(rout) <- ncol(rout) * nl
+	rout <- writeStart(rout, filename, ...)
+	if (bandorder=='BSQ') {
+		if (class(object) != 'RasterStack') {
+			if (dataContent(object) == 'all') {
+				rout <- writeValues(rout, as.vector(values(object)))
+				v <- na.omit(values(object)) 
+				if (length(v) > 0) {
+					rout@data@min <- apply(v, 2, min)
+					rout@data@max <- apply(v, 2, max)
+				}
+				rout <- writeStop(rout)
+				return(rout)
+			}
+		} 
+		pb <- pbCreate(rout@nrows*nl, type=.progress(...))
+		rr <- 0
+		for (i in 1:nl) {
+			sr <- raster(object, i)
+			for (r in 1:sr@nrows) {
+				v <- getValues(sr, r)
+				rout <- writeValues(rout, as.vector(v))
+				v <- na.omit(v) 
+				if (length(v) > 0) {
+					rout@data@min[i] <- min(rout@data@min[i], v)
+					rout@data@max[i] <- max(rout@data@max[i], v)
+				}	
+				rr <- rr + 1
+				pbStep(pb, rr) 				
+			}
+		}				
+		pbClose(pb)
+	} else if (bandorder=='BIL') {
+		pb <- pbCreate(nrow(rout), type=.progress(...))
 		for (r in 1:nrow(object)) {
-			rv <- getValues(object, r)
-			rout <- setValues(rout, as.vector(rv), r)
-			rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)
+			v <- getValues(object, r)
+			rout <- writeValues(rout, as.vector(v))
+			v <- na.omit(v)
+			if (length(v) > 0) {
+				rout@data@min <- pmin(rout@data@min, apply(v, 2, min))
+				rout@data@max <- pmax(rout@data@max, apply(v, 2, max))
+			}
 			pbStep(pb, r) 				
 		}
-	} else 	if (bandorder=='BIP') {
-		ncol(rout) <- ncol(rout) * nl
-		if (dataContent(object) == 'all') {
-			sv <- as.vector(t(getValues(object)))
-			object <- clearValues(object)
-			rout <- setValues(rout, sv)
-			rm(sv)
-			rout <- .writeRasterAll(rout, filename=filename, datatype=datatype, overwrite=overwrite)			
-		} else {
-			for (r in 1:nrow(object)) {
-				rv <- getValues(object, r)
-				rout <- setValues(rout, as.vector(t(rv)), r)
-				rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)
-				pbStep(pb, r) 				
+		pbClose(pb)
+	} else if (bandorder=='BIP') {
+		pb <- pbCreate(nrow(rout), type=.progress(...))
+		for (r in 1:nrow(object)) {
+			v <- getValues(object, r)
+			rout <- writeValues(rout, as.vector(t(v)))
+			v <- na.omit(v) 
+			if (length(v) > 0) {
+				rout@data@min <- pmin(rout@data@min, apply(v, 2, min))
+				rout@data@max <- pmax(rout@data@max, apply(v, 2, max))
 			}
+			pbStep(pb, r) 				
 		}
-	} else 	if (bandorder=='BSQ') {
-		nrow(rout) <- nrow(rout) * nl
-		if (dataContent(object) == 'all') {
-			rout <- setValues(rout, as.vector(values(object)))
-			object <- clearValues(object)
-			rout <- .writeRasterAll(rout, datatype=datatype, filename=filename, overwrite=overwrite)			
-		} else {
-			fakerow <- 0
-			pb <- pbCreate(nrow(rout), type=progress)
-			rr <- 0
-			for (i in 1:nl) {
-				sr <- raster(object, i)
-				for (r in 1:nrow(sr)) {
-					fakerow <- fakerow + 1
-					rv <- getValues(sr, r)
-					rout <- setValues(rout, rv, fakerow)
-					rout <- writeRaster(rout, filename=filename, datatype=datatype, overwrite=overwrite)
-					rr <- rr + 1
-					pbStep(pb, rr) 				
-				}				
-			}
-		}		
+		pbClose(pb)
 	}
-	pbClose(pb)
+	rout <- writeStop(rout)
 
-	f <- filename(rout)
-	rout <- brick(rout)
-	rout@file@name <- f
-	nrow(rout) <- nrow(object)
-	ncol(rout) <- ncol(object)
-	rout@data@min <- minValue(object, -1)
-	rout@data@max <- maxValue(object, -1)
-	rout@data@nlayers <- nl
-	rout@file@bandorder <- bandorder
-	rout@layernames <- layerNames(object)
-	writeRasterHdr(rout, format=filetype)
-
-	return(invisible(brick(filename(rout))))
+#	rout <- brick(filename(rout))
+#	rout@data@min <- minValue(object, -1)
+#	rout@data@max <- maxValue(object, -1)
+#	rout@data@nlayers <- nl
+#	rout@file@bandorder <- bandorder
+#	rout@layernames <- layerNames(object)
+#	writeRasterHdr(rout, format=.filetype(...))
+	return(rout)
 }
 

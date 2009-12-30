@@ -5,21 +5,40 @@
 # Version 0.9
 # Licence GPL v3
 
+.startGDALwriting <- function(raster, filename, options, doPB, ...) {
+	mvFlag <- NA
+	attr(raster@file, "transient") <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
+	if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress(...) ) }
+	raster@file@driver <- 'gdal'
+	raster@data@source <- 'disk'		
+	raster@file@name <- filename
+	return(raster)
+}
 
+.stopGDALwriting <- function(raster, doPB) {
+	
+	saveDataset(raster@file@transient, raster@file@name)
+	GDAL.close(raster@file@transient) 
+	if (doPB) {
+		pbClose( attr(raster@file, "pb") )
+		attr(raster@file, "pb") <- ''
+	}
+	rasterout <- raster(raster@file@name)
+	if (!raster@data@haveminmax) {
+		rasterout@data@min <- raster@data@min
+		rasterout@data@max <- raster@data@max
+	}
+	rasterout@data@haveminmax <- TRUE
+#	.writeStx(rasterout) 
+	return(rasterout)
+}
 
 .writeGDALrow <- function(raster, filename,  options=NULL, doPB=FALSE, ... ) {
 	if (!require(rgdal)) { stop() }
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {
-		mvFlag <- NA
-		transient <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
-		attr(raster@file, "transient") <- transient
-		if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress(...) ) }
-		
-		raster@file@driver <- 'gdal'
-		raster@data@source <- 'disk'		
-		raster@file@name <- filename
+		raster <- .startGDALwriting(raster, filename, options, doPB, ...)
 	}	
 	
 #	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -51,26 +70,7 @@
 	if (doPB) {	pbStep( attr(raster@file, "pb"), rownr ) 	}
 	
 	if ( rownr == nrow(raster)) {
-		saveDataset(raster@file@transient, filename )
-		GDAL.close(raster@file@transient) 
-		
-		# establish the handle:
-
-		if (doPB) {
-			pbClose( attr(raster@file, "pb") )
-			attr(raster@file, "pb") <- ''
-		}
-
-		rasterout <- raster(filename)
-		if (!raster@data@haveminmax) {
-			rasterout@data@min <- raster@data@min
-			rasterout@data@max <- raster@data@max
-		}
-		rasterout@data@haveminmax <- TRUE
-#		rasterout@file@driver <- 'gdal'
-		
-		.writeStx(rasterout) 
-		return(rasterout)
+		raster <- .stopGDALwriting(raster, doPB)
 	}
 	return(raster)
 }

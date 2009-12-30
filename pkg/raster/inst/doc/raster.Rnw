@@ -7,9 +7,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 
-\DeclareMathOperator{\var}{var}
-\DeclareMathOperator{\cov}{cov}
-
 % \VignetteIndexEntry{raster package}
 
 \begin{document}
@@ -26,60 +23,9 @@ foo <- packageDescription("raster")
 
 \section{Introduction}
 
-This vignette describes the R package '\verb@raster@'. A raster is a spatial (geographic) data structure that devides an area into rectangles. Such a data structure is also referred to as a 'grid' and is often contrasted with 'vector' data (points, lines, polygons). The \verb@raster@ package has functions for reading, manipulating, and writing raster data. The package was developed to (1) to provide general low-level raster data manipulation functions (e.g. read raster values by row) that can easily be used to develop higher level specific functions; (2) assure that all these functions can work with very large raster datasets that are stored on disk and cannot be loaded into memory; (3) to provide 'high level' functions for raster data manipulation that are common in other spatail data analysis software (often referred to as 'GIS'); and (4) to provide an easy-to-use raster algebra implementation. 
+This vignette describes the R package '\verb@raster@'. A raster is a spatial (geographic) data structure that divides an area into rectangles. Such a data structure is also referred to as a 'grid' and is often contrasted with 'vector' data (representing points, lines, and polygons). The \verb@raster@ package has functions for reading, manipulating, and writing raster data. The package was developed to (1) to provide general low-level raster data manipulation functions (e.g. read raster values by row) that can easily be used to develop higher level specific functions; (2) assure that all these functions can work with very large raster datasets that are stored on disk and cannot be loaded into memory; (3) to provide 'high level' functions for raster data manipulation that are common in other spatail data analysis software (often referred to as 'GIS'); and (4) to provide a raster algebra implementation. 
 
 The package is build around a number of S4 classes of which the RasterLayer, RasterBrick, and RasterStack classes are the most important. All code is written in R, for is clarity, and ease of adapation. In some future version we plan to also implement C++ functions to speed up processing of very large datasets. 
-
-With this package, together with other efforts, we would like to help build a bridge to -the powerful statistics and modeling of- R for the "GIS" community. Our perspective is that standard GIS is too map centric, and that proper data-analysis needs tools that are more data and model centric. 
-
-
-\section{Some examples}
-
-The first thing to do is to install \verb@raster@ package if you have not yet done so. As the package is currently not on CRAN, this takes a tiny bit more effort than installing packages that are on CRAN. \verb@raster@ depends on \verb@sp@ so if you do not have this package, install it first: 
-\verb@install.packages("sp")@. Also install "\verb@rgdal@" if you can, it allows access to a large number of additional datasources.
-Now install \verb@raster@ from the R-Forge repository: \verb@install.packages("raster", repos="http://R-Forge.R-project.org")@
-
-The following R statements should now work
-<<raster-1>>=
-library(raster)
-# create a 'skeleton' RasterLayer object
-r <- raster(ncol=36, nrow=18)
-# show some of its contents 
-r
-# set (random uniform) values for each cell:
-r[] <- runif(ncell(r))
-# plot the values
-par(mfrow=c(1, 2))
-plot(r)
-# set other values for each cell (the cell number):
-r <- setValues(r, 1:ncell(r))
-plot(r)
-# save this to a file
-r <- writeRaster(r, filename='example.grd', overwrite=TRUE)
-@
-
-RasterLayer objects consist of several parameters describing a raster dataset, such as the number of columns and rows, and the spatial extent. A RasterLayer object does not necessarily contain any raster cell values. Frequently these values are stored in a file on disk. In this first example there is no reference to a file.
-
-
-It is probably more common to create a RasterLayer objecgt from a file. The raster package can read raster files in several formats, including some 'natively' supported formats and those supported by rgdal. Here is an example using the Meuse dataset that (taken from the sp package):
-
-<<raster-2>>=
-r <- raster(system.file("external/test.grd", package="raster"))
-r
-# read some valus (row # 50)
-r <- readRow(r, 50)
-# show some of them
-values(r)[1:50]
-# raster algebra
-s <- sqrt(r) - 5
-# show original and transformed RasterLayers
-par(mfrow=c(1, 2))
-plot(r)
-plot(s)
-@
-
-The command \verb@r <- raster(filename)@ creates a raster object describing the data on file, but not reading the actual raster cell values. \verb@readRow@ reads the values of a specified row of a raster file into memory. \verb@readAll@ reads all values, but this may not be possible if the file is very large. \verb@values(r)@ returns the values that are currently in memory (i.e. those of row 50). \verb@s <- sqrt(r) - r + 1@ is an example of raster algebra. \verb@s@ is a new RasterLayer, its values are the square root of r minus 5. The computation was done for the entire raster, not just for the values that were in memory. The new values are available in memory and can be inspected via \verb@plot@, @values(r)@, or via indexing. 
-
 
 \section{Classes}
 
@@ -104,6 +50,53 @@ The three classes described above inherit from the Raster class which inherits f
 
 
 \section{Creating a RasterLayer}
+
+<<raster-1>>=
+library(raster)
+# create a 'skeleton' RasterLayer object
+r <- raster()
+r
+r <- raster(ncol=36, nrow=18, xmn=-1000, xmx=1000, ymn=-100, ymx=900)
+res(r) <- 100
+r
+@
+
+It is more common to create a RasterLayer object from a file. The raster package can read raster files in several formats, including some 'natively' supported formats and other formats via rgdal. Here is an example using the Meuse dataset that (taken from the sp package):
+
+<<raster-2>>=
+r <- raster(system.file("external/test.grd", package="raster"))
+r
+@
+
+In addition, RasterLayer objects can be created from sp SpatialGrid* and SpatialPixel* objects and from a matrix, other Raster* objects, and from an Extent object.
+
+
+\section{Cell numbers}
+
+The cell number is an important concept in the raster package. Raster data can be thought of as a matrix, but in a RasterLayer it is stored as a vector. Cells are numbered from the upper left cell to the upper right cell and then contining on the left side of the next row, and so on untill the last cell at the lower-right side of the raster. There are several helper functions to determine the column or row number from a cell and vice versa, and to go from coordinates to cell numbers and back.
+
+<<raster-1>>=
+library(raster)
+r <- raster(ncol=36, nrow=18)
+ncol(r)
+nrow(r)
+ncell(r)
+rowFromCell(r, 100)
+colFromCell(r, 100)
+cellFromRowCol(r,5,5)
+xyFromCell(r, 100)
+cellFromXY(r, c(0,0))
+colFromX(r, 0)
+rowFromY(r, 0)
+@
+
+
+
+
+
+\section{Accessing cell values}
+
+
 
 
 

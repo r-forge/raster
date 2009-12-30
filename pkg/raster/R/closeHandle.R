@@ -6,10 +6,6 @@
 
 
 closeConnection <- function(raster) {
-#	if handle = gdal then gdalclose the handle
-	if (class(raster) != 'RasterLayer') {
-		stop('closeConnection is only for RasterLayer objects')
-	}
 	if (.driver(raster) == "gdal") {
 		try(closeDataset(raster@file@con), silent = T)
 	} else {

@@ -5,10 +5,13 @@
 
 
 .rasterToPointsChunk <- function(object, startrow, endrow) {
-	object <- readRows(object, startrow, nrows=(endrow-startrow)+1)
+	nr <- (endrow-startrow)+1
+	vals <- values(readRows(object, startrow, nrows=nr))
+	vals <- matrix(vals, nrow=nr, ncol=object@ncols, byrow=TRUE)
+
 	c1 <- cellFromRowCol(object, startrow, 1)
 	c2 <- cellFromRowCol(object, endrow, ncol(object))
-	xyv <- cbind(xyFromCell(object, c1:c2), values(object))
+	xyv <- cbind(xyFromCell(object, c1:c2), vals)
 	return( subset(xyv, !(is.na(xyv[,3]))) ) 
 }
 

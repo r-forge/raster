@@ -141,19 +141,9 @@
 			dataType(x) <- 'INT2U'		
 		}
 	} else if (nbits == 32) {
-		if (pixtype == 'SIGNEDINT') {
-			dataType(x) <- 'INT4S'
-		} else {
-			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT4S"')
-			dataType(x) <- 'INT4U'		
-		}
+		dataType(x) <- 'INT4S'
 	} else if (nbits == 64) {
-		if (pixtype == 'SIGNEDINT') {
-			dataType(x) <- 'INT8S'
-		} else {
-			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT8S"')
-			dataType(x) <- 'INT8U'		
-		}
+		dataType(x) <- 'INT8S'
 	} else {
 		stop(paste('unexpected nbits in BIL:', nbits))
 	}

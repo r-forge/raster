@@ -6,6 +6,21 @@
 
 
 #read data on the raster for cell numbers
+
+.brickReadCells <- function(object, cells) {
+	result <- matrix(nrow=length(cells), ncol=nlayers(object))
+	for (i in 1:nlayers(object)) {
+		r <- raster(object, i)
+		result[,i] <- .readCells(r, cells)
+	}
+	if (!(is.null(dim(result)))) {
+		colnames(result) <- layerNames(object)
+	}	
+	return(result)
+}
+
+
+
 .readCells <- function(raster, cells) {
 	cells <- cbind(1:length(cells), cells)
 	cells <- cells[order(cells[,2]), ,drop=FALSE]

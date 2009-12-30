@@ -17,7 +17,7 @@ setOptions <- function(format, overwrite, datatype, tmpdir, progress, todisk) {
 	}
 	
 	setDataType <- function(datatype) {
-		if (datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'INT8U', 'FLT4S', 'FLT8S')) {	options(rasterDatatype = datatype)
+		if (datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S')) {	options(rasterDatatype = datatype)
 		} else { warning(paste('Cannot set datatype to unknown type:',datatype))	}
 	}
 	

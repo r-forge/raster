@@ -38,7 +38,7 @@ setMethod('hist', signature(x='RasterStackBrick'),
 
 
 setMethod('hist', signature(x='RasterLayer'), 
-	function(x, maxsamp=10000, main='', ...){
+	function(x, maxsamp=100000, main='', ...){
 		if (dataContent(x) == 'all') {
 			values <- values(x)
 		} else if (dataSource(x) == 'disk') {

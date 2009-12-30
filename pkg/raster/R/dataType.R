@@ -75,13 +75,8 @@
 		}
 		
 		if (size == '4') {
-			if (signed) {
-				x@file@datanotation <- 'INT4S'
-				x@file@nodatavalue <- -2147483647
-			} else {
-				x@file@datanotation <- 'INT4U'
-				x@file@nodatavalue <- 4294967295
-			}
+			x@file@datanotation <- 'INT4S'
+			x@file@nodatavalue <- -2147483647
 		} else if (size == '2') {
 			if (signed) {
 				x@file@datanotation <- 'INT2S'
@@ -100,13 +95,8 @@
 			}
 			#warning("binary files of a single byte do not have NA values on disk")
 		} else if (size == '8') {
-			if (signed) {
-				x@file@nodatavalue <- -9223372036854775808
-				x@file@datanotation <- 'INT8S'							
-			} else {
-				x@file@nodatavalue <- 18446744073709551615
-				x@file@datanotation <- 'INT8U'			
-			}
+			x@file@nodatavalue <- -9223372036854775808
+			x@file@datanotation <- 'INT8S'							
 		} else {
 			stop("invalid datasize for this datatype") 
 		}

@@ -67,12 +67,12 @@ showOptions <- function() {
 		datatype <- getOption('rasterDatatype')
 		if (is.null(datatype)) {
 			return('FLT4S') 
-		} else {
-			return(datatype)
-		}
-	} else { 
-		return(datatype)
+		} 
+	} 
+	if (! datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S')) {
+		warning(datatype, 'is an invalid datatype, changed to FLT4S')
 	}
+	return(datatype)
 }
 
 .filetype <- function(..., format) {

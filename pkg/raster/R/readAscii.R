@@ -4,15 +4,6 @@
 # Licence GPL v3
 
 
-.getAsciiData <- function(x, rownr=-1, startcol=1, ncolumns=ncol(x)) {
-	if (rownr > 0) {
-		v <- .readRowAscii(x, rownr)
-		endcol <- min(ncol(x), (startcol+ncolumns-1))
-		v <- v[startcol:endcol]
-	} else {
-		return(.readAllAscii(x))
-	}
-}
 
 .readAllAscii <- function(x) {
 	filename <- trim(filename(x))
@@ -27,24 +18,19 @@
 }
 
 
-.readRowAscii <- function(x, rownr) {
-	filename <- trim(filename(x))
-	skiprows <- 6 + rownr - 1 
-	v <- as.numeric ( scan(filename, skip=skiprows, nlines=1, what='character', quiet=TRUE) )
-	if (x@file@nodatavalue < 0) {
-		v[v <= x@file@nodatavalue ] <- NA 			
+.readRowsAscii <- function(x, startrow, nrows, startcol, ncols) {
+	if (startcol > 1 | ncols < ncol(x)) {
+		v <- matrix(nrow=ncols, ncol=nrows)
+		endcol <- startcol+ncols-1
+		skiprows <- 6 + startrow - 2 
+		for (i in 1:nrows) {
+			v[,i] <- as.numeric ( scan(filename(x), skip=skiprows+i, nlines=nrows, what='character', quiet=TRUE) )[startcol:endcol]
+		}
+		v <- as.vector(v)
 	} else {
-		v[v == x@file@nodatavalue ] <- NA 					
+		skiprows <- 6 + startrow - 1 
+		v <- as.numeric ( scan(filename(x), skip=skiprows, nlines=nrows, what='character', quiet=TRUE) )
 	}
-	return ( v )
-}
-
-
-.readRowsAscii <- function(x, startrow, endrow) {
-	filename <- trim(filename(x))
-	skiprows <- 6 + startrow - 1 
-	nrows <- endrow - startrow + 1
-	v <- as.numeric ( scan(filename, skip=skiprows, nlines=nrows, what='character', quiet=TRUE) )
 	if (x@file@nodatavalue < 0) {
 		v[v <= x@file@nodatavalue ] <- NA 			
 	} else {
@@ -63,7 +49,7 @@
 	colrow[,4] <- NA
 	rows <- na.omit(unique(colrow[order(colrow[,2]), 2]))
 	for (i in 1:length(rows)) {
-		v <- .readRowAscii(raster, rows[i])
+		v <- .readRowsAscii(raster, rows[i], 1)
 		thisrow <- subset(colrow, colrow[,2] == rows[i])
 		colrow[colrow[,2]==rows[i],4] <- v[thisrow[,1]]
 	}

@@ -4,12 +4,12 @@
 # Licence GPL v3
 
 if (!isGeneric("getValues")) {
-	setGeneric("getValues", function(x, row, ...)
+	setGeneric("getValues", function(x, row, nrows, ...)
 		standardGeneric("getValues"))
 }	
 
-setMethod("getValues", signature(x='Raster', row='missing'), 
-function(x, format='', names=TRUE) {
+setMethod("getValues", signature(x='RasterLayer', row='missing', nrows='missing'), 
+function(x, format='') {
 	if (dataContent(x) != "all") {
 		x <- readAll(x)
 	}
@@ -23,23 +23,25 @@ function(x, format='', names=TRUE) {
 }
 )
 
+setMethod("getValues", signature(x='RasterBrick', row='missing', nrows='missing'), 
+function(x) {
+	if (dataContent(x) != "all") {
+		x <- readAll(x)
+	}
+	colnames(x@data@values) <- layerNames(x)
+	x@data@values
+}
+)
 
-setMethod("getValues", signature(x='RasterStack', row='missing'), 
-function(x, format='', names=TRUE) {
+
+setMethod("getValues", signature(x='RasterStack', row='missing', nrows='missing'), 
+function(x) {
 	m <- matrix(nrow=ncell(x), ncol=nlayers(x))
+	colnames(m) <- layerNames(x)
 	for (i in 1:nlayers(x)) {
-		m[,i] <- getValues(raster(x, i))
+		m[,i] <- getValues(x@layers[[i]])
 	}
-	if (names) {
-		colnames(m) <- layerNames(x)
-	} 
-	if (format == 'dataframe') {
-		m <- as.data.frame(m)
-	}
-	if (format == 'vector') {
-		m <- as.vector(m)
-	}
-	return(m)
+	m
 }
 )
 

@@ -28,7 +28,14 @@ setMethod("cellValues", signature(x='RasterBrick', cells='vector'),
 
 setMethod("cellValues", signature(x='RasterStack', cells='vector'), 
 	function(x, cells) { 
-		return(.stackReadCells(x, cells))
+		result <- matrix(ncol=nlayers(x), nrow=length(cells))
+		for (i in seq(nlayers(x))) {
+			result[,i] <- .readCells( x@layers[[i]], cells )
+		}
+		if (!(is.null(dim(result)))) {
+			colnames(result) <- layerNames(x)
+		}	
+		result
 	}
 )
 

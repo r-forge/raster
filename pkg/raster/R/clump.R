@@ -146,7 +146,7 @@ function(x, filename='', directions=8, ...) {
 				}	
 		
 				x1 <- setValues(x1, c2, r)
-				x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4U')
+				x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4S')
 
 				trcl <- unique(trcl)
 				rcl <- unique(rbind(rcl, trcl))
@@ -184,7 +184,7 @@ function(x, filename='', directions=8, ...) {
 				}	
 		
 				x1 <- setValues(x1, c2, r)
-				x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4U')
+				x1 <- writeRaster(x1, filename=tmpfile, format='raster', datatype='INT4S')
 				
 				trcl <- unique(trcl)
 				rcl <- unique(rbind(rcl, trcl))

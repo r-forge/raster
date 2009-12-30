@@ -24,6 +24,7 @@
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
 		x@data@nlayers <- as.integer(gdalinfo[["bands"]])
+		x@file@nbands <- as.integer(gdalinfo[["bands"]])
 	} else {
 		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
 		x@file@nbands <- as.integer(gdalinfo[["bands"]])

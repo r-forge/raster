@@ -16,12 +16,8 @@
 		v[v <= 0 | v > 65534] <- NA
 	} else if (dtype == 'INT4S') {
 		v[v < -2147483647 | v > 2147483648] <- NA
-	} else if (dtype == 'INT4U') {
-		v[v <= 0 | v > 4294967294] <- NA
 	} else if (dtype == 'INT8S') {
 		v[v < -2^63/2 | v > 2^64/2] <- NA
-	} else if (dtype == 'INT8U') {
-		v[v <= 0 | v > 2^64] <- NA
 	} 
 	return(v)
 }
@@ -55,16 +51,8 @@
 		if (mn < -2147483647 | mx > 2147483648 ) {
 			ok <- FALSE
 		}
-	} else if (dtype == 'INT4U') {
-		if (mn <= 0 | mx > 4294967294 ) {
-			ok <- FALSE
-		}
 	} else if (dtype == 'INT8S') {
 		if (mn < -2^63/2 | mx > 2^64/2) {
-			ok <- FALSE
-		}
-	} else if (dtype == 'INT8U') {
-		if (mn <= 0 | mx > 2^64) {
 			ok <- FALSE
 		}
 	} else {
@@ -90,12 +78,8 @@
 		datatype <- 'INT2U'
 	} else if (mn > -2147483647 & mx < 2147483648 ) {
 		datatype <- 'INT4S'
-	} else if (mn >= 0 & mx < 4294967294 ) {
-		datatype <- 'INT4U'
 	} else if (mn > -(2^63/2) & mx < (2^64/2)) {
 		datatype <- 'INT8S'
-	} else if (mn >= 0 & mx < 2^64) {
-		datatype <- 'INT8U'
 	} else {
 		stop('these values are too large to be saved as integers')
 	}

@@ -61,23 +61,18 @@ setMethod("xyValues", signature(object='RasterStack', xyCoords='matrix'),
 		}
 		
 		if (method == 'bilinear') {
+			result <- matrix(ncol=nlayers(object), nrow=nrow(xyCoords))
 			for (i in seq(nlayers(object))) {
-				r <- raster(object, i)
-				v <- .bilinearValue(r, xyCoords)
-				if (i == 1) {
-					result <- v
-				} else {
-					result <- cbind(result, v)
-				}
+				result[,i] <- .bilinearValue(object@layers[[i]], xyCoords)
 			}
 			if (!(is.null(dim(result)))) {
 				colnames(result) <- layerNames(object)
 			}	
-			return(result)		
+			return( result )
 	
 		} else if (method=='simple') {
 			cells <- cellFromXY(object, xyCoords)
-			return(.stackReadCells(object, cells))
+			return( cellValues(object, cells) )
 		} else {
 			stop('invalid method argument. Should be simple or bilinear.')
 		}

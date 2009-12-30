@@ -49,10 +49,11 @@ function(x, filename, ...) {
 
 setMethod('writeRaster', signature(x='RasterBrick', filename='character'), 
 function(x, filename, bandorder='BIL', ...) {
+	
 	dc <- dataContent(x)
 	if (! dc %in% c('row', 'all') ) {
 		if (dataSource(x) == 'disk') {
-			return( saveAs(x, filename, ...) )
+			return( saveAs(x, filename, bandorder=bandorder, ...) )
 		} else {
 			stop('No usable data available for writing.')
 		}
