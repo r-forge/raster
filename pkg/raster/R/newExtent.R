@@ -8,13 +8,15 @@
 
 
 newExtent <- function(xmn, xmx, ymn, ymx) {
-	bb <- new('Extent')
-	bb@xmin <- xmn
-	bb@xmax <- xmx
-	bb@ymin <- ymn
-	bb@ymax <- ymx
-	validObject(bb)
-	return(bb)
+	warning('depracated function. Use "extent"')
+	extent(xmn, xmx, ymn, ymx)
+#	bb <- new('Extent')
+#	bb@xmin <- xmn
+#	bb@xmax <- xmx
+#	bb@ymin <- ymn
+#	bb@ymax <- ymx
+#	validObject(bb)
+#	return(bb)
 }
 
 

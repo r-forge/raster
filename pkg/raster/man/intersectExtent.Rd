@@ -23,12 +23,12 @@ Extent object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{unionExtent}}, \code{\link[raster]{extent}},  \code{\link[raster]{setExtent}} }
+\seealso{ \code{\link[raster]{unionExtent}}, \code{\link[raster]{extent}}}
 
 \examples{
 r <- raster()
-b1 <- newExtent(-10, 10, -20, 20)
-b2 <- newExtent(0, 20, -40, 5)
+b1 <- extent(-10, 10, -20, 20)
+b2 <- extent(0, 20, -40, 5)
 i <- intersectExtent(b1, b2)
 }
 

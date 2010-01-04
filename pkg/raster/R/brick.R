@@ -12,8 +12,8 @@ if (!isGeneric("brick")) {
 
 setMethod('brick', signature(x='missing'), 
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84", nlayers=1) {
-		extent <- newExtent(xmn, xmx, ymn, ymx)
-		b <- brick(extent, nrows=nrows, ncols=ncols, projs=projs, nlayers=nlayers)
+		ext <- extent(xmn, xmx, ymn, ymx)
+		b <- brick(ext, nrows=nrows, ncols=ncols, projs=projs, nlayers=nlayers)
 		return(b)
 	}
 )

@@ -47,7 +47,7 @@ projectExtent <- function(object, projs) {
 		miny <- miny - 0.5
 	}
 	
-	obj <- raster(newExtent(minx, maxx, miny,  maxy), nrows=nrow(object), ncols=ncol(object), proj=(projs))
+	obj <- raster(extent(minx, maxx, miny,  maxy), nrows=nrow(object), ncols=ncol(object), proj=(projs))
 	return(obj)
 }
 

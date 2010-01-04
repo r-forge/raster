@@ -66,11 +66,11 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 		rownr <- 1
 		pb <- pbCreate(nrow(outraster), type=.progress(...))
 		for (r in row1:row2) {
-			x <- readPartOfRow( x, r, col1, nc)
+			vv <- getValues(x, r)[col1:col2]
 			if (filename == "") {
-				v[,r] <- values(x)
+				v[,r] <- vv
 			} else {
-				outraster <- setValues(outraster, values(x), rownr)
+				outraster <- setValues(outraster, vv, rownr)
 				outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)
 			}	
 			rownr <- rownr + 1

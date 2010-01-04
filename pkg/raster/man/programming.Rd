@@ -7,7 +7,7 @@
 \alias{pbStep} 
 \alias{pbClose} 
 
-\title{ These are helper functions to use in new functions you develop}
+\title{ Helper functions to use in new functions you develop}
 
 \description{ 
 low level functions for programmers 

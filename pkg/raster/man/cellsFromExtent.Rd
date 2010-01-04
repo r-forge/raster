@@ -31,7 +31,7 @@ a vector of cell numbers
 
 \examples{
 r <- raster()
-bb <- newExtent(-5, 5, -5, 5)
+bb <- extent(-5, 5, -5, 5)
 cells <- cellsFromExtent(r, bb)
 r <- crop(r, bb)
 r[] <- cells

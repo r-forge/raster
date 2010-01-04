@@ -40,7 +40,7 @@ ymax(x) <- value
 a single number
 }
 
-\seealso{ \code{\link[raster]{setExtent}},  \code{\link[raster]{dimensions}} }
+\seealso{ \code{\link[raster]{extent}},  \code{\link[raster]{dimensions}} }
 
 
 \author{Robert J. Hijmans }

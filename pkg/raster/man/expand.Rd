@@ -46,7 +46,7 @@ The following additional arguments can be passed, to replace default values for 
 \examples{
 r <- raster(xmn=-150, xmx=-120, ymx=60, ymn=30, ncol=36, nrow=18)
 r[] <- 1:ncell(r)
-bb <- newExtent(-180, 0, 0, 90)
+bb <- extent(-180, 0, 0, 90)
 re <- expand(r, bb)
 }
 

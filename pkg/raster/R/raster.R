@@ -12,7 +12,7 @@ if (!isGeneric("raster")) {
 
 setMethod('raster', signature(x='missing'), 
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84") {
-		ext <- newExtent(xmn, xmx, ymn, ymx)
+		ext <- extent(xmn, xmx, ymn, ymx)
 		r <- raster(ext, nrows=nrows, ncols=ncols, projs=projs)
 		return(r)
 	}

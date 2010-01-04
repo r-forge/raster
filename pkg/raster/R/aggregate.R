@@ -35,8 +35,8 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	xmx <- xmin(x) + csteps * xfact * xres(x)
 		
 	outRaster <- raster(x, filename)
-	bndbox <- newExtent(xmin(x), xmx, ymn, ymax(x))
-	outRaster <- setExtent(outRaster, bndbox, keepres=FALSE)
+	bndbox <- extent(xmin(x), xmx, ymn, ymax(x))
+	extent(outRaster) <- bndbox
 	rowcol(outRaster) <- c(rsteps, csteps) 
 	
 	

@@ -35,7 +35,7 @@ function(x, y, filename='', ...) {
 	ymx <- max(ymx, ymax(x))
 	
 	outraster <- raster(x)
-	bndbox <- newExtent(xmn, xmx, ymn, ymx)
+	bndbox <- extent(xmn, xmx, ymn, ymx)
 	outraster <- setExtent(outraster, bndbox, keepres=TRUE)
 
 	if (canProcessInMemory(outraster, 2)) {

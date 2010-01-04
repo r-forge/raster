@@ -22,8 +22,7 @@ crop(x, y, ...)
 }
 
 \details{
- Objects that have a Extent object include RasterLayer, RasterStack.  They can also be extracted from objects descending from the Spatial class in the sp package. 
- You can check this with the \code{\link[raster]{extent}} function. New Extent objects can be created with \code{newExtent}.
+ Objects that have a Extent object include RasterLayer, RasterStack.  They can also be extracted from objects descending from the Spatial class in the sp package. You can check this with the \code{\link[raster]{extent}} function. New Extent objects can be also be created with \code{link[raster]{extent}}.
  
  If no filename is specified, and the resulting RasterLayer is too large to hold in memory, it is saved to a temporary file.  
 
@@ -49,7 +48,7 @@ A new RasterLayer object, and in some cases the side effect of a new file on dis
 \examples{
 r <- raster(nrow=45, ncol=90)
 r[] <- 1:ncell(r)
-bb <- newExtent(-160, 10, 30, 60)
+bb <- extent(-160, 10, 30, 60)
 rc <- crop(r, bb)	
 }
 

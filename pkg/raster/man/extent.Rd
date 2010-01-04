@@ -34,7 +34,7 @@ An Extent object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{setExtent}}, \code{\link[raster]{drawExtent}} }
+\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{drawExtent}} }
 
 \examples{
 r <- raster()

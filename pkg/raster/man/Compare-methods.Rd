@@ -38,7 +38,7 @@ r2 <- setValues(r1, round(10 * runif(ncell(r1))))
 as(r1, 'BasicRaster') == as(r2, 'BasicRaster')
 r3 <- r1 == r2
 
-b <- newExtent(0, 360, 0, 180)
+b <- extent(0, 360, 0, 180)
 r4 <- setExtent(r2, b)
 as(r2, 'BasicRaster') != as(r4, 'BasicRaster')
 # The following would give an error. You cannot compare RasterLayer object that do not have the same BasicRaster properties.

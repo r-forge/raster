@@ -50,7 +50,7 @@ take a single numeric vector as argument and return a single values (e.g. mean, 
 
 
 \value{
-A vector (object is a RasterLayer) or a matrix (object is a RasterStack or RasterBrick); Or a list if buffer not missing.
+A vector (object is a RasterLayer) or a matrix (object is a RasterStack or RasterBrick); Or a list if a buffer is supplied without a function.
 }
 
 \seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{read}}, \code{\link[sp]{SpatialPoints}}  }
@@ -60,15 +60,14 @@ A vector (object is a RasterLayer) or a matrix (object is a RasterStack or Raste
 \examples{
 r <- raster()
 r[] <- 1:ncell(r)
-xy <- cbind(-50, 1:8*20-90)
+xy <- cbind(-50, seq(-80, 80, by=20))
 xyValues(r, xy)
 xyValues(r, xy, method='bilinear')
 
 # examples with a buffer
 xyValues(r, xy, buffer=10000, fun=mean)
-xyValues(r, xy[1:3,], buffer=150000)
+xyValues(r, xy[2:4,], buffer=150000)
 
-## Not run: 
 ## illustrating the varying size of a buffer (expressed in meters) on a longitude/latitude raster
  z <- xyValues(r, xy, buffer=1000000)
  s <- raster(r)
@@ -80,13 +79,11 @@ xyValues(r, xy[1:3,], buffer=150000)
  plot(wrld_simpl, add=TRUE)
 ## compare with raster that is not longitude/latitude
  projection(r) <- NA 
- xy <- cbind(50, 1:8*20-90)
- z <- xyValues(r, xy, buffer=6)
+ xy[,1] <- 50
+ z <- xyValues(r, xy, buffer=8)
  for (i in 1:length(z)) { s[z[[i]]] <- i }
  plot(s)
- points(xy, pch=20, col='blue')
  plot(wrld_simpl, add=TRUE)
-## End(Not run)
 
 }
 

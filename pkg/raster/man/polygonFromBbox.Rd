@@ -13,7 +13,7 @@ polygonFromExtent(bndbox, sp=TRUE)
 }
 
 \arguments{
-  \item{bndbox}{An object of class Extent (which you can create with newExtent() )}  
+  \item{bndbox}{An object of class Extent (which you can create with extent() )}  
   \item{sp}{logical. If \code{TRUE}, the output will be a SpatialPolygons object (sp package). Otherwise a matrix of coordinates is returned}    
 }
 
@@ -23,7 +23,7 @@ a matrix or a SpatialPolygons object
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{cellsFromExtent}}, \code{\link[raster]{newExtent}}, \code{\link[sp]{SpatialPolygons}} }
+\seealso{ \code{\link[raster]{cellsFromExtent}}, \code{\link[raster]{extent}}, \code{\link[sp]{SpatialPolygons}} }
 
 \examples{
 r <- raster()

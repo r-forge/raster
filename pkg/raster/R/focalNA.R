@@ -37,9 +37,21 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename
 
 
 .focNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, filename="", ...) {
-	allNA <- TRUE
 	ngb <- .checkngb(ngb)
 	ngbgrid <- raster(raster)
+
+	if (!canProcessInMemory(ngbgrid, 4) && filename == '') {
+		filename <- rasterTmpFile()
+		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+	}
+
+	if (filename == '') {
+		v <- matrix(NA, ncol=nrow(ngbgrid), nrow=ncol(ngbgrid))
+	} else {
+		v <- vector(length=0)
+	}
+	
+	allNA <- TRUE
 
 	# first create an empty matrix with nrows = ngb and ncols = raster@ncols
 	res <- vector(length=length(ncol(ngbgrid)))
@@ -54,24 +66,12 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename
 # add all rows needed for first ngb, minus 1 that will be read in first loop	
 
 	for (r in 1:limrow) {
-		rowdata <- getValues(raster, r)
-		ngbdata <- rbind(ngbdata, rowdata)
+		ngbdata <- rbind(ngbdata, getValues(raster, r))
 	}
 
 	res <- vector(length=ncol(ngbdata))
 
 	keepGoing <- FALSE
-	
-	if (!canProcessInMemory(ngbgrid, 4) && filename == '') {
-		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
-	}
-
-	if (filename == '') {
-		v <- matrix(NA, ncol=nrow(ngbgrid), nrow=ncol(ngbgrid))
-	} else {
-		v <- vector(length=0)
-	}
 	
 	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
 
@@ -88,7 +88,8 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename
 			ngbdata <- ngbdata[-1, ,drop=FALSE]
 		}
 		
-		vals <- ngbdata[midrow,]
+		mrow <- min(r, midrow)
+		vals <- ngbdata[mrow,]
 		if (sum(is.na(vals)) > 0) {
 			ngbvals <- .calcNGB(ngbdata, colnrs, res, fun, keepdata=TRUE)
 			vals[is.na(vals)] <- ngbvals[is.na(vals)]
