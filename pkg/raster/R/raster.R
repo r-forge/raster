@@ -109,7 +109,7 @@ setMethod('raster', signature(x='Extent'),
 setMethod('raster', signature(x='SpatialGrid'), 
 	function(x, index=1){
 		r <- raster()
-		r <- setExtent(r, extent(x))
+		extent(r) <- extent(x)
 		projection(r) <- x@proj4string
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])		
 		if (index > 0 & class(x) == 'SpatialGridDataFrame') {
@@ -125,7 +125,7 @@ setMethod('raster', signature(x='SpatialGrid'),
 setMethod('raster', signature(x='SpatialPixels'), 
 	function(x, index=1){
 		r <- raster()
-		r <- setExtent(r, extent(x))
+		extent(r) <- extent(x)
 		projection(r) <- x@proj4string
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
 		if (index > 0 & class(x) == 'SpatialPixelsDataFrame') {

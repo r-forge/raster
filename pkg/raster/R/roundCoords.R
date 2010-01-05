@@ -14,7 +14,7 @@ roundExtent <- function(object, digits=0) {
 	if (class(object) == 'Extent') {
 		return(b)
 	}
-	object <- setExtent(object, b)
+	extent(object) <- b
 	return(object)
 }
 
@@ -27,6 +27,6 @@ nudgeExtent <- function(object){
 	if (class(object) == 'Extent') {
 		return(b)
 	}
-	object <- setExtent(object, b)
+	extent(object) <- b
 	return(object)
 }

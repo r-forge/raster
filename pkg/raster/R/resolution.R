@@ -25,7 +25,7 @@
 	}
 	bb@xmax <- bb@xmin + nc * xr
 	bb@ymin <- bb@ymax - nr * yr
-	object	<- setExtent(object, bb)
+	extent(object) <- bb
 	rowcol(object) <- c(nr, nc)
 	return(object)
 }
