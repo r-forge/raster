@@ -53,11 +53,20 @@ setMethod('raster', signature(x='Raster'),
 
 setMethod('raster', signature(x='RasterStack'), 
 	function(x, index=0){
-		if (nlayers(x) > 0 & index > 0) {
+		if (nlayers(x) > 0) {
+			if (!is.numeric(index)) {
+				newindex <- which(layerNames(x) == index)[1]
+				if (is.na (newindex) ) { 
+					warning('variable', index, 'does not exist')
+				} 
+				index <- newindex
+			}
+		}
+		if (isTRUE(index > 0)) {
 			dindex <- max(1, min(nlayers(x), index))
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
 			r <- x@layers[[dindex]]
-			layerNames(r) <- layerNames(x)[index]
+			layerNames(r) <- layerNames(x)[dindex]
 		} else {
 			r <- raster(extent(x))
 			rowcol(r) <- c(nrow(x), ncol(x))
@@ -70,9 +79,19 @@ setMethod('raster', signature(x='RasterStack'),
 
 setMethod('raster', signature(x='RasterBrick'), 
 	function(x, index=0){
-		index <- round(index)
-		if (nlayers(x) > 0 & index > 0) {
+		if (nlayers(x) > 0) {
+			if (!is.numeric(index)) {
+				newindex <- which(layerNames(x) == index)[1]
+				if (is.na (newindex) ) { 
+					warning('variable', index, 'does not exist')
+				} 
+				index <- newindex
+			}
+			index <- round(index)
+		}
+		if (isTRUE(index > 0)) {
 			dindex <- max(1, min(nlayers(x), index))
+				
 			if (filename(x) != '') {
 				if (dindex != index) { warning(paste("index was changed to", dindex))}
 				r <- raster(filename(x), band=dindex)
@@ -111,11 +130,20 @@ setMethod('raster', signature(x='SpatialGrid'),
 		r <- raster()
 		extent(r) <- extent(x)
 		projection(r) <- x@proj4string
-		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])		
-		if (index > 0 & class(x) == 'SpatialGridDataFrame') {
-			dindex <- max(1, min(dim(x@data)[2], index))
-			if (dindex != index) { warning(paste("index was changed to", dindex))}
-			r <- setValues(r, x@data[[dindex]])
+		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
+		if (class(x) == 'SpatialGridDataFrame') {
+			if (dim(x@data)[2] > 0) {
+				if (is.numeric(index)) {
+					index <- index[1]
+					if (index > 0) {
+						dindex <- max(1, min(dim(x@data)[2], index))
+						if (dindex != index) { warning(paste("index was changed to", dindex))}
+						r <- setValues(r, x@data[[dindex]])
+					}
+				} else {
+					r <- setValues(r, x@data[[index]])
+				}
+			}
 		}
 		return(r)
 	}	
@@ -128,11 +156,21 @@ setMethod('raster', signature(x='SpatialPixels'),
 		extent(r) <- extent(x)
 		projection(r) <- x@proj4string
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
-		if (index > 0 & class(x) == 'SpatialPixelsDataFrame') {
-			dindex <- max(1, min(dim(x@data)[2], index))
-			if (dindex != index) { warning(paste("index was changed to", dindex))}
-			x <- as(x, 'SpatialGridDataFrame')
-			r <- setValues(r, x@data[[dindex]])
+		if (class(x) == 'SpatialPixelsDataFrame') {
+			if (dim(x@data)[2] > 0) {
+				if (is.numeric(index)) {
+					dindex <- max(1, min(dim(x@data)[2], index))
+					if (dindex != index) { warning(paste("index was changed to", dindex))}
+					x <- x[dindex]
+					x <- as(x, 'SpatialGridDataFrame')
+					r <- setValues(r, x@data[[1]])
+					
+				} else {
+					x <- x[index]
+					x <- as(x, 'SpatialGridDataFrame')
+					r <- setValues(r, x@data[[1]])
+				}
+			}
 		}
 		return(r)
 	}

@@ -31,7 +31,7 @@ function(p, r, ...) {
 			rc <- crop(rr, extent(pp))
 			rc <- polygonsToRaster(pp, rc, silent=TRUE)
 			xy <- rasterToPoints(rc)[,-3]
-			if (length(xy) > 0)  {  # catch holes
+			if (length(xy) > 0)  {  # catch holes or very small polygons
 				res[[i]] <- xyValues(r, xy)
 			} else {
 				res[[i]] <- NULL
