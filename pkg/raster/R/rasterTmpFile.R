@@ -12,23 +12,22 @@ rasterTmpFile <- function()  {
 	return(d)
 }
 
+.removeTrailingSlash <- function(d) {
+		if (substr(d, nchar(d), nchar(d)) == '/') { d <- substr(d, 1, nchar(d)-1) }
+		if (substr(d, nchar(d), nchar(d)) == '\\') { d <- substr(d, 1, nchar(d)-1) }
+		return(d)
+}
+
+
 removeTmpFiles <- function() {
-	d <- .tmpdir()
-	f <- NULL
-	try ( f <- c(list.files(d, pattern="^raster_.*gri$", full.names=TRUE), list.files(d, pattern="^raster_.*grd$", full.names=TRUE)) , silent=TRUE )
-	if (length(f) > 0) {
-		r <- file.remove(f)
+	d <- .removeTrailingSlash(.tmpdir())
+	if (file.exists(d)) {
+		unlink(paste(d, "/*", sep=""), recursive = TRUE)
 	}
 }
 
 showTmpFiles <- function() {
-	removeTrailingSlash <- function(d) {
-		if (substr(d, nchar(d), nchar(d)) == '/') { d <- substr(d, 1, nchar(d)-1) }
-		if (substr(d, nchar(d), nchar(d)) == '\\') { d <- substr(d, 1, nchar(d)-1) }
-		return(d)
-	}
-	d <- .tmpdir()
-	d <- removeTrailingSlash(d)
+	d <- .removeTrailingSlash(.tmpdir())
 	if (file.exists(d)) {
 		f <- c(list.files(d, '.grd'), list.files(d, '.gri'))
 		if (length(f) == 0) {
