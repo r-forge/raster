@@ -22,7 +22,7 @@ setMethod('brick', signature(x='missing'),
 
 setMethod('brick', signature(x='character'), 
 	function(x, values=FALSE, proj=NULL, ...) {
-		b <- .rasterObjectFromFile(x, objecttype='RasterBrick')
+		b <- .rasterObjectFromFile(x, objecttype='RasterBrick', ...)
 		if (values) {
 			b <- readAll(b)
 		}

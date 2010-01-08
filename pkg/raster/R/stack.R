@@ -18,7 +18,7 @@ function(x) {
 
 setMethod("stack", signature(x='Raster'), 
 function(x, ..., bands=NULL) {
-	rlist <- .makeRasterList(x, ...)
+	rlist <- .makeRasterList(x, ..., keepone=FALSE)
 	return(stack(rlist, bands))	
 } )
 
@@ -29,7 +29,7 @@ function(x, ..., bands=NULL) {
 setMethod("stack", signature(x='character'), 
 function(x, ..., bands=NULL, xvar='', yvar='', zvar='', time='') {
     if (xvar != '' | yvar != '' | zvar != '' | is.numeric(time)) {
-		return(.stackCDF(x, xvar, yvar, zvar, time))
+		return(.rasterFromCDF(x, type='RasterStack', xvar, yvar, zvar, time))
 	} else {
 		rlist <- c(x, list(...))
 		return(stack(rlist, bands))

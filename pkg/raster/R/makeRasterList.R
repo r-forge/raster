@@ -31,7 +31,7 @@
 	x <- list()
 	for (i in seq(along=arg)) {
 		if (class(arg[[i]]) == 'list') {
-			for (j in 1:length(arg[[i]])) {
+			for (j in seq(along=arg[[i]])) {
 				x <- .addToList(x, arg[[i]][[j]], compare, giveError) 
 			}
 		} else {

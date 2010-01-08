@@ -66,7 +66,7 @@
 	yy <- as.vector(var.get.nc(nc, yvar))
 	rs <- yy[-length(yy)] - yy[-1]
 	if (! isTRUE ( all.equal( min(rs), max(rs) ) ) ) {
-		stop('cells are not equally spaced; extract as points') }
+		stop('cells are not equally spaced; you should extract values as points') }
 	yrange <- c(min(yy), max(yy))
 	resy <- (yrange[2] - yrange[1]) / (nrows-1)
 	rm(yy)
@@ -76,6 +76,11 @@
 	yrange[1] <- yrange[1] - 0.5 * resy
 	yrange[2] <- yrange[2] + 0.5 * resy
     r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
+
+	if (xrange[1] < -400 | xrange[2] > 400 | yrange[1] < -100 | yrange[2] > 100) {
+		projection(r) <- NA
+	}
+
     return(r)
 }
 
@@ -84,15 +89,6 @@
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop() }
 
-
-	if (type == 'RasterBrick') {
-		b <- .stackCDF(filename, type, xvar, yvar, zvar)
-		b <- brick(b)
-		b@file@driver <- "netcdf"
-		return(b)
-	}
-
-
 	nc <- open.nc(filename)
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
@@ -100,7 +96,56 @@
 	zvar <- .getzvar(zvar, vars) 
 	r <- .nctoraster(nc, vars, xvar, yvar)
 	
-	if (is.na(time) ) {
+	
+	att <- var.inq.nc(nc, variable=zvar)
+	
+	add_offset <- 0
+	scale_factor <- 1
+	missing_value <- NA
+	projection <- NA
+	long_name <- zvar
+	for (i in 0:(att$natts-1)) {
+		if (att.inq.nc(nc, zvar, i)$name == "add_offset") {
+			add_offset <- att.get.nc(nc, zvar, i)
+		}
+		if (att.inq.nc(nc, zvar, i)$name == "scale_factor") {
+			scale_factor <- att.get.nc(nc, zvar, i)
+		}
+		if (att.inq.nc(nc, zvar, i)$name == "missing_value") {
+			missing_value <- att.get.nc(nc, zvar, i)
+		}
+		if (att.inq.nc(nc, zvar, i)$name == "long_name") {
+			long_name <- att.get.nc(nc, zvar, i)
+		}
+		if (att.inq.nc(nc, zvar, i)$name == "grid_mapping") {
+			projection <- att.get.nc(nc, zvar, i)
+		}
+	}
+
+	if (type != 'RasterLayer' ) {
+		b <- .stackCDF(nc, type, r, xvar, yvar, zvar, time, add_offset, scale_factor, missing_value, long_name, projection)
+		return(b)		
+	}
+	
+
+	r <- .enforceGoodLayerNames(r, long_name)
+
+	if (!is.na(projection)) {
+		prj = list()
+		att <- var.inq.nc(nc, projection)
+		for (i in 0:(att$natts-1)) {
+			prj[[i+1]] <- att.get.nc(nc, projection, i)
+			names(prj)[i+1] <- att.inq.nc(nc, projection, i)$name
+		}
+		attr(r, "prj") <- prj 
+		# and now what to do with prj ???
+	}
+
+	if (length(time) > 1) {
+		stop("cannot make a RasterLayer for multiple time steps, use 'stack' or 'brick' instead")		
+	}
+	
+	if (is.na(time) | is.null(time)) {
 		d <- var.get.nc(nc, variable=zvar)
 		dims <- dim(d)
 		if (length(dims)== 1) { 
@@ -120,16 +165,18 @@
 	} 
 	close.nc(nc)
 
+	if (!is.na(missing_value)) {
+		d[d==missing_value] <- NA
+	}
+	d <- add_offset + d * scale_factor
+	
 # y needs to go from big to small
 	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
 	d <- as.vector( t( d[nrow(r):1,] ) )	
 	r <- setValues(r, d)
 	
 	r@file@driver <- "netcdf"
-	shortname <- gsub(" ", "_", ext(basename(filename), ""))
-	r <- .enforceGoodLayerNames(r, shortname)
 
 	return(r)
 }
-
 
