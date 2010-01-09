@@ -70,6 +70,34 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 
 
 
+setMethod("Arith", signature(e1='RasterBrick', e2='numeric'),
+    function(e1, e2){ 
+		if (canProcessInMemory(e1, 4)) {
+			return ( setValues(e1,  callGeneric(getValues(e1), e2) ) )
+		} else {
+			r <- brick(e1)
+			filename <- rasterTmpFile()
+			for (row in 1:nrow(e1)) {
+				r <- setValues(r, callGeneric( getValues(e1, row), e2) , row) 
+				r <- writeRaster(r, filename=filename, doPB=TRUE)
+			}
+			if (getOption('verbose')) {
+				cat('values were written to:', filename)
+			}			
+			return(r)
+		}		
+	}
+)
+
+setMethod("Arith", signature(e1='numeric', e2='RasterBrick'),
+    function(e1, e2){ 
+		callGeneric(e2, e1) 
+	}
+)
+
+
+
+
 setMethod("Arith", signature(e1='Extent', e2='numeric'),
 	function(e1, e2){ 
 		r <- e1@xmax - e1@xmin

@@ -64,7 +64,7 @@ function(x) {
 	clear <- FALSE
 	if (dataContent(x) != 'all') {
 		if (dataSource(x) == 'ram') {
-			stop('no values associated with this xLayer')
+			stop('no values associated with this Layer')
 		}
 		if (canProcessInMemory(x, (2 + nlayers(x)))) {
 			x <- readAll(x)
@@ -73,16 +73,20 @@ function(x) {
 	}
 	
 	if (dataContent(x)=='all') {
-		for (i in 1:nlayers(x)) {
-			vals <- na.omit(values(x)[,i]) # min and max values
-			if (length(vals) > 0) {
-				x@data@min[i] <- min(vals)
-				x@data@max[i] <- max(vals)
-			} else {
-				x@data@min[i] <- NA
-				x@data@max[i] <- NA
-			}
-		}
+		rge <- apply(x@data@values, 2, FUN=function(x){range(x, na.rm=TRUE)})
+		x@data@min <- rge[1,]
+		x@data@max <- rge[2,]
+		
+#		for (i in 1:nlayers(x)) {
+#			vals <- na.omit(values(x)[,i]) # min and max values
+#			if (length(vals) > 0) {
+#				x@data@min[i] <- min(vals)
+#				x@data@max[i] <- max(vals)
+#			} else {
+#				x@data@min[i] <- NA
+#				x@data@max[i] <- NA
+#			}
+#		}
 		if (clear) {x <- clearValues(x)}
 	} else {
 		x@data@min <- rep(Inf, nlayers(x))
@@ -111,48 +115,10 @@ function(x) {
 
 
 setMethod('setMinMax', signature(x='RasterStack'), 
-function(x) {
-	clear <- FALSE
-	if (dataContent(x) != 'all') {
-		if (canProcessInMemory(x, (2 + nlayers(x)))) {
-			x <- readAll(x)
-			clear <- TRUE
-		}
-	}
-	
-	if (dataContent(x)=='all') {
+	function(x) {
 		for (i in 1:nlayers(x)) {
-			vals <- na.omit(values(x)[,i]) # min and max values
-			if (length(vals) > 0) {
-				x@data@min[i] <- min(vals)
-				x@data@max[i] <- max(vals)
-			} else {
-				x@data@min[i] <- NA
-				x@data@max[i] <- NA
-			}
+			x@layers[[i]] <- setMinMax(x@layers[[i]])
 		}
-		if (clear) {x <- clearValues(x)}
-	} else {
-		x@data@min <- rep(Inf, nlayers(x))
-		x@data@max <- rep(-Inf, nlayers(x))
-		for (r in 1:nrow(x)) {
-			x <- readRow(x, r)
-			for (i in 1:nlayers(x)) {
-				rsd <- na.omit(values(x)[,i]) # min and max values
-				if (length(rsd) > 0) {
-					x@data@min[i] <- min(x@data@min[i], min(rsd))
-					x@data@max[i] <- max(x@data@max[i], max(rsd))
-				}	
-			}
-		}
-		x <- clearValues(x)
+		return(x)
 	}
-#	if (datatype == 'logical') {
-#		x@data@min <- as.logical(x@data@min)
-#		x@data@max <- as.logical(x@data@max)
-#	}
-
-	x@data@haveminmax <- TRUE
-	return(x)
-}
 )

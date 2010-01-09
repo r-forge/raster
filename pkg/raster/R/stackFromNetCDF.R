@@ -39,21 +39,42 @@
 	}
 	d <- add_offset + d * scale_factor
 
-	stk <- new('RasterStack')
-
-	for (i in 1:dims[3]) {
-		x <- t(d[,,i])
-		x <- x[nrow(x):1, ]
-		r[] <- as.vector(t(x))
-		stk <- addLayer(stk, r)
-	}
-	if (type=="RasterStack") {	
+	pb <- pbCreate(dims[3], type='text')
+	
+	if (type == 'RasterStack') {
+		stk <- new('RasterStack')
+		for (i in 1:dims[3]) {
+			x <- t(d[,,i])
+			x <- x[nrow(x):1, ]
+			r[] <- as.vector(t(x))
+			if (i==1) {
+				stk <- stack(r)
+			} else {
+				stk@layers[[i]] <- r
+			}
+			pbStep(pb, i) 
+		}
 		attr(stk, 'prj') <- prj
+		layerNames(stk) <- 1:nlayers(stk)
+		pbClose(pb)		
 		return(stk) 
 	} else {
-		b <- brick(stk)
+		b <- brick(r)
+		b@data@values <- matrix(nrow=ncell(r), ncol=dims[3])
+		for (i in 1:dims[3]) {
+			x <- t(d[,,i])
+			x <- x[nrow(x):1, ]
+			b@data@values[,i] <- as.vector(t(x))
+			pbStep(pb, i) 
+		}
+		pbClose(pb)		
 		b@title <- long_name
+		b@data@nlayers <- dims[3]
+		b@data@content <- 'all'
+		b@data@indices <- c(1:ncell(r))
+		b <- setMinMax(b)
 		attr(b, 'prj') <- prj
+		layerNames(b) <- 1:nlayers(b)
 		return(b)
 	}
 }

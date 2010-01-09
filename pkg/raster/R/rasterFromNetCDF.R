@@ -96,7 +96,6 @@
 	zvar <- .getzvar(zvar, vars) 
 	r <- .nctoraster(nc, vars, xvar, yvar)
 	
-	
 	att <- var.inq.nc(nc, variable=zvar)
 	
 	add_offset <- 0
@@ -145,6 +144,8 @@
 		stop("cannot make a RasterLayer for multiple time steps, use 'stack' or 'brick' instead")		
 	}
 	
+	
+
 	if (is.na(time) | is.null(time)) {
 		d <- var.get.nc(nc, variable=zvar)
 		dims <- dim(d)
@@ -153,17 +154,20 @@
 		} else if (length(dims)== 2) { 
 			d <- as.vector(d)
 		} else if (length(dims)== 3) { 
-			stop('zvar has three dimensions, provide a value for "time"')
+			stop('zvar has three dimensions, provide a value for "time", between 1 and ', dims[3])
 		} else if (length(dims)== 4) { 
 			stop('zvar has four dimensions, I cannot process that')
 		}
 		
 	} else {
 		start <- c(1, 1, time)
+		r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
+		r@data@band <- as.integer(time)
 		count <- c(ncol(r), nrow(r), 1)
 		d <- as.vector ( var.get.nc(nc, variable=zvar, start=start, count=count) )
 	} 
 	close.nc(nc)
+
 
 	if (!is.na(missing_value)) {
 		d[d==missing_value] <- NA
