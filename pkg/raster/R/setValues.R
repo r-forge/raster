@@ -173,7 +173,7 @@ setMethod('setValues', signature(object='RasterBrick'),
 #)
 
 
-setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {
+.setValuesBlock <- function(raster, blockvalues, firstcell, lastcell) {
 	if (!is.vector(blockvalues)) {	stop('values must be a vector') }
 	if (length(blockvalues) == 0) {	stop('length(blockvalues==0). If this is intended use raster.data.clear(raster)') }
 	if (!(is.numeric(blockvalues) | is.integer(blockvalues) | is.logical(blockvalues))) { stop('values must be numeric, integer or logical') }

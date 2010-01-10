@@ -57,6 +57,7 @@
 		attr(stk, 'prj') <- prj
 		layerNames(stk) <- 1:nlayers(stk)
 		pbClose(pb)		
+
 		return(stk) 
 	} else {
 		b <- brick(r)
@@ -72,6 +73,7 @@
 		b@data@nlayers <- dims[3]
 		b@data@content <- 'all'
 		b@data@indices <- c(1:ncell(r))
+		b@file@driver <- "netcdf"
 		b <- setMinMax(b)
 		attr(b, 'prj') <- prj
 		layerNames(b) <- 1:nlayers(b)

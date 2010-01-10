@@ -103,48 +103,47 @@
 	missing_value <- NA
 	projection <- NA
 	long_name <- zvar
-	for (i in 0:(att$natts-1)) {
-		if (att.inq.nc(nc, zvar, i)$name == "add_offset") {
-			add_offset <- att.get.nc(nc, zvar, i)
-		}
-		if (att.inq.nc(nc, zvar, i)$name == "scale_factor") {
-			scale_factor <- att.get.nc(nc, zvar, i)
-		}
-		if (att.inq.nc(nc, zvar, i)$name == "missing_value") {
-			missing_value <- att.get.nc(nc, zvar, i)
-		}
-		if (att.inq.nc(nc, zvar, i)$name == "long_name") {
-			long_name <- att.get.nc(nc, zvar, i)
-		}
-		if (att.inq.nc(nc, zvar, i)$name == "grid_mapping") {
-			projection <- att.get.nc(nc, zvar, i)
+	if (att$natts > 0) {
+		for (i in 0:(att$natts-1)) {
+			if (att.inq.nc(nc, zvar, i)$name == "add_offset") {
+				add_offset <- att.get.nc(nc, zvar, i)
+			}
+			if (att.inq.nc(nc, zvar, i)$name == "scale_factor") {
+				scale_factor <- att.get.nc(nc, zvar, i)
+			}
+			if (att.inq.nc(nc, zvar, i)$name == "missing_value") {
+				missing_value <- att.get.nc(nc, zvar, i)
+			}
+			if (att.inq.nc(nc, zvar, i)$name == "long_name") {
+				long_name <- att.get.nc(nc, zvar, i)
+			}
+			if (att.inq.nc(nc, zvar, i)$name == "grid_mapping") {
+				projection <- att.get.nc(nc, zvar, i)
+			}
 		}
 	}
+	prj = list()
+	if (!is.na(projection)) {
+		att <- var.inq.nc(nc, projection)
+		if (att$natts > 0) {
+			for (i in 0:(att$natts-1)) {
+				prj[[i+1]] <- att.get.nc(nc, projection, i)
+				names(prj)[i+1] <- att.inq.nc(nc, projection, i)$name
+			}
+		}	
+	}
+	r@file@driver <- "netcdf"
 
 	if (type != 'RasterLayer' ) {
-		b <- .stackCDF(nc, type, r, xvar, yvar, zvar, time, add_offset, scale_factor, missing_value, long_name, projection)
+		b <- .stackCDF(nc, type, r, xvar, yvar, zvar, time, add_offset, scale_factor, missing_value, long_name, prj)
 		return(b)		
+	} else if (length(time) > 1) {
+		stop("cannot make a RasterLayer for multiple time steps, use 'stack' or 'brick' instead")		
 	}
 	
 
 	r <- .enforceGoodLayerNames(r, long_name)
-
-	if (!is.na(projection)) {
-		prj = list()
-		att <- var.inq.nc(nc, projection)
-		for (i in 0:(att$natts-1)) {
-			prj[[i+1]] <- att.get.nc(nc, projection, i)
-			names(prj)[i+1] <- att.inq.nc(nc, projection, i)$name
-		}
-		attr(r, "prj") <- prj 
-		# and now what to do with prj ???
-	}
-
-	if (length(time) > 1) {
-		stop("cannot make a RasterLayer for multiple time steps, use 'stack' or 'brick' instead")		
-	}
-	
-	
+	attr(r, "prj") <- prj 
 
 	if (is.na(time) | is.null(time)) {
 		d <- var.get.nc(nc, variable=zvar)
@@ -155,8 +154,8 @@
 			d <- as.vector(d)
 		} else if (length(dims)== 3) { 
 			stop('zvar has three dimensions, provide a value for "time", between 1 and ', dims[3])
-		} else if (length(dims)== 4) { 
-			stop('zvar has four dimensions, I cannot process that')
+		} else if (length(dims)>= 4) { 
+			stop('zvar has ', length(dims), ' dimensions, I do not know how to process these data')
 		}
 		
 	} else {
@@ -179,8 +178,6 @@
 	d <- as.vector( t( d[nrow(r):1,] ) )	
 	r <- setValues(r, d)
 	
-	r@file@driver <- "netcdf"
-
 	return(r)
 }
 
