@@ -48,10 +48,11 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 		nc <- ncol(outraster)
 		nr <- row2 - row1 + 1
 		if (canProcessInMemory(outraster, 3)) {
-			v <- values(.rasterReadBlock(x, row1, nrows=nr, startcol=col1, ncolumns=nc))
+			v <- values(.readRasterLayerValues(x, row1, nrows=nr, startcol=col1, ncols=nc))
 			outraster <- setValues(outraster, as.vector(v) )
 			if (filename != '') { 
-				outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...) }
+				outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...) 
+			}
 			return(outraster)
 		}
 	

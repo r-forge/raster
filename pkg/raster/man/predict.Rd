@@ -18,7 +18,7 @@ predict(object, ...)
 
 \arguments{
   \item{object}{a RasterStack, RasterBrick or RasterLayer object}
-  \item{...}{Additional arguments. See below, under Methods}  
+  \item{...}{Additional arguments. See under Methods}  
 }
 
 \section{Methods}{

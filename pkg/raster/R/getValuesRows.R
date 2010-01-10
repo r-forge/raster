@@ -4,9 +4,9 @@
 # Licence GPL v3
 
 setMethod('getValues', signature(x='RasterStack', row='numeric', nrows='missing'), 
-function(x, row, nrows) {
-	getValues(x, row=row, nrows=1)
-}
+	function(x, row, nrows) {
+		getValues(x, row=row, nrows=1)
+	}
 )
 
 setMethod('getValues', signature(x='RasterStack', row='numeric', nrows='numeric'), 
@@ -15,6 +15,7 @@ function(x, row, nrows) {
 		if (i==1) {
 			v <- getValues(x@layers[[i]], row, nrows)
 			res <- matrix(ncol=nlayers(x), nrow=length(v))
+			colnames(res) <- layerNames(x)
 			res[,1] <- v
 		} else {
 			res[,i] <- getValues(x@layers[[i]], row, nrows)
@@ -25,9 +26,9 @@ function(x, row, nrows) {
 )
 
 setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='missing'), 
-function(x, row, nrows) {
-	getValues(x, row=row, nrows=1)
-}
+	function(x, row, nrows) {
+		getValues(x, row=row, nrows=1)
+	}
 )
 
 setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='numeric'), 
@@ -71,7 +72,8 @@ function(x, row, nrows) {
 			if (row < firstrow | (row+nrows-1) > lastrow) {
 				readrow <- TRUE
 			} else {
-				res <- x@data@values[startcell:endcell]
+				cells <- startcell:endcell-dataIndices(x)[1]
+				res <- x@data@values[cells]
 			}
 		}
 	} else {
@@ -84,9 +86,9 @@ function(x, row, nrows) {
 )
 
 setMethod('getValues', signature(x='RasterBrick', row='numeric', nrows='missing'), 
-function(x, row, nrows) {
-	getValues(x, row=row, nrows=1)
-}
+	function(x, row, nrows) {
+		getValues(x, row=row, nrows=1)
+	}
 )
 
 setMethod('getValues', signature(x='RasterBrick', row='numeric', nrows='numeric'), 

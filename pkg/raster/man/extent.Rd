@@ -12,11 +12,10 @@
 \title{Extent}
 
 \description{
-This function returns the extent, as a Extent object, of a Raster* or Spatial* object (or a Extent object). 
-It will also create a Extent object from a matrix (2x2; rows=minx, maxx; cols=miny, maxy) or 
-vector (length=4; order= xmin, xmax, ymin, ymax)
+This function returns an Extent object of a Raster* or Spatial* object (or an Extent object), or creates an 
+Extent object from a matrix (2x2; rows=minx, maxx; cols=miny, maxy) or vector (length=4; order= xmin, xmax, ymin, ymax)
 
-\code{bbox(x)} returns a SP type bbox object (a matrix)
+\code{bbox(x)} returns a \code{sp} package like 'bbox' object (a matrix)
 }
 
 \usage{

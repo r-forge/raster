@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.readRasterLayerValues <- function(object, startrow, nrows=1, startcol=1, ncols=ncol(object)) {
+.readRasterLayerValues <- function(object, startrow, nrows=1, startcol=1, ncols=ncol(object)-startcol+1) {
 
 	if (nrows < 1) { stop("nrows should be > 1") }
 	startrow <- min(max(1, round(startrow)), object@nrows)
@@ -129,8 +129,8 @@
 		result <- as.vector(result)
 	} 
 	
-	firstcell <- cellFromRowCol(object, startrow, 1)
-	lastcell <- cellFromRowCol(object, (startrow+nrows-1), object@ncols)
+	firstcell <- cellFromRowCol(object, startrow, startcol)
+	lastcell <- cellFromRowCol(object, (startrow+nrows-1), endcol)
 	object@data@indices <- c(firstcell, lastcell)
 	if (all(object@data@indices == c(1, ncell(object)))) {
 		object@data@content <- 'all' 

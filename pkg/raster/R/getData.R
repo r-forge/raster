@@ -18,9 +18,8 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	} else if (name=='ISO3') {
 		.countries()[,c(2,1)]
 	} else {
-		cat(name, 'not recognized as a valid name')
+		stop(name, 'not recognized as a valid name')
 	}
-	
 }
 
 .countries <- function() {

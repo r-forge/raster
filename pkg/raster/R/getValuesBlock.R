@@ -1,0 +1,104 @@
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Date :  June 2008
+# Version 0.9
+# Licence GPL v3
+
+if (!isGeneric("getValuesBlock")) {
+	setGeneric("getValuesBlock", function(x, row, ...)
+		standardGeneric("getValuesBlock"))
+}	
+
+
+
+setMethod('getValuesBlock', signature(x='RasterStack', row='numeric'), 
+	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
+		for (i in 1:nlayers(x)) {
+			if (i==1) {
+				v <- getValuesBlock(x@layers[[i]], row, nrows, col, ncols)
+				res <- matrix(ncol=nlayers(x), nrow=length(v))
+				colnames(res) <- layerNames(x)
+				res[,1] <- v
+			} else {
+				res[,i] <- getValuesBlock(x@layers[[i]], row, nrows, col, ncols)
+			}
+		}
+		res
+	}
+)
+
+
+setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'), 
+ 	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
+		if (!is.atomic(row)) {	stop() }
+		if (!is.atomic(nrows)) { stop() }
+		if (!is.atomic(col)) {	stop() }
+		if (!is.atomic(ncols)) { stop() }
+		row <- as.integer(round(row))
+		nrows <- as.integer(round(nrows))
+		lastrow <- row + nrows - 1
+		col <- as.integer(round(col))
+		ncols <- as.integer(round(ncols))
+		lastcol <- col + ncols - 1
+		
+		readrow <- FALSE
+		startcell <- cellFromRowCol(x, row, col)
+		endcell <- cellFromRowCol(x, lastrow, lastcol)
+
+		if (!(validRow(x, row))) {	stop(paste(row, 'is not a valid rownumber')) }
+	
+		if (dataContent(x) == 'nodata') {
+		
+			readrow <- TRUE
+			
+		} else if (dataContent(x) == 'all'){
+		
+			cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
+			res <- x@data@values[cells]
+			
+		} else if (dataContent(x) == 'rows') {
+		
+			if ( (dataIndices(x)[1] <= startcell) & (dataIndices(x)[2] >= endcell) ) {
+				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol) - dataIndices(x)[1] + 1
+				res <- x@data@values[cells]
+			} else {
+				readrow <- TRUE
+			}
+			
+		} else if (dataContent(x) == 'row') {
+		
+			if ( (dataIndices(x)[1] == startcell) & (dataIndices(x)[2] == endcell) ) {
+				res <- x@data@values[col:lastcol]
+			} else {
+				readrow <- TRUE
+			}
+			
+		} else if (dataContent(x) == 'block') {
+		
+			fcol <- colFromCell(x, dataIndices(x)[1])
+			lcol <- colFromCell(x, dataIndices(x)[2])
+			if (fcol > col | lastcol < lastcol) {
+				readrow <- TRUE
+			} else {
+				frow <- rowFromCell(x, dataIndices(x)[1])
+				lrow <- rowFromCell(x, dataIndices(x)[2])
+				if (frow > row | lrow < lastrow) {
+					readrow <- TRUE
+				} else {
+					cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
+					rown <- rowFromCell(x, cells) - frow + 1
+					coln <- colFromCell(x, cells) - fcol + 1
+					res <- as.vector(matrix(x@data@values, nrow=lrow-frow+1, byrow=TRUE)[cbind(rown, coln)])
+				}
+			}
+		} else {
+			stop('something is wrong with the RasterLayer dataContent')
+		}
+	
+		if (readrow) {	
+			res <- values(.readRasterLayerValues(x, row, nrows, col, ncols))
+		}
+		res
+	}
+	
+)
+
