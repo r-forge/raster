@@ -10,19 +10,12 @@
 newExtent <- function(xmn, xmx, ymn, ymx) {
 	warning('depracated function. Use "extent"')
 	extent(xmn, xmx, ymn, ymx)
-#	bb <- new('Extent')
-#	bb@xmin <- xmn
-#	bb@xmax <- xmx
-#	bb@ymin <- ymn
-#	bb@ymax <- ymx
-#	validObject(bb)
-#	return(bb)
 }
 
 
 setMethod('bbox', signature(obj='Raster'), 
 	function(obj) {
-		b <- extent(object)
+		b <- extent(obj)
 		bb <- matrix(ncol=2, nrow=2)
 		colnames(bb) <- c("min","max")
 		rownames(bb) <- c("s1","s2")

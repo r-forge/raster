@@ -15,8 +15,8 @@ setMethod('crop', signature(x='RasterLayer', y='ANY'),
 function(x, y, filename='', datatype=dataType(x), ...) {
 	filename <- trim(filename)
 
-	test <- try ( y <- extent(y), silent=TRUE )
-	if (class(test) == "try-error") {
+	y <- try ( extent(y), silent=TRUE )
+	if (class(y) == "try-error") {
 		stop('Cannot get an Extent object from argument y')
 	}
 
