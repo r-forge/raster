@@ -5,26 +5,23 @@
 
 
 .asSpGrid <- function(object, type='grid', dataframe=TRUE)  {
-	bb <- .toSpBbox(object)
-	cs <- res(object)
-	cc <- bb[,1] + (cs/2)
-	cd <- ceiling(diff(t(bb))/cs)
-	grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
-	if (dataframe) {
-		vals <- getValues(object)
-		vals <- as.data.frame(vals)
-	}
 	if (type=='pixel') {
-		vals <- na.omit( cbind(1:ncell(object), getValues(object)) )
-		pts <- SpatialPoints(xyFromCell(object,  vals[,1]))
+		values = rasterToPoints(object, fun=NULL, asSpatialPoints=FALSE)
+		pts <- SpatialPoints(values[,1:2])
 		if (dataframe) {
-			sp <- SpatialPixelsDataFrame(points=pts, data=vals[,2], proj4string=projection(object, FALSE)) 	
+			sp <- SpatialPixelsDataFrame(points=pts, data=data.frame(values=values[,3]), proj4string=projection(object, FALSE)) 	
 		} else {
 			sp <- SpatialPixels(points=pts, proj4string=projection(object, FALSE))
 		}
 	} else if (type=='grid') {
+		bb <- bbox(object)
+		cs <- res(object)
+		cc <- bb[,1] + (cs/2)
+		cd <- ceiling(diff(t(bb))/cs)
+		grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
 		if (dataframe) {
-			sp <- SpatialGridDataFrame(grd, proj4string=projection(object, FALSE), data=vals)
+			values <- data.frame(getValues(object))
+			sp <- SpatialGridDataFrame(grd, proj4string=projection(object, FALSE), data=values)
 		} else { 
 			sp  <- SpatialGrid(grd, proj4string=projection(object, FALSE))
 		}	
@@ -92,18 +89,6 @@ setAs('SpatialPixelsDataFrame', 'RasterStack',
 	function(from){ return(stack(from)) }
 )
 
-
-
-
-.toSpBbox <- function(object) {
-	b <- extent(object)
-	bb <- matrix(NA, 2, 2)
-	bb[1,1] <- b@xmin
-	bb[1,2] <- b@xmax
-	bb[2,1] <- b@ymin
-	bb[2,2] <- b@ymax
-	return(bb)
-}	
 
 
 

@@ -30,11 +30,6 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 	row1 <- rowFromY(x, ymax(outraster)-0.5*yres(outraster))
 	row2 <- rowFromY(x, ymin(outraster)+0.5*yres(outraster))
 	
-	if (dataContent(x) != 'all' & dataSource(x) == 'disk')  {
-		if (canProcessInMemory(x, 3)) {
-			x <- readAll(x)
-		}
-	}
 	datatype=dataType(x)
 
 	if (dataContent(x) == 'all')  {
@@ -54,26 +49,16 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 				outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...) 
 			}
 			return(outraster)
-		}
-	
-		if (!canProcessInMemory(outraster, 2) && filename == '') {
+		} else if ( filename == '') {
 			filename <- rasterTmpFile()
 			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 		}
-		if (filename == '') {
-			v <- matrix(NA, ncol=nrow(outraster), nrow=ncol(outraster))
-		}
-		
 		rownr <- 1
 		pb <- pbCreate(nrow(outraster), type=.progress(...))
 		for (r in row1:row2) {
 			vv <- getValues(x, r)[col1:col2]
-			if (filename == "") {
-				v[,r] <- vv
-			} else {
-				outraster <- setValues(outraster, vv, rownr)
-				outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)
-			}	
+			outraster <- setValues(outraster, vv, rownr)
+			outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)
 			rownr <- rownr + 1
 			pbStep(pb, r) 			
 		} 

@@ -119,6 +119,7 @@
 		con <- GDAL.open(object@file@name, silent=TRUE)
 		result <- getRasterData(con, offset=offs, region.dim=reg, band=object@data@band)
 		closeDataset(con)
+		result <- as.vector(result)
 		
 		# if  NAvalue() has been used.....
 		if (object@file@nodatavalue < 0) {
@@ -126,7 +127,7 @@
 		} else {
 			result[result == object@file@nodatavalue ] <- NA 					
 		}
-		result <- as.vector(result)
+		
 	} 
 	
 	firstcell <- cellFromRowCol(object, startrow, startcol)

@@ -22,13 +22,14 @@ newExtent <- function(xmn, xmx, ymn, ymx) {
 
 setMethod('bbox', signature(obj='Raster'), 
 	function(obj) {
+		b <- extent(object)
 		bb <- matrix(ncol=2, nrow=2)
 		colnames(bb) <- c("min","max")
 		rownames(bb) <- c("s1","s2")
-		bb[1,1] <- xmin(obj)
-		bb[1,2] <- xmax(obj)
-		bb[2,1] <- ymin(obj)
-		bb[2,2] <- ymax(obj)
+		bb[1,1] <- b@xmin
+		bb[1,2] <- b@xmax
+		bb[2,1] <- b@ymin
+		bb[2,2] <- b@ymax
 		return(bb)
 	}	
 )
