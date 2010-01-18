@@ -38,10 +38,6 @@ See \code{projInfo('proj')}, \code{projInfo('ellps')}, and \code{projInfo('datum
 You can consult this page: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for projections.
  
 Projection is performed using the PROJ.4 library accesed through the rgdal package. Also see \code{?CRS}
-}
-
-\value{
-A RasterLayer object, and, in some cases, the side-effect of a raster file written to disk.
 
 
 The following additional arguments can be passed, to replace default values for this function
@@ -51,6 +47,10 @@ The following additional arguments can be passed, to replace default values for 
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
+}
+
+\value{
+A RasterLayer object, and, in some cases, the side-effect of a raster file written to disk.
 }
 
 \author{Robert J. Hijmans}
