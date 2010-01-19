@@ -22,7 +22,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			nr <- ceiling(nl / nc)
 			par(mfrow=c(nr, nc))
 			for (i in 1:nl) {	
-				.plotraster(raster(x, i), col=col, maxpixels=maxpixels, ...) 
+				.plotraster(raster(x, i), col=col, maxpixels=maxpixels, main=layerNames(x)[i],  ...) 
 			}
 		} else if (is.numeric(y)) {
 			y <- unique(as.integer(round(y)))
@@ -33,10 +33,10 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				par(mfrow=c(nr, nc))
 				par(mfrow=c(nr, nc))
 				for (i in 1:length(y)) {
-					.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, ...) 
+					.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, main=layerNames(x)[i], ...) 
 				}
 			} else {
-				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, ...) 
+				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, main=layerNames(x)[y], ...) 
 			}		
 		}
 	}

@@ -4,11 +4,14 @@
 # Licence GPL v3
 
 dropLayer <- function(rstack, indices) {
-	indices <- sort(indices, decreasing=TRUE)
-	for (i in 1:length(indices)) {
-		index <- -1 * indices[i]
-		rstack@layers <- rstack@layers[index]
-	}	
+	i <- sort(unique(round(indices)))
+	i <- i[i > 0]
+	i <- i[i < (nlayers(rstack)+1)]
+	if (length(i) > 0) {
+		rstack@layers <- rstack@layers[-i]
+		rstack@layernames <- rstack@layernames[-i]
+	}
 	return(rstack)
 }
+
 
