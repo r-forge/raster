@@ -34,7 +34,11 @@ aggregate(x, ...)
 \tab \code{expand} \tab logical. If \code{TRUE} the output RasterLayer will be larger then the input RasterLayer if a division of the number of columns or rows with \code{factor} is not an integer \cr
 \tab \code{na.rm} \tab logical. If \code{TRUE}, NA cells are removed from calculations \cr
 \tab \code{filename} \tab Character. Output filename \cr
-\tab \code{...} \tab Additional arguments, see Details \cr
+\tab \code{...} \tab Additional arguments, see below \cr
+}
+
+Additional arguments:
+\tabular{rll}{
 \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
 \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
 \tab \code{overwrite} \tab Logical. If \code{TRUE}, the file will be overwritten if it exists \cr
