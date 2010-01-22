@@ -133,13 +133,23 @@ setMethod('raster', signature(x='SpatialGrid'),
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
 		if (class(x) == 'SpatialGridDataFrame') {
 			if (dim(x@data)[2] > 0) {
+				index = index[1]
 				if (is.numeric(index)) {
-					index <- index[1]
 					if (index > 0) {
 						dindex <- max(1, min(dim(x@data)[2], index))
 						if (dindex != index) { warning(paste("index was changed to", dindex))}
-						r <- setValues(r, x@data[[dindex]])
+						index <- dindex
 					}
+				} else if (!(index %in% names(x))) {
+					stop(index, 'does not exist')
+				}
+				if (is.character( x@data[[index]]) ) { 
+					x@data[[index]] <- as.factor(x@data[[index]])
+				}
+				if (is.factor( x@data[[index]]) ) { 
+					r@data@isfactor <- TRUE 
+					r@data@levels <- levels(x@data[[index]])
+					r <- setValues(r, as.numeric(x@data[[index]]))
 				} else {
 					r <- setValues(r, x@data[[index]])
 				}
@@ -158,16 +168,26 @@ setMethod('raster', signature(x='SpatialPixels'),
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
 		if (class(x) == 'SpatialPixelsDataFrame') {
 			if (dim(x@data)[2] > 0) {
+				index = index[1]
 				if (is.numeric(index)) {
-					dindex <- max(1, min(dim(x@data)[2], index))
-					if (dindex != index) { warning(paste("index was changed to", dindex))}
-					x <- x[dindex]
-					x <- as(x, 'SpatialGridDataFrame')
-					r <- setValues(r, x@data[[1]])
-					
+					if (index > 0) {
+						dindex <- max(1, min(dim(x@data)[2], index))
+						if (dindex != index) { warning(paste("index was changed to", dindex))}
+						index <- dindex
+					}
+				} else if (!(index %in% names(x))) {
+					stop(index, 'does not exist')
+				}
+				x <- x[index]
+				x <- as(x, 'SpatialGridDataFrame')
+				if (is.character( x@data[[1]]) ) { 
+					x@data[[1]] <- as.factor(x@data[[1]])
+				}
+				if (is.factor( x@data[[1]]) ) { 
+					r@data@isfactor <- TRUE 
+					r@data@levels <- levels(x@data[[1]])
+					r <- setValues(r, as.numeric(x@data[[1]]))
 				} else {
-					x <- x[index]
-					x <- as(x, 'SpatialGridDataFrame')
 					r <- setValues(r, x@data[[1]])
 				}
 			}
@@ -175,3 +195,4 @@ setMethod('raster', signature(x='SpatialPixels'),
 		return(r)
 	}
 )
+
