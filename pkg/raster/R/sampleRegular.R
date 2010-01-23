@@ -5,6 +5,25 @@
 
 
 sampleRegular <- function(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
+	if (class(raster) == 'RasterLayer') {
+		return(.sampleRegular(raster=raster, n=n, extent=extent, cells=cells, asRaster=asRaster, corners=corners))
+	} else {
+	# ugly & inefficient hack :
+		for (i in 1:nlayers(raster)) {
+			if (i==1) {
+				x = .sampleRegular(raster(raster, i), n=n, extent=extent, cells=cells, asRaster=asRaster, corners=corners)
+				v <- matrix(ncol=nlayers(raster), nrow=length(x))
+				v[,1] = x
+			}
+			v[,i] = .sampleRegular(raster(raster, i), n=n, extent=extent, cells=cells, asRaster=asRaster, corners=corners)
+		}
+		colnames(v) <- layerNames(raster)
+		return(v)
+	}
+}	
+
+
+.sampleRegular <- function(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
 	if (n<1) {stop('n < 1')}
 	
 	if (is.null(extent)) {
