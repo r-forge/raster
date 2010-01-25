@@ -5,27 +5,28 @@
 \alias{addLayer,RasterBrick-method}
 \alias{addFiles}
 \alias{dropLayer}
+\alias{dropLayer,RasterStack-method}
+\alias{dropLayer,RasterBrick-method}
 
-\title{Change a RasterStack}
+\title{Add or drop a layer}
 
 \description{
-  A RasterStack is a collection of RasterLayers with the same spatial extent and resolution. 
-  With these functions, you can add RasterLayers to, or remove RasterLayers from, a RasterStack object. 
+  A RasterStack is a collection of RasterLayers with the same spatial extent and resolution. A RasterBrick is a multi-layer object.
+  With these functions, you can add RasterLayers to, or remove RasterLayers from, a RasterStack or RasterBrick object. 
 }
 
 \usage{
 addLayer(x, ...) 
-addFiles(rstack, rasterfiles, bands= rep(1, length(rasterfiles))) 
-dropLayer(rstack, indices) 
+addFiles(x, rasterfiles, bands= rep(1, length(rasterfiles))) 
+dropLayer(x, i) 
 }
 
 \arguments{
   \item{x}{ a RasterStack or RasterBrick object }
   \item{...}{Raster* objects or filenames (character) }
-  \item{rstack}{ a RasterStack object }
   \item{rasterfiles}{ Filename(s) of (a) raster dataset(s) }
   \item{bands}{ a vector or list of bands of raster data files (default values = 1)}
-  \item{indices}{ a vector of the indices of the raster(s) to remove from a RasterStack }  
+  \item{i}{ a vector of the indices of the layer(s) to remove from a RasterStack }  
 }
 
 

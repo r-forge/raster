@@ -3,15 +3,45 @@
 # Version 0.9
 # Licence GPL v3
 
-dropLayer <- function(rstack, indices) {
-	i <- sort(unique(round(indices)))
-	i <- i[i > 0]
-	i <- i[i < (nlayers(rstack)+1)]
-	if (length(i) > 0) {
-		rstack@layers <- rstack@layers[-i]
-		rstack@layernames <- rstack@layernames[-i]
-	}
-	return(rstack)
+ 
+ if (!isGeneric("dropLayer")) {
+	setGeneric("dropLayer", function(x, i)
+		standardGeneric("dropLayer"))
 }
+ 
+
+setMethod('dropLayer', signature(x='RasterStack'), 
+function(x, i) {
+	i <- sort(unique(round(i)))
+	i <- i[i > 0]
+	i <- i[i < (nlayers(x)+1)]
+	if (length(i) > 0) {
+		x@layers <- x@layers[-i]
+		x@layernames <- x@layernames[-i]
+	}
+	return(x)
+}
+)
 
 
+setMethod('dropLayer', signature(x='RasterBrick'), 
+function(x, i) {
+	i <- sort(unique(round(i)))
+	i <- i[i > 0]
+	i <- i[i < (nlayers(x)+1)]
+	if (length(i) > 0) {
+
+		if (dataSource(x) == 'disk') {
+			if (dataContent(x) != 'all') {
+				x = try(readAll(x))
+				if (class(x) == 'try-error') {
+					stop('cannot yet drop a layer from a brick that cannot be loaded into memory')
+				}
+			}
+		}
+		x@layernames <- x@layernames[-i]
+		x@data@values <- x@data@values[,-i]
+	}
+	return(x)
+}
+)

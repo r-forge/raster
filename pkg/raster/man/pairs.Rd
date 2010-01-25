@@ -27,7 +27,7 @@ pairs(x, ...)
 
 \section{Methods}{
 \describe{
-	\code{pairs(x, v=NULL, hist=TRUE, cor=TRUE)}
+	\code{pairs(x, hist=TRUE, cor=TRUE)}
 
 \tabular{rll}{
 \tab \code{v} \tab numeric, to select a subset of pairs, e.g. v=1:3 to plot only the first three variables \cr

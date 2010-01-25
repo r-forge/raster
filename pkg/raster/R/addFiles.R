@@ -5,7 +5,7 @@
 
 
 
-addFiles <- function(rstack, rasterfiles, bands=rep(1, length(rasterfiles))) {
+addFiles <- function(x, rasterfiles, bands=rep(1, length(rasterfiles))) {
 	if (length(bands) == 1) {
 		bands=rep(bands, length(rasterfiles))
 	} 
@@ -24,8 +24,8 @@ addFiles <- function(rstack, rasterfiles, bands=rep(1, length(rasterfiles))) {
 			rasters <- c(rasters, raster(rasterfiles[[i]], FALSE, band=bands[[i]]))
 		}
 	}	
-	rstack <- addLayer(rstack, rasters) 
-	return(rstack)
+	x <- addLayer(x, rasters) 
+	return(x)
 }
 
 

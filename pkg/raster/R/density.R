@@ -10,9 +10,14 @@ if (!isGeneric("density")) {
 }	
 
 setMethod('density', signature(x='RasterLayer'), 
-	function(x, maxpixels=100000, main='', ...) {
+	function(x, maxpixels=100000, plot=TRUE, main='', ...) {
 		d = sampleRegular(x, maxpixels)
-		plot(density(na.omit(d)), main=main, ...)
+		x = density(na.omit(d))
+		if (plot) {
+			plot(x, main=main, ...)
+		} else {
+			return(x)
+		}
 	}
 )
  

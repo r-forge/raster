@@ -6,7 +6,7 @@
  
 
 setMethod('pairs', signature(x='RasterStackBrick'), 
-	function(x, v=NULL, hist=TRUE, cor=TRUE, maxpixels=100000, cex=0.5, main='') {
+	function(x, hist=TRUE, cor=TRUE, maxpixels=100000, cex=0.5, main='') {
 	
 		panelhist <- function(x,...)	{
 			usr <- par("usr"); on.exit(par(usr))
@@ -29,13 +29,6 @@ setMethod('pairs', signature(x='RasterStackBrick'),
 		if (cor) {up <- panelcor} else {up <- NULL}
 	
 	
-		if (is.null(v)) {
-			v <- 1:nlayers(x)
-		} 
-		if (length(v) < 2) {
-			stop('pairs needs at least 2 variables')
-		}
-
 		d = sampleRegular(x, maxpixels)
 		pairs(d, main=main, cex=cex, upper.panel=up, diag.panel=dp)
 	}
