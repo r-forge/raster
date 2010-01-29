@@ -45,7 +45,7 @@
 		else if (ini[i,2] == "NODATAVALUE") {nodataval <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "DATATYPE") {inidatatype <- ini[i,3]} 
 		else if (ini[i,2] == "BYTEORDER") {byteorder <- ini[i,3]} 
-		else if (ini[i,2] == "NBANDS") {nbands <- ini[i,3]} 
+		else if (ini[i,2] == "NBANDS") {nbands <- as.integer(ini[i,3])} 
 		else if (ini[i,2] == "BANDORDER") {bandorder <- ini[i,3]} 
 		else if (ini[i,2] == "PROJECTION") {projstring <- ini[i,3]} 
 		else if (ini[i,2] == "LAYERNAME") {layernames <- ini[i,3]} 

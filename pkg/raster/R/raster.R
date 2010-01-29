@@ -30,7 +30,10 @@ setMethod('raster', signature(x='matrix'),
 
 setMethod('raster', signature(x='character'), 
 	function(x, values=FALSE, band=1, proj=NULL, ...) {
-		r <- .rasterObjectFromFile(x, band=band, values=values, proj=proj, objecttype='RasterLayer', ...)
+		r <- .rasterObjectFromFile(x, band=band, objecttype='RasterLayer', ...)
+		if (! is.null(proj)) {
+			projection(r) = proj
+		}
 		if (values) {
 			r <- readAll(r)
 		}

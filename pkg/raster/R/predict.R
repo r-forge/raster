@@ -10,7 +10,7 @@ if (!isGeneric("predict")) {
 
 setMethod('predict', signature(object='Raster'), 
 	function(object, model, filename="", xy=FALSE, index=1, debug.level=1, ...) {
-		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis')) { return ( predict(model, object, filename=filename, ...) ) }
+		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt')) { return ( predict(model, object, filename=filename, ...) ) }
 	
 		predrast <- raster(object)
 		filename <- trim(filename)
@@ -125,21 +125,32 @@ setMethod('predict', signature(object='Raster'),
 					else { predv <- predv[,index+2] }
 				} else if (inherits(model, "Krig")) {  
 					if (xyOnly) {
-						predv <- predict(model, rowvals)
+						predv <- predict(model, rowvals, ...)
 					} else {
 						rowv <- na.omit(rowvals)
 						predv <- napred
 						if (nrow(rowv) > 0) {
 							naind <- as.vector(attr(rowv, "na.action"))
 							if (!is.null(naind)) {
-								predv[-naind] <- predict(model, rowv)
+								predv[-naind] <- predict(model, rowv, ...)
 							} else {
-								predv[] <- predict(model, rowv)
+								predv[] <- predict(model, rowv, ...)
 							}
 						}
 					}
+				} else if (inherits(model, 'gbm')) {
+					rowv <- na.omit(rowvals)
+					predv <- napred
+					if (nrow(rowv) > 0) {
+						naind <- as.vector(attr(rowv, "na.action"))
+						if (!is.null(naind)) {
+							predv[-naind] <- predict(model, rowv, ...)
+						} else {
+							predv[] <- predict(model, rowv, ...)
+						}
+					}
 				} else {
-					predv <- predict(model, rowvals)			
+					predv <- predict(model, rowvals, ...)
 				}
 			
 				if (length(predv) != nrow(rowvals)) {
