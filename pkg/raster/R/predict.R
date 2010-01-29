@@ -15,8 +15,8 @@ setMethod('predict', signature(object='Raster'),
 		predrast <- raster(object)
 		filename <- trim(filename)
 			
-		v <- (attr(model$terms, "factors"))
-		varnames <- attr(v, "dimnames")[[2]]
+		dataclasses <- attr(model$terms, "dataClasses")[-1]	
+			
 		lyrnames <- layerNames(object)
 		
 		if (xy) {
@@ -24,6 +24,9 @@ setMethod('predict', signature(object='Raster'),
 		} else {
 			xylyrnames <- lyrnames
 		}
+
+		varnames <- names(dataclasses)
+
 		if (! all(varnames %in% xylyrnames)) {
 			stop('variable in model that is not in Raster object: \nIn model: ', paste(varnames, collapse='; '), '\n', 'In Raster object: ', paste(xylyrnames, collapse='; '))
 		}
@@ -32,7 +35,7 @@ setMethod('predict', signature(object='Raster'),
 			stop('duplicate names in Raster* object: ', lyrnames)
 		}
 			
-		dataclasses <- attr(model$terms, "dataClasses")[-1]
+		
 		f <- names( which(dataclasses == 'factor') )
 		if (length(f) > 0) { 
 			haveFactor <- TRUE 

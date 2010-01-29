@@ -12,13 +12,16 @@ setMethod('pairs', signature(x='RasterStackBrick'),
 			usr <- par("usr"); on.exit(par(usr))
 			par(usr = c(usr[1:2], 0, 1.5) )
 			h <- hist(x, plot = FALSE)
-			breaks <- h$breaks; nB <- length(breaks)
-			y <- h$counts; y <- y/max(y)
+			breaks <- h$breaks
+			nB <- length(breaks)
+			y <- h$counts
+			y <- y/max(y)
 			rect(breaks[-nB], 0, breaks[-1], y, col="green")
 		}
 		
 		panelcor <- function(x, y,...) {
-			usr <- par("usr"); on.exit(par(usr))
+			usr <- par("usr")
+			on.exit(par(usr))
 			par(usr = c(0, 1, 0, 1))
 			r <- abs(cor(x, y))
 			txt <- format(c(r, 0.123456789), digits=2)[1]
