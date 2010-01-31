@@ -8,8 +8,7 @@
 
 
 newExtent <- function(xmn, xmx, ymn, ymx) {
-	warning('depracated function. Use "extent"')
-	extent(xmn, xmx, ymn, ymx)
+	stop('depracated function. Use "extent"')
 }
 
 
