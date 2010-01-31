@@ -40,23 +40,37 @@
 			next
 		}
 		cols <- .specialColFromX(rs, c(xyxy[i,1], xyxy[i,3]))
+		if ((cols[1] < 1 & cols[2] < 1) | (cols[1] > ncol(rs) & cols[2] > ncol(rs))) { 
+			next
+		}
+
 		rowcol <- cbind(rows, cols)[order(cols),]
 		if (rowcol[1,1] == rowcol[2,1]) {
-			res <- c(res, (rowcol[1,2]:rowcol[2,2]))
+			# entire line segment in row
+			add = rowcol[1,2]:rowcol[2,2]
+			add = subset(add, add>0 & add<=ncol(rs))
+			res <- c(res, add)
 		} else {
 			if (rowcol[1,1] == rownr  ) {
+				# line segment starts in this row
+				if (rowcol[2,2] < 1) next
 				if (rowcol[2,1] < rownr) {
 					xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
 				} else {
 					xy <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
 				}
 				xy <- t(as.matrix(xy))
-				cols <- c(rowcol[1,2], colFromX(rs, xy[,1]))
-				col1 <- min(cols)
-				col2 <- max(cols)
-				if (is.na(col1) | is.na(col2)) {print("A"); print(rowcol); print(xy); print(xyxy[i,])}
-				res <- c(res, col1:col2)
+				outcol = min(.specialColFromX(rs, xy[,1]), ncol(rs))
+				if (outcol < 1) next
+				cols <- c(max(1, rowcol[1,2]), outcol)
+#				if (length(cols) >  0) { 
+					col1 <- min(cols)
+					col2 <- max(cols)
+					res <- c(res, col1:col2)
+#				}
 			} else if (rowcol[2,1] == rownr) {
+				# line segment ends in this row
+				if (rowcol[1,2] < 1) next
 				if (rowcol[1,1] < rownr) {
 					xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4] )
 				} else {
@@ -64,22 +78,31 @@
 				}
 				if (is.na(xy[1])) { next }
 				xy <- t(as.matrix(xy))
-				cols <- c(rowcol[2,2], colFromX(rs, xy[,1]))
-				col1 <- min(cols)
-				col2 <- max(cols)
-				if (is.na(col1) | is.na(col2)) {print("B"); print(xy)}
-				res <- c(res, col1:col2)
+				incol <- max(1, .specialColFromX(rs, xy[,1]))
+				if (incol > ncol(rs)) next
+				cols <- c(incol, min(ncol(rs), rowcol[2,2]))
+#				if (length(cols) > 0) { 
+					col1 <- min(cols)
+					col2 <- max(cols)
+					res <- c(res, col1:col2)
+#				}
 			} else {
+				# line segment crosses this row
 				xy1 <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
 				xy2 <- .intersectSegments(line2[1,1], line2[1,2], line2[2,1], line2[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
 				if (is.na(xy1[1])) { next }
 				if (is.na(xy2[1])) { next }
 				xy <- rbind(xy1, xy2)
-				cols <-colFromX(rs, xy[,1])
-				col1 <- min(cols)
-				col2 <- max(cols)
-				if (is.na(col1) | is.na(col2)) {print("C"); print(xy)}
-				res <- c(res, col1:col2)
+				cols <- .specialColFromX(rs, xy[,1])
+#				if (length(cols) > 0) { 
+					col1 <- min(cols)
+					col2 <- max(cols)
+					if (col1 > ncol(rs)) { next }
+					if (col2 == -1) {  next }
+					if (col1 == -1) { col1 <- 1 }
+					if (col2 > ncol(rs)) { col2 <- ncol(rs) }
+					res <- c(res, col1:col2)
+#				}
 			}
 		}
 	}
@@ -130,10 +153,10 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 		info[i,2] <- miny
 		info[i,3] <- maxy
 	}
-	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(raster)
-	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(raster)
+	lxmin <- min(spbb[1,1], rsbb[1,1]) - 0.5 * xres(raster)
+	lxmax <- max(spbb[1,2], rsbb[1,2]) + 0.5 * xres(raster)
 
-	if (class(spLines) == 'SpatialPolygons' | field == 0) {
+	if (class(spLines) == 'SpatialLines' | field == 0) {
 		putvals <- as.integer(1:nline)
 	} else {
 		putvals <- as.vector(spLines@data[,field])
@@ -143,19 +166,14 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 	}
 		
 	v <- vector(length=0)
-	rxmn <- xmin(raster) + 0.1 * xres(raster)
-	rxmx <- xmax(raster) - 0.1 * xres(raster)
-
 	
 	pb <- pbCreate(nrow(raster), type=.progress(...))
-
 	for (r in 1:nrow(raster)) {
 		rv <- rep(NA, ncol(raster))
 		
 		ly <- yFromRow(raster, r)
 		line1 <- rbind(c(lxmin, ly + 0.5*yres(raster)), c(lxmax,ly + 0.5*yres(raster)))
 		line2 <- rbind(c(lxmin, ly - 0.5*yres(raster)), c(lxmax,ly - 0.5*yres(raster)))
-		
 		uly <- ly + 0.51 * yres(raster)
 		lly <- ly - 0.51 * yres(raster)
 		for (i in 1:nline) {
@@ -168,7 +186,7 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 					} else {
 						aline <- spLines@lines[[i]]@Lines[[j]]@coords
 						colnrs <- .getCols(raster, r, aline, line1, line2)
-						if ( length(colnrs) > 0 ) {				
+						if ( length(colnrs) > 0 ) {			
 							rv[colnrs] <- putvals[i]
 						}
 					}
