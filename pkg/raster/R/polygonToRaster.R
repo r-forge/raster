@@ -306,13 +306,14 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 	prj <- projection(bigraster)
 	hr <- 0.5 * yres(bigraster)
 
+	vv <- matrix(ncol=f, nrow=nc)
+	
 	pb <- pbCreate(nrow(bigraster), type=.progress(...))
 	for (rr in 1:nrow(bigraster)) {
 		y <- yFromRow(bigraster, rr)
 		yn <- y - hr
 		yx <- y + hr
 		raster <- raster(xmn=rxmn, xmx=rxmx, ymn=yn, ymx=yx, ncols=nc, nrows=f, projs=prj)
-		vv <- matrix(ncol=f, nrow=nc)
 		subpol <- subset(polinfo, !(polinfo[,2] > yx | polinfo[,3] < yn), drop=FALSE)
 		for (r in 1:f) {
 			rv <- rv1
@@ -378,9 +379,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 			}
 			vv[,r] <- rv
 		}
-		av <- apply(vv, 1, sum)
-		av <- matrix(av, nrow=f)
-		av <- apply(av, 2, sum)
+		av <- colSums( matrix( rowSums(vv), nrow=f) )
 		
 		if (filename == "") {
 			v[,rr] <- av

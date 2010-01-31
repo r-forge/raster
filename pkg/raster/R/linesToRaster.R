@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  January 2009
 # Version 0.9
 # Licence GPL v3
@@ -53,7 +52,6 @@
 		} else {
 			if (rowcol[1,1] == rownr  ) {
 				# line segment starts in this row
-				if (rowcol[2,2] < 1) next
 				if (rowcol[2,1] < rownr) {
 					xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
 				} else {
@@ -63,14 +61,11 @@
 				outcol = min(.specialColFromX(rs, xy[,1]), ncol(rs))
 				if (outcol < 1) next
 				cols <- c(max(1, rowcol[1,2]), outcol)
-#				if (length(cols) >  0) { 
-					col1 <- min(cols)
-					col2 <- max(cols)
-					res <- c(res, col1:col2)
-#				}
+				col1 <- min(cols)
+				col2 <- max(cols)
+				res <- c(res, col1:col2)
 			} else if (rowcol[2,1] == rownr) {
 				# line segment ends in this row
-				if (rowcol[1,2] < 1) next
 				if (rowcol[1,1] < rownr) {
 					xy <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4] )
 				} else {
@@ -81,11 +76,9 @@
 				incol <- max(1, .specialColFromX(rs, xy[,1]))
 				if (incol > ncol(rs)) next
 				cols <- c(incol, min(ncol(rs), rowcol[2,2]))
-#				if (length(cols) > 0) { 
-					col1 <- min(cols)
-					col2 <- max(cols)
-					res <- c(res, col1:col2)
-#				}
+				col1 <- min(cols)
+				col2 <- max(cols)
+				res <- c(res, col1:col2)
 			} else {
 				# line segment crosses this row
 				xy1 <- .intersectSegments(line1[1,1], line1[1,2], line1[2,1], line1[2,2], xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4]  )
@@ -94,15 +87,13 @@
 				if (is.na(xy2[1])) { next }
 				xy <- rbind(xy1, xy2)
 				cols <- .specialColFromX(rs, xy[,1])
-#				if (length(cols) > 0) { 
-					col1 <- min(cols)
-					col2 <- max(cols)
-					if (col1 > ncol(rs)) { next }
-					if (col2 == -1) {  next }
-					if (col1 == -1) { col1 <- 1 }
-					if (col2 > ncol(rs)) { col2 <- ncol(rs) }
-					res <- c(res, col1:col2)
-#				}
+				col1 <- min(cols)
+				col2 <- max(cols)
+				if (col1 > ncol(rs)) { next }
+				if (col2 == -1) {  next }
+				if (col1 == -1) { col1 <- 1 }
+				if (col2 > ncol(rs)) { col2 <- ncol(rs) }
+				res <- c(res, col1:col2)
 			}
 		}
 	}
@@ -140,9 +131,6 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 	nline <- length(spLines@lines)
 	info <- matrix(NA, nrow=nline, ncol=3)
 	for (i in 1:nline) {
-#		holes <- sapply(rings, function(y) slot(y, "hole"))
-#		areas <- sapply(rings, function(x) slot(x, "area"))
-
 		info[i,1] <- length(spLines@lines[[i]]@Lines)
 		miny <- NULL
 		maxy <- NULL
@@ -161,7 +149,8 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 	} else {
 		putvals <- as.vector(spLines@data[,field])
 		if (class(putvals) == 'character') {
-			stop('selected field is charater type')
+			stop('selected field is character type')
+			# to do check factors
 		}
 	}
 		
