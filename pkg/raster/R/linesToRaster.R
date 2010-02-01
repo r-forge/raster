@@ -27,7 +27,13 @@
 	resxy <- matrix(NA, ncol=2, nrow=0)
 	miny <- min(line1[,2], line2[,2])
 	maxy <- max(line1[,2], line2[,2])
-	xyxy <- cbind(aline[1:(length(aline[,1])-1),], aline[-1,])
+	xyxy <- cbind(aline[1:(length(aline[,1])-1), ,drop=FALSE], aline[-1, ,drop=FALSE])
+	if (ncol(xyxy) == 2) {
+		print(xyxy)	
+		print(rownr)
+		print(aline)
+	}
+
     xyxy <- subset(xyxy, !( (xyxy[,2] > maxy & xyxy[,4] > maxy ) | (xyxy[,2] < miny & xyxy[,4] < miny)) )
 	if (length(xyxy) < 1) { 
 		return(resxy) 
