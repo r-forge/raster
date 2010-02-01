@@ -79,7 +79,7 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
 		}
 	}
 	zone <- as.integer(names(alltab))
-	alltab <- data.frame(zone, alltab)
+	alltab <- data.frame(zone, as.numeric(alltab))
 	colnames(alltab) <- c('zone', stat)
 	return(alltab)
 }
