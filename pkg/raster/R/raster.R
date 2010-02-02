@@ -56,16 +56,18 @@ setMethod('raster', signature(x='Raster'),
 
 setMethod('raster', signature(x='RasterStack'), 
 	function(x, index=0){
+		newindex = -1
 		if (nlayers(x) > 0) {
 			if (!is.numeric(index)) {
 				newindex <- which(layerNames(x) == index)[1]
 				if (is.na (newindex) ) { 
 					warning('variable', index, 'does not exist')
+					newindex = -1
 				} 
 				index <- newindex
 			}
 		}
-		if (isTRUE(index > 0)) {
+		if ( index > 0 ) {
 			dindex <- max(1, min(nlayers(x), index))
 			if (dindex != index) { warning(paste("index was changed to", dindex))}
 			r <- x@layers[[dindex]]
@@ -82,23 +84,24 @@ setMethod('raster', signature(x='RasterStack'),
 
 setMethod('raster', signature(x='RasterBrick'), 
 	function(x, index=0){
+		newindex = -1
 		if (nlayers(x) > 0) {
 			if (!is.numeric(index)) {
 				newindex <- which(layerNames(x) == index)[1]
 				if (is.na (newindex) ) { 
 					warning('variable', index, 'does not exist')
+					newindex = -1
 				} 
 				index <- newindex
 			}
 			index <- round(index)
 		}
-		if (isTRUE(index > 0)) {
+		if (index > 0) {
 			dindex <- max(1, min(nlayers(x), index))
-				
-			if (filename(x) != '') {
+			if (dataSource(x) == 'disk') {
 				if (dindex != index) { warning(paste("index was changed to", dindex))}
 				r <- raster(filename(x), band=dindex)
-				layerNames(r) <- layerNames(x)[index]
+				layerNames(r) <- layerNames(x)[dindex]
 			} else {
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))	
 				if (dataContent(x) == 'all') {

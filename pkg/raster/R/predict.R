@@ -9,7 +9,8 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", xy=FALSE, index=1, debug.level=1, ...) {
+	function(object, model, filename="", const=NULL, xy=FALSE, index=1, debug.level=1, progress=.progress(), ...) {
+	
 		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt')) { return ( predict(model, object, filename=filename, ...) ) }
 	
 		predrast <- raster(object)
@@ -89,7 +90,7 @@ setMethod('predict', signature(object='Raster'),
 			gstatmod <- FALSE 
 		}
 
-		pb <- pbCreate(nrow(object), type=.progress(...))
+		pb <- pbCreate(nrow(object), type=progress)
 		
 		#print(xy)
 		#print(xyOnly)
@@ -110,11 +111,15 @@ setMethod('predict', signature(object='Raster'),
 					p <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
 					rowvals <- cbind(data.frame( x=p[,1], y=p[,2]), rowvals) 
 				}
+				if (! is.null(const)) {
+					rowvals = cbind(rowvals, const)
+				}
 			} 
-			# patch for predict.gam
-			# perhaps speeds it up too?
-			if ( sum(!is.na(rowvals)) == 0 ) {
-				predv <- napred
+			
+			if (inherits(model, "gam")) {
+				if ( sum(!is.na(rowvals)) == 0 ) {
+					predv <- napred
+				}
 			} else {
 			
 				if (gstatmod) { 
@@ -141,17 +146,18 @@ setMethod('predict', signature(object='Raster'),
 							}
 						}
 					}
-				} else if (inherits(model, 'gbm')) {
-					rowv <- na.omit(rowvals)
-					predv <- napred
-					if (nrow(rowv) > 0) {
-						naind <- as.vector(attr(rowv, "na.action"))
-						if (!is.null(naind)) {
-							predv[-naind] <- predict(model, rowv, ...)
-						} else {
-							predv[] <- predict(model, rowv, ...)
-						}
-					}
+		#		} else if (inherits(model, 'gbm')) {
+		#		# gbm returns non NA predictions when there are NA values. 
+		#			rowv <- na.omit(rowvals)
+		#			predv <- napred
+		#			if (nrow(rowv) > 0) {
+		#				naind <- as.vector(attr(rowv, "na.action"))
+		#				if (!is.null(naind)) {
+		#					predv[-naind] <- predict(model, rowv, ...)
+		#				} else {
+		#					predv[] <- predict(model, rowv, ...)
+		#				}
+		#			}
 				} else {
 					predv <- predict(model, rowvals, ...)
 				}
