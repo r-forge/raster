@@ -24,6 +24,9 @@
 	nodataval <- -Inf
 	layernames <- ''
 	
+	iscat = FALSE
+	catlevels = matrix(NA)
+	
 	for (i in 1:length(ini[,1])) {
 		if (ini[i,2] == "MINX") {xn <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "MAXX") {xx <- as.numeric(ini[i,3])} 
@@ -41,6 +44,9 @@
 		else if (ini[i,2] == "MINVALUE") { try ( minval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 		else if (ini[i,2] == "MAXVALUE") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 		else if (ini[i,2] == "VALUEUNIT") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+
+		else if (ini[i,2] == "CATEGORICAL") { try ( iscat <-  as.logical(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+		else if (ini[i,2] == "LEVELS") { try ( catlevels <-  as.logical(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 		
 		else if (ini[i,2] == "NODATAVALUE") {nodataval <- as.numeric(ini[i,3])} 
 		else if (ini[i,2] == "DATATYPE") {inidatatype <- ini[i,3]} 
@@ -53,6 +59,7 @@
 	
 	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
 
+	
 	if (band < 1) {
 		band <- 1
 		warning('band set to 1')
@@ -76,6 +83,8 @@
 		x@data@band <- as.integer(band)
 		x@data@min <- minval[band]
 		x@data@max <- maxval[band]
+		x@data@isfactor = iscat
+		if (iscat) { x@data@levels = catlevels }
 	}
 
 	x@file@nbands <- as.integer(nbands)
