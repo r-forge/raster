@@ -7,8 +7,7 @@
 \title{Crop}
 
 \description{
-crop returns a geographic subset of the input RasterLayer as specified by a bounding box (or object that has a bounding box). 
-Areas in the bounding box outside of the intput RasterLayer are ignored, and the Extent is aligned to the cells of the input RasterLayer. 
+crop returns a geographic subset of the input RasterLayer as specified by an Extent object (or object from which an extent object can be extracted/created). Areas in the bounding box outside of the intput RasterLayer are ignored, and the Extent is aligned to the cells of the input RasterLayer. 
 }
 
 \usage{
@@ -48,8 +47,8 @@ A new RasterLayer object, and in some cases the side effect of a new file on dis
 \examples{
 r <- raster(nrow=45, ncol=90)
 r[] <- 1:ncell(r)
-bb <- extent(-160, 10, 30, 60)
-rc <- crop(r, bb)	
+e <- extent(-160, 10, 30, 60)
+rc <- crop(r, e)	
 }
 
 \keyword{spatial}
