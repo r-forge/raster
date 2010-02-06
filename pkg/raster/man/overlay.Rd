@@ -55,9 +55,9 @@ Formal definition of the overlay method (in the sp package)
 }
 
 \details{
-You can also supply functions such as \code{sum} or \code{mean}; but it would be more direct to use the Raster* objects are arguments to those functions (e.g. \code{sum(r1,r2,r3)})  
-In stead of the overlay function you can also use normal artimic functions such as \code{*, /, +, -} with RasterLayer objects (see examples), but then you cannot specifiy an output filename. 
-However using the overlay should be more efficient when using large data files that cannot be loaded into memory, as the use of the arithmic functions might cause the creation of many temporary files.
+While you can supply functions such as \code{sum} or \code{mean}, it would be more direct to use the Raster* objects are arguments to those functions (e.g. \code{sum(r1,r2,r3)})  
+In stead of the overlay function you can also use normal aritmethic functions such as \code{*, /, +, -} with RasterLayer objects (see examples), but then you cannot specifiy an output filename. 
+However, the overlay function should be more efficient when using large data files that cannot be loaded into memory, as the use of the standard arithmetic functions might cause the creation of many temporary files.
 }
 
 \value{
