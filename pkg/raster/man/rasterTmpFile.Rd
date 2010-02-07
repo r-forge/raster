@@ -20,7 +20,7 @@ removeTmpFiles()
 
 
 \details{
-The default path where the temporary files are stored is returned by \code{rasterOptions(show=TRUE)}; you can change it (for the current session) with \link[raster]{rasterOptions}. 
+The default path where the temporary files are stored is returned by \code{showOptions()}; you can change it (for the current session) with \link[raster]{rasterOptions}. 
 }
 
 \value{
