@@ -16,11 +16,10 @@
 }
 
 .stopGDALwriting <- function(raster, doPB) {
-	
 	saveDataset(raster@file@transient, raster@file@name)
 	GDAL.close(raster@file@transient) 
 	if (doPB) {
-		try (pbClose( attr(raster@file, "pb") ))
+		try (pbClose( attr(raster@file, "pb") ), silent=TRUE)
 		attr(raster@file, "pb") <- ''
 	}
 	rasterout <- raster(raster@file@name)

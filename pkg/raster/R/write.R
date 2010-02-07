@@ -118,3 +118,12 @@ setMethod('writeValues', signature(x='RasterBrick'),
 	}	
 )
 
+
+.getTransientRows <- function(x, r, n=1) {
+	reg = c(n, ncol(x))
+	off = c(r-1,0)
+	t(getRasterData(x@file@transient, region.dim=reg, offset=off))
+#	v[is.nan(v)] <- NA
+#	v
+}
+
