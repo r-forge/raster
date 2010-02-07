@@ -35,14 +35,15 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			nl <- length(y)
 			nc <- ceiling(sqrt(nl))
 			nr <- ceiling(nl / nc)
-				
+		
 			old.par <- par(no.readonly = TRUE) 
 			on.exit(par(old.par))
 			par(mfrow=c(nr, nc), mar=c(2, 2, 2, 4))
 			xa='n'
 			rown=1
 			coln=0
-			for (i in 1:length(y)) {
+			maxpixels=maxpixels/nl
+			for (i in 1:nl) {
 				coln = coln + 1
 				if (coln > nc) {
 					coln <- 1
