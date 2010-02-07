@@ -46,9 +46,9 @@ setMethod('labels', signature(object='RasterLayer'),
 )
 
 
-'labels<-' <- function(x, value) {
-	if (is.factor(x)) {
-		asFactor(x, levels(x), value)
+'labels<-' <- function(object, value) {
+	if (is.factor(object)) {
+		asFactor(object, levels(object), value)
 	} else {
 		stop('x is not a factor')
 	}

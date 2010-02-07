@@ -159,7 +159,7 @@ RasterLayer object
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{stack},  \link[raster]{values}, \link[rgdal]{readGDAL} } }
+\seealso{ \code{\link[raster]{stack},  \link[raster]{getValues}}  }
 
 
 \examples{

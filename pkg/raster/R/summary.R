@@ -54,7 +54,7 @@ setMethod("Summary", signature(x='Raster'),
 		filename <- rasterTmpFile()
 	} else {
 		filename <- ""
-		v <- vector(length=0)
+		v <- matrix(nrow=ncol(outRaster), ncol=nrow(outRaster))
 	}
 	
 	
@@ -78,7 +78,7 @@ setMethod("Summary", signature(x='Raster'),
 		}
 		
 		if (filename == "") {
-			v <- c(v, vv)
+			v[ , r]  <- vv
 		} else {
 			outRaster <- setValues(outRaster, vv, r)
 			outRaster <- writeRaster(outRaster, filename=filename, ...)
@@ -87,7 +87,7 @@ setMethod("Summary", signature(x='Raster'),
 	} 
 	pbClose(pb)			
 	if (filename == "") {
-		outRaster <- setValues(outRaster, v)
+		outRaster <- setValues(outRaster, as.vector(v))
 	}
 	return(outRaster)
 }

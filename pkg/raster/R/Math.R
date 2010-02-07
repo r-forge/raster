@@ -19,27 +19,32 @@ setMethod("Math2", signature(x='Raster'),
 setMethod("Math", signature(x='RasterLayer'),
     function(x){ 
 		fname <- as.character(sys.call(sys.parent())[[1]])
-		rst <- raster(x)
-		if (canProcessInMemory(rst, 3)) {
-			rst <- setValues(rst, callGeneric(getValues(x)))
+		r <- raster(x)
+		if (canProcessInMemory(r, 3)) {
+			r <- setValues(r, callGeneric(getValues(x)))
 		} else {
 			if (fname %in% c('floor', 'ceiling', 'trunc')) {
 				datatype <- 'INT4S'
 			} else {
 				datatype <- .datatype()
 			}
-			filename <- rasterTmpFile() 
-			pb <- pbCreate(nrow(rst), type=.progress())			
-			for (r in 1:nrow(rst)) {
-				rst <- setValues(rst, callGeneric( getValues(x, r) ), r)
-				rst <- writeRaster(rst, filename=filename, datatype=datatype)
-				pbStep(pb, rst) 
+			
+			tr <- blockSize(x)
+			pb <- pbCreate(tr$n, type=.progress())			
+			r <- writeStart(r, filename=rasterTmpFile(), datatype=datatype, format=.filetype(), overwrite=TRUE )
+			for (i in 1:tr$n) {
+				v <- callGeneric( getValuesBlock(x, row=tr$rows[i], nrows=tr$size) )
+				writeValues(r, v, tr$rows[i])
+				pbStep(pb, i) 
 			}
+			r <- writeStop(r)
+			pbClose(pb)
+			
 			if (getOption('verbose')) {
 				cat('values were written to:', filename)
 			}
 		}
-		return(rst)
+		return(r)
 	}
 )
 
@@ -47,25 +52,28 @@ setMethod("Math", signature(x='RasterLayer'),
 setMethod("Math2", signature(x='RasterLayer'), 
 	function (x, digits=0) {
 		digits <- max(0, digits)
-		rst <- raster(x)
-		if (canProcessInMemory(rst, 3)) {
-			rst <- setValues(rst, callGeneric( getValues(x), digits))
-			return(rst)
+		r <- raster(x)
+		if (canProcessInMemory(r, 3)) {
+			r <- setValues(r, callGeneric( getValues(x), digits))
 		} else {
 			if (digits == 0) {
 				datatype <- 'INT4S'
 			} else {
 				datatype <- .datatype()
 			}
-			filename <- rasterTmpFile() 			
-			pb <- pbCreate(nrow(x), type=.progress() )
-			for (r in 1:nrow(x)) {
-				rst <- setValues(rst, callGeneric(getValues(x, r), digits), r)
-				rst <- writeRaster(rst, filename=filename, datatype=datatype)
-				pbStep(pb, r) 
-				
+
+			tr <- blockSize(x)
+			pb <- pbCreate(tr$n, type=.progress())			
+			r <- writeStart(r, filename=rasterTmpFile(), datatype=datatype, format=.filetype(), overwrite=TRUE )
+			for (i in 1:tr$n) {
+				v <- callGeneric( getValuesBlock(x, row=tr$rows[i], nrows=tr$size), digits )
+				writeValues(r, v, tr$rows[i])
+				pbStep(pb, i) 
 			}
-			return(rst)
+			r <- writeStop(r)
+			pbClose(pb)
 		}
+		return(r)
 	}
 )
+

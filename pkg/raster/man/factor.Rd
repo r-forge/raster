@@ -1,4 +1,4 @@
-\name{aggregate}
+\name{factors}
 
 \docType{methods}
 
@@ -9,12 +9,13 @@
 \alias{asFactor,ANY-method}
 \alias{asFactor,RasterLayer-method}
 \alias{asFactor,RasterStack-method}
+\alias{levels}
 \alias{levels,RasterLayer-method}
+\alias{labels}
 \alias{labels,RasterLayer-method}
 \alias{labels<-}
 \alias{as.numeric,RasterLayer-method}
 \alias{as.numeric,RasterStack-method}
-
    
   
 \title{Factors}
@@ -29,9 +30,8 @@ Factors are categorical variables. These functions allow for defining a RasterLa
 is.factor(x)
 asFactor(x, ...) 
 levels(x)
-labels(object)
+labels(object, ...)
 labels(object) <- value
-as.numeric(x, ...) 
 }
 
 \arguments{

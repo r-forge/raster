@@ -13,15 +13,17 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 				return( setValues(r, values=callGeneric( as.numeric(getValues(e1)), getValues(e2))) )
 			} else {
 				tr <- blockSize(e1)
+				pb <- pbCreate(tr$n, type=.progress())			
 				r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
 				for (i in 1:tr$n) {
 					v1 <- getValuesBlock(e1, row=tr$rows[i], nrows=tr$size)
 					v2 <- getValuesBlock(e2, row=tr$rows[i], nrows=tr$size)
 					v <- callGeneric( v1, v2 )
 					writeValues(r, v, tr$rows[i])
+					pbStep(pb, i) 	
 				}
 				r <- writeStop(r)
-				
+				pbClose(pb)
 				if (getOption('verbose')) {
 					cat('values were written to:', filename)
 				}
@@ -39,13 +41,16 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 			return ( setValues(r,  callGeneric(as.numeric(getValues(e1)), e2) ) )
 		} else {
 			tr <- blockSize(e1)
-			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
+			pb <- pbCreate(tr$n, type=.progress())			
+			r <- writeStart(r, filename=rasterTmpFile(), format=.filetype(), overwrite=TRUE )
 			for (i in 1:tr$n) {
 				v <- getValuesBlock(e1, row=tr$rows[i], nrows=tr$size)
 				v <- callGeneric( v, e2 )
 				writeValues(r, v, tr$rows[i])
+				pbStep(pb, i) 	
 			}
 			r <- writeStop(r)
+			pbClose(pb)
 
 			if (getOption('verbose')) {
 				cat('values were written to:', filename)
@@ -65,13 +70,17 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			return( setValues(r, callGeneric(as.numeric(e1), getValues(e2))) )
 		} else {
 			tr <- blockSize(e1)
-			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
+			pb <- pbCreate(tr$n, type=.progress())			
+			r <- writeStart(r, filename=rasterTmpFile(), format=.filetype(), overwrite=TRUE )
 			for (i in 1:tr$n) {
 				v <- getValuesBlock(e2, row=tr$rows[i], nrows=tr$size)
 				v <- callGeneric( v, e1 )
 				writeValues(r, v, tr$rows[i])
+				pbStep(pb, i) 	
 			}
 			r <- writeStop(r)
+			pbClose(pb)
+
 			if (getOption('verbose')) {
 				cat('values were written to:', filename)
 			}
