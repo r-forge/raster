@@ -213,7 +213,7 @@ zonal, cellStats
 \section{Plotting}
 Several generic functions have been implemented for Raster* objects to create maps and other plot types. 
 plot, hist, persp, contour, pairs
-
+click, zoom
 
 
 \section{Reading from files}

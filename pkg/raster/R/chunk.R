@@ -6,8 +6,12 @@
 # Licence GPL v3
 
 
-tileSize <- function(x) {
-	size <- 10  # for now
+chunkRows <- function(x, size) {
+	if (missing(size)) {
+		size <- min(nrow(x), max(1, floor(100000 / ncol(x))))
+	}
 	nb <- ceiling(x@nrows / size)
-	return(data.frame(size, nb))
+	rows <- (0:(nb-1))*size + 1
+	return(list(size=size, rows=rows, n=nb))
 }
+

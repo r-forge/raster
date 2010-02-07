@@ -13,7 +13,10 @@
 low level functions for programmers 
 
 \code{canProcessInMemory} is typically used within functions. In the raster package this function is used to determine if the amount of memory needed for the function is available. If there is not enough memory available, the function returns \code{FALSE}, and the function that called it will write the results to a temporary file. 
+
 openConnection opens a file connection for reading, closeConnection removes it. 
+
+pbCreate creates a progress bar, pbStep sets the progress, and pbClose closes it.
 }
 
 \usage{
@@ -32,7 +35,7 @@ pbClose(pb, time=FALSE)
   \item{nsteps}{Integer. Number of steps the progress bar will make from start to end (e.g. nrow(raster)) }
   \item{type}{Character. 'txt', 'tcltk', or 'windows'}
   \item{style}{style for text progress bar. See \code{\link[utils]{txtProgressBar}} }
-  \item{pb}{a progress bar object created with setProgressBar }
+  \item{pb}{a progress bar object created with pbCreate }
   \item{step}{which step is this ( 1 <= step <= nsteps ) }
   \item{label}{for the non-text progress bars: a label}
   \item{value}{for the non-text progress bars: what value to paste after the label}

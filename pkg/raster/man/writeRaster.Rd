@@ -87,7 +87,7 @@ This function is used for the side-effect of writing values to a file.
 
 \author{Robert J. Hijmans}
 
-\seealso{ writeFormats \code{\link[raster]{writeFormats}} }  
+\seealso{\code{\link[raster]{writeFormats}} }  
 
 \examples{ 
 rst <- raster(system.file("external/test.grd", package="raster"))

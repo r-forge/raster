@@ -44,16 +44,21 @@ setMethod ('show' , 'RasterLayer',
 #		if (dataContent(object) == 'nodata') { cat('vals in mem : none', '\n')
 #		} else { cat('vals in mem :', dataContent(object) , '\n') }
 						
-		if (object@data@haveminmax) {
-			cat('min value   :' , minValue(object), '\n')
-			cat('max value   :' , maxValue(object), '\n')
-		} else { 
-			if (object@data@source == 'disk')  {
-				cat('min value   : ? \n')
-				cat('max value   : ? \n')
-			} else {
-				cat('min value   :  \n')
-				cat('max value   :  \n')		
+		if (is.factor(object)) {
+			cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
+			cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
+		} else {
+			if (object@data@haveminmax) {
+				cat('min value   :' , minValue(object), '\n')
+				cat('max value   :' , maxValue(object), '\n')
+			} else { 
+				if (object@data@source == 'disk')  {
+					cat('min value   : ? \n')
+					cat('max value   : ? \n')
+				} else {
+					cat('min value   :  \n')
+					cat('max value   :  \n')		
+				}
 			}
 		}
 		cat('projection  :' , projection(object, TRUE), '\n')

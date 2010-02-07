@@ -13,8 +13,8 @@
 \title{Get raster cell values}
 
 \description{
-  getValues returns values for a row of values. It will take them from memory if available, else it will read them from disk. 
-  This is the prefered function to get either all values, or a subset of rows from a RasterLayer (it is safer then read* functions, which will fail when there is no file).
+getValues returns all values or a row of values for a Raster* object. It will take them from memory if available, else it will read them from disk. 
+This is the prefered function to get either all values, or a subset of rows from a RasterLayer (it is safer then read* functions, which will fail if there is no file).
 }
 
 \usage{

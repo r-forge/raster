@@ -20,7 +20,7 @@
 	saveDataset(raster@file@transient, raster@file@name)
 	GDAL.close(raster@file@transient) 
 	if (doPB) {
-		pbClose( attr(raster@file, "pb") )
+		try (pbClose( attr(raster@file, "pb") ))
 		attr(raster@file, "pb") <- ''
 	}
 	rasterout <- raster(raster@file@name)

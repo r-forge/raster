@@ -3,12 +3,13 @@
 # Version 0.9
 # Licence GPL v3
 
-.startRowWriting <- function(raster, filename, doPB=FALSE, ...) {
+.startRasterWriting <- function(raster, filename, doPB=FALSE, ...) {
  	filename <- trim(filename)
 	if (filename == "") {
 		stop('RasterLayer has no filename; and no filename specified as argument to writeRaster')
 	}
 	filetype <- .filetype(...)
+	
 	filename <- .setFileExtensionHeader(filename, filetype)
 	raster@file@name <- filename
 	fnamevals <- .setFileExtensionValues(filename, filetype)
@@ -41,7 +42,7 @@
 }
 
 
-.stopRowWriting <- function(raster, doPB=FALSE) {
+.stopRasterWriting <- function(raster, doPB=FALSE) {
 	close(raster@file@con)
 #	fnamevals <- .setFileExtensionValues(raster@file@name)
 #	attr(raster@file, "con") <- file(fnamevals, "rb")
@@ -72,7 +73,7 @@
 .writeRasterRow <- function(raster, filename, doPB=FALSE, ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
-		raster <- .startRowWriting(raster, filename, doPB, ...)
+		raster <- .startRasterWriting(raster, filename, doPB, ...)
  	} 
 
 	raster@data@values[is.infinite(raster@data@values)] <- NA
@@ -97,7 +98,7 @@
 		if (dataIndices(raster)[2] > ncell(raster)) {
 			warning(paste('You have written beyond the end of file. last cell:', dataIndices(raster)[2], '>', ncell(raster)))
 		}
-		raster <- .stopRowWriting(raster, doPB)
+		raster <- .stopRasterWriting(raster, doPB)
 	}
 
 	return(raster)	

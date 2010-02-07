@@ -6,12 +6,6 @@
 # Licence GPL v3
 
 
-
-newExtent <- function(xmn, xmx, ymn, ymx) {
-	stop('depracated function. Use "extent"')
-}
-
-
 setMethod('bbox', signature(obj='Raster'), 
 	function(obj) {
 		b <- extent(obj)
