@@ -12,8 +12,6 @@ if (!isGeneric("addLayer")) {
 }	
 
 
-
-
 setMethod('addLayer', signature(x='RasterStack'), 
 function(x, ...) {
 #x is a list of r objects
