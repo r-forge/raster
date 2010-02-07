@@ -12,11 +12,16 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 			if (canProcessInMemory(e1, 4)) {
 				return( setValues(r, values=callGeneric( as.numeric(getValues(e1)), getValues(e2))) )
 			} else {
-				filename <- rasterTmpFile()
-				for (row in 1:nrow(e1)) {
-					r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), getValues(e2, row) ), row)
-					r <- writeRaster(r, filename=filename, doPB=TRUE)
+				tr <- blockSize(e1)
+				r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
+				for (i in 1:tr$n) {
+					v1 <- getValuesBlock(e1, row=tr$rows[i], nrows=tr$size)
+					v2 <- getValuesBlock(e2, row=tr$rows[i], nrows=tr$size)
+					v <- callGeneric( v1, v2 )
+					writeValues(r, v, tr$rows[i])
 				}
+				r <- writeStop(r)
+				
 				if (getOption('verbose')) {
 					cat('values were written to:', filename)
 				}
@@ -33,11 +38,15 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 		if (canProcessInMemory(e1, 4)) {
 			return ( setValues(r,  callGeneric(as.numeric(getValues(e1)), e2) ) )
 		} else {
-			filename <- rasterTmpFile()
-			for (row in 1:nrow(e1)) {
-				r <- setValues(r, callGeneric( as.numeric(getValues(e1, row)), e2) , row) 
-				r <- writeRaster(r, filename=filename, doPB=TRUE)
+			tr <- blockSize(e1)
+			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
+			for (i in 1:tr$n) {
+				v <- getValuesBlock(e1, row=tr$rows[i], nrows=tr$size)
+				v <- callGeneric( v, e2 )
+				writeValues(r, v, tr$rows[i])
 			}
+			r <- writeStop(r)
+
 			if (getOption('verbose')) {
 				cat('values were written to:', filename)
 			}			
@@ -55,11 +64,14 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 		if (canProcessInMemory(e2, 4)) {
 			return( setValues(r, callGeneric(as.numeric(e1), getValues(e2))) )
 		} else {
-			filename <- rasterTmpFile()
-			for (row in 1:nrow(e2)) {
-				r <- setValues(r, callGeneric(as.numeric(e1), getValues(e2, row)) , row)
-				r <- writeRaster(r, filename=filename, doPB=TRUE)
+			tr <- blockSize(e1)
+			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
+			for (i in 1:tr$n) {
+				v <- getValuesBlock(e2, row=tr$rows[i], nrows=tr$size)
+				v <- callGeneric( v, e1 )
+				writeValues(r, v, tr$rows[i])
 			}
+			r <- writeStop(r)
 			if (getOption('verbose')) {
 				cat('values were written to:', filename)
 			}

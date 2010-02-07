@@ -3,14 +3,13 @@
 # Version 0.9
 # Licence GPL v3
 
-sampleRandom <- function(raster, n=500, na.rm = TRUE) {
+sampleRandom <- function(raster, n=500, na.rm=TRUE) {
 	if (dataContent(raster) == 'all') {
 		values <- values(raster)
 		if (na.rm) { values <- na.omit(values) }
 		if (length(values) > n) {
-			r <- order(runif(length(values)))
-			values <- values[r]
-			values <- values[1:n]
+			s = sample.int(length(values), n)
+			values <- values[s]
 		}
 	} else {
 		if (dataSource(raster) == 'disk') {
@@ -24,8 +23,7 @@ sampleRandom <- function(raster, n=500, na.rm = TRUE) {
 				} else {
 					N <- 2 * n 
 				}	
-				cells <- unique(as.integer(round(runif(N) * ncell(raster) + 0.5)))
-				cells <- cells[cells > 0]
+				cells <- sample.int(ncell(raster), N)
 				values <- cellValues(raster, cells)
 				if (na.rm) {
 					values <- na.omit(values)

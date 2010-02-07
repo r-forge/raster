@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-chunkRows <- function(x, size) {
+blockSize <- function(x, size) {
 	if (missing(size)) {
 		size <- min(nrow(x), max(1, floor(100000 / ncol(x))))
 	}
