@@ -38,7 +38,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				
 			old.par <- par(no.readonly = TRUE) 
 			on.exit(par(old.par))
-			par(mfrow=c(nr, nc))
+			par(mfrow=c(nr, nc), mar=c(2, 2, 2, 4))
 			xa='n'
 			rown=1
 			coln=0

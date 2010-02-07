@@ -20,13 +20,12 @@ Plot (that is, make a map of) the values of a RasterLayer or RasterStack, or mak
 \describe{
 \bold{x=RasterLayer}
 
-\code{plot(x, col=rev(terrain.colors(25)), maxpixels=100000, addbox=TRUE, axes = TRUE, xlab="", ylab="", ...)}
+\code{plot(x, col=rev(terrain.colors(25)), maxpixels=100000, axes = TRUE, xlab="", ylab="", ...)}
 
 \tabular{rll}{
 \tab \code{x} \tab a RasterLayer object \cr
 \tab \code{col}  \tab  A color palette, i.e. a vector of n contiguous colors such as \code{rainbow}, \code{heat.colors}, and \code{topo.colors}, on one or your own making \cr
 \tab \code{maxpixels}  \tab  Maximum number of pixels used for the map  \cr
-\tab \code{addbox}  \tab  Logical. If \code{TRUE} a box is drawn around the map \cr
 \tab \code{...}  \tab  Any argument that can be passed to \code{\link[fields]{image.plot}} and to \code{\link[graphics]{plot}}  \cr
 }
 

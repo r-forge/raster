@@ -5,7 +5,7 @@
 # University Corporation for Atmospheric Research
 # Licensed under the GPL -- www.gpl.org/licenses/gpl.html
 
-.imageplot <- function (..., add = FALSE, nlevel = 64, horizontal = FALSE, 
+.imageplot <- function (..., add=FALSE, legend=TRUE, nlevel = 64, horizontal = FALSE, 
 # fields, Tools for spatial data
 # Copyright 2004-2007, Institute for Mathematics Applied Geosciences
 # University Corporation for Atmospheric Research
@@ -81,7 +81,8 @@
         legend.mar <- ifelse(horizontal, 3.1, 5.1)
     }
     temp <- .imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
-        horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
+									horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
+		
     smallplot <- temp$smallplot
     bigplot <- temp$bigplot
     if (!legend.only) {
@@ -89,68 +90,65 @@
             par(plt = bigplot)
         }
         if (!info$poly.grid) {
-            image(..., add = add, col = col)
+            image(..., add=add, col=col)
         }
         else {
             .polyimage(..., add = add, col = col, midpoint = midpoint)
         }
         big.par <- par(no.readonly = TRUE)
     }
-    if ((smallplot[2] < smallplot[1]) | (smallplot[4] < smallplot[3])) {
-        par(old.par)
-        stop("plot region too small to add legend\n")
-    }
-    ix <- 1
-   minz <- info$zlim[1]
-    maxz <- info$zlim[2]
-    binwidth <- (maxz - minz)/nlevel
-    midpoints <- seq(minz + binwidth/2, maxz - binwidth/2, by = binwidth)
-    iy <- midpoints
-    iz <- matrix(iy, nrow = 1, ncol = length(iy))
-    breaks <- list(...)$breaks
-    par(new = TRUE, pty = "m", plt = smallplot, err = -1)
-    if (!is.null(breaks) & !is.null(lab.breaks)) {
-        axis.args <- c(list(side = ifelse(horizontal, 1, 4), 
-            mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2), 
-            at = breaks, labels = lab.breaks), axis.args)
-    }
-    else {
-        axis.args <- c(list(side = ifelse(horizontal, 1, 4), 
-            mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2)), 
-            axis.args)
-    }
-    if (!horizontal) {
-        if (is.null(breaks)) {
-            image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col)
-        }
-        else {
-            image(ix, iy, iz, xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
-        }
-    }
-    else {
-        if (is.null(breaks)) {
-            image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col)
-        }
-        else {
-            image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
-        }
-    }
-    do.call("axis", axis.args)
-    box()
-    if (!is.null(legend.lab)) {
-        legend.args <- list(text = legend.lab, side = ifelse(horizontal, 
-            1, 4), line = legend.mar - 2)
-    }
-    if (!is.null(legend.args)) {
-        do.call(mtext, legend.args)
-    }
-    mfg.save <- par()$mfg
+	
+	
+	if (legend) {
+	
+		if ((smallplot[2] < smallplot[1]) | (smallplot[4] < smallplot[3])) {
+			par(old.par)
+			stop("plot region too small to add legend\n")
+		}
+		ix <- 1
+		minz <- info$zlim[1]
+		maxz <- info$zlim[2]
+		binwidth <- (maxz - minz)/nlevel
+		midpoints <- seq(minz + binwidth/2, maxz - binwidth/2, by = binwidth)
+		iy <- midpoints
+		iz <- matrix(iy, nrow = 1, ncol = length(iy))
+		breaks <- list(...)$breaks
+		par(new=TRUE, pty = "m", plt=smallplot, err = -1)
+		if (!is.null(breaks) & !is.null(lab.breaks)) {
+			axis.args <- c(list(side = ifelse(horizontal, 1, 4), mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2), 
+				at = breaks, labels = lab.breaks), axis.args)
+		} else {
+			axis.args <- c(list(side = ifelse(horizontal, 1, 4), mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2)), axis.args)
+		}
+		if (!horizontal) {
+			if (is.null(breaks)) {
+				image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col)
+			} else {
+				image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks)
+			}
+		} else {
+			if (is.null(breaks)) {
+				image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col)
+			} else {
+				image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
+			}
+		}
+		do.call("axis", axis.args)
+		box()
+	
+		if (!is.null(legend.lab)) {
+			legend.args <- list(text = legend.lab, side = ifelse(horizontal, 1, 4), line = legend.mar - 2)
+		}
+		if (!is.null(legend.args)) {
+			do.call(mtext, legend.args)
+		}
+	}
+	mfg.save <- par()$mfg
     if (graphics.reset | add) {
         par(old.par)
         par(mfg = mfg.save, new = FALSE)
         invisible()
-    }
-   else {
+    } else {
         par(big.par)
         par(plt = big.par$plt, xpd = FALSE)
         par(mfg = mfg.save, new = FALSE)

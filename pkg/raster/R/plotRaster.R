@@ -5,7 +5,7 @@
 
 
 
-.plotraster <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, add=FALSE, box=TRUE, axes=TRUE, xlab='', ylab='', extent=NULL, ...) {
+.plotraster <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, axes=TRUE, xlab='', ylab='', extent=NULL, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 
 	if ( dataContent(object) != 'all') { 
@@ -14,7 +14,7 @@
 		} 
 	}
 
-	if (add) {box <- FALSE}
+#	if (add) {box <- FALSE}
 	maxpixels <- max(1, maxpixels)
 
 #	if (! missing(xlim) | ! missing(ylim )) {
@@ -44,7 +44,7 @@
 	z <- t(z[nrow(z):1,])
 	z[is.infinite(z)] <- NA
 	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, ...)
-	if (box) {box()}
+#	if (box) {box()}
 }	
 
 

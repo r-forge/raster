@@ -41,12 +41,15 @@ setMethod("stack", signature(x='list'),
 function(x, bands=NULL) {
 	j <- 0
 	r <- list()
+	if (is.null(bands)) { bands = rep(-1, length(x)) }
+	
 	for (i in seq(along=x)) {
 		j <- j + 1
 		if (is.character(x[[i]])) {
-			if (is.null(bands)) {
-				r[j] <- raster(x[[i]])
-			} else if (bands[[i]] > 0) {
+#			if (is.null(bands)) {
+#				r[j] <- raster(x[[i]])
+#			} else if (bands[[i]] > 0) {
+			if (bands[[i]] > 0) {
 				r[j] <- raster(x[[i]], band=bands[[i]])
 				if (length(bands) > 1 & length(x) == 1) {
 					# single file, multuple bands
