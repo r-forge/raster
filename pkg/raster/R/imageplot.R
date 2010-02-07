@@ -10,7 +10,7 @@
 # Copyright 2004-2007, Institute for Mathematics Applied Geosciences
 # University Corporation for Atmospheric Research
 # Licensed under the GPL -- www.gpl.org/licenses/gpl.html
-    legend.shrink = 0.5, legend.width = 0.8, legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
+    legend.shrink = 0.5, legend.width = 0.6, legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = heat.colors(nlevel), 
     lab.breaks = NULL, axis.args = NULL, legend.args = NULL, midpoint = FALSE) {
 
