@@ -5,11 +5,12 @@
 
 
 showOptions <- function() {
-	cat('format :', .filetype(), '\n' )
+	cat('format   :', .filetype(), '\n' )
 	cat('datatype :', .datatype(), '\n')
 	cat('overwrite:', .overwrite(), '\n')
-	cat('tmpdir   :', .tmpdir(), '\n')
 	cat('progress :', .progress(), '\n')
+	cat('chunksize:', .chunksize(), '\n')
+	cat('tmpdir   :', .tmpdir(), '\n')
 	if (.toDisk()) {
 		cat('toDisk   : TRUE\n')
 	}
@@ -17,7 +18,7 @@ showOptions <- function() {
 
 
 .dataloc <- function(){
-	d <- trim(getOption('rasterDataLocation'))	
+	d <- trim(getOption('rasterDataDir'))	
 	if (is.null(d) ) {
 		d <- getwd()
 	} else if (d=='') {
@@ -38,6 +39,23 @@ showOptions <- function() {
 	}
 	return(d)
 }
+
+
+
+.chunksize <- function(){
+	d <- trim(getOption('rasterChunkSize'))	
+	if (is.null(d)) {
+		d <- 1000000
+	} 
+	d <- round(as.numeric(d[1]))
+	if (is.na(d)) {
+		d <- 1000000
+	} 
+	if (d < 1) {
+		d <- 1000000
+	} 
+	return(d)
+}	
 
 
 .overwrite <- function(..., overwrite) {

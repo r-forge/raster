@@ -42,8 +42,7 @@ saveOptions <- function() {
 	lst <- c(lst, paste("options(rasterOverwrite=", .overwrite(), ')', sep=''))
 	lst <- c(lst, paste("options(rasterProgress='", .progress(), "')", sep=''))
 	lst <- c(lst, paste("options(rasterTmpDir='", .tmpdir(), "')", sep=''))
-	lst <- c(lst, paste("options(rasterTmpDir='", .dataloc(), "')", sep=''))
-	options(rasterDataLocation = '')
+	lst <- c(lst, paste("options(rasterDataDir='", .dataloc(), "')", sep=''))
 
 	r <- try( write(unlist(lst), fn), silent = TRUE )
 #	if (class(r) == "try-error") { cat('Cannot save options. No write access to: ', fn, '\n')	}

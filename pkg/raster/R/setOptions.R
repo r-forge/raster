@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-setOptions <- function(format, overwrite, datatype, tmpdir, progress, todisk) {
+setOptions <- function(format, overwrite, datatype, tmpdir, progress, chunksize, todisk) {
 	
 	setFiletype <- function(format) {
 		if (.isSupportedFormat(format)) {	options(rasterFiletype = format)	
@@ -49,7 +49,7 @@ setOptions <- function(format, overwrite, datatype, tmpdir, progress, todisk) {
 		}
 	}
 	
-	
+
 	setToDisk <- function(todisk) {
 		if (is.logical(todisk)) { 
 			options(rasterToDisk = todisk )
@@ -58,13 +58,18 @@ setOptions <- function(format, overwrite, datatype, tmpdir, progress, todisk) {
 		}
 	}
  
-	
+	setChunksize <- function(chunksize) {
+		chunksize = max(1, round(chunksize[1]))
+		options(rasterChunkSize = chunksize )
+	}
+ 	
 	if (!missing(format)) { setFiletype(format) }
 	if (!missing(overwrite)) { setOverwrite(overwrite) }
 	if (!missing(datatype)) { setDataType(datatype) }
 	if (!missing(progress)) { setProgress(progress) }
 	if (!missing(tmpdir)) { setTmpdir(tmpdir) }
 	if (!missing(todisk)) { setToDisk(todisk) }
+	if (!missing(chunksize)) { setChunksize(chunksize) }
 }
 
 
