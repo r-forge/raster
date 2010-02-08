@@ -17,16 +17,10 @@ setMethod('Median', signature(x='ANY'),
 
 setMethod("Median", signature(x='Raster'),
 	function(x, ..., na.rm=FALSE){
-
 		rasters <- .makeRasterList(x, ...)
-		add <- .addArgs(fun, ...)
-
-		if (length(rasters) <= 1 & length(add)==0) { return(x) }
+		add <- .addArgs(...)
 		rm(x)
-		
-		fun <- function(...){ stats::median(..., na.rm=na.rm) }
-		return( .summaryRasters(rasters=rasters, add=add, fun=fun, ...) )
-		
+		return( .summaryRasters(rasters=rasters, add=add, fun=stats::median, na.rm=na.rm) )
 	}
 )
 

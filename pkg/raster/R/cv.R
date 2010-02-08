@@ -40,11 +40,8 @@ setMethod("cv", signature(x='Raster'),
 	function(x, ..., aszero=FALSE, na.rm=FALSE){
 		rasters <- .makeRasterList(x, ...)
 		add <- .addArgs(...)
-		if (length(rasters) == 1 & length(add)==0) { return(x) }
-		rm(x)
-		fun <- function(...){ cv(..., aszero=aszero, na.rm=na.rm) }
-		return( .summaryRasters(rasters=rasters, add=add, fun=fun, ...) )
-		
+		fun <- function(...){ cv(..., aszero=aszero) }
+		return( .summaryRasters(rasters=rasters, add=add, fun=fun, na.rm=na.rm) )	
 	}
 )
 

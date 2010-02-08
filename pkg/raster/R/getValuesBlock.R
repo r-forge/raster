@@ -51,9 +51,17 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 			readrow <- TRUE
 			
 		} else if (dataContent(x) == 'all'){
-		
-			cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
-			res <- x@data@values[cells]
+			if (col==1 & ncols==ncol(x)) {
+				if (row==1 & nrows==nrow(x)) {
+					res <- x@data@values
+				} else {
+					cells = cellFromRow(x, row:lastrow)
+					res <- x@data@values[cells]
+				}
+			} else {
+				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
+				res <- x@data@values[cells]
+			}
 			
 		} else if (dataContent(x) == 'rows') {
 		

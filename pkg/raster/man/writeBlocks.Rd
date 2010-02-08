@@ -19,7 +19,7 @@ Under development! Low level functions for writing blocks of values (larger than
 }
 
 \usage{
-blockSize(x, size)
+blockSize(x, chunksize)
 writeStart(x, filename, ...)
 writeValues(x, v, ...)
 writeStop(x)
@@ -27,7 +27,7 @@ writeStop(x)
 
 \arguments{
   \item{x}{Raster* object}
-  \item{size}{Integer, normally missing, setting tile (chunk) size as a number of rows}
+  \item{chunksize}{Integer, normally missing, setting tile (chunk) size as a number of rows}
   \item{filename}{Output filename}
   \item{v}{vector}
   \item{...}{Additional arguments. See under Methods}    
