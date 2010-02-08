@@ -37,9 +37,6 @@ setMethod("Summary", signature(x='Raster'),
         fun <- as.character(call[[1L]])
 		rasters <- .makeRasterList(x, ...)
 		add <- .addArgs(...)
-		if (length(rasters)==1 & length(add)==0) {
-			return(x)
-		}
 		rm(x)
 		return( .summaryRasters(rasters=rasters, add=add, fun=fun, na.rm=na.rm) )
 	}
@@ -50,6 +47,7 @@ setMethod("Summary", signature(x='Raster'),
 .summaryRasters <- function(rasters, add, fun, na.rm=na.rm) {
 
 #	fun = match.fun(fun)
+
 	if (length(rasters)==1 & length(add)==0) {
 		warning('nothing to summarize if you provide a single RasterLayer')
 		return(rasters[[1]])
@@ -69,8 +67,10 @@ setMethod("Summary", signature(x='Raster'),
 	if (length(add) > 0) {
 		m <- cbind(m, add) 
 	}
-	on.exit(options('warn'= getOption('warn')))
-#	options('warn'=-1)  # for NA rows in apply
+	if (na.rm) {
+		on.exit(options('warn'= getOption('warn')))
+		options('warn'=-1)  # for NA rows in apply
+	}
 	pb <- pbCreate(tr$n, type=.progress())			
 	for (i in 1:tr$n) {
 		if (i==tr$n & i > 1) {  # the last one could be smaller
