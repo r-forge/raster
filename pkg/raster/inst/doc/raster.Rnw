@@ -50,20 +50,24 @@ The three classes described above inherit from the Raster class which inherits f
 
 
 \section{Creating a RasterLayer}
-A RasterLayer can easily be created from scratch using the functions raster. The default settings will create a description of a global raster data structure with a longitude/latitude coordinate reference system and 1 by 1 degree cells. You can change these settings by providing additional arguments such as nrow, ncol, and xmn, to the function. 
+A RasterLayer can easily be created from scratch using the functions raster. The default settings will create a description of a global raster data structure with a longitude/latitude coordinate reference system and 1 by 1 degree cells. You can change these settings by providing additional arguments such as nrow, ncol, and xmn, to the function. You can also change one or more structural parameters after creating the object. In some cases, for example when you change the number of columns or rows, you will loose the values associated with the RasterLayer (or the link to a file if there was one). If you set the projection, this is only to properly define it, not to change it. To you cange can use the function projectRaster. 
+
 <<raster-1>>=
 library(raster)
-# create a 'skeleton' RasterLayer object
 r <- raster()
 r
 r <- raster(ncol=36, nrow=18, xmn=-1000, xmx=1000, ymn=-100, ymx=900)
 res(r) <- 100
+r[] <- 1:ncell(r)
 r
+ncol(r) <- 18
+res(r)
+projection(r) <- "+proj=utm +zone=48 +datum=WGS84"
 @
 
 The raster function also allows you to create a RasterLayer from another object, including another RasterLayer, RasterStack and RasterBrick, as well as from a SpatialPixels* and SpatialGrid* object (defined in the sp package), and from an extent object, and from a matrix.
 
-It is more common, however, to create an initial RasterLayer object from a file. The raster package can read raster files in several formats, including some 'natively' supported formats and other formats via the rgdal package. Supported formats for reading include ESRI, ENVI, and ERDAS grids and geoTiff.  Most formats supported for reading can also be written too. Here is an example using the 'Meuse' dataset that (taken from the sp package), using a file in the native raster-grid format:
+It is more common, perhaps, to create RasterLayer objects from files. The raster package can read raster files in several formats, including some 'natively' supported formats and other formats via the rgdal package. Supported formats for reading include ESRI, ENVI, and ERDAS grids and geoTiff.  Most formats supported for reading can also be written too. Here is an example using the 'Meuse' dataset that (taken from the sp package), using a file in the native raster-grid format:
 
 <<raster-2>>=
 r <- raster(system.file("external/test.grd", package="raster"))
@@ -73,7 +77,7 @@ r
 
 \section{Row, column and cell numbers}
 
-The cell number is an important concept in the raster package. Raster data can be thought of as a matrix, but in a RasterLayer it is more commonly treated as a vector. Cells are numbered from the upper left cell to the upper right cell and then continuing on the left side of the next row, and so on until the last cell at the lower-right side of the raster. There are several helper functions to determine the column or row number from a cell and vice versa, and to determion the cell number for x, y coordinates and vice versa.
+The cell number is an important concept in the raster package. Raster data can be thought of as a matrix, but in a RasterLayer it is more commonly treated as a vector. Cells are numbered from the upper left cell to the upper right cell and then continuing on the left side of the next row, and so on until the last cell at the lower-right side of the raster. There are several helper functions to determine the column or row number from a cell and vice versa, and to determine the cell number for x, y coordinates and vice versa.
 
 <<raster-1>>=
 library(raster)
@@ -111,7 +115,7 @@ r[[1:3,1:3]]
 r[[75:90, 15]]
 @
 
-However, the above methods are generally not the preferred way to get RasterLayer values, and less so to set RasterLayer values  Setting raster values for very large files will be very slow with this approach as each time a new (temporary) file, with all the values, is written to disk. Here are some alternatives to obtain values from a RasterLayer (irrespective whether from memory or from disk). Below are some examples of better ways to retrieve values from a RasterLayer.
+However, the above methods are generally not the preferred way to get RasterLayer values, and less so to set RasterLayer values . Setting raster values for very large files will be very slow with this approach as each time a new (temporary) file, with all the values, is written to disk. Here are some alternatives to obtain values from a RasterLayer (irrespective whether from memory or from disk). Below are some examples of better ways to retrieve values from a RasterLayer.
  
 <<raster-3b>>=
 r <- raster()
@@ -126,7 +130,10 @@ xyValues(r,  xy)
 
 \section{Raster algebra}
 
-Many generic methods are implemented for RasterLayer objects, including the R Arith, Math, and Summary 'group-generic' functions. Implementing these functions allows for simple and elegant raster algebra. In raster algebra, the result of a computation is always a RasterLayer. This is perhaps obvious when mutliplying two RasterLayer objects, but perhaps this is not obvious when using functions like sum or mean. In such functions you can mix RasterLayer objects with numbers, as long as the first argument is a RasterLayer.
+Many generic functions have been implemented for RasterLayer objects, including the R Arith, Math, and Summary 'group-generic' functions, 
+including the normal algebraic and logical operators and functions such as abs, round ceiling, floor, trunc, sqrt, log, log10, exp, cos, sin, max, min, range, prod, sum, any, all.  These functions allows for simple and elegant raster algebra.
+
+In raster algebra, the result of a computation is always a RasterLayer. This is perhaps obvious when mutliplying two RasterLayer objects, but perhaps this is not obvious when using functions like sum or mean. In such functions you can mix RasterLayer objects with numbers, as long as the first argument is a RasterLayer.
 
 <<raster-6>>=
 r <- raster(ncol=36, nrow=18)
@@ -140,7 +147,7 @@ s[r] <- -0.5
 s[!r] <- 5
 s[s == 5] <- runif(length(s[s == 5]))
 a <- sum(r,s)
-b <- mean(r,s,10)
+b <- round(mean(r,s,10))
 @
 
 \section{'High-level' functions}
@@ -150,7 +157,7 @@ Several 'high level functions' have been implemented. With 'high level' function
 The high-level functions have some arguments in common. The first argument is typically 'x' or 'object' and can be a RasterLayer, and in some cases a RasterStack or RasterBrick. It is followed by one or more arguments specific to the function (either additional RasterLayer objects or parameters), followed by a filename="" and ... arguments. The default filename is an empty character "". If you do not specify a filename, the default action for the function is to return a RasterLayer that only exists in memory. However, if the function will create a RasterLayer that is too large to hold memory it is written  to a temporary file instead. The ...  argument allows for setting additional arguments that are relevant when writing values to a file: the file format, datatype, and a logical value indicating whether existing files should be overwritten. 
 
 \subsection{Structural modification}
-There are several functions that deal with modifying the structure of RasterLayer objects. Aggregate and disaggregate allow for changing the resolution of a RasterLayer. In  the case of aggregate, you need to specify a function determining what to do with the grouped cell values (e.g. mean).  It is possible to specify different (dis) aggregation factors in the x and y direction. Aggregate and disaggregate are the best functions when adjusting cells size only, and with an integer fraction (e.g. each side 2 times smaller or larger), but in some cases that is not possible. For example, you may need nearly the same cell size, while shifting the cell centers. In those cases, the resample function might be used. It can do either nearest neighbor assignments (for categorical data) or bilinear interpolation (for non-categorical data). 
+There are several functions that deal with modifying the structure of RasterLayer objects. Aggregate and disaggregate allow for changing the resolution of a RasterLayer. In the case of aggregate, you need to specify a function determining what to do with the grouped cell values (e.g. mean).  It is possible to specify different (dis) aggregation factors in the x and y direction. Aggregate and disaggregate are the best functions when adjusting cells size only, and with an integer fraction (e.g. each side 2 times smaller or larger), but in some cases that is not possible. For example, you may need nearly the same cell size, while shifting the cell centers. In those cases, the resample function might be used. It can do either nearest neighbor assignments (for categorical data) or bilinear interpolation (for non-categorical data). 
 The crop function lets you take a geographic subset of a larger RasterLayer. You can crop a RasterLayer by providing an extent object or another spatial object from which an extent can be extracted (objects from classes deriving from Raster and from Spatial in the sp package). An easy way to get an extent object is to plot the larger RasterLayer and then use drawExtent() to visually determine the new extent (bounding box) to provide to the crop function. Shrink crops a RasterLayer by removing the outer rows and columns that only contain NA values.
 
 In contrast, expand adds new rows and/or columns with NA values. The purpose of this could be to create a new RasterLayer of the same extent of another larger RasterLayer such that the can be used in raster algebra. 
@@ -170,7 +177,7 @@ m <- merge(r1, r2, filename='test.tif', format='GTiff', overwrite=TRUE)
 
 
 \subsection{overlay}
-As an alternative to the raster algebra discussed above, the following 'high-level' functions are available to accomplish the same things: overlay, calc, cover and mask. They provide either easy to use short-hand, or more efficient computation (for disk based RasterLayers). The function calc allows you to do a computation for all the cells of a single layer whereas with overlay you can combine multiple layers. mask removed all values from one layer that are NA in another layer. cover combines two layers by taking the values of the first layer except where these are NA.
+As an alternative to the raster algebra discussed above, the following 'high-level' functions are available to accomplish the same things: overlay, calc, reclass, cover and mask. They provide either easy to use short-hand, or more efficient computation (for disk based RasterLayers). The function calc allows you to do a computation for a single RasterLayer whereas with overlay you can combine multiple layers. Use reclass to replace (ranges of) values with other values. Function mask removed all values from one layer that are NA in another layer. cover combines two layers by taking the values of the first layer except where these are NA.
 
 <<raster-6a>>=
 r <- raster(ncol=36, nrow=18)
@@ -188,7 +195,7 @@ Also see the gdistance package
 
 
 \subsection{focal functions}
-focal, focalFilter, focalNA, 
+There are three focal functions: focal, focalFilter, focalNA. These functions make a computation using values in a neighborhood of cells around a focal cell, and putting the result in the focal cell of the output RasterLayer. In focal the neighborhood can only be a rectangle. In focalFilter, the neighborhood is defined by the filter (a matrix) and could approximate any shape by giving some cells zero weight. The focalNA function only computes new values for cells that are NA in the input RasterLayer.
 
 
 \subsection{Vector to raster conversion}
@@ -201,19 +208,25 @@ Polygon to raster conversion (with polygonsToRaster) is typically done to select
 It is also possible to convert the valus of a RasterLayer to points or polygons with functions rasterToPoints and rasterToPolygons. Both functions only return values for cells that are not NA. Unlike rasterToPolygons, rasterToPoints is reasonably efficient and allows you to provide a function to subset the output before it is produced (which can be necessary for very large rasters as the point object is created in memory). 
 
 
+\subsection{Additional high-level functions}
+area, clump
+
+
 \section{Summary functions}
-zonal, cellStats
 
+When used with a RasterLayer as first argument, normal summary statistics functions such as min, max and mean return a RasterLayer. To, instead, obtain a summary for all cells of a single RasterLayer you can use cellStats. You can use 'freq' to make a frequency table, or count to count the number of cells with a specific value. Use 'zonal' to summarize a RasterLayer using zones (areas with the same integer number) defined in another RasterLayer.
 
+<<raster-20>>=
+r <- raster(ncol=36, nrow=18)
+r[] <- runif(ncell(r))
+cellStats(r, mean)
+s = r
+s[] <- round(runif(ncell(r)) * 5)
+zonal(r,s,median)
+freq(s)
+count(s, 3)
+@
 
-\section{Model predictions}
-
-
-
-\section{Plotting}
-Several generic functions have been implemented for Raster* objects to create maps and other plot types. 
-plot, hist, persp, contour, pairs
-click, zoom
 
 
 \section{Reading from files}
@@ -243,9 +256,31 @@ Raster can read most, and write several raster file formats, via the \verb@rgdal
 The raster package can work with extremely large files because it does not load the files into memory. When a RasterLayer object is created form a file, the object stores some information about the data on disk (number of rows and columns, spatial extent), and it contains a pointer to that file, to read parts of the data as needed. In computations such as raster algebra or the 'higher level functions', data will normally be read in chunks, processed, and written to disk again. If there is no output filename specified (or if that is not possible such as is the case with raster algebra), the results will be written to a temporary file. If you want to keep that file you should move it another location, e.g. using the copyRasterFile or moveRasterFile functions. At the start of each session, the raster package will attempt to delete temporary files it has created in previous sessions. 
 
 
-
-
 \section{Session options}
+
+There are a number of session options that can be set and these can be saved to make them persistent in between sessions. We would advice against changing the default values unless you have pressing need to do so. They all have to do with reading and writing files. You can set the preferred file format and data type. You can set the default value for overwrite to TRUE (be careful with that one!), and you specify a default progress-bar. All of these values can also be provided as arguments of functions where they apply. Except for generic functions like mean, '+', and sqrt. These functions may write a file when the result is too large to hold in memory and then these options can only be set through the session options. You can also set the tmpdir, the location where such files are written. The option chunksize determines the maximum size (in number of cells) of a single chunk of values that is read/written in chunk-by-chunk processing of very large files. 
+
+
+\section{Multi-layer objects}
+stack, brick
+
+
+
+\section{Model predictions}
+
+
+
+\section{Plotting}
+Several generic functions have been implemented for Raster* objects to create maps and other plot types. Use 'plot' to create a map of a RasterLayer.
+When plot is used with a RasterLayer, it uses code taken from the image.plot function in the fields package, which calls the function 'image' (but, by default, adds a legend). It is also possible to directly call 'image'. You can zoom in using 'zoom' and clicking on the map twice (to indicate where to zoom to). After plotting a RasterLayer you can add vector type spatial data (points, lines, polygons). You can do this with functions points, lines, polygons if you are using the basic R data structures or plot(object, add=TRUE) if you are using Spatial* objects as defined in the sp package. When plot is used with a multi-layer Raster* object, all layers are plotted (up to 16), unless the layers desired are indicated with an additional argument.
+
+You can also use the following functions with a RasterLayer as argument: hist, persp, contour, and density. See the help files for more info. You can use plot3D to create an interactive 3D plot (you need the rgl package for this).
+
+With click it is possible to interactively query a Raster* object by clicking once or several times on a map plot.
+
+
+
+\section{Extent}
 
 
 
@@ -253,7 +288,7 @@ The raster package can work with extremely large files because it does not load 
 
 Although the raster package defines its own set of classes, it is easy to coerce objects of these classes to objects of the 'spatial' family defined in the sp package. This allows for using functions defined by sp (e.g. spplot) and for using other packages that expect spatial* objects. To create a RasterLayer from variable n in a SpatialGrid* x use \verb@raster(x, n)@ or \verb@stack(x)@. Vice versa use \verb@as( , )@
 
-<<raster-7>>=
+<<raster-27>>=
 r1 <- raster(ncol=36, nrow=18)
 r2 <- r1
 r1[] <- runif(ncell(r1))
@@ -263,5 +298,11 @@ sgdf <- as(s, 'SpatialGridDataFrame')
 newr2 <- raster(sgdf, 2)
 news <- stack(sgdf)
 @
+
+
+\section{Miscellaneous functions}
+modal, cv, Median, readIniFiles
+
+
 
 \end{document}
