@@ -29,7 +29,7 @@
  The generic function \code{range} returns 2 values (the minimum and maximum value of a vector). The Raster* implementations returns
  a single values (the maximum minus the minimum)
  
- To summarize all cells within a single RasterLayer, see \code{\link[rasetr]{cellStats}} and \code{\link[raster]{maxValue}} and \code{\link[raster]{minValue}}
+ To summarize all cells within a single RasterLayer, see \code{\link[raster]{cellStats}} and \code{\link[raster]{maxValue}} and \code{\link[raster]{minValue}}
 }
 
 \value{a RasterLayer}
