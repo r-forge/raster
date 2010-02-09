@@ -119,14 +119,18 @@ setMethod('raster', signature(x='RasterBrick'),
 
 setMethod('raster', signature(x='Extent'), 
 	function(x, nrows=10, ncols=10, projs=NA) {
-		bb <- extent(x)
-		nr = as.integer(round(nrows))
-		nc = as.integer(round(ncols))
-		if (nc < 1) { stop("ncols should be > 0") }
-		if (nr < 1) { stop("nrows should be > 0") }
-		r <- new("RasterLayer", extent=bb, ncols=nc, nrows=nr)
+		nrows = as.integer(max(1, round(nrows)))
+		ncols = as.integer(max(1, round(ncols)))
+		r <- new("RasterLayer", extent=x, ncols=ncols, nrows=nrows)
 		projection(r) <- projs
-		return(r) 
+		return(r)
+	}
+)
+
+
+setMethod('raster', signature(x='Spatial'), 
+	function(x){
+		raster(extent(x))
 	}
 )
 

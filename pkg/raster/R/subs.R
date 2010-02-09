@@ -3,7 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-
 	
 if (!isGeneric("subs")) {
 	setGeneric("subs", function(x, y, ...)

@@ -85,7 +85,9 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 		}
 	}
 	raster <- raster(raster)
-	
+	if (projection(spPolys) != "NA") {
+		projection(raster) = projection(spPolys)
+	}
 
 # check if bbox of raster and spPolys overlap
 	spbb <- bbox(spPolys)

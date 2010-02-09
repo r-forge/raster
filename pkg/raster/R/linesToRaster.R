@@ -112,6 +112,9 @@ linesToRaster <- function(spLines, raster, field=0, filename="", updateRaster=FA
 		}
 	}
 	raster <- raster(raster)
+	if (projection(spLines) != "NA") {
+		projection(raster) = projection(spLines)
+	}
 	
 	if (class(spLines) == 'SpatialPolygons') {
 		spLines <- as(spLines, "SpatialLines")
