@@ -14,7 +14,6 @@
 		} 
 	}
 
-#	if (add) {box <- FALSE}
 	maxpixels <- max(1, maxpixels)
 
 #	if (! missing(xlim) | ! missing(ylim )) {
@@ -44,7 +43,8 @@
 	z <- t(z[nrow(z):1,])
 	z[is.infinite(z)] <- NA
 	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, ...)
-#	if (box) {box()}
+	
+	
 }	
 
 

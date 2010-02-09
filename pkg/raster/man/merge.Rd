@@ -26,13 +26,12 @@ merge(x, y, ...)
 
 \section{Methods}{
 \describe{
-A full call to the merge method is:
+A full call to merge is:
 
 \code{merge(x, y, ..., tolerance=0.05, filename="", overwrite, format, progress ) }
 
-\item{x,y}{"RasterLayer"}{
-  \item{\code{x}}{A RasterLayer object}
-  \item{\code{y}}{A RasterLayer object}
+  \item{\code{x}}{RasterLayer object}
+  \item{\code{y}}{RasterLayer object}
   \item{\code{...}}{Additional RasterLayer objects}
   \item{\code{tolerance}}{Numeric. Difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal}
   \item{\code{filename}}{Character. output filename}
@@ -41,8 +40,7 @@ A full call to the merge method is:
   \item{\code{datatype}}{Character. output data type; see \code{\link[raster]{dataType}}}
   \item{\code{progress}}{Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""}
 }  
-  
-}} 
+} 
 
 \details{
 The RasterLayer objects must have the same origin and resolution. 

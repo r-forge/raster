@@ -154,6 +154,9 @@
         par(mfg = mfg.save, new = FALSE)
         invisible()
     }
+	
+	if (!add) box()
+	
 }
 
 
