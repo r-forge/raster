@@ -44,15 +44,27 @@
 	x <- .enforceGoodLayerNames(x, shortname)
 	filename(x) <- filename
 	
+	x@file@driver <- 'gdal' 
 	
 	datatype <- "FLT4S"
-	try ( datatype <- .getRasterDType ( attr(gdalinfo, 'df')[1] ), silent=TRUE )
+	minv = 	rep(Inf, nlayers(x))
+	maxv = 	rep(-Inf, nlayers(x))
+	if (type == 'RasterBrick') {
+		try ( datatype <- .getRasterDType ( as.character( attr(gdalinfo, 'df')[1, 1]) ), silent=TRUE )
+		try ( minv <- as.numeric( attr(gdalinfo, 'df')[, 2] ) , silent=TRUE ) 
+		try ( maxv <- as.numeric( attr(gdalinfo, 'df')[, 3] ) , silent=TRUE ) 
+	} else {
+		try ( datatype <- .getRasterDType ( as.character( attr(gdalinfo, 'df')[band, 1]) ), silent=TRUE )
+		try ( minv <- as.numeric( attr(gdalinfo, 'df')[band, 2] ) , silent=TRUE ) 
+		try ( maxv <- as.numeric( attr(gdalinfo, 'df')[band, 3] ) , silent=TRUE ) 
+	}
 	
 	dataType(x) <- datatype
 	
-	x@file@driver <- 'gdal' 
-	x@data@min <- rep(Inf, nlayers(x))
-	x@data@max <- rep(-Inf, nlayers(x))
+	
+	
+	x@data@min <- minv 
+	x@data@max <- maxv
 
 	projection(x) <- attr(gdalinfo, "projection")
 	
