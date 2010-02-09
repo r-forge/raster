@@ -18,21 +18,25 @@ hist(x, ...)
 
 \arguments{
   \item{x}{A Raster* object}
-  \item{...}{Additional arguments. See \code{?hist}}  
+  \item{...}{Additional arguments. See under Methods and at \code{\link[graphics]{hist}}}  
 }
 
 \section{Methods}{
 \describe{
-\code{hist(x, maxsamp=100000, ...)}
+A full call as implemented here:
 
-maxsamp is the maximum number of (randomly selected) grid cells to use for creating the histogram
+\code{hist(x, maxsamp=100000, main=NA, plot=TRUE, ...)}
+
+maxsamp is the maximum number of (randomly sampled) cells to be used for creating the histogram
+
+see \code{\link[graphics]{hist}} for the other arguments
 }}
 
 
 \seealso{ \code{\link[raster]{plot}} }
 
 \examples{ 
-r1 <- raster(nrows=25, ncols=25)
+r1 <- raster(nrows=50, ncols=50)
 r1 <- setValues(r1, runif(ncell(r1)))
 r2 <- setValues(r1, runif(ncell(r1)))
 rs <- r1 + r2
@@ -41,7 +45,8 @@ par(mfrow=c(2,2))
 plot(rs, main='sum')
 plot(rp, main='product')
 hist(rs)
-hist(rp)
+a = hist(rp)
+a
 }
 
 \keyword{methods}

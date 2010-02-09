@@ -5,10 +5,15 @@
 # Licence GPL v3
 
 setMethod('hist', signature(x='RasterStackBrick'), 
-	function(x, layer=0, maxsamp=10000, main='', ...) {
+	function(x, layer=0, maxsamp=10000, main=NA, plot=TRUE, ...) {
 		layer <- round(layer)
 		
+		res=list()
+		
 		if (layer < 1) {
+			if (is.na(main)) {
+				main=layerNames(x)
+			}
 			nl <- nlayers(x)
 			if (nl > 12) {
 				warning('only first 12 layers are plotted')
@@ -19,26 +24,27 @@ setMethod('hist', signature(x='RasterStackBrick'),
 			par(mfrow=c(nr, nc))
 			for (i in 1:nl) {	
 				r <- raster(x, i)
-				if (length(main) == nl) {
-					m <- main[nl]
-				} else {
-					m <- main
-				}
-				hist(r, maxsamp=maxsamp, main=m, ...)
+				m <- main[i]
+				if (plot) { res[[i]] = hist(r, maxsamp=maxsamp, main=m, ...)
+				} else  { res[[i]] = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }
 			}		
 		} else {
-			if (layer > nlayers(hist)) {
+			if (layer > nlayers(x)) {
 				stop('layer number too high')
 			}
 			x <- raster(x, layer)
-			hist(x, maxsamp=maxsamp, main=main, ...)
+			if (plot) { res[[1]] = hist(x, maxsamp=maxsamp, main=main, ...)
+			} else { res[[1]] = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }
 		}
+		
+		return(invisible(res))
+		
 	}
 )
 
 
 setMethod('hist', signature(x='RasterLayer'), 
-	function(x, maxsamp=10000, main='', ...){
+	function(x, maxsamp=10000, main=NA,  plot=TRUE, ...){
 		if (dataContent(x) == 'all') {
 			values <- values(x)
 		} else if (dataSource(x) == 'disk') {
@@ -61,6 +67,9 @@ setMethod('hist', signature(x='RasterLayer'),
 		if (.shortDataType(x) == 'LOG') {
 			values <- values * 1
 		}
-		hist(values, main=main, ...)
+		if (plot) { res = hist(values, main=main, ...)  
+		} else { res = hist(values, plot=FALSE, ...)  }
+		
+		return(invisible(res))
 	}	
 )

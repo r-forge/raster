@@ -177,15 +177,18 @@ m <- merge(r1, r2, filename='test.tif', format='GTiff', overwrite=TRUE)
 
 
 \subsection{overlay}
-As an alternative to the raster algebra discussed above, the following 'high-level' functions are available to accomplish the same things: overlay, calc, reclass, cover and mask. They provide either easy to use short-hand, or more efficient computation (for disk based RasterLayers). The function calc allows you to do a computation for a single RasterLayer whereas with overlay you can combine multiple layers. Use reclass to replace (ranges of) values with other values. Function mask removed all values from one layer that are NA in another layer. cover combines two layers by taking the values of the first layer except where these are NA.
+As an alternative to the raster algebra discussed above, the following 'high-level' functions are available to accomplish the same things: overlay, calc, reclass, subs, cover and mask. They provide either easy to use short-hand, or more efficient computation (for disk based RasterLayers). The function calc allows you to do a computation for a single RasterLayer whereas with overlay you can combine multiple layers. Use reclass to replace ranges of values with single values, or subs to substitute (replace) single values with other values. Function mask removed all values from one layer that are NA in another layer. cover combines two layers by taking the values of the first layer except where these are NA.
 
 <<raster-6a>>=
-r <- raster(ncol=36, nrow=18)
-r[] <- runif(ncell(r))
-s <- calc(r, function(x){ x[x>0.9] <- NA; return(x * 10)} )
-z <- overlay(r, s, fun=function(x, y){ x / (10 * x + y) } )
-q <- mask(r, s)
-r <- cover(q, r)
+r <- raster(ncol=10, nrow=10)
+r[] <- round(runif(ncell(r))*10)
+s <- calc(r, function(x){ x[x < 2] <- NA; return(x)} )
+t <- overlay(r, s, fun=function(x, y){ x / (2 * sqrt(y)) + 5 } )
+u <- mask(r, t)
+v = u==s
+w <- cover(t, r)
+x <- reclass(w, c(0,1,1,  1,5,2, 4,10,3))
+y <- subs(w, data.frame(id=c(0,2), v=c(40,50)))
 @
 
 
