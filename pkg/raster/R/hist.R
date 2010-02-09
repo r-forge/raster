@@ -5,46 +5,59 @@
 # Licence GPL v3
 
 setMethod('hist', signature(x='RasterStackBrick'), 
-	function(x, layer=0, maxsamp=10000, main=NA, plot=TRUE, ...) {
-		layer <- round(layer)
+	function(x, layer, maxsamp=10000, main=NA, plot=TRUE, ...) {
 		
-		res=list()
+		if (missing(layer)) y = 1:nlayers(x)
+		else if (is.character(layer)) {
+			yy = NULL
+			for (i in 1:length(y)) {
+				yy = c(yy, which(layerNames(x) == y[i])[1])
+			}
+			y = yy
+		} else { 
+			y = layer 
+		}
+		y <- unique(as.integer(round(y)))
+		y = na.omit(y)
+		y = subset(y, y >= 1 & y <= nlayers(x))
+		nl <- length(y)
 		
-		if (layer < 1) {
-			if (is.na(main)) {
-				main=layerNames(x)
+		if (nl == 0) {stop('no existing layers selected')}
+		
+		if (nl > 1)	{
+			res=list()
+			if (nl > 16) {
+				warning('only the first 16 layers are plotted')
+				nl <- 16
+				y <- y[1:16]
 			}
-			nl <- nlayers(x)
-			if (nl > 12) {
-				warning('only first 12 layers are plotted')
-				nl <- 12
-			}
+			if (is.na(main)) {	main=layerNames(x) }
+
 			nc <- ceiling(sqrt(nl))
 			nr <- ceiling(nl / nc)
 			par(mfrow=c(nr, nc))
-			for (i in 1:nl) {	
-				r <- raster(x, i)
-				m <- main[i]
+			for (i in 1:length(y)) {	
+				r <- raster(x, index=y[i])
+				m <- main[y[i]]
 				if (plot) { res[[i]] = hist(r, maxsamp=maxsamp, main=m, ...)
 				} else  { res[[i]] = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }
 			}		
-		} else {
-			if (layer > nlayers(x)) {
-				stop('layer number too high')
-			}
-			x <- raster(x, layer)
-			if (plot) { res[[1]] = hist(x, maxsamp=maxsamp, main=main, ...)
-			} else { res[[1]] = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }
+
+		} else if (nl==1) {
+			x <- raster(x, y)
+			if (plot) { res = hist(x, maxsamp=maxsamp, main=main, ...)
+			} else { res = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }
 		}
 		
-		return(invisible(res))
+		if (plot) return(invisible(res))
+		else return(res)
 		
 	}
 )
 
 
 setMethod('hist', signature(x='RasterLayer'), 
-	function(x, maxsamp=10000, main=NA,  plot=TRUE, ...){
+	function(x, layer=1, maxsamp=10000, main=NA,  plot=TRUE, ...){
 		if (dataContent(x) == 'all') {
 			values <- values(x)
 		} else if (dataSource(x) == 'disk') {
@@ -70,6 +83,7 @@ setMethod('hist', signature(x='RasterLayer'),
 		if (plot) { res = hist(values, main=main, ...)  
 		} else { res = hist(values, plot=FALSE, ...)  }
 		
-		return(invisible(res))
+		if (plot) return(invisible(res))
+		else return(res)
 	}	
 )

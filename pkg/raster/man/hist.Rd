@@ -25,15 +25,22 @@ hist(x, ...)
 \describe{
 A full call as implemented here:
 
-\code{hist(x, maxsamp=100000, main=NA, plot=TRUE, ...)}
+\code{hist(x, layer, maxsamp=100000, main=NA, plot=TRUE, ...)}
 
-maxsamp is the maximum number of (randomly sampled) cells to be used for creating the histogram
+\code{layer} can be used to subset the layers to plot in a multilayer object (RasterBrick or RasterStack)
+
+\code{maxsamp} is the maximum number of (randomly sampled) cells to be used for creating the histogram
 
 see \code{\link[graphics]{hist}} for the other arguments
 }}
 
 
-\seealso{ \code{\link[raster]{plot}} }
+\value{
+This function is principally used for the side-effect of plotting a histogram, but it also returns an S3 object of class 'histogram' (invisibly if \code{plot=TRUE}).
+}
+
+
+\seealso{ \code{\link[raster]{plot}} and \code{\link[graphics]{hist}} }
 
 \examples{ 
 r1 <- raster(nrows=50, ncols=50)

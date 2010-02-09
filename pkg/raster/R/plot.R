@@ -25,7 +25,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 					yy = c(yy, which(layerNames(x) == y[i])[1])
 				}
 			}
-			y = na.omit(y)
+			y = na.omit(yy)
 			y <- unique(as.integer(round(y)))
 		}
 		if (length(y) == 1) {
