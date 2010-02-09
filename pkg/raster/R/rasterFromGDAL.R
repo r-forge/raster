@@ -45,6 +45,8 @@
 	filename(x) <- filename
 	
 	x@file@driver <- 'gdal' 
+	projection(x) <- attr(gdalinfo, "projection")
+	x@data@source <- 'disk'
 	
 	datatype <- "FLT4S"
 	minv = 	rep(Inf, nlayers(x))
@@ -53,23 +55,21 @@
 		try ( datatype <- .getRasterDType ( as.character( attr(gdalinfo, 'df')[1, 1]) ), silent=TRUE )
 		try ( minv <- as.numeric( attr(gdalinfo, 'df')[, 2] ) , silent=TRUE ) 
 		try ( maxv <- as.numeric( attr(gdalinfo, 'df')[, 3] ) , silent=TRUE ) 
+		if ( is.finite(minv) && is.finite(maxv) ) x@data@haveminmax <- TRUE 
+		
 	} else {
 		try ( datatype <- .getRasterDType ( as.character( attr(gdalinfo, 'df')[band, 1]) ), silent=TRUE )
 		try ( minv <- as.numeric( attr(gdalinfo, 'df')[band, 2] ) , silent=TRUE ) 
 		try ( maxv <- as.numeric( attr(gdalinfo, 'df')[band, 3] ) , silent=TRUE ) 
+		if ( is.finite(minv) & is.finite(maxv) ) x@data@haveminmax <- TRUE 
 	}
 	
 	dataType(x) <- datatype
-	
-	
-	
 	x@data@min <- minv 
 	x@data@max <- maxv
 
-	projection(x) <- attr(gdalinfo, "projection")
 	
 #oblique.x   0  #oblique.y   0 
-	x@data@source <- 'disk'
 	return(x)
 }
 
