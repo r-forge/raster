@@ -5,12 +5,11 @@
 
 
 .isNetCDF <- function(x) {
-	warn <- getOption('warn')
+	on.exit(options('warn'= getOption('warn')))
 	options('warn'=-1) 
 	fcon <- file(x, "rb")
 	tst <- try( w <- readBin(fcon, what='character', n=1), silent=TRUE)
 	close(fcon)
-	options('warn'= warn) 	
 	if (isTRUE((substr(w, 1, 3) == "CDF"))) {
 		return(TRUE) 
 	} else {

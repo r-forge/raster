@@ -5,9 +5,15 @@
 
 
 .rasterFromGDAL <- function(filename, band, type) {	
-	if (!require(rgdal)) { stop() }
+	if (!require(rgdal)) { stop('package rgdal is missing') }
 
-	gdalinfo <- GDALinfo(filename)
+	# suppressing the geoTransform warning...
+	w <- getOption('warn')
+	on.exit(options('warn'= w))
+	options('warn'=-1) 
+	gdalinfo <- GDALinfo(filename, silent=TRUE)
+	options('warn'= w) 
+
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
 	xn <- gdalinfo[["ll.x"]]
