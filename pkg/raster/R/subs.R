@@ -26,7 +26,7 @@ setMethod('subs', signature(x='RasterLayer', y='data.frame'),
 			}
 		}
 
-		y = y[, c(by, which)]
+		y = y[ , c(by, which)]
 		r = raster(x)
 		
 		if (canProcessInMemory(x, 3)) {

@@ -1,11 +1,10 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  January 2009
 # Version 0.9
 # Licence GPL v3
 
 
-setMethod("[", c("RasterLayer","ANY", "missing"),
+setMethod("[", c("Raster","ANY", "missing"),
 function(x,i,j,...,drop=TRUE) {
 	
 	if (dataContent(x) != 'all') {
@@ -16,7 +15,7 @@ function(x,i,j,...,drop=TRUE) {
 	
 	if (missing(i)) {
 		if (dataContent(x) == 'all') {
-			return(values(x))
+			return(x@data@values)
 		} else {
 			return(values(readAll(x)))
 		}
@@ -35,7 +34,7 @@ function(x,i,j,...,drop=TRUE) {
 	}
 	
 	if (dataContent(x) == 'all') {
-		values(x)[i, drop=drop]
+		x@data@values[i, drop=drop]
 	} else {
 		return(cellValues(x, i))
 	}
