@@ -5,8 +5,9 @@
 # Licence GPL v3
 
 setMethod('hist', signature(x='RasterStackBrick'), 
-	function(x, layer, maxsamp=10000, main=NA, plot=TRUE, mfrow=NULL, ...) {
+	function(x, layer, maxsamp=10000, plot=TRUE, main, mfrow, ...) {
 		
+	
 		if (missing(layer)) y = 1:nlayers(x)
 		else if (is.character(layer)) {
 			yy = NULL
@@ -31,14 +32,15 @@ setMethod('hist', signature(x='RasterStackBrick'),
 				nl <- 16
 				y <- y[1:16]
 			}
-			if (is.na(main)) {	main=layerNames(x) }
+			if (missing(main)) {	main=layerNames(x) }
 
 			nc <- ceiling(sqrt(nl))
 			nr <- ceiling(nl / nc)
-			if (is.null(mfrow)) {
+			
+			mfrow = par("mfrow")
+			spots = mfrow[1] * mfrow[2]
+			if (spots < nl) {
 				par(mfrow=c(nr, nc))
-			} else {
-				par(mfrow=mfrow)
 			}
 			for (i in 1:length(y)) {	
 				r <- raster(x, index=y[i])
@@ -48,6 +50,7 @@ setMethod('hist', signature(x='RasterStackBrick'),
 			}		
 
 		} else if (nl==1) {
+			if (missing(main)) main = layerNames(x)[y]
 			x <- raster(x, y)
 			if (plot) { res = hist(x, maxsamp=maxsamp, main=main, ...)
 			} else { res = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }

@@ -25,13 +25,11 @@ hist(x, ...)
 \describe{
 A full call as implemented here:
 
-\code{hist(x, layer, maxsamp=100000, main=NA, plot=TRUE, mfrow=NULL, ...)}
+\code{hist(x, layer, maxsamp=100000, plot=TRUE, main, ...)}
 
 \code{layer} can be used to subset the layers to plot in a multilayer object (RasterBrick or RasterStack)
 
 \code{maxsamp} is the maximum number of (randomly sampled) cells to be used for creating the histogram
-
-\code{mfrow} lets you overwrite the default behaviour for plotting multiple histograms by setting your own arguments for a call to \code{par(mfrow= )}
 
 see \code{\link[graphics]{hist}} for the other arguments
 }}
