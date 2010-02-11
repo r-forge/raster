@@ -78,13 +78,10 @@ netCDF data can only be read if the data are stored in 2 (x and y) or 3 (x, y, a
  \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
  \tab \code{ymx} \tab maximum y coordinate of raster (top border) \cr
  \tab \code{projs} \tab Character. PROJ4 type description of a Coordinate Reference System (map projection) \cr
- \tab \code{bndbox} \tab bounding box used to crop a raster. Any object that is a Extent object or contains one (such as Raster* objects) \cr
 }
-
 (item \code{x} is 'missing' in this case)
 
-
-  
+ 
 3) Create a RasterLayer object from an Extent object
   
 \code{raster(x, nrows=10, ncols=10, projs=NA)}
@@ -110,14 +107,13 @@ but does not copy the filename nor the data associated with the original Raster 
 }
 
 
-
 5) Create a RasterLayer object from a RasterStack or RasterBrick object.
 
 \code{raster(x, index=0)}
 
 \tabular{rll}{
  \tab \code{x} \tab a RasterStack, SpatialPixels* or SpatialGrid* object \cr
- \tab \code{index} \tab the layer from which to copy values to the new RasterLayer, if \code{layer > 0}.  \cr
+ \tab \code{layer} \tab Integer. The layer from which to copy values to the new RasterLayer, if \code{layer > 0}.  \cr
 }
 
 
@@ -127,7 +123,7 @@ but does not copy the filename nor the data associated with the original Raster 
 
 \tabular{rll}{
  \tab \code{x} \tab a RasterStack, SpatialPixels* or SpatialGrid* object \cr
- \tab \code{index} \tab the layer from which to copy values to the new RasterLayer, if \code{layer > 0}.\cr
+ \tab \code{layer} \tab Integer. the layer from which to copy values to the new RasterLayer, if \code{layer > 0}.\cr
 }
 
 
@@ -172,8 +168,8 @@ logo <- raster(system.file("pictures/Rlogo.jpg", package="rgdal"), values=TRUE)
 r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
 
 #from an Extent object
-bb <- extent(r)
-r2 <- raster(bb)
+e <- extent(r)
+r2 <- raster(e)
 
 #from another Raster* object
 r3 <- raster(r)

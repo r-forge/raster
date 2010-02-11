@@ -9,7 +9,6 @@
 }
 
 
-
 .getNGBvalues <- function(rows, colnrs) {
 	values <- vector()
 	for (i in 1:dim(rows)[2]) {

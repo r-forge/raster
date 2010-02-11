@@ -3,54 +3,70 @@
 # Version 0.9
 # Licence GPL v3
 
-flip <- function(raster, direction='y', filename='', ...)  {
-	
-	filename <- trim(filename)
-	
-	if (!canProcessInMemory(raster, 2) && filename == '') {
-		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename(outRaster))	}						
-	}
-	outRaster <- raster(raster, filename=filename)
-	
-	if (!(direction %in% c('y', 'x'))) {
-		stop('directions should be y or x')
-	}
-		
-	if ( filename == "" ) {
-		if (dataContent( raster ) != 'all') {
-			v <- values(readAll(raster), format='matrix')
-		} else {
-			v <- values(raster, format='matrix')
-		}
-		if (direction == 'y') {
-			v <- v[nrow(v):1,]
-		} else {
-			v <- v[,ncol(v):1]
-		}
-		outRaster <- setValues(outRaster, as.vector(t(v)))
-	} else {
-	
-		pb <- pbCreate(nrow(outRaster), type=.progress(...))
-
-		if (direction == 'y') {
-			for (r in nrow(raster):1) {
-				res <- getValues(raster, r)
-				nr <- nrow(outRaster) - r + 1
-				outRaster <- setValues(outRaster, res, nr)
-				outRaster <- writeRaster(outRaster, filename=filename, ...)
-				pbStep(pb, r)
-			}
-		} else {
-			for (r in 1:nrow(raster)) {
-				res <- getValues(raster, r)
-				outRaster <- setValues(outRaster, rev(res), r)
-				outRaster <- writeRaster(outRaster, filename=filename, ...)
-				pbStep(pb, r)
-			}
-		}
-		pbClose(pb)
-	}
-	return(outRaster)
+if (!isGeneric("flip")) {
+	setGeneric("flip", function(x, direction, ...)
+		standardGeneric("flip"))
 }
+
+
+setMethod('flip', signature(x='RasterLayer', direction='ANY'), 
+	function(x, direction='y', filename='', ...)  {
+	
+		filename <- trim(filename)
+		outRaster <- raster(x)
+
+		if (direction[1] == 1) { direction <- 'x'
+		} else if (direction[1] == 2) { direction <- 'y' }
+		if (!(direction %in% c('y', 'x'))) {
+			stop('directions should be y or x')
+		}
+	
+		if (!canProcessInMemory(outRaster, 2) && filename == '') {
+			filename <- rasterTmpFile()
+			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+			inmemory = FALSE
+		} else {
+			inmemory = TRUE
+		}
+	
+		
+		if ( inmemory ) {
+			if (dataContent( x ) != 'all') {
+				v <- values(readAll(x), format='matrix')
+			} else {
+				v <- values(x, format='matrix')
+			}
+			if (direction == 'y') {
+				v <- v[nrow(v):1,]
+			} else {
+				v <- v[,ncol(v):1]
+			}
+			outRaster <- setValues(outRaster, as.vector(t(v)))
+			if (filename != '') {
+				outRaster = writeRaster(outRaster, filename=filename, ...)
+			}
+		} else {
+			pb <- pbCreate(nrow(outRaster), type=.progress(...))
+			if (direction == 'y') {
+				readRows = nrow(x):1
+				for (r in 1:nrow(outRaster)) {
+					res <- getValues(x, readRows[r])
+					outRaster <- setValues(outRaster, res, r)
+					outRaster <- writeRaster(outRaster, filename=filename, ...)
+					pbStep(pb, r)
+				}
+			} else {
+				for (r in 1:nrow(outRaster)) {
+					res <- getValues(x, r)
+					outRaster <- setValues(outRaster, rev(res), r)
+					outRaster <- writeRaster(outRaster, filename=filename, ...)
+					pbStep(pb, r)
+				}
+			}
+			pbClose(pb)
+		}
+		return(outRaster)
+	}
+)
+
 

@@ -55,7 +55,8 @@ setMethod('raster', signature(x='Raster'),
 
 
 setMethod('raster', signature(x='RasterStack'), 
-	function(x, index=0){
+	function(x, layer=0){
+		index = layer
 		newindex = -1
 		if (nlayers(x) > 0) {
 			if (!is.numeric(index)) {
@@ -83,7 +84,8 @@ setMethod('raster', signature(x='RasterStack'),
 
 
 setMethod('raster', signature(x='RasterBrick'), 
-	function(x, index=0){
+	function(x, layer=0){
+		index = layer
 		newindex = -1
 		if (nlayers(x) > 0) {
 			if (!is.numeric(index)) {
@@ -136,9 +138,9 @@ setMethod('raster', signature(x='Spatial'),
 
 
 setMethod('raster', signature(x='SpatialGrid'), 
-	function(x, index=1){
-		r <- raster()
-		extent(r) <- extent(x)
+	function(x, layer=1){
+		index = layer
+		r <- raster(extent(x))
 		projection(r) <- x@proj4string
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
 		if (class(x) == 'SpatialGridDataFrame') {
@@ -171,7 +173,8 @@ setMethod('raster', signature(x='SpatialGrid'),
 
 
 setMethod('raster', signature(x='SpatialPixels'), 
-	function(x, index=1){
+	function(x, layer=1){
+		index = layer
 		r <- raster()
 		extent(r) <- extent(x)
 		projection(r) <- x@proj4string
