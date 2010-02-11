@@ -5,7 +5,7 @@
 \title{Frequency table}
 
 \description{
-Frequncy table of the values of a RasterLayer.  
+Frequency table of the values of a RasterLayer.  
 }
 
 \usage{
@@ -33,4 +33,5 @@ r <- r * r * r * 10
 freq(r)
 }
 
+\keyword{spatial}
 \keyword{univar}
