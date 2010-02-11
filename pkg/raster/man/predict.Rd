@@ -5,7 +5,7 @@
 \alias{predict}
 \alias{predict,Raster-method}
 
-\title{Model predictions}
+\title{Spatial model predictions}
 
 \description{
 Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should exactely match those expected by the model. This will be the case if the RasterStack was used (via \code{xyValues}) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. If you have 'x' and 'y' as independent variables (i.e. the location of grid cells), you can use \code{xy=TRUE} to add these to the independent variables, or use \code{\link[raster]{interpolate}}.
@@ -60,9 +60,7 @@ logo <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"), bands=-1)
 layerNames(logo) <- c('red', 'green', 'blue')
 
 #get presence and absence points
-presence <- matrix(c(48.243420, 48.243420, 47.985820, 52.880230, 49.531423, 46.182616, 54.168232, 69.624263, 83.792291, 85.337894, 74.261072, 83.792291, 95.126713,
- 84.565092, 66.275456, 41.803408, 25.832176, 3.936132, 18.876962, 17.331359,7.048974, 13.648543, 26.093446, 28.544714, 39.104026, 44.572240, 51.171810, 56.262906,
- 46.269272, 38.161230, 30.618865, 21.945145, 34.390047, 59.656971, 69.839163, 73.233228, 63.239594, 45.892154, 43.252326, 28.356155), ncol=2)
+presence <- matrix(c(48, 48, 48, 53, 50, 46, 54, 70, 84, 85, 74, 84, 95, 85, 66, 42, 26, 4, 19, 17, 7, 14, 26, 29, 39, 45, 51, 56, 46, 38, 31, 22, 34, 60, 70, 73, 63, 46, 43, 28), ncol=2)
 # random absence
 absence <- cbind(runif(50)*(xmax(logo)-xmin(logo))+xmin(logo), runif(50)*(ymax(logo)-ymin(logo))+ymin(logo))
 
