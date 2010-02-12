@@ -11,7 +11,7 @@ if (!isGeneric("predict")) {
 setMethod('predict', signature(object='Raster'), 
 	function(object, model, filename="", const=NULL, xy=FALSE, index=1, debug.level=1, progress=.progress(), ...) {
 	
-		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt')) { return ( predict(model, object, filename=filename, ...) ) }
+		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull')) { return ( predict(model, object, filename=filename, ...) ) }
 	
 		predrast <- raster(object)
 		filename <- trim(filename)
@@ -27,10 +27,6 @@ setMethod('predict', signature(object='Raster'),
 		}
 
 		varnames <- names(dataclasses)
-
-		if (! all(varnames %in% xylyrnames)) {
-			stop('variable in model that is not in Raster object: \nIn model: ', paste(varnames, collapse='; '), '\n', 'In Raster object: ', paste(xylyrnames, collapse='; '))
-		}
 
 		if ( length( unique(lyrnames[(lyrnames %in% varnames)] )) != length(lyrnames[(lyrnames %in% varnames)] )) {
 			stop('duplicate names in Raster* object: ', lyrnames)
