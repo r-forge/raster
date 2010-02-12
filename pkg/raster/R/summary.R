@@ -54,7 +54,7 @@ setMethod("Summary", signature(x='Raster'),
 	}	
 	
 	r <- raster(rasters[[1]])
-	tr <- blockSize(r, chunksize=.chunksize()/length(rasters))
+	tr <- blockSize(r, n=length(rasters))
 	if (!canProcessInMemory(r, length(rasters)+1)) {
 		filename <- rasterTmpFile()
 		r <- writeStart(r, filename=filename, overwrite=TRUE )

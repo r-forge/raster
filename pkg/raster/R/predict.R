@@ -9,12 +9,12 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", const=NULL, xy=FALSE, index=1, debug.level=1, progress=.progress(), ...) {
+	function(object, model, filename="", const=NULL, xy=FALSE, index=1, debug.level=1, progress=.progress(), se.fit=FALSE, ...) {
 	
+		filename <- trim(filename)
 		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull')) { return ( predict(model, object, filename=filename, ...) ) }
 	
 		predrast <- raster(object)
-		filename <- trim(filename)
 			
 		dataclasses <- attr(model$terms, "dataClasses")[-1]	
 			
@@ -49,10 +49,13 @@ setMethod('predict', signature(object='Raster'),
 			v <- matrix(NA, ncol=nrow(predrast), nrow=ncol(predrast))
 		} 
 
+
+		tr <- blockSize(predrast, n=nlayers(object)+3)
+
 		napred <- rep(NA, ncol(predrast))
 		xyOnly <- FALSE
 		if (xy) { 
-			arow <- 1:ncol(object) 
+			ablock <- 1:(ncol(object) * tr$size)
 			if (class(object) == 'RasterStack') {
 				if (nlayers(object)==0) { xyOnly <- TRUE }
 			} else {
@@ -85,35 +88,38 @@ setMethod('predict', signature(object='Raster'),
 		} else { 
 			gstatmod <- FALSE 
 		}
+		
+		
+		pb <- pbCreate(tr$n,  type=progress)			
+		
+		if (filename != '') {
+			predrast <- writeStart(predrast, filename=filename, ... )
+		}
 
-		pb <- pbCreate(nrow(object), type=progress)
+		for (i in 1:tr$n) {
 		
-		#print(xy)
-		#print(xyOnly)
-		
-		for (r in 1:nrow(object)) {
 			if (xyOnly) {
-				p <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
-				rowvals <- data.frame(x=p[,1], y=p[,2])
+				p <- xyFromCell(predrast, ablock + (tr$rows[i]-1) * ncol(predrast)) 
+				blockvals <- data.frame(x=p[,1], y=p[,2])
 			} else {
-				rowvals <- as.data.frame( getValues(object, r) )
-				colnames(rowvals) <- lyrnames
+				blockvals <- as.data.frame(getValuesBlock(object, row=tr$rows[i], nrows=tr$size))
+				#colnames(blockvals) <- lyrnames
 				if (haveFactor) {
 					for (i in 1:length(f)) {
-						rowvals[,f[i]] <- as.factor(rowvals[,f[i]])
+						blockvals[,f[i]] <- as.factor(blockvals[,f[i]])
 					}
 				}
 				if (xy) {
-					p <- xyFromCell(predrast, arow + (r-1) * ncol(predrast)) 
-					rowvals <- cbind(data.frame( x=p[,1], y=p[,2]), rowvals) 
+					p <- xyFromCell(predrast, ablock + (tr$rows[i]-1) * ncol(predrast)) 
+					blockvals <- cbind(data.frame( x=p[,1], y=p[,2]), blockvals) 
 				}
 				if (! is.null(const)) {
-					rowvals = cbind(rowvals, const)
+					blockvals = cbind(blockvals, const)
 				}
 			} 
 			
 			if (inherits(model, "gam")) {
-				if ( sum(!is.na(rowvals)) == 0 ) {
+				if ( sum(!is.na(blockvals)) == 0 ) {
 					predv <- napred
 				}
 			} else {
@@ -121,17 +127,18 @@ setMethod('predict', signature(object='Raster'),
 				if (gstatmod) { 
 					if (sp) { 
 						row.names(p) <- 1:nrow(p)
-						rowvals <- SpatialPointsDataFrame(coords=p, data = rowvals, proj4string = projection(predrast, asText = FALSE))
+						blockvals <- SpatialPointsDataFrame(coords=p, data = blockvals, proj4string = projection(predrast, asText = FALSE))
 					}
-					if (r == nrow(predrast)) { predv <- predict(model, rowvals, debug.level=debug.level, ...) 
-					} else { predv <- predict(model, rowvals, debug.level=0, ...) }
+					if (i == 1) { predv <- predict(model, blockvals, debug.level=debug.level, ...) 
+					} else { predv <- predict(model, blockvals, debug.level=0, ...) }
 					if (sp) { predv <- predv@data[,index] }
 					else { predv <- predv[,index+2] }
+					
 				} else if (inherits(model, "Krig")) {  
 					if (xyOnly) {
-						predv <- predict(model, rowvals, ...)
+						predv <- predict(model, blockvals, ...)
 					} else {
-						rowv <- na.omit(rowvals)
+						rowv <- na.omit(blockvals)
 						predv <- napred
 						if (nrow(rowv) > 0) {
 							naind <- as.vector(attr(rowv, "na.action"))
@@ -144,7 +151,7 @@ setMethod('predict', signature(object='Raster'),
 					}
 		#		} else if (inherits(model, 'gbm')) {
 		#		# gbm returns non NA predictions when there are NA values. 
-		#			rowv <- na.omit(rowvals)
+		#			rowv <- na.omit(blockvals)
 		#			predv <- napred
 		#			if (nrow(rowv) > 0) {
 		#				naind <- as.vector(attr(rowv, "na.action"))
@@ -154,15 +161,19 @@ setMethod('predict', signature(object='Raster'),
 		#					predv[] <- predict(model, rowv, ...)
 		#				}
 		#			}
+				} else if (se.fit) {
+					predv <- predict(model, blockvals, se.fit=TRUE, ...)
+					predv <- as.vector(predv$se.fit)
+				
 				} else {
-					predv <- predict(model, rowvals, ...)
+					predv <- predict(model, blockvals, ...)
 				}
 			
-				if (length(predv) != nrow(rowvals)) {
+				if (length(predv) != nrow(blockvals)) {
 				# perhaps no prediction for rows with NA ? 
 				# this was a problem with predict.rf, now fixed
-					rowvals <- na.omit( cbind(1:nrow(rowvals), rowvals) )
-					indices <- rowvals[,1]
+					blockvals <- na.omit( cbind(1:nrow(blockvals), blockvals) )
+					indices <- blockvals[,1]
 					if (length(indices) == length(predv)) {
 						pr <- 1:ncol(object)
 						pr[] <- NA
@@ -175,18 +186,21 @@ setMethod('predict', signature(object='Raster'),
 			}
 			
 			if (filename == '') {
-				v[,r] <- predv
+				predv = matrix(predv, nrow=ncol(predrast))
+				v[,tr$rows[i]:dim(predv)[2]] <- predv
 			} else {
-				predrast <- setValues(predrast, as.numeric(predv), r)
-				predrast <- writeRaster(predrast, filename=filename, ...)
+				writeValues(predrast, predv, tr$rows[i])
 			}
-			pbStep(pb, r) 
+			pbStep(pb, i) 
 		}
 		pbClose(pb)
 		
 		if (filename == '') {
 			predrast <- setValues(predrast, as.vector(v))
+		} else {
+			predrast <- writeStop(predrast)
 		}
+		
 		return(predrast)
 	}
 )

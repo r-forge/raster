@@ -6,9 +6,10 @@
 # Licence GPL v3
 
 
-blockSize <- function(x, chunksize) {
+blockSize <- function(x, chunksize, n=1) {
+	n = max(n, 1)
 	if (missing(chunksize)) {
-		bs = .chunksize()
+		bs = .chunksize()  / n
 	} else {
 		bs = chunksize
 	}
