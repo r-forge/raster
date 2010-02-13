@@ -43,7 +43,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 			i <- which(country==cs[,1])
 			country <- cs[i,2]
 		} else {
-			stop('provide a valid 3 letter ISO country code')
+			stop('provide a valid 3 letter ISO country code; you can get a list with: getData("ISO3")')
 		}
 	}
 	return(country)

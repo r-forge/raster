@@ -10,8 +10,20 @@
 }
  
 
+.nameToIndex <- function(name, allnames) {
+	k = NULL
+	for (i in 1:length(name)) {
+		k = c(k, which(allnames == name[i])[1])
+	}
+	return(k)
+}
+ 
+ 
 setMethod('dropLayer', signature(x='RasterStack'), 
 function(x, i) {
+	if (is.character(i)) {
+		i = .nameToIndex(i, layerNames(x))
+	}
 	i <- sort(unique(round(i)))
 	i <- i[i > 0]
 	i <- i[i < (nlayers(x)+1)]
@@ -26,6 +38,9 @@ function(x, i) {
 
 setMethod('dropLayer', signature(x='RasterBrick'), 
 function(x, i) {
+	if (is.character(i)) {
+		i = .nameToIndex(i, layerNames(x))
+	}
 	i <- sort(unique(round(i)))
 	i <- i[i > 0]
 	i <- i[i < (nlayers(x)+1)]

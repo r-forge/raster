@@ -56,7 +56,7 @@ a RasterLayer object
 # and 50 (random) pseudo-absence points. This type of model is often used to predict species distributions
 
 # create a RasterStack (a set of predictor rasters)
-logo <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"), bands=-1)
+logo <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"))
 layerNames(logo) <- c('red', 'green', 'blue')
 
 #get presence and absence points

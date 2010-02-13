@@ -56,21 +56,20 @@ setMethod('raster', signature(x='Raster'),
 
 setMethod('raster', signature(x='RasterStack'), 
 	function(x, layer=0){
-		index = layer
 		newindex = -1
 		if (nlayers(x) > 0) {
-			if (!is.numeric(index)) {
-				newindex <- which(layerNames(x) == index)[1]
+			if (!is.numeric(layer)) {
+				newindex <- which(layerNames(x) == layer)[1]
 				if (is.na (newindex) ) { 
-					warning('variable', index, 'does not exist')
+					warning('variable', layer, 'does not exist')
 					newindex = -1
 				} 
-				index <- newindex
+				layer <- newindex
 			}
 		}
-		if ( index > 0 ) {
-			dindex <- max(1, min(nlayers(x), index))
-			if (dindex != index) { warning(paste("index was changed to", dindex))}
+		if ( layer > 0 ) {
+			dindex <- max(1, min(nlayers(x), layer))
+			if (dindex != layer) { warning(paste("layer was changed to", dindex))}
 			r <- x@layers[[dindex]]
 			layerNames(r) <- layerNames(x)[dindex]
 		} else {
@@ -85,29 +84,28 @@ setMethod('raster', signature(x='RasterStack'),
 
 setMethod('raster', signature(x='RasterBrick'), 
 	function(x, layer=0){
-		index = layer
 		newindex = -1
 		if (nlayers(x) > 0) {
-			if (!is.numeric(index)) {
-				newindex <- which(layerNames(x) == index)[1]
+			if (!is.numeric(layer)) {
+				newindex <- which(layerNames(x) == layer)[1]
 				if (is.na (newindex) ) { 
-					warning('variable', index, 'does not exist')
+					warning('variable', layer, 'does not exist')
 					newindex = -1
 				} 
-				index <- newindex
+				layer <- newindex
 			}
-			index <- round(index)
+			layer <- round(layer)
 		}
-		if (index > 0) {
-			dindex <- max(1, min(nlayers(x), index))
+		if (layer > 0) {
+			dindex <- max(1, min(nlayers(x), layer))
 			if (dataSource(x) == 'disk') {
-				if (dindex != index) { warning(paste("index was changed to", dindex))}
+				if (dindex != layer) { warning(paste("layer was changed to", dindex))}
 				r <- raster(filename(x), band=dindex)
 				layerNames(r) <- layerNames(x)[dindex]
 			} else {
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), projs=projection(x))	
 				if (dataContent(x) == 'all') {
-					if (dindex != index) { warning(paste("index was changed to", dindex))}
+					if (dindex != layer) { warning(paste("layer was changed to", dindex))}
 					r <- setValues(r, values(x)[,dindex])
 				}
 			}
@@ -139,31 +137,30 @@ setMethod('raster', signature(x='Spatial'),
 
 setMethod('raster', signature(x='SpatialGrid'), 
 	function(x, layer=1){
-		index = layer
 		r <- raster(extent(x))
 		projection(r) <- x@proj4string
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
 		if (class(x) == 'SpatialGridDataFrame') {
 			if (dim(x@data)[2] > 0) {
-				index = index[1]
-				if (is.numeric(index)) {
-					if (index > 0) {
-						dindex <- max(1, min(dim(x@data)[2], index))
-						if (dindex != index) { warning(paste("index was changed to", dindex))}
-						index <- dindex
+				layer = layer[1]
+				if (is.numeric(layer)) {
+					if (layer > 0) {
+						dindex <- max(1, min(dim(x@data)[2], layer))
+						if (dindex != layer) { warning(paste("layer was changed to", dindex))}
+						layer <- dindex
 					}
-				} else if (!(index %in% names(x))) {
-					stop(index, 'does not exist')
+				} else if (!(layer %in% names(x))) {
+					stop(layer, 'does not exist')
 				}
-				if (is.character( x@data[[index]]) ) { 
-					x@data[[index]] <- as.factor(x@data[[index]])
+				if (is.character( x@data[[layer]]) ) { 
+					x@data[[layer]] <- as.factor(x@data[[layer]])
 				}
-				if (is.factor( x@data[[index]]) ) { 
+				if (is.factor( x@data[[layer]]) ) { 
 					r@data@isfactor <- TRUE 
-					r@data@levels <- levels(x@data[[index]])
-					r <- setValues(r, as.numeric(x@data[[index]]))
+					r@data@levels <- levels(x@data[[layer]])
+					r <- setValues(r, as.numeric(x@data[[layer]]))
 				} else {
-					r <- setValues(r, x@data[[index]])
+					r <- setValues(r, x@data[[layer]])
 				}
 			}
 		}
@@ -174,24 +171,23 @@ setMethod('raster', signature(x='SpatialGrid'),
 
 setMethod('raster', signature(x='SpatialPixels'), 
 	function(x, layer=1){
-		index = layer
 		r <- raster()
 		extent(r) <- extent(x)
 		projection(r) <- x@proj4string
 		rowcol(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
 		if (class(x) == 'SpatialPixelsDataFrame') {
 			if (dim(x@data)[2] > 0) {
-				index = index[1]
-				if (is.numeric(index)) {
-					if (index > 0) {
-						dindex <- max(1, min(dim(x@data)[2], index))
-						if (dindex != index) { warning(paste("index was changed to", dindex))}
-						index <- dindex
+				layer = layer[1]
+				if (is.numeric(layer)) {
+					if (layer > 0) {
+						dindex <- max(1, min(dim(x@data)[2], layer))
+						if (dindex != layer) { warning(paste("layer was changed to", dindex))}
+						layer <- dindex
 					}
-				} else if (!(index %in% names(x))) {
-					stop(index, 'does not exist')
+				} else if (!(layer %in% names(x))) {
+					stop(layer, 'does not exist')
 				}
-				x <- x[index]
+				x <- x[layer]
 				x <- as(x, 'SpatialGridDataFrame')
 				if (is.character( x@data[[1]]) ) { 
 					x@data[[1]] <- as.factor(x@data[[1]])

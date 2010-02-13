@@ -7,14 +7,9 @@
 setMethod('hist', signature(x='RasterStackBrick'), 
 	function(x, layer, maxsamp=10000, plot=TRUE, main, mfrow, ...) {
 		
-	
 		if (missing(layer)) y = 1:nlayers(x)
 		else if (is.character(layer)) {
-			yy = NULL
-			for (i in 1:length(y)) {
-				yy = c(yy, which(layerNames(x) == y[i])[1])
-			}
-			y = yy
+			y = .nameToIndex(layer, layerNames(x))
 		} else { 
 			y = layer 
 		}
@@ -43,7 +38,7 @@ setMethod('hist', signature(x='RasterStackBrick'),
 				par(mfrow=c(nr, nc))
 			}
 			for (i in 1:length(y)) {	
-				r <- raster(x, index=y[i])
+				r <- raster(x, y[i])
 				m <- main[y[i]]
 				if (plot) { res[[i]] = hist(r, maxsamp=maxsamp, main=m, ...)
 				} else  { res[[i]] = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }

@@ -20,13 +20,10 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			}
 		} else {
 			if (is.character(y)) {
-				yy = NULL
-				for (i in 1:length(y)) {
-					yy = c(yy, which(layerNames(x) == y[i])[1])
-				}
+				y = .nameToIndex(y, layerNames(x))
 			}
-			y = na.omit(yy)
 			y <- unique(as.integer(round(y)))
+			y = na.omit(y)
 		}
 		if (length(y) == 1) {
 			.plotraster(raster(x, y), col=col, maxpixels=maxpixels, main=layerNames(x)[y], ...) 

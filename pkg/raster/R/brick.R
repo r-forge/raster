@@ -77,7 +77,7 @@ setMethod('brick', signature(x='Extent'),
 
 
 setMethod('brick', signature(x='SpatialGrid'), 
-	function(x, index=0){
+	function(x){
 		b <- brick()
 		extent(b) <- extent(x)
 		projection(b) <- x@proj4string
@@ -91,7 +91,7 @@ setMethod('brick', signature(x='SpatialGrid'),
 
 
 setMethod('brick', signature(x='SpatialPixels'), 
-	function(x, index=0){
+	function(x) {
 		b <- brick()
 		exent(b) <- extent(x)
 		projection(b) <- x@proj4string
