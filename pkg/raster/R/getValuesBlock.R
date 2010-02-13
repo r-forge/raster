@@ -27,6 +27,48 @@ setMethod('getValuesBlock', signature(x='RasterStack', row='numeric'),
 )
 
 
+
+setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'), 
+	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
+	
+		if (dataContent(x) == 'all'){
+			row <- as.integer(round(row))
+			nrows <- as.integer(round(nrows))
+			lastrow <- row + nrows - 1
+			col <- as.integer(round(col))
+			ncols <- as.integer(round(ncols))
+			lastcol <- col + ncols - 1
+			if (col==1 & ncols==ncol(x)) {
+				if (row==1 & nrows==nrow(x)) {
+					res <- x@data@values
+				} else {
+					cells = cellFromRow(x, row:lastrow)
+					res <- x@data@values[cells, ]
+				}
+			} else {
+				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
+				res <- x@data@values[cells, ]
+			}
+		} else {
+			for (i in 1:nlayers(x)) {
+				# to do: need a more efficient function here that only goes to disk once.
+				if (i==1) {
+					v <- values(.readRasterLayerValues(raster(x, i), row, nrows, col, ncols))
+					res <- matrix(ncol=nlayers(x), nrow=length(v))
+					res[,1] <- v
+				} else {
+					res[,i] <- values(.readRasterLayerValues(raster(x, i), row, nrows, col, ncols))
+				}
+			}
+		}
+		colnames(res) = layerNames(x)
+		res
+	}
+)
+
+
+
+
 setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'), 
  	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
 		if (!is.atomic(row)) {	stop() }

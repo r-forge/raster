@@ -10,24 +10,7 @@ if (!isGeneric("getValuesExtent")) {
 
 
 
-setMethod('getValuesExtent', signature(x='RasterStack', e='Extent'), 
-	function(x, e) {
-		for (i in 1:nlayers(x)) {
-			if (i==1) {
-				v <- getValuesExtent(x@layers[[i]], row, nrows, col, ncols)
-				res <- matrix(ncol=nlayers(x), nrow=length(v))
-				colnames(res) <- layerNames(x)
-				res[,1] <- v
-			} else {
-				res[,i] <- getValuesExtent(x@layers[[i]], row, nrows, col, ncols)
-			}
-		}
-		res
-	}
-)
-
-
-setMethod('getValuesExtent', signature(x='RasterLayer', e='Extent'), 
+setMethod('getValuesExtent', signature(x='Raster', e='Extent'), 
  	function(x, e) {
 		e <- intersectExtent(e, x)
 		e <- alignExtent(e, x)

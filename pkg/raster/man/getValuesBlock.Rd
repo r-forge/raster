@@ -3,9 +3,9 @@
 \alias{getValuesBlock}
 \alias{getValuesBlock,RasterLayer,numeric-method}
 \alias{getValuesBlock,RasterStack,numeric-method}
+\alias{getValuesBlock,RasterBrick,numeric-method}
 \alias{getValuesExtent}
-\alias{getValuesExtent,RasterLayer,Extent-method}
-\alias{getValuesExtent,RasterStack,Extent-method}
+\alias{getValuesExtent,Raster,Extent-method}
   
 \title{Get raster cell values}
 
