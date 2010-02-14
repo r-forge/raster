@@ -1,6 +1,9 @@
 \name{freq}
 
+\docType{methods}
+
 \alias{freq}
+\alias{freq,RasterLayer-method}
 
 \title{Frequency table}
 
@@ -9,20 +12,31 @@ Frequency table of the values of a RasterLayer.
 }
 
 \usage{
-freq(raster, digits=0)
+freq(x, ...)
 }
 
 \arguments{
-  \item{raster}{A RasterLayer}
-  \item{digits}{the number of digits for rounding the values}   
+  \item{x}{A RasterLayer object}
+  \item{...}{Additional arguments. See under Details}   
 }
 
 \value{
-  A matrix
+A matrix
 }
 
+\section{Methods}{
+\describe{
+A full call as implemented here:
 
-\seealso{ \code{\link[raster]{setMinMax} } }
+\code{freq(x, digits=0, progress, ...)}
+
+the \code{digits} argument is used passed to \code{\link[base]{round}}
+
+with \code{progress} a progress bar can be specied ('text', 'tcltk', or "windows")
+}}
+
+
+\seealso{ \code{\link[raster]{crosstab} } and \code{\link[raster]{zonal} } }
 
 \author{Robert J. Hijmans}
 

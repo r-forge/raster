@@ -7,7 +7,7 @@
 if (!isGeneric("crosstab")) {
 	setGeneric("crosstab", function(x, y, ...)
 		standardGeneric("crosstab"))
-}	
+}
 
 
 setMethod('crosstab', signature(x='RasterLayer', y='RasterLayer'), 
@@ -16,7 +16,7 @@ setMethod('crosstab', signature(x='RasterLayer', y='RasterLayer'),
 		if (missing(progress)) { progress <- .progress() }
 
 		if (dataContent(x) == 'all' & dataContent(y) == 'all') {
-			res = table(round(values(x), digits=digits), round(values(y), digits=digits))
+			return( table(first=round(values(x), digits=digits), second=round(values(y), digits=digits)) )	
 		}
 		
 		res=NULL
@@ -25,15 +25,15 @@ setMethod('crosstab', signature(x='RasterLayer', y='RasterLayer'),
 		for (i in 1:tr$n) {
 			d <- table( round(getValuesBlock(x, row=tr$rows[i], nrows=tr$size), digits=digits), round(getValuesBlock(y, row=tr$rows[i], nrows=tr$size), digits=digits))
 			if (length(dim(d))==1) {
-				first = as.integer(names(d))
+				first = as.numeric(names(d))
 				second = first
 			} else {
-				first = as.integer(rep(rownames(d), each=ncol(d)))
-				second = as.integer(rep(colnames(d), times=nrow(d)))
+				first = as.numeric(rep(rownames(d), each=ncol(d)))
+				second = as.numeric(rep(colnames(d), times=nrow(d)))
 			}
 			count = as.vector(matrix(d))
 			res = rbind(res, cbind(first, second, count))
-			pbStep(pb, r)
+			pbStep(pb, i)
 		}
 		pbClose(pb)
 		res = xtabs(count~first+second, data=res)

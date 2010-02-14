@@ -8,7 +8,7 @@
 \title{crosstab}
 
 \description{
-cross-tabulate two RasterLayer objects to create a contingency table. . 
+Cross-tabulate two RasterLayer objects to create a contingency table.
 }
 
 \usage{
@@ -18,7 +18,7 @@ crosstab(x, y, ...)
 \arguments{
   \item{x}{A RasterLayer object}
   \item{y}{A RasterLayer object}
-  \item{...}{Additional arguments. See under Methods}  
+  \item{...}{Additional arguments. See Details}  
 }
 
 \details{

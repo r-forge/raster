@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 setMethod('hist', signature(x='RasterStackBrick'), 
-	function(x, layer, maxsamp=10000, plot=TRUE, main, mfrow, ...) {
+	function(x, layer, maxsamp=10000, plot=TRUE, main, ...) {
 		
 		if (missing(layer)) y = 1:nlayers(x)
 		else if (is.character(layer)) {
@@ -40,15 +40,15 @@ setMethod('hist', signature(x='RasterStackBrick'),
 			for (i in 1:length(y)) {	
 				r <- raster(x, y[i])
 				m <- main[y[i]]
-				if (plot) { res[[i]] = hist(r, maxsamp=maxsamp, main=m, ...)
-				} else  { res[[i]] = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }
+				if (plot) { res[[i]] = hist(r, maxpixels=maxpixels, main=m, ...)
+				} else  { res[[i]] = hist(r, maxpixels=maxpixels, plot=FALSE, ...) }
 			}		
 
 		} else if (nl==1) {
 			if (missing(main)) main = layerNames(x)[y]
 			x <- raster(x, y)
-			if (plot) { res = hist(x, maxsamp=maxsamp, main=main, ...)
-			} else { res = hist(r, maxsamp=maxsamp, plot=FALSE, ...) }
+			if (plot) { res = hist(x, maxpixels=maxpixels, main=main, ...)
+			} else { res = hist(r, maxpixels=maxpixels, plot=FALSE, ...) }
 		}
 		
 		if (plot) return(invisible(res))
@@ -59,20 +59,20 @@ setMethod('hist', signature(x='RasterStackBrick'),
 
 
 setMethod('hist', signature(x='RasterLayer'), 
-	function(x, layer=1, maxsamp=10000, main=NA,  plot=TRUE, ...){
+	function(x, layer=1, maxpixels=10000, main=NA,  plot=TRUE, ...){
 		if (dataContent(x) == 'all') {
 			values <- values(x)
 		} else if (dataSource(x) == 'disk') {
 			
-			if (ncell(x) <= maxsamp) {
+			if (ncell(x) <= maxpixels) {
 				values <- na.omit(values(readAll(x)))
 			} else {
 
 			# TO DO: make a function that does this by block and combines  all data into a single histogram
-				values <- sampleRandom(x, maxsamp)
-				msg <- paste(round(100 * maxsamp / ncell(x)), "% of the raster cells were used", sep="")
-				if (maxsamp > length(values)) {
-					msg <- paste(msg, " (of which ", 100 - round(100 * length(values) / maxsamp ), "% were NA)", sep="")
+				values <- sampleRandom(x, maxpixels)
+				msg <- paste(round(100 * maxpixels / ncell(x)), "% of the raster cells were used", sep="")
+				if (maxpixels > length(values)) {
+					msg <- paste(msg, " (of which ", 100 - round(100 * length(values) / maxpixels ), "% were NA)", sep="")
 				}
 				warning( paste(msg, ". ",length(values)," values used.", sep="") )
 			}	

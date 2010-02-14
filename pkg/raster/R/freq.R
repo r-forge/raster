@@ -3,26 +3,44 @@
 # Version 0.9
 # Licence GPL v3
 
-freq <- function(raster, digits=0) {
-	if (canProcessInMemory(raster, 3)) {
-		if (dataContent(raster) != 'all') {
-			raster <- readAll(raster)
-		}
-		d <- round(values(raster), digits=digits)
-		x <- table(d, useNA="ifany" )
-	} else {
-		xx <- vector(length=0)
-		for (r in 1:nrow(raster)) {
-			v <- getValues(raster, r)
-			d <- round(v, digits=digits)
-			x <- table(d, useNA="ifany" )
-			x <- cbind(as.numeric(unlist(as.vector(dimnames(x)))), as.vector(x))
-			xx <- rbind(xx, x)
-		}
-		x <- tapply(xx[,2], xx[,1], sum)
-	}
-	x <- cbind(as.numeric(unlist(as.vector(dimnames(x)))), as.vector(x))
-	colnames(x) <- c('value', 'count')
-	return(x)
+
+if (!isGeneric("freq")) {
+	setGeneric("freq", function(x, ...)
+		standardGeneric("freq"))
 }
+
+
+setMethod('freq', signature(x='RasterLayer'), 
+	function(x, digits=0, progress, ...) {
+
+		if (canProcessInMemory(x, 3)) {
+	
+			if (dataContent(x) != 'all') {
+				x <- readAll(x)
+			}
+			d <- round(values(x), digits=digits)
+			res <- table(d, useNA="ifany" )
+		
+		} else {
+			if (missing(progress)) { progress <- .progress() }
+	
+			tr <- blockSize(x, n=2)
+			pb <- pbCreate(tr$n, type=progress)	
+			z <- vector(length=0)
+			for (i in 1:tr$n) {
+				d <- round(getValuesBlock(x, row=tr$rows[i], nrows=tr$size), digits=digits)
+				res <- table(d, useNA="ifany" )
+				res <- cbind(as.numeric(unlist(as.vector(dimnames(res)))), as.vector(res))
+				z <- rbind(z, res)
+				pbStep(pb, i)
+			}
+			res <- tapply(z[,2], z[,1], sum)	
+			pbClose(pb)		
+		}
+	
+		res <- cbind(as.numeric(unlist(as.vector(dimnames(res)))), as.vector(res))
+		colnames(res) <- c('value', 'count')
+		return(res)
+	}
+)
 
