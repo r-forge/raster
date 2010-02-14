@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-blockSize <- function(x, chunksize, n=1) {
+blockSize <- function(x, chunksize, n=1, minblocks=4) {
 	n = max(n, 1)
 	if (missing(chunksize)) {
 		bs = .chunksize()  / n
@@ -14,6 +14,11 @@ blockSize <- function(x, chunksize, n=1) {
 		bs = chunksize
 	}
 	size <- min(nrow(x), max(1, floor(bs / ncol(x))))
+	# min number of chunks
+	if (size > 1) {
+		minblocks = min(nrow(x), max(1, minblocks))
+		size = min(ceiling(nrow(x)/minblocks), size)
+	}
 	nb <- ceiling(x@nrows / size)
 	rows <- (0:(nb-1))*size + 1
 	return(list(size=size, rows=rows, n=nb))

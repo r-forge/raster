@@ -60,7 +60,7 @@ setMethod("Summary", signature(x='Raster'),
 		r <- writeStart(r, filename=filename, overwrite=TRUE )
 	} else {
 		filename <- ""
-		v <- matrix(ncol=tr$n, nrow=tr$size * ncol(r))
+		v <- matrix(ncol=nrow(r), nrow=ncol(r))
 	}
 
 	m <- matrix(NA, nrow=tr$size * ncol(r), ncol=length(rasters))
@@ -94,7 +94,9 @@ setMethod("Summary", signature(x='Raster'),
 		}
 		
 		if (filename == "") {
-			v[ ,i] <- vv
+			vv <- matrix(vv, nrow=ncol(r))
+			cols <- tr$rows[i]:(tr$rows[i]+dim(vv)[2]-1)	
+			v[,cols] <- vv
 		} else {
 			writeValues(r, vv, tr$rows[i])
 		}

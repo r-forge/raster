@@ -100,6 +100,7 @@ setMethod('predict', signature(object='Raster'),
 		
 			if (xyOnly) {
 				p <- xyFromCell(predrast, ablock + (tr$rows[i]-1) * ncol(predrast)) 
+				p <- na.omit(p)
 				blockvals <- data.frame(x=p[,1], y=p[,2])
 			} else {
 				blockvals <- as.data.frame(getValuesBlock(object, row=tr$rows[i], nrows=tr$size))
@@ -187,7 +188,8 @@ setMethod('predict', signature(object='Raster'),
 			
 			if (filename == '') {
 				predv = matrix(predv, nrow=ncol(predrast))
-				v[,tr$rows[i]:dim(predv)[2]] <- predv
+				cols = tr$rows[i]:(tr$rows[i]+dim(predv)[2]-1)
+				v[,cols] <- predv
 			} else {
 				writeValues(predrast, predv, tr$rows[i])
 			}

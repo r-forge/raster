@@ -19,7 +19,7 @@ Under development! Low level functions for writing blocks of values (larger than
 }
 
 \usage{
-blockSize(x, chunksize, n=1)
+blockSize(x, chunksize, n=1, minblocks=4)
 writeStart(x, filename, ...)
 writeValues(x, v, ...)
 writeStop(x)
@@ -29,6 +29,7 @@ writeStop(x)
   \item{x}{Raster* object}
   \item{chunksize}{Integer, normally missing. To setting the block size; unit is number of cells. Block size is then computed in units of number of rows (always >= 1)  }
   \item{n}{Integer. number of layers to consider. The function divides chunksize by n to determine blocksize }
+  \item{minblocks}{Integer. Minimum number of blocks }
   \item{filename}{Output filename}
   \item{v}{vector}
   \item{...}{Additional arguments. See under Methods}    

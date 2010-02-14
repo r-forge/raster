@@ -75,16 +75,17 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 		if (!is.atomic(nrows)) { stop() }
 		if (!is.atomic(col)) {	stop() }
 		if (!is.atomic(ncols)) { stop() }
+		
 		row <- as.integer(round(row))
-		nrows <- as.integer(round(nrows))
-		lastrow <- row + nrows - 1
+		lastrow <- min(nrow(x), row + as.integer(round(nrows)) - 1)
+		nrows <- lastrow - row + 1
 		col <- as.integer(round(col))
-		ncols <- as.integer(round(ncols))
-		lastcol <- col + ncols - 1
+		lastcol <- col + as.integer(round(ncols)) - 1
+		ncols <- lastcol - col + 1
 		
 		readrow <- FALSE
 		startcell <- cellFromRowCol(x, row, col)
-		endcell <- cellFromRowCol(x, lastrow, lastcol)
+		lastcell <- cellFromRowCol(x, lastrow, lastcol)
 
 		if (!(validRow(x, row))) {	stop(paste(row, 'is not a valid rownumber')) }
 	
@@ -92,19 +93,15 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 		
 			readrow <- TRUE
 			
-		} else if (dataContent(x) == 'all'){
+		} else if (dataContent(x) == 'all') {
+		
 			if (col==1 & ncols==ncol(x)) {
-				if (row==1 & nrows==nrow(x)) {
-					res <- x@data@values
-				} else {
-					cells = cellFromRow(x, row:lastrow)
-					res <- x@data@values[cells]
-				}
+				res <- x@data@values[startcell:lastcell]
 			} else {
 				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
 				res <- x@data@values[cells]
 			}
-			
+
 		} else if (dataContent(x) == 'rows') {
 		
 			if ( (dataIndices(x)[1] <= startcell) & (dataIndices(x)[2] >= endcell) ) {

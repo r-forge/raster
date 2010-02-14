@@ -24,7 +24,7 @@ canProcessInMemory(raster, n=4)
 closeConnection(raster)
 openConnection(raster, silent=FALSE)
 pbCreate(nsteps, type, style=3)
-pbStep(pb, step, label='row', value=step)
+pbStep(pb, step, label='step')
 pbClose(pb, time=FALSE)
 }
 
@@ -37,8 +37,7 @@ pbClose(pb, time=FALSE)
   \item{style}{style for text progress bar. See \code{\link[utils]{txtProgressBar}} }
   \item{pb}{a progress bar object created with pbCreate }
   \item{step}{which step is this ( 1 <= step <= nsteps ) }
-  \item{label}{for the non-text progress bars: a label}
-  \item{value}{for the non-text progress bars: what value to paste after the label}
+  \item{label}{label for the non-text progress bars}
   \item{time}{Logical. If \code{TRUE}, time to completion will be printed}
 }
 
