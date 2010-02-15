@@ -117,7 +117,7 @@ If there are values associated with a RasterLayer object (either in memory or vi
 
 
 \section{Acknowledgements}{
-We thank the following persons for suggestions and bug reports: Paul Hiemstra, Alice Laborte, Agustin Lobo, Herry Herry, and Tyler Rudolph.
+We thank the following persons for suggestions to improve the package: Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, and Agustin Lobo.
 }
 
 

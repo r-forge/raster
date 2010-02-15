@@ -9,7 +9,7 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", const=NULL, xy=FALSE, index=1, debug.level=1, progress=.progress(), se.fit=FALSE, ...) {
+	function(object, model, filename="", const=NULL, xy=FALSE, index=1, debug.level=1, se.fit=FALSE, progress=.progress(), ...) {
 	
 		filename <- trim(filename)
 		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull')) { return ( predict(model, object, filename=filename, ...) ) }
@@ -169,7 +169,21 @@ setMethod('predict', signature(object='Raster'),
 				} else {
 					predv <- predict(model, blockvals, ...)
 				}
+				
+				if (class(predv)[1] == 'list') {
+					predv = unlist(predv)
+					if (length(predv) != nrow(blockvals)) {
+						predv = matrix(predv, nrow=nrow(blockvals))
+					}					
+				}
+				
+				if (isTRUE(dim(predv)[2] > 1)) {
+					predv=predv[,index]
+				}
 			
+				# to change factor to numeric; should keep track of this to return a factor type RasterLayer
+				predv = as.numeric(predv)
+				
 				if (length(predv) != nrow(blockvals)) {
 				# perhaps no prediction for rows with NA ? 
 				# this was a problem with predict.rf, now fixed
@@ -198,7 +212,7 @@ setMethod('predict', signature(object='Raster'),
 		pbClose(pb)
 		
 		if (filename == '') {
-			predrast <- setValues(predrast, as.vector(v))
+			predrast <- setValues(predrast, as.numeric(v))  # or as.vector
 		} else {
 			predrast <- writeStop(predrast)
 		}

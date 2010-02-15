@@ -24,14 +24,17 @@ predict(object, ...)
 \section{Methods}{
 \describe{
  
-\code{predict(object, model, filename='', xy=FALSE, ...)}
+\code{predict(object, model, filename='', const=NULL, xy=FALSE, index=1, se.fit=FALSE, ...)}
   
 \tabular{rll}{  
   \tab  \code{object} \tab a RasterStack, RasterBrick or RasterLayer object \cr
   \tab  \code{model}  \tab A fitted model\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
+  \tab  \code{const}  \tab data.frame. Can be used to add a constant for which there is no Raster object for model predictions. Particulalry useful if the constant is a character-like factor value \cr
   \tab  \code{xy}  \tab Logical. If \code{TRUE}, 'x' and 'y' (in lowercase), i.e. the location of each cell, are added to the predictor variables (in object); see \link[raster]{predict} \cr
-  \tab  \code{...}  \tab Additional arguments \cr
+  \tab  \code{index}  \tab Integer. To select the column if predict.'model' returns a matrix with multiple columns \cr
+  \tab  \code{se.fit}  \tab Extract the standard error rather then the prediction (works for GLM and perhaps other methods where the prediction and se.fit are returned as a list) \cr
+  \tab  \code{...}  \tab Additional arguments to pass to the predict.'model' function \cr
 }
 
 

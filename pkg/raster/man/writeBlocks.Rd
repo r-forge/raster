@@ -19,7 +19,7 @@ Under development! Low level functions for writing blocks of values (larger than
 }
 
 \usage{
-blockSize(x, chunksize, n=1, minblocks=4)
+blockSize(x, chunksize, n=1, minblocks=2)
 writeStart(x, filename, ...)
 writeValues(x, v, ...)
 writeStop(x)
