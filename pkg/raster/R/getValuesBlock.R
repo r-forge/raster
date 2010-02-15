@@ -42,8 +42,9 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 				if (row==1 & nrows==nrow(x)) {
 					res <- x@data@values
 				} else {
-					cells = cellFromRow(x, row:lastrow)
-					res <- x@data@values[cells, ]
+					start = cellFromRowCol(x, row, 1)
+					end =  cellFromRowCol(x, lastrow, ncol(x))
+					res <- x@data@values[start:end, ]
 				}
 			} else {
 				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)

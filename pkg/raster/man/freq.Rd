@@ -36,7 +36,7 @@ with \code{progress} a progress bar can be specied ('text', 'tcltk', or "windows
 }}
 
 
-\seealso{ \code{\link[raster]{crosstab} } and \code{\link[raster]{zonal} } }
+\seealso{ \code{\link[raster]{count}}, \code{\link[raster]{crosstab} } and \code{\link[raster]{zonal} } }
 
 \author{Robert J. Hijmans}
 

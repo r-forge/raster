@@ -25,8 +25,11 @@ rowFromCell <- function(object, cell) {
 cellFromRow <- function(object, rownr) {
 	if (.mustCoerce(object)) { object <- raster(object) }
 	rownr <- round(rownr)
+	if (length(rownr)==1) {
+		return(cellFromRowCol(object, rownr, 1):cellFromRowCol(object, rownr, object@ncols))
+	}
 	cols <- rep(1:ncol(object), times=length(rownr))
-	rows <- rep(rownr, each=length(cols))
+	rows <- rep(rownr, each=ncol(object))	
 	return(cellFromRowCol(object, rows, cols))
 }
 
