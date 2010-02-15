@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  October 2008
 # Version 0.9
 # Licence GPL v3
@@ -39,12 +38,13 @@ cellFromCol <- function(object, colnr) {
 	return(cellFromRowCol(object, rows, cols))
 }
 
+
 cellFromRowColCombine <- function(object, rownr, colnr) {
 	if (.mustCoerce(object)) { object <- raster(object) }
-	rows <- cellFromRow(object, rownr)
-	cols <- cellFromCol(object, colnr)
-	return(intersect(rows, cols))
+	rc <- expand.grid(rownr, colnr)
+	return( cellFromRowCol(object, rc[,1], rc[,2]))
 }
+
 
 colFromCell <- function(object, cell) {
 	if (.mustCoerce(object)) { object <- raster(object) }
