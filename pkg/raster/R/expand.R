@@ -11,7 +11,7 @@ if (!isGeneric("expand")) {
 }	
 
 setMethod('expand', signature(x='RasterLayer', y='ANY'), 
-function(x, y, filename='', ...) {
+function(x, y, filename='', value=NA, ...) {
 
 	test <- try ( y <- extent(y), silent=TRUE )
 	if (class(test) == "try-error") {
@@ -42,11 +42,8 @@ function(x, y, filename='', ...) {
 		if (dataContent(x) != 'all') { 
 			x <- readAll(x) 
 		}
-		v <- vector(length=ncol(outraster))
-		v[] <- NA		
-		datatype <- dataType(x)
 		d <- vector(length=ncell(outraster))
-		d[] <- NA
+		d[] <- value
 		cells <- cellsFromExtent(outraster, extent(x))
 		d[cells] <- values(x)
 		outraster <- setValues(outraster, d)	
@@ -65,16 +62,15 @@ function(x, y, filename='', ...) {
 		endcol <- colFromX(outraster, xFromCol(x, ncol(x)))
 		
 		pb <- pbCreate(nrow(outraster), type=.progress(...))
-		v <- vector(length=0)
 		d <- vector(length=ncol(outraster))
+		d[] = value
 		datatype <- dataType(x)
 		xr <- 0
 		for (r in 1:nrow(outraster)) {
 			d[] <- NA
 			if (r >= startrow & r <= endrow) {
 				xr <- xr + 1
-				vals <- getValues(x, xr)
-				d[startcol:endcol] <- vals
+				d[startcol:endcol] <- getValues(x, xr)
 			}
 			outraster <- setValues(outraster, d, r)
 			outraster <- writeRaster(outraster, filename=filename, datatype=datatype, ...)

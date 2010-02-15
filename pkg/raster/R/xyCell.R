@@ -93,12 +93,3 @@ xFromCell <- function(object, cell) {
 }  
 
 	
-cxyFromExtent <- function(object, extent) {
-	if (.mustCoerce(object)) { 	object <- raster(object) }
-	bbox <- extent(extent)
-	cells <- cellsFromExtent(object, bbox)
-	cxy <- cbind(cells, xyFromCell(object, cells))
-	colnames(cxy) <- c("cell", "x", "y")
-	return(cxy)
-}
-

@@ -5,7 +5,6 @@
 \alias{xyFromCell}
 \alias{xFromCell}
 \alias{yFromCell}
-\alias{cxyFromExtent}
 
   
 \title{Coordinates from a row, column or cell number}
@@ -20,7 +19,6 @@ yFromRow(object, rownr)
 xyFromCell(object, cell, asSpatialPoints=FALSE)
 xFromCell(object, cell)
 yFromCell(object, cell)
-cxyFromExtent(object, extent)
 }
 
 
@@ -29,7 +27,6 @@ cxyFromExtent(object, extent)
   \item{cell}{cell number(s)}
   \item{colnr}{column number; or vector of column numbers}
   \item{rownr}{row number; or vector of row numbers}
-  \item{extent}{An object of class Extent (or an object that can be coerced to an Extent object)}
   \item{asSpatialPoints}{return a SpatialPoints object (sp package) instead of a matrix}
 }
   
@@ -41,9 +38,12 @@ cxyFromExtent(object, extent)
 \value{
   xFromCol, yFromCol, xFromCell, yFromCell: vector of x or y coordinate(s) 
   xyFromCell: matrix(x,y) of pairs of coordinates 
-  cxyFromExtent: matrix(cell, x, y) of cellnumbers and x and y coordinates
 }
 \author{Robert J. Hijmans }
+
+\seealso{
+	\code{\link{raster}[cellsFromExtent]}
+}
 
 \examples{
 #using a new default raster (1 degree global)
