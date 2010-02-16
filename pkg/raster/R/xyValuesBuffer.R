@@ -17,7 +17,7 @@
 
 	cv <- list()
 	obj <- raster(object) 
-	centralcells <- cellFromXY(obj, xy)
+# ?	centralcells <- cellFromXY(obj, xy)
 	if (isLatLon(obj)) { 
 		# from m to degrees
 		bufy <- buffer / 111319.5
@@ -39,16 +39,15 @@
 			if (is.na(s)) {
 				cv[[i]] <- NA
 			} else {
+				vals <- getValuesBlock(object, rn[i], rx[i]-rn[i]+1, cn[i], cx[i]-cn[i]+1)
 				cells <- cellFromRowColCombine(obj, rn[i]:rx[i], cn[i]:cx[i])
 				coords <- xyFromCell(obj, cells)
 				pd <- cbind(cells, pointDistance(xy[i,], coords, 'GreatCircle'))
 				if (length(pd) > 2) {
-					cells <- cells[pd[,2] <= buffer[i]]
-					cells <- unique(c(cells, centralcells[i]))
+					cv[[i]] <- pd[pd[,2] <= buffer[i], 1]
 				} else { 
-					cells <- pd[,1]
+					cv[[i]] <- pd[,1]
 				}
-				cv[[i]] <- cellValues(object, cells)
 			}
 		}
 	} else { 
@@ -66,16 +65,16 @@
 			if (is.na(s)) {
 				cv[[i]] <- NA
 			} else {
+				vals <- getValuesBlock(object, rn[i], rx[i]-rn[i]+1, cn[i], cx[i]-cn[i]+1)
 				cells <- cellFromRowColCombine(obj, rn[i]:rx[i], cn[i]:cx[i])
 				coords <- xyFromCell(obj, cells)
-				pd <- cbind(cells, pointDistance(xy[i,], coords, type='Euclidean'))
+				pd <- cbind(vals, pointDistance(xy[i,], coords, type='Euclidean'))
 				if (length(pd) > 2) {
-					cells <- cells[pd[,2] <= buffer[i]]
-					cells <- unique(c(cells, centralcells[i]))
+					cv[[i]] <- pd[pd[,2] <= buffer[i], 1]
+				#	cells <- unique(c(cells, centralcells[i]))
 				} else { 
-					cells <- pd[,1]
+					cv[[i]] <- pd[,1]
 				}
-				cv[[i]] <- cellValues(object, cells)
 			}
 		}
 	}
