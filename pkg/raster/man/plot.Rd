@@ -13,6 +13,8 @@
 
 \description{
 Plot (that is, make a map of) the values of a RasterLayer or RasterStack, or make a scatterplot of their values.
+
+Points, lines, and polygons can be drawn on top of a map using \code{plot(..., add=TRUE)}, or functions like \code{points, lines, polygons}
 }
 
 
@@ -77,6 +79,9 @@ Draws the (rectangular) bounding box of a raster object.
 Most of the code for this function was taken from image.plot (fields package)
 }
 
+\seealso{
+ \code{\link[raster]{persp}}, \code{\link[raster]{contour}}, \code{\link[raster]{pairs}}, \code{\link[raster]{hist}}, \code{\link[raster]{plot3D}}  
+}
 
 \author{ Robert J. Hijmans }
 

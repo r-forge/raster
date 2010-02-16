@@ -19,7 +19,7 @@ See the vignette for more information: \code{vignette('raster', 'raster')}
 }
 
 \details{
- The package supports
+ The package implements classes for Raster data (see \link{Raster-class}) and supports
   \itemize{
     \item Creation of Raster* objects from scratch or from file
     \item Extremely large raster files
@@ -29,7 +29,8 @@ See the vignette for more information: \code{vignette('raster', 'raster')}
     \item Polygon, line and point to raster conversion
     \item Summarizing raster values
     \item Model predictions
-    \item Many helper functions to go from row, col and cell numbers to coordinates and vice versa
+    \item Plotting (making maps)
+    \item Computation of row, col and cell numbers to coordinates and vice versa
   }
 }
 
@@ -96,6 +97,19 @@ If there are values associated with a RasterLayer object (either in memory or vi
     \code{\link{subs}} \tab Substitute values \cr
   }
 }
+
+
+\section{IX. Plotting}{
+  \tabular{ll}{
+    \code{\link{plot}} \tab Plot a Raster* object (make a map)\cr
+    \code{\link{hist}} \tab Histogram of Raster* object values \cr
+    \code{\link{persp}} \tab Perspective plot of a RasterLayer \cr
+    \code{\link{plot3D}} \tab 3-dimensional plot of a RasterLayer \cr
+    \code{\link{contour}} \tab Contour plot of a RasterLayer \cr
+    \code{\link{pairs}} \tab Pairs plot for layers in a RasterStack or RasterBrick \cr
+  }
+}
+
 
 \section{X. Row, column, cell numbers and coordinates}{
   \tabular{ll}{

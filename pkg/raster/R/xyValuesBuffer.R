@@ -42,11 +42,11 @@
 				vals <- getValuesBlock(object, rn[i], rx[i]-rn[i]+1, cn[i], cx[i]-cn[i]+1)
 				cells <- cellFromRowColCombine(obj, rn[i]:rx[i], cn[i]:cx[i])
 				coords <- xyFromCell(obj, cells)
-				pd <- cbind(cells, pointDistance(xy[i,], coords, 'GreatCircle'))
-				if (length(pd) > 2) {
-					cv[[i]] <- pd[pd[,2] <= buffer[i], 1]
+				pd <- cbind(pointDistance(xy[i,], coords, 'GreatCircle'), vals)
+				if (nrow(pd) > 1) {
+					cv[[i]] <- pd[pd[,2] <= buffer[i], -1]
 				} else { 
-					cv[[i]] <- pd[,1]
+					cv[[i]] <- pd[,-1]
 				}
 			}
 		}
@@ -68,18 +68,18 @@
 				vals <- getValuesBlock(object, rn[i], rx[i]-rn[i]+1, cn[i], cx[i]-cn[i]+1)
 				cells <- cellFromRowColCombine(obj, rn[i]:rx[i], cn[i]:cx[i])
 				coords <- xyFromCell(obj, cells)
-				pd <- cbind(vals, pointDistance(xy[i,], coords, type='Euclidean'))
-				if (length(pd) > 2) {
-					cv[[i]] <- pd[pd[,2] <= buffer[i], 1]
+				pd <- cbind(pointDistance(xy[i,], coords, type='Euclidean'), vals)
+				if (nrow(pd) > 1) {
+					cv[[i]] <- pd[pd[,1] <= buffer[i], -1]
 				#	cells <- unique(c(cells, centralcells[i]))
 				} else { 
-					cv[[i]] <- pd[,1]
+					cv[[i]] <- pd[,-1]
 				}
 			}
 		}
 	}
 	
-	if (! is.null(fun) ) {
+	if (! is.null(fun)) {
 		if (na.rm) {
 			fun2 <- function(x){
 						x <- na.omit(x)
