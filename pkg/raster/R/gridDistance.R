@@ -30,7 +30,7 @@ gridDistance <- function(object, filename="", ...) {
 		toCells <- which(is.na(values(object)))
 		accDist <- rep(0,times=n)
 		accDist[toCells] <- Inf
-		if (isLatLon(object)) {
+		if (isLonLat(object)) {
 			while(length(fromCells)>0) {			
 				adj <- adjacency(object,fromCells=fromCells,toCells=toCells,directions=8)
 				coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
@@ -93,7 +93,7 @@ gridDistance <- function(object, filename="", ...) {
 					rowWindow <- c(rowWindow, values(r1))
 					fromCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow) & !((maxDist - rowWindow) < 1e-60)] 
 					toCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow)] 
-					if(isLatLon(object))
+					if(isLonLat(object))
 					{						
 						adj <- adjacency(object, fromCells=fromCells, toCells=toCells, directions=8)
 						coord <- cbind(xyFromCell(object,adj[,1]), xyFromCell(object, adj[,2]))

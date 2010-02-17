@@ -5,17 +5,17 @@
 # Licence GPL v3
 
 
-if (!isGeneric("isLatLon")) {
-	setGeneric("isLatLon", function(object)
-		standardGeneric("isLatLon"))
+if (!isGeneric("isLonLat")) {
+	setGeneric("isLonLat", function(x)
+		standardGeneric("isLonLat"))
 }	
 
-setMethod('isLatLon', signature(object='Raster'), 
+setMethod('isLonLat', signature(x='Raster'), 
 # copied from the SP package (slightly adapted)
 #author:
 # ...
-	function(object){
-		p4str <- projection(object)
+	function(x){
+		p4str <- projection(x)
 		if (is.na(p4str) || nchar(p4str) == 0) {
 			return(as.logical(NA))
 		} 
@@ -28,12 +28,12 @@ setMethod('isLatLon', signature(object='Raster'),
     }
 )
 
-setMethod('isLatLon', signature(object='character'), 
+setMethod('isLonLat', signature(x='character'), 
 # copied from the SP package (slightly adapted)
 #author:
 # ...
-	function(object){
-		res <- grep("longlat", object, fixed = TRUE)
+	function(x){
+		res <- grep("longlat", x, fixed = TRUE)
 		if (length(res) == 0) {
 			return(FALSE)
 		} else {
@@ -43,15 +43,15 @@ setMethod('isLatLon', signature(object='character'),
 )
 
 
-setMethod('isLatLon', signature(object='CRS'), 
+setMethod('isLonLat', signature(x='CRS'), 
 # copied from the SP package (slightly adapted)
 #author:
 # ...
-	function(object){
-		if (is.na(object@projargs)) { 
+	function(x){
+		if (is.na(x@projargs)) { 
 			p4str <- "NA"
 		} else {
-			p4str <- trim(object@projargs)
+			p4str <- trim(x@projargs)
 		}	
 		if (is.na(p4str) || nchar(p4str) == 0) {
 			return(as.logical(NA))

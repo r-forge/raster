@@ -31,5 +31,4 @@ r3 <- sqrt(r1)
 }
 
 \keyword{methods}
-\keyword{math)
-}
+\keyword{math}

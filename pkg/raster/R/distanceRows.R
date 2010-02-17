@@ -29,7 +29,7 @@
 		stop('file exists; use overwrite=TRUE to overwrite it')
 	}
 
-	if (isLatLon(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
+	if (isLonLat(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 	
 	rst1 <- raster(object, filename=rasterTmpFile())
 	rst2 <- raster(object, filename=rasterTmpFile())

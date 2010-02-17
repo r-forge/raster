@@ -21,7 +21,7 @@ distanceFromPoints <- function(object, xy, filename='', ...) {
 
 	filename <- trim(filename)
 	
-	if (isLatLon(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
+	if (isLonLat(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 	                                                                        
 	rst <- raster(object)
 	if (!canProcessInMemory(rst, 2) && filename == '') {

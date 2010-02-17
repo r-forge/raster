@@ -17,7 +17,7 @@
 		pixtype <- 'real'
 	}
 
-	if (isLatLon(raster)) {
+	if (isLonLat(raster)) {
 		refsystem <- 'latlong'
 		refunits <- 'degrees';
 	} else {

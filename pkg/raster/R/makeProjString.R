@@ -6,7 +6,7 @@
 
 
 
-newCRS <- function(projs) {
+.newCRS <- function(projs) {
 	projs <- trim(projs)
 	if (is.na(projs) | nchar(projs) < 3) { 
 		prj <- (CRS(as.character(NA)))
@@ -58,7 +58,7 @@ newCRS <- function(projs) {
 		}
 	}
 	cat("Projection: ", projname[1], "\n")
-	crs <- newCRS(pstr)
+	crs <- .newCRS(pstr)
 	if (asText) { 
 		return(trim(crs@projargs))
 	} else {

@@ -43,3 +43,4 @@ cv(data, na.rm=TRUE)
 }
 
 \keyword{univar}
+\keyword{math}

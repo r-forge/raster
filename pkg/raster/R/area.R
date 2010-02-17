@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 .couldBeLatLon <- function(x) {
-	if (isLatLon(x)) return(TRUE)
+	if (isLonLat(x)) return(TRUE)
 	if (projection(x)=='NA') {
 		e <- extent(x)
 		if (e@xmin > -400 & e@xmax < 400 & e@ymin > -90.1 & e&ymax < 90.1) { return(TRUE) }

@@ -9,7 +9,7 @@
 	if (class(value)=="CRS") {
 		x@crs <- value
 	} else {	
-		x@crs <- newCRS(value)
+		x@crs <- .newCRS(value)
 	}	
 	return(x)
 }

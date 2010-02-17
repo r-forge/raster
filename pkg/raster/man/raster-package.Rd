@@ -55,7 +55,8 @@ Raster* objects can be created, from scracth or from raster files, with the foll
 	
 RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to as Raster* objects
 }
-  
+
+
 \section{II. Changing the spatial extent and/or resolution of RasterLayer objects}{
 
   \tabular{ll}{
@@ -210,6 +211,7 @@ Basic parameters of existing Raster* objects can be obtained, and in most cases 
 	\code{\link{extent}} \tab The extent (minimum and maximum x and y coordinates) \cr
 	\code{\link{origin}} \tab The origin of a Raster* object \cr
     \code{\link{projection}} \tab The coordinate reference system (map projection) \cr	
+    \code{\link{isLonLat}} \tab Test if an object has a longitude/latitude coordinate reference system \cr
     \code{\link{filename}} \tab Filename to which RasterLayer or RasterBrick is linked \cr	
     \code{\link{band}} \tab Band (layer) of a multi-band file that this RasterLayer is linked to \cr	
     \code{\link{nbands}} \tab How many bands (layers) does the file have? \cr	
@@ -236,6 +238,9 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
     \code{\link{cellFromXY}} \tab Cell numbers from x and y coordinates \cr
     \code{\link{cellFromRowCol}} \tab Cell numbers from row and column numbers \cr
     \code{\link{cellsFromExtent}} \tab Cell numbers from extent object \cr
+    \code{\link{validCell}} \tab Is this a valid cell number? \cr
+    \code{\link{validCol}} \tab Is this a valid column number? \cr
+    \code{\link{validRow}} \tab Is this a valid row number? \cr
   }
 }
 
@@ -263,6 +268,7 @@ Basic writing
     \code{\link{dataContent}} \tab How much data (if any) is in memory? \cr
     \code{\link{writeRaster}} \tab Write raster data to disk, either a row or all values \cr
     \code{\link{saveAs}} \tab Save raster file under other name and perhaps in different format \cr
+    \code{\link{KML}} \tab Save raster as KML file \cr	
   }
 
 Advanced writing (more error prone, but faster)
@@ -288,9 +294,10 @@ Managing files in the 'native raster format'
     \code{\link{extent}} \tab Create an extent object \cr
     \code{\link{intersectExtent}} \tab Intersect two extent objects  \cr
     \code{\link{unionExtent}} \tab Combine two extent objects \cr
-    \code{\link{drawExtent}} \tab Create an Extent object by drawing it on top of a map (see plot) \cr		
+    \code{\link{alignExtent}} \tab Align an extent with a Raster* object \cr
     \code{\link{roundExtent}} \tab Round the coordinates of an Extent object \cr		
     \code{\link{nudgeExtent}} \tab Floor/ceiling of the coordinates of an Extent object \cr			
+    \code{\link{drawExtent}} \tab Create an Extent object by drawing it on top of a map (see plot) \cr		
   }
 It is also possible to use Arithmetic functions with Extent objects (but these work perhaps unexpectedly!)
 }
