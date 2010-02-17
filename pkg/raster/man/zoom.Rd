@@ -21,6 +21,12 @@ zoom(x, extent=drawExtent(), maxpixels=100000, layer=1, new=TRUE, ...)
 \item{...}{Raster* objects or filenames (character) }
 }
 
+
+\value{
+An extent object (invisibly)
+}
+
+
 \author{Robert J. Hijmans}
 
 \seealso{ \code{\link[raster]{drawExtent}}, \code{\link[raster]{plot}}}

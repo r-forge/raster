@@ -13,5 +13,6 @@ zoom <- function(x, extent=drawExtent(), maxpixels=100000, layer=1, new=TRUE, ..
 	if (new) { dev.new() }
 	if (class(x) != 'RasterLayer') { x <- raster(x,layer) }
 	.plotraster(x, maxpixels=maxpixels, extent=extent, ...) 	
+	return(invisible(extent))
 }
 
