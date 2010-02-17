@@ -3,7 +3,6 @@
 \alias{band}
 \alias{band,RasterLayer-method}
 \alias{nbands}
-\alias{bandOrder}
   
 \title{Bands}
 

@@ -1,31 +1,28 @@
 \name{initialize}
 
 \alias{init}
-\alias{initXYID}
 
 \title{Intitialize}
 
 \description{
-Set values for a new raster (from scratch), either using a formula (init) or by choosing the x or y coordinate or cell number (initXYID)
+Set values for a new raster (from scratch), either using a formula or by choose a variable \code{v} from 'x', 'y', 'col', 'row', or 'cell'.
+When using a function, cell values are initialized without reference to pre-existing values. E.g., initialize with a random number (\code{fun=runif}).
+Either supply an argument to \code{fun}, or to \code{v}, but not both.
 }
 
 \usage{
-init(raster, fun=runif, filename="", ...) 
-initXYID(raster, v='id', filename="", ...) 
+init(raster, fun, v, filename="", ...) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{fun}{The function to be applied. This must be a function that can take the number of cells as a single argument to return a vector of values with a length equal to the number of cells}
-  \item{v}{'x', 'y', or 'id'}
+  \item{v}{'x', 'y', 'row', 'col', or 'cell'}
   \item{filename}{Output filename}
   \item{...}{Additional arguments. See Details}  
 }
 
 \details{
- \code{init} sets a value without reference to existing values. E.g. initialize with a random number.
- 
- 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
   \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
@@ -51,11 +48,10 @@ r <- raster(ncols=36, nrows=18)
 # with a function (this will work for very large files if a file name is supplied)
  set1function <- function(x){rep(1, x)}
  r <- init(r, fun=set1function, filename='test.grd', overwrite=TRUE)
-# "manually", if all the values can be kept in memory.
+# easier to do "manually"
  r <- setValues(r, rep(1, ncell(r)))
 # or  
  r[] <- rep(1, ncell(r))
- 
 }
 
 \keyword{spatial}

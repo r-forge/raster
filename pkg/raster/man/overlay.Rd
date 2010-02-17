@@ -73,8 +73,8 @@ Robert J. Hijmans
 
 \examples{
 r <- raster(ncol=10, nrow=10)
-r1 <- init(r)
-r2 <- init(r)
+r1 <- init(r, fun=runif)
+r2 <- init(r, fun=runif)
 r3 <- overlay(r1, r2, fun=function(x,y){return(x+y)})
 
 # long version for multiplication

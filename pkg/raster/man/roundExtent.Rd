@@ -6,7 +6,7 @@
 \title{Round extent coordinates}
 
 \description{
-\code{roundCoords} rounds the coordinates of the extent of a Raster* to a number of digits specified. 
+\code{roundExtent} rounds the coordinates of the extent of a Raster* to a number of digits specified. 
 This can be useful when dealing with a small inprecision in the data (e.g. 179.9999 in stead of 180). 
 nudgeCoords takes the floor (lower integer) of the mimumum x and y of the exent and the ceiling (upper integer) 
 of the maximum x and y of the extent. Thus returning a RasterLayer with an extent of rounded coordinates and that 

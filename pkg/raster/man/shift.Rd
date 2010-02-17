@@ -40,7 +40,7 @@ The following additional arguments can be passed, to replace default values for 
   
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{xmin}}, \code{\link[raster]{flip}}, \code{\link[raster]{rotate}} }
+\seealso{ \code{\link[raster]{flip}}, \code{\link[raster]{rotate}} }
 
 \examples{
 r <- raster()
