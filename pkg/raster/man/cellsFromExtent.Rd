@@ -27,7 +27,7 @@ a vector of cell numbers
   
 \author{Robert J. Hijmans}
 
-\seealso{  \code{\link[raster]{polygonFromExtent}}, \code{\link[raster]{newExtent}}, \code{\link[sp]{SpatialPolygons}} }
+\seealso{  \code{\link[raster]{extent}}, \code{\link[raster]{polygonFromExtent}} }
 
 \examples{
 r <- raster()

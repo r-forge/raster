@@ -1,7 +1,8 @@
-\name{Summary}
+\name{Summary-methods}
 
 \docType{methods}
 
+\alias{Summary-methods}
 \alias{Summary,Raster-method}
 \alias{mean,Raster-method}
 \alias{Median}
@@ -13,7 +14,7 @@
 \description{
  The following summary methods are available for Raster* objects:
  
- \code{mean, median, max, min, range, prod, sum, any, all}
+ \code{mean, Median, max, min, range, prod, sum, any, all}
 }
 
 

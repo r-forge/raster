@@ -4,7 +4,7 @@
 
 \docType{package}
 
-\title{
+\title{ 
 Management, analysis and modeling of raster-type geographic data
 }
 
@@ -22,17 +22,21 @@ Below is a list of functions grouped by theme. See the vignette for more informa
  The package implements classes for Raster data (see \link{Raster-class}) and supports
   \itemize{
     \item Creation of Raster* objects from scratch or from file
-    \item Extremely large raster files
+    \item Handling extremely large raster files
     \item Raster algebra and overlay functions
-    \item Manipulation of raster extent, resolution and origin
     \item Distance, neighborhood (focal) and patch functions
     \item Polygon, line and point to raster conversion
-    \item Summarizing raster values
     \item Model predictions
+    \item Summarizing raster values
+    \item Easy access to raster cell-values
     \item Plotting (making maps)
+    \item Manipulation of raster extent, resolution and origin
     \item Computation of row, col and cell numbers to coordinates and vice versa
+    \item Reading and writing various raster file types
   }
 }
+
+
 
 \author{
 Robert J. Hijmans and Jacob van Etten
@@ -57,6 +61,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 }
 
 
+
 \section{II. Changing the spatial extent and/or resolution of RasterLayer objects}{
 
   \tabular{ll}{
@@ -74,32 +79,34 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
   }
 }
 
+
 \section{III. Raster algebra}{
 
 	\tabular{ll}{
-    \code{\link{Arith-methods}} \tab Arith generic function (\code{+, -, *, ^, \%\%, \%/\%, /}) \cr
-	\code{\link{Math-methods}} \tab Math generic functions (\code{abs, sqrt, trunc, log, log10, exp, cos, sin, gamma, round} among others)	\cr	
-    \code{\link{Logic-methods}} \tab Logic generic functions (\code{!, &, |}) \cr
-    \code{\link{Compare-methods}} \tab Compare generic functions (\code{==, !=, >, <, <=, >=}) \cr
+    \code{\link{Arith-methods}} \tab Arith functions (\code{+, -, *, ^, \%\%, \%/\%, /}) \cr
+	\code{\link{Math-methods}} \tab Math functions (\code{abs, sqrt, trunc, log, log10, exp, cos, sin, gamma, round} among others)	\cr	
+    \code{\link{Logic-methods}} \tab Logic functions (\code{!, &, |}) \cr
+    \code{\link{Summary-methods}} \tab Summary functions (\code{mean, Median, max, min, range, prod, sum, any, all}) \cr
+    \code{\link{Compare-methods}} \tab Compare functions (\code{==, !=, >, <, <=, >=}) \cr
 	}
 }  
   
   
-\section{IV. Functions for basic RasterLayer computation}{
+\section{IV. Basic computation}{
 
   \tabular{ll}{
-    \code{\link{calc}} \tab Computations on a single layer \cr
-    \code{\link{overlay}} \tab Computations on mutliple layers \cr
+    \code{\link{calc}} \tab Computations on a single RasterLayer, or on a RasterStack or RasterBrick to produce a single RasterLayer \cr
+    \code{\link{overlay}} \tab Computations on mutliple RasterLayer objects \cr
     \code{\link{cover}} \tab First layer covers second layer except where the first layer is NA \cr
-    \code{\link{mask}} \tab Values from first layer except where cells of the second layer are NA (these become NA)\cr
-    \code{\link{reclass}} \tab Reclassify using a from-to-becomes matrix \cr
-    \code{\link{subs}} \tab Substitute values \cr	
+    \code{\link{mask}} \tab Use values from first layer except where cells of the second layer are NA (these become NA)\cr
+    \code{\link{reclass}} \tab Reclassify using a 'from-to-becomes' matrix \cr
+    \code{\link{subs}} \tab Substitute values using a 'is-becomes' matrix \cr	
     \code{\link{init}} \tab Initialize cells with new values \cr	
   }
 }
 
 
-\section{V. Functions for spatial contextual computation}{
+\section{V. Spatial contextual computation}{
 
   \tabular{ll}{
     \code{\link{distance}} \tab Distance to non-NA cells \cr
@@ -121,6 +128,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 }
 }
 
+
 \section{VII. Coverting spatial data types}{
 
   \tabular{ll}{
@@ -139,12 +147,12 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
 \section{VIII. Summarizing}{
 
   \tabular{ll}{
-    \code{\link{zonal}} \tab Summarize a RatserLayer by zones in another RasterLayer \cr
-    \code{\link{crosstab}} \tab Cross-tabulate two RasterLayer objects \cr
+    \code{\link{cellStats}} \tab Summarize a Raster cell values with a function \cr
     \code{\link{freq}} \tab Frequency table of Raster cell values \cr
-    \code{\link{unique}} \tab Get the unique values in a RasterLayer \cr
     \code{\link{count}} \tab Count the frequency of a single (range of) value(s) \cr
-    \code{\link{cellStats}} \tab Summarize a RasterLayer using a function \cr
+    \code{\link{crosstab}} \tab Cross-tabulate two RasterLayer objects \cr
+    \code{\link{unique}} \tab Get the unique values in a RasterLayer \cr
+    \code{\link{zonal}} \tab Summarize a RasterLayer by zones in another RasterLayer \cr
   }
 }
 
@@ -298,9 +306,11 @@ Managing files in the 'native raster format'
     \code{\link{roundExtent}} \tab Round the coordinates of an Extent object \cr		
     \code{\link{nudgeExtent}} \tab Floor/ceiling of the coordinates of an Extent object \cr			
     \code{\link{drawExtent}} \tab Create an Extent object by drawing it on top of a map (see plot) \cr		
+    \code{\link{polygonFromExtent}} \tab Create a SpatialPolygons object from an Extent object \cr			
   }
 It is also possible to use Arithmetic functions with Extent objects (but these work perhaps unexpectedly!)
 }
+
 
 \section{XVI. Options}{
 
@@ -311,6 +321,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
   \code{\link{clearOptions}} \tab Set session options to default values \cr
 }
 }
+
 
 \section{XVII. For programmers}{
 
@@ -324,6 +335,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
   \code{\link{rasterTmpFile}}  \tab Get a name for a temporary file \cr
 }
 }
+
 
 \section{XVIII. Miscellaneous}{
 

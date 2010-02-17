@@ -91,7 +91,6 @@ setAs('SpatialPixelsDataFrame', 'RasterStack',
 
 
 
-
 setAs('matrix', 'RasterLayer',
 	function(from){ return(raster(from)) }
 )
@@ -99,3 +98,18 @@ setAs('matrix', 'RasterLayer',
 setAs('RasterLayer', 'matrix',
 	function(from){ return( values(from, format='matrix')) }
 )
+
+
+	
+setAs('RasterLayer', 'SpatialPointsDataFrame', 
+	function(from){ return( rasterToPoints (from)) }
+)
+
+setAs('RasterLayer', 'SpatialPolygonsDataFrame', 
+	function(from){ return( rasterToPolygons (from)) }
+)
+
+setAs('Extent', 'SpatialPolygonsDataFrame', 
+	function(from){ return( polygonFromExtent (from)) }
+)
+

@@ -20,6 +20,8 @@
 Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a filename, a Extent object, a matrix, or a Raster* or Spatial* object.
 
 In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
+
+If you are new to the raster package, first have a look here: \code{\link{raster-package}}.
 }
 
 
