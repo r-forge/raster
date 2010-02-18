@@ -33,8 +33,8 @@ setMethod("Math", signature(x='RasterLayer'),
 			pb <- pbCreate(tr$n, type=.progress())			
 			r <- writeStart(r, filename=rasterTmpFile(), datatype=datatype, format=.filetype(), overwrite=TRUE )
 			for (i in 1:tr$n) {
-				v <- callGeneric( getValuesBlock(x, row=tr$rows[i], nrows=tr$size) )
-				writeValues(r, v, tr$rows[i])
+				v <- callGeneric( getValuesBlock(x, row=tr$row[i], nrows=tr$size) )
+				writeValues(r, v, tr$row[i])
 				pbStep(pb, i) 
 			}
 			r <- writeStop(r)
@@ -66,8 +66,8 @@ setMethod("Math2", signature(x='RasterLayer'),
 			pb <- pbCreate(tr$n, type=.progress())			
 			r <- writeStart(r, filename=rasterTmpFile(), datatype=datatype, format=.filetype(), overwrite=TRUE )
 			for (i in 1:tr$n) {
-				v <- callGeneric( getValuesBlock(x, row=tr$rows[i], nrows=tr$size), digits )
-				writeValues(r, v, tr$rows[i])
+				v <- callGeneric( getValuesBlock(x, row=tr$row[i], nrows=tr$size), digits )
+				writeValues(r, v, tr$row[i])
 				pbStep(pb, i) 
 			}
 			r <- writeStop(r)

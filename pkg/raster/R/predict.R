@@ -9,12 +9,24 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", const=NULL, xy=FALSE, index=1, debug.level=1, se.fit=FALSE, progress=.progress(), ...) {
+	function(object, model, filename="", ext=NULL, const=NULL, xy=FALSE, index=1, debug.level=1, se.fit=FALSE, progress=.progress(), ...) {
 	
 		filename <- trim(filename)
-		if (class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull')) { return ( predict(model, object, filename=filename, ...) ) }
+		if ( class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull') ) { 
+			return ( predict(model, object, filename=filename, ext=ext, progress=progress, ...) ) 
+		}
 	
 		predrast <- raster(object)
+				
+		if (!is.null(ext)) {
+			predrast <- crop(predrast, extent(ext))
+			firstrow <- rowFromY(object, yFromRow(out, 1))
+			firstcol <- colFromX(object, xFromCol(out, 1))
+		} else {
+			firstrow <- 1
+			firstcol <- 1
+		}
+		ncols <- ncol(predrast)
 			
 		dataclasses <- attr(model$terms, "dataClasses")[-1]	
 			
@@ -97,13 +109,17 @@ setMethod('predict', signature(object='Raster'),
 		}
 
 		for (i in 1:tr$n) {
+			rr <- firstrow + tr$row[i] - 1
 		
 			if (xyOnly) {
-				p <- xyFromCell(predrast, ablock + (tr$rows[i]-1) * ncol(predrast)) 
+				if (i==tr$n) { # if using ext last row(s) may need to be removed
+					ablock <- 1:(ncol(object) * tr$nrows[i])
+				}
+				p <- xyFromCell(predrast, ablock + (tr$row[i]-1) * ncol(predrast)) 
 				p <- na.omit(p)
 				blockvals <- data.frame(x=p[,1], y=p[,2])
 			} else {
-				blockvals <- as.data.frame(getValuesBlock(object, row=tr$rows[i], nrows=tr$size))
+				blockvals <- as.data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
 				#colnames(blockvals) <- lyrnames
 				if (haveFactor) {
 					for (i in 1:length(f)) {
@@ -111,7 +127,7 @@ setMethod('predict', signature(object='Raster'),
 					}
 				}
 				if (xy) {
-					p <- xyFromCell(predrast, ablock + (tr$rows[i]-1) * ncol(predrast)) 
+					p <- xyFromCell(predrast, ablock + (tr$row[i]-1) * ncol(predrast)) 
 					blockvals <- cbind(data.frame( x=p[,1], y=p[,2]), blockvals) 
 				}
 				if (! is.null(const)) {
@@ -202,10 +218,14 @@ setMethod('predict', signature(object='Raster'),
 			
 			if (filename == '') {
 				predv = matrix(predv, nrow=ncol(predrast))
-				cols = tr$rows[i]:(tr$rows[i]+dim(predv)[2]-1)
-				v[,cols] <- predv
+				cols = tr$row[i]:(tr$row[i]+dim(predv)[2]-1)
+				a = try( v[,cols] <- predv )
+				if (class(a) == 'try-error') {
+					print(cols)
+					print(dim(v))
+				}
 			} else {
-				writeValues(predrast, predv, tr$rows[i])
+				writeValues(predrast, predv, tr$row[i])
 			}
 			pbStep(pb, i) 
 		}

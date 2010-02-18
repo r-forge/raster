@@ -76,12 +76,12 @@ setMethod("Summary", signature(x='Raster'),
 		if (i==tr$n & i > 1) {  # the last one could be smaller
 			m = NULL
 			for (j in 1:length(rasters)) {
-				m <- cbind(m, getValuesBlock(rasters[[j]], row=tr$rows[i], nrows=tr$size))
+				m <- cbind(m, getValuesBlock(rasters[[j]], row=tr$row[i], nrows=tr$size))
 			}				
 			m <- cbind(m, add)
 		} else {
 			for (j in 1:length(rasters)) {
-				m[,j] <- getValuesBlock(rasters[[j]], row=tr$rows[i], nrows=tr$size)
+				m[,j] <- getValuesBlock(rasters[[j]], row=tr$row[i], nrows=tr$size)
 			}
 		}
 		if (na.rm) {
@@ -95,10 +95,10 @@ setMethod("Summary", signature(x='Raster'),
 		
 		if (filename == "") {
 			vv <- matrix(vv, nrow=ncol(r))
-			cols <- tr$rows[i]:(tr$rows[i]+dim(vv)[2]-1)	
+			cols <- tr$row[i]:(tr$row[i]+dim(vv)[2]-1)	
 			v[,cols] <- vv
 		} else {
-			writeValues(r, vv, tr$rows[i])
+			writeValues(r, vv, tr$row[i])
 		}
 		pbStep(pb, i) 
 	} 

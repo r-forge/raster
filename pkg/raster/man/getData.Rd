@@ -1,7 +1,7 @@
 \name{getData}
 \alias{getData}
 
-\title{get geographic data }
+\title{Get geographic data }
 
 \description{
 Get geographic data objects for anywhere in the world. Data are read from files that are first downloaded if necessary

@@ -20,7 +20,12 @@ blockSize <- function(x, chunksize, n=1, minblocks=2) {
 		size = min(ceiling(nrow(x)/minblocks), size)
 	}
 	nb <- ceiling(x@nrows / size)
-	rows <- (0:(nb-1))*size + 1
-	return(list(size=size, rows=rows, n=nb))
+	row <- (0:(nb-1))*size + 1
+	nrows <- rep(size, length(row))
+
+	dif = nb * size - nrow(x)
+	nrows[length(nrows)] = nrows[length(nrows)] - dif
+	
+	return(list(size=size, row=row, nrows=nrows, n=nb))
 }
 

@@ -72,16 +72,16 @@ tr <- blockSize(r, 25)
 tr
 s <- writeStart(s, filename='test.grd',  overwrite=TRUE)
 for (i in 1:tr$n) {
-	v <- getValuesBlock(r, row=tr$rows[i], nrows=tr$size)
-	writeValues(s, v, tr$rows[i])
+	v <- getValuesBlock(r, row=tr$row[i], nrows=tr$size)
+	writeValues(s, v, tr$row[i])
 }
 s <- writeStop(s)
 
 s2 <- writeStart(s, filename='test2.tif', format='GTiff', overwrite=TRUE)
 # writing last row first
 for (i in tr$n:1) {
-	v <- getValuesBlock(r, row=tr$rows[i], nrows=tr$size)
-	writeValues(s2, v, tr$rows[i])
+	v <- getValuesBlock(r, row=tr$row[i], nrows=tr$size)
+	writeValues(s2, v, tr$row[i])
 }
 # row number 5 once more
 v <- getValuesBlock(r, row=5, nrows=1)

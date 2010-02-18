@@ -38,8 +38,8 @@ setMethod('subs', signature(x='RasterLayer', y='data.frame'),
 			pb <- pbCreate(tr$n, type=.progress(...))
 			r <- writeStart(r, filename=filename, ... )
 			for (i in 1:tr$n) {
-				v = getValuesBlock(x, row=tr$rows[i], nrows=tr$size)
-				writeValues(r, localmerge(v, y, subsWithNA), tr$rows[i])
+				v = getValuesBlock(x, row=tr$row[i], nrows=tr$size)
+				writeValues(r, localmerge(v, y, subsWithNA), tr$row[i])
 				pbStep(pb, i) 
 			}
 			pbClose(pb)			
