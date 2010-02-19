@@ -27,7 +27,7 @@ setMethod("contour", signature(x='RasterStackBrick'),
 
 
 rasterToContour <- function(x,maxpixels=100000,...) {
-	x <- sampleRegular(x, n=maxpixels, asRaster=TRUE)
+	x <- sampleRegular(x, size=maxpixels, asRaster=TRUE)
 	cL <- contourLines(x=xFromCol(x,1:ncol(x)), y=yFromRow(x, nrow(x):1), z=t((values(x, format='matrix'))[nrow(x):1,]), ...)
 	
 # The below was taken from ContourLines2SLDF(maptools), by Roger Bivand & Edzer Pebesma 

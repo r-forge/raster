@@ -18,9 +18,9 @@
 
 	maxpixels <- max(1, maxpixels)
 	if (is.null(extent)) {
-		object <- sampleRegular(object, n=maxpixels, asRaster=TRUE, corners=TRUE)
+		object <- sampleRegular(object, size=maxpixels, asRaster=TRUE, corners=TRUE)
 	} else {
-		object <- sampleRegular(object, n=maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
+		object <- sampleRegular(object, size=maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
 	}
 
 	xint <- ticks[2]

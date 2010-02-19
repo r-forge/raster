@@ -67,8 +67,8 @@ setMethod("plot", signature(x='RasterLayer', y='RasterLayer'),
 	function(x, y, maxpixels=100000, cex=0.1, ...)  {
 		comp <- compare(c(x, y), bb=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
 		nc <- ncell(x)
-		x <- sampleRegular(x, n=maxpixels)
-		y <- sampleRegular(y, n=maxpixels)
+		x <- sampleRegular(x, size=maxpixels)
+		y <- sampleRegular(y, size=maxpixels)
 		if (length(x) < nc) {
 			warning(paste('plot used a sample of ', round(100*length(x)/nc), "% of the cells", sep=""))
 		}

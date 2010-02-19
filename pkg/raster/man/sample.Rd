@@ -1,23 +1,26 @@
 \name{Sample}
 
 \alias{sampleRandom}
+\alias{sampleRandom,Raster-method}
+\alias{sampleRandom,RasterStack-method}
+
 \alias{sampleRegular}
 
-\title{Sample values of a RasterLayer}
+\title{Random or regular sample}
 
 \description{
-Take a sample from a RasterLayer, either systematic or random
+Take a random or systematic sample the values from a Raster object. 
 }
 
 \usage{
-sampleRandom(raster, n, na.rm = TRUE)
-sampleRegular(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE)
+sampleRandom(x, size,...)
+sampleRegular(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE)
 }
 
 \arguments{
-  \item{raster}{a RasterLayer object}
-  \item{n}{sample size}  
-  \item{na.rm}{Logical. If \code{TRUE} NA values are removed from random sample}  
+  \item{x}{a Raster object}
+  \item{size}{positive integer giving the number of items to choose.}  
+  \item{...}{Additional argument: \code{na.rm}. If \code{TRUE} NA values are removed from random sample}  
   \item{extent}{Extent. To limit regular sampling to the area within that box}  
   \item{cells}{Logical. Also return sampled cell numbers (if asRaster==FALSE) }  
   \item{asRaster}{Logical. If \code{TRUE}, a rasterLayer is returned, rather then the sampled values}  
@@ -25,18 +28,18 @@ sampleRegular(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE
 }
 
 \details{
-Sample size is approximate for sampleRegular and for sampleRandom with na.rm=TRUE
+With na.rm=TRUE, the returned sample may be smaller than requested
 }
 
 \value{
-A vector, matrix (if cells=TRUE), or RasterLayer (if asRaster=TRUE)
+A vector, matrix (if cells=TRUE; or for a multi-layered object), or RasterLayer (if asRaster=TRUE)
 }
 
 \author{Robert J. Hijmans}
 
 \examples{
  r <- raster(system.file("external/test.grd", package="raster"))
- v <- sampleRegular(r, n=100)
+ v <- sampleRegular(r, size=100)
 }
 
 \keyword{spatial}

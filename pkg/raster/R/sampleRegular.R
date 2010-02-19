@@ -4,20 +4,20 @@
 # Licence GPL v3
 
 
-sampleRegular <- function(raster, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
-	if (class(raster) == 'RasterLayer') {
-		return(.sampleRegular(raster=raster, n=n, extent=extent, cells=cells, asRaster=asRaster, corners=corners))
+sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
+	if (class(x) == 'RasterLayer') {
+		return(.sampleRegular(raster=x, n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners))
 	} else {
 	# ugly & inefficient hack :
-		for (i in 1:nlayers(raster)) {
+		for (i in 1:nlayers(x)) {
 			if (i==1) {
-				x = .sampleRegular(raster(raster, i), n=n, extent=extent, cells=cells, asRaster=asRaster, corners=corners)
-				v <- matrix(ncol=nlayers(raster), nrow=length(x))
+				x = .sampleRegular(raster(x, i), n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners)
+				v <- matrix(ncol=nlayers(x), nrow=length(x))
 				v[,1] = x
 			}
-			v[,i] = .sampleRegular(raster(raster, i), n=n, extent=extent, cells=cells, asRaster=asRaster, corners=corners)
+			v[,i] = .sampleRegular(raster(x, i), n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners)
 		}
-		colnames(v) <- layerNames(raster)
+		colnames(v) <- layerNames(x)
 		return(v)
 	}
 }	

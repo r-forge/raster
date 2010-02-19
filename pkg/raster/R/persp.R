@@ -15,7 +15,7 @@ setMethod("persp", signature(x='RasterLayer'),
 			if (canProcessInMemory(x, 2)) {
 				x <- readAll(x) 
 			} else {
-				x <- sampleRegular(x, n=maxpixels, asRaster=TRUE, corners=TRUE)
+				x <- sampleRegular(x, size=maxpixels, asRaster=TRUE, corners=TRUE)
 			}
 		}
 		value <- t((values(x, format='matrix'))[nrow(x):1,])

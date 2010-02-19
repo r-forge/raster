@@ -1,40 +1,59 @@
-# raster package
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date: June 2008
 # Version 0.9
 # Licence GPL v3
 
 setMethod('summary', signature(object='RasterLayer'), 
-	function(object, ...) {
+	function(object, maxsamp=5000, ...) {
 		sumobj <- new("RasterSummary")
 		sumobj@ncell <- ncell(object)
 		sumobj@dataContent <- dataContent(object) 
 		if ( sumobj@dataContent == "all") {
 			sumobj@NAs <- sum(is.na(object@data@values))
 			sumobj@values <- as.matrix( summary(object@data@values) )
-			colnames(sumobj@values)=""
-		} 
+		} else if (dataSource(object) == 'disk') {
+			if (ncell(object) > maxsamp) {
+				v = sampleRandom(object, maxsamp)
+				sumobj@warning = paste('summary based on a sample of:', maxsamp, ' cells, which is ', 100*maxsamp/ncell(object), '% of all cells')
+			} else {
+				v = getValues(object)
+			}
+			sumobj@NAs <- sum(is.na(v))
+			sumobj@values <- as.matrix( summary(v) )
+		} else {
+			stop('no cell values associated with this RasterLayer')
+		}
+		colnames(sumobj@values)=""
 		return(sumobj)
 	}	
 )
 
 
 setMethod('summary', signature(object='RasterStack'), 
-	function(object, ...) {
+	function(object, maxsamp=5000, ...) {
+		if (nlayers(object) == 0) {	stop('no layers in this RasterStack') }
+		
 		sumobj <- new("RasterSummary")
 		sumobj@ncell <- ncell(object)
 		for (n in 1:nlayers(object)) {
 			sumobj@dataContent <- c(sumobj@dataContent, dataContent(object@layers[[n]]) )
 			if (dataContent(object@layers[[n]]) == 'all') {
-				sumobj@NAs <- c(sumobj@NAs, sum(is.na(object@layers[[n]]@data@values)))
+				nas <- sum(is.na(object@layers[[n]]@data@values))
 				sm = as.matrix( summary(object@layers[[n]]@data@values) )
-				sumobj@values <- cbind(sumobj@values, as.matrix(sm))
-				rownames(sumobj@values) <- rownames(sm)
 			} else {
-				sumobj@NAs <- c(sumobj@NAs, NA)
-				sumobj@values <- cbind(sumobj@values , NA)
+				if (sumobj@ncell > maxsamp) {
+					v = sampleRandom(object@layers[[n]], maxsamp)
+					sumobj@warning = paste('summary based on a sample of:', maxsamp, ' cells, which is ', 100*maxsamp/ncell(object), '% of all cells')
+				} else {
+					v = getValues(object@layers[[n]])
+				}
+				sm <- as.matrix( summary(v) )					
+				nas = sum(is.na(v)) 
 			}
+			sumobj@NAs <- c(sumobj@NAs, nas)
+			sumobj@values <- cbind(sumobj@values, as.matrix(sm))
 		}
+		rownames(sumobj@values) <- rownames(sm)
 		colnames(sumobj@values) <- 1:nlayers(object)
 		return(sumobj)
 	}
@@ -44,7 +63,7 @@ setMethod('summary', signature(object='RasterStack'),
 
 
 setMethod('summary', signature(object='RasterBrick'), 
-	function(object, ...) {
+	function(object, maxsamp=5000, ...) {
 		sumobj <- new("RasterSummary")
 		sumobj@ncell <- ncell(object)
 		sumobj@dataContent <- dataContent(object)
@@ -57,7 +76,28 @@ setMethod('summary', signature(object='RasterBrick'),
 				rownames(sumobj@values) <- rownames(sm)
 			} 
 			colnames(sumobj@values) <- 1:nlayers(object)
+			
+		} else if (dataSource(object) == 'disk') {
+		
+			if (sumobj@ncell > maxsamp) {
+				v = sampleRandom(object, maxsamp)
+				sumobj@warning = paste('summary based on a sample of:', maxsamp, ' cells, which is ', 100*maxsamp/ncell(object), '% of all cells')
+			} else {
+				v = getValues(object)
+			}
+
+			for (n in 1:nlayers(object)) {
+				sumobj@NAs <- c(sumobj@NAs, sum(is.na(v[, n])))
+				sm = as.matrix( summary( v[,n] ) )
+				sumobj@values <- cbind(sumobj@values, as.matrix(sm))
+				rownames(sumobj@values) <- rownames(sm)
+			} 
+			colnames(sumobj@values) <- 1:nlayers(object)
+			
+		} else {
+			stop('no cell values associated with this RasterBrick')
 		}
+		
 		return(sumobj)
 	}
 )	
@@ -68,12 +108,14 @@ setClass('RasterSummary',
 		ncell = 'numeric',
 		dataContent = 'vector',
 		NAs = 'vector',
-		values = 'matrix'
+		values = 'matrix',
+		warning = 'character'
 	),
 	prototype (	
 		dataContent = vector(mode='character'),
 		NAs = vector(mode='numeric'),
-		values = matrix(nrow=6, ncol=0)
+		values = matrix(nrow=6, ncol=0),
+		warning = ''
 	),
 )
 	
@@ -81,12 +123,11 @@ setClass('RasterSummary',
 setMethod('show', signature(object='RasterSummary'), 	
 	function(object) {
 		cat ("Cells: " , object@ncell, "\n")
-		if ( any(object@dataContent=="all")) {
-			cat("NAs  : ", object@NAs, "\n")
-			cat("\n")
-			print(object@values) 
-		} else {
-			cat("values not in memory\n")
+		cat("NAs  : ", object@NAs, "\n")
+		cat("\n")
+		print(object@values) 
+		if (object@warning != '') {
+			cat(object@warning, '\n')
 		}
 	}	
 )
