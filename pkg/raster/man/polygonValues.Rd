@@ -7,7 +7,7 @@
 \title{ Extract values from a RasterLayer by polygons }
 
 \description{
-This method returns the values of a Raster object for the area covered by one or more polygons.
+This method returns the values of the cells of a Raster object that is covered by a polygon.
 }
 
 \usage{
@@ -17,7 +17,7 @@ polygonValues(p, r, ...)
 \arguments{
 \item{p}{SpatialPolygons* object}
 \item{r}{Raster object}
-\item{...}{additional arguments (none implemented)}
+\item{...}{additional arguments. One implemented: \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the fraction of each cell coverd (the weight that can be used for averaging; see examples) This option can be useful if the polygons are small relative to the cells size of the RasterLayer }
 }
 
 
@@ -42,7 +42,15 @@ polys@polygons[[3]]@Polygons[[1]]@hole <- TRUE
 
 #plot(r)
 #plot(polys, add=TRUE)
-polygonValues(polys, r)
+v <- polygonValues(polys, r)
+v
+# mean for each polygon
+unlist(lapply(v, function(x) if (!is.null(x)) mean(x, rm.na=T) else NA ))
+
+v <- polygonValues(polys, r, weights=TRUE)
+v
+# weighted mean for each polygon
+unlist(lapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  ))
 }
 
 \keyword{methods}
