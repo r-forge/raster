@@ -136,12 +136,13 @@ setMethod('predict', signature(object='Raster'),
 			} 
 			
 			if (inherits(model, "gam")) {
-				if ( sum(!is.na(blockvals)) == 0 ) {
+				if (sum(!is.na(blockvals)) == 0 ) {
 					predv <- napred
+				} else {
+					predv <- predict(model, blockvals, ...)
 				}
-			} else {
-			
-				if (gstatmod) { 
+				
+			} else if (gstatmod) { 
 					if (sp) { 
 						row.names(p) <- 1:nrow(p)
 						blockvals <- SpatialPointsDataFrame(coords=p, data = blockvals, proj4string = projection(predrast, asText = FALSE))
@@ -151,7 +152,7 @@ setMethod('predict', signature(object='Raster'),
 					if (sp) { predv <- predv@data[,index] }
 					else { predv <- predv[,index+2] }
 					
-				} else if (inherits(model, "Krig")) {  
+			} else if (inherits(model, "Krig")) {  
 					if (xyOnly) {
 						predv <- predict(model, blockvals, ...)
 					} else {
@@ -178,43 +179,43 @@ setMethod('predict', signature(object='Raster'),
 		#					predv[] <- predict(model, rowv, ...)
 		#				}
 		#			}
-				} else if (se.fit) {
+			} else if (se.fit) {
 					predv <- predict(model, blockvals, se.fit=TRUE, ...)
 					predv <- as.vector(predv$se.fit)
 				
-				} else {
+			} else {
 					predv <- predict(model, blockvals, ...)
-				}
+			}
 				
-				if (class(predv)[1] == 'list') {
+			if (class(predv)[1] == 'list') {
 					predv = unlist(predv)
 					if (length(predv) != nrow(blockvals)) {
 						predv = matrix(predv, nrow=nrow(blockvals))
 					}					
-				}
+			}
 				
-				if (isTRUE(dim(predv)[2] > 1)) {
-					predv=predv[,index]
-				}
+			if (isTRUE(dim(predv)[2] > 1)) {
+				predv=predv[,index]
+			}
 			
 				# to change factor to numeric; should keep track of this to return a factor type RasterLayer
-				predv = as.numeric(predv)
+			predv = as.numeric(predv)
 				
-				if (length(predv) != nrow(blockvals)) {
-				# perhaps no prediction for rows with NA ? 
-				# this was a problem with predict.rf, now fixed
-					blockvals <- na.omit( cbind(1:nrow(blockvals), blockvals) )
-					indices <- blockvals[,1]
-					if (length(indices) == length(predv)) {
-						pr <- 1:ncol(object)
-						pr[] <- NA
-						pr[indices] <- predv
-						predv <- pr
-					} else {
-						stop('length of predict vector does not match lenght of input vectors; please submit a bug report')
-					}
+			if (length(predv) != nrow(blockvals)) {
+			# perhaps no prediction for rows with NA ? 
+			# this was a problem with predict.rf, now fixed
+				blockvals <- na.omit( cbind(1:nrow(blockvals), blockvals) )
+				indices <- blockvals[,1]
+				if (length(indices) == length(predv)) {
+					pr <- 1:ncol(object)
+					pr[] <- NA
+					pr[indices] <- predv
+					predv <- pr
+				} else {
+					stop('length of predict vector does not match lenght of input vectors; please submit a bug report')
 				}
 			}
+		
 			
 			if (filename == '') {
 				predv = matrix(predv, nrow=ncol(predrast))

@@ -340,6 +340,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 \section{XVIII. Miscellaneous}{
 
 \tabular{ll}{
+    \code{\link{getData}} \tab Download and geographic data\cr
     \code{\link{readIniFile}} \tab Read a (windows) 'ini' file \cr
     \code{\link{writeRasterHdr}} \tab Write header file for some raster formats \cr
     \code{\link{trim}} \tab Remove leading and trainling blanks from a character string \cr
