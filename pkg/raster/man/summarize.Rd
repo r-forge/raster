@@ -1,21 +1,20 @@
-\name{Summarize}
+\name{Summary}
 
 \docType{methods}
 \alias{summary}
 \alias{summary,RasterLayer-method}
-\alias{summary,RasterStack-method}
-\alias{show,RasterLayerSummary-method}
+\alias{summary,RasterStackBrick-method}
+\alias{show,RasterSummary-method}
 
 
-\title{ Summarize}
+\title{Summary}
+
 \description{
- Summarize a RasterLayer or RasterStack
+Summarize a Raster* object. Only useful for Raster* object that have their values in memory. See \link{cellStats} for other cases.
 }
-\section{Methods}{
-\describe{
 
-Creates an object of class "RasterLayerSummary". Not particularly useful.
+\value{A RasterSummary object}
 
-}}
+
 \keyword{methods}
 \keyword{spatial}
