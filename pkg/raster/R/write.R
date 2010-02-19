@@ -22,7 +22,8 @@ if (!isGeneric('writeValues')) {
 setMethod('writeStart', signature(x='RasterLayer', filename='character'), 
 function(x, filename, options=NULL, doPB=FALSE, ...) {
 	filetype <- .filetype(...)
-	res <- filetype %in% c(.nativeDrivers(), 'ascii')
+	if (filetype=='ascii') {stop('ascii files not yet supported by this function, you can use writeRaster') }
+	res <- filetype %in% c(.nativeDrivers())
 	if (res) { 
 		.startRasterWriting(x, filename, ...)
 	} else {
@@ -122,8 +123,6 @@ setMethod('writeValues', signature(x='RasterBrick'),
 .getTransientRows <- function(x, r, n=1) {
 	reg = c(n, ncol(x))
 	off = c(r-1,0)
-	t(getRasterData(x@file@transient, region.dim=reg, offset=off))
-#	v[is.nan(v)] <- NA
-#	v
+	as.vector((getRasterData(x@file@transient, region.dim=reg, offset=off)))
 }
 

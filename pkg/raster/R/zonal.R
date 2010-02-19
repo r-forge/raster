@@ -3,26 +3,18 @@
 # Version 0.9
 # Licence GPL v3
 
-zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
+zonal <- function(raster, zones, stat='mean', na.rm=TRUE, progress) {
 	compare(c(raster, zones))
 	
 	if (missing(progress)) {progress <- .progress()}
 
 	if (class(stat) != 'character') {
 		if (canProcessInMemory(raster, 3)) {
-			if (dataContent(raster) != 'all') {
-				raster <- readAll(raster)
-			}
-			d <- values(raster)
+			d <- getValues(raster)
 			rm(raster)
-			if (dataContent(zones) != 'all') {
-				zones <- readAll(zones)
-			}
-			d <- cbind(d, as.integer(values(zones)))
+			d <- cbind(d, round(getValues(zones)))
 			rm(zones)
-			if (keepdata) {
-				d <- na.omit(d)
-			}
+			if (na.rm) {d <- na.omit(d)	}
 			alltab  <-  tapply(d[,1], d[,2], stat) 
 			stat <- deparse(substitute(stat))
 		} else {
@@ -47,14 +39,13 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
 		alltab <- array(dim=0)
 		cnttab <- alltab
 	
+		tr <- blockSize(raster, n=2)
+		pb <- pbCreate(tr$n, type=.progress())			
 		
-		pb <- pbCreate(nrow(raster), type=progress)
-		
-		for (r in 1:nrow(raster)) {
-			d <- cbind(getValues(raster, r), as.integer(getValues(zones, r)))
-			if (keepdata) {
-				d <- na.omit(d)
-			}
+		for (i in 1:tr$n) {
+			d <- getValuesBlock(raster, row=tr$row[i], nrows=tr$nrows[i])
+			d <- cbind(d,  getValuesBlock(zones, row=tr$row[i], nrows=tr$nrows[i]))
+			if (na.rm) { d <- na.omit(d)	}
 			if (length(d) == 0) { next }
 			alltab <- c(alltab, tapply(d[,1], d[,2], fun))
 			if (counts) {
@@ -67,7 +58,7 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
 					cnttab <- tapply(as.vector(cnttab), groups, sum)
 				}
 			}
-			pbStep(pb, r)
+			pbStep(pb, i)
 		}
 		pbClose(pb)
 			
@@ -83,4 +74,5 @@ zonal <- function(raster, zones, stat='mean', keepdata=TRUE, progress) {
 	colnames(alltab) <- c('zone', stat)
 	return(alltab)
 }
+
 

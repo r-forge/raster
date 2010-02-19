@@ -9,14 +9,14 @@ Compute zonal statistics. That is, cross-tabulate the values of a RasterLayer ba
 }
 
 \usage{
-zonal(raster, zones, stat='mean', keepdata=TRUE, progress) 
+zonal(raster, zones, stat='mean', na.rm=TRUE, progress) 
 }
 
 \arguments{
   \item{raster}{A RasterLayer object}
   \item{zones}{A RasterLayer object; with codes representing zones that are treated as integer values}
   \item{stat}{The function to be applied. Either as character: 'mean', 'min', 'max', 'sum'; or a function (see Details) }
-  \item{keepdata}{Logical. If \code{TRUE}, NA will be removed for neighborhood computations. The result will only be NA if all cells are NA}
+  \item{na.rm}{Logical. If \code{TRUE}, NA will be removed from the computations and the result will only be NA if all cells in a zone are NA}
   \item{progress}{Character. Valid values are "text", "tcltk", "windows" (on that platform only) and "" }   
 }
 

@@ -165,8 +165,9 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{xyValues}} \tab Use points (optionally with a buffer) to extract cell values \cr
     \code{\link{cellValues}} \tab Use cell numbers to extract cell values \cr
     \code{\link{polygonValues}} \tab Use a SpatialPolygons* object to extract cell values \cr
-    \code{\link{minValue}} \tab The minimum value of the cells of a Raster* object \cr
-    \code{\link{maxValue}} \tab The maximum value of the cells of a Raster* object \cr
+    \code{\link{minValue}} \tab The minimum value of the cells of a Raster* object (not always known)\cr
+    \code{\link{maxValue}} \tab The maximum value of the cells of a Raster* object (not always known)\cr
+    \code{\link{setMinMax}} \tab Compute the minimum and maximum value of a Raster* object if these are not known\cr
   }
 You can also use indexing with \code{[} for cell numbers, and \code{[[} for row / column number combinations \cr
 }

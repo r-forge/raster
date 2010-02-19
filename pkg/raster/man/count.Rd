@@ -9,20 +9,21 @@ Count the frequency of a single value in a RasterLayer.
 }
 
 \usage{
-count(raster, value, digits=0)
+count(raster, value, digits=0, progress)
 }
 
 \arguments{
   \item{raster}{A RasterLayer}
   \item{value}{The value to be counted}  
   \item{digits}{the number of digits for rounding the values}   
+  \item{progress}{Character. Optional. Can be "text", "tcltk", "windows" (on that platform only) and ""}  
 }
 
 \value{
 numeric
 }
 
-\seealso{ \code{\link[raster]{setMinMax} } }
+\seealso{ \code{\link{freq}} }
 
 \author{Robert J. Hijmans}
 

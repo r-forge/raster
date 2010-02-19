@@ -30,15 +30,13 @@ distanceFromPoints <- function(object, xy, filename='', ...) {
 	}
 
 	xy <- xFromCol(rst, 1:ncol(rst))
-	xy <- cbind(xy, xy)
+	xy <- cbind(xy, NA)
 	
 	arow <- rep(NA, ncol(rst))
 	
 	if (filename == '') {
 		v <- matrix(ncol=nrow(rst), nrow=ncol(rst))
-	} else {
-		v <- vector()
-	}
+	} 
 	
 	pb <- pbCreate(nrow(rst), type=.progress(...))
 	for (r in 1:nrow(rst)) {	
