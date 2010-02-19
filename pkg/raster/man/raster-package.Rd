@@ -148,11 +148,13 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
 
   \tabular{ll}{
     \code{\link{cellStats}} \tab Summarize a Raster cell values with a function \cr
+    \code{\link{summary}} \tab Summary of the values of a Raster* object (quartiles and mean) \cr			
     \code{\link{freq}} \tab Frequency table of Raster cell values \cr
     \code{\link{count}} \tab Count the frequency of a single (range of) value(s) \cr
     \code{\link{crosstab}} \tab Cross-tabulate two RasterLayer objects \cr
     \code{\link{unique}} \tab Get the unique values in a RasterLayer \cr
     \code{\link{zonal}} \tab Summarize a RasterLayer by zones in another RasterLayer \cr
+
   }
 }
 
@@ -165,9 +167,12 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{xyValues}} \tab Use points (optionally with a buffer) to extract cell values \cr
     \code{\link{cellValues}} \tab Use cell numbers to extract cell values \cr
     \code{\link{polygonValues}} \tab Use a SpatialPolygons* object to extract cell values \cr
+    \code{\link{sampleRandom}} \tab Random sample \cr
+    \code{\link{sampleRegular}} \tab Regular sample \cr
     \code{\link{minValue}} \tab The minimum value of the cells of a Raster* object (not always known)\cr
     \code{\link{maxValue}} \tab The maximum value of the cells of a Raster* object (not always known)\cr
     \code{\link{setMinMax}} \tab Compute the minimum and maximum value of a Raster* object if these are not known\cr
+
   }
 You can also use indexing with \code{[} for cell numbers, and \code{[[} for row / column number combinations \cr
 }
@@ -349,6 +354,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
     \code{\link{cv}} \tab Coefficient of variation  \cr
     \code{\link{modal}} \tab Modal value  \cr
     \code{\link{Median}} \tab Median value \cr
+    \code{\link{sampleInt}} \tab Random sample of integer values \cr
     \code{\link{showTmpFiles}} \tab Show temporary files \cr
     \code{\link{removeTmpFiles}} \tab Remove temporary files \cr
 }
