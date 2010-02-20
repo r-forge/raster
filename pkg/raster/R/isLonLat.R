@@ -1,8 +1,18 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  October 2008
 # Version 0.9
 # Licence GPL v3
+
+
+.couldBeLonLat <- function(x) {
+	if (isLonLat(x)) return(TRUE)
+	if (projection(x)=='NA') {
+		e <- extent(x)
+		if (e@xmin > -400 & e@xmax < 400 & e@ymin > -90.1 & e&ymax < 90.1) { return(TRUE) }
+	} else {
+		return(FALSE)
+	}
+}
 
 
 if (!isGeneric("isLonLat")) {

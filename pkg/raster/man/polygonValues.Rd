@@ -45,7 +45,7 @@ polys@polygons[[3]]@Polygons[[1]]@hole <- TRUE
 v <- polygonValues(polys, r)
 v
 # mean for each polygon
-unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=T) else NA ))
+unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=TRUE) else NA ))
 
 v <- polygonValues(polys, r, weights=TRUE)
 v

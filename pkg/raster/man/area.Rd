@@ -1,20 +1,20 @@
 \name{area}
 
 \alias{area}
+\alias{area,Raster-method}
   
 \title{area}
 
 \description{
-Compute the approximate surface area of cells in an unprojected (CRS = latitude / longitude) RasterLayer. It is an approximation as area is computed as the height of a cell (which is constant among all cells) times the width in the middle of a cell (the width is smaller at the polewards side than at the equator-wards side of a cell). This variation is greatest near the poles and the values are thus not very precise for high latitudes.
+Compute the approximate surface area of cells in an unprojected (longitude/latitude) RasterLayer. It is an approximation as area is computed as the height of a cell (which is constant among all cells) times the width in the middle of a cell (the width is smaller at the polewards side than at the equator-wards side of a cell). This variation is greatest near the poles and the values are thus not very precise for very high latitudes. 
 }
 
 \usage{
-area(x, filename='', ...)
+area(x, ...)
 }
 
 \arguments{
 \item{x}{a Raster* object}
-\item{filename}{Character. Output filename}
 \item{...}{Additional arguments, see Details}
 }
 
@@ -22,6 +22,7 @@ area(x, filename='', ...)
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
+  \tab \code{filename}  \tab filename for the output RasterLayer \cr
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
@@ -41,4 +42,5 @@ r <- raster(nrow=18, ncol=36)
 a <- area(r)
 }
 
+\keyword{methods}
 \keyword{spatial}
