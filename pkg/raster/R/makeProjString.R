@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  January 2009
 # Version 0.9
 # Licence GPL v3
@@ -7,10 +6,10 @@
 
 
 .newCRS <- function(projs) {
-	projs <- trim(projs)
-	if (is.na(projs) | nchar(projs) < 3) { 
+	if (is.null(projs) | is.na(projs) | nchar(projs) < 3) { 
 		prj <- (CRS(as.character(NA)))
 	} else {
+		projs <- trim(projs)
 		prj <- try(CRS(projs), silent = T)
 		if (class(prj) == "try-error") { 
 			warning(paste(projs, 'is not a valid proj4 CRS string')) 

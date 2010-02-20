@@ -1,26 +1,28 @@
-\name{shrink}
+\name{trim}
 
-\alias{shrink}
-\alias{shrink,RasterLayer-method}
+\alias{trim}
+\alias{trim,RasterLayer-method}
+\alias{trim,character-method}
 
-\title{Shrink}
+\title{trim}
 
 \description{
-Shrink a RasterLayer by removing outer rows and columns that have no data
+Trim (shrink) a RasterLayer by removing outer rows and columns that have no data.
+
+Or remove the whitespace before or after a string of characters.
 }
 
 \usage{
-shrink(x, ...) 
+trim(x, ...) 
 }
 
 \arguments{
-  \item{x}{A RasterLayer object}
+  \item{x}{A RasterLayer object or a character string}
   \item{...}{additional arguments. See Details.}  
 }
 
 \details{
-
-The following additional arguments can be passed, to replace default values for this function
+If \code{x} is a RasterLayer, the following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
   \tab \code{padding}  \tab Integer. Number of outer rows/columns with NA values to keep; default=0\cr
   \tab \code{filename}  \tab Output filename. Default = '' \cr
@@ -32,7 +34,9 @@ The following additional arguments can be passed, to replace default values for 
 }
 
 \value{
-A new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
+If \code{x} is a RasterLayer, a new RasterLayer object (in the R environment), and in some cases the side effect of a new file on disk.
+
+A character string If \code{x} is a character string.
 }
 
 \author{Robert J. Hijmans and Jacob van Etten}
@@ -42,7 +46,11 @@ r1 <- raster(ncol=36,nrow=18)
 r1[309:310] <- 1:2
 r1[353:355] <- 3:5
 r1[400] <- 6
-s <- shrink(r1) 
+s <- trim(r1) 
+
+
+trim("  hi folks  ")
 }
+
 \keyword{spatial}
 

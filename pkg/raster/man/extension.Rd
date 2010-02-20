@@ -1,26 +1,22 @@
-\name{fileFunctions}
+\name{extension}
 
 \alias{ext}
 \alias{ext<-}
-\alias{trim}
 
-\title{Filename manipulation}
+\title{Filename extensions}
 
 \description{
-Get or change a file extension
-use \code{trim} to remove the whitespace before or after a string of characters.
+Get or change a filename extension
 }
 
 \usage{
 ext(filename, value=NULL)
 ext(filename) <- value
-trim(x)
 }
 
 \arguments{
-  \item{filename}{A filename, with or without the path}
-  \item{value}{A file extension including the dot, e.g., ".txt" }
-  \item{x}{A character string (filename)}
+\item{filename}{A filename, with or without the path}
+\item{value}{A file extension including the dot, e.g., ".txt" }
 }
 
 \value{
@@ -31,9 +27,9 @@ If \code{ext(filename)} is used without a \code{value} argument, it returns the 
 
 \author{Robert J. Hijmans }
 
+
 \examples{
-fn <- "  c:/temp folder/filename.exten sion  "
-fn <- trim(fn)
+fn <- "c:/temp folder/filename.exten sion"
 ext(fn)
 ext(fn) <- ".txt"
 ext(fn)

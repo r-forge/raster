@@ -68,7 +68,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{merge}} \tab Combine RasterLayer objects with different extents (but same origin and resolution) \cr
     \code{\link{crop}} \tab Select a geographic subset of a RasterLayer \cr
     \code{\link{expand}} \tab Enlarge a RasterLayer  \cr
-    \code{\link{shrink}} \tab Shrink a RasterLayer by removing exterior rows and/or columns that only have NA values \cr
+    \code{\link{trim}} \tab Trim a RasterLayer by removing exterior rows and/or columns that only have NA values \cr
     \code{\link{aggregate}} \tab Combine cells to create larger cells \cr
     \code{\link{disaggregate}} \tab Subdivide cells \cr
     \code{\link{shift}} \tab Shift the location of RasterLayer \cr

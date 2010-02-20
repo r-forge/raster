@@ -43,9 +43,9 @@ showOptions <- function() {
 
 
 .chunksize <- function(){
-	d <- trim(getOption('rasterChunkSize'))	
+	d <- getOption('rasterChunkSize')
 	if (is.null(d)) {
-		d <- 1000000
+		return( 1000000 )
 	} 
 	d <- round(as.numeric(d[1]))
 	if (is.na(d)) {
