@@ -7,45 +7,64 @@
 
 
 alignExtent <- function(extent, object) {
-	oldbb <- extent(object)
-	bndbox <- extent(extent)
-	bndbox@xmin <- max(bndbox@xmin, oldbb@xmin)
-	bndbox@xmax <- min(bndbox@xmax, oldbb@xmax)
-	bndbox@ymin <- max(bndbox@ymin, oldbb@ymin)
-	bndbox@ymax <- min(bndbox@ymax, oldbb@ymax)
-	col <- colFromX(object, bndbox@xmin)
+	object <- raster(object)
+	oldext <- extent(object)
+	e <- extent(extent)
+	e@xmin <- max(e@xmin, oldext@xmin)
+	e@xmax <- min(e@xmax, oldext@xmax)
+	e@ymin <- max(e@ymin, oldext@ymin)
+	e@ymax <- min(e@ymax, oldext@ymax)
+	col <- colFromX(object, e@xmin)
 	mn <- xFromCol(object, col) - 0.5 * xres(object)
 	mx <- xFromCol(object, col) + 0.5 * xres(object)
-	if (abs(bndbox@xmin - mn) > abs(bndbox@xmin - mx)) { 
-		bndbox@xmin <- mx 
+	if (abs(e@xmin - mn) > abs(e@xmin - mx)) { 
+		e@xmin <- mx 
 	} else { 
-		bndbox@xmin <- mn 
+		e@xmin <- mn 
 	}
-	col <- colFromX(object, bndbox@xmax)
+	col <- colFromX(object, e@xmax)
 	mn <- xFromCol(object, col) - 0.5 * xres(object)
 	mx <- xFromCol(object, col) + 0.5 * xres(object)
-	if (abs(bndbox@xmax - mn) > abs(bndbox@xmax - mx)) { 
-		bndbox@xmax <- mx 
+	if (abs(e@xmax - mn) > abs(e@xmax - mx)) { 
+		e@xmax <- mx 
 	} else { 
-		bndbox@xmax <- mn 
+		e@xmax <- mn 
 	}
-	row <- rowFromY(object, bndbox@ymin)
+	row <- rowFromY(object, e@ymin)
 	mn <- yFromRow(object, row) - 0.5 * yres(object)
 	mx <- yFromRow(object, row) + 0.5 * yres(object)
-	if (abs(bndbox@ymin - mn) > abs(bndbox@ymin - mx)) {
-		bndbox@ymin <- mx
+	if (abs(e@ymin - mn) > abs(e@ymin - mx)) {
+		e@ymin <- mx
 	} else { 
-		bndbox@ymin <- mn 
+		e@ymin <- mn 
 	}
-	row <- rowFromY(object, bndbox@ymax)
+	row <- rowFromY(object, e@ymax)
 	mn <- yFromRow(object, row) - 0.5 * yres(object)
 	mx <- yFromRow(object, row) + 0.5 * yres(object)
-	if (abs(bndbox@ymax - mn) > abs(bndbox@ymax - mx)) { 
-		bndbox@ymax <- mx 
+	if (abs(e@ymax - mn) > abs(e@ymax - mx)) { 
+		e@ymax <- mx 
 	} else {
-		bndbox@ymax <- mn 
+		e@ymax <- mn 
 	}
-	return(bndbox)
+	
+	if ( e@ymin == e@ymax ) {
+		if (oldext@ymin > e@ymin) {
+			e@ymax = e@ymax + yres(object)
+		} else {
+			e@ymin = e@ymin - yres(object)		
+		}
+	}
+	if ( e@xmin == e@xmax ) {
+		if (oldext@xmin > e@xmin) {
+			e@xmax = e@xmax + xres(object)
+		} else {
+			e@xmin = e@xmin - xres(object)		
+		}
+	}
+	
+	
+	
+	return(e)
 }
 
 

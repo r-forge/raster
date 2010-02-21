@@ -3,7 +3,15 @@
 # Version 0.9
 # Licence GPL v3
 
-setMethod('summary', signature(object='RasterLayer'), 
+
+if (!isGeneric("summary")) {
+	setGeneric("summary", function(object, ...)
+		standardGeneric("summary"))
+}	
+
+
+
+setMethod('summary', signature(object='Raster'), 
 	function(object, maxsamp=5000, ...) {
 		sumobj <- new("RasterSummary")
 		sumobj@ncell <- ncell(object)
