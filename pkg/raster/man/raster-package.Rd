@@ -144,20 +144,19 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
 }
 
 
+
 \section{VIII. Summarizing}{
 
   \tabular{ll}{
     \code{\link{cellStats}} \tab Summarize a Raster cell values with a function \cr
-    \code{\link{summary}} \tab Summary of the values of a Raster* object (quartiles and mean) \cr			
+    \code{\link{summary}} \tab Summary of the values of a Raster* object (quartiles and mean) \cr
     \code{\link{freq}} \tab Frequency table of Raster cell values \cr
     \code{\link{count}} \tab Count the frequency of a single (range of) value(s) \cr
     \code{\link{crosstab}} \tab Cross-tabulate two RasterLayer objects \cr
     \code{\link{unique}} \tab Get the unique values in a RasterLayer \cr
     \code{\link{zonal}} \tab Summarize a RasterLayer by zones in another RasterLayer \cr
-
   }
 }
-
 
 \section{IX. Accessing values of Raster* object cells}{
 
@@ -169,13 +168,15 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{polygonValues}} \tab Use a SpatialPolygons* object to extract cell values \cr
     \code{\link{sampleRandom}} \tab Random sample \cr
     \code{\link{sampleRegular}} \tab Regular sample \cr
-    \code{\link{minValue}} \tab The minimum value of the cells of a Raster* object (not always known)\cr
-    \code{\link{maxValue}} \tab The maximum value of the cells of a Raster* object (not always known)\cr
-    \code{\link{setMinMax}} \tab Compute the minimum and maximum value of a Raster* object if these are not known\cr
-
+    \code{\link{minValue}} \tab The minimum value of the cells of a Raster* object (not always known) \cr
+    \code{\link{maxValue}} \tab The maximum value of the cells of a Raster* object (not always known) \cr
+    \code{\link{setMinMax}} \tab Compute the minimum and maximum value of a Raster* object if these are not known \cr
   }
 You can also use indexing with \code{[} for cell numbers, and \code{[[} for row / column number combinations \cr
 }
+
+
+
 
 
 \section{X. Plotting}{
