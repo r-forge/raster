@@ -5,13 +5,14 @@
 
 
 distance <- function(object, filename='', ...) {
-	test <- try( pts <- rasterToPoints(object)[,1:2] )
-	if (class(test) == "try-error") {
+	#r = edge(object, ...) * object
+	pts <- try(  rasterToPoints(object, fun=function(x){x>0})[,1:2] )
+	if (class(pts) == "try-error") {
 		return( .distanceRows(object, filename=filename, ...) )
 	}
+
 	return( distanceFromPoints(object=object, xy=pts, filename=filename, ...) )
 }
-
 
 
 distanceFromPoints <- function(object, xy, filename='', ...) {

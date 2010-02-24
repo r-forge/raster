@@ -56,7 +56,7 @@
 
 	xx <- as.vector(var.get.nc(nc, xvar))
 	rs <- xx[-length(xx)] - xx[-1]
-	if (! isTRUE ( all.equal( min(rs), max(rs) ) ) ) {
+	if (! isTRUE ( all.equal( min(rs), max(rs), scale= min(rs)/100 ) ) ) {
 		stop('cells are not equally spaced; extract as points') }
 	xrange <- c(min(xx), max(xx))
 	resx <- (xrange[2] - xrange[1]) / (ncols-1)
@@ -64,7 +64,7 @@
 
 	yy <- as.vector(var.get.nc(nc, yvar))
 	rs <- yy[-length(yy)] - yy[-1]
-	if (! isTRUE ( all.equal( min(rs), max(rs) ) ) ) {
+	if (! isTRUE ( all.equal( min(rs), max(rs), scale= min(rs)/100 ) ) ) {
 		stop('cells are not equally spaced; you should extract values as points') }
 	yrange <- c(min(yy), max(yy))
 	resy <- (yrange[2] - yrange[1]) / (nrows-1)
