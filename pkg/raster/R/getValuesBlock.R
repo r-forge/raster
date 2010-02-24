@@ -71,7 +71,7 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 
 
 setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'), 
- 	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
+ 	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), format='') {
 		if (!is.atomic(row)) {	stop() }
 		if (!is.atomic(nrows)) { stop() }
 		if (!is.atomic(col)) {	stop() }
@@ -144,6 +144,11 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 	
 		if (readrow) {	
 			res <- values(.readRasterLayerValues(x, row, nrows, col, ncols))
+		}
+		if (format=='matrix') {
+			res = matrix(res, nrow=nrows , ncol=ncols )
+			colnames(res) <- col:lastcol
+			rownames(res) <- row:lastrow
 		}
 		res
 	}

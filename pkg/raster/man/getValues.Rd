@@ -30,8 +30,9 @@ getValues(x, row, nrows, ...)
   
 
 \details{
-Additional arguments when x is a RasterLayer:
- \code{format} Character. specifiy the output format. Either '', 'vector', 'matrix' or 'dataframe'. If '' is used, a matrix is returned for a RasterStack or RasterBrick, and a vector for a RasterLayer
+Additional arguments when x is a \code{RasterLayer}:
+ \code{format} Character. specifiy the output format. Either '' or 'matrix'. The default is '', in which case a vector is returned. 
+ The values returned for a RasterStack or RasterBrick are always a matrix.
 
 }
 

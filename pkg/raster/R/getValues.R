@@ -9,14 +9,12 @@ if (!isGeneric("getValues")) {
 }	
 
 setMethod("getValues", signature(x='RasterLayer', row='missing', nrows='missing'), 
-function(x, format='', names=FALSE) {
+function(x, format='') {
 	if (dataContent(x) != "all") {
 		x <- readAll(x)
 	}
 	if (format=='matrix') { 
-		return(.values.as.matrix(x, names=names)) 
-	} else if (format=='dataframe') { 
-		return(.values.as.dataframe(x)) 
+		return(matrix(x@data@values, ncol=x@ncols, nrow=x@nrows)) 
 	} else {
 		return(x@data@values) 
 	}
