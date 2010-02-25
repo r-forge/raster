@@ -33,7 +33,7 @@ There are two related additional arguments:
 a list as long as the number of polygons in p
 }
 
-\seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{xyValues}}, \code{\link[raster]{read}}, \code{\link[sp]{SpatialPolygons}}  }
+\seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{xyValues}}, \code{\link[raster]{getValues}}, \code{\link[sp]{SpatialPolygons}}  }
 
 \author{Robert J. Hijmans }
 
