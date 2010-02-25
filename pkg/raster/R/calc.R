@@ -10,9 +10,12 @@ if (!isGeneric("calc")) {
 
 setMethod('calc', signature(x='RasterLayer', fun='function'), 
 
-
 function(x, fun, filename='', ...) {
-	if (length(fun(5)) > 1) { 
+	test = try(fun(1), silent=TRUE)
+	if (class(test) == 'try-error') {
+		stop("function 'fun' is not valid here") 
+	}
+	if (length(fun(1)) > 1) { 
 		stop("function 'fun' returns more than one value") 
 	}
 
@@ -24,14 +27,8 @@ function(x, fun, filename='', ...) {
 	outraster <- raster(x)
 
 	if (dataSource(x) == 'disk') {
-		if (!canProcessInMemory(x, 4) & filename == '') {
+		if (!canProcessInMemory(x, 3) & filename == '') {
 			filename <- rasterTmpFile()
-		} else {
-		# 	clear <- FALSE
-		#	if ( dataContent(x) != 'all') {
-		#		x <- readAll(x)
-		# 		clear <- TRUE	
-		#	}
 		}
 	}
 	
@@ -39,26 +36,28 @@ function(x, fun, filename='', ...) {
 		outraster <- setValues(outraster, fun(values(x))) 
 		if (filename != "") {
 			outraster <- writeRaster(outraster, filename=filename, ...)
-			# if (clear) outraster <- clearValues(outraster) 
 		}
 		return(outraster)
 	} 
 	
 	if (filename == '') {
-		v <- matrix(NA, ncol=nrow(outraster), nrow=ncol(outraster))
-	} 
+		v <- matrix(ncol=nrow(outraster), nrow=ncol(outraster))
+	} else {
+		outraster <- writeStart(outraster, filename=filename, ...)
+	}
 		
-	pb <- pbCreate(nrow(outraster), type=.progress(...))
-		
-	for (r in 1:nrow(outraster)) {
-		x <- readRow(x, r)
+	tr <- blockSize(outraster)
+	pb <- pbCreate(tr$n, type=.progress(...))			
+	
+	for (i in 1:tr$n) {
+		vv <- fun( getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]) )
 		if (filename == "") {
-			v[,r] <- fun(values(x))
+			cols <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)	
+			v[,cols] <- matrix(vv, nrow=outraster@ncols)
 		} else {
-			outraster <- setValues(outraster, fun(values(x)), r)
-			outraster <- writeRaster(outraster, filename=filename, ...)
+			writeValues(outraster, vv, tr$row[i])
 		}
-		pbStep(pb, r)
+		pbStep(pb, i)
 	}
 	pbClose(pb)
 		
