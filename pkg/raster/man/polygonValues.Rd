@@ -1,4 +1,5 @@
 \name{polygonValues}
+
 \docType{methods}
 
 \alias{polygonValues}
@@ -17,9 +18,16 @@ polygonValues(p, r, ...)
 \arguments{
 \item{p}{SpatialPolygons* object}
 \item{r}{Raster object}
-\item{...}{additional arguments. One implemented: \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the fraction of each cell coverd (the weight that can be used for averaging; see examples) This option can be useful if the polygons are small relative to the cells size of the RasterLayer }
+\item{...}{additional arguments. See details}
 }
 
+\details{
+There are two related additional arguments:
+
+\code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the fraction of each cell coverd (the weight that can be used for averaging; see examples). This option can be useful if the polygons are small relative to the cells size of the RasterLayer
+
+\code{cellnumbers}. If \code{cellnumbers=TRUE} and \code{weights=TRUE}, cellnumbers will also be returned. 
+}
 
 \value{
 a list as long as the number of polygons in p

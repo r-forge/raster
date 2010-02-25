@@ -12,7 +12,7 @@ if (!isGeneric("polygonValues")) {
 
 
 setMethod("polygonValues", signature(p='SpatialPolygons', r='Raster'), 
-function(p, r, fun, weights=FALSE, ...) {
+function(p, r, fun, weights=FALSE, cellnumbers=FALSE, ...) {
 	spbb <- bbox(p)
 	rsbb <- bbox(r)
 	if (spbb[1,1] >= rsbb[1,2] | spbb[1,2] <= rsbb[1,1] | spbb[2,1] >= rsbb[2,2] | spbb[2,2] <= rsbb[2,1]) {
@@ -43,7 +43,12 @@ function(p, r, fun, weights=FALSE, ...) {
 			if (length(xy) > 0)  {  # catch holes or very small polygons
 				if (weights) {
 					value <- xyValues(r, xy)
-					res[[i]] <- cbind(value, weight)
+					if (cellnumbers) {
+						cell <- cellFromXY(r, xy)
+						res[[i]] <- cbind(cell, value, weight)
+					} else {				
+						res[[i]] <- cbind(value, weight)
+					}
 				} else {
 					res[[i]] <- xyValues(r, xy)
 				}

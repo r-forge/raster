@@ -29,12 +29,13 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 
-.getCountry <- function(country) {
-	country <- toupper(trim(country[1]))
-	if (missing(country)) {
+.getCountry <- function(country='') {
+#	country <- toupper(trim(country[1]))
+	if (country == '') {
 		stop('provide a 3 letter ISO country code')
 	}
-	cs <- toupper(.countries())
+	cs <- .countries()
+	try (cs <- toupper(cs))
 	if (! country %in% cs[,2]) {
 		if (country %in% cs[,3]) {
 			i <- which(country==cs[,3])
