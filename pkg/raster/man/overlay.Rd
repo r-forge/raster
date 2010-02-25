@@ -13,9 +13,8 @@
 \description{
 Create a new RasterLayer object, based on two or more existing and RasterLayers (possibly as part of a RasterStack or RasterBrick) of the same extent and resolution. 
 
-You should supply a function \code{fun} to set the way that the RasterLayers are combined. The number of arguments in the function must match the number of RasterLayer objects.
-For example, if you combine two RasterLayers you could use multiply: \code{fun=function(x,y){return(x*y)}} percentage: \code{fun=function(x,y){return(100 * x / y)}}. If you combine three layers you could use \code{fun=function(x,y,z){return((x + y) * z)}}
-You can also supply a function such as \code{sum}, that takes \code{n} arguments.
+You should supply a function \code{fun} to set the way that the RasterLayers are combined. The number of arguments in the function must match the number of RasterLayer objects. For example, if you combine two RasterLayers you could use multiply: \code{fun=function(x,y){return(x*y)}} percentage: \code{fun=function(x,y){return(100 * x / y)}}. If you combine three layers you could use \code{fun=function(x,y,z){return((x + y) * z)}}
+You can also supply a function such as \code{sum}, that takes \code{n} arguments. Note that the function must work when its arguments are vectors (not only single numbers)
 }
 
 \section{Methods}{

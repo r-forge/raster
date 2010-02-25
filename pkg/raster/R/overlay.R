@@ -14,6 +14,9 @@ function(x, y, fun=sum, filename="", ...){
 
 setMethod('overlay', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, ..., fun, filename="", datatype, format, overwrite, progress){ 
+	if (missing(fun)) {
+		stop('you must provide a function "fun"')
+	}
 	if (missing(datatype)) {
 		datatype <- .datatype(datatype)
 	}
