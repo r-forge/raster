@@ -27,7 +27,7 @@ xyValues(object, xy, ...)
 \arguments{
 \item{object}{Raster* object}
 \item{xy}{Coordinates. A \code{n*2} matrix or dataframe with the first column having the x values, and the second column has the y values.
-It can also be a \code{SpatialPoints*} object, or a vector of length 2}
+It can also be a \code{\link[sp]{SpatialPoints}*} object, or a vector of length 2}
 \item{...}{Additional arguments. See Details}
 }
 
@@ -53,7 +53,7 @@ take a single numeric vector as argument and return a single values (e.g. mean, 
 A vector (object is a RasterLayer) or a matrix (object is a RasterStack or RasterBrick); Or a list if a buffer is supplied without a function.
 }
 
-\seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{read}}, \code{\link[sp]{SpatialPoints}}  }
+\seealso{ \code{\link[raster]{cellValues}}, \code{\link[raster]{polygonValues}}, \code{\link[raster]{focalValues}} }
 
 \author{Robert J. Hijmans }
 

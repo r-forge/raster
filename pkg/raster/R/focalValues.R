@@ -8,18 +8,18 @@
 #	if (global) {}
 	
 
-if (!isGeneric("ngbValues")) {
-	setGeneric("ngbValues", function(x, ...)
-		standardGeneric("ngbValues"))
+if (!isGeneric("focalValues")) {
+	setGeneric("focalValues", function(x, ...)
+		standardGeneric("focalValues"))
 }	
 
 
-setMethod("ngbValues", signature(x='RasterLayer'), 
-function(x, ngb=3, r, ...) {
-
-	if (!(validRow(x, r))) {	stop(paste(row, 'is not a valid rownumber')) }
+setMethod("focalValues", signature(x='RasterLayer'), 
+function(x, r, ngb=3, ...) {
 
 	if (missing(r)) stop('You must provide a row number "r=" argument')
+
+	if (!(validRow(x, r))) {	stop(paste(row, 'is not a valid rownumber')) }
 
 	ngb <- .checkngb(ngb)
 	r1 = r - floor(ngb[1]/2)
