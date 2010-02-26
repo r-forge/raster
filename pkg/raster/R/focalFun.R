@@ -30,16 +30,6 @@
 	return(res)
 }
 
-.checkngb <- function(ngb) {
-	ngb <- as.integer(round(ngb))
-	if (length(ngb) == 1) {
-		ngb <- c(ngb, ngb)
-	} else if (length(ngb) > 2) {
-		stop('ngb should be a single value or two values')
-	}
-	if (min(ngb) < 3) { stop("ngb should be 3 or larger") } 
-	return(ngb)
-}
 
 focal <- function(raster, fun=mean, ngb=3, keepdata=TRUE, filename="", ...) {
 	

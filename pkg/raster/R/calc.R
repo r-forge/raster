@@ -13,10 +13,10 @@ setMethod('calc', signature(x='RasterLayer', fun='function'),
 function(x, fun, filename='', ...) {
 	test = try(fun(1), silent=TRUE)
 	if (class(test) == 'try-error') {
-		stop("function 'fun' is not valid here") 
+		stop("function 'fun' is not valid here")
 	}
 	if (length(fun(1)) > 1) { 
-		stop("function 'fun' returns more than one value") 
+		stop("function 'fun' returns more than one value")
 	}
 
 	if (!(dataContent(x) == 'all' | dataSource(x) == 'disk')) {
@@ -63,6 +63,8 @@ function(x, fun, filename='', ...) {
 		
 	if (filename == "") { 
 		outraster <- setValues(outraster, as.vector(v)) 
+	} else {
+		outraster <- writeStop(outraster)
 	}
 	return(outraster)
 }
