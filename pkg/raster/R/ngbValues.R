@@ -7,8 +7,19 @@
 #	global <- .isGlobalLatLon(raster)
 #	if (global) {}
 	
-	
-ngbValues <- function(x, ngb=3, r) {
+
+if (!isGeneric("ngbValues")) {
+	setGeneric("ngbValues", function(x, ...)
+		standardGeneric("ngbValues"))
+}	
+
+
+setMethod("ngbValues", signature(x='RasterLayer'), 
+function(x, ngb=3, r, ...) {
+
+	if (!(validRow(x, r))) {	stop(paste(row, 'is not a valid rownumber')) }
+
+	if (missing(r)) stop('You must provide a row number "r=" argument')
 
 	ngb <- .checkngb(ngb)
 	r1 = r - floor(ngb[1]/2)
@@ -31,8 +42,7 @@ ngbValues <- function(x, ngb=3, r) {
 	idx = matrix(ncol=cols, nrow=ngb[2]*nrows)
 	cc = 1:ngb[2]
 	for (c in 1:cols) {
-		idx[,c] = nrs[,cc] 
-		cc = cc + 1
+		idx[,c] = nrs[, (cc+c-1)] 
 	}
 	id = as.vector(idx)
 	id = cbind(rep(1:cols, each=nrow(idx)), id)
@@ -42,4 +52,5 @@ ngbValues <- function(x, ngb=3, r) {
 	colnames(v) = c('col', 'value')
 	return(v)
 }
-	
+)
+
