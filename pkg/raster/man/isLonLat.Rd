@@ -6,7 +6,7 @@
 \alias{isLonLat,character-method}
 
   
-\title{Is this longitude/latitude data}
+\title{Is this longitude/latitude data?}
 
 \description{
  Test whether a Raster* object has the a longitude / latitude coordinate reference system.

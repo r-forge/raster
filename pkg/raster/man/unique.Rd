@@ -5,7 +5,7 @@
 \alias{unique}
 \alias{unique,RasterLayer,missing-method}
 
-\title{unique}
+\title{Unique values}
 
 \description{
 This function returns the unique values in a RasterLayer

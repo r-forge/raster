@@ -4,7 +4,7 @@
 \alias{trim,RasterLayer-method}
 \alias{trim,character-method}
 
-\title{trim}
+\title{Trim}
 
 \description{
 Trim (shrink) a RasterLayer by removing outer rows and columns that have no data.

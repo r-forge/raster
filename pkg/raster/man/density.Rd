@@ -6,7 +6,7 @@
 
 \docType{methods}
 
-\title{density}
+\title{Density plot}
 
 \description{
 Create a density plots of values in a RasterLayer

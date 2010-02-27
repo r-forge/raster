@@ -3,7 +3,7 @@
 \alias{edge}
 \alias{edge,RasterLayer-method}
   
-\title{edge}
+\title{Edge detection}
 
 \description{
 Detect edges. Edges are those cells who have more than one class in the 9 cells surrounding it, or, if \code{classes=FALSE}, cells with values and cells with \code{NA}. 
@@ -27,7 +27,7 @@ The following additional arguments can be passed:
   \tab \code{filename}  \tab Character. Filename for the output RasterLayer \cr
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
-  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }
 }

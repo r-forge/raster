@@ -365,7 +365,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 
 
 \section{Acknowledgements}{
-We thank the following persons for suggestions to improve the package: Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, and Agustin Lobo.
+We thank the following persons for suggestions to improve the package: Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, and Agustin Lobo.
 }
 
 \keyword{package}

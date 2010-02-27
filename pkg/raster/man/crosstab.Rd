@@ -5,7 +5,7 @@
 \alias{crosstab}
 \alias{crosstab,RasterLayer,RasterLayer-method}
 
-\title{crosstab}
+\title{Cross-tabulate}
 
 \description{
 Cross-tabulate two RasterLayer objects to create a contingency table.

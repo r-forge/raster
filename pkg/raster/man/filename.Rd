@@ -3,7 +3,7 @@
 \alias{filename}
 \alias{filename<-}
 
-\title{filename}
+\title{Filename}
 
 \description{
 Get the filename of a Raster* object. You can also set the filename, but normally you should set a filename by providing a 'filename= ' argument to a function that creates a new RasterLayer or RasterBrick* object.
