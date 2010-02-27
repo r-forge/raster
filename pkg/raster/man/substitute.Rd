@@ -5,10 +5,10 @@
 \alias{subs}
 \alias{subs,RasterLayer,data.frame-method}
 
-\title{ Substitue values in a RasterLayer }
+\title{ Substitute values in a RasterLayer }
 
 \description{
-Substitute (replace) values in a RasterLayer with values in a data.frame. The data.frame should have a column to identify the key (ID) to match with the values of the RasterLayer, and a column with the replacement values. By default these are the first and second column but you can specify other columns with arguments \code{by} and \code{which} (see Methods).
+Substitute (replace) values in a RasterLayer with values in a \code{data.frame}. The \code{data.frame} should have a column to identify the key (ID) to match with the values of the RasterLayer, and a column with the replacement values. By default these are the first and second column but you can specify other columns with arguments \code{by} and \code{which} (see under Methods).
 }
 
 \usage{
@@ -24,14 +24,14 @@ subs(x, y, ...)
 
 \section{Methods}{
 \describe{
-A full call to merge (with the "RasterLayer, data.frame" signature) is:
+A full call to \code{subs} is:
 
 \code{subs(x, y, by=1, which=2, subsWithNA=TRUE, filename='', ... ) }
 
   \item{\code{x}}{RasterLayer}
   \item{\code{y}}{data.frame}
-  \item{\code{by}}{ the column number or name that is the key (ID) to match a the data.frame row to a value of the RasterLayer}
-  \item{\code{which}}{the column number or name that has the new (replacement) values}
+  \item{\code{by}}{The column number or name that is the key (ID) to match a the \code{data.frame} row to a value of the RasterLayer. Default is 1}
+  \item{\code{which}}{The column number or name that has the new (replacement) values. Default is 2}
   \item{\code{subsWithNA}}{Logical. If \code{TRUE} values that are not matched become NA. If \code{FALSE}, they retain their original value (which could also be NA. This latter option is handy when you want to replace only one or a few values. }
   \item{\code{filename}}{Character. output filename}
   \item{\code{...}}{Standard additional variables, see below}
@@ -46,7 +46,7 @@ A full call to merge (with the "RasterLayer, data.frame" signature) is:
 } 
 
 \details{
-You could obtain the same result with \code{\link[raster]{reclass}}, but this function is more efficient for simple replacement. Use reclass if you want to replace ranges of values with new values. 
+You could obtain the same result with \code{\link[raster]{reclass}}, but \code{subs} is more efficient for simple replacement. Use reclass if you want to replace ranges of values with new values. 
 
 You can also replace values using a fitted model. E.g. fit a model to \code{glm} or \code{loess} and then call \link[raster]{predict}
 }
