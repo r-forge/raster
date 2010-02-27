@@ -113,6 +113,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{gridDistance}} \tab Distance when forced to go through non-NA cells \cr
     \code{\link{focal}} \tab Focal (neighborhood) functions \cr
     \code{\link{focalFilter}} \tab Focal (neighborhood) filters \cr
+    \code{\link{edge}} \tab Edge detection \cr
     \code{\link{clump}} \tab Find clumps (patches) \cr
     \code{\link{adjacency}} \tab Identify cells that are adjacent to a set of cells on a raster \cr
     \code{\link{area}} \tab Compute area of cells (for longitude/latitude data) \cr
@@ -166,6 +167,7 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{xyValues}} \tab Use points (optionally with a buffer) to extract cell values \cr
     \code{\link{cellValues}} \tab Use cell numbers to extract cell values \cr
     \code{\link{polygonValues}} \tab Use a SpatialPolygons* object to extract cell values \cr
+    \code{\link{focalValues}} \tab Extract values from focal cells\cr
     \code{\link{sampleRandom}} \tab Random sample \cr
     \code{\link{sampleRegular}} \tab Regular sample \cr
     \code{\link{minValue}} \tab The minimum value of the cells of a Raster* object (not always known) \cr

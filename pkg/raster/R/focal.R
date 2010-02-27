@@ -1,5 +1,5 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# Date :  June 2008
+# Date :  February 2009
 # Version 0.9
 # Licence GPL v3
 
@@ -21,7 +21,7 @@
 }
 	
 	
-focal2 <- function(x, fun=mean, ngb=3, na.rm=TRUE, filename="", ...) {
+focal <- function(x, fun=mean, ngb=3, na.rm=TRUE, filename="", ...) {
 	
 	ngb <- .checkngb(ngb)
 	

@@ -1,92 +1,150 @@
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Date : February 2010
+# Version 0.9
+# Licence GPL v3
+
+if (!isGeneric("edge")) {
+	setGeneric("edge", function(x, ...)
+		standardGeneric("edge"))
+}	
 
 
-edge <- function(raster, filename="", type='both', keepclasses=FALSE, ...) {
-	
-	if (! type %in% c('both', 'inner', 'outer')) stop()
+setMethod('edge', signature(x='RasterLayer'), 
+
+function(x, filename="", classes=TRUE, type='both', ...) {
 	
 	ngb <- c(3,3)
+	type = tolower(type)
+	if (! type %in% c('both', 'inner', 'outer')) stop("type must be 'both', 'inner', or 'outer'")
 	
-	ngbgrid <- raster(raster)
-
-# to do: if proj is latlon & between -180 to 180, then use cells from other side..
-#	global <- .isGlobalLatLon(raster)
-#	if (global) {}
+	out <- raster(x)
 	
-	# first create an empty matrix with nrows = ngb and ncols = raster@ncols
-	res <- vector(length=length(ncol(ngbgrid)))
-	limcol <- floor(ngb[2] / 2)
-	colnrs <- (-limcol+1):(ncol(ngbgrid)+limcol)
-	colnrs <- .embed(colnrs, ngb[2])
-	colnrs[colnrs > ncol(ngbgrid) | colnrs < 0] <- 0
+	row1 = floor(ngb[1]/2)
+	row2 = ngb[1]-(row1+1)
+	nrows = ngb[1]
+	col1 = floor(ngb[2]/2)
+	col2 = ngb[2]-(col1+1)
+	
+	add1 = matrix(0, ncol=col1, nrow=ngb[1])
+	add2 = matrix(0, ncol=col2, nrow=ngb[1])
 
-	limrow <- floor(ngb[1] / 2)
-	ngbdata <- matrix(NA, nrow=0, ncol=ncol(ngbgrid))
-# add all rows needed for first ngb, minus 1 that will be read in first loop	
-	for (r in 1:limrow) {
-		rowdata <- getValues(raster, r)
-		if (! keepclasses) {
-			rowdata[!is.na(rowdata)] <- 1
-		} else {
-			rowdata = round(rowdata)
-			rowdata[rowdata < 1] <- 0
-		}
-		rowdata[is.na(rowdata)] <- 0
-		ngbdata <- rbind(ngbdata, rowdata)
+	nrs = matrix(ncol=ncol(out), nrow=ngb[1])
+	nrs[] = 1:length(nrs)
+	nrs = cbind(add1, nrs, add2)
+	
+	idx = matrix(ncol=ncol(out), nrow=prod(ngb))
+	cc = 1:ngb[2]
+	for (c in 1:ncol(out)) {
+		idx[,c] = nrs[,cc] 
+		cc = cc + 1
 	}
-
-	res <- vector(length=ncol(ngbdata))
-
+	id = as.vector(idx)
+	id = cbind(rep(1:ncol(out), each=nrow(idx)), id)
+	id = subset(id, id[,2]>0)
+	
 	filename <- trim(filename)
-	if (!canProcessInMemory(ngbgrid, 2) && filename == '') {
+	inmem = TRUE
+	if (!canProcessInMemory(out, 3) && filename == '') {
 		filename <- rasterTmpFile()
+		inmem = FALSE
 		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
-
-	if (filename == '') {
-		v <- matrix(NA, ncol=nrow(ngbgrid), nrow=ncol(ngbgrid))
+	if (inmem) {
+		v = matrix(nrow=ncol(out), ncol=nrow(out))		
 	} else {
-		v <- vector(length=0)
+		out <- writeStart(out, filename=filename, ...)
 	}
-	
-	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
 
-	fun = function(x) length(unique(x))!=1
-	for (r in 1:nrow(ngbgrid)) {		
-		rr <- r + limrow
-		if (rr <= nrow(ngbgrid)) {
-			rowdata <- getValues(raster, rr)
-			if (! keepclasses) {
-				rowdata[!is.na(rowdata)] <- 1
-			} else {
-				rowdata = round(rowdata)
-				rowdata[rowdata < 1] <- 0
-			}
-			rowdata[is.na(rowdata)] <- 0
-			if (dim(ngbdata)[1] == ngb[1]) {
-				ngbdata <- rbind(ngbdata[2:ngb[1],], rowdata)
-			} else {
-				ngbdata <- rbind(ngbdata, rowdata)			
-			}
+	fun = function(x) length(unique(x)) != 1
+
+	pb <- pbCreate(nrow(out), type=.progress(...))
+	ngbdata = matrix(nrow=ngb[1], ncol=ncol(x))
+	rr = 0
+	for (r in 1:row1) {
+		rr = rr + 1
+		d = getValues(x, rr)
+		if (! classes) {
+			d[!is.na(d)] <- 1
 		} else {
-			ngbdata <- ngbdata[-1, ,drop=FALSE]
+			d = round(d)
+		}
+		ngbdata[rr,] <- d
+	}
+	for (r in 1:nrow(out)) {	
+		rr = rr + 1
+		if (rr <= ngb[1]) {
+			d = getValues(x, rr)
+			if (! classes) {
+				d[!is.na(d)] <- 1
+			} else {
+				d = round(d)
+			}
+			ngbdata[rr,] <- d
+			ids = matrix(as.vector(idx), nrow=ngb[1])
+			ids = ids[1:rr, ]
+			ids = matrix(as.vector(ids), ncol=ncol(out))
+			ids = cbind(rep(1:ncol(out), each=nrow(ids)), as.vector(ids))
+			ids = subset(ids, ids[,2]>0)
+			vv = tapply(as.vector(ngbdata)[ids[,2]], ids[,1], fun)
+			if (type == 'inner') {
+				vv[is.na(ngbdata[1,])] = 0
+			} else if (type == 'outer') {
+				vv[! is.na(ngbdata[1,])] = 0
+			}
+			
+		} else if (r <= (nrow(out)-row1)) {
+			ngbdata[1:(ngb[1]-1), ] <- ngbdata[2:(ngb[1]), ]
+			d = getValues(x, rr)
+			if (! classes) {
+				d[!is.na(d)] <- 1
+			} else {
+				d = round(d)
+			}
+			ngbdata[ngb[1],] <- d
+			vv = tapply(as.vector(ngbdata)[id[,2]], id[,1], fun)
+			if (type == 'inner') {
+				vv[is.na(ngbdata[2,])] = 0
+			} else if (type == 'outer') {
+				vv[! is.na(ngbdata[2,])] = 0
+			}
+			
+		} else {
+			ngbdata[1:(ngb[1]-1), ] <- ngbdata[2:(ngb[1]), ]
+			ngbdata[nrows,] = NA
+			nrows=nrows-1
+			ids = matrix(as.vector(idx), nrow=ngb[1])
+			ids = ids[1:nrows, ]
+			ids = matrix(as.vector(ids), ncol=ncol(out))
+			ids = cbind(rep(1:ncol(out), each=nrow(ids)), as.vector(ids))
+			ids = subset(ids, ids[,2]>0)
+			vv = tapply(as.vector(ngbdata)[ids[,2]], ids[,1], fun)
+			if (type == 'inner') {
+				vv[is.na(ngbdata[1,])] = NA
+			} else if (type == 'outer') {
+				vv[! is.na(ngbdata[1,])] = NA		
+			}
 		}
 		
-		ngbvals <- .calcNGB(ngbdata, colnrs, res, fun, keepdata=FALSE) 
-		if (filename != "") {
-			ngbgrid <- setValues(ngbgrid, ngbvals, r)
-			ngbgrid <- writeRaster(ngbgrid, filename=filename, ...)
+		if (inmem) {
+			v[,r] <- vv
 		} else {
-			v[,r] <- ngbvals
+			writeValues(out, vv, r)
 		}
 		pbStep(pb, r)
 	}
+
 	pbClose(pb)
 
-	if (filename == "") { 
-		ngbgrid <- setValues(ngbgrid, as.vector(v)) 
+	if (inmem) { 
+		out <- setValues(out, as.vector(v)) 
+		if (filename != "") {
+			out <- writeRaster(out, filename, ...)
+		}
+	} else {
+		out <- writeStop(out)
 	}
-	return(ngbgrid)
+	return(out)
 }
 
-	
-#ee = edge(r, progress='text')
+)	
+

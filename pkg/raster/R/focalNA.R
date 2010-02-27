@@ -4,7 +4,37 @@
 # Licence GPL v3
 
 
-focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename="", ...) {
+
+.embed <- function(x, dimension) {
+    n <- length(x)
+    m <- n - dimension + 1
+    data <- x[1:m + rep.int(1:dimension, rep.int(m, dimension)) - 1]
+	dim(data) <- c(m, dimension)
+	return(data)
+}
+
+
+.calcNGB <- function(rows, colnrs, res, fun, keepdata) {
+	res[] <- NA
+    for (i in 1:dim(rows)[2]) {
+		d <- as.vector(rows[, colnrs[i, ]])
+		if (keepdata) {
+			d <- na.omit(d)
+			if (length(d) > 0) {
+				res[i] <- fun(d)
+			} else {  # for sum because sum(NULL) = 0
+				res[i] <- NA 
+			}	
+		} else {
+			res[i] <- fun(d)
+		}
+	}	
+	return(res)
+}
+
+
+
+focalNA <- function(x, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename="", ...) {
 	filename <- trim(filename)
 	if (recursive) {
 		fn <- ''
@@ -14,24 +44,24 @@ focalNA <- function(raster, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename
 		}
 		iterator <- 0
 		keepGoing <-  TRUE
-		raster <- list(raster)
+		x <- list(x)
 		while (keepGoing) {
 			iterator <- 1 + iterator
 			cat('iteration', iterator , '\n')
 			flush.console()
-			raster <- .focNA(raster[[1]], fun=fun, ngb=ngb, recursive=TRUE, filename=fn) 
-			if (raster[[2]]) {
+			x <- .focNA(x[[1]], fun=fun, ngb=ngb, recursive=TRUE, filename=fn) 
+			if (x[[2]]) {
 				stop('all values are NA')
 			}
-			keepGoing <- raster[[3]]	
+			keepGoing <- x[[3]]	
 			if (iterator == maxrec) { keepGoing <- FALSE }
 		} 
 		if (filename != '') {
-			raster[[1]] <- saveAs(raster[[1]], filename=filename, ...)
+			x[[1]] <- saveAs(x[[1]], filename=filename, ...)
 		}
-		return(raster[[1]])
+		return(x[[1]])
 	} else {
-		return( .focNA(raster, fun=fun, ngb=ngb, recursive=FALSE, filename=filename, ...) )
+		return( .focNA(x, fun=fun, ngb=ngb, recursive=FALSE, filename=filename, ...) )
 	}
 }
 
