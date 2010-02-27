@@ -40,7 +40,7 @@
 		}
 		
 	} else {
-		if (length(vals) == 1 && ncol(outraster) > 1) {
+		if (length(vals) == 1 & ncol(outraster) > 1) {
 			m <- matrix(rep(a,length(x)), ncol=length(x), nrow=length(a))
 			vals <- apply(m, 1, fun)
 			if (length(vals) == length(a)) {
@@ -84,14 +84,18 @@
 		if (filename == "") {
 			if (!canProcessInMemory(outraster, 3)) {
 				filename <- rasterTmpFile()
-			} else {
-				v <- matrix(ncol=nrow(outraster), nrow=ncol(outraster))
-			}
-		}	
+			} 
+		} 
+		if (filename == "") {
+			v <- matrix(ncol=nrow(outraster), nrow=ncol(outraster))
+		} else {
+			outraster <- writeStart(outraster, filename=filename, ...)
+		}
+		
 		
 		tr <- blockSize(outraster, n=length(x))
 		pb <- pbCreate(tr$n, type=.progress(...))			
-		outraster <- writeStart(outraster, filename=filename, ...)
+
 		
 		if (applymethod) { valmat = matrix(nrow=tr$size*ncol(outraster) , ncol=length(x)) }
 		
