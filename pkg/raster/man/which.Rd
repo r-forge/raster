@@ -5,10 +5,10 @@
 \alias{which}
 \alias{which,RasterLayer-method}
 
-\title{which}
+\title{Which cells are TRUE?}
 
 \description{
-\code{which} returns a RasterLayer with TRUE or FALSE (NA is set to FALSE)
+\code{which} returns a RasterLayer with \code{TRUE} or \code{FALSE}. Cells with 1 are set to \code{TRUE}, all other cells, including \code{NA} are set to \code{FALSE}
 }
 
 
