@@ -39,7 +39,7 @@ A new RasterLayer object, and in some cases the side effect of a new file on dis
 \examples{
 r1 <- raster(ncols=36, nrows=18)
 r1[] <- 1:ncell(r1)
-r2[] <- runif(ncell(r1))
+r2 <- setValues(r1, runif(ncell(r1)))
 r2[r2<0.5] <- NA
 r3 <- cover(r2, r1)
 }	
