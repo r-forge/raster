@@ -48,7 +48,7 @@ a RasterLayer object
 }
 
 \details{
-interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring values associated wtih the first argument ('object')
+\code{interpolate} is a wrapper of raster::predict with argument xy=TRUE; and ignoring values associated wtih the first argument ('object').
 }
 
 \seealso{ \code{\link[raster]{predict}}, \code{\link[gstat]{predict.gstat}}, \code{\link[fields]{Tps}} }
@@ -71,9 +71,8 @@ plot(p)
 
 ## inverse distance weighted interpolation with gstat
 #r <- raster(system.file("external/test.grd", package="raster"))
-#r <- raster(r)
 #data(meuse)
-#mg <- gstat(id = "zinc", formula = zinc ~ 1, locations = ~ x + y, data = meuse, nmax = 7, set = list(idp = .5))
+#mg <- gstat(id = "zinc", formula = zinc~1, locations = ~x+y, data=meuse, nmax=7, set=list(idp = .5))
 #z <- interpolate(r, mg)
 #z <- mask(z, r)
 
