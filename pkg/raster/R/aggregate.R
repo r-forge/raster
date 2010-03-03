@@ -77,7 +77,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		if (filename == '') {
 			v <- matrix(NA, ncol=nrow(outRaster), nrow=ncol(outRaster))
 		} else {
-			writeStart(outRaster, filename=filename, ...)
+			outRaster <- writeStart(outRaster, filename=filename, ...)
 		}
 		
 		cells <- cellFromRowCol(x, rows, cols)

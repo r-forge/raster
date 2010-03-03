@@ -60,7 +60,7 @@ interpolate is a wrapper of raster::predict with argument xy=TRUE; and ignoring 
 require(fields)
 r <- raster(system.file("external/test.grd", package="raster"))
 ra <- aggregate(r, 10)
-tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), values(ra) )
+tps <- Tps(as.data.frame(xyFromCell(ra, 1:ncell(ra))), getValues(ra) )
 p <- interpolate(r, tps)
 p <- mask(p, r)
 plot(p)
