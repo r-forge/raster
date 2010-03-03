@@ -3,6 +3,7 @@
 # Version 0.9
 # Licence GPL v3
 
+
 if (!isGeneric("edge")) {
 	setGeneric("edge", function(x, ...)
 		standardGeneric("edge"))
@@ -11,7 +12,7 @@ if (!isGeneric("edge")) {
 
 setMethod('edge', signature(x='RasterLayer'), 
 
-function(x, filename="", classes=TRUE, type='both', ...) {
+function(x, filename="", classes=TRUE, type='both', asNA=FALSE, ...) {
 	
 	ngb <- c(3,3)
 	type = tolower(type)
@@ -124,6 +125,8 @@ function(x, filename="", classes=TRUE, type='both', ...) {
 				vv[! is.na(ngbdata[1,])] = NA		
 			}
 		}
+		
+		if (asNA) { vv[vv==0] = NA }
 		
 		if (inmem) {
 			v[,r] <- vv

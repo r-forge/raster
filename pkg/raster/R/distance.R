@@ -5,8 +5,8 @@
 
 
 distance <- function(object, filename='', ...) {
-	#r = edge(object, ...) * object
-	pts <- try(  rasterToPoints(object, fun=function(x){x>0})[,1:2] )
+	r = edge(object, classes=FALSE, type='inner', asNA=TRUE) 
+	pts <- try(  rasterToPoints(r, fun=function(x){x>0})[,1:2] )
 	if (class(pts) == "try-error") {
 		return( .distanceRows(object, filename=filename, ...) )
 	}

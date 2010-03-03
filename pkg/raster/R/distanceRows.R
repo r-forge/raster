@@ -14,21 +14,21 @@
 	}
 	if (isLonLat(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 
+	e = edge(object, classes=FALSE, type='inner', asNA=TRUE) 
+	
 	r <- raster(object)
 	tr <- blockSize(r, n=3)
 	tmp = rasterTmpFile()
 	ext(tmp) = '.tif'
 	r <- writeStart(r, filename=tmp, format='GTiff')
 	
-	#e = edge(object, progress==progress)
-
 	pb <- pbCreate(tr$n, type=progress)			
 	xx <- xFromCol( r, 1:ncol(r) )
 	
 	hasWritten=FALSE
 	for (i in 1:tr$n) {
 	# get the from points for a block
-		v <- getValuesBlock(object, row=tr$row[i], nrows=tr$nrows[i])
+		v <- getValuesBlock(e, row=tr$row[i], nrows=tr$nrows[i])
 		x <- rep(xx, tr$nrows[i])
 		y <- yFromRow(r, tr$row[i]) - (0:(tr$nrows[i]-1)) * yres(r)
 		y <- rep(y, each=ncol(r))

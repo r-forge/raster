@@ -76,13 +76,16 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		
 		if (filename == '') {
 			v <- matrix(NA, ncol=nrow(outRaster), nrow=ncol(outRaster))
+		} else {
+			writeStart(outRaster, filename=filename, ...)
 		}
 		
 		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
 		
-		pb <- pbCreate(rsteps, type=.progress(...))
+#		pb <- pbCreate(rsteps, type=.progress(...))
+		pb <- pbCreate(rsteps, type='text')
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {
@@ -92,22 +95,22 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				cols <- cols[1:(ncol(x)*nrows)]
 				cells <- cellFromRowCol(x, theserows, cols)
 			}	
-			vals <- values(readRows(x, startrow = startrow, nrows = nrows))
-			vals <- matrix(vals, nrow=nrows, ncol=x@ncols, byrow=TRUE)
+			vals <- getValues(x, startrow, nrows)
 			vals <- as.vector( tapply(vals, cells, thefun ) )
 			
 			if (filename == "") {
 				v[,r] <- vals
 			} else {
-				outRaster <- setValues(outRaster, vals, r)
-				outRaster <- writeRaster(outRaster, filename=filename, ...)
+				writeValues(outRaster, vals, r)
 			}
 		
 			pbStep(pb, r) 
 		} 
 		pbClose(pb)
 		if (filename == "") { 
-			outRaster <- setValues(outRaster, as.vector(v) )
+			outRaster <- setValues( outRaster, as.vector(v) )
+		} else {
+			outRaster <- writeStop(outRaster)
 		}
 	}
 	return(outRaster)
