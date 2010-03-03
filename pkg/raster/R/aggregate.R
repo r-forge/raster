@@ -84,8 +84,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		nrows = yfact
 
 		
-#		pb <- pbCreate(rsteps, type=.progress(...))
-		pb <- pbCreate(rsteps, type='text')
+		pb <- pbCreate(rsteps, type=.progress(...))
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {

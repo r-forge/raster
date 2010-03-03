@@ -61,10 +61,9 @@ setMethod('predict', signature(object='Raster'),
 			v <- matrix(NA, ncol=nrow(predrast), nrow=ncol(predrast))
 		} 
 
-
 		tr <- blockSize(predrast, n=nlayers(object)+3)
 
-		napred <- rep(NA, ncol(predrast))
+		napred <- rep(NA, ncol(predrast)*tr$size )
 		xyOnly <- FALSE
 		if (xy) { 
 			ablock <- 1:(ncol(object) * tr$size)
@@ -109,12 +108,14 @@ setMethod('predict', signature(object='Raster'),
 		}
 
 		for (i in 1:tr$n) {
+			if (i==tr$n) { 
+				ablock <- 1:(ncol(object) * tr$nrows[i])
+				napred <- rep(NA, ncol(predrast) * tr$nrows[i])
+			}
+
 			rr <- firstrow + tr$row[i] - 1
 		
 			if (xyOnly) {
-				if (i==tr$n) { # if using ext last row(s) may need to be removed
-					ablock <- 1:(ncol(object) * tr$nrows[i])
-				}
 				p <- xyFromCell(predrast, ablock + (tr$row[i]-1) * ncol(predrast)) 
 				p <- na.omit(p)
 				blockvals <- data.frame(x=p[,1], y=p[,2])
@@ -161,9 +162,9 @@ setMethod('predict', signature(object='Raster'),
 						if (nrow(rowv) > 0) {
 							naind <- as.vector(attr(rowv, "na.action"))
 							if (!is.null(naind)) {
-								predv[-naind] <- predict(model, rowv, ...)
+								predv[-naind] <- predict(model, rowv)
 							} else {
-								predv[] <- predict(model, rowv, ...)
+								predv[] <- predict(model, rowv)
 							}
 						}
 					}
