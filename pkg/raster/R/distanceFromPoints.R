@@ -3,29 +3,25 @@
 # Version 0.9
 # Licence GPL v3
 
-
-distance <- function(object, filename='', ...) {
-
-	r = edge(object, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
+distanceFromPoints <- function(object, xy, filename='', ...) {
 	
-	pts <- try(  rasterToPoints(r, fun=function(x){x>0})[,1:2] )
-	if (class(pts) == "try-error") {
-		return( .distanceRows(object, filename=filename, ...) )
-	}
-	if (nrow(pts) == 0) {
-		stop('RasterLayer has no NA cells (for which to compute a distance)')
-	}
+	pts <- .pointsToMatrix(xy)
+	rm(xy)
 
+	filename <- trim(filename)
+	
 	if (.couldBeLonLat(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 	                                                                        
 	rst <- raster(object)
-	filename <- trim(filename)
 	if (!canProcessInMemory(rst, 2) && filename == '') {
 		filename <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
+
 	xy <- xFromCol(rst, 1:ncol(rst))
 	xy <- cbind(xy, NA)
+	
+	arow <- rep(NA, ncol(rst))
 	
 	if (filename == '') {
 		v <- matrix(ncol=nrow(rst), nrow=ncol(rst))
@@ -33,13 +29,10 @@ distance <- function(object, filename='', ...) {
 	
 	pb <- pbCreate(nrow(rst), type=.progress(...))
 	for (r in 1:nrow(rst)) {	
-		vals <- getValues(object, r)
-		i = which(is.na(vals))
-		if (length(i) > 0) {
-			xy[,2] <- yFromRow(rst, r)
-			for (c in i) {
-				vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
-			}
+		vals <- arow
+		xy[,2] <- yFromRow(rst, r)
+		for (c in 1:length(xy[,1])) {
+			vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
 		}
 		if (filename == "") {
 			v[,r] <- vals
@@ -56,8 +49,5 @@ distance <- function(object, filename='', ...) {
 	}
 	return(rst)
 }
-
-
-
 
 

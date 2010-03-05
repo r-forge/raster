@@ -18,12 +18,14 @@ edge(x, ...)
 \item{...}{Additional arguments, see Details}
 }
 
+
 \details{
 The following additional arguments can be passed:
 \tabular{rll}{
   \tab \code{classes}  \tab Logical. If \code{TRUE} all different values are (after rounding) distinguished, as well as \code{NA}. If \code{FALSE}, the only comparison is between values and \code{NA} \cr
   \tab \code{type}  \tab Character. 'both' (default), 'inner', or 'outer' to distinguish cells with values versus cells with \code{NA}.  \cr
-
+  \tab \code{asNA}  \tab Logical. Should non-edge cells by \code{NA} rather than \code{FALSE} (zero)?\cr
+  \tab \code{asZero}  \tab Logical. If \code{asNA=TRUE}, should cells that are not an edge, and not \code{NA} on the input RasterLayer be returned as zero?\cr
   \tab \code{filename}  \tab Character. Filename for the output RasterLayer \cr
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
@@ -36,9 +38,6 @@ The following additional arguments can be passed:
 a RasterLayer. Cell values are either 1 (and edge) or 0 (not an edge)
 }
 
-\note{
-A call to edge with the default values is equivalent to call to \code{focal} with a neighborhood of 3 and \code{fun=function(x) length(unique(x))!=1}
-}
 
 \seealso{ \code{\link[raster]{focal}}, \code{\link[raster]{clump}} }
 

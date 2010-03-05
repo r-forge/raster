@@ -97,11 +97,10 @@ focal <- function(x, ngb=3, fun=mean, na.rm=TRUE, filename="", ...) {
 			ids = subset(ids, ids[,2]>0)
 			vv = tapply(as.vector(ngbdata)[ids[,2]], ids[,1], fun, na.rm=na.rm)
 		}
-		
 		if (inmem) {
 			v[,r] <- vv
 		} else {
-			writeValues(out, vv, r)
+			writeValues(out, as.vector(vv), r)
 		}
 		
 		pbStep(pb, r)

@@ -51,7 +51,7 @@ function(x, mask, filename="", ...){
 				cols <- tr$row[i]:(tr$row[i]+dim(vv)[2]-1)	
 				v[,cols] <- vv
 			}
-			pbStep(pb, r) 
+			pbStep(pb, i) 
 		} 
 		pbClose(pb)			
 
