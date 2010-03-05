@@ -48,7 +48,7 @@ a RasterLayer. Cell values are either 1 (and edge) or 0 (not an edge)
 r <- raster(nrow=18, ncol=36)
 r[] <- round(c(1:324, 324:1)/324)
 r[r==0] <- NA
-e <- edge(r)
+e <- edge(r, type='inner', asNA=TRUE, asZero=TRUE)
 }
 
 \keyword{methods}

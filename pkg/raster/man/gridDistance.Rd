@@ -13,9 +13,8 @@
  The distance is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically meters) when it is projected.
  
  Distances are calculated by summing local distances between cells, which are connected with their neighbours in 8 directions.
- 
- For data on disk we provide only a highly inaccurate proof of concept version.
 
+ This function currently only works for RasterLayer objects of which all values can be stored in memory 
 }
 
 \usage{
@@ -55,9 +54,6 @@ r1[345:355] <- 1
 distRaster <- gridDistance(r1) 
 plot(distRaster)
 
-#row by row processing -- proof of concept only, highly inaccurate!
-#setOptions(todisk=TRUE)
-#distRaster <- gridDistance(r1) 
 
 }
 
