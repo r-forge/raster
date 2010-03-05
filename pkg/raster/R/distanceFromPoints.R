@@ -32,7 +32,7 @@ distanceFromPoints <- function(object, xy, filename='', ...) {
 		vals <- arow
 		xy[,2] <- yFromRow(rst, r)
 		for (c in 1:length(xy[,1])) {
-			vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
+			vals[c] <- min( pointDistance(xy[c, ], pts, type=disttype) )
 		}
 		if (filename == "") {
 			v[,r] <- vals

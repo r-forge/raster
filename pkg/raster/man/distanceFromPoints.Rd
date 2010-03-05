@@ -1,30 +1,29 @@
-\name{distance}
+\name{distanceFromPoints}
 
-\alias{distance}
-\alias{distance,RasterLayer-method}
+\alias{distanceFromPoints}
 
-\title{Distance}
+\title{Distance from points}
 
 \description{
-The function calculates the distance to cells of a RasterLayer. Function \code{distance} computes the distance, for all cells that are \code{NA}, to the nearest cell that is not \code{NA}.
+The function calculates the distance from a set of points to all cells of a RasterLayer.
  
 The distance unit is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically meters) when it is projected.
 }
 
 \usage{
-distance(x, ...) 
+distanceFromPoints(object, xy, filename='', ...) 
 }
 
 \arguments{
-\item{x}{a RasterLayer object}
-\item{...}{additional arguments. See Details.}  
+\item{object}{RasterLayer object}
+\item{xy}{Matrix of x and y coordinates, or a SpatialPoints* object.}
+\item{filename}{Filename for the output RasterLayer}
+\item{...}{Additional arguments. See Details.}  
 }
-
 
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{filename}  \tab Filename for the output RasterLayer \cr
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
@@ -32,18 +31,18 @@ The following additional arguments can be passed, to replace default values for 
  }
 }
 
-\author{Robert J. Hijmans }
 
 \value{A RasterLayer object}
 
-\seealso{ \code{\link[raster]{distanceFromPoints}},  \code{\link[raster]{gridDistance}},  \code{\link[raster]{pointDistance}}  }
+\seealso{ \code{\link[raster]{distance}},  \code{\link[raster]{gridDistance}},  \code{\link[raster]{pointDistance}}  }
+
+\author{Robert J. Hijmans }
 
 
 \examples{
-r1 <- raster(ncol=36,nrow=18)
-r1[] <- NA
-r1[345:355] <- 1
-dist <- distance(r1) 
+r <- raster(ncol=36,nrow=18)
+xy = c(0,0)
+dist <- distanceFromPoints(r, xy) 
 #plot(dist)
 }
 

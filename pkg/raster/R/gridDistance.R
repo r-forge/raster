@@ -6,9 +6,9 @@
 
 #for data on disk only proof of concept version. In reality, we need Dijkstra´s algorithm (igraph) and read/write a couple of row at once to gain some speed
 
-#setGeneric("distance", function(object, ...) standardGeneric("distance"))
+#setGeneric("gridDistance", function(object, ...) standardGeneric("distance"))
 
-#setMethod("distance", signature(object = "RasterLayer"), def =	
+#setMethod("gridDistance", signature(object = "RasterLayer"), def =	
 
 gridDistance <- function(object, filename="", ...) {
 

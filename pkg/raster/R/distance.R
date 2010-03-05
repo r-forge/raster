@@ -3,22 +3,30 @@
 # Version 0.9
 # Licence GPL v3
 
+if (!isGeneric("distance")) {
+	setGeneric("distance", function(x, ...)
+		standardGeneric("distance"))
+}	
 
-distance <- function(object, filename='', ...) {
 
-	r = edge(object, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
+setMethod('distance', signature(x='RasterLayer'), 
+
+function(x, filename='', ...) {
+
+	r = edge(x, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
 	
-	pts <- try(  rasterToPoints(r, fun=function(x){x>0})[,1:2] )
+	pts <- try(  rasterToPoints(r, fun=function(z){z>0})[,1:2] )
 	if (class(pts) == "try-error") {
-		return( .distanceRows(object, filename=filename, ...) )
+		return( .distanceRows(x, filename=filename, ...) )
 	}
 	if (nrow(pts) == 0) {
 		stop('RasterLayer has no NA cells (for which to compute a distance)')
 	}
 
-	if (.couldBeLonLat(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
+	rst <- raster(x)
+	
+	if (.couldBeLonLat(rst)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 	                                                                        
-	rst <- raster(object)
 	filename <- trim(filename)
 	if (!canProcessInMemory(rst, 2) && filename == '') {
 		filename <- rasterTmpFile()
@@ -33,7 +41,7 @@ distance <- function(object, filename='', ...) {
 	
 	pb <- pbCreate(nrow(rst), type=.progress(...))
 	for (r in 1:nrow(rst)) {	
-		vals <- getValues(object, r)
+		vals <- getValues(x, r)
 		i = which(is.na(vals))
 		if (length(i) > 0) {
 			xy[,2] <- yFromRow(rst, r)
@@ -56,8 +64,5 @@ distance <- function(object, filename='', ...) {
 	}
 	return(rst)
 }
-
-
-
-
+)
 

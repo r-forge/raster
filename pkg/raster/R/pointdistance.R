@@ -7,18 +7,17 @@
 .pointsToMatrix <- function(p) {
 	if (class(p) == 'SpatialPoints' | class(p) == 'SpatialPointsDataFrame') {
 		p <- coordinates(p)
-	}
-	if (is.data.frame(p)) {
+	} else if (is.data.frame(p)) {
 		p <- as.matrix(p)
-	}
-	if (is.vector(p)){
+	} else if (is.vector(p)){
 		if (length(p) != 2) {
 			stop('Wrong length for a vector, should be 2')
 		} else {
 			p <- matrix(p, ncol=2) 
 		}
-	} else if (is.matrix(p)) {
-		if (length(p[1,]) != 2) {
+	}
+	if (is.matrix(p)) {
+		if (ncol(p) != 2) {
 			stop( 'A points matrix should have 2 columns')
 		}
 		cn <- colnames(p)
