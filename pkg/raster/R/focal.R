@@ -21,12 +21,10 @@
 }
 	
 	
-focal <- function(x, fun=mean, ngb=3, na.rm=TRUE, filename="", ...) {
-	
-	ngb <- .checkngb(ngb)
-	
-	out <- raster(x)
+focal <- function(x, ngb=3, fun=mean, na.rm=TRUE, filename="", ...) {
 
+	ngb <- .checkngb(ngb)
+	out <- raster(x)
 	
 	row1 = floor(ngb[1]/2)
 	row2 = ngb[1]-(row1+1)
@@ -81,12 +79,12 @@ focal <- function(x, fun=mean, ngb=3, na.rm=TRUE, filename="", ...) {
 			ids = matrix(as.vector(ids), ncol=ncol(out))
 			ids = cbind(rep(1:ncol(out), each=nrow(ids)), as.vector(ids))
 			ids = subset(ids, ids[,2]>0)
-			vv = tapply(as.vector(ngbdata)[ids[,2]], ids[,1], fun)
+			vv = tapply(as.vector(ngbdata)[ids[,2]], ids[,1], fun, na.rm=na.rm)
 			
 		} else if (r <= (nrow(out)-row1)) {
 			ngbdata[1:(ngb[1]-1), ] <- ngbdata[2:(ngb[1]), ]
 			ngbdata[ngb[1],] = getValues(x, rr)
-			vv = tapply(as.vector(ngbdata)[id[,2]], id[,1], fun)
+			vv = tapply(as.vector(ngbdata)[id[,2]], id[,1], fun, na.rm=na.rm)
 			
 		} else {
 			ngbdata[1:(ngb[1]-1), ] <- ngbdata[2:(ngb[1]), ]
@@ -97,7 +95,7 @@ focal <- function(x, fun=mean, ngb=3, na.rm=TRUE, filename="", ...) {
 			ids = matrix(as.vector(ids), ncol=ncol(out))
 			ids = cbind(rep(1:ncol(out), each=nrow(ids)), as.vector(ids))
 			ids = subset(ids, ids[,2]>0)
-			vv = tapply(as.vector(ngbdata)[ids[,2]], ids[,1], fun)
+			vv = tapply(as.vector(ngbdata)[ids[,2]], ids[,1], fun, na.rm=na.rm)
 		}
 		
 		if (inmem) {

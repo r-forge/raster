@@ -32,6 +32,17 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 	outraster <- raster(rasters[[1]], filename)
 	outraster <- setExtent(outraster, bb, keepres=TRUE, snap=FALSE)
 
+	if (all(sapply(rasters, dataContent) == 'all')) {
+		outraster[] = NA
+		for (i in 1:length(rasters)) {
+			cells = cellsFromExtent(outraster, extent(rasters[[i]]) )
+			x = cbind(cells, outraster[cells], values(rasters[[i]]))
+			x = subset(x, is.na(x[,2]))
+			outraster[x[,1]] = x[,3]
+		}	
+		return(outraster)
+	}
+	
 	isInt <- TRUE
 	for (i in 1:length(rasters)) {
 		dtype <- .shortDataType(rasters[[i]]@file@datanotation)
@@ -54,24 +65,28 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 		rowcol[i,3] <- colFromX(outraster, xy1[1]) #start col
 	}
 	
-	v <- vector(length=0)
 	
 	if (!canProcessInMemory(x, 2) && filename == '') {
 		filename <- rasterTmpFile()
 		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
 	}
 
+	if (filename == "") {
+		v <- matrix(NA, ncol=nrow(x), nrow=ncol(x))
+	} else {
+		outraster = writeStart(outraster, filename, ...)
+	}
 	
-	pb <- pbCreate(nrow(outraster), type=.progress(...))
+	pb <- pbCreate(nrow(outraster), type=progress)
+	
+	ds = sapply(rasters, dataSource)
+	dc = sapply(rasters, dataContent)
 	
 	for (r in 1:nrow(outraster)) {
 		rd <- as.vector(matrix(NA, nrow=1, ncol=ncol(outraster))) 
 		for (i in length(rasters):1) {  #reverse order so that the first raster covers the second etc.
 			if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
-				if (dataSource(rasters[[i]]) == 'disk') {
-					rasters[[i]] <- readRow(rasters[[i]], r + 1 - rowcol[i,1]) 
-					d <- values(rasters[[i]])
-				} else if (dataContent(rasters[[i]]) == 'all') {
+				if (ds[i] == 'disk' | dc[i] == 'all') {
 					d <- getValues(rasters[[i]], r + 1 - rowcol[i,1]) 
 				} else {
 					d <- vector(length=ncol(rasters[[i]]))
@@ -85,18 +100,18 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 		}
 		
 		if (filename != '') {
-			outraster <- setValues(outraster, rd, r)
-			outraster <- writeRaster(outraster, filename=filename, datatype=datatype, overwrite=overwrite, format=format)
+			writeValues(outraster, rd, r)
 		} else {
-			v <- c(v, rd)
+			v[,r] <- rd
 		}
-
 		pbStep(pb, r)
 	}
 	pbClose(pb)
 
 	if (filename == "") { 
-		outraster <- setValues(outraster, v) 
+		outraster <- setValues(outraster, as.vector(v))
+	} else {
+		outraster <- writeStop(outraster)
 	}
 	return(outraster)
 }

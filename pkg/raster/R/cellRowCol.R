@@ -4,17 +4,9 @@
 # Licence GPL v3
 
 
-.mustCoerce  <- function(object){
-	cl <- class(object)
-	if (cl == "SpatialGrid" | cl == "SpatialGridDataFrame" | cl == "SpatialPixels" | cl == "SpatialPixelsDataFrame" | cl == 'matrix') {
-		return(TRUE)
-	} else {
-		return(FALSE)
-	}	
-}
 	
 rowFromCell <- function(object, cell) {
-	if (.mustCoerce(object)) { object <- raster(object) }
+	object <- raster(object)
 	cell <- round(cell)
 	cell[cell < 1 | cell > ncell(object)] <- NA
 	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
@@ -23,7 +15,7 @@ rowFromCell <- function(object, cell) {
 
 
 cellFromRow <- function(object, rownr) {
-	if (.mustCoerce(object)) { object <- raster(object) }
+	object <- raster(object)
 	rownr <- round(rownr)
 	if (length(rownr)==1) {
 		return(cellFromRowCol(object, rownr, 1):cellFromRowCol(object, rownr, object@ncols))
@@ -34,7 +26,7 @@ cellFromRow <- function(object, rownr) {
 }
 
 cellFromCol <- function(object, colnr) {
-	if (.mustCoerce(object)) { object <- raster(object) }
+	object <- raster(object)
 	colnr <- round(colnr)
 	rows <- rep(1:nrow(object), times=length(colnr))
 	cols <- rep(colnr, each=nrow(object))
@@ -42,15 +34,28 @@ cellFromCol <- function(object, colnr) {
 }
 
 
-cellFromRowColCombine <- function(object, rownr, colnr) {
-	if (.mustCoerce(object)) { object <- raster(object) }
+.OLD_cellFromRowColCombine <- function(object, rownr, colnr) {
+	object <- raster(object)
 	rc <- expand.grid(rownr, colnr)
 	return( cellFromRowCol(object, rc[,1], rc[,2]))
 }
 
 
+cellFromRowColCombine <- function(object, rownr, colnr) {
+	object <- raster(object)
+	rownr[rownr < 1 | rownr > object@nrows] = NA
+	colnr[colnr < 1 | colnr > object@ncols] = NA
+	cols = rep(colnr, times=length(rownr))
+	dim(cols) = c(length(colnr), length(rownr))
+	cols = t(cols)
+	rownr = (rownr-1) * object@ncols
+	cols = cols + rownr
+	return(as.vector(t(cols)))
+}
+
+
 colFromCell <- function(object, cell) {
-	if (.mustCoerce(object)) { object <- raster(object) }
+	object <- raster(object)
 	cell <- round(cell)
 	cell[cell < 1 | cell > ncell(object)] <- NA	
 	rownr <- as.integer(trunc((cell-1)/ncol(object)) + 1)
@@ -59,7 +64,7 @@ colFromCell <- function(object, cell) {
 }
 
 cellFromRowCol <- function(object, rownr, colnr) {
-	if (.mustCoerce(object)) { object <- raster(object) }
+	object <- raster(object)
 	rownr <- round(rownr)
 	colnr <- round(colnr)
 	rownr[rownr < 1 | rownr > nrow(object)] <- NA

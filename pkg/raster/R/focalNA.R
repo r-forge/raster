@@ -34,7 +34,7 @@
 
 
 
-focalNA <- function(x, fun=mean, ngb=3, recursive=FALSE, maxrec=0, filename="", ...) {
+focalNA <- function(x, ngb=3, fun=mean, recursive=FALSE, maxrec=0, filename="", ...) {
 	filename <- trim(filename)
 	if (recursive) {
 		fn <- ''

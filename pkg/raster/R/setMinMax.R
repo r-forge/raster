@@ -18,15 +18,10 @@ function(x) {
 		if (dataSource(x) == 'ram') {
 			stop('no, or not enough, values associated with this Layer')
 		}
-		if (canProcessInMemory(x, 2)) {
-			x <- readAll(x)
-			clear <- TRUE
-		}
 	}
 	
 	if (dataContent(x)=='all' ) {
-		vals <- na.omit(values(x)) # min and max values
-		if (clear) {x <- clearValues(x)}
+		vals <- na.omit(values(x)) 
 		if (length(vals) > 0) {
 			x@data@min <- min(vals)
 			x@data@max <- max(vals)
@@ -37,15 +32,15 @@ function(x) {
 	} else {
 		x@data@min <- Inf
 		x@data@max <- -Inf
-		for (r in 1:nrow(x)) {
-			x <- readRow(x, r)
-			rsd <- na.omit(values(x)) # min and max values
-			if (length(rsd) > 0) {
-				x@data@min <- min(minValue(x), min(rsd))
-				x@data@max <- max(maxValue(x), max(rsd))
+		tr <- blockSize(x)
+		pb <- pbCreate(tr$n, type=.progress())			
+		for (i in 1:tr$n) {
+			v <- na.omit ( getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]) )
+			if (length(v) > 0) {
+				x@data@min <- min(x@data@min, min(v))
+				x@data@max <- max(x@data@max, max(v))
 			}	
 		}
-		x <- clearValues(x)
 	}
 	
 #	if (datatype == 'logical') {

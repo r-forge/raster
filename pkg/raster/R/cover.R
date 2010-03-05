@@ -10,14 +10,24 @@ if (!isGeneric("cover")) {
 }	
 
 setMethod('cover', signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, ..., filename='', datatype=NULL) {
+	function(x, y, ..., filename='', format, datatype, overwrite, progress){ 
 
 	rasters <- .makeRasterList(x, y, ...)
 	compare(rasters)
 		
 	outRaster <- raster(x)
 
-	if (is.null(datatype)) {
+	if (missing(format)) {
+		format <- .filetype()
+	} 
+	if (missing(overwrite)) {
+		overwrite <- .overwrite()
+	}
+	if (missing(progress)) {
+		progress <- .progress()
+	}
+	
+	if (missing(datatype)) {
 # check for boolean data?
 		isInt <- TRUE
 		for (i in 1:length(rasters)) {
@@ -41,7 +51,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	if (filename == '') {
 		v <- matrix(ncol=nrow(outRaster), nrow=ncol(outRaster))
 	} else {
-		r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
+		outRaster <- writeStart(outRaster, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress )
 	}
 	
 	tr <- blockSize(outRaster, length(rasters))
