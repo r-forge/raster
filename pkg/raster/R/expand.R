@@ -53,7 +53,7 @@ function(x, y, filename='', value=NA, ...) {
 	} else { 
 		if (filename == '') {
 			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+									
 		}
 
 		startrow <- rowFromY(outraster, yFromRow(x, 1))

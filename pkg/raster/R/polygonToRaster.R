@@ -63,7 +63,7 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 	filename <- trim(filename)
 	if (!canProcessInMemory(raster, 3) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 	
 	if (getCover) {

@@ -24,9 +24,6 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 				}
 				r <- writeStop(r)
 				pbClose(pb)
-				if (getOption('verbose')) {
-					cat('values were written to:', filename)
-				}
 				return(r)
 			}
 		}	
@@ -52,9 +49,6 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 			r <- writeStop(r)
 			pbClose(pb)
 
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}			
 			return(r)
 		}		
 	}
@@ -80,10 +74,6 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			}
 			r <- writeStop(r)
 			pbClose(pb)
-
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}
 			return(r)
 		}		
 	}
@@ -102,9 +92,6 @@ setMethod("Arith", signature(e1='RasterBrick', e2='numeric'),
 				r <- setValues(r, callGeneric( getValues(e1, row), e2) , row) 
 				r <- writeRaster(r, filename=filename, doPB=TRUE)
 			}
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}			
 			return(r)
 		}		
 	}

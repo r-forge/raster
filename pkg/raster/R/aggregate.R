@@ -68,7 +68,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	} else if ( dataSource(x) == 'disk') { 
 		if (!canProcessInMemory(outRaster, 2) && filename == '') {
 			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+									
 		}
 		
 		cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)

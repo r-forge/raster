@@ -72,7 +72,7 @@ focalNA <- function(x, ngb=3, fun=mean, recursive=FALSE, maxrec=0, filename="", 
 
 	if (!canProcessInMemory(ngbgrid, 4) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 
 	if (filename == '') {

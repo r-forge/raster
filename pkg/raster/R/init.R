@@ -22,7 +22,7 @@ init <- function(raster, fun, v, filename="", ...) {
 		inmem=FALSE
 		if (filename == '') {
 			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+									
 		}
 	}
 	

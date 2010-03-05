@@ -16,7 +16,7 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 	
 	if (!canProcessInMemory(to, 1) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}
+		
 	}
 	inMemory <- (filename == "")
 

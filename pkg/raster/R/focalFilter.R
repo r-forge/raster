@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date : March 2009
 # Version 0.9
 # Licence GPL v3
@@ -23,6 +22,7 @@
 focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	if (!is.matrix(filter)) {stop('filter must be a matrix')}
 	ngb <- dim(filter)
+	if (prod(ngb) == 0) {stop('ncol and nrow of filter must be > 0') }
 
 	ngbgrid <- raster(raster)
 
@@ -48,7 +48,7 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	filename <- trim(filename)
 	if (!canProcessInMemory(ngbgrid, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 	
 	if (filename == '') {

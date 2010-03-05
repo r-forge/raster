@@ -23,7 +23,7 @@ setMethod('flip', signature(x='RasterLayer', direction='ANY'),
 	
 		if (!canProcessInMemory(outRaster, 2) && filename == '') {
 			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+									
 			inmemory = FALSE
 		} else {
 			inmemory = TRUE

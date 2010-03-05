@@ -9,6 +9,7 @@ rasterTmpFile <- function()  {
 	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
 	d <- paste(d, 'raster_', f, '.grd', sep="")
+	if (getOption('verbose')) { cat('writing raster to:', d) }
 	return(d)
 }
 

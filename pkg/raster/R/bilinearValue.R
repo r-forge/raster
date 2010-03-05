@@ -32,8 +32,10 @@
 	}
 	
 	bilinear <- function(x,y, x1,x2,y1,y2, v) {
-		div <- (x2-x1)*(y2-y1)
-		return ( (v[,1]/div)*(x2-x)*(y2-y) + (v[,3]/div)*(x-x1)*(y2-y) + (v[,2]/div)*(x2-x)*(y-y1) + (v[,4]/div)*(x-x1)*(y-y1) )
+		v = v / ((x2-x1)*(y2-y1))
+		return( v[,1]*(x2-x)*(y2-y) + v[,3]*(x-x1)*(y2-y) + v[,2]*(x2-x)*(y-y1) + v[,4]*(x-x1)*(y-y1) )
+		#div <- (x2-x1)*(y2-y1)
+		#return ( (v[,1]/div)*(x2-x)*(y2-y) + (v[,3]/div)*(x-x1)*(y2-y) + (v[,2]/div)*(x2-x)*(y-y1) + (v[,4]/div)*(x-x1)*(y-y1) )
 	}
 	
 	

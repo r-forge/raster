@@ -27,7 +27,6 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 	if (!canProcessInMemory(rs, 2 * nres))  {
 		if (filename == '') {
 			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing results to:', filename)	}						
 		}
 		todisk <- TRUE
 	}	

@@ -48,7 +48,7 @@ function(x, filename="", classes=TRUE, type='both', asNA=FALSE, asZero=TRUE, ...
 	if (!canProcessInMemory(out, 3) && filename == '') {
 		filename <- rasterTmpFile()
 		inmem = FALSE
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 	if (inmem) {
 		v = matrix(nrow=ncol(out), ncol=nrow(out))		

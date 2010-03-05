@@ -6,8 +6,7 @@
 \description{
 Resample transfers values between non matching RasterLayers (in terms of origin and resolution). 
 
-Avoid using this function if you can use functions like (dis)aggregate, crop and merge instead, because 
-these functions are more accurate and much faster.
+Avoid using this function if you can use functions like (dis)aggregate, crop and merge instead, because these functions are more accurate and much faster.
 }
 
 \usage{
@@ -36,22 +35,22 @@ The following additional arguments can be passed, to replace default values for 
 }
 
 \value{
-  a RasterLayer object, and, in some cases, the side-effect of a file with the values of the new RasterLayer 
+A RasterLayer object, and, in some cases, the side-effect of a file with the values of the new RasterLayer 
 }
 
 \author{Robert J. Hijmans }
 
 
-\seealso{ \code{\link[raster]{aggregate}}, \code{\link[raster]{crop}}, \code{\link[raster]{merge}} }
+\seealso{ \code{\link[raster]{aggregate}}, \code{\link[raster]{disaggregate}}, \code{\link[raster]{crop}}, , \code{\link[raster]{expand}}, \code{\link[raster]{merge}}, \code{\link[raster]{projectRaster}} }
 
 
 \examples{
-r <- raster(nrow=4, ncol=4)
+r <- raster(nrow=3, ncol=3)
 r[] <- 1:ncell(r)
-r2 <- raster(nrow=40, ncol=40)
-s <- resample(r, r2, method='bilinear')
+s <- raster(nrow=10, ncol=10)
+s <- resample(r, s, method='bilinear')
+#par(mfrow=c(1,2))
 #plot(r)
-#x11()
 #plot(s)
 }
 

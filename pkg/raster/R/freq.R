@@ -11,7 +11,7 @@ if (!isGeneric("freq")) {
 
 
 setMethod('freq', signature(x='RasterLayer'), 
-	function(x, digits=0, progress, ...) {
+	function(x, digits=0, ...) {
 
 		if (canProcessInMemory(x, 3)) {
 	
@@ -22,10 +22,8 @@ setMethod('freq', signature(x='RasterLayer'),
 			res <- table(d, useNA="ifany" )
 		
 		} else {
-			if (missing(progress)) { progress <- .progress() }
-	
 			tr <- blockSize(x, n=2)
-			pb <- pbCreate(tr$n, type=progress)	
+			pb <- pbCreate(tr$n, type=.progress(...))	
 			z <- vector(length=0)
 			for (i in 1:tr$n) {
 				d <- round(getValuesBlock(x, row=tr$row[i], nrows=tr$size), digits=digits)

@@ -54,7 +54,7 @@ setMethod('predict', signature(object='Raster'),
 		
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+									
 		} 
 
 		if (filename == '') {

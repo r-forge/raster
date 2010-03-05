@@ -40,9 +40,6 @@ setMethod("Math", signature(x='RasterLayer'),
 			r <- writeStop(r)
 			pbClose(pb)
 			
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}
 		}
 		return(r)
 	}

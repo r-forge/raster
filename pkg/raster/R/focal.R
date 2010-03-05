@@ -55,7 +55,7 @@ focal <- function(x, ngb=3, fun=mean, na.rm=TRUE, filename="", ...) {
 	if (!canProcessInMemory(out, 3) && filename == '') {
 		filename <- rasterTmpFile()
 		inmem = FALSE
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 	if (inmem) {
 		v = matrix(nrow=ncol(out), ncol=nrow(out))		

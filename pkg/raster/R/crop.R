@@ -51,7 +51,7 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 			return(outraster)
 		} else if ( filename == '') {
 			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+									
 		}
 		rownr <- 1
 		pb <- pbCreate(nrow(outraster), type=.progress(...))

@@ -52,7 +52,7 @@ function(x, fact, filename='', ...) {
 	
 	if ((!canProcessInMemory(outraster, 3)) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 	
 	if ( filename == "" ) {

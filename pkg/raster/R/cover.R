@@ -45,7 +45,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	filename <- trim(filename	)
 	if (!canProcessInMemory(x, length(rasters)+2) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 	
 	if (filename == '') {
@@ -73,7 +73,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 		} else {
 			writeValues(outRaster, vv, tr$row[i])
 		}
-		pbStep(pb, r) 
+		pbStep(pb, i) 
 	}
 	pbClose(pb)
 

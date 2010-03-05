@@ -109,8 +109,10 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 \section{V. Spatial contextual computation}{
 
   \tabular{ll}{
-    \code{\link{distance}} \tab Distance to non-NA cells \cr
-    \code{\link{gridDistance}} \tab Distance when forced to go through non-NA cells \cr
+    \code{\link{distance}} \tab Shortest distance to a cell that is not \code{NA}\cr
+    \code{\link{gridDistance}} \tab Distance when traversing grid cells that are not \code{NA} \cr
+    \code{\link{distanceFromPoints}} \tab Shortest distance to any point in a set of points \cr
+    \code{\link{pointDistance}} \tab Distance between points \cr
     \code{\link{focal}} \tab Focal (neighborhood) functions \cr
     \code{\link{focalFilter}} \tab Focal (neighborhood) filters \cr
     \code{\link{edge}} \tab Edge detection \cr

@@ -15,7 +15,7 @@ distanceFromPoints <- function(object, xy, filename='', ...) {
 	rst <- raster(object)
 	if (!canProcessInMemory(rst, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 
 	xy <- xFromCol(rst, 1:ncol(rst))

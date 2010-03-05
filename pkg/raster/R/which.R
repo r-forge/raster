@@ -4,30 +4,6 @@
 # Licence GPL v3
 
 
-setMethod('as.logical', signature(x='RasterLayer'), 
-function(x, filename='', ...) {
-	if (canProcessInMemory(x, 2)){
-		if (dataContent(x) != 'all') { x <- readAll(x) }
-		x <- setValues(x, as.logical(values(x)))
-		if (filename != '') {
-			x <- writeRaster(x, filename, datatype='INT2S', ...)
-		}
-		return(x)
-	} else {
-		if (filename == '') {
-			filename <- rasterTmpFile()
-			if (getOption('verbose')) { cat('writing raster to:', filename)	}						
-			out <- raster(x)
-			for (r in 1:nrow(out)) {
-				out <- setValues(out, as.logical(getValues(x, r)), r)
-				out <- writeRaster(out, filename, datatype='INT2S', ...)
-			}
-		}
-	}
-}
-)
-
-
 if (!isGeneric("which")) {
 	setGeneric("which", function(x, arr.ind=FALSE)
 		standardGeneric("which"))
@@ -36,32 +12,50 @@ if (!isGeneric("which")) {
 
 setMethod('which', signature(x='RasterLayer'), 
 function(x, arr.ind=FALSE) {
+
+		
 	if (canProcessInMemory(x, 2)){
-		if (dataContent(x) != 'all') { x <- readAll(x) }
-		x <- as.logical(x)
 		if (arr.ind) {
-			return(which(values(x)))
+			return(which(getValues(x)==TRUE))
 		} else {
+			x <- as.logical(x)
 			x[is.na(x)] <- FALSE
 			return(x)
 		}
 	} else {
-		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}
 		out <- raster(x)
-		vv <- vector()
-		for (r in 1:nrow(out)) {
-			v <- as.logical(getValues(x, r))
-			if (arr.ind) {
-				vv <- c(vv, which(values(x)))
-			} else {
-				v[is.na(v)] <- FALSE
-				out <- setValues(out, v, r)
-				out <- writeRaster(out, filename, datatype='INT2S')
-			}
+		if (arr.ind) {
+			vv <- vector()
+		} else {
+			filename <- rasterTmpFile()
+			
+			out <- writeStart(out, filename=filename, format=.filetype(), datatype='INT1S', overwrite=TRUE)
 		}
-		if (arr.ind) { return(vv) 
-		} else { return(x) }
+		
+		tr <- blockSize(out, n=2)
+		pb <- pbCreate(tr$n, type=.progress() )	
+		for (i in 1:tr$n) {
+			v <- getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i] ) 
+			
+			if (arr.ind) {
+				offs = (tr$row[i]-1) * out@ncols
+				vv <- c(vv, which(v==TRUE) + offs)
+			} else {
+				v <- as.logical(v)
+				v[is.na(v)] <- FALSE
+				writeValues(out, v, tr$row[i])
+			}
+			pbStep(pb, i)
+		}
+		pbClose(pb)
+		
+		
+		if (arr.ind) { 
+			return(vv)
+		} else { 
+			x <- writeStop(x)
+			return(x) 
+		}
 	}
 }
 )

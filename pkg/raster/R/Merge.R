@@ -68,7 +68,7 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 	
 	if (!canProcessInMemory(x, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 
 	if (filename == "") {

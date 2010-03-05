@@ -30,7 +30,7 @@ function(x, filename='', ...) {
 	filename <- trim(filename)
 	if (!canProcessInMemory(rst, 2) && filename == '') {
 		filename <- rasterTmpFile()
-		if (getOption('verbose')) { cat('writing raster to:', filename)	}						
+								
 	}
 	xy <- xFromCol(rst, 1:ncol(rst))
 	xy <- cbind(xy, NA)

@@ -23,9 +23,6 @@ setMethod("is.na", signature(x='RasterLayer'),
 			r <- writeStop(r)
 			pbClose(pb)
 
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}
 			return(r)
 		}
 	}
@@ -52,9 +49,6 @@ setMethod("is.nan", signature(x='RasterLayer'),
 			r <- writeStop(r)
 			pbClose(pb)
 
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}
 			return(r)
 		}
 	}
@@ -82,9 +76,6 @@ setMethod("is.finite", signature(x='RasterLayer'),
 			r <- writeStop(r)
 			pbClose(pb)
 
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}
 			return(r)
 		}
 	}
@@ -112,9 +103,6 @@ setMethod("is.infinite", signature(x='RasterLayer'),
 			r <- writeStop(r)
 			pbClose(pb)
 
-			if (getOption('verbose')) {
-				cat('values were written to:', filename)
-			}
 			return(r)
 		}
 	}

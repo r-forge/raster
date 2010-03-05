@@ -11,28 +11,34 @@ if (!isGeneric("unique")) {
 
 
 setMethod('unique', signature(x='RasterLayer', incomparables='missing'), 
-function(x) {
+function(x, progress='') {
 	if (canProcessInMemory(x, 2)) {
 		if (dataContent(x) != 'all') {
 			x <- readAll(x)
 		}
 	} 
 	if (dataContent(x) == 'all') {
-		u <- callGeneric(values(x))
-		return(sort(u))
-	} else if (dataSource(x) == 'disk' ) {
+		x <- unique(x@data@values)
+		return(sort(x))
+	} else if (dataSource(x) != 'disk' ) {
+		stop('This RasterLayer has no values')	
+	} else {
 		u1 <- vector()
 		u2 <- vector()
-		for (r in 1:nrow(x)) {
-			u1 <- unique(c(values(readRow(x, r)), u1))
+		
+		tr <- blockSize(x, n=2)
+		pb <- pbCreate(tr$n, type=progress)	
+
+		for (i in 1:tr$n) {
+			u1 <- unique( c(u1, getValuesBlock(x, row=tr$row[i], nrows=tr$size)) )
 			if (length(u1) > 10000 ) {
 				u2 <- unique(c(u1, u2))
 				u1 <- vector()
 			}
+			pbStep(pb, i)			
 		}
+		pbClose(pb)
 		return(sort(unique(c(u1, u2))))	
-	} else {
-		stop('This RasterLayer has no values')
 	}
 }
 )
