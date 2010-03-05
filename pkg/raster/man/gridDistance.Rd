@@ -6,7 +6,7 @@
 \title{Grid distance}
 
 \description{
- The function calculates the distance to cells of a RasterLayer when the path has to follow the center of neighboring raster cells (currently as a 'queen', but we should also implement an option to go like a 'rook'...
+ The function calculates the distance to cells of a RasterLayer when the path has to follow the center of neighboring raster cells (currently only implemented as a 'queen' case).
  
  Origin cells should have value TRUE (or 1), destination cells should be \code{NA} and cells that can not be traversed should be set to FALSE (or 0).
  
@@ -18,11 +18,11 @@
 }
 
 \usage{
-gridDistance(object, filename = "", ...) 
+gridDistance(x, filename = "", ...) 
 }
 
 \arguments{
-\item{object}{a RasterLayer object}
+\item{x}{a RasterLayer object}
 \item{filename}{character. output filename}
 \item{...}{additional arguments. See Details.}  
 }
@@ -47,14 +47,11 @@ The following additional arguments can be passed, to replace default values for 
 
 
 \examples{
-#File in memory
 r1 <- raster(ncol=36,nrow=18)
 r1[] <- NA
 r1[345:355] <- 1
 distRaster <- gridDistance(r1) 
 plot(distRaster)
-
-
 }
 
 

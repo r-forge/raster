@@ -6,28 +6,30 @@
 
 #for data on disk only proof of concept version. In reality, we need Dijkstra´s algorithm (igraph) and read/write a couple of row at once to gain some speed
 
-#setGeneric("gridDistance", function(object, ...) standardGeneric("distance"))
+#setGeneric("gridDistance", function(x, ...) standardGeneric("gridDistance"))
 
-#setMethod("gridDistance", signature(object = "RasterLayer"), def =	
+#setMethod("gridDistance", signature(x = "RasterLayer"), def =	
 
-gridDistance <- function(object, filename="", ...) {
+gridDistance <- function(x, filename="", ...) {
 
-	filename <- trim(filename)
-	n <- ncell(object)
-	
-	if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) {
+	if ((dataContent(x) != 'all') & (dataSource(x) != 'disk')) {
 		stop('cannot compute distance on a RasterLayer with no data')
 	}
+
+	filename <- trim(filename)
+	
+	object <- raster(x)
+	n <- ncell(object)
 		
-	if(canProcessInMemory(object, n=10)) {
-		if (dataContent(object) != 'all' ) { 
-			object <- readAll(object) 
-		}
+	if(canProcessInMemory(object, n=5)) {
+		
+		x = getValues(x)
+		
 		outRaster <- raster(object)
 
-		fromCells <- which(!is.na(values(object)))
-		fromCells <- fromCells[which(values(object)[fromCells] == TRUE)]
-		toCells <- which(is.na(values(object)))
+		fromCells <- which(!is.na(x))
+		fromCells <- fromCells[which(x[fromCells] == TRUE)]
+		toCells <- which(is.na(x))
 		accDist <- rep(0,times=n)
 		accDist[toCells] <- Inf
 		if (isLonLat(object)) {

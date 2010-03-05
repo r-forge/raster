@@ -12,7 +12,7 @@
 	if( (!overwrite) & file.exists(filename)) {
 		stop('file exists; use overwrite=TRUE to overwrite it')
 	}
-	if (isLonLat(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
+	if (.couldBeLonLat(object)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 
 	e = edge(object, classes=FALSE, type='inner', asNA=TRUE) 
 	
