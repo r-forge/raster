@@ -40,10 +40,10 @@ The following additional arguments can be passed, to replace default values for 
 
 
 \examples{
-r1 <- raster(ncol=36,nrow=18)
-r1[] <- NA
-r1[345:355] <- 1
-dist <- distance(r1) 
+r <- raster(ncol=36,nrow=18)
+r[] <- NA
+r[500] <- 1
+dist <- distance(r) 
 #plot(dist)
 }
 

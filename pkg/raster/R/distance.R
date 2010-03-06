@@ -15,10 +15,12 @@ function(x, filename='', ...) {
 
 	r = edge(x, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
 	
-	pts <- try(  rasterToPoints(r, fun=function(z){z>0})[,1:2] )
+	pts <- try(  rasterToPoints(r, fun=function(z){z>0})[,1:2, drop=FALSE] )
+	
 	if (class(pts) == "try-error") {
 		return( .distanceRows(x, filename=filename, ...) )
 	}
+
 	if (nrow(pts) == 0) {
 		stop('RasterLayer has no NA cells (for which to compute a distance)')
 	}
@@ -43,6 +45,7 @@ function(x, filename='', ...) {
 	for (r in 1:nrow(rst)) {	
 		vals <- getValues(x, r)
 		i = which(is.na(vals))
+		vals[] <- 0
 		if (length(i) > 0) {
 			xy[,2] <- yFromRow(rst, r)
 			for (c in i) {
