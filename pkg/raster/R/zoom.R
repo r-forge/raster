@@ -5,7 +5,15 @@
 # Licence GPL v3
 
 
-zoom <- function(x, extent=drawExtent(), maxpixels=100000, layer=1, new=TRUE, ...) {
+	
+if (!isGeneric("zoom")) {
+	setGeneric("zoom", function(x, ...)
+		standardGeneric("zoom"))
+}	
+
+
+setMethod('zoom', signature(x='Raster'), 
+function(x, extent=drawExtent(), maxpixels=100000, layer=1, new=TRUE, ...) {
 	if (missing(x)) {
 		stop('You must provide a Raster* object as first argument to this function')
 	}
@@ -15,4 +23,4 @@ zoom <- function(x, extent=drawExtent(), maxpixels=100000, layer=1, new=TRUE, ..
 	.plotraster(x, maxpixels=maxpixels, extent=extent, ...) 	
 	return(invisible(extent))
 }
-
+)
