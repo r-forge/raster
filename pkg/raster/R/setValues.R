@@ -32,6 +32,16 @@ if (!isGeneric('setValues')) {
 setMethod('setValues', signature(object='RasterLayer'), 
 function(object, values, rownr=-1, layer=-1) {
   
+	if (is.matrix(values)) { 
+		if (ncol(values) == object@ncols & nrow(values) == object@nrows) {
+			values <- as.vector(t(values)) 
+		} else if (ncol(values)==1 | nrow(values)==1) {
+			values <- as.vector(values)
+		} else {
+			stop('cannot use a matrix with these dimensions')
+		}
+	}
+  
 	if (!is.vector(values)) {stop('values must be a vector')}
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
 		stop('values must be numeric, integer or logical.')	}
@@ -129,7 +139,7 @@ setMethod('setValues', signature(object='RasterBrick'),
 			if (dataContent(object) != 'all') { 
 				atry <- try(object <- readAll(object), silent=T)
 				if (class(atry) == "try-error") {
-					stop(" you can only setValues for a single layer if all values are in memory. But values could not be loaded")				
+					stop("you can only setValues for a single layer if all values are in memory. But values could not be loaded")				
 				}
 			}
 			object@data@values[,layer] <- values
