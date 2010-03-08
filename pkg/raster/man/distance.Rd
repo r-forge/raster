@@ -39,9 +39,9 @@ The following additional arguments can be passed, to replace default values for 
 \seealso{
 \code{\link[raster]{distanceFromPoints}},  \code{\link[raster]{gridDistance}},  \code{\link[raster]{pointDistance}}  
 
-For more advanced distances see the \code{\link[gdistance]{gdistance}} package.
+For more advanced distances see the \code{gdistance} package.
 
-For great-circle distances (etc) between (unprojected) points, see the \code{\link[geosphere]{geosphere}} package.
+For great-circle distances (and more) between (unprojected) points, see the \code{geosphere} package.
 }
 
 

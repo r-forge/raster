@@ -3,7 +3,7 @@
 \alias{direction}
 \alias{direction,RasterLayer-method}
 
-\title{direction}
+\title{Direction}
 
 \description{
 The direction (azimuth) to the nearest cell that is not \code{NA}. The direction unit is in degrees (not radians). If you want radians, use \code{fun=function(x){x}}.
@@ -39,7 +39,7 @@ The following additional arguments can be passed, to replace default values for 
 \seealso{
 \code{\link[raster]{distance}},  \code{\link[raster]{gridDistance}}
 
-For the direction between points, see the \code{\link[geosphere]{azimuth}} function in the \code{\link[geosphere]{geosphere}} package 
+For the direction between points, see the \code{azimuth} function in the \code{geosphere} package 
 }
 
 

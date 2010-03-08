@@ -37,9 +37,9 @@ function(x, fun=NULL, from=FALSE, filename='', ...) {
 				dLon = p2[1] - p1[1] 
 				y = sin(dLon)  * cos(p2[2]) 
 				x = cos(p1[2]) * sin(p2[2]) - sin(p1[2]) * cos(p2[2]) * cos(dLon) 
-				azm = atan2(y, x) / toRad
-				azm[azm < 0] <-  360 + azm[azm < 0] 
-				return(fun(azm*toRad))
+				azm = atan2(y, x) 
+				azm[azm < 0] <-  azm[azm < 0] + 2 * pi
+				return(fun(azm))
 			}
 		}
 	} else { 
@@ -48,14 +48,14 @@ function(x, fun=NULL, from=FALSE, filename='', ...) {
 			direct <- function(from, to) {
 				A = to[2] - from[2]
 				B = to[1] - from[1]
-				b = atan2(A, B) * 180 / pi
+				b = atan2(B, A) * 180 / pi 
 				return( (b + 360) %% 360 )
 			}
 		} else {
-			direct <- function(from, to, fun=fun) {
+			direct <- function(from, to) {
 				A = to[2] - from[2]
 				B = to[1] - from[1]
-				b = atan2(A, B)
+				b = atan2(B, A)
 				return(fun(b))
 			}
 		}
