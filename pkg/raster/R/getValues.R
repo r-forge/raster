@@ -14,7 +14,7 @@ function(x, format='') {
 		x <- readAll(x)
 	}
 	if (format=='matrix') { 
-		return(matrix(x@data@values, ncol=x@ncols, nrow=x@nrows)) 
+		return(matrix(x@data@values, ncol=x@ncols, nrow=x@nrows, byrow=TRUE)) 
 	} else {
 		return(x@data@values) 
 	}
