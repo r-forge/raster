@@ -112,7 +112,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{distance}} \tab Shortest distance to a cell that is not \code{NA}\cr
     \code{\link{gridDistance}} \tab Distance when traversing grid cells that are not \code{NA} \cr
     \code{\link{distanceFromPoints}} \tab Shortest distance to any point in a set of points \cr
-    \code{\link{pointDistance}} \tab Distance between points \cr
+    \code{\link{direction}} \tab Direction (azimuth) to or from cells that are not \code{NA}\cr
     \code{\link{focal}} \tab Focal (neighborhood) functions \cr
     \code{\link{focalFilter}} \tab Focal (neighborhood) filters \cr
     \code{\link{edge}} \tab Edge detection \cr
@@ -352,6 +352,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 
 \tabular{ll}{
     \code{\link{getData}} \tab Download and geographic data\cr
+    \code{\link{pointDistance}} \tab Distance between points \cr
     \code{\link{readIniFile}} \tab Read a (windows) 'ini' file \cr
     \code{\link{writeRasterHdr}} \tab Write header file for some raster formats \cr
     \code{\link{trim}} \tab Remove leading and trainling blanks from a character string \cr

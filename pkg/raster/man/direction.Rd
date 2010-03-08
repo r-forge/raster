@@ -1,18 +1,16 @@
-\name{distance}
+\name{direction}
 
-\alias{distance}
-\alias{distance,RasterLayer-method}
+\alias{direction}
+\alias{direction,RasterLayer-method}
 
-\title{Distance}
+\title{direction}
 
 \description{
-The function calculates the distance for all cells that are \code{NA}, to the nearest cell that is not \code{NA}.
- 
-The distance unit is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically also meters) when it is projected.
+The direction (azimuth) to the nearest cell that is not \code{NA}. The direction unit is in degrees (not radians). If you want radians, use \code{fun=function(x){x}}.
 }
 
 \usage{
-distance(x, ...) 
+direction(x, ...) 
 }
 
 \arguments{
@@ -24,6 +22,8 @@ distance(x, ...)
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
+  \tab \code{fun} \tab A function that takes the direction (in radians!) as argument. E.g. \code{sin} \cr
+  \tab \code{from} \tab Logical. Default is \code{FALSE}. If \code{TRUE}, the direction from (in stead of to) the nearest cell that is not \code{NA} is returned \cr
   \tab \code{filename}  \tab Filename for the output RasterLayer \cr
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
@@ -37,20 +37,18 @@ The following additional arguments can be passed, to replace default values for 
 \value{A RasterLayer object}
 
 \seealso{
-\code{\link[raster]{distanceFromPoints}},  \code{\link[raster]{gridDistance}},  \code{\link[raster]{pointDistance}}  
+\code{\link[raster]{distance}},  \code{\link[raster]{gridDistance}}
 
-For more advanced distances see the \code{\link[gdistance]{gdistance}} package.
-
-For great-circle distances (etc) between (unprojected) points, see the \code{\link[geosphere]{geosphere}} package.
+For the direction between points, see the \code{\link[geosphere]{azimuth}} function in the \code{\link[geosphere]{geosphere}} package 
 }
 
 
 \examples{
 r <- raster(ncol=36,nrow=18)
 r[] <- NA
-r[500] <- 1
-dist <- distance(r) 
-#plot(dist)
+r[306] <- 1
+b <- direction(r, fun=sin, from=TRUE) 
+#plot(b)
 }
 
 \keyword{spatial}

@@ -25,29 +25,31 @@ function(x, filename='', ...) {
 		stop('RasterLayer has no NA cells (for which to compute a distance)')
 	}
 
-	rst <- raster(x)
+	out <- raster(x)
 	
-	if (.couldBeLonLat(rst)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
+	if (.couldBeLonLat(out)) { disttype <- 'GreatCircle' } else { disttype <- 'Euclidean' }
 	                                                                        
 	filename <- trim(filename)
-	if (!canProcessInMemory(rst, 2) && filename == '') {
+	if (!canProcessInMemory(out, 2) && filename == '') {
 		filename <- rasterTmpFile()
 								
 	}
-	xy <- xFromCol(rst, 1:ncol(rst))
+	xy <- xFromCol(out, 1:ncol(out))
 	xy <- cbind(xy, NA)
 	
 	if (filename == '') {
-		v <- matrix(ncol=nrow(rst), nrow=ncol(rst))
-	} 
+		v <- matrix(ncol=nrow(out), nrow=ncol(out))
+ 	} else {
+		out <- writeStart(out, filename, ...)
+	}
 	
-	pb <- pbCreate(nrow(rst), type=.progress(...))
-	for (r in 1:nrow(rst)) {	
+	pb <- pbCreate(nrow(out), type=.progress(...))
+	for (r in 1:nrow(out)) {	
 		vals <- getValues(x, r)
 		i = which(is.na(vals))
 		vals[] <- 0
 		if (length(i) > 0) {
-			xy[,2] <- yFromRow(rst, r)
+			xy[,2] <- yFromRow(out, r)
 			for (c in i) {
 				vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
 			}
@@ -55,17 +57,18 @@ function(x, filename='', ...) {
 		if (filename == "") {
 			v[,r] <- vals
 		} else {
-			rst <- setValues(rst, vals, r)
-			rst <- writeRaster(rst, filename=filename, ...)
+			writeValues(out, vals, r)
 		}
 		pbStep(pb, r) 	
 	}	
 	pbClose(pb)
 	
 	if (filename == "") { 
-		rst <- setValues(rst, as.vector(v)) 
+		out <- setValues(out, as.vector(v)) 
+	} else {
+		writeStop(out)
 	}
-	return(rst)
+	return(out)
 }
 )
 

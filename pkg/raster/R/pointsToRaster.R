@@ -6,6 +6,8 @@
 
 
 pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, filename="", ...) {
+
+	rs <- raster(raster)
 	
 	nres <- length(fun(1))
 	xy <- .pointsToMatrix(xy)
@@ -17,8 +19,6 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 		stop('number of points does not match the number of values')
 	}
 	
-	raster <- raster(raster)
-	rs <- raster(raster)
 	
 	cells <- cellFromXY(rs, xy)
 	
@@ -45,7 +45,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			rs <- brick(rs)  #  return a'RasterBrick'
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 		}
-		pb <- pbCreate(nrow(raster), type=.progress(...))
+		pb <- pbCreate(nrow(rs), type=.progress(...))
 		for (r in 1:rs@nrows) {
 			d <- dna
 			if (r %in% urows) {
