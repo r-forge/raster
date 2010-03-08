@@ -28,7 +28,7 @@ The following additional arguments can be passed:
   \tab \code{asZero}  \tab Logical. If \code{asNA=TRUE}, should cells that are not an edge, and not \code{NA} on the input RasterLayer be returned as zero?\cr
   \tab \code{filename}  \tab Character. Filename for the output RasterLayer \cr
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab Character. Output data type; see \code{\link[raster]{dataType}} \cr
+  \tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Valid values are "text", "tcltk", "windows" (on that platform only) and ""  \cr
  }

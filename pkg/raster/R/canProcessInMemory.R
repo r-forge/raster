@@ -8,11 +8,10 @@ canProcessInMemory <- function(raster, n=4) {
 	if (.toDisk()) { return(FALSE) } 
 
 	n <- n + (nlayers(raster) - 1)
-	
-	cells <- round(1.1 * ncell(raster) )
+	cells <- round(1.1 * ncell(raster))
 
 	if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
-		if (cells > 200000000) {
+		if ((cells * n) > 300000000) {
 			return(FALSE) 
 		}
 	}
@@ -28,10 +27,12 @@ canProcessInMemory <- function(raster, n=4) {
 #	}
 #   } else {
 
+	g <- gc()
 	w <- getOption('warn')
 	options('warn'=-1) 
 	r <- try( matrix(0.1, ncol=n, nrow=cells), silent=TRUE )
 	options('warn'= w) 
+
 	if (class(r) == "try-error") {
 		return( FALSE )
 	} else {
