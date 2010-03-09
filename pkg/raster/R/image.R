@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  April 2009
 # Version 0.9
 # Licence GPL v3
@@ -11,14 +10,7 @@ if (!isGeneric("image")) {
 
 setMethod("image", signature(x='RasterLayer'), 
 	function(x, maxpixels=100000, ...)  {
-		if (dataContent(x) != 'all') { 
-#	to do: should  test if can read, else sample
-			if (canProcessInMemory(x, 2)) {
-				x <- readAll(x) 
-			} else {
-				x <- sampleRegular(x, maxpixels, asRaster=TRUE)
-			}
-		}
+		x <- sampleRegular(x, maxpixels, asRaster=TRUE)
 		y <- yFromRow(x, nrow(x):1)
 		value <- t((values(x, format='matrix'))[nrow(x):1,])
 		x <- xFromCol(x,1:ncol(x))

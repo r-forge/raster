@@ -29,32 +29,36 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 	if (is.null(extent)) {
 		if (n >= ncell(raster)) {
 			if (dataContent(raster) != 'all') { 
-			raster <- readAll(raster) }
-			if (asRaster) { return(raster) 
-			} else { return(values(raster)) }
+				raster <- readAll(raster) }
+			if (asRaster) { 
+				return(raster) 
+			} else { 
+				return(values(raster)) 
+			}
 		}
-	} else {
-		extent <- alignExtent(extent, raster)
-		rcut <- crop(raster(raster), extent)
-		if (n >= ncell(rcut)) {
-			raster <- crop(raster, extent)
-			if (asRaster) { return(raster) 
-			} else { return(values(raster)) }
-		}
-	}
-	
-	if (!(is.null(extent))) { 
-		firstrow <- rowFromY(raster, ymax(rcut))
-		lastrow <- rowFromY(raster, ymin(rcut))
-		firstcol <- colFromX(raster, xmin(rcut))
-		lastcol <- colFromX(raster, xmax(rcut))
-	} else {
 		rcut <- raster(raster)
 		firstrow <- 1
 		lastrow <- nrow(rcut)
 		firstcol <- 1
 		lastcol <- ncol(rcut)
+		
+	} else {
+		extent <- alignExtent(extent, raster)
+		rcut <- crop(raster(raster), extent)
+		if (n >= ncell(rcut)) {
+			raster <- crop(raster, extent)
+			if (asRaster) { 
+				return(raster) 
+			} else { 
+				return(getValues(raster)) 
+			}
+		}
+		firstrow <- rowFromY(raster, ymax(rcut))
+		lastrow <- rowFromY(raster, ymin(rcut))
+		firstcol <- colFromX(raster, xmin(rcut))
+		lastcol <- colFromX(raster, xmax(rcut))
 	}
+	
 
 	x <- sqrt(ncell(rcut)/n)
 	y <- x

@@ -31,7 +31,10 @@
 		if (dataContent(raster) == 'all') {
 			vals <- values(raster)[uniquecells]
 		} else if (dataSource(raster) == 'disk') {
-			if (.driver(raster) == 'gdal') {
+			if (length(uniquecells) > 100 & canProcessInMemory(raster, 2)) {
+				vals <- getValues(raster)
+				vals <- vals[uniquecells]
+			} else if (.driver(raster) == 'gdal') {
 				vals <- .readCellsGDAL(raster, uniquecells)
 			} else if (.driver(raster) == 'ascii') {
 				vals <- .readCellsAscii(raster, uniquecells)			

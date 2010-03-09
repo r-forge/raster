@@ -31,11 +31,8 @@ setMethod('flip', signature(x='RasterLayer', direction='ANY'),
 	
 		
 		if ( inmemory ) {
-			if (dataContent( x ) != 'all') {
-				v <- values(readAll(x), format='matrix')
-			} else {
-				v <- values(x, format='matrix')
-			}
+			v <- getValues(x, format='matrix')
+
 			if (direction == 'y') {
 				v <- v[nrow(v):1,]
 			} else {

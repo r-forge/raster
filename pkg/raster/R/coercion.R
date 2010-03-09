@@ -96,7 +96,7 @@ setAs('matrix', 'RasterLayer',
 )
 
 setAs('RasterLayer', 'matrix',
-	function(from){ return( values(from, format='matrix')) }
+	function(from){ return( getValues(from, format='matrix')) }
 )
 
 

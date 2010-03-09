@@ -23,15 +23,8 @@ click <- function(object, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 		}
 	}
 
-	if (class(object) == 'RasterStack' | class(object) == 'RasterBrick') {
-		value <- cellValues(object, cells)
-	} else {
-		if (dataContent(object) != 'all') {
-			value <- cellValues(object, cells)
-		} else {
-			value <- values(object)[cells]
-		}
-	}	
+	value <- cellValues(object, cells)
+
 	if (class(object) == 'RasterStack' | class(object) == 'RasterBrick') {
 		value <- t(matrix(value, nrow=n))
 		rownames(value) <- layerNames(object)
