@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  January 2009
 # Version 0.9
 # Licence GPL v3
@@ -44,7 +43,9 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 			filename(x) <- ""
 			x <- setMinMax(x)
 			return(x)
+			
 		} else {
+		
 			filename <- rasterTmpFile()
 			outras <- raster(x)
 			if  (missing(i)) { 

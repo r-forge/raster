@@ -36,9 +36,9 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 		outraster[] = NA
 		for (i in 1:length(rasters)) {
 			cells = cellsFromExtent(outraster, extent(rasters[[i]]) )
-			x = cbind(cells, outraster[cells], values(rasters[[i]]))
-			x = subset(x, is.na(x[,2]))
-			outraster[x[,1]] = x[,3]
+			v = outraster[cells] 
+			v[is.na(v)] = values(rasters[[i]])[is.na(v)]
+			outraster[cells] <- v
 		}	
 		return(outraster)
 	}
