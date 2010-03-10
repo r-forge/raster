@@ -73,12 +73,12 @@ netCDF data can only be read if the data are stored in 2 (x and y) or 3 (x, y, a
 \code{raster(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, projs="+proj=longlat +datum=WGS84")}
 
 \tabular{rll}{
- \tab \code{nrows} \tab number of rows on raster \cr
- \tab \code{ncols} \tab number of columns on raster \cr
- \tab \code{xmn} \tab minimum x coordinate or raster (left border) \cr
- \tab \code{xmx} \tab maximum x coordinate of raster (right border) \cr
- \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
- \tab \code{ymx} \tab maximum y coordinate of raster (top border) \cr
+ \tab \code{nrows} \tab number of rows \cr
+ \tab \code{ncols} \tab number of columns \cr
+ \tab \code{xmn} \tab minimum x coordinate (left border) \cr
+ \tab \code{xmx} \tab maximum x coordinate (right border) \cr
+ \tab \code{ymn} \tab minimum y coordinate (bottom border) \cr
+ \tab \code{ymx} \tab maximum y coordinate (top border) \cr
  \tab \code{projs} \tab Character. PROJ4 type description of a Coordinate Reference System (map projection) \cr
 }
 (item \code{x} is 'missing' in this case)
@@ -90,8 +90,8 @@ netCDF data can only be read if the data are stored in 2 (x and y) or 3 (x, y, a
 
 \tabular{rll}{
  \tab \code{x} \tab Extent object \cr
- \tab \code{nrows} \tab number of rows on raster  \cr
- \tab \code{ncols} \tab number of columns on raster \cr
+ \tab \code{nrows} \tab number of rows  \cr
+ \tab \code{ncols} \tab number of columns \cr
  \tab \code{projs} \tab PROJ4 type description of a map projection \cr
 }
 
@@ -135,10 +135,10 @@ but does not copy the filename nor the data associated with the original Raster 
 
 \tabular{rll}{
  \tab \code{x} \tab a matrix \cr
- \tab \code{xmn} \tab minimum x coordinate or raster (left border) \cr
- \tab \code{xmx} \tab maximum x coordinate of raster (right border) \cr
- \tab \code{ymn} \tab minimum y coordinate or raster (bottom border) \cr
- \tab \code{ymx} \tab maximum y coordinate of raster (top border) \cr
+ \tab \code{xmn} \tab minimum x coordinate (left border) \cr
+ \tab \code{xmx} \tab maximum x coordinate (right border) \cr
+ \tab \code{ymn} \tab minimum y coordinate (bottom border) \cr
+ \tab \code{ymx} \tab maximum y coordinate (top border) \cr
  \tab \code{projs} \tab PROJ4 type description of a map projection \cr
 }
 
@@ -147,8 +147,8 @@ but does not copy the filename nor the data associated with the original Raster 
 
 \details{
 New RasterLayer objects normally have no values in memory. 
-You can get values into memory with \code{\link[raster]{read}*}, functions; extract values with \code{\link[raster]{xyValues}};
-Or set values with \code{\link[raster]{replacement}}.
+If they are created from a file on disk, you can access values with \code{\link[raster]{getValues}), \link[raster]{xyValues}} and related functions.
+You can assign new values with  \code{\link[raster]{setValues}} and with \code{\link[raster]{replacement}}.
 }
 
 

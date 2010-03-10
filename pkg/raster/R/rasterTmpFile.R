@@ -4,14 +4,31 @@
 # Licence GPL v3
 
 
+.defaultExtention <- function(format=.filetype()) {
+	if (format == 'raster') { return('.grd') 
+	} else if (format == 'GTiff') { return('.tif') 
+	} else if (format == 'HFA') { return( '.img') 
+	} else if (format == 'ENVI') { return('.envi')
+	} else if (format == 'ERS') { return('.ers') 
+	} else if (format == 'RST') { return('.rst') 
+	} else if (format == 'EHdr') { return('.bil')
+	} else if (format == 'ascii') { return('.asc')
+	} else if (format == 'netcdf') { return('.nc')
+	} else { return('') }
+}
+
+
+
 rasterTmpFile <- function()  {
+	extension <- .defaultExtention(.filetype())
 	d <- .tmpdir()
 	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
-	d <- paste(d, 'raster_', f, '.grd', sep="")
+	d <- paste(d, 'raster_', f, extension, sep="")
 	if (getOption('verbose')) { cat('writing raster to:', d) }
 	return(d)
 }
+
 
 .removeTrailingSlash <- function(d) {
 		if (substr(d, nchar(d), nchar(d)) == '/') { d <- substr(d, 1, nchar(d)-1) }

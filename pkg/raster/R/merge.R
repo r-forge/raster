@@ -33,13 +33,13 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 	outraster <- setExtent(outraster, bb, keepres=TRUE, snap=FALSE)
 
 	if (all(sapply(rasters, dataContent) == 'all')) {
-		outraster[] = NA
+		outraster = setValues(outraster, NA)
 		for (i in 1:length(rasters)) {
 			cells = cellsFromExtent(outraster, extent(rasters[[i]]) )
 			v = outraster[cells] 
 			v[is.na(v)] = values(rasters[[i]])[is.na(v)]
 			outraster[cells] <- v
-		}	
+		}
 		return(outraster)
 	}
 	
