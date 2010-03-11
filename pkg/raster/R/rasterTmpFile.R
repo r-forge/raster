@@ -40,7 +40,7 @@ rasterTmpFile <- function()  {
 removeTmpFiles <- function() {
 	d <- .removeTrailingSlash(.tmpdir())
 	if (file.exists(d)) {
-		unlink(paste(d, "/*", sep=""), recursive = TRUE)
+		unlink(paste(d, "/*", sep=""), recursive = FALSE)
 	}
 }
 
