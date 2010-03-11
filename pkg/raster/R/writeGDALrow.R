@@ -37,7 +37,7 @@
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {
-		raster <- .startGDALwriting(raster, filename, options, doPB, ...)
+		raster <- .startGDALwriting(raster, filename=filename, options=options, doPB=doPB, ...)
 	}	
 	
 #	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -69,7 +69,7 @@
 	if (doPB) {	pbStep( attr(raster@file, "pb"), rownr ) 	}
 	
 	if ( rownr == nrow(raster)) {
-		raster <- .stopGDALwriting(raster, doPB)
+		raster <- .stopGDALwriting(raster, doPB=doPB)
 	}
 	return(raster)
 }

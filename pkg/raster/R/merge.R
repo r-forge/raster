@@ -13,6 +13,7 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 	if (missing(overwrite)) {
 		overwrite <- .overwrite()
 	}
+	
 	if (missing(progress)) {
 		progress <- .progress()
 	}
@@ -32,17 +33,6 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 	outraster <- raster(rasters[[1]], filename)
 	outraster <- setExtent(outraster, bb, keepres=TRUE, snap=FALSE)
 
-	if (all(sapply(rasters, dataContent) == 'all')) {
-		outraster = setValues(outraster, NA)
-		for (i in 1:length(rasters)) {
-			cells = cellsFromExtent(outraster, extent(rasters[[i]]) )
-			v = outraster[cells] 
-			v[is.na(v)] = values(rasters[[i]])[is.na(v)]
-			outraster[cells] <- v
-		}
-		return(outraster)
-	}
-	
 	isInt <- TRUE
 	for (i in 1:length(rasters)) {
 		dtype <- .shortDataType(rasters[[i]]@file@datanotation)
@@ -50,11 +40,27 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 			isInt <- FALSE
 		}
 	}
-	if (isInt) { 
-		datatype <- 'INT4S'
-	} else { 
-		datatype <- 'FLT4S'
+	
+	if (isInt) { datatype <- 'INT4S'
+	} else { datatype <- 'FLT4S'
 	}
+
+	if ( canProcessInMemory(outraster, 3) ) {
+		v = rep(NA, ncell(outraster))
+		for (i in 1:length(rasters)) {
+			cells = cellsFromExtent( outraster, extent(rasters[[i]]) )
+			vv = v[cells]
+			vv[is.na(vv)] = getValues(rasters[[i]])[is.na(vv)]
+			v[cells] = vv
+		}
+		rm(vv)
+		outraster <- setValues(outraster, v)
+		if (filename != '') {
+			outraster <- writeRaster(outraster, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
+		}
+		return(outraster)
+	}
+	
 	
 	rowcol <- matrix(0, ncol=3, nrow=length(rasters))
 	for (i in 1:length(rasters)) {
@@ -64,19 +70,12 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 		rowcol[i,2] <- rowFromY(outraster, xy2[2]) #end row
 		rowcol[i,3] <- colFromX(outraster, xy1[1]) #start col
 	}
-	
-	
-	if (!canProcessInMemory(x, 2) && filename == '') {
-		filename <- rasterTmpFile()
-								
-	}
 
 	if (filename == "") {
-		v <- matrix(NA, ncol=nrow(x), nrow=ncol(x))
-	} else {
-		outraster = writeStart(outraster, filename, ...)
-	}
-	
+		filename <- rasterTmpFile()
+	} 
+
+	outraster <- writeStart(outraster, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 	pb <- pbCreate(nrow(outraster), type=progress)
 	
 	ds = sapply(rasters, dataSource)
@@ -99,20 +98,12 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 			}		
 		}
 		
-		if (filename != '') {
-			writeValues(outraster, rd, r)
-		} else {
-			v[,r] <- rd
-		}
+		writeValues(outraster, rd, r)
 		pbStep(pb, r)
 	}
 	pbClose(pb)
-
-	if (filename == "") { 
-		outraster <- setValues(outraster, as.vector(v))
-	} else {
-		outraster <- writeStop(outraster)
-	}
+	outraster <- writeStop(outraster)
+	
 	return(outraster)
 }
 )
