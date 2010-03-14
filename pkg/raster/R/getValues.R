@@ -10,9 +10,15 @@ if (!isGeneric("getValues")) {
 
 setMethod("getValues", signature(x='RasterLayer', row='missing', nrows='missing'), 
 function(x, format='') {
+	
 	if (dataContent(x) != "all") {
-		x <- readAll(x)
+		if (dataSource(x) == 'disk') {
+			x <- readAll(x)
+		} else {
+			x <- setValues(x, rep(NA, ncell(x)))
+		}
 	}
+	
 	if (format=='matrix') { 
 		return(matrix(x@data@values, ncol=x@ncols, nrow=x@nrows, byrow=TRUE)) 
 	} else {
@@ -24,7 +30,11 @@ function(x, format='') {
 setMethod("getValues", signature(x='RasterBrick', row='missing', nrows='missing'), 
 function(x) {
 	if (dataContent(x) != "all") {
-		x <- readAll(x)
+		if (dataSource(x) == 'disk') {
+			x <- readAll(x)
+		} else {
+			stop('no values available')
+		}
 	}
 	colnames(x@data@values) <- layerNames(x)
 	x@data@values

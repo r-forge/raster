@@ -121,5 +121,3 @@ setAs('im', 'RasterLayer',
 		flip(r, direction='y')
 	}
 )
-
-

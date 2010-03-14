@@ -72,16 +72,12 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 
 setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'), 
  	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), format='') {
-		if (!is.atomic(row)) {	stop() }
-		if (!is.atomic(nrows)) { stop() }
-		if (!is.atomic(col)) {	stop() }
-		if (!is.atomic(ncols)) { stop() }
 		
-		row <- as.integer(round(row))
-		lastrow <- min(nrow(x), row + as.integer(round(nrows)) - 1)
+		row <- max(1, min(x@nrows, round(row[1])))
+		lastrow <- min(x@nrows, row + round(nrows[1]) - 1)
 		nrows <- lastrow - row + 1
-		col <- as.integer(round(col))
-		lastcol <- col + as.integer(round(ncols)) - 1
+		col <- max(1, min(x@ncols, round(col[1])))
+		lastcol <- col + round(ncols[1]) - 1
 		ncols <- lastcol - col + 1
 		
 		readrow <- FALSE
@@ -91,8 +87,12 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 		if (!(validRow(x, row))) {	stop(paste(row, 'is not a valid rownumber')) }
 	
 		if (dataContent(x) == 'nodata') {
-		
-			readrow <- TRUE
+			
+			if (dataSource(x) == 'ram') {
+				return(rep(NA, times=(lastcell-startcell+1)))
+			}
+			
+			readrow <- TRUE			
 			
 		} else if (dataContent(x) == 'all') {
 		

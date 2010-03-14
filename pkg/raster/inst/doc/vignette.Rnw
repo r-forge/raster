@@ -7,7 +7,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 
-%\VignetteIndexEntry{raster package}
+%\VignetteIndexEntry{The raster package}
 
 \SweaveOpts{keep.source=TRUE}
 
@@ -247,39 +247,46 @@ rowFromY(r, 0)
 
 \section{Accessing cell values}
 
-Cell values can be set for a RasterLayer using standard R notation for a vector. You can also this notation to replace values. If you replace a value in a RasterLayer based on a file, the connection to that file is broken.
+Cell values can be accessed with several methods. Use {\bf getValues} to get all values or a single row; and {\bf getValuesBlock} to read a block (rectangle) of cell values. 
 
 <<raster-10>>=
-r <- raster()
-r[] <- 1:ncell(r)
-r[1:10]
-r[5:10] <- 5
-r[1:10]
+r <- raster(system.file("external/test.grd", package="raster"))
+getValues(r, 50)[35:39]
+getValuesBlock(r, 50, 1, 35, 5)
 @
 
-Values can also be inspected using a two-dimensional (matrix) notation. To do so you need to use double brackets.
 
+You can also read values using cell numbers or coordinates (xy).
 <<raster-11>>=
+cells <- cellFromRowCol(r, 50, 35:39)
+cells
+cellValues(r, cells)
+xy = xyFromCell(r, cells)
+xy
+xyValues(r, xy)
+@
+
+In addition, you can use standard R indexing to access values. You can also to replace values (assignn new values to cells).  If you replace a value in a RasterLayer based on a file, the connection to that file is lost (because it now is different from that file). Setting raster values for very large files will be very slow with this approach as each time a new (temporary) file, with all the values, is written to disk. 
+
+<<raster-12>>=
+r[cells] 
+r[1:4]
+filename(r)
+r[2:3] <- 10
+r[1:4]
+filename(r)
+@
+
+Note that in the above examples values are retrieved using cell numbers. That is, a raster is represented as a (one-dimensional) vector. Values can also be inspected using a (two-dimensional) matrix notation. To do so you need to use double brackets. As in ordinary R matrices, the first index represents the row number, the second the column number.
+
+<<raster-13>>=
 r[1]
 r[[1,1]]
 r[[1:3,1:3]]
 r[[75:90, 15]]
 @
 
-However, the above methods are generally not the preferred way to get RasterLayer values, and less so to set RasterLayer values . Setting raster values for very large files will be very slow with this approach as each time a new (temporary) file, with all the values, is written to disk. Here are some alternatives to obtain values from a RasterLayer (irrespective whether from memory or from disk). Below are some examples of better ways to retrieve values from a RasterLayer.
-
-<<raster-13>>=
-r <- raster(system.file("external/test.grd", package="raster"))
-getValues(r, 50)[35:39]
-getValuesBlock(r, 50, 1, 35, 5)
-cells <- cellFromRowCol(r, 50, 35:39)
-cells
-cellValues(r, cells)
-r[cells]
-xy = xyFromCell(r, cells)
-xy
-xyValues(r, xy)
-@
+Accessing values through this type of indexing should be avoided inside functions as it is less efficient accessing values via functions like {\bf getValues}. 
 
 
 \section{Writing files}
@@ -297,7 +304,7 @@ There are a number of session options that can be set and these can be saved to 
 
 Although the raster package defines its own set of classes, it is easy to coerce objects of these classes to objects of the 'spatial' family defined in the sp package. This allows for using functions defined by sp (e.g. spplot) and for using other packages that expect spatial* objects. To create a RasterLayer from variable n in a SpatialGrid* x use \verb@raster(x, n)@ or \verb@stack(x)@. Vice versa use \verb@as( , )@
 
-<<raster-27>>=
+<<raster-20>>=
 r1 <- raster(ncol=36, nrow=18)
 r2 <- r1
 r1[] <- runif(ncell(r1))

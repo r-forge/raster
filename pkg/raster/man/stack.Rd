@@ -8,8 +8,8 @@
 \alias{stack,Raster-method}
 \alias{stack,list-method}
 \alias{stack,missing-method}
-\alias{stack,SpatialPixels-method}
-\alias{stack,SpatialGrid-method}
+\alias{stack,SpatialPixelsDataFrame-method}
+\alias{stack,SpatialGridDataFrame-method}
 
 \title{ Create a RasterStack object}
 

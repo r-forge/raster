@@ -78,13 +78,9 @@ function(x, bands=NULL) {
 } )
 
 
-setMethod("stack", signature(x='SpatialGrid'), 
+setMethod("stack", signature(x='SpatialGridDataFrame'), 
 	function(x) {
 		stk <- new("RasterStack")
-		stk@extent <- extent(x)
-		projection(stk) <- x@proj4string
-		rowcol(stk) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
-
 		if (class(x)=='SpatialGridDataFrame') {
 			for (i in 1:ncol(x@data)) {
 				rs <- raster(x, i)
@@ -96,7 +92,7 @@ setMethod("stack", signature(x='SpatialGrid'),
 )
 	
 
-setMethod("stack", signature(x='SpatialPixels'), 
+setMethod("stack", signature(x='SpatialPixelsDataFrame'), 
 	function(x) {
 		x <- as(x, 'SpatialGridDataFrame')
 		return(stack(x))
