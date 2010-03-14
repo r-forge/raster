@@ -4,19 +4,19 @@
 # Licence GPL v3
 
  
-.writeHdrBIL <- function(raster) {
-	hdrfile <- filename(raster)
-	hdrfile <- .setFileExtensionHeader(hdrfile, 'BIL')
+.writeHdrBIL <- function(raster, layout='BIL') {
+	hdrfile <- raster@file@name
+	ext(hdrfile) <- '.hdr'
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
-	cat("NROWS ",  nrow(raster), "\n", file = thefile)
-	cat("NCOLS ",  ncol(raster), "\n", file = thefile)
-	cat("NBANDS ",  nbands(raster), "\n", file = thefile)
-	cat("NBITS ",  dataSize(raster@file@datanotation) * 8, "\n", file = thefile)
+	cat("NROWS          ",  nrow(raster), "\n", file = thefile)
+	cat("NCOLS          ",  ncol(raster), "\n", file = thefile)
+	cat("NBANDS         ",  nbands(raster), "\n", file = thefile)
+	cat("NBITS          ",  dataSize(raster@file@datanotation) * 8, "\n", file = thefile)
 	if (.Platform$endian == "little") { 
 		btorder <- "I" 
 	} else { btorder <- "M" 
 	}
-	cat("BYTEORDER ", btorder, "\n", file = thefile)
+	cat("BYTEORDER      ", btorder, "\n", file = thefile)
 	
 #  PIXELTYPE should work for Gdal, and perhpas ArcGIS, see:
 # http://lists.osgeo.org/pipermail/gdal-dev/2006-October/010416.html	
@@ -31,18 +31,18 @@
 	} else { 
 		pixtype <- "FLOAT" 
 	}
-	cat("PIXELTYPE ", pixtype, "\n", file = thefile)	
-	cat("LAYOUT ", "BIL", "\n", file = thefile)
-    cat("SKIPBYTES 0\n", file = thefile)
-    cat("ULXMAP", xmin(raster) + 0.5 * xres(raster), "\n", file = thefile) 
-    cat("ULYMAP", ymax(raster) - 0.5 * yres(raster), "\n", file = thefile) 
-	cat("XDIM", xres(raster), "\n", file = thefile)
-	cat("YDIM", yres(raster), "\n", file = thefile)
+	cat("PIXELTYPE      ", pixtype, "\n", file = thefile)	
+	cat("LAYOUT         ", layout, "\n", file = thefile)
+    cat("SKIPBYTES       0\n", file = thefile)
+    cat("ULXMAP         ", xmin(raster) + 0.5 * xres(raster), "\n", file = thefile) 
+    cat("ULYMAP         ", ymax(raster) - 0.5 * yres(raster), "\n", file = thefile) 
+	cat("XDIM           ", xres(raster), "\n", file = thefile)
+	cat("YDIM           ", yres(raster), "\n", file = thefile)
 	browbytes <- round(ncol(raster) * dataSize(raster@file@datanotation) )
-	cat("BANDROWBYTES ", browbytes, "\n", file = thefile)
-	cat("TOTALROWBYTES ", browbytes *  nbands(raster), "\n", file = thefile)
-	cat("BANDGAPBYTES  0", "\n", file = thefile)
-    cat("NODATA", .nodatavalue(raster), "\n", file = thefile)	
+	cat("BANDROWBYTES   ", browbytes, "\n", file = thefile)
+	cat("TOTALROWBYTES  ", browbytes *  nbands(raster), "\n", file = thefile)
+	cat("BANDGAPBYTES    0\n", file = thefile)
+    cat("NODATA         ", .nodatavalue(raster), "\n", file = thefile)	
 
 	cat("\n\n", file = thefile)
 	cat("The below is additional metadata, not part of the BIL/HDR format\n", file = thefile)

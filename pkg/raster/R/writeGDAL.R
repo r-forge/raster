@@ -10,6 +10,7 @@
 
 
 .getGDALtransient <- function(raster, filename, options, ...)  {
+	r = raster(raster)
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
 	gdalfiletype <- .filetype(...)
@@ -27,22 +28,22 @@
 			stop("cannot delete existing file. permission denied.")
 		}
 	}	
-# this needs to get fancier; depending on object and the abilties of the drivers
-	dataformat <- .getGdalDType(datatype)
 
+	dataformat <- .getGdalDType(datatype, gdalfiletype)
+	
     nbands = nlayers(raster)
 	if (gdalfiletype=='GTiff') {
-		bytes <- ncell(raster) * dataSize(datatype) * nbands
+		bytes <- ncell(r) * dataSize(datatype) * nbands
 		if (bytes > (4 * 1024 * 1024 * 1000) ) {  # ~ 4GB
 			options <- c(options, 'BIGTIFF=YES')
 		}
 	}
 	driver = new("GDALDriver", gdalfiletype)
-    transient = new("GDALTransientDataset", driver=driver, rows=nrow(raster), cols=ncol(raster), bands=nbands, type=dataformat, options=options, handle=NULL)
+    transient = new("GDALTransientDataset", driver=driver, rows=r@nrows, cols=r@ncols, bands=nbands, type=dataformat, fname=filename, options=options, handle=NULL)
  
-	gt <- c(xmin(raster), xres(raster), 0, ymax(raster), 0, -yres(raster))
+	gt <- c(xmin(r), xres(r), 0, ymax(r), 0, -yres(r))
     .Call("RGDAL_SetGeoTransform", transient, gt, PACKAGE = "rgdal")
-    p4s <- projection(raster)
+    p4s <- projection(r)
     .Call("RGDAL_SetProject", transient, p4s, PACKAGE = "rgdal")
 	
 	return(transient)

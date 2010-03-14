@@ -22,6 +22,8 @@ if (!isGeneric('writeValues')) {
 setMethod('writeStart', signature(x='RasterLayer', filename='character'), 
 function(x, filename, options=NULL, doPB=FALSE, ...) {
 	filetype <- .filetype(...)
+	filename <- .getExtension(filename, filetype)
+	
 	if (filetype=='ascii') {stop('ascii files not yet supported by this function, you can use writeRaster') }
 	res <- filetype %in% c(.nativeDrivers())
 	if (res) { 

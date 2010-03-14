@@ -11,6 +11,12 @@ writeRasterHdr <- function(raster, format) {
 	} else if (type=="BIL") {
 		.writeHdrBIL(raster)
 		.writeStx(raster)
+	} else if (type=="BSQ") {
+		.writeHdrBIL(raster, "BSQ")
+		.writeStx(raster)
+	} else if (type=="BIP") {
+		.writeHdrBIL(raster, "BIP")
+		.writeStx(raster)
 	} else if (type=="ERDASRAW") {
 		.writeHdrErdasRaw(raster)
 		.writeStx(raster)

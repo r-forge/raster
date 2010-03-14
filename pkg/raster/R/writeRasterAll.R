@@ -9,12 +9,17 @@
 	filetype <- .filetype(...)
 	raster@file@driver <- filetype
  	filename <- trim(filename)
-	filename <- .setFileExtensionHeader(filename, filetype)
-	raster@file@name <- filename
 	fnamevals <- .setFileExtensionValues(filename, filetype)
+	fnamehdr <- .setFileExtensionHeader(filename, filetype)
+	if (filetype == 'raster') {
+		filename <- fnamehdr
+	} else {
+		filename <- fnamevals
+	}
+	raster@file@name <- filename
 	
 	overwrite <- .overwrite(...)
-	if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
+	if (!overwrite & (file.exists(fnamehdr) | file.exists(fnamevals))) {
 		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
 	

@@ -4,27 +4,13 @@
 # Licence GPL v3
 
 
-.defaultExtention <- function(format=.filetype()) {
-	if (format == 'raster') { return('.grd') 
-	} else if (format == 'GTiff') { return('.tif') 
-	} else if (format == 'HFA') { return( '.img') 
-	} else if (format == 'ENVI') { return('.envi')
-	} else if (format == 'ERS') { return('.ers') 
-	} else if (format == 'RST') { return('.rst') 
-	} else if (format == 'EHdr') { return('.bil')
-	} else if (format == 'ascii') { return('.asc')
-	} else if (format == 'netcdf') { return('.nc')
-	} else { return('') }
-}
-
-
 
 rasterTmpFile <- function()  {
-	extension <- .defaultExtention(.filetype())
+	extension <- .defaultExtension(.filetype())
 	d <- .tmpdir()
 	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
-	d <- paste(d, 'raster_', f, extension, sep="")
+	d <- paste(d, 'raster_tmp_', f, extension, sep="")
 	if (getOption('verbose')) { cat('writing raster to:', d) }
 	return(d)
 }
@@ -40,14 +26,14 @@ rasterTmpFile <- function()  {
 removeTmpFiles <- function() {
 	d <- .removeTrailingSlash(.tmpdir())
 	if (file.exists(d)) {
-		unlink(paste(d, "/*", sep=""), recursive = FALSE)
+		unlink(paste(d, "/raster_tmp_*", sep=""), recursive = FALSE)
 	}
 }
 
 showTmpFiles <- function() {
 	d <- .removeTrailingSlash(.tmpdir())
 	if (file.exists(d)) {
-		f <- c(list.files(d, '.grd'), list.files(d, '.gri'))
+		f <- list.files(d, pattern='raster_tmp_')
 		if (length(f) == 0) {
 			cat('--- none ---\n')
 		} else {
@@ -59,3 +45,4 @@ showTmpFiles <- function() {
 		cat('--- none ---\n')
 	}
 }
+

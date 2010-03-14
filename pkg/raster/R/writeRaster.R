@@ -14,6 +14,8 @@ function(x, filename, ...) {
 
 	filetype <- .filetype(...)
 
+	filename <- .getExtension(filename, filetype)
+	
 	dc <- dataContent(x)
 	if (dc == 'nodata') {
 		if (dataSource(x) == 'disk') {
@@ -22,6 +24,7 @@ function(x, filename, ...) {
 			stop('No usable data available for writing.')
 		}
 	}
+	
 	
 	if (.isNativeDriver(filetype)) {
 		if (substr(dc, 1, 3) == 'row' ) {
@@ -49,6 +52,9 @@ function(x, filename, ...) {
 
 setMethod('writeRaster', signature(x='RasterBrick', filename='character'), 
 function(x, filename, bandorder='BIL', ...) {
+
+	filetype <- .filetype(...)
+	filename <- .getExtension(filename, filetype)
 	
 	dc <- dataContent(x)
 	if (! dc %in% c('row', 'all') ) {
@@ -58,7 +64,7 @@ function(x, filename, bandorder='BIL', ...) {
 			stop('No usable data available for writing.')
 		}
 	}
-	filetype <- .filetype(...)
+
 	if (filetype=='raster') {
 		if (dc == 'row' ) {
 			return( .writeBrickRow(object=x, filename=filename, bandorder=bandorder, ...) )

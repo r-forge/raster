@@ -25,8 +25,8 @@ Supported formats include:
 \tab \code{EHdr}   \tab ESRI .hdr Labelled \cr
 \tab \code{ERS}  \tab ERMapper .ers Labelled \cr
 \tab \code{GTiff}  \tab GeoTiff \cr
-\tab \code{HFAErdas}  \tab Imagine Images (.img) \cr
-\tab \code{ILWIS}   \tab ILWIS Raster Map \cr
+\tab \code{HFA}  \tab Erdas Imagine (.img) \cr
+\tab \code{ILWIS}   \tab ILWIS raster \cr
 \tab \code{PAux}   \tab PCI .aux Labelled \cr
 \tab \code{PCIDSK}   \tab PCIDSK Database File \cr
 \tab \code{RST}  \tab  Idrisi Raster A.1 \cr
