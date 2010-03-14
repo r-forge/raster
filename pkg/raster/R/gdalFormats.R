@@ -11,12 +11,19 @@
 	return(res)
 }
 
-.isSupportedGDALFormat <- function(dname) {
-	if (!require(rgdal)) { stop() }
 
+.gdalWriteFormats <- function() {
 	gd <- gdalDrivers()
 	gd <- as.matrix(subset(gd, gd[,3] == T))
-	res <- dname %in% gd
+	i <- which(gd[,1] %in% c('VRT', 'MEM', 'MFF', 'MFF2'))
+	gd[-i,]
+}
+
+
+.isSupportedGDALFormat <- function(dname) {
+	if (!require(rgdal)) { stop() }
+	gd <- .gdalWriteFormats()
+	res <- dname %in% gd[,1]
 	if (!res) { stop(paste(dname, "is not a supported file format. See writeFormats()" ) ) }
 	return(res)
 }

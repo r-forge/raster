@@ -252,6 +252,6 @@ setClass ('RasterList',
 )
 
 
-setClassUnion("RasterStackBrickList", c("RasterStack", "RasterBrick", "RasterList"))
+setClassUnion("RasterStackBrickList", c("RasterStack", "RasterBrick"))
 
 

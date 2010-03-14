@@ -19,13 +19,9 @@
 
 writeFormats <- function() {
 	if (require(rgdal)) { 
-		gd <- gdalDrivers()
-		gd <- as.matrix(subset(gd, gd[,3] == T))
-		i <- which(gd[,1] %in% c('VRT', 'MEM', 'MFF', 'MFF2'))
-		gd <- gd[-i,]
+		gd <- .gdalWriteFormats() 
 		short <- c(.nativeDrivers(),  'ascii', as.vector(gd[,1]))
 		long <- c(.nativeDriversLong(), 'Arc ASCII', as.vector(gd[,2]))
-		m <- cbind(short, long)
 	} else {
 		short <- c(.nativeDrivers(), 'ascii', "")
 		long <- c(.nativeDriversLong(), "Arc ASCII", "rgdal not installed")
