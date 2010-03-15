@@ -286,4 +286,24 @@ By providing it with a dots argument it will use the value of progress if one wa
 Typically functions are developed and tested with small (RasterLayer) objects. But you also need to test your functions for the case it needs to write values to disk. You can use a very large raster for that, but then you may need to wait a long time each time you run it. Depening on how you desing your function you may be able to test alternate forks in your function by providing a file name. But this would not necessarily work for function f7. You can force functions of that type to treat the input as a very large raster by setting to option 'todisk' to TRUE as in setOptions(todisk=TRUE). If that option is set, 'canProcessInMemory' always returns FALSE. This should only be used in debugging. 
 
 
+\section{Methods}
+
+The raster package is build with S4 classes and methods. If you are developing a package that builds on the raster package I would advise to also use S4 classes and methods. Thus, rater than using plain functions, define generic methods (where necessary) and implement them for a RasterLayer, as in the example below (the function does not do anything; replace 'return(x)' with something meaningful along the pattern explained above. 
+
+<<code-10>>=
+if (!isGeneric("f9")) {
+	setGeneric("f9", function(x, ...)
+		standardGeneric("f9"))
+}	
+
+
+setMethod('f9', signature(x='RasterLayer'), 
+	function(x, filename='', ...) {
+		return(x)
+	}
+)
+
+s <- f9(r)
+@
+
 \end{document}
