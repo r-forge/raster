@@ -27,8 +27,8 @@ a matrix or a SpatialPolygons object
 
 \examples{
 r <- raster()
-b <- extent(r)
-pol <- polygonFromExtent(b)
+e <- extent(r)
+pol <- polygonFromExtent(e)
 }
 
 \keyword{spatial}

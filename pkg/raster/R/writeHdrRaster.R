@@ -17,8 +17,8 @@
 	cat("ymin=", ymin(raster), "\n", file = thefile)
 	cat("xmax=", xmax(raster), "\n", file = thefile)
 	cat("ymax=", ymax(raster), "\n", file = thefile)
-	cat("xres=", xres(raster), "\n", file = thefile)
-	cat("yres=", yres(raster), "\n", file = thefile)
+#	cat("xres=", xres(raster), "\n", file = thefile)
+#	cat("yres=", yres(raster), "\n", file = thefile)
 	cat("projection=", projection(raster), "\n", file = thefile)
 
 	cat("[data]", "\n", file = thefile)

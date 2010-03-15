@@ -14,7 +14,7 @@ This packages provides classes and functions to manipulate geographic (spatial) 
 The package should be particularly useful when using very large datasets that can not be loaded into the computer's memory. Functions will
 work correctly, because they will read, process, and write blocks of data, without loading all values into memory. 
 
-Below is a list of functions grouped by theme. See the vignette for more information and some examples: \code{vignette('vignette', 'raster')}
+Below is a list of functions grouped by theme. See the vignette for more information and some examples: \code{vignette('raster', 'raster')}
 }
 
 

@@ -7,7 +7,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 
-%\VignetteIndexEntry{The raster package}
+%\VignetteIndexEntry{Introduction to the raster package}
 
 \SweaveOpts{keep.source=TRUE}
 

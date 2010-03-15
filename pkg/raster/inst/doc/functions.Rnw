@@ -7,14 +7,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 
-%\VignetteIndexEntry{Writing functions}
+%\VignetteIndexEntry{Writing functions for large raster files}
 
 \SweaveOpts{keep.source=TRUE}
 
 \begin{document}
 
 
-\title{Wrting functions with the "raster" package}
+\title{Writing functions with the "raster" package}
 \author{Robert J. Hijmans}
 \maketitle
 
@@ -29,6 +29,7 @@ Let's start with two simple example functions, f1 and f2, that are NOT memory sa
 
 To test the functions, we create a RasterLayer with 100 cells.
 <<code-1>>=
+library(raster)
 r <- raster(ncol=10, nrow=10)
 r[] <- 1:100
 r
