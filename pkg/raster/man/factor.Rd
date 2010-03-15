@@ -21,7 +21,7 @@
 \title{Factors}
 
 \description{
-Under development!
+Under development!  
 
 Factors are categorical variables. These functions allow for defining a RasterLayer as a categorical variable. 
 }
