@@ -15,7 +15,7 @@
 \title{Write values to a file}
 
 \description{
-Under development! Low level functions for writing blocks of values (larger than rows) to files. For programmers and advanced users to speed up functions. Others are adviced to use \link[raster]{writeRaster} which is safer but more limited. writeRaster can only take all values (for smaller data sets) or a single row at a time (for larger data sets). The advantage of the functions described here is that they allow writing values to file using chunks of any size. \code{blockSize} will create chunks consisting of a number of rows that can be much larger than 1 (up to all rows). This reduces the number of loops and the number of file i/o requests and hence could speed up writing values to file. These functions do not have many validity tests and will try to do as requested, or perhaps fail, or write invalid files. Hence the adviced to use \link[raster]{writeRaster} instead (or first, and later optimize with the functions described here). Also, this is currently only implemented for the small set of file formats that are 'nativelely' supported (i.e. not via rgdal, but that should change soon).
+Low level functions for writing blocks (>= 1 row) of values to files. For programmers and advanced users to speed up functions. Others are adviced to use \link[raster]{writeRaster} which is safer but more limited. writeRaster can only take all values (for smaller data sets) or a single row at a time (for larger data sets). The advantage of the functions described here is that they allow writing values to file using chunks of any size (and some additional optimization for speed). Function \code{blockSize} can be used to suggest chunks of a number of rows that can be much larger than 1 (up to all rows). This reduces the number of loops and the number of file i/o requests and hence could speed up writing values to file. These functions do not have many validity tests and will try to do as requested, or perhaps fail, or write invalid files. Hence the adviced to use \link[raster]{writeRaster} instead (or first, and later optimize with the functions described here). 
 }
 
 \usage{
@@ -27,7 +27,7 @@ writeStop(x)
 
 \arguments{
   \item{x}{Raster* object}
-  \item{chunksize}{Integer, normally missing. To setting the block size; unit is number of cells. Block size is then computed in units of number of rows (always >= 1)  }
+  \item{chunksize}{Integer, normally missing. Can be used to set the block size; unit is number of cells. Block size is then computed in units of number of rows (always >= 1)  }
   \item{n}{Integer. number of layers to consider. The function divides chunksize by n to determine blocksize }
   \item{minblocks}{Integer. Minimum number of blocks }
   \item{filename}{Output filename}
