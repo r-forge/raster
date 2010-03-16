@@ -65,7 +65,7 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
 	function(x, y, maxpixels=100000, cex=0.1, ...)  {
-		comp <- compare(c(x, y), bb=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
+		comp <- compare(c(x, y), extent=TRUE, rowcol=TRUE, prj=FALSE, tolerance=0.0001, stopiffalse=TRUE) 
 		nc <- ncell(x)
 		x <- sampleRegular(x, size=maxpixels)
 		y <- sampleRegular(y, size=maxpixels)

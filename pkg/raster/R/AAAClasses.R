@@ -20,12 +20,12 @@ setClass('Extent',
 	),
 	validity = function(object)	{
 		c1 <- (object@xmin <= object@xmax)
-		if (!c1) { stop('xmin > xmax') }
+		if (!c1) { stop('invalid extent: xmin >= xmax') }
 		c2 <- (object@ymin <= object@ymax)
-		if (!c2) { stop('ymin > ymax') }
+		if (!c2) { stop('invalid extent: ymin >= ymax') }
 		v <- c(object@xmin, object@xmax, object@ymin, object@ymax)
 		c3 <- all(!is.infinite(v))
-		if (!c3) { stop('infinite in Extent') }		
+		if (!c3) { stop('invalid extent: infinite value') }		
 		return(c1 & c2 & c3)
 	}
 )
@@ -224,7 +224,7 @@ setClass ('RasterStack',
 		),
 	validity = function(object) {
 		if (length(object@layers) > 1) {
-			cond <- compare(object@layers[[1]], object@layers, bb=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
+			cond <- compare(object@layers[[1]], object@layers, extent=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
 		} else {
 			cond <- TRUE
 		}

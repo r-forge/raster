@@ -9,12 +9,13 @@ intersectExtent returns the intersection (i.e. the area in which they all overla
 }
 
 \usage{
-intersectExtent(x, ...)
+intersectExtent(x, ..., validate=TRUE)
 }
 
 \arguments{
   \item{x}{Extent object or object from which it can be coerced via \code{\link[raster]{extent}} (Raster* or Spatial* objects)} 
   \item{...}{Additional Extent or Raster* or Spatial* objects } 
+  \item{validate}{Logical. If \code{TRUE}, an error is returned if the intersection is empty; else \code{NULL} is returned if the intersection is empty}   
 }
  
 \value{

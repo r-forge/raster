@@ -7,27 +7,45 @@
 	
 setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
-		if ( compare(c(e1, e2)) ) {
-			r <- raster(e1)
-			if (canProcessInMemory(e1, 4)) {
-				return( setValues(r, values=callGeneric( as.numeric(getValues(e1)), getValues(e2))) )
-			} else {
-				tr <- blockSize(e1)
-				pb <- pbCreate(tr$n, type=.progress())			
-				r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
-				for (i in 1:tr$n) {
-					v1 <- getValuesBlock(e1, row=tr$row[i], nrows=tr$size)
-					v2 <- getValuesBlock(e2, row=tr$row[i], nrows=tr$size)
-					v <- callGeneric( v1, v2 )
-					writeValues(r, v, tr$row[i])
-					pbStep(pb, i) 	
+		
+		if ( ! compare(e1, e2, stopiffalse=FALSE) ) {
+			if ( compare(e1, e2, extent=FALSE, rowcol=FALSE, prj=TRUE, res=TRUE, orig=TRUE, stopiffalse=TRUE) ) {
+				ie <- intersectExtent(extent(e1), extent(e2), validate=FALSE)
+				if (is.null(ie)) {
+					stop('Layers have non-overlapping extents')
 				}
-				r <- writeStop(r)
-				pbClose(pb)
-				return(r)
+				warning('RasterLayer objects have different extents. Result for their intersection is returned')
+				e1 <- crop(e1, ie)
+				e2 <- crop(e2, ie)
+			} else {
+				stop()  # stops anyway because compare returned FALSE
 			}
-		}	
-	}
+		}
+		
+		r <- raster(e1)
+		
+		if (canProcessInMemory(r, 4)) {
+		
+			return( setValues(r, values=callGeneric( getValues(e1), getValues(e2))) )
+			
+		} else {
+		
+			tr <- blockSize(e1)
+			pb <- pbCreate(tr$n, type=.progress())			
+			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
+			for (i in 1:tr$n) {
+				v1 <- getValuesBlock(e1, row=tr$row[i], nrows=tr$size)
+				v2 <- getValuesBlock(e2, row=tr$row[i], nrows=tr$size)
+				v <- callGeneric( v1, v2 )
+				writeValues(r, v, tr$row[i])
+				pbStep(pb, i) 	
+			}
+			r <- writeStop(r)
+			pbClose(pb)
+			return(r)
+			
+		}
+	}	
 )
 
 

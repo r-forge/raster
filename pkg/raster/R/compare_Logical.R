@@ -13,7 +13,7 @@
 
 setMethod('==', signature(e1='BasicRaster', e2='BasicRaster'),
 	function(e1,e2){
-		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.05, stopiffalse=FALSE) 
+		cond <- compare(c(e1, e2), extent=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.05, stopiffalse=FALSE) 
 		return(cond)
 	}
 )	
@@ -21,7 +21,7 @@ setMethod('==', signature(e1='BasicRaster', e2='BasicRaster'),
 
 setMethod('!=', signature(e1='BasicRaster', e2='BasicRaster'),
 	function(e1,e2){
-		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.05, stopiffalse=FALSE) 
+		cond <- compare(c(e1, e2), extent=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.05, stopiffalse=FALSE) 
 		return(!cond)
 	}
 )	
@@ -155,10 +155,9 @@ setMethod("Compare", signature(e1='numeric', e2='RasterLayer'),
 
 setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 	function(e1,e2){
-		cond <- compare(c(e1, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
-		if (!cond) {
-			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See compare()")
-		}	
+		
+		compare(c(e1, e2), extent=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=TRUE) 
+		
 		r <- raster(e1) 
 		if (canProcessInMemory(r, 3)) {
 			dataType(r) <- 'LOG1S'
@@ -184,7 +183,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='RasterLayer'),
 setMethod("Logic", signature(e1='RasterLayer', e2='RasterLayer'),
     function(e1, e2){ 
 		r <- raster(e1)
-		cond <- compare(c(r, e2), bb=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
+		cond <- compare(c(r, e2), extent=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=FALSE) 
 		if (!cond) {
 			stop("Cannot compare RasterLayers that have different BasicRaster attributes. See compare()")
 		}	

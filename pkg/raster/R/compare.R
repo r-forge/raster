@@ -1,24 +1,22 @@
-# R code for changing rasters (spatial data)
-# Authors: Robert J. Hijmans
-# International Rice Research Institute
-#contact: r.hijmans@gmail.com
+# Author: Robert J. Hijmans
+# contact: r.hijmans@gmail.com
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
 
 
 
-compare <- function(object, ..., bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE, showwarning=FALSE) {
+compare <- function(x, ..., extent=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance=0.05, stopiffalse=TRUE, showwarning=FALSE) {
 	result <- TRUE
 	firstproj <- NA
-	objects <- c(object, list(...))
+	objects <- c(x, list(...))
 	if (!isTRUE(length(objects) > 1)) {
 		warning('There should be at least 2 Raster* objects to compare')
 		return(result)
 	}	
 	minres <- min(res(objects[[1]]))
 	for (i in 2:length(objects)) { 
-		if (bb) {
+		if (extent) {
 			if (!(isTRUE(all.equal(extent(objects[[1]]), extent(objects[[i]]), tolerance=tolerance, scale=minres )))) {
 				result <- F
 				if (stopiffalse) { stop('Different bounding box') }
@@ -48,7 +46,7 @@ compare <- function(object, ..., bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig
 				if (showwarning) { warning('different projection') }
 			}
 		}
-# Can also check res through bb & rowcol
+# Can also check res through extent & rowcol
 		if (res) {
 			if (!(isTRUE(all.equal(res(objects[[1]]), res(objects[[i]]), tolerance=tolerance, scale=minres)))) {
 				result <- F
@@ -56,7 +54,7 @@ compare <- function(object, ..., bb=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig
 				if (showwarning) { warning('different resolution') }
 			}	
 		}
-# Can also check orig through bb & rowcol, but orig is useful for e.g. Merge(raster, raster)
+# Can also check orig through extent & rowcol, but orig is useful for e.g. Merge(raster, raster)
 		if (orig) {
 			dif1 <- origin(objects[[1]]) - origin(objects[[i]])
 			dif2 <- abs(origin(objects[[1]])) - origin(objects[[i]])

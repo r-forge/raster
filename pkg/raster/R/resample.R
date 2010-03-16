@@ -9,10 +9,11 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') 	}
 	filename <- trim(filename)
 	
-	bb <- intersectExtent(from, to)
-	validObject(bb)
-	if (is.null(filename)){filename <- ""}
 	to <- raster(to)
+
+	e = intersectExtent(from, to, validate=TRUE)
+	
+	if (is.null(filename)){filename <- ""}
 	
 	if (!canProcessInMemory(to, 1) && filename == '') {
 		filename <- rasterTmpFile()
@@ -26,6 +27,8 @@ resample <- function(from, to, method="ngb", filename="", ...)  {
 			
 	pb <- pbCreate(nrow(to), type=.progress(...))
 
+	
+	
 	for (r in 1:nrow(to)) {
 		cells <- rowCells + (r-1) * ncol(to)
 		xy <- xyFromCell(to, cells)

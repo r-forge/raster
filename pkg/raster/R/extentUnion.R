@@ -9,31 +9,37 @@ unionExtent <- function(x, ...) {
 	if (length(objects) == 1) {
 		return(extent(x))
 	}
-	bb <- extent(objects[[1]])
+	e <- extent(objects[[1]])
 	for (i in 2:length(objects)) {
-		bb2 <- extent(objects[[i]])
-		bb@xmin <- min(xmin(bb), xmin(bb2))
-		bb@xmax <- max(xmax(bb), xmax(bb2))
-		bb@ymin <- min(ymin(bb), ymin(bb2))
-		bb@ymax <- max(ymax(bb), ymax(bb2))
+		e2 <- extent(objects[[i]])
+		e@xmin <- min(e@xmin, e2@xmin)
+		e@xmax <- max(e@xmax, e2@xmax)
+		e@ymin <- min(e@ymin, e2@ymin)
+		e@ymax <- max(e@ymax, e2@ymax)
 	}
-	return(bb)
+	return(e)
 }
 
-intersectExtent <- function(x, ...) {
+intersectExtent <- function(x, ..., validate=TRUE) {
 	objects <- c(x, list(...))
 	if (length(objects) == 1) {
 		return(extent(x))
 	}
-	bb <- extent(objects[[1]])
+	e <- extent(objects[[1]])
 	for (i in 2:length(objects)) {
-		bb2 <- extent(objects[[i]])
-		bb@xmin <- max(xmin(bb), xmin(bb2))
-		bb@xmax <- min(xmax(bb), xmax(bb2))
-		bb@ymin <- max(ymin(bb), ymin(bb2))
-		bb@ymax <- min(ymax(bb), ymax(bb2))
+		e2 <- extent(objects[[i]])
+		e@xmin <- max(e@xmin, e2@xmin)
+		e@xmax <- min(e@xmax, e2@xmax)
+		e@ymin <- max(e@ymin, e2@ymin)
+		e@ymax <- min(e@ymax, e2@ymax)
 	}
-	validObject(bb)
-	return(bb)
+	if ((e@xmax <= e@xmin) | (e@ymax <= e@ymin) ) {
+		if (validate) {
+			stop('Invalid extent')
+		} else {
+			return(NULL)
+		}
+	}
+	return(e)
 }
 

@@ -21,10 +21,10 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 	}
 
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
-	bb <- intersectExtent(x, y)
-	bb <- alignExtent(bb, x)
+	e <- intersectExtent(x, y)
+	e <- alignExtent(e, x)
 	outraster <- raster(x)
-	outraster <- setExtent(outraster, bb, keepres=TRUE)
+	outraster <- setExtent(outraster, e, keepres=TRUE)
 	col1 <- colFromX(x, xmin(outraster)+0.5*xres(outraster))
 	col2 <- colFromX(x, xmax(outraster)-0.5*xres(outraster))
 	row1 <- rowFromY(x, ymax(outraster)-0.5*yres(outraster))

@@ -23,12 +23,12 @@ setMethod('extent', signature(x='BasicRaster'),
 setMethod('extent', signature(x='Spatial'), 
 	function(x){ 
 		bndbox <- bbox(x)
-		bb <- new('Extent')
-		bb@xmin <- bndbox[1,1]
-		bb@xmax <- bndbox[1,2]
-		bb@ymin <- bndbox[2,1]
-		bb@ymax <- bndbox[2,2]
-		return(bb) 
+		e <- new('Extent')
+		e@xmin <- bndbox[1,1]
+		e@xmax <- bndbox[1,2]
+		e@ymin <- bndbox[2,1]
+		e@ymax <- bndbox[2,2]
+		return(e) 
 	}
 )
 
@@ -40,12 +40,12 @@ setMethod('extent', signature(x='matrix'),
 			stop('matrix should have dimensions of at least 2 by 2') }		
 		if (d[2] > 2) {
 			stop('matrix should not have more than 2 columns') }		
-		bb <- new('Extent')
-		bb@xmin <- min(x[1,])
-		bb@xmax <- max(x[1,])
-		bb@ymin <- min(x[2,])
-		bb@ymax <- max(x[2,])
-		return(bb)
+		e <- new('Extent')
+		e@xmin <- min(x[1,])
+		e@xmax <- max(x[1,])
+		e@ymin <- min(x[2,])
+		e@ymax <- max(x[2,])
+		return(e)
 	}
 )
 	
@@ -59,12 +59,12 @@ setMethod('extent', signature(x='numeric'),
 		if (length(x) > 4) {
 			warning('more elements than expected (should be 4)')
 		}
-		bb <- new('Extent')
-		bb@xmin <- x[1]
-		bb@xmax <- x[2]
-		bb@ymin <- x[3]
-		bb@ymax <- x[4]
-		return(bb)
+		e <- new('Extent')
+		e@xmin <- x[1]
+		e@xmax <- x[2]
+		e@ymin <- x[3]
+		e@ymax <- x[4]
+		return(e)
 	}	
 )
 

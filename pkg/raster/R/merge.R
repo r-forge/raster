@@ -28,7 +28,7 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 		}
 	}
 
-	compare(rasters, bb=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
+	compare(rasters, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
 	bb <- unionExtent(rasters)
 	outraster <- raster(rasters[[1]], filename)
 	outraster <- setExtent(outraster, bb, keepres=TRUE, snap=FALSE)
