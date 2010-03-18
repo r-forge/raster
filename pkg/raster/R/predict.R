@@ -9,7 +9,9 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", ext=NULL, const=NULL, xy=FALSE, index=1, debug.level=1, se.fit=FALSE, progress=.progress(), ...) {
+	function(object, model, filename="", ext=NULL, const=NULL, xy=FALSE, index=1, debug.level=1, se.fit=FALSE, progress, ...) {
+	
+		if (missing(progress)) { progress <- .progress() }
 	
 		filename <- trim(filename)
 		if ( class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull') ) { 
