@@ -21,9 +21,14 @@
 
 \section{Introduction}
 
-The '\verb@raster@' package has a default 'native' file format called 'rasterfile'. This file format is used because it is simple, flexible and extensible. The package can read and write other formats via the '\verb@rgdal@' package. 
+The '\verb@raster@' package has a default 'native' file format called 'rasterfile'. This file format is used because it is simple, flexible and extensible and does not require rgdal, which may be difficult to install (the '\verb@raster@' package can read and write other formats via the '\verb@rgdal@' package). 
 
-The rasterfile format is highly similar to many other formats used for raster data. It consists of two files. One file with sequential binary data (filename extention is '.gri'), and one header file (filename extension is '.grd'. The variation is in the header file, and the contents of the header file are described here.
+The rasterfile format is highly similar to many other formats used for raster data. It consists of two files. One file with sequential binary values (filename extention is '.gri'), and one header file (filename extension is '.grd'). The variation between such file formats is in the header file, and the contents of the rasterfile header file are described here.
+
+The purpose is to standardize the format and help others to read and write files of the same format if they wish to do so. Hence, this article is aimed at software developers. The typical user of the '\verb@raster@' package would not need to be familiar with it.
+
+This is an incomplete first draft.
+
 
 \section{ini files}
 
@@ -44,7 +49,7 @@ var3=value
 var4=value
 
 
-Variables names must be unique within a section, but the same variable name could occur in multiple sections. This is not done for raster files (variable names are unique) such that section names could be ignored. The raster package has a convinient function {\bf readIniFile} to read .ini files.
+Variables names must be unique within a section, but the same variable name could occur in multiple sections. This is not done for raster files (variable names are unique) such that section names could be ignored. The '\verb@raster@' package has a convenient function, {\bf readIniFile}, to read .ini files.
 
 
 \section{Sections}
@@ -120,7 +125,5 @@ nbands is optional. It indicates the number of layers (bands) stored in the file
 bandorder is required if nbands > 1 and ignored when nbands=1. Values can be 'BIL' (band interleaved by line), 'BIP' (band interleaved by pixel) and 'BSQ' (band sequential). BIL is recommended for most cases.
 
 
-
-MORE COMING.
 
 \end{document}
