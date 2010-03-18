@@ -51,6 +51,7 @@ The following additional arguments can be passed, to replace default values
 
 \seealso{
 Use \code{\link[raster]{interpolate}} if your model has 'x' and 'y' as implicit independent variables (i.e. in kriging).
+}
 
 \value{
 a RasterLayer object
