@@ -114,10 +114,10 @@ setAs('Extent', 'SpatialPolygonsDataFrame',
 )
 
 
-setAs('im', 'RasterLayer', 
-	function(from) {
-		r = raster(nrows=from$dim[1], ncols=from$dim[2], xmn=from$xrange[1], xmx=from$xrange[2], ymn=from$yrange[1], ymx=from$yrange[2], projs='')
-		r = setValues(r, from$v)
-		flip(r, direction='y')
-	}
-)
+#setAs('im', 'RasterLayer', 
+#	function(from) {
+#		r = raster(nrows=from$dim[1], ncols=from$dim[2], xmn=from$xrange[1], xmx=from$xrange[2], ymn=from$yrange[1], ymx=from$yrange[2], projs='')
+#		r = setValues(r, from$v)
+#		flip(r, direction='y')
+#	}
+#)
