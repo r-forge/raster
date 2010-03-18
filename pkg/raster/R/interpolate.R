@@ -9,8 +9,6 @@ setMethod('interpolate', signature(object='Raster'),
 	
 	function(object, model, filename="", ext=NULL, const=NULL, index=1, debug.level=1, na.rm=TRUE, ...) {
 		
-		progress <- .progress(...) 
-		filename <- trim(filename)
 		predrast <- raster(object)
 				
 		if (!is.null(ext)) {
@@ -42,6 +40,8 @@ setMethod('interpolate', signature(object='Raster'),
 		} else {
 			haveFactor <- FALSE
 		}
+		
+		filename <- trim(filename)
 		
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()	
@@ -83,7 +83,7 @@ setMethod('interpolate', signature(object='Raster'),
 		ablock <- 1:(ncol(object) * tr$size)
 		napred <- rep(NA, ncol(predrast)*tr$size )
 				
-		pb <- pbCreate(tr$n,  type=progress)			
+		pb <- pbCreate(tr$n,  type=.progress(...) )			
 		
 		if (filename != '') {
 			predrast <- writeStart(predrast, filename=filename, ... )

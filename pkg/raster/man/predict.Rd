@@ -8,7 +8,7 @@
 \title{Spatial model predictions}
 
 \description{
-Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should exactely match those expected by the model. This will be the case if the RasterStack was used (via \code{xyValues}) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. If you have 'x' and 'y' as independent variables (i.e. the location of grid cells), you can use \code{xy=TRUE} to add these to the independent variables, or use \code{\link[raster]{interpolate}}.
+Make a RasterLayer with a prediction based on a a fitted model object. Provide a Raster* with the independent variables. The layerNames in the RasterStack should exactely match those expected by the model. This will be the case if the RasterStack was used (via \code{xyValues}) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomforest) for which a predict method has been implemented can be used. 
 }
 
 \usage{
@@ -24,7 +24,7 @@ predict(object, ...)
 \section{Methods}{
 \describe{
  
-\code{predict(object, model, filename='', ext=NULL, const=NULL, xy=FALSE, index=1, se.fit=FALSE, ...)}
+\code{predict(object, model, filename='', ext=NULL, const=NULL, index=1, se.fit=FALSE, ...)}
   
 \tabular{rll}{  
   \tab  \code{object} \tab a RasterStack, RasterBrick or RasterLayer object \cr
@@ -32,7 +32,6 @@ predict(object, ...)
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
   \tab  \code{ext} \tab An Extent object to limit the prediction to a sub-region of \code{x} \cr
   \tab  \code{const}  \tab data.frame. Can be used to add a constant for which there is no Raster object for model predictions. Particulalry useful if the constant is a character-like factor value \cr
-  \tab  \code{xy}  \tab Logical. If \code{TRUE}, 'x' and 'y' (in lowercase), i.e. the location of each cell, are added to the predictor variables (in object); see \link[raster]{predict} \cr
   \tab  \code{index}  \tab Integer. To select the column if predict.'model' returns a matrix with multiple columns \cr
   \tab  \code{se.fit}  \tab Extract the standard error rather then the prediction (works for GLM and perhaps other methods where the prediction and se.fit are returned as a list) \cr
   \tab  \code{...}  \tab Additional arguments to pass to the predict.'model' function \cr
@@ -48,6 +47,10 @@ The following additional arguments can be passed, to replace default values
  }
 
 }}
+
+
+\seealso{
+Use \code{\link[raster]{interpolate}} if your model has 'x' and 'y' as implicit independent variables (i.e. in kriging).
 
 \value{
 a RasterLayer object

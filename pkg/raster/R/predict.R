@@ -11,11 +11,9 @@ if (!isGeneric("predict")) {
 setMethod('predict', signature(object='Raster'), 
 	function(object, model, filename="", ext=NULL, const=NULL, index=1, se.fit=FALSE, na.rm=TRUE, ...) {
 	
-		progress <- .progress(...) 
-	
-		filename <- trim(filename)
+
 		if ( class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull') ) { 
-			return ( predict(model, object, filename=filename, ext=ext, progress=progress, ...) ) 
+			return ( predict(model, object, filename=filename, ext=ext, ...) ) 
 		}
 	
 		predrast <- raster(object)
@@ -48,6 +46,7 @@ setMethod('predict', signature(object='Raster'),
 			haveFactor <- FALSE
 		}
 		
+		filename <- trim(filename)
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()
 									
@@ -72,7 +71,7 @@ setMethod('predict', signature(object='Raster'),
 		}
 		
 		
-		pb <- pbCreate(tr$n,  type=progress)			
+		pb <- pbCreate(tr$n,  type=.progress(...) )			
 		
 		if (filename != '') {
 			predrast <- writeStart(predrast, filename=filename, ... )
