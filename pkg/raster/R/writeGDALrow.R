@@ -22,7 +22,11 @@
 		try (pbClose( attr(raster@file, "pb") ), silent=TRUE)
 		attr(raster@file, "pb") <- ''
 	}
-	rasterout <- raster(raster@file@name)
+	if (class(raster) == 'RasterBrick') {
+		rasterout <- brick(raster@file@name)
+	} else {
+		rasterout <- raster(raster@file@name)
+	}
 	if (!raster@data@haveminmax) {
 		rasterout@data@min <- raster@data@min
 		rasterout@data@max <- raster@data@max

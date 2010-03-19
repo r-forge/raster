@@ -36,6 +36,7 @@ function(x, filename, options=NULL, doPB=FALSE, ...) {
 setMethod('writeStart', signature(x='RasterBrick', filename='character'), 
 function(x, filename, options=NULL, doPB=FALSE, ...) {
 	filetype <- .filetype(...)
+	if (filetype=='ascii') {stop('ascii files not yet supported by this function, you can use writeRaster') }
 	res <- filetype %in% c(.nativeDrivers(), 'ascii')
 	if (res) { 
 		.startRasterWriting(x, filename, ...)
@@ -99,7 +100,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 	function(x, v, start) {
 		v[is.infinite(v)] <- NA
 		
-		res <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
+		res <- x@file@driver %in% .nativeDrivers()
 		
 		if (res) {
 			if (x@file@dtype == "INT" || x@file@dtype =='LOG' ) { 
@@ -110,11 +111,11 @@ setMethod('writeValues', signature(x='RasterBrick'),
 			}
 			writeBin(v, x@file@con, size=x@file@dsize )
 		} else {
-			nl <- nlayers(raster)
+			nl <- nlayers(x)
 			off = c(start-1, 0)
 			for (i in 1:nl) {
-				v = matrix(v[,i], nrow=ncol(x))
-				gd <- putRasterData(x@file@transient, v, band=i, offset=off) 	
+				#v = matrix(v[,i], nrow=ncol(x))
+				gd <- putRasterData(x@file@transient, v[,i,drop=FALSE], band=i, offset=off) 	
 			}
 		}
 		return(invisible(NULL))

@@ -43,9 +43,14 @@ setMethod('brick', signature(x='Raster'),
 
 
 setMethod('brick', signature(x='RasterStack'), 
-	function(x){
-		b <- new('RasterBrick')
-		b <- addLayer(b, x@layers)
+	function(x, values=TRUE){
+		if (values) {
+			b <- new('RasterBrick')
+			b <- addLayer(b, x@layers)
+		} else {
+			b <- brick(raster(x))
+			b@data@nlayers <- nlayers(x)
+		}
 		layerNames(b) <- layerNames(x)
 		return(b)
 	}
