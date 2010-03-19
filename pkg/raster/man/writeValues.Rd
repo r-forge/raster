@@ -19,7 +19,7 @@ Low level functions for writing blocks (>= 1 row) of values to files. For progra
 }
 
 \usage{
-blockSize(x, chunksize, n=1, minblocks=2)
+blockSize(x, chunksize, n=nlayers(x), minblocks=2)
 writeStart(x, filename, ...)
 writeValues(x, v, ...)
 writeStop(x)
@@ -89,19 +89,17 @@ writeValues(s2, v, 5)
 s2 <- writeStop(s2)
 
 
-## write a RasterStack to a RasterBrick
-#s <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"))
-#b <- brick(s, values=FALSE)  # creates an empty brick, with the same number of layers, from the stack
-#b <- writeStart(b, filename="test.tif", format="GTiff",overwrite=TRUE)
-#pb <- pbCreate(nrow(b), type='text')
-#for (r in 1:nrow(b)) {
-#	v <- getValues(s, r)
-#	writeValues(b, v, r)
-#	pbStep(pb, r)
-#}
-#result <- writeStop(b)
-#pbClose(pb)
-##
+## write values of a RasterStack to a RasterBrick
+s <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"))
+# create empty brick
+b <- brick(s, values=FALSE)  
+b <- writeStart(b, filename="test.tif", format="GTiff",overwrite=TRUE)
+tr <- blockSize(b)
+for (i in 1:tr$n) {
+	v <- getValuesBlock(s, row=tr$row[i], nrows=tr$size)
+	writeValues(b, v, tr$row[i])
+}
+b <- writeStop(b)
 
 }
 

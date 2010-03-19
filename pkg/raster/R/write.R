@@ -36,6 +36,8 @@ function(x, filename, options=NULL, doPB=FALSE, ...) {
 setMethod('writeStart', signature(x='RasterBrick', filename='character'), 
 function(x, filename, options=NULL, doPB=FALSE, ...) {
 	filetype <- .filetype(...)
+	filename <- .getExtension(filename, filetype)
+
 	if (filetype=='ascii') {stop('ascii files not yet supported by this function, you can use writeRaster') }
 	res <- filetype %in% c(.nativeDrivers(), 'ascii')
 	if (res) { 
@@ -114,8 +116,8 @@ setMethod('writeValues', signature(x='RasterBrick'),
 			nl <- nlayers(x)
 			off = c(start-1, 0)
 			for (i in 1:nl) {
-				#v = matrix(v[,i], nrow=ncol(x))
-				gd <- putRasterData(x@file@transient, v[,i,drop=FALSE], band=i, offset=off) 	
+				vv = matrix(v[,i], nrow=ncol(x))
+				gd <- putRasterData(x@file@transient, vv, band=i, offset=off) 	
 			}
 		}
 		return(invisible(NULL))

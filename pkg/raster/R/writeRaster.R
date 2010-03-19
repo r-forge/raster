@@ -84,18 +84,17 @@ function(x, filename, bandorder='BIL', ...) {
 
 setMethod('writeRaster', signature(x='RasterStack', filename='character'), 
 function(x, filename, bandorder='BIL', ...) {
-	test <- try( b <- brick(x) )
-	if (class(test) != "try-error") {
-		b <- writeRaster(b, filename=filename, bandorder=bandorder, ...)
-		return(invisible(b))
+	b <- brick(x, values=FALSE)
+	b <- writeStart(b, filename=filename, bandorder=bandorder, ...)
+	tr <- blockSize(b)
+	pb <- pbCreate(tr$n, type=.progress(...))
+	for (i in 1:tr$n) {
+		v <- getValuesBlock(x, row=tr$row[i], nrows=tr$size)
+		writeValues(b, v, tr$row[i])
+		pbStep(pb, i)
 	}
-
-	b <- brick(raster(x))
-	for (r in 1:nrow(x)) {
-		v <- getValues(x, r)
-		b <- setValues(b, v, r)
-		b <- writeRaster(b, filename=filename, bandorder=bandorder, ...)
-	}
+	pbClose(pb)
+	b <- writeStop(b)
 	return(invisible(b))
 }
 )
