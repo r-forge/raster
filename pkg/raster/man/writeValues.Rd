@@ -88,6 +88,21 @@ v <- getValuesBlock(r, row=5, nrows=1)
 writeValues(s2, v, 5)
 s2 <- writeStop(s2)
 
+
+## write a RasterStack to a RasterBrick
+#s <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"))
+#b <- brick(s, values=FALSE)  # creates an empty brick, with the same number of layers, from the stack
+#b <- writeStart(b, filename="test.tif", format="GTiff",overwrite=TRUE)
+#pb <- pbCreate(nrow(b), type='text')
+#for (r in 1:nrow(b)) {
+#	v <- getValues(s, r)
+#	writeValues(b, v, r)
+#	pbStep(pb, r)
+#}
+#result <- writeStop(b)
+#pbClose(pb)
+##
+
 }
 
 \keyword{ spatial }
