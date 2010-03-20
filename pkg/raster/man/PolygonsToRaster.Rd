@@ -56,17 +56,20 @@ r <- raster()
 r <- polygonsToRaster(pols, r, overlap='sum')
 #plot(r)
 #plot(pols, add=T)
-p5 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),  c(-25, -15), c(-180,0), c(-180,10))
-addpoly <- SpatialPolygons(list(Polygons(list(Polygon(p5)), 1)))
-addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
-addpoly@data[1,1] <- 10
-r2 <- polygonsToRaster(addpoly, r, field=1, updateRaster=TRUE, updateValue="NA")
+
+## add a polygon
+#p5 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),  c(-25, -15), c(-180,0), c(-180,10))
+#addpoly <- SpatialPolygons(list(Polygons(list(Polygon(p5)), 1)))
+#addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
+#addpoly@data[1,1] <- 10
+#r2 <- polygonsToRaster(addpoly, r, field=1, updateRaster=TRUE, updateValue="NA")
 #plot(r2)
 #plot(pols, border="blue", lwd=2, add=TRUE)
 #plot(addpoly, add=TRUE, border="red", lwd=2)
 
-r3 <- raster(ncol=36, nrow=18)
-r3 <- polygonsToRaster(pols, r3, getCover=TRUE)
+## get the percentage cover of polygons in a cell
+#r3 <- raster(ncol=36, nrow=18)
+#r3 <- polygonsToRaster(pols, r3, getCover=TRUE)
 
 }
 

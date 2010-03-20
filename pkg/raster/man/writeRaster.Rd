@@ -87,13 +87,13 @@ This function is used for the side-effect of writing values to a file.
 
 \author{Robert J. Hijmans}
 
-\seealso{\code{\link[raster]{writeFormats}} }  
+\seealso{\code{\link[raster]{writeFormats}}, and for faster writing: \code{\link[raster]{writeValues}} }  
 
 \examples{ 
 rst <- raster(system.file("external/test.grd", package="raster"))
- 
-# read all values
-rst <- readAll(rst)
+
+# take a small part
+rst <- crop(rst, extent(179880, 180800, 329880, 330840) )
 
 # write all to an integer binary file
 r <- writeRaster(rst, filename="allint.grd", datatype='INT4S', overwrite=TRUE)

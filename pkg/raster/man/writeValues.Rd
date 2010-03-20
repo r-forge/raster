@@ -100,6 +100,8 @@ for (i in 1:tr$n) {
 	writeValues(b, v, tr$row[i])
 }
 b <- writeStop(b)
+# note that the above is equivalent to 
+# b <- writeRaster(s, filename="test.tif", format="GTiff",overwrite=TRUE)
 
 }
 
