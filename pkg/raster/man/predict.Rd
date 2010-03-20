@@ -34,6 +34,7 @@ predict(object, ...)
   \tab  \code{const}  \tab data.frame. Can be used to add a constant for which there is no Raster object for model predictions. Particulalry useful if the constant is a character-like factor value \cr
   \tab  \code{index}  \tab Integer. To select the column if predict.'model' returns a matrix with multiple columns \cr
   \tab  \code{se.fit}  \tab Extract the standard error rather then the prediction (works for GLM and perhaps other methods where the prediction and se.fit are returned as a list) \cr
+  \tab  \code{na.rm}  \tab Logical. Remove cells with NA values in the predictors before solving the model (and return a NA value for those cells). In most cases this will not affect the output. This option prevents errors with models that cannot handle NA values. \cr
   \tab  \code{...}  \tab Additional arguments to pass to the predict.'model' function \cr
 }
 

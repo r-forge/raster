@@ -41,12 +41,9 @@ a list as long as the number of polygons in p
 r <- raster(nrow=18, ncol=9)
 r[] <- 1:ncell(r)
 
-cds1 <- rbind(c(-180,-20), c(-160,55), c(-60, 0), c(-160,-60), c(-180,-20))
-cds2 <- rbind(c(-80,0), c(-20,60), c(0,5), c(-60,-45), c(-80,0))
-cds3 <- rbind(c(80,0), c(100,60), c(120,0), c(120,-55), c(80,0))
-hole <- rbind(c(-150,-20), c(-100,-10), c(-110,20), c(-150,-20))
-polys <- SpatialPolygons(list(Polygons(list(Polygon(cds1)), 1), Polygons(list(Polygon(cds2)), 2), Polygons(list(Polygon(hole)), 3), Polygons(list(Polygon(cds3)), 4) ))
-polys@polygons[[3]]@Polygons[[1]]@hole <- TRUE
+cds1 <- rbind(c(-180,-20), c(-160,5), c(-60, 0), c(-160,-60), c(-180,-20))
+cds2 <- rbind(c(80,0), c(100,60), c(120,0), c(120,-55), c(80,0))
+polys <- SpatialPolygons(list(Polygons(list(Polygon(cds1)), 1), Polygons(list(Polygon(cds2)), 2)))
 
 #plot(r)
 #plot(polys, add=TRUE)
@@ -55,10 +52,10 @@ v
 # mean for each polygon
 unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=TRUE) else NA ))
 
-v <- polygonValues(polys, r, weights=TRUE)
-v
-# weighted mean for each polygon
-unlist(lapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  ))
+# v <- polygonValues(polys, r, weights=TRUE)
+# v
+## weighted mean for each polygon
+# unlist(lapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  ))
 }
 
 \keyword{methods}

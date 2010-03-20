@@ -92,54 +92,29 @@ This function is used for the side-effect of writing values to a file.
 \examples{ 
 rst <- raster(system.file("external/test.grd", package="raster"))
  
-# read all data
+# read all values
 rst <- readAll(rst)
 
-# write all to a new binary file
-rst <- writeRaster(rst, filename="binall.grd", overwrite=TRUE)
+# write all to an integer binary file
+r <- writeRaster(rst, filename="allint.grd", datatype='INT4S', overwrite=TRUE)
 
 # write all to a new ERDAS .img file
-rst <- writeRaster(rst, filename="binall.img", format="HFA", overwrite=TRUE)
-
-# write all to an integer binary file
-rst <- writeRaster(rst, filename="binallint.grd", datatype='INT4S', overwrite=TRUE)
+r <- writeRaster(rst, filename="hfa.img", format="HFA", overwrite=TRUE)
  
-# write all to ascii file
-rst <- writeRaster(rst, filename="ascall.asc", format='ascii', overwrite=TRUE)
-
 # make a brick and save multi-band file
 b <- brick(rst, sqrt(rst))
-rst <- writeRaster(b, filename="mutli.grd", bandorder='BIL', overwrite=TRUE)
+b <- writeRaster(b, filename="mutli.grd", bandorder='BIL', overwrite=TRUE)
  
-# read and write row by row; write to ascii file
-rst <- raster(system.file("external/test.grd", package="raster"))
-ascras <- raster(rst)
-for (r in 1:nrow(rst)) {
-	rst <- readRow(rst, r)
-	v <- values(rst) * 10
-	ascras <- setValues(ascras, v, r)
-	ascras <- writeRaster(ascras, filename='ascrow.asc', format='ascii', overwrite=TRUE) 
-}
-	
-# read and write row by row; write to binary file
+# read and write row by row; write to GTiff file
 binras <- raster(rst)
-for (r in 1:nrow(rst)) {
-	rst <- readRow(rst, r)
-	binras <- setValues(binras, values(rst), r)
-	binras <- writeRaster(binras, 'binbyrow', overwrite=TRUE) 
-}
-
-# read and write row by row; write to GeoTiff binary file
-binras <- raster(rst)
-for (r in 1:nrow(rst)) {
-	rst <- readRow(rst, r)
-	binras <- setValues(binras, values(rst), r)
-	binras <- writeRaster(binras, 'binbyrow2.tif', format="GTiff", overwrite=TRUE) 
+for (r in 1:nrow(binras)) {
+	v <- getValues(rst, r)
+	binras <- setValues(binras, v, r)
+	binras <- writeRaster(binras, 'byrow.grd', overwrite=TRUE) 
 }
 
 # write to netcdf 
 if (require(RNetCDF)) {	
-    rst <- readAll(rst)
     writeRaster(rst, filename='netCDF.nc', format="CDF", overwrite=TRUE)   
 }
 
