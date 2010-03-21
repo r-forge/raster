@@ -56,7 +56,7 @@ a RasterLayer object
 
 \examples{
 ## Thin plate spline interpolation with x and y only
-#require(fields)
+#library(fields)
 #r <- raster(system.file("external/test.grd", package="raster"))
 #ra <- aggregate(r, 10)
 #xy <- data.frame(xyFromCell(ra, 1:ncell(ra)))
@@ -69,7 +69,7 @@ a RasterLayer object
 ## 
 
 ##gstat examples
-#require(gstat)
+#library(gstat)
 
 ## inverse distance weighted interpolation with gstat
 #r <- raster(system.file("external/test.grd", package="raster"))
