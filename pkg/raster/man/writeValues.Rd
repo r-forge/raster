@@ -90,7 +90,7 @@ s2 <- writeStop(s2)
 
 
 ## write values of a RasterStack to a RasterBrick
-s <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"))
+s <- stack(system.file("external/Rlogo.grd", package="raster"))
 # create empty brick
 b <- brick(s, values=FALSE)  
 b <- writeStart(b, filename="test.tif", format="GTiff",overwrite=TRUE)

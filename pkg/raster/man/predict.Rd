@@ -65,28 +65,28 @@ a RasterLayer object
 # and 50 (random) pseudo-absence points. This type of model is often used to predict species distributions
 
 # create a RasterStack (a set of predictor rasters)
-logo <- stack(system.file("pictures/Rlogo.jpg", package="rgdal"))
-layerNames(logo) <- c('red', 'green', 'blue')
+logo <- stack(system.file("external/Rlogo.grd", package="raster"))
+layerNames(logo)
 
-#get presence and absence points
+#get presence and random background (pseudo-absence) points
 presence <- matrix(c(48, 48, 48, 53, 50, 46, 54, 70, 84, 85, 74, 84, 95, 85, 66, 42, 26, 4, 19, 17, 7, 14, 26, 29, 39, 45, 51, 56, 46, 38, 31, 22, 34, 60, 70, 73, 63, 46, 43, 28), ncol=2)
-# random absence
-absence <- cbind(runif(50)*(xmax(logo)-xmin(logo))+xmin(logo), runif(50)*(ymax(logo)-ymin(logo))+ymin(logo))
+# random background
+background <- cbind(runif(250)*(xmax(logo)-xmin(logo))+xmin(logo), runif(250)*(ymax(logo)-ymin(logo))+ymin(logo))
 
 #extract values for points from stack
-xy <- rbind(cbind(1, presence), cbind(0, absence))
+xy <- rbind(cbind(1, presence), cbind(0, background))
 v <- cbind(xy[,1], xyValues(logo, xy[,2:3]))
-colnames(v)[1] <- 'presabs'
+colnames(v)[1] <- 'presback'
 
 #build a model, here an example with glm 
-model <- glm(formula=presabs~., data=data.frame(v))
+model <- glm(formula=presback~., data=data.frame(v))
 
 #predict to a raster
 r <- predict(logo, model, progress='text')
 
-plot(r>0.3)
+plot(r)
 points(presence, bg='blue', pch=21)
-points(absence, bg='red', pch=21)
+points(background, bg='red', pch=21)
 
 ## also try:
 # require(randomForest)
@@ -95,7 +95,6 @@ points(absence, bg='red', pch=21)
 # model <- randomForest(formula, data=data.frame(v))
 # r2 <- predict(logo, type='response', model, progress='text')
 ## note the additional argument "type='response'" that is passed to predict.randomForest
-
 }
 
 \keyword{methods}
