@@ -56,16 +56,16 @@ a RasterLayer object
 
 \examples{
 ## Thin plate spline interpolation with x and y only
-require(fields)
-r <- raster(system.file("external/test.grd", package="raster"))
-ra <- aggregate(r, 10)
-xy <- data.frame(xyFromCell(ra, 1:ncell(ra)))
-v <- getValues(ra)
-tps <- Tps(xy, v)
-p <- raster(r)
-p <- interpolate(p, tps)
-p <- mask(p, r)
-plot(p)
+#require(fields)
+#r <- raster(system.file("external/test.grd", package="raster"))
+#ra <- aggregate(r, 10)
+#xy <- data.frame(xyFromCell(ra, 1:ncell(ra)))
+#v <- getValues(ra)
+#tps <- Tps(xy, v)
+#p <- raster(r)
+#p <- interpolate(p, tps)
+#p <- mask(p, r)
+#plot(p)
 ## 
 
 ##gstat examples
