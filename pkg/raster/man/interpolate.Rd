@@ -56,36 +56,37 @@ a RasterLayer object
 
 \examples{
 ## Thin plate spline interpolation with x and y only
-#library(fields)
-#r <- raster(system.file("external/test.grd", package="raster"))
-#ra <- aggregate(r, 10)
-#xy <- data.frame(xyFromCell(ra, 1:ncell(ra)))
-#v <- getValues(ra)
-#tps <- Tps(xy, v)
-#p <- raster(r)
-#p <- interpolate(p, tps)
-#p <- mask(p, r)
-#plot(p)
-## 
+if (require(fields)) {
+r <- raster(system.file("external/test.grd", package="raster"))
+ra <- aggregate(r, 10)
+xy <- data.frame(xyFromCell(ra, 1:ncell(ra)))
+v <- getValues(ra)
+tps <- Tps(xy, v)
+p <- raster(r)
+p <- interpolate(p, tps)
+p <- mask(p, r)
+plot(p)
+}
+ 
 
 ##gstat examples
-#library(gstat)
 
+if (require(gstat)) {
 ## inverse distance weighted interpolation with gstat
-#r <- raster(system.file("external/test.grd", package="raster"))
-#data(meuse)
-#mg <- gstat(id = "zinc", formula = zinc~1, locations = ~x+y, data=meuse, nmax=7, set=list(idp = .5))
-#z <- interpolate(r, mg)
-#z <- mask(z, r)
+r <- raster(system.file("external/test.grd", package="raster"))
+data(meuse)
+mg <- gstat(id = "zinc", formula = zinc~1, locations = ~x+y, data=meuse, nmax=7, set=list(idp = .5))
+z <- interpolate(r, mg)
+z <- mask(z, r)
 
 ## kriging
-#data(meuse)
 #coordinates(meuse) = ~x+y
 #v <- variogram(log(zinc)~1, meuse)
 #m <- fit.variogram(v, vgm(1, "Sph", 300, 1))
 #g <- gstat(NULL, "log.zinc", log(zinc)~1, meuse, model = m)
 #projection(r) <- projection(meuse)
 #x <- interpolate(r, g)
+}
 }
 
 \keyword{methods}
