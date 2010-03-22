@@ -98,14 +98,17 @@ rst <- crop(rst, extent(179880, 180800, 329880, 330840) )
 # write all to an integer binary file
 r <- writeRaster(rst, filename="allint.grd", datatype='INT4S', overwrite=TRUE)
 
-# write all to a new ERDAS .img file
-r <- writeRaster(rst, filename="hfa.img", format="HFA", overwrite=TRUE)
- 
+
+# write all to a new geotiff file (depends on rgdal)
+if (require(rgdal)) {
+  r <- writeRaster(rst, filename="test.tif", format="GTiff", overwrite=TRUE)
+}
+
 # make a brick and save multi-band file
 b <- brick(rst, sqrt(rst))
 b <- writeRaster(b, filename="mutli.grd", bandorder='BIL', overwrite=TRUE)
  
-# read and write row by row; write to GTiff file
+# read and write row by row
 binras <- raster(rst)
 for (r in 1:nrow(binras)) {
 	v <- getValues(rst, r)

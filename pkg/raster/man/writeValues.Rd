@@ -77,6 +77,7 @@ for (i in 1:tr$n) {
 }
 s <- writeStop(s)
 
+if(require(rgdal)){
 s2 <- writeStart(s, filename='test2.tif', format='GTiff', overwrite=TRUE)
 # writing last row first
 for (i in tr$n:1) {
@@ -87,13 +88,13 @@ for (i in tr$n:1) {
 v <- getValuesBlock(r, row=5, nrows=1)
 writeValues(s2, v, 5)
 s2 <- writeStop(s2)
-
+}
 
 ## write values of a RasterStack to a RasterBrick
 s <- stack(system.file("external/Rlogo.grd", package="raster"))
 # create empty brick
 b <- brick(s, values=FALSE)  
-b <- writeStart(b, filename="test.tif", format="GTiff",overwrite=TRUE)
+b <- writeStart(b, filename="test.grd", format="raster",overwrite=TRUE)
 tr <- blockSize(b)
 for (i in 1:tr$n) {
 	v <- getValuesBlock(s, row=tr$row[i], nrows=tr$size)
@@ -101,7 +102,7 @@ for (i in 1:tr$n) {
 }
 b <- writeStop(b)
 # note that the above is equivalent to 
-# b <- writeRaster(s, filename="test.tif", format="GTiff",overwrite=TRUE)
+# b <- writeRaster(s, filename="test.grd", format="raster",overwrite=TRUE)
 
 }
 
