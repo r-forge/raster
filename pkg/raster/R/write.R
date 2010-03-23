@@ -20,32 +20,37 @@ if (!isGeneric('writeValues')) {
 	
 
 setMethod('writeStart', signature(x='RasterLayer', filename='character'), 
-function(x, filename, options=NULL, doPB=FALSE, ...) {
-	filetype <- .filetype(...)
+function(x, filename, options=NULL, format, ...) {
+
+	filename <- trim(filename)
+	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
 	if (filetype=='ascii') {stop('ascii files not yet supported by this function, you can use writeRaster') }
 	res <- filetype %in% c(.nativeDrivers())
 	if (res) { 
-		.startRasterWriting(x, filename, ...)
+		.startRasterWriting(x, filename, format=filetype, ...)
 	} else {
-		.startGDALwriting(x, filename, options, doPB, ...)
+		.startGDALwriting(x, filename, options, format=filetype, ...)
 	}		
 })
 
 setMethod('writeStart', signature(x='RasterBrick', filename='character'), 
-function(x, filename, options=NULL, doPB=FALSE, ...) {
-	filetype <- .filetype(...)
+function(x, filename, options=NULL, format, ...) {
+
+	filename <- trim(filename)
+	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 
-	if (filetype=='ascii') {stop('ascii files not yet supported by this function, you can use writeRaster') }
+	if (filetype=='ascii') {stop('ascii files cannot write multi-layer files') }
 	res <- filetype %in% c(.nativeDrivers(), 'ascii')
 	if (res) { 
-		.startRasterWriting(x, filename, ...)
+		.startRasterWriting(x, filename, format=filetype, ...)
 	} else {
-		.startGDALwriting(x, filename, options, doPB, ...)
+		.startGDALwriting(x, filename, options, ...)
 	}
 })
+
 
 setMethod('writeStop', signature(x='RasterLayer'), 
 function(x) {
@@ -53,7 +58,7 @@ function(x) {
 	if (res) { 
 		.stopRasterWriting(x)
 	} else {
-		.stopGDALwriting(x, doPB=TRUE)
+		.stopGDALwriting(x)
 	}
 })
 
@@ -63,7 +68,7 @@ function(x) {
 	if (res) { 
 		.stopRasterWriting(x)
 	} else {
-		.stopGDALwriting(x, doPB=TRUE)
+		.stopGDALwriting(x)
 	}
 })
 

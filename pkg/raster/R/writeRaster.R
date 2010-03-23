@@ -10,16 +10,16 @@ if (!isGeneric('writeRaster')) {
 	
 
 setMethod('writeRaster', signature(x='RasterLayer', filename='character'), 
-function(x, filename, ...) {
+function(x, filename, format, ...) {
 
-	filetype <- .filetype(...)
-
+	filename <- trim(filename)
+	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
 	dc <- dataContent(x)
 	if (dc == 'nodata') {
 		if (dataSource(x) == 'disk') {
-			return( saveAs(x, filename, ...) )
+			return( saveAs(x, filename, format=filetype, ...) )
 		} else {
 			stop('No usable data available for writing.')
 		}
@@ -28,19 +28,19 @@ function(x, filename, ...) {
 	
 	if (.isNativeDriver(filetype)) {
 		if (substr(dc, 1, 3) == 'row' ) {
-			x <- .writeRasterRow(x, filename=filename, ...)
+			x <- .writeRasterRow(x, filename=filename, format=filetype, ...)
 		} else {
-			x <- .writeRasterAll(x, filename=filename, ...)
+			x <- .writeRasterAll(x, filename=filename, format=filetype,...)
 		}  
 	} else if (filetype=='ascii') {
-		x <- .writeAscii(x, filename=filename, ...)
+		x <- .writeAscii(x, filename=filename, format=filetype,...)
 	} else if (filetype=='CDF') {
-		x <- .writeRasterCDF(x, filename=filename, ...)
+		x <- .writeRasterCDF(x, filename=filename, format=filetype,...)
 	} else { 
 		if (substr(dc, 1, 3) == 'row' ) {
-			x <- .writeGDALrow(x, filename=filename, ...)
+			x <- .writeGDALrow(x, filename=filename, format=filetype,...)
 		} else if (dc == 'all') {
-			x <- .writeGDALall(x, filename=filename, ...)
+			x <- .writeGDALall(x, filename=filename, format=filetype,...)
 		} else {
 			stop('cannot write data')
 		}		
@@ -51,10 +51,12 @@ function(x, filename, ...) {
 
 
 setMethod('writeRaster', signature(x='RasterBrick', filename='character'), 
-function(x, filename, bandorder='BIL', ...) {
+function(x, filename, bandorder='BIL', format, ...) {
 
-	filetype <- .filetype(...)
+	filename <- trim(filename)
+	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
+
 	
 	dc <- dataContent(x)
 	if (! dc %in% c('row', 'all') ) {
@@ -83,7 +85,11 @@ function(x, filename, bandorder='BIL', ...) {
 
 
 setMethod('writeRaster', signature(x='RasterStack', filename='character'), 
-function(x, filename, bandorder='BIL', ...) {
+function(x, filename, bandorder='BIL', format, ...) {
+	filename <- trim(filename)
+	filetype <- .filetype(format=format, filename=filename)
+	filename <- .getExtension(filename, filetype)
+
 	b <- brick(x, values=FALSE)
 	b <- writeStart(b, filename=filename, bandorder=bandorder, ...)
 	tr <- blockSize(b)

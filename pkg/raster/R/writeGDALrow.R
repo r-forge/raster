@@ -5,23 +5,18 @@
 # Version 0.9
 # Licence GPL v3
 
-.startGDALwriting <- function(raster, filename, options, doPB, ...) {
+.startGDALwriting <- function(raster, filename, options, ...) {
 	mvFlag <- NA
 	attr(raster@file, "transient") <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
-	if (doPB)  { attr(raster@file, "pb") <- pbCreate(nrow(raster), type=.progress(...) ) }
 	raster@file@driver <- 'gdal'
 	raster@data@source <- 'disk'		
 	raster@file@name <- filename
 	return(raster)
 }
 
-.stopGDALwriting <- function(raster, doPB) {
+.stopGDALwriting <- function(raster) {
 	saveDataset(raster@file@transient, raster@file@name)
 	GDAL.close(raster@file@transient) 
-	if (doPB) {
-		try (pbClose( attr(raster@file, "pb") ), silent=TRUE)
-		attr(raster@file, "pb") <- ''
-	}
 	if (class(raster) == 'RasterBrick') {
 		rasterout <- brick(raster@file@name)
 	} else {
@@ -36,12 +31,12 @@
 	return(rasterout)
 }
 
-.writeGDALrow <- function(raster, filename,  options=NULL, doPB=FALSE, ... ) {
+.writeGDALrow <- function(raster, filename,  options=NULL, ... ) {
 	if (!require(rgdal)) { stop() }
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {
-		raster <- .startGDALwriting(raster, filename=filename, options=options, doPB=doPB, ...)
+		raster <- .startGDALwriting(raster, filename=filename, options=options, ...)
 	}	
 	
 #	raster@data@values[is.nan(raster@data@values)] <- NA
@@ -70,10 +65,8 @@
 		}
 	}
 
-	if (doPB) {	pbStep( attr(raster@file, "pb"), rownr ) 	}
-	
 	if ( rownr == nrow(raster)) {
-		raster <- .stopGDALwriting(raster, doPB=doPB)
+		raster <- .stopGDALwriting(raster)
 	}
 	return(raster)
 }

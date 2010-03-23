@@ -40,7 +40,7 @@ init <- function(raster, fun, v, filename="", ...) {
 				} else if (v == 'y') { outraster <- setValues(outraster, rep(yFromRow(outraster, r), each=ncol(outraster)), r)
 				} else if (v == 'col') { outraster <- setValues(outraster, 1:ncol(outraster), r)
 				} else if (v == 'x') { outraster <- setValues(outraster, xFromCol(1:ncol(outraster)), r) }
-				outraster <- writeRaster(outraster, filename=filename, doPB=TRUE, ...)
+				outraster <- writeRaster(outraster, filename=filename, ...)
 			}	
 		}
 	} else {
@@ -51,7 +51,7 @@ init <- function(raster, fun, v, filename="", ...) {
 			n <- ncol(raster)
 			for (r in 1:nrow(raster)) {
 				outraster <- setValues(outraster, fun(n), r) 
-				outraster <- writeRaster(outraster, filename=filename, doPB=TRUE, ...)
+				outraster <- writeRaster(outraster, filename=filename, ...)
 			}
 		}
 	}
