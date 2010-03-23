@@ -58,7 +58,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		return(outRaster)
 	}	
 
-	if (dataContent(x) == 'all') { nl = 1 }  else { nl = 2 }
+	if (dataContent(x) == 'all') { nl = 3 }  else { nl = 4 }
 
 	if (canProcessInMemory(outRaster, nl)) {
 
