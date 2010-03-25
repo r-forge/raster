@@ -68,6 +68,13 @@
 		stop('cells are not equally spaced; you should extract values as points') }
 	yrange <- c(min(yy), max(yy))
 	resy <- (yrange[2] - yrange[1]) / (nrows-1)
+
+	if (yy[1] > yy[length(yy)]) {
+		topdown <- TRUE 
+	} else {
+		topdown <- FALSE
+	}
+
 	rm(yy)
 
 	xrange[1] <- xrange[1] - 0.5 * resx
@@ -80,7 +87,7 @@
 		projection(r) <- NA
 	}
 
-    return(r)
+    return(c(r, topdown))
 }
 
 
@@ -94,6 +101,8 @@
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
 	zvar <- .getzvar(zvar, vars) 
 	r <- .nctoraster(nc, vars, xvar, yvar)
+	topdown <- r[[2]]
+	r <- r[[1]]
 	
 	att <- var.inq.nc(nc, variable=zvar)
 	
@@ -171,12 +180,14 @@
 		d[d==missing_value] <- NA
 	}
 	d <- add_offset + d * scale_factor
+	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
 	
 # y needs to go from big to small
-	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
-	d <- as.vector( t( d[nrow(r):1,] ) )	
-	r <- setValues(r, d)
-	
-	return(r)
+	if (topdown) { 
+		d <- as.vector( t( d ) )	
+	} else {
+		d <- as.vector( t( d[nrow(r):1,] ) )	
+	}
+	return( setValues(r, d) )
 }
 
