@@ -58,6 +58,7 @@
     }  
 	
 	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
+	if (projstring == 'UNKNOWN') { projstring <- "NA" }
 
 	
 	if (band < 1) {
