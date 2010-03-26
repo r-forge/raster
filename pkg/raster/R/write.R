@@ -47,7 +47,7 @@ function(x, filename, options=NULL, format, ...) {
 	if (res) { 
 		.startRasterWriting(x, filename, format=filetype, ...)
 	} else {
-		.startGDALwriting(x, filename, options, ...)
+		.startGDALwriting(x, filename, options, format=filetype, ...)
 	}
 })
 
