@@ -102,5 +102,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 	pbClose(pb)
 	b <- writeStop(b)
 	return(invisible(b))
+	
 }
 )
+
