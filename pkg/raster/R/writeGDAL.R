@@ -58,7 +58,7 @@
 
 
 .writeGDALall <- function(raster, filename, options=NULL, ...) {
-	if (!require(rgdal)) { stop() }
+	if (! .requireRgdal() ) { stop('rgdal not available') }
 
 	mvFlag <- NA
 	transient <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)

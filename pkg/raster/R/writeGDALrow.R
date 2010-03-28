@@ -33,6 +33,7 @@
 
 .writeGDALrow <- function(raster, filename,  options=NULL, ... ) {
 	if (!require(rgdal)) { stop() }
+	if (! .requireRgdal() ) { stop('rgdal not available') }
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
 	if ( rownr == 1) {

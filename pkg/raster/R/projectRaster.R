@@ -5,7 +5,7 @@
 
 
 projectExtent <- function(object, projs) {
-	if (!require(rgdal)) { stop() }
+	if (!require(rgdal)) { stop( 'You need to install rgdal to be able to use this function' ) }
 
 	validObject(projection(object, asText=FALSE))
 	validObject(projection(projs, asText=FALSE))
@@ -53,7 +53,7 @@ projectExtent <- function(object, projs) {
 
 
 projectRaster <- function(from, to, method="ngb", filename="", ...)  {
-	if (!require(rgdal)) { stop() }
+	if (!require(rgdal)) { stop( 'You need to install rgdal to be able to use this function' ) }
 	
 	
 	if (dataContent(from) != 'all' & dataSource(from) == 'ram') { stop('no vales for "from". Nothing to do') }
