@@ -1,12 +1,12 @@
 Package: raster
 Type: Package
 Title: Geographic analysis and modeling with raster data
-Version: 1.0.0-4
-Date: 22-March-2010
+Version: 1.0.0-5
+Date: 28-March-2010
 Depends: methods, sp, R (>= 2.8.0)
 Suggests: rgdal (>= 0.5-33), RNetCDF, igraph, tcltk, lattice
 Author: Robert J. Hijmans & Jacob van Etten
 Maintainer: Robert J. Hijmans <r.hijmans@gmail.com> 
-Description: Package for reading, writing, and manipulating raster (grid) type spatial data
+Description: Package for reading, writing, and manipulating raster (grid) type geographic (spatial) data
 License: GPL (>=3)
 URL: http://raster.r-forge.r-project.org/
