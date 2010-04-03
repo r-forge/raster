@@ -1,7 +1,7 @@
 # Authors: Robert J. Hijmans 
 # contact: r.hijmans@gmail.com
-# Date : October 2008
-# Version 0.9
+# Date : March 2010
+# Version 1.0
 # Licence GPL v3
 
 	
@@ -30,10 +30,21 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	}
 
 	compare(rasters, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
-	bb <- unionExtent(rasters)
+	e <- unionExtent(rasters)
 	outraster <- raster(rasters[[1]])
-	outraster <- setExtent(outraster, bb, keepres=TRUE, snap=FALSE)
+	outraster <- setExtent(outraster, e, keepres=TRUE, snap=FALSE)
 
+	ds = sapply(rasters, dataSource)
+	dc = sapply(rasters, dataContent)
+	hasvalues = ds == 'disk' | dc == 'all'
+	if (! all(hasvalues)) {
+		rasters = rasters[hasvalues]
+		if (length(rasters) == 0 ) {
+			return(outraster)
+		}
+	}
+
+	
 	isInt <- TRUE
 	for (i in 1:length(rasters)) {
 		dtype <- .shortDataType(rasters[[i]]@file@datanotation)
@@ -41,7 +52,6 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 			isInt <- FALSE
 		}
 	}
-	
 	if (isInt) { datatype <- 'INT4S'
 	} else { datatype <- 'FLT4S'
 	}
@@ -67,7 +77,8 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 			stop('File exists, use overwrite = TRUE if you want to overwrite it')
 		}
 	}
-	
+
+
 	if (todisk) {
 		outraster <- writeStart(outraster, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 	} else {
@@ -75,10 +86,6 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	}
 	
 	pb <- pbCreate(nrow(outraster), type=progress)
-	
-	ds = sapply(rasters, dataSource)
-	dc = sapply(rasters, dataContent)
-	hasvalues = ds[i] == 'disk' | dc[i] == 'all'
 	
 	rd <- matrix(nrow=ncol(outraster), ncol=length(rasters)) 
 	ids = rd
@@ -90,17 +97,14 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	emptyrow <- rep(NA, ncol(outraster))
 	
 	for (r in 1:nrow(outraster)) {
-		rd[] = NA
+		rdd = rd
 		for (i in 1:length(rasters)) { 
 			if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
-				if (hasvalues) {
-					rd[ids[,i], i] <- getValues(rasters[[i]], r+1-rowcol[i,1])
-				} 
-				#	rd[,d] <- NA
+				rdd[ids[,i], i] <- getValues(rasters[[i]], r+1-rowcol[i,1])
 			}	
 		}
 		
-		res <- apply(rd, 1, FUN=fun, na.rm=na.rm)
+		res <- apply(rdd, 1, FUN=fun, na.rm=na.rm)
 		
 		if (todisk) {
 			writeValues(outraster, res, r)
