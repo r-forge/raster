@@ -10,10 +10,8 @@
 	fcon <- file(x, "rb")
 	tst <- try( w <- readBin(fcon, what='character', n=1), silent=TRUE)
 	close(fcon)
-	if (isTRUE((substr(w, 1, 3) == "CDF"))) {
-		return(TRUE) 
-	} else {
-		return(FALSE)
+	if ( isTRUE((substr(w, 1, 3) == "CDF" ))) { return(TRUE) 
+	} else { return(FALSE)
 	}
 }
 
@@ -26,7 +24,7 @@
 		} else if ('longitude' %in% vars) { xvar <- 'longitude' 
 		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(xvar %in% vars)) { stop( paste('Cannot find xvar in file. Select one from:\n', paste(vars, collapse=", "))) }	
+	} else if (!(xvar %in% vars)) { stop( paste('Cannot find "xvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(xvar)
 }
 
@@ -36,13 +34,13 @@
 		} else if ('latitude' %in% vars) { yvar <- 'latitude' 
 		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(yvar %in% vars)) { stop( paste('Cannot find yvar in file. Select one from:\n', paste(vars, collapse=", "))) }	
+	} else if (!(yvar %in% vars)) { stop( paste('Cannot find "yvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(yvar)
 }
 
 .getzvar <- function(zvar, vars) {
 	if (zvar == '') { zvar <- 'z' }
-	if (!(zvar %in% vars)) { stop ( 'Cannot find an obvious zvar in file. Select one from:\n', paste(vars, collapse=", ") ) }
+	if (!(zvar %in% vars)) { stop ( 'Cannot find an obvious "zvar" in file. Select one from:\n', paste(vars, collapse=", ") ) }
 	return(zvar)
 }
 
@@ -70,9 +68,9 @@
 	resy <- (yrange[2] - yrange[1]) / (nrows-1)
 
 	if (yy[1] > yy[length(yy)]) {
-		topdown <- TRUE 
+		toptobottom  <- FALSE
 	} else {
-		topdown <- FALSE
+		toptobottom <- TRUE
 	}
 
 	rm(yy)
@@ -86,14 +84,16 @@
 	if (xrange[1] < -400 | xrange[2] > 400 | yrange[1] < -100 | yrange[2] > 100) {
 		projection(r) <- NA
 	}
-
-    return(c(r, topdown))
+	
+	r@file@toptobottom <- toptobottom
+    return(r)
 }
 
 
 .rasterFromCDF <- function(filename, type, xvar='', yvar='', zvar='', time=NA, ...) {
+
 # to be improved for large files (i.e. do not read all data from file...)
-	if (!require(RNetCDF)) { stop() }
+	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
 	nc <- open.nc(filename)
 	nv <- file.inq.nc(nc)$nvars
@@ -101,8 +101,6 @@
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
 	zvar <- .getzvar(zvar, vars) 
 	r <- .nctoraster(nc, vars, xvar, yvar)
-	topdown <- r[[2]]
-	r <- r[[1]]
 	
 	att <- var.inq.nc(nc, variable=zvar)
 	
@@ -182,8 +180,7 @@
 	d <- add_offset + d * scale_factor
 	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
 	
-# y needs to go from big to small
-	if (topdown) { 
+	if ( r@file@toptobottom ) { 
 		d <- as.vector( t( d ) )	
 	} else {
 		d <- as.vector( t( d[nrow(r):1,] ) )	
