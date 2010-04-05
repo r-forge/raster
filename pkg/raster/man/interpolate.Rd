@@ -29,6 +29,7 @@ interpolate(object, ...)
   \tab  \code{object} \tab a RasterLayer object \cr
   \tab  \code{model}  \tab A fitted model\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
+  \tab  \code{xyOnly} \tab Logical. If \code{TRUE}, values of the Raster* object are not considered as co-variables; and only x and y (longitude and latitude) are used. This should match the model \cr
   \tab  \code{ext} \tab An Extent object to limit the prediction to a sub-region of \code{x} \cr
   \tab  \code{const}  \tab data.frame. Can be used to add a constant for which there is no Raster object for model predictions. Particulalry useful if the constant is a character-like factor value \cr
   \tab  \code{index}  \tab Integer. To select the column if 'predict.model' returns a matrix with multiple columns \cr
