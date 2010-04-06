@@ -13,7 +13,7 @@ function(x, maxpixels=100000, zfac=6, col=terrain.colors, rev=TRUE, ...) {
 # maxpixels=100000; zfac=6; col=terrain.colors; rev=TRUE
 # most of the below code was taken from example(surface3d) in the rgl package
 	if (!require(rgl)){ stop("to use this function you need to install the 'rgl' package") }
-	x <- sampleRegular(x, n=maxpixels, asRaster=TRUE)
+	x <- sampleRegular(x, size=maxpixels, asRaster=TRUE)
 	X <- xFromCol(x,1:ncol(x))
 	Y <- yFromRow(x, nrow(x):1)
 	Z <- t((values(x, format='matrix'))[nrow(x):1,])
