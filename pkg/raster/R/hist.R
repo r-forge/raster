@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 setMethod('hist', signature(x='RasterStackBrick'), 
-	function(x, layer, maxsamp=10000, plot=TRUE, main, ...) {
+	function(x, layer, maxpixels=10000, plot=TRUE, main, ...) {
 		
 		if (missing(layer)) y = 1:nlayers(x)
 		else if (is.character(layer)) {
