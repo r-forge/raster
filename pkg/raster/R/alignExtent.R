@@ -50,20 +50,19 @@ alignExtent <- function(extent, object) {
 	if ( e@ymin == e@ymax ) {
 		if (oldext@ymax > e@ymax) {
 			e@ymax = e@ymax + yres(object)
-		} else {
+		} 
+		if (oldext@ymin < e@ymin) {
 			e@ymin = e@ymin - yres(object)		
 		}
 	}
 	if ( e@xmin == e@xmax ) {
 		if (oldext@xmax > e@xmax) {
 			e@xmax = e@xmax + xres(object)
-		} else {
+		} 
+		if (oldext@xmin < e@xmin) {
 			e@xmin = e@xmin - xres(object)		
 		}
 	}
-	
-	
-	
 	return(e)
 }
 
