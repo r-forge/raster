@@ -88,7 +88,11 @@ setMethod('brick', signature(x='SpatialGrid'),
 		projection(b) <- x@proj4string
 		rowcol(b) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])		
 		if (class(x) == 'SpatialGridDataFrame') {
-			b <- setValues(r, x@data)
+			m = as.matrix(x@data)
+			if (! is.numeric(m)) {
+				m[] = as.numeric(m)
+			}
+			b <- setValues(b, m)
 		}
 		return(b)
 	}	
@@ -103,7 +107,11 @@ setMethod('brick', signature(x='SpatialPixels'),
 		rowcol(b) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])
 		if (class(x) == 'SpatialPixelsDataFrame') {
 			x <- as(x, 'SpatialGridDataFrame')
-			b <- setValues(b, x@data)
+			m = as.matrix(x@data)
+			if (! is.numeric(m)) {
+				m[] = as.numeric(m)
+			}
+			b <- setValues(b, m)
 		}
 		return(b)
 	}
