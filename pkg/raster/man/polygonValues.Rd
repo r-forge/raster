@@ -8,7 +8,7 @@
 \title{ Extract values from a RasterLayer by polygons }
 
 \description{
-This method returns the values of the cells of a Raster object that is covered by a polygon.
+This method returns the values of the cells of a Raster object that is covered by a polygon. A cell is covered if its center is inside the polygon (but see the \code{weights} option for considering partly covered cells).
 }
 
 \usage{
@@ -27,6 +27,10 @@ There are two related additional arguments:
 \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction of each cell covered (rounded to 1/100; and the sum of weights should be ~1. The weights can be used for averaging; see examples. This option can be useful if the polygons are small relative to the cells size of the RasterLayer
 
 \code{cellnumbers}. If \code{cellnumbers=TRUE} and \code{weights=TRUE}, cellnumbers will also be returned. 
+}
+
+\note{
+Relatively small polygons (e.g. those smaller than a single cell of the RasterLayer), or polygons with an odd shape, may not return any values if they do not cover any RasterLayer cell centers. In some cases, you could use the centroids of such polygons, for example using \code{xyValues(coordinates(p))} or \code{xyValues(coordinates(p), method='bilinear')}
 }
 
 \value{
