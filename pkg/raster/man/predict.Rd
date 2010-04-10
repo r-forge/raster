@@ -65,7 +65,7 @@ a RasterLayer object
 # and 50 (random) pseudo-absence points. This type of model is often used to predict species distributions
 
 # create a RasterStack (a set of predictor rasters)
-logo <- stack(system.file("external/Rlogo.grd", package="raster"))
+logo <- stack(system.file("external/rlogo.grd", package="raster"))
 layerNames(logo)
 
 #get presence and random background (pseudo-absence) points

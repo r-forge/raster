@@ -91,7 +91,7 @@ s2 <- writeStop(s2)
 }
 
 ## write values of a RasterStack to a RasterBrick
-s <- stack(system.file("external/Rlogo.grd", package="raster"))
+s <- stack(system.file("external/rlogo.grd", package="raster"))
 # create empty brick
 b <- brick(s, values=FALSE)  
 b <- writeStart(b, filename="test.grd", format="raster",overwrite=TRUE)
