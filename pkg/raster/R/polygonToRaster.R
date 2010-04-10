@@ -211,11 +211,13 @@ polygonsToRaster <- function(spPolys, raster, field=0, overlap='last', mask=FALS
 							#	txt <- paste('something funny at row:', r, 'polygon:',j)
 							#	stop(txt)
 							#}
-							if (x1 > rxmx) { next }
-							if (x2 < rxmn) { next }
+							#  if (x1 > rxmx) { next }
+							# if (x2 < rxmn) { next }
 							# adjust to skip first cell if the center is not covered by this polygon
 							x1a <- x1 + adj
 							x2a <- x2 - adj
+							if (x1a > rxmx) { next }
+							if (x2a < rxmn) { next }
 							x1a <- min(rxmx, max(rxmn, x1a))
 							x2a <- min(rxmx, max(rxmn, x2a))
 							col1 <- colFromX(raster, x1a)
