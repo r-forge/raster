@@ -57,6 +57,7 @@ a RasterLayer object
 
 \examples{
 ## Thin plate spline interpolation with x and y only
+if (require(spam)) {
 if (require(fields)) {
 r <- raster(system.file("external/test.grd", package="raster"))
 ra <- aggregate(r, 10)
@@ -68,7 +69,7 @@ p <- interpolate(p, tps)
 p <- mask(p, r)
 plot(p)
 }
- 
+}
 
 ##gstat examples
 
