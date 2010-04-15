@@ -191,6 +191,7 @@ Maps
     \code{\link{image}} \tab Plot a Raster* using the image function \cr
     \code{\link{persp}} \tab Perspective plot of a RasterLayer \cr
     \code{\link{plot3D}} \tab 3-dimensional plot of a RasterLayer \cr
+    \code{\link{plotRGB}} \tab Combine three layers in a red-green-blue plot \cr
     \code{\link{contour}} \tab Contour plot of a RasterLayer \cr
  }
 
