@@ -96,6 +96,7 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			off = c(start-1, 0)
 			v = matrix(v, nrow=ncol(x))
 			gd <- putRasterData(x@file@transient, v, band=1, offset=off) 	
+			.Call("RGDAL_SetNoDataValue", gd, as.double(x@file@nodatavalue), PACKAGE = "rgdal")
 		}
 		return(invisible(NULL))
 	} 		

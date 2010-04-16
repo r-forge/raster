@@ -4,6 +4,8 @@
 # Licence GPL v3
 
 
+
+
 'dataType<-' <- function(x, value) {
 	if (class(x) == 'RasterStack') {
 		stop('Cannot set datatype of a RasterStack')

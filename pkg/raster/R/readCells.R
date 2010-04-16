@@ -57,7 +57,9 @@
 
 
 .readCellsGDAL <- function(raster, cells) {
-	if (!require(rgdal)) { stop() }
+
+	if (! .requireRgdal() ) { stop('rgdal not available') }
+
 	colrow <- matrix(ncol=3, nrow=length(cells))
 	colrow[,1] <- colFromCell(raster, cells)
 	colrow[,2] <- rowFromCell(raster, cells)

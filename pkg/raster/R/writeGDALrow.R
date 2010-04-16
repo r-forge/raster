@@ -6,17 +6,23 @@
 # Licence GPL v3
 
 .startGDALwriting <- function(raster, filename, options, ...) {
-	mvFlag <- NA
-	attr(raster@file, "transient") <- .getGDALtransient(raster, filename=filename, mvFlag=mvFlag, options=options, ...)
+	temp <- .getGDALtransient(raster, filename=filename, options=options, ...)
+	
+	attr(raster@file, "transient") <- temp[[1]]
+	raster@file@nodatavalue <- temp[[2]]
+	
 	raster@file@driver <- 'gdal'
 	raster@data@source <- 'disk'		
 	raster@file@name <- filename
 	return(raster)
 }
 
+
 .stopGDALwriting <- function(raster) {
+
 	saveDataset(raster@file@transient, raster@file@name)
 	GDAL.close(raster@file@transient) 
+	
 	if (class(raster) == 'RasterBrick') {
 		rasterout <- brick(raster@file@name)
 	} else {
@@ -31,8 +37,10 @@
 	return(rasterout)
 }
 
+
 .writeGDALrow <- function(raster, filename,  options=NULL, ... ) {
 	if (!require(rgdal)) { stop() }
+
 	if (! .requireRgdal() ) { stop('rgdal not available') }
 
 	rownr <- rowFromCell(raster, dataIndices(raster)[1])
@@ -59,10 +67,14 @@
 	
     nl <- nlayers(raster)
 	if (nl == 1) {
-		x <- putRasterData(raster@file@transient, values(raster, rownr), band=1, c((rownr-1), 0)) 	
+		v <- values(raster)
+	#	v[is.na(v)] <- raster@file@nodatavalue
+		x <- putRasterData(raster@file@transient, v, band=1, c((rownr-1), 0)) 	
 	} else {
 		for (i in 1:nl) {
-			x <- putRasterData(raster@file@transient, values(raster, rownr)[,i], band=i, c((rownr-1), 0)) 
+			v <- values(raster)[,i]
+	#		v[is.na(v)] <- raster@file@nodatavalue
+			x <- putRasterData(raster@file@transient, v, band=i, c((rownr-1), 0)) 
 		}
 	}
 
@@ -71,3 +83,4 @@
 	}
 	return(raster)
 }
+
