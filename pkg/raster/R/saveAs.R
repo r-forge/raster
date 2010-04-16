@@ -74,6 +74,7 @@ setMethod('saveAs', signature(x='RasterStackBrick', filename='character'),
 				writeValues(b, v, tr$row[i])
 				pbStep(pb, i)
 			}
+			b <- writeStop(b)
 			pbClose(pb)
 			return(b)
 		}

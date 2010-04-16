@@ -11,7 +11,7 @@ if (!isGeneric("plotRGB")) {
 }	
 
 setMethod("plotRGB", signature(x='Raster'), 
-function(x, r=1, g=2, b=3, maxpixels=100000, ...) { 
+function(x, r=1, g=2, b=3, maxpixels=100000, axes=TRUE, xlab='', ylab='', extent=NULL, ...) { 
 
 	r <- sampleRegular(raster(x,r), maxpixels, asRaster=TRUE)
 	g <- sampleRegular(raster(x,g), maxpixels, asRaster=TRUE)
@@ -20,14 +20,12 @@ function(x, r=1, g=2, b=3, maxpixels=100000, ...) {
 	z <- rgb(getValues(r), getValues(g), getValues(b), max=255)
 	col <- unique(z)
 	z <- match(z, col)
-	r = setValues(r, z)
-	plot(r, col=col, maxpixels=maxpixels, legend=FALSE, ...)
 
-#	x <- xFromCol(r, 1:ncol(r))
-#	y <- yFromRow(r, nrow(r):1)
-#	z <- matrix(z, nrow=nrow(r), ncol=ncol(r), byrow=T)
-#	z <- t(z[nrow(z):1,])
-#	image(x=x, y=y, z=z, col=col, ...)
+	x <- xFromCol(r, 1:ncol(r))
+	y <- yFromRow(r, nrow(r):1)
+	z <- matrix(z, nrow=nrow(r), ncol=ncol(r), byrow=T)
+	z <- t(z[nrow(z):1,])
+	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, legend=FALSE, ...)
 }
 )
 

@@ -68,12 +68,12 @@
     nl <- nlayers(raster)
 	if (nl == 1) {
 		v <- values(raster)
-	#	v[is.na(v)] <- raster@file@nodatavalue
+		v[is.na(v)] <- raster@file@nodatavalue
 		x <- putRasterData(raster@file@transient, v, band=1, c((rownr-1), 0)) 	
 	} else {
 		for (i in 1:nl) {
 			v <- values(raster)[,i]
-	#		v[is.na(v)] <- raster@file@nodatavalue
+			v[is.na(v)] <- raster@file@nodatavalue
 			x <- putRasterData(raster@file@transient, v, band=i, c((rownr-1), 0)) 
 		}
 	}

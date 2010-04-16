@@ -10,7 +10,7 @@ Merge RasterLayers
 }
 
 \description{
-Merge RasterLayers to form a new RasterLayer with a larger spatial extent
+Merge RasterLayers to form a new RasterLayer with a larger spatial extent. 
 }
 
 \usage{
@@ -45,6 +45,7 @@ A full call to merge is:
 \details{
 The RasterLayer objects must have the same origin and resolution. 
 In areas where the RasterLayers overlap, the values of the RasterLayer that is first in the sequence of arguments will be retained. 
+If you'd rather use the average, or do another computation, you can use \code{\link[raster]{mosaic}} instead of merge.
 }
 
 \value{
@@ -53,7 +54,7 @@ A new RasterLayer object, and in some cases, the side effect of a new file on di
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{crop}}, \code{\link[raster]{expand}}}
+\seealso{ \code{\link[raster]{mosaic}}, \code{\link[raster]{crop}}, \code{\link[raster]{expand}}}
 
 \examples{
 r1 <- raster(xmx=-150, ymn=60, ncols=30, nrows=30)

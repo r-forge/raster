@@ -43,32 +43,32 @@ function(x, filename, options=NULL, format, ...) {
 	filename <- .getExtension(filename, filetype)
 
 	if (filetype=='ascii') {stop('ascii files cannot write multi-layer files') }
-	res <- filetype %in% c(.nativeDrivers(), 'ascii')
-	if (res) { 
-		.startRasterWriting(x, filename, format=filetype, ...)
+	native <- filetype %in% c(.nativeDrivers(), 'ascii')
+	if (native) { 
+		return( .startRasterWriting(x, filename, format=filetype, ...) )
 	} else {
-		.startGDALwriting(x, filename, options, format=filetype, ...)
+		return( .startGDALwriting(x, filename, options, format=filetype, ...) )
 	}
 })
 
 
 setMethod('writeStop', signature(x='RasterLayer'), 
 function(x) {
-	res <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
-	if (res) { 
-		.stopRasterWriting(x)
+	native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
+	if (native) { 
+		return( .stopRasterWriting(x) )
 	} else {
-		.stopGDALwriting(x)
+		return( .stopGDALwriting(x) )
 	}
 })
 
 setMethod('writeStop', signature(x='RasterBrick'), 
 function(x) {
-	res <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
-	if (res) { 
-		.stopRasterWriting(x)
+	native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
+	if (native) { 
+		return( .stopRasterWriting(x) )
 	} else {
-		.stopGDALwriting(x)
+		return( .stopGDALwriting(x) )
 	}
 })
 
@@ -83,8 +83,9 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			x@data@max <- max(x@data@max, rsd)
 		}	
 
-		res <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
-		if (res) {
+		native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
+		
+		if (native) {
 			if (x@file@dtype == "INT" || x@file@dtype =='LOG' ) { 
 				v <- as.integer(round(v))  
 				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
@@ -94,6 +95,7 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			writeBin(v, x@file@con, size=x@file@dsize )
 		} else {
 			off = c(start-1, 0)
+			v[is.na(v)] <- x@file@nodatavalue
 			v = matrix(v, nrow=ncol(x))
 			gd <- putRasterData(x@file@transient, v, band=1, offset=off) 	
 			.Call("RGDAL_SetNoDataValue", gd, as.double(x@file@nodatavalue), PACKAGE = "rgdal")
@@ -107,10 +109,10 @@ setMethod('writeValues', signature(x='RasterLayer'),
 setMethod('writeValues', signature(x='RasterBrick'), 
 	function(x, v, start) {
 		v[is.infinite(v)] <- NA
+	
+		native <- x@file@driver %in% .nativeDrivers()
 		
-		res <- x@file@driver %in% .nativeDrivers()
-		
-		if (res) {
+		if (native) {
 			if (x@file@dtype == "INT" || x@file@dtype =='LOG' ) { 
 				v <- as.integer(round(v))  
 				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
@@ -123,6 +125,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 			off = c(start-1, 0)
 			for (i in 1:nl) {
 				vv = matrix(v[,i], nrow=ncol(x))
+				vv[is.na(vv)] <- x@file@nodatavalue
 				gd <- putRasterData(x@file@transient, vv, band=i, offset=off) 	
 			}
 		}

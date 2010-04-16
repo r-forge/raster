@@ -56,7 +56,6 @@ function(x, filename, bandorder='BIL', format, ...) {
 	filename <- trim(filename)
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
-
 	
 	dc <- dataContent(x)
 	if (! dc %in% c('row', 'all') ) {
@@ -86,6 +85,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 
 setMethod('writeRaster', signature(x='RasterStack', filename='character'), 
 function(x, filename, bandorder='BIL', format, ...) {
+
 	filename <- trim(filename)
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)

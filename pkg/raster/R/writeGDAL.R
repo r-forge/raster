@@ -96,7 +96,6 @@
 		v <- values(raster, format='matrix')
 		v[is.na(v)] = naValue
 		x <- putRasterData(transient, t(v), band=1, c(0, 0)) 
-		.Call("RGDAL_SetNoDataValue", x, as.double(naValue), PACKAGE = "rgdal")
 	} else {
 	    for (i in 1:nl) {
 			v <- values(raster)[,i]
