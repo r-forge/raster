@@ -24,17 +24,17 @@ predict(object, ...)
 \section{Methods}{
 \describe{
  
-\code{predict(object, model, filename='', ext=NULL, const=NULL, index=1, se.fit=FALSE, ...)}
+\code{predict(object, model, filename='', ext=NULL, const=NULL, index=1, se.fit=FALSE, na.rm=TRUE, ...)}
   
 \tabular{rll}{  
-  \tab  \code{object} \tab a RasterStack, RasterBrick or RasterLayer object \cr
-  \tab  \code{model}  \tab A fitted model\cr
+  \tab  \code{object} \tab a Raster* object. Typcially a multi-layer type (RasterStack or RasterBrick) \cr
+  \tab  \code{model}  \tab A fitted model of any class that has a 'predict' method. E.g. glm, gam, or randomForest \cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
   \tab  \code{ext} \tab An Extent object to limit the prediction to a sub-region of \code{x} \cr
-  \tab  \code{const}  \tab data.frame. Can be used to add a constant for which there is no Raster object for model predictions. Particulalry useful if the constant is a character-like factor value \cr
+  \tab  \code{const}  \tab data.frame. Can be used to add a constant for which there is no Raster object for model predictions. Particulalry useful if the constant is a character-like factor value for which it is currently not possible to make a RasterLayer \cr
   \tab  \code{index}  \tab Integer. To select the column if predict.'model' returns a matrix with multiple columns \cr
   \tab  \code{se.fit}  \tab Extract the standard error rather then the prediction (works for GLM and perhaps other methods where the prediction and se.fit are returned as a list) \cr
-  \tab  \code{na.rm}  \tab Logical. Remove cells with NA values in the predictors before solving the model (and return a NA value for those cells). In most cases this will not affect the output. This option prevents errors with models that cannot handle NA values. \cr
+  \tab  \code{na.rm}  \tab Logical. Remove cells with NA values in the predictors before solving the model (and return a NA value for those cells). This option prevents errors with models that cannot handle NA values. In most other cases this will not affect the output. An exception is when predicting with a boosted regression trees model because these return predicted value even if some (or all!) variables are NA \cr
   \tab  \code{...}  \tab Additional arguments to pass to the predict.'model' function \cr
 }
 
@@ -68,6 +68,12 @@ a RasterLayer object
 logo <- stack(system.file("external/rlogo.grd", package="raster"))
 layerNames(logo)
 
+#par(mfrow=c(2,2))
+#plotRGB(logo, main='logo')
+#plot(logo, 1, col=rgb(cbind(0:255,0,0), maxColorValue=255))
+#plot(logo, 2, col=rgb(cbind(0,0:255,0), maxColorValue=255))
+#plot(logo, 3, col=rgb(cbind(0,0,0:255), maxColorValue=255))
+
 #get presence and random background (pseudo-absence) points
 presence <- matrix(c(48, 48, 48, 53, 50, 46, 54, 70, 84, 85, 74, 84, 95, 85, 66, 42, 26, 4, 19, 17, 7, 14, 26, 29, 39, 45, 51, 56, 46, 38, 31, 22, 34, 60, 70, 73, 63, 46, 43, 28), ncol=2)
 # random background
@@ -90,8 +96,8 @@ points(background, bg='red', pch=21)
 
 ## also try:
 # require(randomForest)
-## formula <- as.factor(presabs) ~.
-# formula <- presabs ~.
+## formula <- as.factor(presback) ~.
+# formula <- presback ~.
 # model <- randomForest(formula, data=data.frame(v))
 # r2 <- predict(logo, type='response', model, progress='text')
 ## note the additional argument "type='response'" that is passed to predict.randomForest
