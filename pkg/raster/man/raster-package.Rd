@@ -184,12 +184,13 @@ You can also use indexing with \code{[} for cell numbers, and \code{[[} for row 
 
 Maps
   \tabular{ll}{
-    \code{\link{plot}} \tab Plot a Raster* object\cr
-    \code{\link{plot3D}} \tab 3-dimensional plot of a RasterLayer \cr
+    \code{\link{plot}} \tab Plot a Raster* object. The main method to create a map \cr
     \code{\link{plotRGB}} \tab Combine three layers (red, green, blue channels) into a single 'real color' image \cr
+    \code{\link{plot3D}} \tab 3-dimensional plot of a RasterLayer \cr
     \code{\link{image}} \tab Plot a Raster* using the image function \cr
     \code{\link{persp}} \tab Perspective plot of a RasterLayer \cr
     \code{\link{contour}} \tab Contour plot of a RasterLayer \cr
+    \code{\link{filledContour}} \tab Filled contour plot of a RasterLayer \cr
  }
 
 Interacting with a map (plot of a RasterLayer)
@@ -366,7 +367,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 
 
 \section{Acknowledgements}{
-We thank the following persons for suggestions to improve the package: Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, Agustin Lobo, Matteo Mattiuzzi, and Kevin Ummel.
+We thank the following persons for suggestions to improve the package: Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, Agustin Lobo, Matteo Mattiuzzi, Edzer Pebesma, and Kevin Ummel.
 }
 
 \keyword{package}
