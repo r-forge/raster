@@ -28,11 +28,11 @@
 	yx <- round(yx, digits=9)
 
 	if (type == 'RasterBrick') {
-		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
+		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs="")
 		x@data@nlayers <- as.integer(gdalinfo[["bands"]])
 		x@file@nbands <- as.integer(gdalinfo[["bands"]])
 	} else {
-		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, projs="")
+		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs="")
 		x@file@nbands <- as.integer(gdalinfo[["bands"]])
 		band <- as.integer(band)
 		if ( band > nbands(x) ) {

@@ -19,7 +19,7 @@ filledContour(x, y=1, maxpixels=100000, ...)
   \item{...}{Any argument that can be passed to \code{\link[graphics]{filled.contour}} (graphics package)}  
 }
 
-\seealso{ \code{\link[graphics]{filledContour}}, \code{\link[raster]{persp}}, \code{\link[raster]{plot}} }
+\seealso{ \code{\link[graphics]{filled.contour}}, \code{\link[raster]{persp}}, \code{\link[raster]{plot}} }
 
 \author{ Robert J. Hijmans }
 

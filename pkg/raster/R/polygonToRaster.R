@@ -318,7 +318,7 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 		y <- yFromRow(bigraster, rr)
 		yn <- y - hr
 		yx <- y + hr
-		raster <- raster(xmn=rxmn, xmx=rxmx, ymn=yn, ymx=yx, ncols=nc, nrows=f, projs=prj)
+		raster <- raster(xmn=rxmn, xmx=rxmx, ymn=yn, ymx=yx, ncols=nc, nrows=f, crs=prj)
 		subpol <- subset(polinfo, !(polinfo[,2] > yx | polinfo[,3] < yn), drop=FALSE)
 		for (r in 1:f) {
 			rv <- rv1

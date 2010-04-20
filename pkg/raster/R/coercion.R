@@ -135,7 +135,7 @@ setAs('Extent', 'SpatialPolygonsDataFrame',
 # spatstat
 setAs('im', 'RasterLayer', 
 	function(from) {
-		r = raster(nrows=from$dim[1], ncols=from$dim[2], xmn=from$xrange[1], xmx=from$xrange[2], ymn=from$yrange[1], ymx=from$yrange[2], projs='')
+		r = raster(nrows=from$dim[1], ncols=from$dim[2], xmn=from$xrange[1], xmx=from$xrange[2], ymn=from$yrange[1], ymx=from$yrange[2], crs='')
 		r = setValues(r, from$v)
 		flip(r, direction='y')
 	}

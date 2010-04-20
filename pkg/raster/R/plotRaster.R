@@ -32,11 +32,8 @@
 #		} else  { extent <- intersectExtent(extent, ext) }
 #	}
 	
-	if (is.null(extent)) {
-		object <- sampleRegular(object, size=maxpixels, asRaster=TRUE, corners=TRUE)
-	} else {
-		object <- sampleRegular(object, size=maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
-	}
+	object <- sampleRegular(object, size=maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
+
 	x <- (0:ncol(object)) * xres(object) + xmin(object) 
 	y <- (0:nrow(object)) * yres(object) + ymin(object) 		
 	z <- values(object, format='matrix')

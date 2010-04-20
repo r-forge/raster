@@ -4,13 +4,13 @@
 # Licence GPL v3
 
 
-projectExtent <- function(object, projs) {
+projectExtent <- function(object, crs) {
 	if (! .requireRgdal() ) { stop('rgdal not available') }
 
 	validObject(projection(object, asText=FALSE))
-	validObject(projection(projs, asText=FALSE))
+	validObject(projection(crs, asText=FALSE))
 	projfrom <- projection(object)
-	projto <- projection(projs)
+	projto <- projection(crs)
 	
 	xy1 <- xyFromCell(object, cellFromCol(object, 1))
 	xy1[,1] <- xy1[,1] - 0.5 * xres(object)
@@ -47,7 +47,7 @@ projectExtent <- function(object, projs) {
 		miny <- miny - 0.5
 	}
 	
-	obj <- raster(extent(minx, maxx, miny,  maxy), nrows=nrow(object), ncols=ncol(object), proj=(projs))
+	obj <- raster(extent(minx, maxx, miny,  maxy), nrows=nrow(object), ncols=ncol(object), crs=crs)
 	return(obj)
 }
 

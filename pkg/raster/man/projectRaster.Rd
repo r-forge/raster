@@ -13,7 +13,7 @@ be used as \code{'to'} RasterLayer in \code{projectRaster}. \code{projectRaster}
 
 \usage{
 projectRaster(from, to, method="ngb", filename="", ...) 
-projectExtent(object, projs)
+projectExtent(object, crs)
 }
 
 \arguments{
@@ -23,7 +23,7 @@ projectExtent(object, projs)
   \item{filename}{character. output filename}  
   \item{...}{additional arguments. See Details.}    
   \item{object}{Extent or Raster* object}
-  \item{projs}{a character string describing a projection and datum in PROJ4 format}
+  \item{crs}{Character or object of class CRS. PROJ4 type descriptin of the coordinate reference system}
 
 }
 
