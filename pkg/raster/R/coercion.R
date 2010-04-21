@@ -28,7 +28,7 @@
 		bb <- bbox(object)
 		cs <- res(object)
 		cc <- bb[,1] + (cs/2)
-		cd <- ceiling(diff(t(bb))/cs)
+		cd = cbind(ncol(object), nrow(object))
 		grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
 		if (dataframe) {
 			values <- data.frame(getValues(object))
