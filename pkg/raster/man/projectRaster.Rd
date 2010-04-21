@@ -68,7 +68,7 @@ newproj <- "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100 +ellps=WGS84"
 if (require(rgdal)) {
 pr <- projectExtent(r, newproj)
 # Adjust the cell size 
-res(pr) <- 100000
+res(pr) <- 200000
 
 # project the values of RasterLayer 'r' to the new RasterLayer 'projras'
 pr <- projectRaster(r, pr)

@@ -68,7 +68,7 @@ r <- raster(system.file("external/test.grd", package="raster"))
 # write to a new binary file in chunks
 s <- raster(r)
 # 
-tr <- blockSize(r, 25)
+tr <- blockSize(r)
 tr
 s <- writeStart(s, filename='test.grd',  overwrite=TRUE)
 for (i in 1:tr$n) {
