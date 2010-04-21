@@ -141,9 +141,17 @@
 			dataType(x) <- 'INT2U'		
 		}
 	} else if (nbits == 32) {
-		dataType(x) <- 'INT4S'
+		if (pixtype == 'FLOAT') {
+			dataType(x) <- 'FLT4S'
+		} else {
+			dataType(x) <- 'INT4S'
+		}
 	} else if (nbits == 64) {
-		dataType(x) <- 'INT8S'
+		if (pixtype == 'FLOAT') {
+			dataType(x) <- 'FLT8S'
+		} else {
+			dataType(x) <- 'INT8S'
+		}
 	} else {
 		stop(paste('unexpected nbits in BIL:', nbits))
 	}

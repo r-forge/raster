@@ -60,7 +60,7 @@
 	raster@file@driver <- 'raster'
 	raster <- clearValues(raster)
 
-	return(raster)
+	return(raster(filename(raster), native=TRUE))
 }		
  
  
