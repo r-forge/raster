@@ -24,7 +24,7 @@
 		} else {
 			sp <- SpatialPixels(points=pts, proj4string=projection(object, FALSE))
 		}
-	} else if (type=='grid') {
+	} else {
 		bb <- bbox(object)
 		cs <- res(object)
 		cc <- bb[,1] + (cs/2)
@@ -120,15 +120,15 @@ setAs('RasterLayer', 'matrix',
 	
 # Between Raster and sp vector objects	
 setAs('RasterLayer', 'SpatialPointsDataFrame', 
-	function(from){ return( rasterToPoints (from)) }
+	function(from){ return( rasterToPoints(from)) }
 )
 
 setAs('RasterLayer', 'SpatialPolygonsDataFrame', 
-	function(from){ return( rasterToPolygons (from)) }
+	function(from){ return( rasterToPolygons(from)) }
 )
 
 setAs('Extent', 'SpatialPolygonsDataFrame', 
-	function(from){ return( polygonFromExtent (from)) }
+	function(from){ return( polygonFromExtent(from)) }
 )
 
 
