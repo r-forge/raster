@@ -16,6 +16,8 @@ gridDistance <- function(x, filename="", ...) {
 		stop('cannot compute distance on a RasterLayer with no data')
 	}
 
+	lonlat <- .couldBeLonLat(x)
+	
 	filename <- trim(filename)
 	
 	object <- raster(x)
@@ -32,7 +34,7 @@ gridDistance <- function(x, filename="", ...) {
 		toCells <- which(is.na(x))
 		accDist <- rep(0,times=n)
 		accDist[toCells] <- Inf
-		if (isLonLat(object)) {
+		if (lonlat) {
 			while(length(fromCells)>0) {			
 				adj <- adjacency(object,fromCells=fromCells,toCells=toCells,directions=8)
 				coord <- cbind(xyFromCell(object,adj[,1]),xyFromCell(object,adj[,2]))
@@ -95,7 +97,7 @@ gridDistance <- function(x, filename="", ...) {
 					rowWindow <- c(rowWindow, values(r1))
 					fromCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow) & !((maxDist - rowWindow) < 1e-60)] 
 					toCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow)] 
-					if(isLonLat(object))
+					if(lonlat)
 					{						
 						adj <- adjacency(object, fromCells=fromCells, toCells=toCells, directions=8)
 						coord <- cbind(xyFromCell(object,adj[,1]), xyFromCell(object, adj[,2]))

@@ -5,17 +5,21 @@
 
 
 .couldBeLonLat <- function(x) {
-	if (projection(x)=='NA') {
-		e <- extent(x)
-		if (e@xmin > -400 & e@xmax < 400 & e@ymin > -90.1 & e@ymax < 90.1) { 
-			return(TRUE) 
-		} else {
-			return(FALSE)
-		}
-	} else if (isLonLat(x)) { 
-		return(TRUE) 
+	crsLL <- isLonLat(x)
+	crsNA <- projection(x)=='NA'
+	e <- extent(x)
+	extLL <- (e@xmin > -365 & e@xmax < 365 & e@ymin > -90.1 & e@ymax < 90.1) 
+	
+	if (extLL & crsLL) { 
+		return(TRUE)
+	} else if (extLL & crsNA) {
+		warning('CRS is NA. Assuming raster has longitude/latidue dimensions')
+		return(TRUE)
+	} else if (crsLL) {
+		warning('raster has a longitude/latitude CRS, but coordinates do not match that')
+		return(TRUE)
 	} else {
-		return(FALSE)
+		return(FALSE) 	
 	}
 }
 
