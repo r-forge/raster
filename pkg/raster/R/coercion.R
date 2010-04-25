@@ -17,7 +17,7 @@
 .asSpGrid <- function(object, type='grid', dataframe)  {
 		
 	if (type=='pixel') {
-		values = rasterToPoints(object, fun=NULL, asSpatialPoints=FALSE)
+		values <- rasterToPoints(object, fun=NULL, asSpatialPoints=FALSE)
 		pts <- SpatialPoints(values[,1:2])
 		if (dataframe) {
 			sp <- SpatialPixelsDataFrame(points=pts, data=data.frame(values=values[,3]), proj4string=projection(object, FALSE)) 	
@@ -28,7 +28,7 @@
 		bb <- bbox(object)
 		cs <- res(object)
 		cc <- bb[,1] + (cs/2)
-		cd = cbind(ncol(object), nrow(object))
+		cd <- cbind(ncol(object), nrow(object))
 		grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
 		if (dataframe) {
 			values <- data.frame(getValues(object))

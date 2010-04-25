@@ -39,7 +39,6 @@
 
 
 .writeGDALrow <- function(raster, filename,  options=NULL, ... ) {
-	if (!require(rgdal)) { stop() }
 
 	if (! .requireRgdal() ) { stop('rgdal not available') }
 

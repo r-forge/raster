@@ -41,7 +41,7 @@ function(x, filename, options=NULL, format, ...) {
 	filename <- trim(filename)
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
-
+	
 	if (filetype=='ascii') {stop('ascii files cannot write multi-layer files') }
 	native <- filetype %in% c(.nativeDrivers(), 'ascii')
 	if (native) { 
@@ -75,14 +75,15 @@ function(x) {
 
 setMethod('writeValues', signature(x='RasterLayer'), 
 	function(x, v, start) {
+
 		v[is.infinite(v)] <- NA
 		
-		rsd <- na.omit(v) # min and max values
-		if (length(rsd) > 0) {
-			x@data@min <- min(x@data@min, rsd)
-			x@data@max <- max(x@data@max, rsd)
-		}	
-
+		#rsd <- na.omit(v) # min and max values
+		#if (length(rsd) > 0) {
+		#	x@data@min <- min(x@data@min, rsd)
+		#	x@data@max <- max(x@data@max, rsd)
+		#}	
+		
 		native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
 		
 		if (native) {
@@ -93,14 +94,16 @@ setMethod('writeValues', signature(x='RasterLayer'),
 				v  <- as.numeric( v ) 
 			}
 			writeBin(v, x@file@con, size=x@file@dsize )
+			
 		} else {
+		
 			off = c(start-1, 0)
 			v[is.na(v)] <- x@file@nodatavalue
 			v = matrix(v, nrow=ncol(x))
 			gd <- putRasterData(x@file@transient, v, band=1, offset=off) 	
-			.Call("RGDAL_SetNoDataValue", gd, as.double(x@file@nodatavalue), PACKAGE = "rgdal")
+#			.Call("RGDAL_SetNoDataValue", gd, as.double(x@file@nodatavalue), PACKAGE = "rgdal")
 		}
-		return(invisible(NULL))
+		return(invisible(x))
 	} 		
 )
 

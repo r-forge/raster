@@ -105,6 +105,7 @@ showOptions <- function() {
 		} else if (ext == '.grd') { return('raster')
 		} else if (ext == '.asc') { return('ascii')
 		} else if (ext == '.nc') { return('netcdf')
+		} else if (ext == '.sgrd') { return('SAGA')
 		} else if (ext == '.bil') { return('BIL')
 		} else if (ext == '.bsq') { return('BSQ')
 		} else if (ext == '.bip') { return('BIP')
@@ -119,7 +120,7 @@ showOptions <- function() {
 		} else if (ext == '.sdat') { return('SAGA')
 		} else if (ext == '.rsw') { return('RMF')
 		} else { 
-			warning('extension', ext, 'is unknown. Using default format in stead')
+			warning('extension ', ext, 'is unknown. Using default format.')
 			return('') 
 		}
 	}
