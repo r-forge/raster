@@ -36,9 +36,13 @@ showOptions <- function() {
 	if (is.null(d)) {
 		d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
 	}
-	if (!file.exists(d)) {
+	lastchar = substr(d, nchar(d), nchar(d))
+	if (lastchar == "/" | lastchar == '\\') {
+		dd <- substr(d, 1, nchar(d)-1)
+	}		
+	if (!file.exists(dd)) {
 		d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
-		dir.create(d, showWarnings=FALSE )
+		dir.create(d, recursive=TRUE, showWarnings=FALSE )
 	}
 	return(d)
 }
