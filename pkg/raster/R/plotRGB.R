@@ -11,13 +11,13 @@ if (!isGeneric("plotRGB")) {
 }	
 
 setMethod("plotRGB", signature(x='Raster'), 
-function(x, r=1, g=2, b=3, maxpixels=100000, axes=TRUE, xlab='', ylab='', extent=NULL, ...) { 
+function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, xlab='', ylab='', ...) { 
 
-	r <- sampleRegular(raster(x,r), maxpixels, asRaster=TRUE, corners=TRUE)
-	g <- sampleRegular(raster(x,g), maxpixels, asRaster=TRUE, corners=TRUE)
-	b <- sampleRegular(raster(x,b), maxpixels, asRaster=TRUE, corners=TRUE)
-
-	z <- rgb(getValues(r), getValues(g), getValues(b), max=255)
+	r <- sampleRegular(raster(x,r), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
+	g <- sampleRegular(raster(x,g), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
+	b <- sampleRegular(raster(x,b), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
+	scale = as.vector(scale)[1]
+	z <- rgb(getValues(r), getValues(g), getValues(b), max=scale)
 	col <- unique(z)
 	z <- match(z, col)
 
