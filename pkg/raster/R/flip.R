@@ -42,14 +42,14 @@ setMethod('flip', signature(x='RasterLayer', direction='ANY'),
 			}
 		} else {
 			tr <- blockSize(outRaster)
-			pb <- pbCreate(tr$n, type=.progress())
+			pb <- pbCreate(tr$n, type=.progress(...))
 			outRaster <- writeStart(outRaster, filename=filename, datatype=dataType(x), ... )
 			if (direction == 'y') {
 				trinv <- tr
 				trinv$row <- rev(trinv$row)
 				trinv$size <- rev(trinv$size)
 				for (i in 1:tr$n) {
-					v = getValuesBlock(x, row=trinv$row[i], nrows=trinv$size)
+					v = getValues(x, row=trinv$row[i], nrows=trinv$size)
 					v = matrix(v, ncol=ncol(x), byrow=TRUE)
 					v = as.vector(t(v[nrow(v):1, ]))
 					writeValues(outRaster, v, tr$row[i])
@@ -57,7 +57,7 @@ setMethod('flip', signature(x='RasterLayer', direction='ANY'),
 				}
 			} else {
 				for (i in 1:tr$n) {
-					v = getValuesBlock(x, row=tr$row[i], nrows=tr$size)
+					v = getValues(x, row=tr$row[i], nrows=tr$size)
 					v = matrix(v, ncol=ncol(x), byrow=TRUE)
 					v = as.vector(t(v[, ncol(v):1]))
 					writeValues(outRaster, v, tr$row[i])
