@@ -78,11 +78,11 @@ setMethod('writeValues', signature(x='RasterLayer'),
 
 		v[is.infinite(v)] <- NA
 		
-		#rsd <- na.omit(v) # min and max values
-		#if (length(rsd) > 0) {
-		#	x@data@min <- min(x@data@min, rsd)
-		#	x@data@max <- max(x@data@max, rsd)
-		#}	
+		rsd <- na.omit(v) # min and max values
+		if (length(rsd) > 0) {
+			x@data@min <- min(x@data@min, rsd)
+			x@data@max <- max(x@data@max, rsd)
+		}	
 		
 		native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
 		

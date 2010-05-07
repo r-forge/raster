@@ -50,38 +50,40 @@ function(x, fact, filename='', ...) {
 	}
 	
 	
-	if ((!canProcessInMemory(outraster, 3)) && filename == '') {
-		filename <- rasterTmpFile()
-								
-	}
+	if (canProcessInMemory(outraster, 3)) { 
 	
-	if ( filename == "" ) {
-		if (dataContent(x) != 'all') {
-			x <- readAll(x)
-		}
 		cols <- rep(rep(1:ncol(x), each=xfact), times=nrow(x)*yfact)
 		rows <- rep(1:nrow(x), each=ncol(x)*xfact*yfact)
 		cells <- cellFromRowCol(x, rows, cols)
-		outraster <- setValues(outraster, x@data@values[cells])
+		outraster <- setValues(outraster, getValues(x)[cells])
+
+		if (filename != '') {
+			outraster <- writeRaster(outraster, filename=filename,...)
+		}
 		
 	} else { 
-		# to speed up valuesRow
+		if (filename == '') {
+			filename <- rasterTmpFile()						
+		}
+	# to speed up getValues
 		if (dataContent(x) != 'all') { x <- clearValues(x) }
 		v <- vector(length=0)
-		cols <- rep(1:ncol(x), each=xfact)
-
+		cols <- rep(rep(1:ncol(x), each=xfact), times=yfact)
+				
 				
 		pb <- pbCreate(nrow(x), type=.progress(...))
+		outraster <- writeStart(outraster, filename=filename, datatype=dataType(x), ...)
 		for (r in 1:nrow(x)) {
 			vals <- getValues(x, r)
-			for (i in 1:yfact) {
-				outraster <- setValues(outraster, vals[cols], (r-1) * xfact + i)
-				outraster <- writeRaster(outraster, filename=filename, ...)
-			}	
+			rown <- (r-1) * xfact + 1
+			outraster <- writeValues(outraster, vals[cols], rown)
 			pbStep(pb, r)
 		}
+		outraster <- writeStop(outraster)
 		pbClose(pb)
 	}
+
 	return(outraster)
 }
 )
+

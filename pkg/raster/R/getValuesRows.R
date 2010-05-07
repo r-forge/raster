@@ -80,7 +80,7 @@ function(x, row, nrows) {
 		stop('something is wrong with the RasterLayer dataContent')
 	}
 	
-	if (readrow) {	res <- values(..readRows(x, row, nrows))	}
+	if (readrow) {	res <- ..readRows(x, row, nrows)@data@values }
 	res
 }
 )
