@@ -11,7 +11,7 @@ if (!isGeneric("plotRGB")) {
 }	
 
 setMethod("plotRGB", signature(x='Raster'), 
-function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, xlab='', ylab='', ...) { 
+function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, xlab='', ylab='', asp, ...) { 
 
  	if (missing(asp)) {
 		if (.couldBeLonLat(x)) {
@@ -22,7 +22,6 @@ function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, 
 			asp = 1
 		}		
 	}
-
 
 	r <- sampleRegular(raster(x,r), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
 	g <- sampleRegular(raster(x,g), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
