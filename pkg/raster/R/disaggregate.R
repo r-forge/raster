@@ -8,6 +8,8 @@
 	if (!missing(method)) { 
 		if (method=='bilinear') {
 			return( TRUE )
+		} else {
+			warning('unknown "method". Should be "method=bilinear", or absent')
 		}
 	}
 	return(FALSE)
@@ -17,7 +19,7 @@
 if (!isGeneric("disaggregate")) {
 	setGeneric("disaggregate", function(x, fact, ...)
 		standardGeneric("disaggregate"))
-}	
+}
 
 setMethod('disaggregate', signature(x='RasterLayer', fact='numeric'), 
 function(x, fact, filename='', ...) {
@@ -69,8 +71,7 @@ function(x, fact, filename='', ...) {
 		if (dataContent(x) != 'all') { x <- clearValues(x) }
 		v <- vector(length=0)
 		cols <- rep(rep(1:ncol(x), each=xfact), times=yfact)
-				
-				
+
 		pb <- pbCreate(nrow(x), type=.progress(...))
 		outraster <- writeStart(outraster, filename=filename, datatype=dataType(x), ...)
 		for (r in 1:nrow(x)) {
