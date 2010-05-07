@@ -140,7 +140,7 @@ function(x, row, nrows) {
 		stop('something is wrong with the RasterLayer dataContent')
 	}
 	if (readrow) {
-		res <- values(.readRasterBrickValues(x, row, nrows))
+		res <- .readRasterBrickValues(x, row, nrows)@data@values
 	}
 	colnames(res) <- layerNames(x)
 	return(res)

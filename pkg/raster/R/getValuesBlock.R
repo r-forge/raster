@@ -143,7 +143,7 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 		}
 	
 		if (readrow) {	
-			res <- values(.readRasterLayerValues(x, row, nrows, col, ncols))
+			res <- .readRasterLayerValues(x, row, nrows, col, ncols)@data@values
 		}
 		if (format=='matrix') {
 			res = matrix(res, nrow=nrows , ncol=ncols )
