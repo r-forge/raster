@@ -41,16 +41,15 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 
 
 .sampleRegular <- function(x, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
+
 	if (n<1) {stop('n < 1')}
 	
 	if (is.null(extent)) {
 		if (n >= ncell(x)) {
-			if (dataContent(x) != 'all') { 
-				if (asRaster) { 
-					return(x) 
-				} else { 
-					return(getValues(x)) 
-				}
+			if (asRaster) { 
+				return(x) 
+			} else { 
+				return(getValues(x)) 
 			}
 		}
 		rcut <- raster(x)
@@ -86,8 +85,7 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 	} else {
 		rows <- rows - (0.5 * (lastrow - firstrow + 1)/nr)
 	}
-	rows <- round(rows)
-	
+		
 	nc <- max(1, floor((lastcol - firstcol + 1) / X))
 	cols <- (lastcol - firstcol + 1)/nc * 1:nc  + firstcol - 1
 	if (corners) {
@@ -97,6 +95,8 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 	}
 	cols <- unique(round(cols))
 	rows <- unique(round(rows))
+	cols = cols[cols>0]
+	rows = rows[cols>0]
 	nr <- length(rows)
 	nc <- length(cols)
 	
