@@ -42,7 +42,7 @@ function(x, filename, ...) {
 	r <- writeStart(r, filename=filename, ...)
 	for (i in 1:tr$n) {
 		v <- getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i])
-		writeValues(r, v, tr$row[i])
+		r <- writeValues(r, v, tr$row[i])
 		pbStep(pb, i) 			
 	}
 	r <- writeStop(r)
@@ -71,7 +71,7 @@ setMethod('saveAs', signature(x='RasterStackBrick', filename='character'),
 			b <- writeStart(b, filename=filename, bandorder=bandorder, ...)
 			for (i in 1:tr$n) {
 				v <- getValuesBlock(x, row=tr$row[i], nrows=tr$size)
-				writeValues(b, v, tr$row[i])
+				b <- writeValues(b, v, tr$row[i])
 				pbStep(pb, i)
 			}
 			b <- writeStop(b)
@@ -96,8 +96,8 @@ setMethod('saveAs', signature(x='RasterStackBrick', filename='character'),
 # to do: if filetype and datatype are the same, then just copy the file .... 
 	newr <- raster(x)
 	for (r in 1:nrow(newr)) {
-		x <- readRow(x, r)
-		newr <- setValues(newr, values(x), r)
+		v <- getValues(x, r)
+		newr <- setValues(newr, v, r)
 		newr <- writeRaster(newr, filename=filename, ...)
 	}
 	return(newr)

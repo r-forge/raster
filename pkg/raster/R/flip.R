@@ -52,7 +52,7 @@ setMethod('flip', signature(x='RasterLayer', direction='ANY'),
 					v = getValues(x, row=trinv$row[i], nrows=trinv$size)
 					v = matrix(v, ncol=ncol(x), byrow=TRUE)
 					v = as.vector(t(v[nrow(v):1, ]))
-					writeValues(outRaster, v, tr$row[i])
+					outRaster <- writeValues(outRaster, v, tr$row[i])
 					pbStep(pb, i) 
 				}
 			} else {
@@ -60,7 +60,7 @@ setMethod('flip', signature(x='RasterLayer', direction='ANY'),
 					v = getValues(x, row=tr$row[i], nrows=tr$size)
 					v = matrix(v, ncol=ncol(x), byrow=TRUE)
 					v = as.vector(t(v[, ncol(v):1]))
-					writeValues(outRaster, v, tr$row[i])
+					outRaster <- writeValues(outRaster, v, tr$row[i])
 					pbStep(pb, i) 
 				}
 			}

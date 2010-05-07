@@ -51,9 +51,9 @@
 	if (type == "FLT") {
 		if (dataContent(x) != 'nodata') { 
 			if (class(x)  == 'RasterLayer') {
-				x@data@values <- as.numeric(values(x))
+				x@data@values <- as.numeric(x@data@values)
 			} else {
-				x@data@values <- matrix(as.numeric(values(x)), ncol=nlayers(x))
+				x@data@values <- matrix(as.numeric(x@data@values), ncol=nlayers(x))
 			}
 		}
 		if (size == '4') {
@@ -70,9 +70,9 @@
 		x@data@max <- round(x@data@max)
 		if (dataContent(x) != 'nodata') { 
 			if (class(x)  == 'RasterLayer') {
-				x@data@values <- as.integer(round(values(x)))
+				x@data@values <- as.integer(round(x@data@values))
 			} else {
-				x@data@values <- matrix(as.integer(round(values(x))), ncol=nlayers(x))
+				x@data@values <- matrix(as.integer(round(x@data@values)), ncol=nlayers(x))
 			}                  
 		}
 		

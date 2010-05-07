@@ -264,17 +264,14 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
 
 
 \section{XIII. Reading data}{
-
   \tabular{ll}{
     \code{\link{readAll}} \tab Read all values into memory \cr
-    \code{\link{readRow}} \tab Read a row of data into memory \cr
-    \code{\link{readBlock}} \tab Read a block of data into memory \cr
     \code{\link{values}} \tab Returns the values read with read* \cr
     \code{\link{dataContent}} \tab How much data (if any) is in memory? \cr
     \code{\link{dataIndices}} \tab Values for which cells are in memory? \cr	
     \code{\link{dataSource}} \tab What is the source of the values (disk or RAM)? \cr	
   }
-  Rather then reading data & using values, it is avisble to use getValues* functions (see above)
+  Rather then reading data & using values, it is advisable to use \code{\link{getValues}*} functions (see above)
 }
 
   
@@ -284,7 +281,7 @@ Basic writing
   \tabular{ll}{
     \code{\link{setValues}} \tab Put new values in a Raster* object \cr
     \code{\link{dataContent}} \tab How much data (if any) is in memory? \cr
-    \code{\link{writeRaster}} \tab Write raster data to disk, either a row or all values \cr
+    \code{\link{writeRaster}} \tab Write all values of Raster* object to disk \cr
     \code{\link{saveAs}} \tab Save raster file under other name and perhaps in different format \cr
     \code{\link{KML}} \tab Save raster as KML file \cr	
   }

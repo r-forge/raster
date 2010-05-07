@@ -18,7 +18,7 @@ setMethod("persp", signature(x='RasterLayer'),
 				x <- sampleRegular(x, size=maxpixels, asRaster=TRUE, corners=TRUE)
 			}
 		}
-		value <- t((values(x, format='matrix'))[nrow(x):1,])
+		value <- t((getValues(x, format='matrix'))[nrow(x):1,])
 		y <- yFromRow(x, nrow(x):1)
 		x <- xFromCol(x,1:ncol(x))
 		persp(x=x, y=y, z=value, ...)

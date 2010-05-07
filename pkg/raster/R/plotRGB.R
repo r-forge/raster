@@ -13,6 +13,17 @@ if (!isGeneric("plotRGB")) {
 setMethod("plotRGB", signature(x='Raster'), 
 function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, xlab='', ylab='', ...) { 
 
+ 	if (missing(asp)) {
+		if (.couldBeLonLat(x)) {
+		#	ym <- mean(object@extent@ymax + object@extent@ymin)
+		#	asp <- min(5, 1/cos((ym * pi)/180))
+			asp = NA
+		} else {
+			asp = 1
+		}		
+	}
+
+
 	r <- sampleRegular(raster(x,r), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
 	g <- sampleRegular(raster(x,g), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
 	b <- sampleRegular(raster(x,b), maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
@@ -26,7 +37,7 @@ function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, 
 	z <- matrix(z, nrow=nrow(r), ncol=ncol(r), byrow=T)
 	z <- t(z[nrow(z):1,])
 	
-	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, legend=FALSE, ...)
+	.imageplot(x, y, z, col=col, axes=axes, xlab=xlab, ylab=ylab, legend=FALSE, asp=asp, ...)
 }
 )
 

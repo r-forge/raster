@@ -54,7 +54,7 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 			for (i in 1:nlayers(x)) {
 				# to do: need a more efficient function here that only goes to disk once.
 				if (i==1) {
-					v <- values(.readRasterLayerValues(raster(x, i), row, nrows, col, ncols))
+					v <- .readRasterLayerValues(raster(x, i), row, nrows, col, ncols)@data@values
 					res <- matrix(ncol=nlayers(x), nrow=length(v))
 					res[,1] <- v
 				} else {

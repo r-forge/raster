@@ -43,7 +43,7 @@ setMethod('area', signature(x='Raster'),
 			if (filename == "") {
 				v[,r] <- vv
 			} else {
-				writeValues(x, vv, tr$row[i])
+				x <- writeValues(x, vv, tr$row[i])
 			}
 			pbStep(pb, i)
 		}

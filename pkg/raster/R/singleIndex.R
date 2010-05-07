@@ -17,7 +17,7 @@ function(x,i,j,...,drop=TRUE) {
 		if (dataContent(x) == 'all') {
 			return(x@data@values)
 		} else {
-			return(values(readAll(x)))
+			return(getValues(x))
 		}
 	}
 

@@ -109,7 +109,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			if (filename == "") {
 				v[,r] <- vals
 			} else {
-				writeValues(outRaster, vals, r)
+				outRaster <- writeValues(outRaster, vals, r)
 			}
 		
 			pbStep(pb, r) 

@@ -2,8 +2,6 @@
 # Date :  June 2008
 # Version 0.9
 # Licence GPL v3
-
-
 	
 if (!isGeneric("values")) {
 	setGeneric("values", function(x, ...)
@@ -14,10 +12,12 @@ if (!isGeneric("values")) {
 setMethod('values', signature(x='RasterLayer'), 
 function(x, format='vector', names=FALSE, ...) {
 
+	warning('"values" is depracated; use getValues instead')
+
 	if (dataContent(x)=="nodata") {
 		stop("No data in memory. Use getValues()") 
 	}
-	
+
 	if (format=='matrix') { 
 		if (dataContent(x) == 'all') {
 			x = matrix(x@data@values, nrow=nrow(x), ncol=ncol(x), byrow=TRUE)
@@ -26,6 +26,7 @@ function(x, format='vector', names=FALSE, ...) {
 				rownames(x) <- 1:nrow(x)
 			}
 		} else if (dataContent(r)=="row") {
+			warning('the use of "values" for a "row" of data is depracated; use getValues instead')
 			r = rowFromCell(x, dataIndices(x)[1])
 			x <- matrix(x@data@values, nrow=1, ncol=ncol(r))
 			if (names) {
@@ -33,6 +34,7 @@ function(x, format='vector', names=FALSE, ...) {
 				rownames(x) <- r
 			}	
 		} else if (dataContent(x)=="block") {
+			warning('the use of "values" for a "block" of data is depracated; use getValuesBlock instead')
 			rows <- rowFromCell(x, dataIndices(x))
 			nrows <- 1 + rows[2] - rows[1]
 			cols <- colFromCell(x, dataIndices(x))
@@ -52,6 +54,10 @@ function(x, format='vector', names=FALSE, ...) {
 
 setMethod('values', signature(x='RasterBrick'), 
 function(x, names=FALSE, ...) {
+
+	warning('"values" is depracated; use getValues instead')
+
+
 	if (dataContent(x)=="nodata") {
 		stop("No data in memory. Use getValues()") 
 	}

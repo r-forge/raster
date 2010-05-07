@@ -39,7 +39,7 @@
 	yint[1] <- 1
 	y <- list('at'=yint, 'labels'=y)
 	
-	z <- values(object, format='matrix')
+	z <- getValues(object, format='matrix')
 	z <- t(z[nrow(z):1,])
 	levelplot(z, xlab=xlab, ylab=ylab, scales=list(x=x, y=y), ...)
 }

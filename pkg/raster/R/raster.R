@@ -114,7 +114,7 @@ setMethod('raster', signature(x='RasterBrick'),
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
 				if (dataContent(x) == 'all') {
 					if (dindex != layer) { warning(paste("layer was changed to", dindex))}
-					r <- setValues(r, values(x)[,dindex])
+					r <- setValues(r, getValues(x)[,dindex])
 				}
 			}
 		} else {

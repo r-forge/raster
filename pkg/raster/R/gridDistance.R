@@ -89,12 +89,10 @@ gridDistance <- function(x, filename="", ...) {
 			while (remainingCells) 
 			{
 				remainingCells <- FALSE
-				r1 <- getValues(r1, 1)
-				rowWindow <- values(r1)
+				rowWindow <- getValues(r1, 1)
 				for(r in 1:(nrows-1))
 				{
-					r1 <- getValues(r1, r+1)
-					rowWindow <- c(rowWindow, values(r1))
+					rowWindow <- c(rowWindow, getValues(r1, r+1))
 					fromCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow) & !((maxDist - rowWindow) < 1e-60)] 
 					toCells <- ((((r-1)*ncols)+1):((r+1)*ncols))[!is.na(rowWindow)] 
 					if(lonlat)

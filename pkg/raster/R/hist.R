@@ -60,11 +60,11 @@ setMethod('hist', signature(x='RasterStackBrick'),
 setMethod('hist', signature(x='RasterLayer'), 
 	function(x, layer=1, maxpixels=10000, main=NA,  plot=TRUE, ...){
 		if (dataContent(x) == 'all') {
-			values <- values(x)
+			values <- getValues(x)
 		} else if (dataSource(x) == 'disk') {
 			
 			if (ncell(x) <= maxpixels) {
-				values <- na.omit(values(readAll(x)))
+				values <- na.omit(getValues(x))
 			} else {
 
 			# TO DO: make a function that does this by block and combines  all data into a single histogram

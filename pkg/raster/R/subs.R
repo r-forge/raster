@@ -39,7 +39,7 @@ setMethod('subs', signature(x='RasterLayer', y='data.frame'),
 			r <- writeStart(r, filename=filename, ... )
 			for (i in 1:tr$n) {
 				v = getValuesBlock(x, row=tr$row[i], nrows=tr$size)
-				writeValues(r, localmerge(v, y, subsWithNA), tr$row[i])
+				r <- writeValues(r, localmerge(v, y, subsWithNA), tr$row[i])
 				pbStep(pb, i) 
 			}
 			pbClose(pb)			

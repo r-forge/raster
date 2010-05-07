@@ -14,9 +14,9 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 				if (i==1) {
 					xx = .sampleRegular(raster(x, i), n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners)
 					v <- matrix(ncol=nlayers(x), nrow=ncell(xx))
-					v[,1] = values(xx)
+					v[,1] = xx@data@values
 				} else {
-					v[,i] = values(.sampleRegular(raster(x, i), n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners))
+					v[,i] = .sampleRegular(raster(x, i), n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners)@data@values
 				}
 			}
 			b = brick(xx)
@@ -46,11 +46,11 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 	if (is.null(extent)) {
 		if (n >= ncell(x)) {
 			if (dataContent(x) != 'all') { 
-				x <- readAll(x) }
-			if (asRaster) { 
-				return(x) 
-			} else { 
-				return(values(x)) 
+				if (asRaster) { 
+					return(x) 
+				} else { 
+					return(getValues(x)) 
+				}
 			}
 		}
 		rcut <- raster(x)

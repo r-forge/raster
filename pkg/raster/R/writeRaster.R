@@ -96,7 +96,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 	pb <- pbCreate(tr$n, type=.progress(...))
 	for (i in 1:tr$n) {
 		v <- getValuesBlock(x, row=tr$row[i], nrows=tr$size)
-		writeValues(b, v, tr$row[i])
+		b <- writeValues(b, v, tr$row[i])
 		pbStep(pb, i)
 	}
 	pbClose(pb)

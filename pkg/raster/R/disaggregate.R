@@ -62,7 +62,7 @@ function(x, fact, filename='', ...) {
 		cols <- rep(rep(1:ncol(x), each=xfact), times=nrow(x)*yfact)
 		rows <- rep(1:nrow(x), each=ncol(x)*xfact*yfact)
 		cells <- cellFromRowCol(x, rows, cols)
-		outraster <- setValues(outraster, values(x)[cells])
+		outraster <- setValues(outraster, x@data@values[cells])
 		
 	} else { 
 		# to speed up valuesRow

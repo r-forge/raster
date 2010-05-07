@@ -6,13 +6,10 @@
 
 count <- function(raster, value, digits=0, progress) {
 	if (canProcessInMemory(raster, 2)) {
-		if (dataContent(raster) != 'all') {
-			raster <- readAll(raster)
-		}
 		if (is.na(value)) {
-			x <- sum(is.na(values(raster)))
+			x <- sum(is.na(getValues(raster)))
 		} else {
-			v <- na.omit(round(values(raster), digits=digits))
+			v <- na.omit(round(getValues(raster), digits=digits))
 			x <- sum(v == value)
 		}
 	} else {
