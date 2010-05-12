@@ -11,7 +11,7 @@ pbCreate <- function(nsteps, type, style=3) {
 		require(tcltk)
 		pb <- tkProgressBar(title="progress bar", min=0, max=nsteps, width = 300)
 	} else if (type == 'windows') {
-		if (substr( R.Version()$platform, 1, 7) == "i386-pc" ) {
+		if (.Platform$OS.type == "windows" ) {
 			pb <- winProgressBar(title="progress bar", min=0 , max=nsteps, width = 300)
 		} else {
 			pb <- tkProgressBar(title="progress bar", min=0, max=nsteps, width = 300)
@@ -24,7 +24,9 @@ pbCreate <- function(nsteps, type, style=3) {
 }
 
 
-pbStep <- function(pb, step, label='step') {
+
+pbStep <- function(pb, step=NULL, label='step') {
+	if (is.null(step)) step = pb$getVal() + 1
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
 		setTxtProgressBar(pb, step)

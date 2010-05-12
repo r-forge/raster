@@ -35,7 +35,7 @@ function(x) {
 		tr <- blockSize(x)
 		pb <- pbCreate(tr$n, type=.progress())			
 		for (i in 1:tr$n) {
-			v <- na.omit ( getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]) )
+			v <- na.omit ( getValues(x, row=tr$row[i], nrows=tr$nrows[i]) )
 			if (length(v) > 0) {
 				x@data@min <- min(x@data@min, min(v))
 				x@data@max <- max(x@data@max, max(v))

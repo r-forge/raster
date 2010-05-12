@@ -8,126 +8,147 @@
 #We could ask the igraph author to make it possible to calculate shortest distance for several origin nodes simultaneously. 
 #However, I think I asked this more than a year ago and he seemed not very convinced.
 
+# We could -- perhaps -- speed it up for cases with many origin cells by only considering the 'edge' cells (all the others have distance = 0
+# see the edge function. Or perhaps use igraph to compute the edges???
+
+
 #setGeneric("gridDistance", function(object, ...) standardGeneric("gridDistance"))
 
 #setMethod("gridDistance", signature(object = "RasterLayer"), def =	
 
 gridDistance <- function(object, originValue, omitValue, filename="", ...) 
 {
-	if(require(igraph))
-	{
-		if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) 
-		{
-			stop('cannot compute distance on a RasterLayer with no data')
-		}
-		lonlat <- .couldBeLonLat(object)
-		filename <- trim(filename)
+	if( !require(igraph)) {
+		stop('you need to install the igraph package to be able to use this function')
+	}
 	
-		if(canProcessInMemory(object, n=5) & !(.toDisk())) 
-		{
-			vals <- getValues(object)
-			outRaster <- raster(object)
-			oC <- which(vals %in% originValue) #select cells not surrounded by other origin cells
-			ftC <- which(!(vals %in% omitValue))
-			chunkSize <- ncell(object)
-			outRaster[] <- .calcDist(object, chunkSize, ftC, oC)
-		} 
-		else 
-		{
-			f1 <- rasterTmpFile()
-			r1 <- writeStart(raster(object), filename=f1, overwrite=TRUE)
-			hChunks <- min(5, nrow(object))
-			nChunks <- ceiling(nrow(object) / hChunks)
-			hChunks <- rep(hChunks, nChunks)
-			hChunks[nChunks] <- nrow(object) - (nChunks - 1) * hChunks[1]
-			pb <- pbCreate(nChunks*2-1, type=.progress(...))
+	if ((dataContent(object) != 'all') & (dataSource(object) != 'disk')) {
+			stop('cannot compute distance on a RasterLayer with no data')
+	}
+	lonlat <- .couldBeLonLat(object)
+	filename <- trim(filename)
+	
+	if (dataContent(object) == 'all') nr=4 else nr=5
+	
+	if(canProcessInMemory(object, n=nr)) {
+		vals <- getValues(object)
+		outRaster <- raster(object)
+		oC <- which(vals %in% originValue) #select cells not surrounded by other origin cells
+		ftC <- which(!(vals %in% omitValue))
+		chunkSize <- ncell(object)
+		outRaster <- setValues(outRaster, .calcDist(object, chunkSize, ftC, oC))
+		
+	} else 	{
+		f1 <- rasterTmpFile()
+		r1 <- writeStart(raster(object), filename=f1, overwrite=TRUE)
+		
+		# to keep this in-line with the rest of the package?
+		# why not use something like:
+		tr <- blockSize(object, n=5)
+		pb <- pbCreate(tr$n*2 - 1, type=.progress(...))
+		
+		#hChunks <- min(5, nrow(object))
+		#nChunks <- ceiling(nrow(object) / hChunks)
+		#hChunks <- rep(hChunks, nChunks)
+		#hChunks[nChunks] <- nrow(object) - (nChunks - 1) * hChunks[1]
+		#pb <- pbCreate(nChunks*2-1, type=.progress(...))
 			
 			#going down
-			for(iChunk in 1:nChunks)
-			{
-				chunk <- getValues(object, (iChunk - 1)* hChunks[1] + 1, hChunks[iChunk])
-				chunkSize <- length(chunk)
-				startCell <- (iChunk -1) * hChunks[1] * ncol(object)
-				oC <- which(chunk %in% originValue) 
-				ftC <- which(!(chunk %in% omitValue))
+#		for(iChunk in 1:nChunks) {
+		for(i in 1:tr$n) {
+		
+			#chunk <- getValues(object, (iChunk - 1)* hChunks[1] + 1, hChunks[iChunk])
+			chunk <- getValues(object, row=tr$row[i], nrows=tr$nrows[i]) 
+			chunkSize <- length(chunk)
+			#startCell <- (iChunk -1) * hChunks[1] * ncol(object)
+			startCell <- (tr$row[i]-1) * ncol(object)
+			oC <- which(chunk %in% originValue) 
+			ftC <- which(!(chunk %in% omitValue))
 
-				chunkDist <- .calcDist(object, chunkSize, ftC, oC)
-				if(iChunk>1)
-				{
-					
-					chunkDist <- pmin(chunkDist,
-						.calcDist(object, 
+			chunkDist <- .calcDist(object, chunkSize, ftC, oC)
+				# if(iChunk>1) {
+			if (i > 1) {
+				chunkDist <- pmin(chunkDist,
+					.calcDist(object, 
 							chunkSize=chunkSize+ncol(object), 
 							ftC=c(lastRowftC, ftC+ncol(object)), 
 							oC = c(lastRowftC, oC+ncol(object)), 
 							perCell=c(lastRowDist, rep(0,times=length(oC))), 
 							startCell = startCell - ncol(object))[-(1:length(lastRowftC))])
 				}
-				writeValues(r1, chunkDist, (iChunk - 1) * hChunks[1] + 1)
-				lastRow <- chunk[(length(chunk)-ncol(object)+1):length(chunk)]
-				lastRowDist <- chunkDist[(length(chunkDist)-ncol(object)+1):length(chunkDist)]
-				lastRowftC <- which(!(lastRow %in% omitValue))
-				pbStep(pb, iChunk) 
-			}
-			r1 <- writeStop(r1)
+				#writeValues(r1, chunkDist, (iChunk - 1) * hChunks[1] + 1)
+			writeValues(r1, chunkDist, tr$row[i])
+			lastRow <- chunk[(length(chunk)-ncol(object)+1):length(chunk)]
+			lastRowDist <- chunkDist[(length(chunkDist)-ncol(object)+1):length(chunkDist)]
+			lastRowftC <- which(!(lastRow %in% omitValue))
+				# pbStep(pb, iChunk) 
+			pbStep(pb, i) 
+		}
+		r1 <- writeStop(r1)
 
 			#then up again
-			if(nChunks>1)
-			{
-				firstRow <- chunk[1:nrow(object)]
-				firstRowDist <- chunkDist[1:nrow(object)]
-				fileFormat <- .filetype() #to restore the options later
-				setOptions(format="GTiff") #in order not to create a .grd in next line -- filling from bottom not possible
-				f2 <- rasterTmpFile()
-				setOptions(fileFormat) #restore to original value
-				r2 <- writeStart(raster(r1), f2, overwrite=TRUE)
+#			if(nChunks>1)  # always true 
+#			{
+		firstRow <- chunk[1:nrow(object)]
+		firstRowDist <- chunkDist[1:nrow(object)]
+		f2 <- rasterTmpFile()
+		# rather then setting the default format etc, you could do ext(f2) = 'tif' to set format, but below is shorter still; format trumps the extension:
+		r2 <- writeStart(raster(r1), f2, overwrite=TRUE, format='GTiff')
+		
+		# writeValues(r2, chunkDist, start = (nChunks - 1) * hChunks[1] +1)
+		writeValues(r2, chunkDist, tr$row[tr$n])
+		
+				#for(iChunk in (nChunks-1):1) {
+		for(i in (tr$n-1):1) {
+		
 				
-				writeValues(r2, chunkDist, start = (nChunks - 1) * hChunks[1] +1)
+			chunk <- getValues(object, row=tr$row[i], nrows=tr$nrows[i]) 
+			startCell <- (tr$row[i]-1) * ncol(object)
 
-				for(iChunk in (nChunks-1):1)
-				{
-					startCell <- (iChunk - 1) * hChunks[1] * ncol(object)
-					chunk <- getValues(object, (iChunk - 1)* hChunks[1] + 1, hChunks[iChunk])
-					chunkSize <- length(chunk)
-					oC <- which(chunk %in% originValue) 
-					ftC <- which(!(chunk %in% omitValue))
-					chunkDist <- getValues(r1, (iChunk - 1)* nChunks + 1, hChunks[iChunk])
-					firstRowftC <- which(!(firstRow %in% omitValue)) + chunkSize
-					chunkDist <- pmin(chunkDist,
-						.calcDist(object, 
+			#startCell <- (iChunk - 1) * hChunks[1] * ncol(object)
+			#chunk <- getValues(object, (iChunk - 1)* hChunks[1] + 1, hChunks[iChunk])
+					
+			chunkSize <- length(chunk)
+			oC <- which(chunk %in% originValue) 
+			ftC <- which(!(chunk %in% omitValue))
+			# chunkDist <- getValues(r1, (iChunk - 1)* nChunks + 1, hChunks[iChunk])
+			# Should the above really be nChunks ?
+			# I am not sure about this one:
+			chunkDist <- getValues(r1, row=tr$row[i], nrows=tr$nrows[i]) 
+			firstRowftC <- which(!(firstRow %in% omitValue)) + chunkSize
+			chunkDist <- pmin(chunkDist,
+			.calcDist(object, 
 							chunkSize=chunkSize+ncol(object), 
 							ftC=c(ftC, firstRowftC), 
 							oC=c(oC, firstRowftC), 
 							perCell=c(rep(0,times=length(oC)),firstRowDist), 
 							startCell=startCell)[1:chunkSize])
-					writeValues(r2, chunkDist, start = (iChunk - 1) * hChunks + 1)
-					firstRow <- chunk[1:nrow(object)]
-					firstRowDist <- chunkDist[1:nrow(object)]
-					pbStep(pb, 2*nChunks - iChunk)
-				}
-				r2 <- writeStop(r2)
-				pbClose(pb)
-				outRaster <- r2
-				#why not clean up the mess?
-				#rm(r2)
-				#unlink(f2)
-			}
-			else{outRaster <- r1}
-			#why not clean up the mess?
-			#rm(r1)
-			#unlink(f1)
-			if(filename == "")
-			{
-				outRaster <- readAll(outRaster)
+					# writeValues(r2, chunkDist, start = (iChunk - 1) * hChunks + 1)
+			writeValues(r2, chunkDist, tr$row[i])
+			firstRow <- chunk[1:nrow(object)]
+			firstRowDist <- chunkDist[1:nrow(object)]
+			#pbStep(pb, 2*nChunks - iChunk)
+			pbStep(pb) 
+		}
+		r2 <- writeStop(r2)
+		pbClose(pb)
+	
+		if (filename == "") {
+			if(canProcessInMemory(object, n=1)) {
+				outRaster <- readAll(outRaster) 
+				outRaster[0] <- outRaster[0] # to disasociate it from the temp file
+			} else {
+				filename = rasterTmpFile()
 			}
 		}
 	}
-	if (filename != "") 
-	{
+	
+	if (filename != "") {
 		outRaster <- writeRaster(outRaster, filename=filename, ...)
 	}
 	return(outRaster)
 }
+
 
 .calcDist <- function(object, chunkSize, ftC, oC, perCell=0, startCell=0)
 {
