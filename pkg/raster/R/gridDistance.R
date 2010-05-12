@@ -39,8 +39,7 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 		outRaster <- setValues(outRaster, .calcDist(object, chunkSize, ftC, oC))
 		
 	} else 	{
-		f1 <- rasterTmpFile()
-		r1 <- writeStart(raster(object), filename=f1, overwrite=TRUE)
+		r1 <- writeStart(raster(object), filename=rasterTmpFile(), overwrite=TRUE)
 		
 		# to keep this in-line with the rest of the package?
 		# why not use something like:
@@ -91,9 +90,8 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 #			{
 		firstRow <- chunk[1:nrow(object)]
 		firstRowDist <- chunkDist[1:nrow(object)]
-		f2 <- rasterTmpFile()
 		# rather then setting the default format etc, you could do ext(f2) = 'tif' to set format, but below is shorter still; format trumps the extension:
-		r2 <- writeStart(raster(r1), f2, overwrite=TRUE, format='GTiff')
+		r2 <- writeStart(raster(r1), rasterTmpFile(), overwrite=TRUE, format='GTiff')
 		
 		# writeValues(r2, chunkDist, start = (nChunks - 1) * hChunks[1] +1)
 		writeValues(r2, chunkDist, tr$row[tr$n])
