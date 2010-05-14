@@ -52,7 +52,7 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 		#hChunks[nChunks] <- nrow(object) - (nChunks - 1) * hChunks[1]
 		#pb <- pbCreate(nChunks*2-1, type=.progress(...))
 			
-			#going down
+		#going down
 #		for(iChunk in 1:nChunks) {
 		for(i in 1:tr$n) {
 		
@@ -109,9 +109,7 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 			chunkSize <- length(chunk)
 			oC <- which(chunk %in% originValue) 
 			ftC <- which(!(chunk %in% omitValue))
-			# chunkDist <- getValues(r1, (iChunk - 1)* nChunks + 1, hChunks[iChunk])
-			# Should the above really be nChunks ?
-			# I am not sure about this one:
+			# chunkDist <- getValues(r1, (iChunk - 1)* hChunks + 1, hChunks[iChunk])
 			chunkDist <- getValues(r1, row=tr$row[i], nrows=tr$nrows[i]) 
 			firstRowftC <- which(!(firstRow %in% omitValue)) + chunkSize
 			chunkDist <- pmin(chunkDist,
@@ -125,10 +123,10 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 			writeValues(r2, chunkDist, tr$row[i])
 			firstRow <- chunk[1:nrow(object)]
 			firstRowDist <- chunkDist[1:nrow(object)]
-			#pbStep(pb, 2*nChunks - iChunk)
-			pbStep(pb) 
+			pbStep(pb, 2*tr$n - i)
+			#pbStep(pb) #produces an error!
 		}
-		r2 <- writeStop(r2)
+		outRaster <- writeStop(r2)
 		pbClose(pb)
 	
 		if (filename == "") {
@@ -164,7 +162,11 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 		}
 		else
 		{
-			E(distGraph)$weight <- 1 #Pythagoras using xres and yres, perhaps using adjacency() here instead of above
+			sameRow <- rowFromCell(object, adj[,1]) == rowFromCell(object, adj[,2]) 
+			sameCol <- colFromCell(object, adj[,1]) == colFromCell(object, adj[,2])
+			E(distGraph)$weight[sameRow] <- xres(object)
+			E(distGraph)$weight[sameCol] <- yres(object)
+			E(distGraph)$weight[!sameCol & !sameRow] <- sqrt(xres(object)^2 + yres(object)^2)
 		}
 		shortestPaths <- pmin(shortestPaths, apply(shortest.paths(distGraph, oC-1) + perCell, 2, min))
 		if(max(ftC) < chunkSize){shortestPaths <- c(shortestPaths,rep(Inf,times=chunkSize-max(ftC)))}
