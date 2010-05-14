@@ -122,8 +122,8 @@
 	}
 	x <- sampleRegular(x, maxpixels, asRaster=TRUE, corners=TRUE)
 
-	xticks <- axTicks(1, c(xmin(r), xmax(r), 4))
-	yticks <- axTicks(2, c(ymin(r), ymax(r), 4))
+	xticks <- axTicks(1, c(xmin(x), xmax(x), 4))
+	yticks <- axTicks(2, c(ymin(x), ymax(x), 4))
 	
 	if (xres(x) %% 1 == 0) xticks = round(xticks)
 	if (yres(x) %% 1 == 0) yticks = round(yticks)

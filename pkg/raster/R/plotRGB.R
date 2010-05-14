@@ -38,8 +38,8 @@ function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, 
 
 	xticks <- axTicks(1, c(xmin(r), xmax(r), 4))
 	yticks <- axTicks(2, c(ymin(r), ymax(r), 4))
-	if (xres(x) %% 1 == 0) xticks = round(xticks)
-	if (yres(x) %% 1 == 0) yticks = round(yticks)
+	if (xres(r) %% 1 == 0) xticks = round(xticks)
+	if (yres(r) %% 1 == 0) yticks = round(yticks)
 	
 	image(x=x, y=y, z=z,  col=col, axes=FALSE, xlab=xlab, ylab=ylab, asp=asp, ...)
 	axis(1, at=xticks)
