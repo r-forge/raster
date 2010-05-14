@@ -15,8 +15,8 @@ function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, 
 
  	if (missing(asp)) {
 		if (.couldBeLonLat(x)) {
-		#	ym <- mean(object@extent@ymax + object@extent@ymin)
-		#	asp <- min(5, 1/cos((ym * pi)/180))
+#			ym <- mean(object@extent@ymax + object@extent@ymin)
+#			asp <- min(5, 1/cos((ym * pi)/180))
 			asp = NA
 		} else {
 			asp = 1

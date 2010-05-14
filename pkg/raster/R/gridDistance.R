@@ -31,12 +31,18 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 	if (dataContent(object) == 'all') nr=4 else nr=5
 	
 	if(canProcessInMemory(object, n=nr)) {
-		vals <- getValues(object)
 		outRaster <- raster(object)
-		oC <- which(vals %in% originValue) #select cells not surrounded by other origin cells
-		ftC <- which(!(vals %in% omitValue))
-		chunkSize <- ncell(object)
-		outRaster <- setValues(outRaster, .calcDist(object, chunkSize, ftC, oC))
+		object <- getValues(object) # to avoid keeping values in memory twice
+		
+		oC <- which(object %in% originValue) #select cells not surrounded by other origin cells
+		ftC <- which(!(object %in% omitValue))
+		chunkSize <- ncell(outRaster)
+		outRaster <- setValues(outRaster, .calcDist(outRaster, chunkSize, ftC, oC))
+		outRaster[is.infinite(outRaster)] <- NA
+		if (filename != "") {
+			outRaster <- writeRaster(outRaster, filename, ...)
+		}
+		return(outRaster)
 		
 	} else 	{
 		r1 <- writeStart(raster(object), filename=rasterTmpFile(), overwrite=TRUE)
@@ -123,24 +129,13 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 			writeValues(r2, chunkDist, tr$row[i])
 			firstRow <- chunk[1:nrow(object)]
 			firstRowDist <- chunkDist[1:nrow(object)]
-			pbStep(pb, 2*tr$n - i)
-			#pbStep(pb) #produces an error!
+			#pbStep(pb, 2*tr$n - i)
+			pbStep(pb) #produces an error! (fixed!!)
 		}
 		outRaster <- writeStop(r2)
 		pbClose(pb)
 	
-		if (filename == "") {
-			if(canProcessInMemory(object, n=1)) {
-				outRaster <- readAll(outRaster) 
-				outRaster[0] <- outRaster[0] # to disasociate it from the temp file
-			} else {
-				filename = rasterTmpFile()
-			}
-		}
-	}
-	
-	if (filename != "") {
-		outRaster <- writeRaster(outRaster, filename=filename, ...)
+		outRaster <- calc(outRaster, fun = function(x) {x[is.infinite(x)] <- NA; return(x) }, filename=filename, ...)
 	}
 	return(outRaster)
 }

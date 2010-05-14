@@ -11,8 +11,8 @@
  
  	if (missing(asp)) {
 		if (.couldBeLonLat(object)) {
-		#	ym <- mean(object@extent@ymax + object@extent@ymin)
-		#	asp <- min(5, 1/cos((ym * pi)/180))
+#			ym <- mean(object@extent@ymax + object@extent@ymin)
+#			asp <- min(5, 1/cos((ym * pi)/180))
 			asp = NA
 		} else {
 			asp = 1

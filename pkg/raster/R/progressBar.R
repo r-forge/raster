@@ -26,13 +26,15 @@ pbCreate <- function(nsteps, type, style=3) {
 
 
 pbStep <- function(pb, step=NULL, label='step') {
-	if (is.null(step)) step = pb$getVal() + 1
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
+		if (is.null(step)) { step = pb$getVal() + 1 }
 		setTxtProgressBar(pb, step)
 	} else if (pbclass=="tkProgressBar") {
+		if (is.null(step)) { step = pb$getVal() + 1 }
 		setTkProgressBar(pb, step, label=paste(label, step))	
 	} else if (pbclass=="winProgressBar") {
+		if (is.null(step)) { step <- getWinProgressBar(pb)+1  }
 		setWinProgressBar(pb, step, title=paste(label, step))	
 	} 
 }
