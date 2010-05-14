@@ -96,7 +96,7 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 	cols <- unique(round(cols))
 	rows <- unique(round(rows))
 	cols = cols[cols>0]
-	rows = rows[cols>0]
+	rows = rows[rows>0]
 	nr <- length(rows)
 	nc <- length(cols)
 	
