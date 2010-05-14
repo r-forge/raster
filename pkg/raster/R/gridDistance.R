@@ -134,10 +134,13 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 		}
 		outRaster <- writeStop(r2)
 		pbClose(pb)
-	
-		outRaster <- calc(outRaster, fun = function(x) {x[is.infinite(x)] <- NA; return(x) }, filename=filename, ...)
+		
+		if (filename == '') {
+			return(outRaster)
+		} else {
+			return( writeRaster(outRaster, filename=filename, ...) )
+		}
 	}
-	return(outRaster)
 }
 
 

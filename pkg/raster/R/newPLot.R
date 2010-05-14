@@ -69,13 +69,13 @@
 			if (legend.at == 'quantile') {
 				z <- subset(z, is.finite(z))
 				at = quantile(z, names=F, na.rm=TRUE)
-				at <- round(at, decs)
 				axis.args <- c(list(side = ifelse(horizontal, 1, 4), mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2), at=at), axis.args)				
 #				at <- c(0, 1:5 * (1/5))
 #				at <- minz + zrange * at
 			} else {
 				at <- axTicks(2, c(minz, maxz, 4))
 			}
+			at <- round(at, decs)
 			axis.args <- c(list(side = ifelse(horizontal, 1, 4), mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2), at=at), axis.args)						
 		}
 		
@@ -110,7 +110,6 @@
 
 .plot2 <- function(x, maxpixels=100000, col=rev(terrain.colors(25)), xlab='', ylab='', asp, add=FALSE, legend=TRUE, legend.at='', ...)  {
 		
-	old.par <- par(no.readonly = TRUE)
 	plotArea <- .plotSpace()
 
 	if (!add & missing(asp)) {
@@ -122,8 +121,12 @@
 		}		
 	}
 	x <- sampleRegular(x, maxpixels, asRaster=TRUE, corners=TRUE)
-	xticks <- axTicks(1, c(xmin(x), xmax(x), 4))
-	yticks <- axTicks(2, c(ymin(x), ymax(x), 4))
+
+	xticks <- axTicks(1, c(xmin(r), xmax(r), 4))
+	yticks <- axTicks(2, c(ymin(r), ymax(r), 4))
+	
+	if (xres(x) %% 1 == 0) xticks = round(xticks)
+	if (yres(x) %% 1 == 0) yticks = round(yticks)
 
 	y <- yFromRow(x, nrow(x):1)
 	z <- t((getValues(x, format='matrix'))[nrow(x):1,])
@@ -145,7 +148,7 @@
 	}
 }
 
-.plot2(x, legend=F)
+#.plot2(x, legend=F)
 
 # plot2(r, legend.at='quantiles')
 # plot(wrld_simpl, add=T)
