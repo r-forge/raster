@@ -46,12 +46,20 @@ The following additional arguments can be passed, to replace default values for 
 
 
 \examples{
+
+#world lonlat raster
 r <- raster(ncol=10,nrow=10)
 r[] <- 1
 r[48] <- 2
 r[66:68] <- 3
 distRaster <- gridDistance(r,originValue=2,omitValue=3) 
 plot(distRaster)
+
+#UTM small area
+projection(r) <- "+proj=utm +zone=15 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
+distRaster <- gridDistance(r,originValue=2,omitValue=3) 
+plot(distRaster)
+
 }
 
 
