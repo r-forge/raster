@@ -45,33 +45,54 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 		return(outRaster)
 		
 	} else 	{
-		r1 <- writeStart(raster(object), filename=rasterTmpFile(), overwrite=TRUE)
-		
-		# to keep this in-line with the rest of the package?
-		# why not use something like:
 		tr <- blockSize(object, n=5)
 		pb <- pbCreate(tr$n*2 - 1, type=.progress(...))
+
+		#going up
+		r1 <- writeStart(raster(object), rasterTmpFile(), overwrite=TRUE)
+		for(i in tr$n:1) {
+			chunk <- getValues(object, row=tr$row[i], nrows=tr$nrows[i]) 
+			startCell <- (tr$row[i]-1) * ncol(object)
+			chunkSize <- length(chunk)
+			oC <- which(chunk %in% originValue) 
+			ftC <- which(!(chunk %in% omitValue))
+			if(i < tr$n) {
+				firstRowftC <- which(!(firstRow %in% omitValue)) + chunkSize
+				chunkDist <- .calcDist(object, 
+								chunkSize=chunkSize+ncol(object), 
+								ftC=c(ftC, firstRowftC), 
+								oC=c(oC, firstRowftC), 
+								perCell=c(rep(0,times=length(oC)),firstRowDist), 
+								startCell=startCell)[1:chunkSize]
+			} else {
+				chunkDist <- .calcDist(object, 
+								chunkSize=chunkSize, 
+								ftC=ftC, 
+								oC=oC, 
+								perCell=0, 
+								startCell=startCell)
+			}
+			firstRow <- chunk[1:nrow(object)]
+			firstRowDist <- chunkDist[1:nrow(object)]
+			chunkDist[is.infinite(chunkDist)] <- NA
+			writeValues(r1, chunkDist)
+			pbStep(pb) 
+		}
+		r1 <- writeStop(r1)
 		
-		#hChunks <- min(5, nrow(object))
-		#nChunks <- ceiling(nrow(object) / hChunks)
-		#hChunks <- rep(hChunks, nChunks)
-		#hChunks[nChunks] <- nrow(object) - (nChunks - 1) * hChunks[1]
-		#pb <- pbCreate(nChunks*2-1, type=.progress(...))
-			
 		#going down
-#		for(iChunk in 1:nChunks) {
-		for(i in 1:tr$n) {
+		if (filename == '') {filename <- rasterTmpFile()}
 		
-			#chunk <- getValues(object, (iChunk - 1)* hChunks[1] + 1, hChunks[iChunk])
+		outRaster <- writeStart(raster(object), filename=filename, overwrite=TRUE, ...)			
+		for(i in 1:tr$n) {
+			iM <- tr$n - i + 1
 			chunk <- getValues(object, row=tr$row[i], nrows=tr$nrows[i]) 
 			chunkSize <- length(chunk)
-			#startCell <- (iChunk -1) * hChunks[1] * ncol(object)
 			startCell <- (tr$row[i]-1) * ncol(object)
 			oC <- which(chunk %in% originValue) 
 			ftC <- which(!(chunk %in% omitValue))
-
-			chunkDist <- .calcDist(object, chunkSize, ftC, oC)
-				# if(iChunk>1) {
+			chunkDist <- getValues(r1, row=tr$row[iM], nrows=tr$nrows[iM])
+			chunkDist[is.na(chunkDist)] <- Inf
 			if (i > 1) {
 				chunkDist <- pmin(chunkDist,
 					.calcDist(object, 
@@ -81,65 +102,18 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 							perCell=c(lastRowDist, rep(0,times=length(oC))), 
 							startCell = startCell - ncol(object))[-(1:length(lastRowftC))])
 				}
-				#writeValues(r1, chunkDist, (iChunk - 1) * hChunks[1] + 1)
-			writeValues(r1, chunkDist, tr$row[i])
 			lastRow <- chunk[(length(chunk)-ncol(object)+1):length(chunk)]
 			lastRowDist <- chunkDist[(length(chunkDist)-ncol(object)+1):length(chunkDist)]
 			lastRowftC <- which(!(lastRow %in% omitValue))
-				# pbStep(pb, iChunk) 
-			pbStep(pb, i) 
+			chunkDist[is.infinite(chunkDist)] <- NA				
+			writeValues(outRaster, chunkDist, tr$row[i])
+			pbStep(pb) 
 		}
-		r1 <- writeStop(r1)
-
-			#then up again
-#			if(nChunks>1)  # always true 
-#			{
-		firstRow <- chunk[1:nrow(object)]
-		firstRowDist <- chunkDist[1:nrow(object)]
-		# rather then setting the default format etc, you could do ext(f2) = 'tif' to set format, but below is shorter still; format trumps the extension:
-		r2 <- writeStart(raster(r1), rasterTmpFile(), overwrite=TRUE, format='GTiff')
-		
-		# writeValues(r2, chunkDist, start = (nChunks - 1) * hChunks[1] +1)
-		writeValues(r2, chunkDist, tr$row[tr$n])
-		
-				#for(iChunk in (nChunks-1):1) {
-		for(i in (tr$n-1):1) {
-		
-				
-			chunk <- getValues(object, row=tr$row[i], nrows=tr$nrows[i]) 
-			startCell <- (tr$row[i]-1) * ncol(object)
-
-			#startCell <- (iChunk - 1) * hChunks[1] * ncol(object)
-			#chunk <- getValues(object, (iChunk - 1)* hChunks[1] + 1, hChunks[iChunk])
-					
-			chunkSize <- length(chunk)
-			oC <- which(chunk %in% originValue) 
-			ftC <- which(!(chunk %in% omitValue))
-			# chunkDist <- getValues(r1, (iChunk - 1)* hChunks + 1, hChunks[iChunk])
-			chunkDist <- getValues(r1, row=tr$row[i], nrows=tr$nrows[i]) 
-			firstRowftC <- which(!(firstRow %in% omitValue)) + chunkSize
-			chunkDist <- pmin(chunkDist,
-			.calcDist(object, 
-							chunkSize=chunkSize+ncol(object), 
-							ftC=c(ftC, firstRowftC), 
-							oC=c(oC, firstRowftC), 
-							perCell=c(rep(0,times=length(oC)),firstRowDist), 
-							startCell=startCell)[1:chunkSize])
-					# writeValues(r2, chunkDist, start = (iChunk - 1) * hChunks + 1)
-			writeValues(r2, chunkDist, tr$row[i])
-			firstRow <- chunk[1:nrow(object)]
-			firstRowDist <- chunkDist[1:nrow(object)]
-			#pbStep(pb, 2*tr$n - i)
-			pbStep(pb) #produces an error! (fixed!!)
-		}
-		outRaster <- writeStop(r2)
+		outRaster <- writeStop(outRaster)
 		pbClose(pb)
 		
-		if (filename == '') {
-			return(outRaster)
-		} else {
-			return( writeRaster(outRaster, filename=filename, ...) )
-		}
+		return(outRaster)
+		#this leaves it up to the user to read the values in memory if that´s what s/he wants.
 	}
 }
 
