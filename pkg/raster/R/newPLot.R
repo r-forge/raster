@@ -12,11 +12,8 @@
 # Licence GPL v3
 
 
-.plotSpace <- function(){
-	legend.mar = 5.1
-	legend.width = 0.5
-	legend.shrink = 0.5
-
+.plotSpace <- function(legend.mar = 3.1, legend.width = 0.5, legend.shrink = 0.5) {
+	
 	par <- par()
 	char.size <- par$cin[1]/par$din[1]
     offset <- char.size * par$mar[4] 
@@ -40,7 +37,7 @@
 }
 
 
-.plotLegend <- function(z, col, smallplot, legend.at='classic', lab.breaks = NULL, axis.args = NULL, legend.lab = NULL, legend.args = NULL, ...) {
+.plotLegend <- function(z, col, legend.at='classic', lab.breaks = NULL, axis.args = NULL, legend.lab = NULL, legend.args = NULL, ...) {
 		horizontal=FALSE
 		ix <- 1
 		zlim <- range(z, na.rm = TRUE, finite=TRUE)
@@ -92,6 +89,7 @@
 				image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
 			}
 		}
+		axis.args = c(axis.args, cex.axis=0.75, tcl=-0.15, list(mgp=c(3, 0.4, 0)) )
 		do.call("axis", axis.args)
 		#axis(axis.args$side, at=min(iz), las=ifelse(horizontal, 0, 2))
 		box()
@@ -108,7 +106,7 @@
 	}
 
 
-.plot2 <- function(x, maxpixels=100000, col=rev(terrain.colors(25)), xlab='', ylab='', asp, add=FALSE, legend=TRUE, legend.at='', ...)  {
+.plot2 <- function(x, maxpixels=100000, col=rev(terrain.colors(25)), xlab='', ylab='', asp, box=TRUE, add=FALSE, legend=TRUE, legend.at='', ...)  {
 		
 	plotArea <- .plotSpace()
 
@@ -138,19 +136,21 @@
 		if (legend) {
 			par(pty = "m", plt=plotArea$legendPlot, err = -1)
 			.plotLegend(z, col, legend.at=legend.at, ...)
-			par(new=TRUE, plt = plotArea$mainPlot) 
+			par(new=TRUE, plt=plotArea$mainPlot) 
 		}
 		image(x=x, y=y, z=z,  col=col, axes=FALSE, xlab=xlab, ylab=ylab, asp=asp, ...)
-		axis(1, at=xticks)
-		axis(2, at=yticks, las = 1)
-		axis(3, at=xticks, labels=FALSE, lwd.ticks=0)
-		axis(4, at=yticks, labels=FALSE, lwd.ticks=0)
+		axis(1, at=xticks,  cex.axis=0.67, tcl=-0.3, mgp=c(3, 0.25, 0))
+		las = ifelse(max(nchar(as.character(yticks)))> 5, 0, 1)
+		axis(2, at=yticks, las = las,  cex.axis=0.67, tcl=-0.3, mgp=c(3, 0.75, 0) )
+		#axis(3, at=xticks, labels=FALSE, lwd.ticks=0)
+		#axis(4, at=yticks, labels=FALSE, lwd.ticks=0)
+		if (box) box()
 	}
 }
 
-#.plot2(x, legend=F)
+#.plot2(r, legend=T)
 
-# plot2(r, legend.at='quantiles')
+# .plot2(r, legend.at='quantile')
 # plot(wrld_simpl, add=T)
  
 

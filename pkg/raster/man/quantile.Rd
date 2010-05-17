@@ -17,7 +17,7 @@ quantile(x, ...)
 
 \arguments{
   \item{x}{A RasterLayer object}
-  \item{...}{Additional arguments: \code{na.rm=TRUE},  {ncells=NULL}, and additional arguments to the stats::quantile function, see \code{\link[stats]{quantile}}}  
+  \item{...}{Additional arguments: \code{na.rm=TRUE}, \code{ncells=NULL}, and additional arguments to the stats::quantile function, see \code{\link[stats]{quantile}}}  
        ncells can be used to set the number of cells to be sampled, for very large raster datasets.
 }
 

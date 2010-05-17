@@ -10,9 +10,10 @@ if (!isGeneric("plotRGB")) {
 		standardGeneric("plotRGB"))
 }	
 
-setMethod("plotRGB", signature(x='Raster'), 
-function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, xlab='', ylab='', asp, ...) { 
+setMethod("plotRGB", signature(x='RasterStackBrick'), 
 
+function(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, axes=TRUE, xlab='', ylab='', asp, ...) { 
+	
  	if (missing(asp)) {
 		if (.couldBeLonLat(x)) {
 			ym <- mean(object@extent@ymax + object@extent@ymin)

@@ -9,8 +9,7 @@
 #However, I think I asked this more than a year ago and he seemed not very convinced.
 
 # We could -- perhaps -- speed it up for cases with many origin cells by only considering the 'edge' cells (all the others have distance = 0
-# see the edge function. Or perhaps use igraph to compute the edges???
-
+# see the edge function. Or perhaps use igraph to compute the edges??? 
 
 #setGeneric("gridDistance", function(object, ...) standardGeneric("gridDistance"))
 
@@ -27,6 +26,12 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 	}
 	lonlat <- .couldBeLonLat(object)
 	filename <- trim(filename)
+	
+	if (filename != ""  & file.exists(filename)) {
+		if (! .overwrite(...)) {
+			stop("file exists. Use another name or 'overwrite=TRUE' if you want to overwrite it")
+		}
+	}
 	
 	if (dataContent(object) == 'all') nr=4 else nr=5
 	
@@ -111,9 +116,7 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 		}
 		outRaster <- writeStop(outRaster)
 		pbClose(pb)
-		
 		return(outRaster)
-		#this leaves it up to the user to read the values in memory if that´s what s/he wants.
 	}
 }
 

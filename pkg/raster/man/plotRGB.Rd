@@ -3,7 +3,7 @@
 \docType{methods}
 
 \alias{plotRGB}
-\alias{plotRGB,Raster-method}
+\alias{plotRGB,RasterStackBrick-method}
 
 \title{Red-Green-Blue plot of RasterLayers}
 
