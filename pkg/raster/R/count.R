@@ -18,7 +18,7 @@ count <- function(raster, value, digits=0, progress) {
 		pb <- pbCreate(tr$n, type=progress)			
 		x <- 0
 		for (i in 1:tr@n) {
-			v <- getValuesBlock(raster, row=tr$row[i], nrows=tr$nrows[i])
+			v <- getValues(raster, row=tr$row[i], nrows=tr$nrows[i])
 			if (is.na(value)) {
 				x <- x + sum(is.na(v))
 			} else {

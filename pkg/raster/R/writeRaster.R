@@ -21,7 +21,7 @@ function(x, filename, format, ...) {
 		if (dataSource(x) == 'disk') {
 			return( saveAs(x, filename, format=filetype, ...) )
 		} else {
-			stop('No usable data available for writing.')
+			stop('No usable data available for writing')
 		}
 	}
 	

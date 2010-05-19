@@ -26,7 +26,8 @@ function(x, filename, options=NULL, format, ...) {
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
-	if (filetype=='ascii') {stop('ascii files not yet supported by this function, you can use writeRaster') }
+	if (filetype=='ascii') { return(.startAsciiWriting(x, filename)) }
+
 	res <- filetype %in% c(.nativeDrivers())
 	if (res) { 
 		.startRasterWriting(x, filename, format=filetype, ...)
@@ -54,9 +55,10 @@ function(x, filename, options=NULL, format, ...) {
 
 setMethod('writeStop', signature(x='RasterLayer'), 
 function(x) {
-	native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
-	if (native) { 
+	if ( x@file@driver %in% .nativeDrivers() ) { 
 		return( .stopRasterWriting(x) )
+	} else if ( x@file@driver == 'ascii' ) { 
+		return( .stopAsciiWriting(x) )
 	} else {
 		return( .stopGDALwriting(x) )
 	}
@@ -64,7 +66,7 @@ function(x) {
 
 setMethod('writeStop', signature(x='RasterBrick'), 
 function(x) {
-	native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
+	native <- x@file@driver %in% c(.nativeDrivers())
 	if (native) { 
 		return( .stopRasterWriting(x) )
 	} else {
@@ -84,9 +86,7 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			x@data@max <- max(x@data@max, rsd)
 		}	
 		
-		native <- x@file@driver %in% c(.nativeDrivers(), 'ascii')
-		
-		if (native) {
+		if ( x@file@driver %in% .nativeDrivers() ) {
 			if (x@file@dtype == "INT" || x@file@dtype =='LOG' ) { 
 				v <- as.integer(round(v))  
 				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
@@ -95,8 +95,13 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			}
 			writeBin(v, x@file@con, size=x@file@dsize )
 			
+		} else if ( x@file@driver == 'ascii') {
+			if (x@file@dtype == 'INT') {v <- round(v)}
+			v[is.na(v)] <- x@file@nodatavalue
+			v <- matrix(v, ncol=ncol(x), byrow=TRUE)
+			write.table(v, x@file@name, append = TRUE, quote = FALSE, sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
+
 		} else {
-		
 			off = c(start-1, 0)
 			v[is.na(v)] <- x@file@nodatavalue
 			v = matrix(v, nrow=ncol(x))

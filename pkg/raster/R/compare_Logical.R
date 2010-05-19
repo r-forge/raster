@@ -40,7 +40,7 @@ setMethod('!', signature(x='RasterLayer'),
 			pb <- pbCreate(tr$n, type=.progress())			
 			r <- writeStart(r, filename=rasterTmpFile(), datatype='LOG1S', overwrite=TRUE )
 			for (i in 1:tr$n) {
-				v <- ! .asLogical(getValuesBlock(x, row=tr$row[i], nrows=tr$size))
+				v <- ! .asLogical(getValues(x, row=tr$row[i], nrows=tr$size))
 				r <- writeValues(r, v, tr$row[i])
 				pbStep(pb, i) 
 			}
@@ -64,7 +64,7 @@ setMethod("Compare", signature(e1='RasterLayer', e2='logical'),
 			pb <- pbCreate(tr$n, type=.progress())
 			r <- writeStart(r, filename=rasterTmpFile(), datatype='LOG1S', overwrite=TRUE )
 			for (i in 1:tr$n) {
-				v <- callGeneric(getValuesBlock(e1, row=tr$row[i], nrows=tr$size), e2)
+				v <- callGeneric(getValues(e1, row=tr$row[i], nrows=tr$size), e2)
 				r <- writeValues(r, v, tr$row[i])
 				pbStep(pb, i) 
 			}

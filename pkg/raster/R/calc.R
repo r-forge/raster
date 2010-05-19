@@ -43,7 +43,7 @@ function(x, fun, filename='', ...) {
 	pb <- pbCreate(tr$n, type=.progress(...))			
 	
 	for (i in 1:tr$n) {
-		vv <- fun( getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]) )
+		vv <- fun( getValues(x, row=tr$row[i], nrows=tr$nrows[i]) )
 		outraster <- writeValues(outraster, vv, tr$row[i])
 		pbStep(pb, i)
 	}
