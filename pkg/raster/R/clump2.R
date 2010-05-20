@@ -54,8 +54,7 @@ function(x, filename='', directions=8, ...) {
 	} 
 	# else 
 	
-	if (filename == '') filename <- rasterTmpFile()
-	writeStart(outRaster, filename, ...)
+	outRaster <- writeStart(outRaster, filename=rasterTmpFile(), ...)
 
 	tr <- blockSize(outRaster)
 	pb <- pbCreate(tr$n, type=.progress(...))
@@ -63,6 +62,7 @@ function(x, filename='', directions=8, ...) {
 	ext <- c(xmin(outRaster), xmax(outRaster), ymax(outRaster), NA)
 	maxval <- 0
 	
+	rcl <- NULL
 	for (i in 1:tr$n) {
 		ext[4] <- ext[3]
 		ext[3] <- yFromRow(tr$row[i] + 1) # one more row
@@ -70,17 +70,19 @@ function(x, filename='', directions=8, ...) {
 		xc <- .clump(xc, directions) + maxval
 		if (i > 1) {
 			firstrow <- getValues(xc, 1)
-			rr <- na.omit(unique(cbind(firstrow, lastrow)))
-			if (nrow(rr) > 0 ) {
-				xc <- subs(xc, rr, subsWithNA=FALSE)
-			}
+			rc <- na.omit(unique(cbind(firstrow, lastrow)))
+			rcl <- rbind(rcl, rc)
 		}
 		lastrow <- getValues(xc, nrows(cx))
 		maxval <- max(getValues(xc))
 		outRaster <- writeValues(outRaster, getValues(xc, 1, tr$nrows[i]))
 	}
-	
 	outRaster <- writeStop(outRaster)
+
+	if (filename == '') filename <- rasterTmpFile()
+
+	# now reclass
+	
 	return(outRaster)
 }
 )

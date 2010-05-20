@@ -26,10 +26,9 @@ function(x, filename, options=NULL, format, ...) {
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
-	if (filetype=='ascii') { return(.startAsciiWriting(x, filename)) }
-
-	res <- filetype %in% c(.nativeDrivers())
-	if (res) { 
+	if (filetype=='ascii') { 
+		return(.startAsciiWriting(x, filename, ...)) 
+	} else if ( filetype %in% .nativeDrivers() ) { 
 		.startRasterWriting(x, filename, format=filetype, ...)
 	} else {
 		.startGDALwriting(x, filename, options, format=filetype, ...)
