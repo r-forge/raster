@@ -59,7 +59,7 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 		colnames(coords) <- c('x', 'y')
 		rastvals <- as.data.frame(xyv[,3])
 		colnames(rastvals) <- 'value'
-		return(SpatialPointsDataFrame(coords=coords, data=rastvals, proj4string=proj4string)))
+		return(SpatialPointsDataFrame(coords=coords, data=rastvals, proj4string=proj4string))
 	} else {
 		return(xyv)
 	}

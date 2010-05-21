@@ -40,8 +40,18 @@
 	return(sp)
 }
 
+setAs('Raster', 'SpatialPointsDataFrame', 
+	function(from) { 
+		return(rasterToPoints(from, asSpatialPoints=TRUE)) 
+	}
+)
+
 setAs('Raster', 'SpatialPoints', 
-	function(from) { return(.rasterToPoints(from, asSpatialPoints=TRUE)) }
+	function(from) { 
+		sp <- data.frame(rasterToPoints(from, asSpatialPoints=FALSE))
+		coordinates(sp) = ~ x + y
+		return(sp)
+	}
 )
 
 setAs('Raster', 'SpatialPixels', 
