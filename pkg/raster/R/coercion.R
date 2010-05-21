@@ -40,6 +40,10 @@
 	return(sp)
 }
 
+setAs('Raster', 'SpatialPoints', 
+	function(from) { return(.rasterToPoints(from, asSpatialPoints=TRUE)) }
+)
+
 setAs('Raster', 'SpatialPixels', 
 	function(from) { return(.asSpGrid(from, type='pixel', FALSE)) }
 )

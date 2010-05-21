@@ -22,7 +22,7 @@
 	if (resdif > 0.01) {
 		stop(paste("x has unequal horizontal and vertical resolutions. Such data cannot be stored in arc-ascii format"))
 	} else if (resdif > 0.001) {
-		warning("arc-ascii format ignore that this x has slightly unequal horizontal and vertical resolutions")
+		warning("ignoring the slightly unequal horizontal and vertical resolutions")
 	}
 	if (!overwrite & file.exists(filename)) {
 		stop(paste(filename, "exists. Use 'overwrite=TRUE'")) 

@@ -24,7 +24,8 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 			return(xyFromCell(x, 1:ncell(x)))
 		}
 	}
-	
+
+	proj4string=projection(x, asText=FALSE)
 	if (canProcessInMemory(x, 3)) {
 		xyv <- cbind(xyFromCell(x, 1:ncell(x)), getValues(x))
 		x = NULL
@@ -58,7 +59,7 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 		colnames(coords) <- c('x', 'y')
 		rastvals <- as.data.frame(xyv[,3])
 		colnames(rastvals) <- 'value'
-		return(SpatialPointsDataFrame(coords=coords, data=rastvals, proj4string=projection(x, asText=FALSE)))
+		return(SpatialPointsDataFrame(coords=coords, data=rastvals, proj4string=proj4string)))
 	} else {
 		return(xyv)
 	}
