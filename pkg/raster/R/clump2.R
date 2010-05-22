@@ -20,15 +20,13 @@ if (!isGeneric("clump2")) {
 	cl <- clusters(graph(adjv, directed=FALSE))$membership[val+1]
 	ucl <- sort(unique(cl))
 	ucl <- data.frame(id=ucl, value=1:length(ucl))
-	test <- subset(ucl, ucl$id != ucl$value)
-	if (nrow(test) > 0 ) {
-		cl <- merge(cl, ucl, by=1, all.x=TRUE)
-	}
+	#test <- subset(ucl, ucl$id != ucl$value)
+	#if (nrow(test) > 0 ) {
+	#	cl <- merge(cl, ucl, by=1, all.x=TRUE)
+	#}
 	x1[val] <- cl
 	return(x1)
 }
-
-
 
 setMethod('clump2', signature(x='RasterLayer'), 
 function(x, filename='', directions=8, ...) {
@@ -74,6 +72,7 @@ function(x, filename='', directions=8, ...) {
 			rcl <- rbind(rcl, rc)
 		}
 		lastrow <- getValues(xc, nrows(cx))
+		
 		maxval <- max(getValues(xc))
 		outRaster <- writeValues(outRaster, getValues(xc, 1, tr$nrows[i]))
 	}
@@ -82,7 +81,10 @@ function(x, filename='', directions=8, ...) {
 	if (filename == '') filename <- rasterTmpFile()
 
 	# now reclass
-	
+	rcl <- graph.edgelist(rcl, directed=FALSE)
+	cl <- clusters(rcl)$membership + 1
+	outRaster <- reclass(outRaster, cbind(V(rcl),cl))
 	return(outRaster)
 }
 )
+
