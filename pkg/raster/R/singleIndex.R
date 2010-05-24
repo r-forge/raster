@@ -42,3 +42,21 @@ function(x,i,j,...,drop=TRUE) {
 )
 
 
+
+
+setMethod("[", c("RasterStack","ANY", "missing"),
+function(x,i,j,...,drop=TRUE) {
+	
+	if (missing(i)) { 
+		return(getValues(x))
+	}
+
+	if (class(i) == "RasterLayer") {
+		i <- as.logical( getValues(i) ) 
+	}
+	
+	return(cellValues(x, i))
+}
+)
+
+

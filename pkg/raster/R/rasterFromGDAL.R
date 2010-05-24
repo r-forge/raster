@@ -61,12 +61,18 @@
 		try ( datatype <- .getRasterDType ( as.character( attr(gdalinfo, 'df')[1, 1]) ), silent=TRUE )
 		try ( minv <- as.numeric( attr(gdalinfo, 'df')[, 2] ) , silent=TRUE ) 
 		try ( maxv <- as.numeric( attr(gdalinfo, 'df')[, 3] ) , silent=TRUE ) 
+		minv[minv == -4294967295] <- Inf
+		maxv[maxv == 4294967295] <- -Inf
 		if ( is.finite(minv) && is.finite(maxv) ) x@data@haveminmax <- TRUE 
-		
 	} else {
 		try ( datatype <- .getRasterDType ( as.character( attr(gdalinfo, 'df')[band, 1]) ), silent=TRUE )
-		try ( minv <- as.numeric( attr(gdalinfo, 'df')[band, 2] ) , silent=TRUE ) 
-		try ( maxv <- as.numeric( attr(gdalinfo, 'df')[band, 3] ) , silent=TRUE ) 
+		minmax <- c(Inf, -Inf)
+		try( minmax <- attr(gdalinfo, 'df')[band, 2:3] , silent=TRUE )
+		if (all( minmax == c(-4294967295, 4294967295))) {
+			minmax <- c(Inf, -Inf)
+		}
+		minv <- minmax[1]
+		maxv <- minmax[2]
 		if ( is.finite(minv) & is.finite(maxv) ) x@data@haveminmax <- TRUE 
 	}
 	
