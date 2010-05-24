@@ -80,7 +80,7 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 			firstRow <- chunk[1:nrow(object)]
 			firstRowDist <- chunkDist[1:nrow(object)]
 			chunkDist[is.infinite(chunkDist)] <- NA
-			writeValues(r1, chunkDist)
+			r1 <- writeValues(r1, chunkDist)
 			pbStep(pb) 
 		}
 		r1 <- writeStop(r1)
@@ -111,7 +111,7 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 			lastRowDist <- chunkDist[(length(chunkDist)-ncol(object)+1):length(chunkDist)]
 			lastRowftC <- which(!(lastRow %in% omitValue))
 			chunkDist[is.infinite(chunkDist)] <- NA				
-			writeValues(outRaster, chunkDist, tr$row[i])
+			outRaster <- writeValues(outRaster, chunkDist, tr$row[i])
 			pbStep(pb) 
 		}
 		outRaster <- writeStop(outRaster)

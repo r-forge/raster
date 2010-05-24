@@ -15,8 +15,9 @@ function(x, filename, ...) {
 		return(  writeRaster(x, filename=filename, ...) )
 	} 
 
+	
 	filename <- trim(filename)
-	filetype <- .filetype(format=format, filename=filename)
+	filetype <- .filetype(format=.filetype(...), filename=filename)
 	filename <- .getExtension(filename, filetype)
 
 	if ( trim(filename(x)) == filename ) {
