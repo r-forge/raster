@@ -103,14 +103,6 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 				res <- x@data@values[cells]
 			}
 
-		} else if (dataContent(x) == 'rows') {
-		
-			if ( (dataIndices(x)[1] <= startcell) & (dataIndices(x)[2] >= endcell) ) {
-				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol) - dataIndices(x)[1] + 1
-				res <- x@data@values[cells]
-			} else {
-				readrow <- TRUE
-			}
 			
 		} else if (dataContent(x) == 'row') {
 		
@@ -120,24 +112,6 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 				readrow <- TRUE
 			}
 			
-		} else if (dataContent(x) == 'block') {
-		
-			fcol <- colFromCell(x, dataIndices(x)[1])
-			lcol <- colFromCell(x, dataIndices(x)[2])
-			if (fcol > col | lastcol < lastcol) {
-				readrow <- TRUE
-			} else {
-				frow <- rowFromCell(x, dataIndices(x)[1])
-				lrow <- rowFromCell(x, dataIndices(x)[2])
-				if (frow > row | lrow < lastrow) {
-					readrow <- TRUE
-				} else {
-					cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
-					rown <- rowFromCell(x, cells) - frow + 1
-					coln <- colFromCell(x, cells) - fcol + 1
-					res <- as.vector(matrix(x@data@values, nrow=lrow-frow+1, byrow=TRUE)[cbind(rown, coln)])
-				}
-			}
 		} else {
 			stop('something is wrong with the RasterLayer dataContent')
 		}

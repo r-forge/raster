@@ -9,39 +9,26 @@ if (!isGeneric("saveAs")) {
 		standardGeneric("saveAs"))
 }	
 
-
-
 setMethod('saveAs', signature(x='RasterLayer', filename='character'), 
 function(x, filename, ...) {
-	filename <- trim(filename)
-	if ( trim(filename(x)) == filename ) {
-		stop('filenames of source and destination should be different')
-	}
-	
-	ft = .filetype(...)
-	if (ft == 'ascii') {
-		return(.saveAsAscii(x, filename, ...))
-	} else if (ft == 'raster') {
-		fn = filename
-		ext(fn) = '.grd'
-		if ( trim(filename(x)) == fn ) {
-			stop('filenames of source and destination should be different')
-		}
-	}
-	
-	
-# to do also chec 	
 	if (dataContent(x) == 'all') {
 		return(  writeRaster(x, filename=filename, ...) )
 	} 
-# to do: if filetype and datatype are the same, then just copy the file .... 
+
+	filename <- trim(filename)
+	filetype <- .filetype(format=format, filename=filename)
+	filename <- .getExtension(filename, filetype)
+
+	if ( trim(filename(x)) == filename ) {
+		stop('filenames of source and destination should be different')
+	}
 
 	r <- raster(x)
 	tr <- blockSize(r)
 	pb <- pbCreate(tr$n, type=.progress(...))			
 	r <- writeStart(r, filename=filename, ...)
 	for (i in 1:tr$n) {
-		v <- getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i])
+		v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 		r <- writeValues(r, v, tr$row[i])
 		pbStep(pb, i) 			
 	}
@@ -70,7 +57,7 @@ setMethod('saveAs', signature(x='RasterStackBrick', filename='character'),
 			pb <- pbCreate(tr$n, type=.progress())
 			b <- writeStart(b, filename=filename, bandorder=bandorder, ...)
 			for (i in 1:tr$n) {
-				v <- getValuesBlock(x, row=tr$row[i], nrows=tr$size)
+				v <- getValues(x, row=tr$row[i], nrows=tr$size)
 				b <- writeValues(b, v, tr$row[i])
 				pbStep(pb, i)
 			}
@@ -81,25 +68,4 @@ setMethod('saveAs', signature(x='RasterStackBrick', filename='character'),
 	}
 )
 
-
-
-.saveAsAscii <- function(x, filename, filetype='ascii',...) {
-
-	filename <- trim(filename)
-	if ( trim(filename(x)) == filename ) {
-		stop('filenames of source and destination should be different')
-	}
-	
-	if (dataContent(x) == 'all') {
-		return(  writeRaster(x, filename=filename, ...) )
-	} 
-# to do: if filetype and datatype are the same, then just copy the file .... 
-	newr <- raster(x)
-	for (r in 1:nrow(newr)) {
-		v <- getValues(x, r)
-		newr <- setValues(newr, v, r)
-		newr <- writeRaster(newr, filename=filename, ...)
-	}
-	return(newr)
-}
 
