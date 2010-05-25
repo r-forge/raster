@@ -5,12 +5,21 @@
 # Licence GPL v3
 
 
+
 'projection<-' <- function(x, value) {
 	if (class(value)=="CRS") {
-		x@crs <- value
+		crs <- value
 	} else {	
-		x@crs <- .newCRS(value)
+		crs <- .newCRS(value)
 	}	
+	
+	if (class(x) == 'RasterStack') {
+		for (i in 1:nlayers(x)) {
+			x@layers[[i]]@crs <- crs
+		}
+	} 
+	
+	x@crs = crs
 	return(x)
 }
 
