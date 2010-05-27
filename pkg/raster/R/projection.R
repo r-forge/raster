@@ -14,8 +14,10 @@
 	}	
 	
 	if (class(x) == 'RasterStack') {
-		for (i in 1:nlayers(x)) {
-			x@layers[[i]]@crs <- crs
+		if (nlayers(x) > 0) {
+			for (i in 1:nlayers(x)) {
+				x@layers[[i]]@crs <- crs
+			}
 		}
 	} 
 	
