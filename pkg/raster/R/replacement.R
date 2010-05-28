@@ -8,6 +8,8 @@
 setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 	function(x, i, j, value) {
 		
+		if (!is.numeric(value)) value <- as.numeric(value)
+		
 		if  (missing(i)) {
 			if (length(value) == ncell(x)) {
 				x <- try( setValues(x, value))
