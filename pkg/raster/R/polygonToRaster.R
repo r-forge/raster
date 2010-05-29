@@ -163,6 +163,8 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 
 	if (filename == "") {
 		v <- matrix(NA, ncol=nrow(raster), nrow=ncol(raster))
+	} else {
+		raster <- writeStart(raster, filename=filename, ...)
 	}
 
 	rxmn <- xmin(raster) 
@@ -280,16 +282,16 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 		if (filename == "") {
 			v[,r] <- rv
 		} else {
-			raster <- setValues(raster, values=rv, rownr=r)
-			raster <- writeRaster(raster, filename=filename, ...)
+			raster <- writeValues(raster, rv)
 		}
-		
 		pbStep(pb, r)
 	}
 	pbClose(pb)
 
 	if (filename == "") {
 		raster <- setValues(raster, as.vector(v))
+	} else {
+		raster <- writeStop(raster)
 	}
 	return(raster)
 }
@@ -298,9 +300,6 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 .polygoncover <- function(raster, filename, polinfo, lxmin, lxmax, pollist, ...) {
 # percentage cover per grid cell
 	bigraster <- raster(raster)
-	if (filename == "") {
-		v <- matrix(NA, ncol=nrow(bigraster), nrow=ncol(bigraster))
-	}
 	rxmn <- xmin(bigraster) 
 	rxmx <- xmax(bigraster) 
 	f <- 10
@@ -312,6 +311,12 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 	hr <- 0.5 * yres(bigraster)
 
 	vv <- matrix(ncol=f, nrow=nc)
+	
+	if (filename == "") {
+		v <- matrix(NA, ncol=nrow(bigraster), nrow=ncol(bigraster))
+	} else {
+		bigraster <- writeStart(bigraster, filename=filename, ...)
+	}
 	
 	pb <- pbCreate(nrow(bigraster), type=.progress(...))
 	for (rr in 1:nrow(bigraster)) {
@@ -389,8 +394,7 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 		if (filename == "") {
 			v[,rr] <- av
 		} else {
-			bigraster <- setValues(bigraster, values=av, rownr=rr)
-			bigraster <- writeRaster(bigraster, filename=filename, ...)
+			bigraster <- writeValues(bigraster, values)
 		}
 		pbStep(pb, rr)
 	}
@@ -398,6 +402,8 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 
 	if (filename == "") {
 		bigraster <- setValues(bigraster, as.vector(v))
+	} else {
+		bigraster <- writeStop(bigraster)
 	}
 	return(bigraster)
 }
@@ -415,7 +421,6 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 	filename <- trim(filename)
 	raster <- raster(raster)
 	
-
 	spbb <- bbox(p)
 	rsbb <- bbox(raster)
 	if (spbb[1,1] > rsbb[1,2] | spbb[2,1] > rsbb[2,2]) {

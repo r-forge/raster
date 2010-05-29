@@ -78,7 +78,8 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	}
 
 	filename <- trim(filename)
-	to <- raster(to, filename=filename)
+	
+	to <- raster(to)
 	if (!canProcessInMemory(to, 1) && filename == "") {
 		filename <- rasterTmpFile()
 	}
@@ -95,7 +96,6 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	pb <- pbCreate(tr$n, type=.progress(...))
 	for (i in 1:tr$n) {
 		r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-
 		xy <- xyFromCell(to, cellFromRowCol(to, tr$row[i], 1) : cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to)) ) 
 
 		unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
