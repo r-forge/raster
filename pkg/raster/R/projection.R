@@ -19,8 +19,11 @@
 			}
 		}
 	} 
-	
-	x@crs = crs
+	if (inherits(x, 'Spatial')) {
+		x@proj4string <- crs
+	} else {
+		x@crs = crs
+	}
 	return(x)
 }
 
