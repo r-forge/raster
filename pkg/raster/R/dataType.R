@@ -88,14 +88,13 @@
 				x@file@nodatavalue <- 65535
 			}
 		} else if (size == '1') {
-			# there is no nodata value for byte
-			x@file@nodatavalue <- -9999
 			if (signed) {
 				x@file@datanotation <- 'INT1S'
+				x@file@nodatavalue <- -128
 			} else {
 				x@file@datanotation <- 'INT1U'
+				x@file@nodatavalue <- 255
 			}
-			#warning("binary files of a single byte do not have NA values on disk")
 		} else if (size == '8') {
 			x@file@nodatavalue <- -9223372036854775808
 			x@file@datanotation <- 'INT8S'							
