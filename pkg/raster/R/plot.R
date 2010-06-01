@@ -56,10 +56,10 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), maxpixels=100000, levelplot=FALSE, new=TRUE, ...)  {
+	function(x, col=rev(terrain.colors(255)), maxpixels=100000, levelplot=FALSE, newstyle=FALSE, ...)  {
 		if (levelplot) .levelplotraster(x, col=col, maxpixels=maxpixels, ...) 
 		else { 
-			if (new) {
+			if (newstyle) {
 				.plot2(x, col=col, maxpixels=maxpixels, ...)
 			} else {
 				.plotraster(x, col=col, maxpixels=maxpixels, ...) 
