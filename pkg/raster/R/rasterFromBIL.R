@@ -130,7 +130,7 @@
 		if (pixtype == 'SIGNEDINT') {
 			dataType(x) <- 'INT1S'
 		} else {
-			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT2S"')
+			if (pixtype != 'UNSIGNEDINT') warning('assumed data is unsigned. If not, use  dataType(x) <- "INT1S"')
 			dataType(x) <- 'INT1U'		
 		}
 	} else if (nbits == 16) {

@@ -13,6 +13,9 @@ setMethod('writeRaster', signature(x='RasterLayer', filename='character'),
 function(x, filename, format, ...) {
 
 	filename <- trim(filename)
+	if (filename == '') {
+		stop('provide a filename')
+	}
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
