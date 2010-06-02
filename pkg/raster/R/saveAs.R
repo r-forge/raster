@@ -10,11 +10,13 @@ if (!isGeneric("saveAs")) {
 }	
 
 setMethod('saveAs', signature(x='RasterLayer', filename='character'), 
-function(x, filename, ...) {
+function(x, filename, overwrite, progress, ...) {
 	if (dataContent(x) == 'all') {
 		return(  writeRaster(x, filename=filename, ...) )
 	} 
 
+	if (missing(overwrite)) {		overwrite <- .overwrite() 	}
+	if (missing(progress)) {		progress <- .progress() 	}
 	
 	filename <- trim(filename)
 	filetype <- .filetype(format=.filetype(...), filename=filename)
@@ -26,8 +28,8 @@ function(x, filename, ...) {
 
 	r <- raster(x)
 	tr <- blockSize(r)
-	pb <- pbCreate(tr$n, type=.progress(...))			
-	r <- writeStart(r, filename=filename, format=filetype, ...)
+	pb <- pbCreate(tr$n, type=progress)			
+	r <- writeStart(r, filename=filename, format=filetype, overwrite=overwrite, progress=progress)
 	for (i in 1:tr$n) {
 		v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 		r <- writeValues(r, v, tr$row[i])
@@ -42,7 +44,10 @@ function(x, filename, ...) {
 
 
 setMethod('saveAs', signature(x='RasterStackBrick', filename='character'), 
-	function(x, filename, bandorder='BIL', ...) {
+	function(x, filename, bandorder='BIL', overwrite, progress, ...) {
+
+		if (missing(overwrite)) {		overwrite <- .overwrite() 	}
+		if (missing(progress)) {		progress <- .progress() 	}
 
 		filename <- trim(filename)
 		filetype <- .filetype(format=.filetype(...), filename=filename)
@@ -53,12 +58,12 @@ setMethod('saveAs', signature(x='RasterStackBrick', filename='character'),
 		}
 		
 		if (filetype=='raster') {
-			return( .writeBrick(object=x, filename=filename, bandorder=bandorder, ...) )
+			return( .writeBrick(object=x, filename=filename, bandorder=bandorder, format=filetype, overwrite=overwrite, progress=progress)) )
 		} else {
 			b <- brick(x)
 			tr <- blockSize(b)
 			pb <- pbCreate(tr$n, type=.progress())
-			b <- writeStart(b, filename=filename, bandorder=bandorder, format=filetype, ...)
+			b <- writeStart(b, filename=filename, bandorder=bandorder, format=filetype, overwrite=overwrite, progress=progress)
 			for (i in 1:tr$n) {
 				v <- getValues(x, row=tr$row[i], nrows=tr$size)
 				b <- writeValues(b, v, tr$row[i])
