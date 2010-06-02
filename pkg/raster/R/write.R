@@ -86,8 +86,12 @@ setMethod('writeValues', signature(x='RasterLayer'),
 		}	
 		
 		if ( x@file@driver %in% .nativeDrivers() ) {
-			if (x@file@dtype == "INT" || x@file@dtype =='LOG' ) { 
+			if (x@file@dtype == "INT" ) { 
 				v <- as.integer(round(v))  
+				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
+			} else if ( x@file@dtype =='LOG' ) {
+				v[v != 1] <- 0
+				v <- as.integer(v)  
 				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
 			} else { 
 				v  <- as.numeric( v ) 
@@ -126,9 +130,13 @@ setMethod('writeValues', signature(x='RasterBrick'),
 		native <- x@file@driver %in% .nativeDrivers()
 		
 		if (native) {
-			if (x@file@dtype == "INT" || x@file@dtype =='LOG' ) { 
+			if (x@file@dtype == "INT") { 
+				v[is.na(v)] <- x@file@nodatavalue		
 				v <- as.integer(round(v))  
-				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
+			} else if ( x@file@dtype =='LOG' ) {
+				v[v != 1] <- 0
+				v[is.na(v)] <- x@file@nodatavalue
+				v <- as.integer(v)  
 			} else { 
 				v  <- as.numeric( v ) 
 			}
