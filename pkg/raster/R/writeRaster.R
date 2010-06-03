@@ -22,7 +22,7 @@ function(x, filename, format, ...) {
 	dc <- dataContent(x)
 	if (dc == 'nodata') {
 		if (dataSource(x) == 'disk') {
-			return( saveAs(x, filename, format=filetype, ...) )
+			return( .saveAsRaster(x, filename, format=filetype, ...) )
 		} else {
 			stop('No usable data available for writing')
 		}
@@ -63,7 +63,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 	dc <- dataContent(x)
 	if (! dc %in% c('row', 'all') ) {
 		if (dataSource(x) == 'disk') {
-			return( saveAs(x, filename, bandorder=bandorder, format=filetype, ...) )
+			return( .saveAsBrick(x, filename, bandorder=bandorder, format=filetype, ...) )
 		} else {
 			stop('No usable data available for writing.')
 		}

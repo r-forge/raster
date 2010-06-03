@@ -66,7 +66,7 @@
 	r <- writeStop(r)
 	pbClose(pb)
 	
-	r = saveAs(r, filename=filename, ...)
+	r = writeRaster(r, filename=filename, ...)
 	return(r)
 }	
 

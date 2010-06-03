@@ -5,6 +5,7 @@
 
 
 .writeBrick <- function(object, filename, bandorder='BIL', ...) {
+
 	filename <- trim(filename)
 	if (filename == '') {	stop('you must supply a filename') 	}
 	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) { stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'") }

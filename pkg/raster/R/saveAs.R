@@ -4,32 +4,15 @@
 # Licence GPL v3
 
 
-if (!isGeneric("saveAs")) {
-	setGeneric("saveAs", function(x, filename, ...)
-		standardGeneric("saveAs"))
-}	
 
-setMethod('saveAs', signature(x='RasterLayer', filename='character'), 
-function(x, filename, overwrite, progress, ...) {
-	if (dataContent(x) == 'all') {
-		return(  writeRaster(x, filename=filename, ...) )
-	} 
-
-	if (missing(overwrite)) {		overwrite <- .overwrite() 	}
-	if (missing(progress)) {		progress <- .progress() 	}
-	
-	filename <- trim(filename)
-	filetype <- .filetype(format=.filetype(...), filename=filename)
-	filename <- .getExtension(filename, filetype)
-
-	if ( trim(filename(x)) == filename ) {
+.saveAsRaster <- function(x, filename, format, ...) {
+	if ( toupper(x@file@name == toupper(filename) )) {
 		stop('filenames of source and destination should be different')
 	}
-
 	r <- raster(x)
 	tr <- blockSize(r)
-	pb <- pbCreate(tr$n, type=progress)			
-	r <- writeStart(r, filename=filename, format=filetype, overwrite=overwrite, progress=progress)
+	pb <- pbCreate(tr$n, type=.progress(...))			
+	r <- writeStart(r, filename=filename, format=format, ...)
 	for (i in 1:tr$n) {
 		v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 		r <- writeValues(r, v, tr$row[i])
@@ -39,31 +22,24 @@ function(x, filename, overwrite, progress, ...) {
 	pbClose(pb)
 	return(r)
 }
-)
 
 
 
-setMethod('saveAs', signature(x='RasterStackBrick', filename='character'), 
-	function(x, filename, bandorder='BIL', overwrite, progress, ...) {
 
-		if (missing(overwrite)) {		overwrite <- .overwrite() 	}
-		if (missing(progress)) {		progress <- .progress() 	}
+.saveAsBrick <- function(x, filename, bandorder='BIL', format, ...) {
 
-		filename <- trim(filename)
-		filetype <- .filetype(format=.filetype(...), filename=filename)
-		filename <- .getExtension(filename, filetype)
-		
 		if ( toupper(x@file@name == toupper(filename) )) {
 			stop('filenames of source and destination should be different')
 		}
 		
-		if (filetype=='raster') {
-			return( .writeBrick(object=x, filename=filename, bandorder=bandorder, format=filetype, overwrite=overwrite, progress=progress)) )
+		if (format=='raster') {
+			return( .writeBrick(object=x, filename=filename, bandorder=bandorder, format=format, ...)) 
+			
 		} else {
 			b <- brick(x)
 			tr <- blockSize(b)
-			pb <- pbCreate(tr$n, type=.progress())
-			b <- writeStart(b, filename=filename, bandorder=bandorder, format=filetype, overwrite=overwrite, progress=progress)
+			pb <- pbCreate(tr$n, type=.progress(...))
+			b <- writeStart(b, filename=filename, bandorder=bandorder, format=format, ...)
 			for (i in 1:tr$n) {
 				v <- getValues(x, row=tr$row[i], nrows=tr$size)
 				b <- writeValues(b, v, tr$row[i])
@@ -74,6 +50,6 @@ setMethod('saveAs', signature(x='RasterStackBrick', filename='character'),
 			return(b)
 		}
 	}
-)
+
 
 

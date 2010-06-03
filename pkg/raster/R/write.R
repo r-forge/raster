@@ -31,7 +31,7 @@ function(x, filename, options=NULL, format, ...) {
 	} else if ( filetype %in% .nativeDrivers() ) { 
 		.startRasterWriting(x, filename, format=filetype, ...)
 	} else {
-		.startGDALwriting(x, filename, options, format=filetype, ...)
+		.startGDALwriting(x, filename, options=options, format=filetype, ...)
 	}		
 })
 
@@ -47,7 +47,7 @@ function(x, filename, options=NULL, format, ...) {
 	if (native) { 
 		return( .startRasterWriting(x, filename, format=filetype, ...) )
 	} else {
-		return( .startGDALwriting(x, filename, options, format=filetype, ...) )
+		return( .startGDALwriting(x, filename, options=options, format=filetype, ...) )
 	}
 })
 
@@ -141,6 +141,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 				v  <- as.numeric( v ) 
 			}
 			writeBin(v, x@file@con, size=x@file@dsize )
+			
 		} else {
 			nl <- nlayers(x)
 			off = c(start-1, 0)

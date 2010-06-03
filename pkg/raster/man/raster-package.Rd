@@ -282,7 +282,6 @@ Basic writing
     \code{\link{setValues}} \tab Put new values in a Raster* object \cr
     \code{\link{dataContent}} \tab How much data (if any) is in memory? \cr
     \code{\link{writeRaster}} \tab Write all values of Raster* object to disk \cr
-    \code{\link{saveAs}} \tab Save raster file under other name and perhaps in different format \cr
     \code{\link{KML}} \tab Save raster as KML file \cr	
   }
 
