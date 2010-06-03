@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  February 2009
 # Version 0.9
 # Licence GPL v3
@@ -38,21 +37,34 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 		if (!is.null(fun)) {
 			xyv <- subset(xyv, fun(xyv[,3]))
 		}
+		
 	} else {
 		xyv <- matrix(NA, ncol=2+nlayers(x), nrow=0)
 		colnames(xyv) <- c('x', 'y', 'v')
-		x <- xFromCol(x, 1:ncol(x))
-		y <- yFromRow(x, 1:nrow(x))
-		for (r in 1:nrow(x)) {
-			xyvr <- cbind(x, y[r], getValues(x, r))
-			notna = apply(xyv[,3:ncol(xyv)], 1, function(x){ sum(is.na(x)) < length(x) })
+		X <- xFromCol(x, 1:ncol(x))
+		Y <- yFromRow(x, 1:nrow(x))
+
+		tr <- blockSize(x)
+		pb <- pbCreate(tr$n, type=.progress())
+
+		for (i in 1:tr$n) {
+			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
+			xyvr <- cbind(rep(X, tr$nrows[i]), rep(Y[r], each=ncol(x)), getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
+		
+			notna = apply(xyvr[,3:ncol(xyvr), drop=FALSE], 1, function(z){ sum(is.na(z)) < length(z) })
+			
 			xyvr <- xyvr[notna, ]
+			
 			if (!is.null(fun)) {
 				xyvr <- subset(xyvr, fun(xyvr[,3]))
 			}
 			xyv <- rbind(xyv, xyvr)
+			
+			pbStep(pb, i)
 		}
+		pbClose(pb)
 	}
+	
 	if (asSpatialPoints) {
 		coords <- xyv[,1:2]
 		row.names(coords) <- 1:nrow(coords)
@@ -60,6 +72,7 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 		rastvals <- as.data.frame(xyv[,3])
 		colnames(rastvals) <- 'value'
 		return(SpatialPointsDataFrame(coords=coords, data=rastvals, proj4string=proj4string))
+		
 	} else {
 		return(xyv)
 	}
