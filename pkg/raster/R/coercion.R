@@ -48,8 +48,7 @@ setAs('Raster', 'SpatialPointsDataFrame',
 
 setAs('Raster', 'SpatialPoints', 
 	function(from) { 
-		sp <- data.frame(rasterToPoints(from, asSpatialPoints=FALSE))
-		coordinates(sp) = ~ x + y
+		sp <- SpatialPoints(rasterToPoints(from, asSpatialPoints=FALSE)[,1:2])
 		return(sp)
 	}
 )
