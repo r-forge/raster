@@ -17,7 +17,7 @@
 .asSpGrid <- function(object, type='grid', dataframe)  {
 		
 	if (type=='pixel') {
-		values <- rasterToPoints(object, fun=NULL, asSpatialPoints=FALSE)
+		values <- rasterToPoints(object, fun=NULL, spatial=FALSE)
 		pts <- SpatialPoints(values[,1:2])
 		if (dataframe) {
 			sp <- SpatialPixelsDataFrame(points=pts, data=data.frame(values=values[,3]), proj4string=projection(object, FALSE)) 	
@@ -42,13 +42,13 @@
 
 setAs('Raster', 'SpatialPointsDataFrame', 
 	function(from) { 
-		return(rasterToPoints(from, asSpatialPoints=TRUE)) 
+		return(rasterToPoints(from, spatial=TRUE)) 
 	}
 )
 
 setAs('Raster', 'SpatialPoints', 
 	function(from) { 
-		sp <- SpatialPoints(rasterToPoints(from, asSpatialPoints=FALSE)[,1:2])
+		sp <- SpatialPoints(rasterToPoints(from, spatial=FALSE)[,1:2])
 		return(sp)
 	}
 )

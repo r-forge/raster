@@ -5,7 +5,7 @@
 
 
 
-rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
+rasterToPoints <- function(x, fun=NULL, spatial=FALSE, progress='') {
 	
 	nl = nlayers(x)
 	if (nl > 1) {
@@ -15,7 +15,7 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 	}
 	
 	if (dataSource(x) == 'ram' & dataContent(x) != 'all') {
-		if (asSpatialPoints) {
+		if (spatial) {
 			coords <- xyFromCell(x, 1:ncell(x))
 			row.names(coords) <- 1:nrow(coords)
 			return(SpatialPoints(coords=coords, proj4string=projection(x, asText=FALSE)))
@@ -24,7 +24,7 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 		}
 	}
 
-	proj4string=projection(x, asText=FALSE)
+	crs = projection(x, asText=FALSE)
 	
 	if (canProcessInMemory(x, 3)) {
 		xyv <- cbind(xyFromCell(x, 1:ncell(x)), getValues(x))
@@ -46,7 +46,7 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 		Y <- yFromRow(x, 1:nrow(x))
 
 		tr <- blockSize(x)
-		pb <- pbCreate(tr$n, type=.progress())
+		pb <- pbCreate(tr$n, type=progress)
 
 		for (i in 1:tr$n) {
 			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
@@ -66,13 +66,8 @@ rasterToPoints <- function(x, fun=NULL, asSpatialPoints=FALSE) {
 		pbClose(pb)
 	}
 	
-	if (asSpatialPoints) {
-		coords <- xyv[,1:2]
-		row.names(coords) <- 1:nrow(coords)
-		colnames(coords) <- c('x', 'y')
-		rastvals <- as.data.frame(xyv[,3])
-		colnames(rastvals) <- 'value'
-		return(SpatialPointsDataFrame(coords=coords, data=rastvals, proj4string=proj4string))
+	if (spatial) {
+		return( SpatialPointsDataFrame(coords=xyv[,1:2], data=data.frame(value = xyv[,3]), proj4string=crs ) )
 		
 	} else {
 		return(xyv)
