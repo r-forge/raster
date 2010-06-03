@@ -13,18 +13,16 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, progress='') {
 			stop('you can only supply a fun argument if "x" has a single layer')		
 		}
 	}
+	crs = projection(x, asText=FALSE)
 	
 	if (dataSource(x) == 'ram' & dataContent(x) != 'all') {
 		if (spatial) {
-			coords <- xyFromCell(x, 1:ncell(x))
-			row.names(coords) <- 1:nrow(coords)
-			return(SpatialPoints(coords=coords, proj4string=projection(x, asText=FALSE)))
+			return(SpatialPoints(coords=xyFromCell(x, 1:ncell(x)), proj4string=crs) )
 		} else {
 			return(xyFromCell(x, 1:ncell(x)))
 		}
 	}
 
-	crs = projection(x, asText=FALSE)
 	
 	if (canProcessInMemory(x, 3)) {
 		xyv <- cbind(xyFromCell(x, 1:ncell(x)), getValues(x))
@@ -73,3 +71,4 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, progress='') {
 		return(xyv)
 	}
 }
+
