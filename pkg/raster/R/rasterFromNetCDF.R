@@ -152,12 +152,12 @@
 	attr(r, "prj") <- prj 
 
 	if (is.na(time) | is.null(time)) {
-		d <- var.get.nc(nc, variable=zvar)
-		dims <- dim(d)
+		varinfo <- var.inq.nc(nc, zvar)
+		dims <- varinfo$ndims		
 		if (length(dims)== 1) { 
 			stop('zvar only has a single dimension')
 		} else if (length(dims)== 2) { 
-			d <- as.vector(d)
+			d <- as.vector(var.get.nc(nc, variable=zvar))
 		} else if (length(dims)== 3) { 
 			stop('zvar has three dimensions, provide a value for "time", between 1 and ', dims[3])
 		} else if (length(dims)>= 4) { 
