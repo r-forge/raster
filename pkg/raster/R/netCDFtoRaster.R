@@ -46,7 +46,7 @@
 
 
 
-.rasterFromCDF <- function(filename, type='RasterLayer', xvar='', yvar='', zvar='', time=NA, ...) {
+.rasterObjectFromCDF <- function(filename, type='RasterLayer', xvar='', yvar='', zvar='', time=NA, ...) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
@@ -185,5 +185,5 @@
 }
 
 #f = "G:/cmip/ipcc/20c3m/atm/mo/pr/bccr_bcm2_0/run1/pr_A1_1.nc"
-#p = .rasterFromCDF(f, zvar='pr', type='RasterLayer', time=10)
+#p = .rasterObjectFromCDF(f, zvar='pr', type='RasterLayer', time=10)
 

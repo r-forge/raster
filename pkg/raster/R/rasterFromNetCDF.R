@@ -4,46 +4,6 @@
 # Licence GPL v3
 
 
-.isNetCDF <- function(x) {
-	on.exit(options('warn'= getOption('warn')))
-	options('warn'=-1) 
-	fcon <- file(x, "rb")
-	tst <- try( w <- readBin(fcon, what='character', n=1), silent=TRUE)
-	close(fcon)
-	if ( isTRUE((substr(w, 1, 3) == "CDF" ))) { return(TRUE) 
-	} else { return(FALSE)
-	}
-}
-
-
-.getxvar <- function(xvar, vars) {
-	if (xvar == '') {
-		if ('x' %in% vars) { xvar <- 'x'
-		} else if ('lon' %in% vars) { xvar <- 'lon' 
-		} else if ('long' %in% vars) { xvar <- 'long' 
-		} else if ('longitude' %in% vars) { xvar <- 'longitude' 
-		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
-		}
-	} else if (!(xvar %in% vars)) { stop( paste('Cannot find "xvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
-	return(xvar)
-}
-
-.getyvar <- function(yvar, vars) {
-	if (yvar == '') { if ('y' %in% vars){ yvar <- 'y'
-		} else if ('lat' %in% vars) { yvar <- 'lat' 
-		} else if ('latitude' %in% vars) { yvar <- 'latitude' 
-		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
-		}
-	} else if (!(yvar %in% vars)) { stop( paste('Cannot find "yvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
-	return(yvar)
-}
-
-.getzvar <- function(zvar, vars) {
-	if (zvar == '') { zvar <- 'z' }
-	if (!(zvar %in% vars)) { stop ( 'Cannot find an obvious "zvar" in file. Select one from:\n', paste(vars, collapse=", ") ) }
-	return(zvar)
-}
-
 .nctoraster <- function(nc, vars, xvar, yvar) {
 	xvar <- .getxvar(xvar, vars) 
 	yvar <- .getyvar(yvar, vars) 

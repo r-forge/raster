@@ -83,13 +83,14 @@
 }	
 
 
-.brickGetValuesRowCDF <- function(b, row, nrows=1) {
+.brickGetValuesRowCDF <- function(b, row, nrows=1, time=1, ntimes=nlayers(x)-time+1) {
 	nc <- open.nc(b@file@name)
 	zvar = b@data@zvar
-	start = c(1, row, 1)
-	count = c(b@ncols, nrows, b@data@nlayers)
+	start = c(1, row, time)
+	count = c(b@ncols, nrows, ntimes)
 	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
-	close.nc(nc)	
+	close.nc(nc)
+	
 	dim(d) = c(b@ncols, nrows, b@data@nlayers)
 
 	values <- matrix(nrow=nrows*ncol(b), ncol=nlayers(b))
@@ -106,13 +107,14 @@
 }
 	
 	
-.brickGetValuesBlockCDF <- function(b, row, nrows=1, col=1, ncols=(ncol(b)-col+1)) {
+.brickGetValuesBlockCDF <- function(b, row, nrows=1, col=1, ncols=(ncol(b)-col+1), time=1, ntimes=nlayers(x)-time+1) {
 	nc <- open.nc(b@file@name)
 	zvar = b@data@zvar
-	start = c(col, row, 1)
-	count = c(ncols, nrows, b@data@nlayers)
+	start = c(col, row, time)
+	count = c(ncols, nrows, ntimes)
 	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
-	close.nc(nc)	
+	close.nc(nc)
+	
 	dim(d) = c(ncols, nrows, b@data@nlayers)
 
 	values <- matrix(nrow=nrows*ncol(b), ncol=nlayers(b))
