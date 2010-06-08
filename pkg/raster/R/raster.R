@@ -108,7 +108,11 @@ setMethod('raster', signature(x='RasterBrick'),
 			dindex <- max(1, min(nlayers(x), layer))
 			if (dataSource(x) == 'disk') {
 				if (dindex != layer) { warning(paste("layer was changed to", dindex))}
-				r <- raster(filename(x), band=dindex)
+				if (x@file@driver == 'netcdf') {
+					r <- raster(x@file@name, xvar=x@xvar, yvar=y@yvar, zvar=z@zvar, time=dindex)				
+				} else {
+					r <- raster(filename(x), band=dindex)
+				}
 				layerNames(r) <- layerNames(x)[dindex]
 			} else {
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	

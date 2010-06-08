@@ -151,6 +151,8 @@
 	r@file@toptobottom <- toptobottom
 	r <- .enforceGoodLayerNames(r, long_name)
 
+	attr(r@data, "xvar") <- xvar
+	attr(r@data, "yvar") <- yvar
 	attr(r@data, "zvar") <- zvar
 	attr(r@data, "add_offset") <- add_offset
 	attr(r@data, "scale_factor") <- scale_factor
