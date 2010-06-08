@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.rasterReadAllCDF <- function(r) {	
+.rasterGetValuesAllCDF <- function(r) {	
 	nc <- open.nc(r@file@name)
 	zvar = r@data@zvar
 	if (r@file@nbands == 1) {
@@ -32,7 +32,7 @@
 	} else {
 		d <- as.vector( t( d[nrow(r):1,] ) )	
 	}
-	return( setValues(r, d) )
+	return( d )
 }
 
 
@@ -61,45 +61,46 @@
 	
 	
 
-.brickReadAllCDF <- function(b) {	
-	nc <- open.nc(b@file@name)
-	d <- var.get.nc(nc, b@data@zvar)
+.brickGetValuesAllCDF <- function(x, time=1, ntimes=nlayers(x)-time+1) {	
+	nc <- open.nc(x@file@name)
+	d <- var.get.nc(nc, x@data@zvar)
     close.nc(nc)
 
-	if (!is.na(b@file@nodatavalue)) {
-		d[d==b@file@nodatavalue] <- NA
+	if (!is.na(x@file@nodatavalue)) {
+		d[d==x@file@nodatavalue] <- NA
 	}
-	if (b@data@add_offset != 0 | b@data@scale_factor != 1) {
-		d <- b@data@add_offset + d * b@data@scale_factor
+	if (x@data@add_offset != 0 | x@data@scale_factor != 1) {
+		d <- x@data@add_offset + d * x@data@scale_factor
 	}
 	
-	b@data@values <- matrix(nrow=ncell(b), ncol=nlayers(b))
-	for (i in 1:nlayers(b)) {
+	values <- matrix(nrow=ncell(x), ncol=nlayers(x))
+	for (i in 1:nlayers(x)) {
 		x <- t(d[,,i])
 		x <- x[nrow(x):1, ]
-		b@data@values[,i] <- as.vector(t(x))
+		values[,i] <- as.vector(t(x))
 	}
-	return(b)
+	return(values)
 }	
 
 
-.brickGetValuesRowCDF <- function(b, row, nrows=1, time=1, ntimes=nlayers(x)-time+1) {
-	nc <- open.nc(b@file@name)
-	zvar = b@data@zvar
+.brickGetValuesRowCDF <- function(x, row, nrows=1, time=1, ntimes=nlayers(x)-time+1) {
+	
+	nc <- open.nc(x@file@name)
+	zvar = x@data@zvar
 	start = c(1, row, time)
-	count = c(b@ncols, nrows, ntimes)
+	count = c(x@ncols, nrows, ntimes)
 	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	close.nc(nc)
 	
-	dim(d) = c(b@ncols, nrows, b@data@nlayers)
+	dim(d) = c(x@ncols, nrows, x@data@nlayers)
 
-	values <- matrix(nrow=nrows*ncol(b), ncol=nlayers(b))
+	values <- matrix(nrow=nrows*ncol(x), ncol=nlayers(x))
 	if (nrows > 1) {
-		for (i in 1:nlayers(b)) {
+		for (i in 1:nlayers(x)) {
 			values[,i] <- as.vector(d[,,i])
 		}
 	} else {
-		for (i in 1:nlayers(b)) {
+		for (i in 1:nlayers(x)) {
 			values[,i] <- as.vector(d[,i])
 		}
 	}
@@ -107,23 +108,24 @@
 }
 	
 	
-.brickGetValuesBlockCDF <- function(b, row, nrows=1, col=1, ncols=(ncol(b)-col+1), time=1, ntimes=nlayers(x)-time+1) {
-	nc <- open.nc(b@file@name)
-	zvar = b@data@zvar
+.brickGetValuesBlockCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), time=1, ntimes=nlayers(x)-time+1) {
+	
+	nc <- open.nc(x@file@name)
+	zvar = x@data@zvar
 	start = c(col, row, time)
 	count = c(ncols, nrows, ntimes)
 	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	close.nc(nc)
 	
-	dim(d) = c(ncols, nrows, b@data@nlayers)
+	dim(d) = c(ncols, nrows, x@data@nlayers)
 
-	values <- matrix(nrow=nrows*ncol(b), ncol=nlayers(b))
+	values <- matrix(nrow=nrows*ncol(x), ncol=nlayers(x))
 	if (nrows > 1) {
-		for (i in 1:nlayers(b)) {
+		for (i in 1:nlayers(x)) {
 			values[,i] <- as.vector(d[,,i])
 		}
 	} else {
-		for (i in 1:nlayers(b)) {
+		for (i in 1:nlayers(x)) {
 			values[,i] <- as.vector(d[,i])
 		}
 	}
