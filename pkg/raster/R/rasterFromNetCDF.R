@@ -50,7 +50,7 @@
 }
 
 
-.rasterFromCDF <- function(filename, type, xvar='', yvar='', zvar='', time=NA, ...) {
+..rasterFromCDF <- function(filename, type, xvar='', yvar='', zvar='', time=NA, ...) {
 
 # to be improved for large files (i.e. do not read all data from file...)
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
@@ -101,8 +101,9 @@
 	r@file@driver <- "netcdf"
 
 	if (type != 'RasterLayer' ) {
-		b <- .stackCDF(nc, type, r, xvar, yvar, zvar, time, add_offset, scale_factor, missing_value, long_name, prj)
-		return(b)		
+#		b <- .stackCDF(nc, type, r, xvar, yvar, zvar, time, add_offset, scale_factor, missing_value, long_name, prj)
+#		return(b)		
+		stop('no longer supported')
 	} else if (length(time) > 1) {
 		stop("cannot make a RasterLayer for multiple time steps, use 'stack' or 'brick' instead")		
 	}

@@ -1,83 +1,44 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# Date: Sept 2009
-# Version 0.9
+# Date: Sept 2009 / revised June 2010
+# Version 1.0
 # Licence GPL v3
 
 
-.stackCDF <- function(nc, type, r, xvar, yvar, zvar, time, add_offset, scale_factor, missing_value, long_name, prj) {
-# to be improved for large files (i.e. do not read all data from file...)
+.stackCDF <- function(filename, xvar, yvar, zvar, time) {
+
+	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
+
+	nc <- open.nc(filename)
 
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
-	dd <- var.get.nc(nc, zvar)
-    close.nc(nc)
-	
-	dims <- dim(dd)
-	getRaster <- FALSE
-	if (length(dims)== 3) { 
-		if (is.numeric(time)) { 
-			tsteps <- time	
-		} else { 
-			tsteps <- 1:dims[3] 
-		}
-		if (length(tsteps) < 2) { stop('cannot make a RasterStack or Brick from a single time step, use raster() instead, and then make a stack or brick from that') } 
-		
-	} else if (length(dims)== 2) { 
-		stop('cannot make a RasterStack or Brick from a data that has only two dimensions (no time step), use raster() instead, and then make a stack or brick from that')	
-	} else { 
-		stop(paste('data has an unexpected number of dimensions', dims)) 
-	}
-	
-	
-#	for (i in tsteps) {
+	zvar <- .getzvar(zvar, vars) 
+	xvar <- .getxvar(xvar, vars) 
+	yvar <- .getyvar(yvar, vars) 
 
-	d <- dd[,,tsteps]
-	dims <- dim(d)
-	if (!is.na(missing_value)) {
-		d[d==missing_value] <- NA
-	}
-	d <- add_offset + d * scale_factor
-
-	pb <- pbCreate(dims[3], type='text')
+	varinfo <- try(var.inq.nc(nc, zvar))
+	dims <- varinfo$ndims
 	
-	if (type == 'RasterStack') {
-		stk <- new('RasterStack')
-		for (i in 1:dims[3]) {
-			x <- t(d[,,i])
-			x <- x[nrow(x):1, ]
-			r[] <- as.vector(t(x))
-			if (i==1) {
-				stk <- stack(r)
-			} else {
-				stk@layers[[i]] <- r
-			}
-			pbStep(pb, i) 
-		}
-		attr(stk, 'prj') <- prj
-		layerNames(stk) <- 1:nlayers(stk)
-		pbClose(pb)		
-
-		return(stk) 
+	close.nc(nc)
+	
+	if (dims== 1) { 
+		stop('zvar only has a single dimension; I cannot make a RasterLayer from this')
+	} else if (dims > 3) { 
+		stop('zvar has ', length(dims), ' dimensions, I do not know how to process these data')
+	} else if (dims == 2) {
+		return( stack ( raster(filename, xvar=xvar, yvar=yvar, zvar=zvar, time=time )  )  )
 	} else {
-		b <- brick(r)
-		b@data@values <- matrix(nrow=ncell(r), ncol=dims[3])
-		for (i in 1:dims[3]) {
-			x <- t(d[,,i])
-			x <- x[nrow(x):1, ]
-			b@data@values[,i] <- as.vector(t(x))
-			pbStep(pb, i) 
+		if (time == '') {
+			time = 1:(as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length))
 		}
-		pbClose(pb)		
-		b@title <- long_name
-		b@data@nlayers <- dims[3]
-		b@data@content <- 'all'
-		b@data@indices <- c(1:ncell(r))
-		b@file@driver <- "netcdf"
-		b <- setMinMax(b)
-		attr(b, 'prj') <- prj
-		layerNames(b) <- 1:nlayers(b)
-		return(b)
+		st = stack( raster(filename, xvar=xvar, yvar=yvar, zvar=zvar, time=time[1]) )
+		if (length(time) > 1) {
+			for (i in 2:length(time)) {
+				st <- addLayer(st, raster(filename, xvar=xvar, yvar=yvar, zvar=zvar, time=time[i]) )
+			}
+		}
+		return( st )
 	}
 }
-
+	

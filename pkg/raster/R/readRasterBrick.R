@@ -149,6 +149,11 @@
 		}
 		
  #use GDAL  			
+ 
+ 	} else if (object@file@driver == 'netcdf') {
+		result <- .readRowsBrickNetCDF(object, startrow, nrows, startcol, ncols)
+	
+ 
 	} else {
 		result <- matrix(nrow=ncols*nrows, ncol=nlayers(object))
 		offs <- c((startrow-1), (startcol-1)) 

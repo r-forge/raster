@@ -109,8 +109,12 @@
 		}
 
 # ascii is internal to this package but not 'native' (not binary)
-	} else if (.driver(object) == 'ascii') {
+	} else if (object@file@driver == 'ascii') {
 		result <- .readRowsAscii(object, startrow, nrows, startcol, ncols)
+		
+	} else if (object@file@driver == 'netcdf') {
+		result <- .readRowsNetCDF(object, startrow, nrows, startcol, ncols)
+		
 		
 #use GDAL  		
 	} else { 

@@ -61,7 +61,7 @@
 	dims <- varinfo$ndims
 	if (dims== 1) { 
 		stop('zvar only has a single dimension; I cannot make a RasterLayer from this')
-	} else if (length(dims)> 3) { 
+	} else if (dims > 3) { 
 		stop('zvar has ', length(dims), ' dimensions, I do not know how to process these data')
 	}
 	

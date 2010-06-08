@@ -4,61 +4,61 @@
 # Licence GPL v3
 
 
-.rasterGetValuesAllCDF <- function(r) {	
-	nc <- open.nc(r@file@name)
-	zvar = r@data@zvar
-	if (r@file@nbands == 1) {
+.rasterGetValuesAllCDF <- function(x) {	
+	nc <- open.nc(x@file@name)
+	zvar = x@data@zvar
+	
+	if (x@file@nbands == 1) {
 		d <- as.vector(var.get.nc(nc, variable=zvar))
-		d <- as.vector(d)
 	} else {
-		time <- r@data@band
+		time <- x@data@band
 		start <- c(1, 1, time)
-		r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
-		r@data@band <- as.integer(time)
-		count <- c(ncol(r), nrow(r), 1)
-		d <- as.vector ( var.get.nc(nc, variable=zvar, start=start, count=count) )
+		x@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
+		x@data@band <- as.integer(time)
+		count <- c(ncol(x), nrow(x), 1)
+		d <- var.get.nc(nc, variable=zvar, start=start, count=count) 
 	} 
 	close.nc(nc)		
 
-	if (!is.na(r@file@nodatavalue)) {
-		d[d==r@file@nodatavalue] <- NA
+	if (!is.na(x@file@nodatavalue)) { 
+		d[d==x@file@nodatavalue] <- NA
 	}
-	d <- r@data@add_offset + d * r@data@scale_factor
+	d <- x@data@add_offset + d * x@data@scale_factor
 
-	d <- matrix(d, ncol=ncol(r), nrow=nrow(r), byrow=TRUE)
-	
-	if ( r@file@toptobottom ) { 
-		d <- as.vector( t( d ) )	
-	} else {
-		d <- as.vector( t( d[nrow(r):1,] ) )	
+	if (! x@file@toptobottom ) { 
+		d <- d[nrow(x):1,] 	
 	}
-	return( d )
+		
+	return( as.vector(d) )
 }
 
 
-.rasterGetValuesRowCDF <- function(x, row, nrows=1) {
-	nc <- open.nc(x@file@name)
-	zvar = x@data@zvar
-	start = c(1, row, x@data@band)
-	count = c(x@ncols, nrows, 1)
-	d <- as.vector(var.get.nc(nc, variable=zvar, start=start, count=count))
-	close.nc(nc)	
-	return(d)
-}
 	
-	
-.rasterGetValuesBlockCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
+.readRowsNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
+
+	if (! x@file@toptobottom ) { 
+		row <- x@nrows - row + 1
+	}
+
 	nc <- open.nc(x@file@name)
 	zvar = x@data@zvar
 	start = c(col, row, x@data@band)
 	count = c(ncols, nrows, 1)
-	d <- as.vector(var.get.nc(nc, variable=zvar, start=start, count=count))
+	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	close.nc(nc)	
-	return(d)
-}
-	
 
+	if (!is.na(x@file@nodatavalue)) { 
+		d[d==x@file@nodatavalue] <- NA
+	}
+	d <- x@data@add_offset + d * x@data@scale_factor
 	
+	if (! x@file@toptobottom ) { 
+		d <- d[nrow(x):1,] 	
+	}
+		
+	return( as.vector(d) )
+}
+
 	
 
 .brickGetValuesAllCDF <- function(x, time=1, ntimes=nlayers(x)-time+1) {	
@@ -83,32 +83,12 @@
 }	
 
 
-.brickGetValuesRowCDF <- function(x, row, nrows=1, time=1, ntimes=nlayers(x)-time+1) {
 	
-	nc <- open.nc(x@file@name)
-	zvar = x@data@zvar
-	start = c(1, row, time)
-	count = c(x@ncols, nrows, ntimes)
-	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
-	close.nc(nc)
-	
-	dim(d) = c(x@ncols, nrows, x@data@nlayers)
+.readRowsBrickNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), time=1, ntimes=nlayers(x)-time+1) {
 
-	values <- matrix(nrow=nrows*ncol(x), ncol=nlayers(x))
-	if (nrows > 1) {
-		for (i in 1:nlayers(x)) {
-			values[,i] <- as.vector(d[,,i])
-		}
-	} else {
-		for (i in 1:nlayers(x)) {
-			values[,i] <- as.vector(d[,i])
-		}
+	if (! x@file@toptobottom ) { 
+		row <- x@nrows - row + 1
 	}
-	return(values)
-}
-	
-	
-.brickGetValuesBlockCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), time=1, ntimes=nlayers(x)-time+1) {
 	
 	nc <- open.nc(x@file@name)
 	zvar = x@data@zvar
@@ -117,8 +97,11 @@
 	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	close.nc(nc)
 	
-	dim(d) = c(ncols, nrows, x@data@nlayers)
-
+	if (!is.na(x@file@nodatavalue)) { 
+		d[d==x@file@nodatavalue] <- NA
+	}
+	d <- x@data@add_offset + d * x@data@scale_factor
+	
 	values <- matrix(nrow=nrows*ncol(x), ncol=nlayers(x))
 	if (nrows > 1) {
 		for (i in 1:nlayers(x)) {
