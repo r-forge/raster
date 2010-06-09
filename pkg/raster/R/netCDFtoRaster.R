@@ -167,9 +167,8 @@
 	if (dims == 2) {
 		nbands = 1
 	} else {
-		tryr@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
+		r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
 	}
-#			dim.inq.nc(x, 'time')$length
 
 	if (type == 'RasterLayer') {
 		if (is.na(time) | is.null(time)) {
