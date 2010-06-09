@@ -39,7 +39,7 @@
 	
 .readRowsNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
 
-	if ( x@file@toptobottom ) { col <- x@ncols - col - ncols + 2	}
+	if ( x@file@toptobottom ) { row <- x@nrows - row - nrows + 2	}
 	
 	nc <- open.nc(x@file@name)
 	zvar = x@data@zvar
@@ -115,7 +115,7 @@
 .readRowsBrickNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), time=1, ntimes=nlayers(x)-time+1) {
 	
 	
-	if ( x@file@toptobottom ) { col <- x@ncols - col - ncols + 2	}
+	if ( x@file@toptobottom ) { row <- x@nrows - row - nrows + 2	}
 	
 	
 	time   =  min( max( round(time), 1), nlayers(x))
