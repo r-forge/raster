@@ -159,9 +159,16 @@
 	
 	attr(r, "prj") <- prj 
 	r@file@driver <- "netcdf"	
-	r@file@nodatavalue <- missing_value
+	if (! is.na(missing_value)) {
+		r@file@nodatavalue <- missing_value
+	}
 	r@data@source <- 'disk'
-	r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
+	
+	if (dims == 2) {
+		nbands = 1
+	} else {
+		tryr@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
+	}
 #			dim.inq.nc(x, 'time')$length
 
 	if (type == 'RasterLayer') {

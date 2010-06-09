@@ -5,6 +5,7 @@
 
 
 .rasterGetValuesAllCDF <- function(x) {	
+
 	nc <- open.nc(x@file@name)
 	zvar = x@data@zvar
 	
@@ -42,8 +43,16 @@
 	
 	nc <- open.nc(x@file@name)
 	zvar = x@data@zvar
-	start = c(col, row, x@data@band)
-	count = c(ncols, nrows, 1)
+
+	if (x@file@nbands == 1) {
+		start = c(col, row)
+		count = c(ncols, nrows)
+		d <- var.get.nc(nc, variable=zvar, start=start, count=count)
+
+	} else {
+		start = c(col, row, x@data@band)
+		count = c(ncols, nrows, 1)
+	}
 	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	close.nc(nc)	
 
