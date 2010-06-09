@@ -38,10 +38,8 @@
 	
 .readRowsNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
 
-	if (! x@file@toptobottom ) { 
-		row <- x@nrows - row + 1
-	}
-
+	if ( x@file@toptobottom ) { col <- x@ncols - col - ncols + 2	}
+	
 	nc <- open.nc(x@file@name)
 	zvar = x@data@zvar
 	start = c(col, row, x@data@band)
@@ -54,15 +52,18 @@
 	}
 	d <- x@data@add_offset + d * x@data@scale_factor
 	
-	if ( x@file@toptobottom ) { 
-		d <- d[, ncol(d):1] 	
+	if (length(dim(d)) > 1) {
+		if ( x@file@toptobottom ) { 
+			d <- d[, ncol(d):1] 	
+		}
 	}
-		
 	return( as.vector(d) )
-}
-
-
 	
+}
+	
+	
+	
+
 
 .brickGetValuesAllCDF <- function(x, time=1, ntimes=nlayers(x)-time+1) {	
 
@@ -104,9 +105,9 @@
 	
 .readRowsBrickNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), time=1, ntimes=nlayers(x)-time+1) {
 	
-	if ( x@file@toptobottom )	{
-		row <- x@nrows - row + 1	
-	}
+	
+	if ( x@file@toptobottom ) { col <- x@ncols - col - ncols + 2	}
+	
 	
 	time   =  min( max( round(time), 1), nlayers(x))
 	ntimes =  min( max( round(ntimes), 1), nlayers(x)-time+1 )
@@ -124,6 +125,8 @@
 	d <- x@data@add_offset + d * x@data@scale_factor
 	
 	values <- matrix(nrow=nrows*ncols, ncol=ntimes)
+	
+	# top to bottom ??
 	
 	if (length(dim(d)) == 3) {
 		for (i in 1:ntimes) {

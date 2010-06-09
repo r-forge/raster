@@ -34,10 +34,12 @@
 			if (length(uniquecells) > 100 & canProcessInMemory(raster, 2)) {
 				vals <- getValues(raster)
 				vals <- vals[uniquecells]
-			} else if (.driver(raster) == 'gdal') {
+			} else if (raster@file@driver == 'gdal') {
 				vals <- .readCellsGDAL(raster, uniquecells)
-			} else if (.driver(raster) == 'ascii') {
+			} else if (raster@file@driver == 'ascii') {
 				vals <- .readCellsAscii(raster, uniquecells)			
+			} else if (raster@file@driver == 'netcdf') {
+				vals <- .readRasterCellsNetCDF(raster, uniquecells)			
 			} else {
 				vals <- .readCellsRaster(raster, uniquecells)
 			}	

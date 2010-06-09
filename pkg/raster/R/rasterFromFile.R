@@ -43,14 +43,14 @@
 		return ( .rasterFromSAGAFile(x) )
 	}
 	if ( fileext %in% c(".NC", ".NCDF", ".NETCDF")) {
-		return ( .rasterObjectFromCDF(x, objecttype, ...) )
+		return ( .rasterObjectFromCDF(x, type=objecttype, ...) )
 		# return ( .rasterFromCDF(x, objecttype, ...) )
 	}
 	if ( fileext == ".GRD") {
 		if (require(RNetCDF)) {
 			if (.isNetCDF(x)) {
 				# return ( .rasterFromCDF(x, objecttype, ...) )
-				return ( .rasterObjectFromCDF(x, objecttype, ...) )
+				return ( .rasterObjectFromCDF(x, type=objecttype, ...) )
 			}
 		}
 	}

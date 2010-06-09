@@ -24,7 +24,7 @@
 		} else if ('longitude' %in% vars) { xvar <- 'longitude' 
 		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(xvar %in% vars)) { stop( paste('Cannot find "xvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
+	} else if (!(xvar %in% vars)) { stop( paste('Cannot find obvious "xvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(xvar)
 }
 
@@ -34,7 +34,7 @@
 		} else if ('latitude' %in% vars) { yvar <- 'latitude' 
 		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(yvar %in% vars)) { stop( paste('Cannot find "yvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
+	} else if (!(yvar %in% vars)) { stop( paste('Cannot find obvious "yvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(yvar)
 }
 
@@ -46,7 +46,7 @@
 
 
 
-.rasterObjectFromCDF <- function(filename, type='RasterLayer', xvar='', yvar='', zvar='', time=NA, ...) {
+.rasterObjectFromCDF <- function(filename, xvar='', yvar='', zvar='', time=NA, type='RasterLayer', ...) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
@@ -173,7 +173,11 @@
 			if (length(time) > 1) {
 				stop('A RasterLayer can only have a single time step. You can use a RasterBrick instead')
 			}		
-			r@data@band <- as.integer(time)
+			if (is.na(time)) {
+				r@data@band <- as.integer(1)
+			} else {
+				r@data@band <- as.integer( min(max(1, time), r@file@nbands) )
+			}
 		} 
 
 	} else {
