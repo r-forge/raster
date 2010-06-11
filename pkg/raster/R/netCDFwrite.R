@@ -4,15 +4,31 @@
 # Licence GPL v3
 
 
-.getNetCDFDType <- function(dtype, format='') {
+.getRasterDTypeFromCDF <- function(type) { 
+	if (type == "NC_CHAR" )  { return("INT1U") 
+	} else if (type == "NC_BYTE" ) { return("INT1S")
+	} else if (type == "NC_SHORT" ) { return("INT2S")
+	} else if (type == "NC_INT" ) { return("INT4S")
+	} else if (type == "NC_FLOAT" ) { return("FLT4S")
+	} else if (type =="NC_DOUBLE" ) { return("FLT8S") 
+	} else { return("FLT4S") }
+}
+
+
+.getNetCDFDType <- function(dtype) {
 	if (!(dtype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S'))) {
 		stop('not a valid data type')
 	}
 	type <- .shortDataType(dtype)
 	size <- dataSize(dtype) * 8
 	signed <- dataSigned(dtype)
-	#NC_CHAR	 8-bit characters intended for representing text.
-	if (size == 8) { return("NC_BYTE")
+	
+	if (size == 8) {
+		if (!signed) {
+			return("NC_CHAR") #8-bit characters intended for representing text.
+		} else {
+			return("NC_BYTE")
+		}
 	} else if (type == 'INT') {
 		if (!signed) {
 			warning('netcdf only stores signed integers')
@@ -26,9 +42,21 @@
 }
 
 
-.saveAsNetCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE) {
+.brickSaveAsNetCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE) {
+	stop('not yet implemented')
+}
 
-	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
+
+.rasterSaveAsNetCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE) {
+	x <- .startWriteCDF(x, filename=filename, datatype=datatype, overwrite=overwrite)
+	x <- .writeValuesCDF(x, getValues(x))
+	return( .stopWriteCDF(x) )
+}
+
+
+.startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE) {
+
+	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package') }
 
 	filename = trim(filename)
 	if (filename == '') { stop('provide a filename') }
@@ -37,49 +65,104 @@
 		stop('file exists, use overwrite=TRUE to overwrite it')
 	}
 	
+	dataType(x) <- datatype
+	
 	datatype = .getNetCDFDType(datatype)
 	
-	varname = layerNames(x)
-	if (trim(varname) == '') {
-		varname <- 'value'
-	}
 	if (.couldBeLonLat(x)) {
-		xvar = 'longitude'
-		yvar = 'latitude'
+		xname = 'longitude'
+		yname = 'latitude'
+		unit = 'degrees'
 	} else {
-		xvar = 'northing'
-		yvar = 'easting'	
+		xname = 'northing'
+		yname = 'easting'	
+		unit = 'meter' # probably
 	}
-	tvar = 'layer'
 	
 	nc <- create.nc(filename)	
 	
-	dim.def.nc(nc, xvar, ncol(x) )
-	var.def.nc(nc, xvar, "NC_DOUBLE", xvar)
-	dim.def.nc(nc, yvar, nrow(x) ) 
-	var.def.nc(nc, yvar, "NC_DOUBLE", yvar)
+	dim.def.nc(nc, 'x', ncol(x) )
+	var.def.nc(nc, 'x', "NC_DOUBLE", 0)
+	att.put.nc(nc, 'x', 'long_name', 'NC_CHAR', xname)
+	att.put.nc(nc, 'x', 'standard_name', 'NC_CHAR', xname)
+	att.put.nc(nc, 'x', 'axis', 'NC_CHAR', 'X')
+	att.put.nc(nc, 'x', 'units', 'NC_CHAR', unit)
 
-#	dim.def.nc(nc, tvar, nlayers(x), unlim=TRUE)
-#	var.def.nc(nc, tvar, "NC_INT", tvar)
-#	var.def.nc(nc, varname, datatype, c(xvar, yvar, tvar))
-	var.def.nc(nc, varname, datatype, c(xvar, yvar))
+	
+	dim.def.nc(nc, 'y', nrow(x) ) 
+	var.def.nc(nc, 'y', "NC_DOUBLE", 1)
+	att.put.nc(nc, 'y', 'long_name', 'NC_CHAR', yname)
+	att.put.nc(nc, 'y', 'standard_name', 'NC_CHAR', yname)
+	att.put.nc(nc, 'y', 'axis', 'NC_CHAR', 'Y')
+	att.put.nc(nc, 'y', 'units', 'NC_CHAR', unit)
 
-	var.put.nc(nc, xvar, xFromCol(x, 1:ncol(x)), start=NA, count=NA, na.mode=0)
-	var.put.nc(nc, yvar, yFromRow(x, 1:nrow(x)), start=NA, count=NA, na.mode=0)
-	var.put.nc(nc, varname, t(values(x, format='matrix')), start=NA, count=NA, na.mode=0)
-#	var.put.nc(nc, tvar, 1:nlayers(x), start=NA, count=NA, na.mode=0)
-#	var.put.nc(nc, varname, t(values(x, format='matrix')), start=c(1,1,1), count=c(ncol(x),nrow(x),nlayers(x)), na.mode=0)
+	var.def.nc(nc, 'value', datatype, c(0,1))
+	att.put.nc(nc, 'value', 'missing_value', datatype, x@file@nodatavalue)
+	
+#	dim.def.nc(nc, 'z', nlayers(x), unlim=TRUE)
+#	var.def.nc(nc, 'z', "NC_INT", 'z')
+#	var.def.nc(nc, 'value', datatype, c('x', 'y', 'z'))
+
+	var.put.nc(nc, 'x', xFromCol(x, 1:ncol(x)), start=NA, count=NA, na.mode=0)
+	var.put.nc(nc, 'y', yFromRow(x, 1:nrow(x)), start=NA, count=NA, na.mode=0)
+#	var.put.nc(nc, 'z', 1:nlayers(x), start=NA, count=NA, na.mode=0)
+	att.put.nc(nc, 'value', 'long_name', 'NC_CHAR', layerNames(x))
+
+	pkgversion = drop(read.dcf(file=system.file("DESCRIPTION", package='raster'), fields=c("Version")))
+	att.put.nc(nc, "NC_GLOBAL", 'created_by', 'NC_CHAR', paste('R, raster package, version', pkgversion))
+	att.put.nc(nc, "NC_GLOBAL", 'date', 'NC_CHAR', format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
 
 	close.nc(nc)
 	
-	r <- raster(filename, zvar=varname)
+	x@data@min <- rep(Inf, nlayers(x))
+	x@data@max <- rep(-Inf, nlayers(x))
+	x@data@haveminmax <- FALSE
+	x@file@driver <- 'netcdf'
+	x@file@name <- filename
+	
+	return(x)
+}
+
+
+.stopWriteCDF <-  function(x) {
+	nc <- open.nc(x@file@name, write=TRUE)
+	att.put.nc(nc, 'value', 'min', 'NC_DOUBLE', as.numeric(x@data@min))
+	att.put.nc(nc, 'value', 'max', 'NC_DOUBLE', as.numeric(x@data@max))
+	close.nc(nc)
+	r <- raster(x@file@name, zvar='value')
 	return(r)
 }
 
-#library(raster)
-#r = raster(ncol=10, nrow=10)
-#r[] = 1:100
-#a = raster:::.saveAsNetCDF(r, 'test.nc', overwrite=TRUE)
-#plot(a)
 
+
+
+.writeValuesCDF <- function(x, v, start=1) {
+
+	nc <- open.nc(x@file@name, write=TRUE)
+	
+	v[is.na(v)] = x@file@nodatavalue
+	v <- matrix(v, ncol=x@nrows)
+	
+	var.put.nc(nc, 'value', v, start=c(1, start), count=NA, na.mode=0)
+	close.nc(nc)
+
+#	var.put.nc(nc, 'value', v, start=c(1,1,1), count=c(ncol(x),nrow(x),nlayers(x)), na.mode=0)
+	
+	rsd <- na.omit(x@data@values) # min and max values
+	if (length(rsd) > 0) {
+		x@data@min <- min(x@data@min, rsd)
+		x@data@max <- max(x@data@max, rsd)
+	}	
+	
+	return(x)
+}
+
+
+#library(raster)
+#r = raster(ncol=10, nrow=5)
+#r[] = c(1:49, NA)
+#layerNames(r) = 'hello world'
+#a = .rasterSaveAsNetCDF(r, 'test.nc', overwrite=TRUE)
+#plot(a)
+#print(a)
 

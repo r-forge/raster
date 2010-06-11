@@ -19,34 +19,23 @@ function(x, filename, format, ...) {
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
-	dc <- dataContent(x)
-	if (dc == 'nodata') {
+
+	if (dataContent(x) != 'all') {
 		if (dataSource(x) == 'disk') {
 			return( .saveAsRaster(x, filename, format=filetype, ...) )
 		} else {
 			stop('No usable data available for writing')
 		}
 	}
-	
-	
+
 	if (.isNativeDriver(filetype)) {
-		if (substr(dc, 1, 3) == 'row' ) {
-			x <- .writeRasterRow(x, filename=filename, format=filetype, ...)
-		} else {
-			x <- .writeRasterAll(x, filename=filename, format=filetype, ...)
-		}  
+		x <- .writeRasterAll(x, filename=filename, format=filetype, ...)
 	} else if (filetype=='ascii') {
-		x <- .writeAscii(x, filename=filename, format=filetype,...)
+		x <- .writeAscii(x, filename=filename,...)
 	} else if (filetype=='CDF') {
-		x <- .writeRasterCDF(x, filename=filename, format=filetype, ...)
+		x <- .rasterSaveAsNetCDF(x, filename=filename, ...)
 	} else { 
-		if (substr(dc, 1, 3) == 'row' ) {
-			x <- .writeGDALrow(x, filename=filename, format=filetype, ...)
-		} else if (dc == 'all') {
-			x <- .writeGDALall(x, filename=filename, format=filetype, ...)
-		} else {
-			stop('cannot write data')
-		}		
+		x <- .writeGDALall(x, filename=filename, format=filetype, ...)
 	}
 	return(x)
 }	
@@ -61,7 +50,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 	filename <- .getExtension(filename, filetype)
 	
 	dc <- dataContent(x)
-	if (! dc %in% c('row', 'all') ) {
+	if (dc != 'all') {
 		if (dataSource(x) == 'disk') {
 			return( .saveAsBrick(x, filename, bandorder=bandorder, format=filetype, ...) )
 		} else {
@@ -70,17 +59,9 @@ function(x, filename, bandorder='BIL', format, ...) {
 	}
 
 	if (filetype=='raster') {
-		if (dc == 'row' ) {
-			return( .writeBrickRow(object=x, filename=filename, bandorder=bandorder, ...) )
-		} else {
-			return( .writeBrick(object=x, filename=filename, format=filetype, bandorder=bandorder, ...) )
-		}
+		return( .writeBrick(object=x, filename=filename, format=filetype, bandorder=bandorder, ...) )
 	} else {
-		if (dc == 'row' ) {
-			x <- .writeGDALrow(x, filename=filename, format=filetype, ...)
-		} else {
-			x <- .writeGDALall(x, filename=filename, format=filetype, ...)
-		}
+		x <- .writeGDALall(x, filename=filename, format=filetype, ...)
 	}
 }
 )
@@ -98,14 +79,13 @@ function(x, filename, bandorder='BIL', format, ...) {
 	tr <- blockSize(b)
 	pb <- pbCreate(tr$n, type=.progress(...))
 	for (i in 1:tr$n) {
-		v <- getValuesBlock(x, row=tr$row[i], nrows=tr$size)
+		v <- getValues(x, row=tr$row[i], nrows=tr$size)
 		b <- writeValues(b, v, tr$row[i])
 		pbStep(pb, i)
 	}
 	pbClose(pb)
 	b <- writeStop(b)
 	return(invisible(b))
-	
 }
 )
 

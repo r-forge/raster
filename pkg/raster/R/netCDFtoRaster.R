@@ -58,6 +58,9 @@
 	zvar <- .getzvar(zvar, vars) 
 
 	varinfo <- try(var.inq.nc(nc, zvar))
+	
+	datatype <- .getRasterDTypeFromCDF(varinfo$type)
+	
 	dims <- varinfo$ndims
 	if (dims== 1) { 
 		stop('zvar only has a single dimension; I cannot make a RasterLayer from this')

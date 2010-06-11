@@ -59,7 +59,7 @@
 }		
  
  
-.writeRasterRow <- function(raster, filename, ...) {
+..writeRasterRow <- function(raster, filename, ...) {
 
 	if (dataIndices(raster)[1] == 1) { 
 		raster <- .startRasterWriting(raster, filename, ...)
