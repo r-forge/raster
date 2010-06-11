@@ -6,7 +6,7 @@
 .defaultExtension <- function(format=.filetype()) {
 	if (format == 'raster') { return('.grd') 
 	} else if (format == 'ascii') { return('.asc')
-	} else if (format == 'netcdf') { return('.nc')
+	} else if (format == 'CDF') { return('.nc')
 	} else if (format == 'BIL') { return('.bil')
 	} else if (format == 'BSQ') { return('.bsq')
 	} else if (format == 'BIP') { return('.bip')

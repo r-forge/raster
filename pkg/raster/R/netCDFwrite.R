@@ -60,7 +60,7 @@
 
 	filename = trim(filename)
 	if (filename == '') { stop('provide a filename') }
-	ext(filename) <- .defaultExtension(format='netcdf')
+	ext(filename) <- .defaultExtension(format='CDF')
 	if (file.exists(filename) & !overwrite) {
 		stop('file exists, use overwrite=TRUE to overwrite it')
 	}
@@ -148,7 +148,7 @@
 
 #	var.put.nc(nc, 'value', v, start=c(1,1,1), count=c(ncol(x),nrow(x),nlayers(x)), na.mode=0)
 	
-	rsd <- na.omit(x@data@values) # min and max values
+	rsd <- na.omit(x@data@values) 
 	if (length(rsd) > 0) {
 		x@data@min <- min(x@data@min, rsd)
 		x@data@max <- max(x@data@max, rsd)
