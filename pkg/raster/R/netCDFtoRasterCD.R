@@ -123,7 +123,7 @@
 	
 	prj = list()
 	if (!is.na(projection)) {
-		att <- var.inq.nc(nc, 'projection')
+		att <- var.inq.nc(nc, projection)
 		if (att$natts > 0) {
 			for (i in 0:(att$natts-1)) {
 				prj[[i+1]] <- att.get.nc(nc, projection, i)
