@@ -20,15 +20,19 @@
 		if (class(object) != 'RasterStack') {
 			if (dataContent(object) == 'all') {
 				writeValues(rout, as.vector(object@data@values))
-				v <- na.omit(object@data@values) 
-				if (length(v) > 0) {
-					rout@data@min <- apply(v, 2, min)
-					rout@data@max <- apply(v, 2, max)
-				}
+			
+				w <- getOption('warn')
+				options('warn'=-1) 
+				rsd <- apply(object@data@values, 2, range, na.rm=TRUE)
+				rout@data@min <- rsd[1,]
+				rout@data@max <- rsd[2,]
+				options('warn'= w) 
+
 				rout <- writeStop(rout)
 				return(rout)
 			}
 		} 
+
 		pb <- pbCreate(rout@nrows*nl, type=.progress(...))
 		rr <- 0
 		for (i in 1:nl) {
@@ -36,29 +40,36 @@
 			for (r in 1:sr@nrows) {
 				v <- getValues(sr, r)
 				writeValues(rout, as.vector(v))
-				v <- na.omit(v) 
+
+				v <- na.omit(v) # min and max values
 				if (length(v) > 0) {
 					rout@data@min[i] <- min(rout@data@min[i], v)
 					rout@data@max[i] <- max(rout@data@max[i], v)
 				}	
+				
 				rr <- rr + 1
 				pbStep(pb, rr) 				
 			}
 		}				
 		pbClose(pb)
+		
 	} else if (bandorder=='BIL') {
 		pb <- pbCreate(nrow(rout), type=.progress(...))
 		for (r in 1:nrow(object)) {
 			v <- getValues(object, r)
 			writeValues(rout, as.vector(v))
-			v <- na.omit(v)
-			if (length(v) > 0) {
-				rout@data@min <- pmin(rout@data@min, apply(v, 2, min))
-				rout@data@max <- pmax(rout@data@max, apply(v, 2, max))
-			}
+
+			w <- getOption('warn')
+			options('warn'=-1) 
+			v <- apply(v, 2, range, na.rm=TRUE)
+			rout@data@min <- pmin(rout@data@min, v[1,])
+			rout@data@max <- pmax(rout@data@max, v[2,])
+			options('warn'= w) 
+
 			pbStep(pb, r) 				
 		}
 		pbClose(pb)
+		
 	} else if (bandorder=='BIP') {
 		pb <- pbCreate(nrow(rout), type=.progress(...))
 		for (r in 1:nrow(object)) {

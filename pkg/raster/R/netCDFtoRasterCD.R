@@ -4,17 +4,6 @@
 # Licence GPL v3
 
 
-.isNetCDF <- function(x) {
-	on.exit(options('warn'= getOption('warn')))
-	options('warn'=-1) 
-	fcon <- file(x, "rb")
-	tst <- try( w <- readBin(fcon, what='character', n=1), silent=TRUE)
-	close(fcon)
-	if ( isTRUE((substr(w, 1, 3) == "CDF" ))) { return(TRUE) 
-	} else { return(FALSE)
-	}
-}
-
 
 .getxvar <- function(xvar, vars) {
 	if (xvar == '') {
@@ -44,14 +33,18 @@
 	return(zvar)
 }
 
-
-
 .rasterObjectFromCDF <- function(filename, xvar='', yvar='', zvar='', time=NA, type='RasterLayer', ...) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
 	nc <- open.nc(filename)
 
+	conv <- try (att.get.nc(nc, "NC_GLOBAL", 'Conventions'))
+	if (substr(conv, 1, 3) == 'RST') {
+		close.nc(nc)
+		return( .rasterObjectFromCDFrst(filename, time=NA, type='RasterLayer', ...) )
+	}
+	
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
@@ -71,16 +64,16 @@
 	xvar <- .getxvar(xvar, vars) 
 	yvar <- .getyvar(yvar, vars) 
 
-	# to do: also consider "lat_bnds", "lat_bnds and time_bnds"
-	
-	
 	ncols <- dim.inq.nc(nc, xvar)$length
 	nrows <- dim.inq.nc(nc, yvar)$length
 
 	xx <- as.vector(var.get.nc(nc, xvar))
 	rs <- xx[-length(xx)] - xx[-1]
+	
 	if (! isTRUE ( all.equal( min(rs), max(rs), scale= min(rs)/100 ) ) ) {
-		stop('cells are not equally spaced; extract as points') }
+		stop('cells are not equally spaced; perhaps consider using these data as points') 
+	}
+	
 	xrange <- c(min(xx), max(xx))
 	resx <- (xrange[2] - xrange[1]) / (ncols-1)
 	rm(xx)

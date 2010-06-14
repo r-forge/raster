@@ -119,17 +119,11 @@ setMethod('writeValues', signature(x='RasterLayer'),
 
 setMethod('writeValues', signature(x='RasterBrick'), 
 	function(x, v, start) {
+	
 		v[is.infinite(v)] <- NA
 	
-		rsd <- na.omit(v) # min and max values
-		if (length(rsd) > 0) {
-			x@data@min <- pmin(x@data@min, rsd)
-			x@data@max <- pmax(x@data@max, rsd)
-		}	
-	
-		native <- x@file@driver %in% .nativeDrivers()
 		
-		if (native) {
+		if ( x@file@driver %in% .nativeDrivers() ) {
 			if (x@file@dtype == "INT") { 
 				v[is.na(v)] <- x@file@nodatavalue		
 				v <- as.integer(round(v))  
