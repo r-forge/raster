@@ -11,6 +11,7 @@
 		} else if ('lon' %in% vars) { xvar <- 'lon' 
 		} else if ('long' %in% vars) { xvar <- 'long' 
 		} else if ('longitude' %in% vars) { xvar <- 'longitude' 
+		} else if ('Longitude' %in% vars) { xvar <- 'Longitude' 
 		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
 	} else if (!(xvar %in% vars)) { stop( paste('Cannot find obvious "xvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
@@ -18,22 +19,24 @@
 }
 
 .getyvar <- function(yvar, vars) {
-	if (yvar == '') { if ('y' %in% vars){ yvar <- 'y'
+	if (yvar == '') { 
+		if ('y' %in% vars){ yvar <- 'y'
 		} else if ('lat' %in% vars) { yvar <- 'lat' 
 		} else if ('latitude' %in% vars) { yvar <- 'latitude' 
+		} else if ('Latitude' %in% vars) { yvar <- 'Latitude' 
 		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
 	} else if (!(yvar %in% vars)) { stop( paste('Cannot find obvious "yvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(yvar)
 }
 
-.getzvar <- function(zvar, vars) {
-	if (zvar == '') { zvar <- 'z' }
-	if (!(zvar %in% vars)) { stop ( 'Cannot find an obvious "zvar" in file. Select one from:\n', paste(vars, collapse=", ") ) }
-	return(zvar)
+.getVarname <- function(varname, vars) {
+	if (varname == '') { varname <- 'value' }
+	if (!(varname %in% vars)) { stop ( 'Cannot find an obvious "varname" in file. Select one from:\n', paste(vars, collapse=", ") ) }
+	return(varname)
 }
 
-.rasterObjectFromCDF <- function(filename, xvar='', yvar='', zvar='', time=NA, type='RasterLayer', ...) {
+.rasterObjectFromCDF <- function(filename, x='', y='', varname='', layer=NA, type='RasterLayer', ...) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
@@ -42,13 +45,13 @@
 	conv <- try (att.get.nc(nc, "NC_GLOBAL", 'Conventions'))
 	if (substr(conv, 1, 3) == 'RST') {
 		close.nc(nc)
-		return( .rasterObjectFromCDFrst(filename, time=NA, type='RasterLayer', ...) )
+		return( .rasterObjectFromCDFrst(filename, layer=layer, type='RasterLayer', ...) )
 	}
 	
 	nv <- file.inq.nc(nc)$nvars
     vars <- vector()
 	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
-	zvar <- .getzvar(zvar, vars) 
+	zvar <- .getVarname(varname, vars) 
 
 	varinfo <- try(var.inq.nc(nc, zvar))
 	
@@ -56,13 +59,13 @@
 	
 	dims <- varinfo$ndims
 	if (dims== 1) { 
-		stop('zvar only has a single dimension; I cannot make a RasterLayer from this')
+		stop('"varname" only has a single dimension; I cannot make a RasterLayer from this')
 	} else if (dims > 3) { 
-		stop('zvar has ', length(dims), ' dimensions, I do not know how to process these data')
+		stop('"varname" has ', length(dims), ' dimensions, I do not know how to process this')
 	}
 	
-	xvar <- .getxvar(xvar, vars) 
-	yvar <- .getyvar(yvar, vars) 
+	xvar <- .getxvar(x, vars) 
+	yvar <- .getyvar(y, vars) 
 
 	ncols <- dim.inq.nc(nc, xvar)$length
 	nrows <- dim.inq.nc(nc, yvar)$length
@@ -166,6 +169,8 @@
 		r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
 	}
 
+	time <- layer
+	
 	if (type == 'RasterLayer') {
 		if (is.na(time) | is.null(time)) {
 			if (length(dims)== 3) { 
