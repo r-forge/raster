@@ -104,14 +104,6 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 			}
 
 			
-		} else if (dataContent(x) == 'row') {
-		
-			if ( (dataIndices(x)[1] == startcell) & (dataIndices(x)[2] == endcell) ) {
-				res <- x@data@values[col:lastcol]
-			} else {
-				readrow <- TRUE
-			}
-			
 		} else {
 			stop('something is wrong with the RasterLayer dataContent')
 		}

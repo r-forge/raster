@@ -73,12 +73,6 @@ function(x, row, nrows) {
 		readrow <- TRUE
 	} else if (dataContent(x) == 'all'){
 		res <- x@data@values[startcell:endcell,]
-	} else if (dataContent(x) == 'row') {
-		if ( (dataIndices(x)[1] == startcell) & (dataIndices(x)[2] == endcell) ) {
-			res <- x@data@values
-		} else {
-			readrow <- TRUE
-		}
 	} else {
 		stop('something is wrong with the RasterLayer dataContent')
 	}
