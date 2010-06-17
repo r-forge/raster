@@ -60,6 +60,8 @@ function(x, filename, bandorder='BIL', format, ...) {
 
 	if (filetype=='raster') {
 		return( .writeBrick(object=x, filename=filename, format=filetype, bandorder=bandorder, ...) )
+	} else if (filetype=='CDF') {
+		x <- .rasterSaveAsNetCDF(x, filename=filename, ...)
 	} else {
 		x <- .writeGDALall(x, filename=filename, format=filetype, ...)
 	}

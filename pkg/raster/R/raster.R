@@ -37,10 +37,10 @@ setMethod('raster', signature(x='matrix'),
 
 
 setMethod('raster', signature(x='character'), 
-	function(x, values=FALSE, band=1, proj=NULL, ...) {
-		r <- .rasterObjectFromFile(x, band=band, objecttype='RasterLayer', ...)
-		if (! is.null(proj)) {
-			projection(r) = proj
+	function(x, band=1, values=FALSE, crs=NULL, ...) {
+		r <- .rasterObjectFromFile(x, layer=band, objecttype='RasterLayer', ...)
+		if (! is.null(crs)) {
+			projection(r) = crs
 		}
 		if (values) {
 			r <- readAll(r)
@@ -109,7 +109,7 @@ setMethod('raster', signature(x='RasterBrick'),
 			if (dataSource(x) == 'disk') {
 				if (dindex != layer) { warning(paste("layer was changed to", dindex))}
 				if (x@file@driver == 'netcdf') {
-					r <- raster(x@file@name, xvar=x@data@xvar, yvar=x@data@yvar, zvar=x@data@zvar, time=dindex)				
+					r <- raster(x@file@name, xvar=x@data@xvar, yvar=x@data@yvar, varname=x@data@zvar, layer=dindex)				
 				} else {
 					r <- raster(filename(x), band=dindex)
 				}
