@@ -4,11 +4,20 @@
 # Licence GPL v3
 
 
-.writeBrick <- function(object, filename, bandorder='BIL', ...) {
+.writeBrick <- function(object, filename, bandorder='BIL', format='raster', ...) {
 
 	filename <- trim(filename)
 	if (filename == '') {	stop('you must supply a filename') 	}
-	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) { stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'") }
+
+	if (! format %in% c("raster", "BIL", "BSQ", "BIP") ) {
+		stop('format should be one of "raster", "BIL", "BSQ", "BIP" (or a rgdal supported format)')
+	}
+	if ( format %in% c("BIL", "BSQ", "BIP") ) {
+		bandorder <- format
+	}
+	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) { 
+		stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'") 
+	}
 	
 	nl <- object@data@nlayers
 	rout <- clearValues(object)

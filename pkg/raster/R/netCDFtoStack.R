@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.stackCDF <- function(filename, x, y, varname, time) {
+.stackCDF <- function(filename, x, y, varname, band) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
@@ -24,17 +24,17 @@
 	if (dims== 1) { 
 		stop('zvar only has a single dimension; I cannot make a RasterLayer from this')
 	} else if (dims > 3) { 
-		stop('zvar has ', length(dims), ' dimensions, I do not know how to process these data')
+		stop(zvar, 'has ', length(dims), ' dimensions, I do not know how to process these data')
 	} else if (dims == 2) {
-		return( stack ( raster(filename, x=xvar, y=yvar, varname=zvar, layer=time )  )  )
+		return( stack ( raster(filename, x=xvar, y=yvar, varname=zvar )  )  )
 	} else {
-		if (time == '') {
-			time = 1:(as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length))
+		if (band == '') {
+			band = 1:(as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length))
 		}
-		st = stack( raster(filename, x=xvar, y=yvar, varname=zvar, layer=time[1]) )
-		if (length(time) > 1) {
+		st = stack( raster(filename, x=xvar, y=yvar, varname=zvar, band=band[1]) )
+		if (length(band) > 1) {
 			for (i in 2:length(time)) {
-				st <- addLayer(st, raster(filename, xvar=x, yvar=y, zvar=varname, layer=time[i]) )
+				st <- addLayer(st, raster(filename, xvar=x, yvar=y, zvar=varname, band=band[i]) )
 			}
 		}
 		return( st )

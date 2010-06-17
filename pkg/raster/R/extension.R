@@ -30,7 +30,6 @@
 
 .getExtension <- function(f, format) {
 	def <- .defaultExtension(format)
-	extension <- tolower(ext(f))
 	if (def != '') {
 		ext(f) <- def
 	}

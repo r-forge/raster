@@ -3,7 +3,7 @@
 # Version 0.9
 # Licence GPL v3
 
-.rasterObjectFromCDFrst <- function(filename, layer=NA, type='RasterLayer', ...) {
+.rasterObjectFromCDFrst <- function(filename, band=NA, type='RasterLayer', ...) {
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
 	nc <- open.nc(filename)
@@ -40,10 +40,10 @@
 	dims <- varinfo$ndims
 	
 	r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, 'value')$dimids[2])$length)
-	if (is.na(layer)) {
+	if (is.na(band)) {
 		r@file@band <- 1
 	} else {
-		r@file@band <- min(max(1, layer), r@file@nbands)
+		r@file@band <- min(max(1, band), r@file@nbands)
 	}
 
 	r@data@min <- att.get.nc(nc, "value", 'min')

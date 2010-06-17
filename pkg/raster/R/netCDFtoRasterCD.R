@@ -36,7 +36,7 @@
 	return(varname)
 }
 
-.rasterObjectFromCDF <- function(filename, x='', y='', varname='', layer=NA, type='RasterLayer', ...) {
+.rasterObjectFromCDF <- function(filename, x='', y='', varname='', band=NA, type='RasterLayer', ...) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
@@ -45,7 +45,7 @@
 	conv <- try (att.get.nc(nc, "NC_GLOBAL", 'Conventions'))
 	if (substr(conv, 1, 3) == 'RST') {
 		close.nc(nc)
-		return( .rasterObjectFromCDFrst(filename, layer=layer, type='RasterLayer', ...) )
+		return( .rasterObjectFromCDFrst(filename, band=band, type='RasterLayer', ...) )
 	}
 	
 	nv <- file.inq.nc(nc)$nvars
@@ -169,21 +169,19 @@
 		r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
 	}
 
-	time <- layer
-	
 	if (type == 'RasterLayer') {
-		if (is.na(time) | is.null(time)) {
+		if (is.na(band) | is.null(band)) {
 			if (length(dims)== 3) { 
-				stop('zvar has three dimensions, provide a value for "time", between 1 and ', dims[3])
+				stop(zvar, 'has three dimensions, provide a "band" value between 1 and ', dims[3])
 			} 
 		} else {
-			if (length(time) > 1) {
-				stop('A RasterLayer can only have a single time step. You can use a RasterBrick instead')
+			if (length(band) > 1) {
+				stop('A RasterLayer can only have a single band. You can use a RasterBrick instead')
 			}		
-			if (is.na(time)) {
+			if (is.na(band)) {
 				r@data@band <- as.integer(1)
 			} else {
-				r@data@band <- as.integer( min(max(1, time), r@file@nbands) )
+				r@data@band <- as.integer( min(max(1, band), r@file@nbands) )
 			}
 		} 
 

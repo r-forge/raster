@@ -43,7 +43,7 @@ function(x, filename, format, ...) {
 
 
 setMethod('writeRaster', signature(x='RasterBrick', filename='character'), 
-function(x, filename, bandorder='BIL', format, ...) {
+function(x, filename, format='raster', bandorder='BIL', ...) {
 
 	filename <- trim(filename)
 	filetype <- .filetype(format=format, filename=filename)
@@ -58,12 +58,12 @@ function(x, filename, bandorder='BIL', format, ...) {
 		}
 	}
 
-	if (filetype=='raster') {
+	if (.isNativeDriver(filetype)) {
 		return( .writeBrick(object=x, filename=filename, format=filetype, bandorder=bandorder, ...) )
 	} else if (filetype=='CDF') {
-		x <- .rasterSaveAsNetCDF(x, filename=filename, ...)
+		return ( .rasterSaveAsNetCDF(x, filename=filename, ...) )
 	} else {
-		x <- .writeGDALall(x, filename=filename, format=filetype, ...)
+		return ( .writeGDALall(x, filename=filename, format=filetype, ...) )
 	}
 }
 )
