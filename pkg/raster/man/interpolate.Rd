@@ -22,11 +22,13 @@ interpolate(object, ...)
 
 \section{Methods}{
 \describe{
+A full call to the method is 
  
-\code{predict(object, model, filename='', index=1, ...)}
+\code{predict(object, model, filename='', xyOnly=TRUE, ext=NULL, const=NULL, index=1, na.rm=TRUE, ...)}
+
   
 \tabular{rll}{  
-  \tab  \code{object} \tab a RasterLayer object \cr
+  \tab  \code{object} \tab a Raster* object \cr
   \tab  \code{model}  \tab A fitted model\cr
   \tab  \code{filename}  \tab Output filename for a new raster; if NA the result is not written to a file but returned with the RasterLayer object, in the data slot \cr
   \tab  \code{xyOnly} \tab Logical. If \code{TRUE}, values of the Raster* object are not considered as co-variables; and only x and y (longitude and latitude) are used. This should match the model \cr
