@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.stackCDF <- function(filename, x='', y='', varname='', band='') {
+.stackCDF <- function(filename, x='', y='', varname='', bands='') {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
@@ -30,14 +30,15 @@
 		close.nc(nc)
 		return( stack ( raster(filename, x=xvar, y=yvar, varname=zvar )  )  )
 	} else {
-		if (band[1] == '') {
-			band = 1:(as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length))
+		if (is.null(bands)) { bands <- ''}
+		if (bands[1] == '') {
+			bands = 1 : ( as.integer( dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length ) )
 		}
 		close.nc(nc)
-		st = stack( raster(filename, xvar=x, yvar=y, varname=zvar, band=band[1]) )
-		if (length(band) > 1) {
-			for (i in 2:length(band)) {
-				st <- addLayer(st, raster(filename, xvar=x, yvar=y, varname=zvar, band=band[i]) )
+		st = stack( raster(filename, xvar=x, yvar=y, varname=zvar, band=bands[1]) )
+		if (length(bands) > 1) {
+			for (i in 2:length(bands)) {
+				st <- addLayer(st, raster(filename, xvar=x, yvar=y, varname=zvar, band=bands[i]) )
 			}
 		}
 		return( st )
