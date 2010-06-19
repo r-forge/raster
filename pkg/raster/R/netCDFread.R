@@ -72,9 +72,7 @@
 	
 	
 	
-
-
-.brickGetValuesAllCDF <- function(x, time=1, ntimes=nlayers(x)-time+1) {	
+...brickGetValuesAllCDF <- function(x, time=1, ntimes=nlayers(x)-time+1) {	
 
 	time   =  min( max( round(time), 1), nlayers(x))
 	ntimes =  min( max( round(ntimes), 1), nlayers(x)-time+1 )
@@ -97,13 +95,14 @@
 	colnames(values) = time:(time+ntimes-1)
 	
 	if ( x@file@toptobottom ) { 
+		cat('hiya')
 		for (i in 1:ntimes) {
-			x <- (d[,,i])
+			x <- d[,,i]
 			values[,i] <- as.vector( x[, ncol(x):1] )
 		}
 	} else {
 		for (i in 1:ntimes) {
-			values[,i] <- as.vector(x)
+			values[,i] <- as.vector( d[,,i] )
 		}
 	}
 	
@@ -114,9 +113,7 @@
 	
 .readRowsBrickNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), time=1, ntimes=nlayers(x)-time+1) {
 	
-	
 	if ( x@file@toptobottom ) { row <- x@nrows - row - nrows + 2	}
-	
 	
 	time   =  min( max( round(time), 1), nlayers(x))
 	ntimes =  min( max( round(ntimes), 1), nlayers(x)-time+1 )
@@ -128,25 +125,30 @@
 	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	close.nc(nc)
 	
+
 	if (!is.na(x@file@nodatavalue)) { 
 		d[d==x@file@nodatavalue] <- NA
 	}
 	d <- x@data@add_offset + d * x@data@scale_factor
 	
-	values <- matrix(nrow=nrows*ncols, ncol=ntimes)
-	
-	# top to bottom ??
-	
-	if (length(dim(d)) == 3) {
-		for (i in 1:ntimes) {
-			values[,i] <- as.vector(d[,,i])
+	dims = dim(d)
+	if (length(dims) == 3) {
+		if ( x@file@toptobottom ) { 
+			values <- matrix(nrow=nrows*ncols, ncol=ntimes)
+			for (i in 1:ntimes) {
+				x <- d[,,i]
+				values[,i] <- as.vector( x[, ncol(x):1] )
+			}
+		} else {
+			dim(d) = c(dims[1] * dims[2], dims[3])
+			return(d)
 		}
-		
 	} else {
-		for (i in 1:ntimes) {
-			values[,i] <- as.vector(d[,i])
+		if ( x@file@toptobottom ) { 
+			values <- as.vector( d[, ncol(d):1] )
+		} else {
+			values <- as.vector(d)
 		}
-		
 	}
 	return(values)
 }

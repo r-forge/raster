@@ -3,11 +3,14 @@
 # Version 0.9
 # Licence GPL v3
 
-
-
 #read data on the raster for cell numbers
 
 .brickReadCells <- function(object, cells) {
+
+	if (object@file@driver == 'netcdf') {
+		return( .readBrickCellsNetCDF(object, cells) )
+	} 
+
 	result <- matrix(nrow=length(cells), ncol=nlayers(object))
 	for (i in 1:nlayers(object)) {
 		r <- raster(object, i)
