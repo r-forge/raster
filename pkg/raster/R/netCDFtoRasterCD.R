@@ -42,7 +42,8 @@
 
 	nc <- open.nc(filename)
 
-	conv <- try (att.get.nc(nc, "NC_GLOBAL", 'Conventions'))
+	conv <- ''
+	conv <- try (att.get.nc(nc, "NC_GLOBAL", 'Conventions') , silent=TRUE)
 	if (substr(conv, 1, 3) == 'RST') {
 		close.nc(nc)
 		return( .rasterObjectFromCDFrst(filename, band=band, type='RasterLayer', ...) )

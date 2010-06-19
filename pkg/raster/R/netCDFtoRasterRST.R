@@ -4,15 +4,11 @@
 # Licence GPL v3
 
 .rasterObjectFromCDFrst <- function(filename, band=NA, type='RasterLayer', ...) {
+
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
 	nc <- open.nc(filename)
 
-	conv <- try (att.get.nc(nc, "NC_GLOBAL", 'Conventions'))
-	if (substr(conv, 1, 3) != 'RST') {
-		warning('')
-	}
-	
 	varinfo <- try(var.inq.nc(nc, 'value'))
 	
 	datatype <- .getRasterDTypeFromCDF(varinfo$type)
@@ -32,7 +28,7 @@
 	}
 	r@file@name <- filename
 
-	r@file@driver <- "rasterCDF"	
+	r@file@driver <- "netcdf"	
 	r@data@source <- 'disk'
 
 	varinfo <- try(var.inq.nc(nc, 'value'))
@@ -52,3 +48,4 @@
 	close.nc(nc)
 	return(r)
 }
+
