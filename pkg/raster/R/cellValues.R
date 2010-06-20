@@ -20,11 +20,6 @@ setMethod("cellValues", signature(x='RasterLayer', cells='vector'),
 	}
 )
 
-setMethod("cellValues", signature(x='RasterBrick', cells='vector'), 
-	function(x, cells, ...) { 
-		return( .brickReadCells(x, cells, ...) )
-	}
-)
 
 
 setMethod("cellValues", signature(x='RasterStack', cells='vector'), 
@@ -50,3 +45,32 @@ setMethod("cellValues", signature(x='RasterStack', cells='vector'),
 	}
 )
 
+setMethod("cellValues", signature(x='RasterBrick', cells='vector'), 
+function(x, cells, ...) {
+
+	dots <- list(...)
+	layer <- dots$layer
+	nlayers <- dots$nlayers
+	if (is.null(layer)) { layer <- 1 } 
+	if (is.null(nlayers)) { nlayers <- x@data@nlayers } 
+	
+	nl <- x@data@nlayers 
+	layer <- min(max(1, round(layer)), nl)
+	maxnl = nl - layer + 1
+	nlayers <- min(max(1, round(nlayers)), maxnl)
+
+	if (x@file@driver == 'netcdf') {
+		return( .readBrickCellsNetCDF(x, cells, layer, nlayers) )
+	} 
+
+	result <- matrix(nrow=length(cells), ncol=nlayers)
+	lyrs <- layer:(layer+nlayers-1)
+	for (i in 1:nlayers) {
+		j <- lyrs[i]
+		r <- raster(x, j)
+		result[,i] <- .readCells(r, cells)
+	}
+	colnames(result) <- layerNames(x)[lyrs]
+	return(result)
+}
+)
