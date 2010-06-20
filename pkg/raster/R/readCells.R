@@ -5,10 +5,15 @@
 
 #read data on the raster for cell numbers
 
-.brickReadCells <- function(object, cells) {
+.brickReadCells <- function(object, cells, layer=1, nlayers=nlayers(object), ...) {
+
+	nl <- nlayers(object)
+	layer <- min(max(1, round(layer)), nl)
+	maxnl = nl - layer + 1
+	nlayers <- min(max(1, round(nlayers)), maxnl)
 
 	if (object@file@driver == 'netcdf') {
-		return( .readBrickCellsNetCDF(object, cells) )
+		return( .readBrickCellsNetCDF(object, cells, layer, nlayers) )
 	} 
 
 	result <- matrix(nrow=length(cells), ncol=nlayers(object))
@@ -19,7 +24,8 @@
 	if (!(is.null(dim(result)))) {
 		colnames(result) <- layerNames(object)
 	}	
-	return(result)
+	endlayer = layer+nlayers-1
+	return(result[,layer:endlayer])
 }
 
 
