@@ -153,3 +153,21 @@ setAs('im', 'RasterLayer',
 		flip(r, direction='y')
 	}
 )
+
+# adehabitat
+setAs('asc', 'RasterLayer', 
+	function(from) {
+		d <- t(from[])
+		d <- d[nrow(d):1, ]
+		cz <- attr(from, "cellsize")
+		xmn <- attr(from, 'xll') - 0.5 * cz
+		ymn <- attr(from, 'yll') - 0.5 * cz
+		xmx <- xmn + ncol(d) * cz
+		ymx <- ymn + nrow(d) * cz
+		e <- extent(xmn, xmx, ymn, ymx)
+		d <- raster(d)
+		extent(d) = e
+		return(d)
+	}
+)
+
