@@ -99,10 +99,15 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			writeBin(v, x@file@con, size=x@file@dsize )
 			
 		} else if ( x@file@driver == 'ascii') {
-			if (x@file@dtype == 'INT') {v <- round(v)}
+			opsci = options('scipen')
+			if (x@file@dtype == 'INT') {
+				options(scipen=10)
+				v <- round(v)				
+			}
 			v[is.na(v)] <- x@file@nodatavalue
 			v <- matrix(v, ncol=ncol(x), byrow=TRUE)
 			write.table(v, x@file@name, append = TRUE, quote = FALSE, sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
+			options(scipen=opsci)
 
 		} else {
 			off = c(start-1, 0)

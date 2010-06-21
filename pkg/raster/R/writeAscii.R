@@ -8,8 +8,9 @@
 
 	v <- getValues(raster)
 	raster <- .startAsciiWriting(raster, filename, ...)
-	
+	opsci = options('scipen')
 	if (raster@file@dtype == 'INT') {
+		options(scipen=10)
 		v <- round(v)
 	}
 	
@@ -17,6 +18,7 @@
 	v <- matrix(v, ncol=ncol(raster), byrow=TRUE)
 	write.table(v, raster@file@name, append = TRUE, quote = FALSE, sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
 
+	options(scipen=opsci)
 	return( .stopAsciiWriting(raster) )
 		
 }

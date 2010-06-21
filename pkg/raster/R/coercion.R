@@ -159,6 +159,10 @@ setAs('asc', 'RasterLayer',
 	function(from) {
 		d <- t(from[])
 		d <- d[nrow(d):1, ]
+		type <- attr(from, "type") 
+		if (type == 'factor') {
+			warning('factor type converted to numeric')
+		}
 		cz <- attr(from, "cellsize")
 		xmn <- attr(from, 'xll') - 0.5 * cz
 		ymn <- attr(from, 'yll') - 0.5 * cz
@@ -168,6 +172,72 @@ setAs('asc', 'RasterLayer',
 		d <- raster(d)
 		extent(d) = e
 		return(d)
+	}
+)
+
+
+setAs('RasterLayer', 'asc', 
+	function(from) {
+		asc <- getValues(from, format='matrix')
+		asc <- asc[nrow(asc):1, ]
+		attr(asc, "cellsize") <- xres(from)
+		attr(asc, "xll") <- xmin(from) + 0.5 * xres(from)
+		attr(asc, "yll") <- ymin(from) + 0.5 * yres(from)
+		attr(asc, "type") <- 'numeric'
+		class(asc) <- "asc"		
+		return(asc)	
+	}
+)
+
+
+setAs('kasc', 'RasterBrick', 
+	function(from) {
+		names <- colnames(from)
+		cz <- attr(from, "cellsize")
+		ncol <- attr(from, 'ncol')
+		nrow <- attr(from, 'nrow')
+		xmn <- attr(from, 'xll') - 0.5 * cz
+		ymn <- attr(from, 'yll') - 0.5 * cz
+		xmx <- xmn + ncol * cz
+		ymx <- ymn + nrow * cz
+		e <- extent(xmn, xmx, ymn, ymx)
+		b <- brick(e, nrow=nrow, ncol=ncol)
+		m = matrix(NA, ncol=ncol(from), nrow=nrow(from))
+		for (i in 1:ncol(m)) {
+			m[,i] <- as.numeric(from[,i])
+		}	
+		dim(m) <- dim(from)
+		b <- setValues(b, m)
+		layerNames(b) <- names
+		return(b)
+	}
+)
+
+
+
+setAs('kasc', 'RasterStack', 
+	function(from) {
+		names <- colnames(from)
+		cz <- attr(from, "cellsize")
+		ncol <- attr(from, 'ncol')
+		nrow <- attr(from, 'nrow')
+		xmn <- attr(from, 'xll') - 0.5 * cz
+		ymn <- attr(from, 'yll') - 0.5 * cz
+		xmx <- xmn + ncol * cz
+		ymx <- ymn + nrow * cz
+		e <- extent(xmn, xmx, ymn, ymx)
+		r <- raster(e, nrow=nrow, ncol=ncol)
+		r <- setValues(r, as.numeric(from[,1]))
+		layerNames(r) <- names[1]
+		s <- stack(r)
+		if (ncol(from) > 1) {
+			for (i in 2:ncol(from)) {
+				r <- setValues(r, as.numeric(from[,i]))
+				layerNames(r) <- names[i]
+				s <- addLayer(s, r)
+			}	
+		}
+		return(s)
 	}
 )
 
