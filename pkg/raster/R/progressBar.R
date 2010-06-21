@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-pbCreate <- function(nsteps, type, style=3) {
+pbCreate <- function(nsteps, type='text', style=3) {
 	if (type=='text') {
 		pb <- txtProgressBar(min=0, max=nsteps, style=style)
 	} else if (type %in% c('window', 'tcltk', 'windows')) {

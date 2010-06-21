@@ -126,7 +126,7 @@ showOptions <- function() {
 		} else if (ext == '.sdat') { return('SAGA')
 		} else if (ext == '.rsw') { return('RMF')
 		} else { 
-			warning('extension ', ext, 'is unknown. Using default format.')
+			warning('extension ', ext, ' is unknown. Using default format.')
 			return('') 
 		}
 	}

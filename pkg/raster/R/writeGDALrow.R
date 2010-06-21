@@ -23,12 +23,13 @@
 	saveDataset(raster@file@transient, raster@file@name)
 	GDAL.close(raster@file@transient) 
 	
-	if (class(raster) == 'RasterBrick') {
+	if (inherits(raster, 'RasterBrick')) {
 		rasterout <- brick(raster@file@name)
 	} else {
 		rasterout <- raster(raster@file@name)
 	}
-	if (!raster@data@haveminmax) {
+	
+	if (! rasterout@data@haveminmax) {
 		rasterout@data@min <- raster@data@min
 		rasterout@data@max <- raster@data@max
 		rasterout@data@haveminmax <- TRUE

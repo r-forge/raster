@@ -55,7 +55,19 @@
 	}
 	writeRasterHdr(raster, .driver(raster)) 
 	filename <- .setFileExtensionValues(filename(raster), raster@file@driver)
-	return(raster(filename, native=TRUE))
+	
+	if (inherits(raster, 'RasterBrick')) {
+		r <- brick(filename, native=TRUE)
+	} else {
+		r <- raster(filename, native=TRUE)
+	}
+	
+	if (! r@data@haveminmax) {
+		r@data@min <- raster@data@min
+		r@data@max <- raster@data@max
+		r@data@haveminmax <- TRUE
+	}
+	return(r)
 }		
  
  
