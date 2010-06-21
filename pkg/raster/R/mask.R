@@ -42,8 +42,8 @@ function(x, mask, filename="", ...){
 
 		pb <- pbCreate(tr$n, type=.progress(...))
 		for (i in 1:tr$n) {
-			v <- getValuesBlock( x, row=tr$row[i], nrows=tr$nrows[i] )
-			m <- getValuesBlock( mask, row=tr$row[i], nrows=tr$nrows[i] )
+			v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+			m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
 			v[is.na(m)] <- NA
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)

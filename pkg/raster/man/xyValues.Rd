@@ -50,7 +50,7 @@ Multi-layer Raster* objects accept these two additional arguments:
 
 5) \code{layer}. Integer. First layer for which you want values 
 
-6) code{nlayers}. Integer. Number of layers for which you want values
+6) \code{nlayers}. Integer. Number of layers for which you want values
 }
 
 
