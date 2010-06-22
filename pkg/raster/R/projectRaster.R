@@ -55,7 +55,7 @@ projectExtent <- function(object, crs) {
 projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	if (! .requireRgdal() ) { stop('rgdal not available') }
 	
-	if (class(from) != 'RasterStack' ) {
+	if (! inherits(from, 'RasterStack' )) {
 		if ( dataSource(from) == 'ram' & dataContent(from) != 'all') {
 			if (dataContent(from) != 'all' & dataSource(from) == 'ram') { stop('no vales for "from". Nothing to do.') }
 		}

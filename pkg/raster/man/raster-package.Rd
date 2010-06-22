@@ -267,8 +267,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
   \tabular{ll}{
     \code{\link{readAll}} \tab Read all values into memory \cr
     \code{\link{values}} \tab Returns the values read with read* \cr
-    \code{\link{dataContent}} \tab How much data (if any) is in memory? \cr
-    \code{\link{dataIndices}} \tab Values for which cells are in memory? \cr	
+    \code{\link{dataContent}} \tab Are the cell values in memory? \cr
     \code{\link{dataSource}} \tab What is the source of the values (disk or RAM)? \cr	
   }
   Rather then reading data & using values, it is advisable to use \code{\link{getValues}*} functions (see above)
@@ -364,7 +363,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 
 \section{Acknowledgements}{
 We thank the following persons for suggestions to improve the package: 
-Jonathan Greenberg, Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, Agustin Lobo, 
+Roger Bivand, Jonathan Greenberg, Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, Agustin Lobo, 
 Matteo Mattiuzzi, Edzer Pebesma, and Kevin Ummel.
 }
 
