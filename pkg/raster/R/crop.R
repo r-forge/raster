@@ -38,7 +38,7 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 	e <- alignExtent(e, x)
 	
 	if (class(x) == 'RasterBrick') {
-		outRaster <- brick(x)	
+		outRaster <- brick(x, values=FALSE)	
 	} else {
 		outRaster <- raster(x)
 	}

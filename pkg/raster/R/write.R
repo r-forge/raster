@@ -126,8 +126,6 @@ setMethod('writeValues', signature(x='RasterBrick'),
 	function(x, v, start) {
 	
 		v[is.infinite(v)] <- NA
-	
-		
 		
 		if ( x@file@driver %in% .nativeDrivers() ) {
 			

@@ -85,8 +85,7 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	if (inherits(from, 'RasterLayer')) {
 		to <- raster(to)
 	} else {
-		to <- brick(to)
-		to@data@nlayers <- nlayers(from)		
+		to <- brick(to, values=FALSE)
 	}
 	
 	if (!canProcessInMemory(to, 1) && filename == "") {

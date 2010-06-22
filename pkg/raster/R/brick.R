@@ -57,15 +57,21 @@ setMethod('brick', signature(x='RasterStack'),
 		} else {
 			b <- brick(raster(x))
 			b@data@nlayers <- nlayers(x)
+			b@data@min <- rep(Inf, b@data@nlayers)
+			b@data@max <- rep(-Inf, b@data@nlayers)
+			b@data@source <- 'ram'
+
 		}
 		layerNames(b) <- layerNames(x)
+		
 		return(b)
 	}
 )
 
 setMethod('brick', signature(x='RasterBrick'), 
-	function(x){
+	function(x, ...){
 		x <- clearValues(x)
+		x@data@source <- 'ram'
 		filename(x) <- ''
 		return(x)
 	}
