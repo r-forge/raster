@@ -1,7 +1,7 @@
 \name{trim}
 
 \alias{trim}
-\alias{trim,RasterLayer-method}
+\alias{trim,Raster-method}
 \alias{trim,character-method}
 \alias{trim,matrix-method}
 \alias{trim,data.frame-method}
