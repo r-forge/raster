@@ -43,7 +43,7 @@
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 	nc <- open.nc(filename)
 	conv <- 'CF'
-	natt <- file.inq.nc(nc)$ndims
+	natt <- file.inq.nc(nc)$ngatts
 	if (natt > 0) {
 		for (i in 1:natt) {
 			if (att.inq.nc(nc,"NC_GLOBAL", i-1)$name == 'Conventions') {
