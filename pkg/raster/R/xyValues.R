@@ -19,14 +19,14 @@ setMethod("xyValues", signature(object='Raster', xy='SpatialPoints'),
 
 
 setMethod("xyValues", signature(object='Raster', xy='data.frame'), 
-	function(object, xy, method='simple', ...) { 
+	function(object, xy, ...) { 
 		callGeneric(object, as.matrix(xy), ...)
 	}	
 )
 
 
 setMethod("xyValues", signature(object='Raster', xy='vector'), 
-	function(object, xy, method='simple', ...) { 
+	function(object, xy, ...) { 
 		if (length(xy) == 2) {
 			callGeneric(object, matrix(xy, ncol=2), ...)
 		} else {
@@ -105,7 +105,7 @@ setMethod("xyValues", signature(object='RasterStackBrick', xy='matrix'),
 			for (i in 1:nlayers ) {
 				j <- lyrs[i]
 				r <- raster(object, j)
-				result[i,] <- .bilinearValue(r, xy)
+				result[,i] <- .bilinearValue(r, xy)
 			}
 			if (!(is.null(dim(result)))) {
 				colnames(result) <- layerNames(object)

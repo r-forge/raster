@@ -11,16 +11,16 @@
 	nc <- open.nc(x@file@name)
 	zvar = x@data@zvar
 
-	if (x@file@nbands == 1) {
+	if (file.inq.nc(nc)$ndims == 2) {
 		start = c(col, row)
 		count = c(ncols, nrows)
-		d <- var.get.nc(nc, variable=zvar, start=start, count=count)
+		d <- var.get.nc( nc,  variable=zvar,  start=start, count=count )
 
 	} else {
 		start = c(col, row, x@data@band)
 		count = c(ncols, nrows, 1)
+		d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	}
-	d <- var.get.nc(nc, variable=zvar, start=start, count=count)
 	close.nc(nc)	
 
 	if (!is.na(x@file@nodatavalue)) { 

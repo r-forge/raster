@@ -4,7 +4,6 @@
 # Licence GPL v3
 
 
-
 .getxvar <- function(xvar, vars) {
 	if (xvar == '') {
 		if ('x' %in% vars) { xvar <- 'x'
@@ -18,6 +17,7 @@
 	return(xvar)
 }
 
+
 .getyvar <- function(yvar, vars) {
 	if (yvar == '') { 
 		if ('y' %in% vars){ yvar <- 'y'
@@ -30,20 +30,27 @@
 	return(yvar)
 }
 
+
 .getVarname <- function(varname, vars) {
 	if (varname == '') { varname <- 'value' }
 	if (!(varname %in% vars)) { stop ( 'Cannot find an obvious "varname" in file. Select one from:\n', paste(vars, collapse=", ") ) }
 	return(varname)
 }
 
+
 .rasterObjectFromCDF <- function(filename, x='', y='', varname='', band=NA, type='RasterLayer', ...) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
-
 	nc <- open.nc(filename)
-
-	conv <- ''
-	conv <- try (att.get.nc(nc, "NC_GLOBAL", 'Conventions') , silent=TRUE)
+	conv <- 'CF'
+	natt <- file.inq.nc(nc)$ndims
+	if (natt > 0) {
+		for (i in 1:natt) {
+			if (att.inq.nc(nc,"NC_GLOBAL", i-1)$name == 'Conventions') {
+				conv <- att.get.nc(nc, "NC_GLOBAL", 'Conventions')
+			}
+		}
+	}	
 	if (substr(conv, 1, 3) == 'RST') {
 		close.nc(nc)
 		return( .rasterObjectFromCDFrst(filename, band=band, type='RasterLayer', ...) )

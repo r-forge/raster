@@ -1,7 +1,7 @@
 \name{disaggregate}
 
 \alias{disaggregate}
-\alias{disaggregate,RasterLayer,numeric-method}
+\alias{disaggregate,Raster,numeric-method}
 
 \title{Disaggregate}
 

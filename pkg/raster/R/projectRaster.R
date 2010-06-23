@@ -99,7 +99,6 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 		to <- writeStart(to, filename=filename, ... )
 	}
 	
-	rowCells <- 1:ncol(to)
 	tr <- blockSize(to)
 	pb <- pbCreate(tr$n, type=.progress(...))
 	for (i in 1:tr$n) {
