@@ -44,10 +44,11 @@ function(x, row, nrows) {
 		startcell <- cellFromRowCol(x, row, 1)
 		endcell <- cellFromRowCol(x, row+nrows-1, x@ncols)
 		return( x@data@values[startcell:endcell] )
+	} else if (dataSource(x) == 'disk') {
+		return( .readRasterLayerValues(x, row, nrows) )		
 	} else {
-		return( .readRasterLayerValues(x, row, nrows) )
+		return( rep(NA, nrows * x@ncols) )
 	}
-	
 }
 )
 

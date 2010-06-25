@@ -50,7 +50,7 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
 				res <- x@data@values[cells, ]
 			}
-		} else {
+		} else if (dataSource(x) == 'disk') {
 			for (i in 1:nlayers(x)) {
 				# to do: need a more efficient function here that only goes to disk once.
 				if (i==1) {
@@ -61,12 +61,14 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 					res[,i] <- .readRasterLayerValues(raster(x, i), row, nrows, col, ncols)
 				}
 			}
+		} else {
+			res <- ( rep(NA, nrows * ncols) )
 		}
-		colnames(res) = layerNames(x)
-		res
+		
+	colnames(res) <- layerNames(x)
+	return(res)
 	}
 )
-
 
 
 
