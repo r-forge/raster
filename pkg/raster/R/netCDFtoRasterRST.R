@@ -8,6 +8,7 @@
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 
 	nc <- open.nc(filename)
+	on.exit( close.nc(nc) )
 
 	varinfo <- try(var.inq.nc(nc, 'value'))
 	
@@ -45,7 +46,6 @@
 	r@data@min <- att.get.nc(nc, "value", 'min')
 	r@data@max <- att.get.nc(nc, "value", 'max')
 
-	close.nc(nc)
 	return(r)
 }
 

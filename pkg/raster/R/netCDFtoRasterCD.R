@@ -42,6 +42,8 @@
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 	nc <- open.nc(filename)
+	on.exit( close.nc(nc) )
+	
 	conv <- 'CF'
 	natt <- file.inq.nc(nc)$ngatts
 	if (natt > 0) {
@@ -199,7 +201,6 @@
 		} 
 		r@data@nlayers <- r@file@nbands
 	}
-	close.nc(nc)
 	return(r)
 }
 
