@@ -9,7 +9,7 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", ext=NULL, const=NULL, index=1, se.fit=FALSE, na.rm=TRUE, ...) {
+	function(object, model, filename="", fun=predict, ext=NULL, const=NULL, index=1, se.fit=FALSE, na.rm=TRUE, ...) {
 	
 
 		if ( class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull') ) { 
@@ -109,7 +109,7 @@ setMethod('predict', signature(object='Raster'),
 			if (nrow(blockvals) == 0 ) {
 				predv <- napred
 			} else {
-				predv <- predict(model, blockvals, ...)	
+				predv <- fun(model, blockvals, ...)	
 			}
 
 			if (class(predv)[1] == 'list') {

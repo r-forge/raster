@@ -13,7 +13,7 @@
 		} else if ('Longitude' %in% vars) { xvar <- 'Longitude' 
 		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(xvar %in% vars)) { stop( paste('Cannot find obvious "xvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
+	} else if (!(xvar %in% vars)) { stop( paste(xvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(xvar)
 }
 
@@ -26,14 +26,14 @@
 		} else if ('Latitude' %in% vars) { yvar <- 'Latitude' 
 		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(yvar %in% vars)) { stop( paste('Cannot find obvious "yvar" in file. Select one from:\n', paste(vars, collapse=", "))) }	
+	} else if (!(yvar %in% vars)) { stop( paste(yvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(yvar)
 }
 
 
 .getVarname <- function(varname, vars) {
 	if (varname == '') { varname <- 'value' }
-	if (!(varname %in% vars)) { stop ( 'Cannot find an obvious "varname" in file. Select one from:\n', paste(vars, collapse=", ") ) }
+	if (!(varname %in% vars)) { stop ( varname,  ' does not exist in the file. Select one from:\n', paste(vars, collapse=", ") ) }
 	return(varname)
 }
 
