@@ -63,7 +63,7 @@ setMethod ('show' , 'RasterLayer',
 				cat('min value   :' , minValue(object), '\n')
 				cat('max value   :' , maxValue(object), '\n')
 			} else { 
-				if (object@data@source == 'disk')  {
+				if (object@data@fromdisk) {
 					cat('min value   : ? \n')
 					cat('max value   : ? \n')
 				} else {

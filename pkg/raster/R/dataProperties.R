@@ -31,13 +31,31 @@ dataType <- function(x) {
 
 
 dataContent <- function(object) {
-	return(object@data@content)
+#	return(object@data@content)
+	if (object@data@inmemory) {
+		return('all')
+	} else {
+		return('nodata')
+	}
 }
 
-dataIndices <- function(object) {
-	return(object@data@indices)
+..dataIndices <- function(object) {
+#	return(object@data@indices)
 }
 
 dataSource <- function(object) {
-	return(object@data@source)
+#	return(object@data@source)
+	if (object@data@fromdisk) {
+		return('disk')
+	} else {
+		return('ram')
+	}
+}
+
+fromDisk <- function(object) {
+	return(object@data@fromdisk)
+}
+	
+inMemory <- function(object) {
+	return(object@data@inmemory)
 }

@@ -3,7 +3,8 @@
 \docType{methods}
 
 \alias{aggregate}
-\alias{aggregate,Raster-method}
+\alias{aggregate,RasterLayer-method}
+\alias{aggregate,RasterStackBrick-method}
 
 \title{Aggregate}
 

@@ -49,7 +49,8 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 		}
 
 		x@data@values[i] <- value
-		x@data@source <- 'ram'
+		x@data@fromdisk <- FALSE
+		
 		filename(x) <- ""
 		x <- setMinMax(x)
 		return(x)

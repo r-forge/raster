@@ -70,6 +70,9 @@ p <- raster(r)
 p <- interpolate(p, tps)
 p <- mask(p, r)
 plot(p)
+#se <- interpolate(p, tps, fun=predict.se)
+#se <- mask(se, r)
+#plot(se)
 }
 
 ##gstat examples

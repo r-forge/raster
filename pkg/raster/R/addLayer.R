@@ -104,7 +104,8 @@ function(x, ..., keepone=FALSE) {
 				x@layernames <- cname
 				x@data@values <- as.matrix(getValues(r))
 				x@data@nlayers <- as.integer(1)
-				x@data@content <- 'all'
+				x@data@inmemory <- TRUE
+				
 				x@data@min <- r@data@min
 				x@data@max <- r@data@max			
 			}

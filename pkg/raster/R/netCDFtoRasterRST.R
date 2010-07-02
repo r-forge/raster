@@ -30,7 +30,7 @@
 	r@file@name <- filename
 
 	r@file@driver <- "netcdf"	
-	r@data@source <- 'disk'
+	r@data@fromdisk <- TRUE
 
 	varinfo <- try(var.inq.nc(nc, 'value'))
 	datatype <- .getRasterDTypeFromCDF(varinfo$type)

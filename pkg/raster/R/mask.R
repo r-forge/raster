@@ -57,47 +57,25 @@ function(x, mask, filename="", ...){
 )
 
 
-setMethod('mask', signature(x='RasterStack', mask='RasterLayer'), 
-function(x, mask, filename="", ...){ 
-
-	compare(x, mask)
-
-	if (canProcessInMemory(mask, 2)) {
-		# read mask only once..
-		if (dataContent(mask) != 'all') { 
-			mask <- readAll(mask) 
-		}
-	}
-	
-	for (i in 1:nlayers(x)) {
-		x@layers[[i]] <- mask(x@layers[[i]], mask, filename='', ...)
-	}
-	
-	return(x)
-}
-)
-
-
-
-setMethod('mask', signature(x='RasterBrick', mask='RasterLayer'), 
+setMethod('mask', signature(x='RasterStackBrick', mask='RasterLayer'), 
 function(x, mask, filename="", ...){ 
 
 	compare(x, mask)
 	
-	if (canProcessInMemory(x, 3)) {
-		if (dataContent(x) != 'all') { x <- readAll(x) }
-		if (dataContent(mask) != 'all') { mask <- readAll(mask) }
-	}
-	if (dataContent(x) == 'all' & dataContent(mask) == 'all') {
-		x@data@values[is.na(mask@data@values),] <- NA
+	outRaster <- brick(x, values=FALSE)
+	
+	if (canProcessInMemory(x, nlayers(x)+4)) {
+
+		x <- getValues(x)
+		x[is.na(getValues(mask)), ] <- NA
+		outRaster <- setValues(outRaster, x)
 		if (filename != '') {
-			x <- writeRaster(x, filename, ...)
-		} else {
-			x@data@source <- 'ram'
-			x@file@name <- ''
-		}
-		return(x)
+			outRaster <- writeRaster(outRaster, filename, ...)
+		} 
+		return(outRaster)
+		
 	} else {
+	
 		out <- brick(x)
 		if ( filename=='') { filename <- rasterTmpFile() }
 

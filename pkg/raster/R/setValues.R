@@ -36,9 +36,11 @@ function(object, values, layer=-1) {
 
 	if (length(values) == ncell(object)) { 
 		object@data@values <- values
-		object@data@content <- 'all'
-		object@data@source <- 'ram'
-		object@data@indices <- c(1, ncell(object))
+
+		object@data@inmemory <- TRUE
+		object@data@fromdisk <- FALSE
+
+#		object@data@indices <- c(1, ncell(object))
 		object <- setMinMax(object)
 		return(object)
 		
@@ -79,8 +81,9 @@ setMethod('setValues', signature(object='RasterBrick'),
 		}
 		if (nrow(values) == ncell(object)) {
 			object@data@nlayers <- ncol(values)
-			object@data@content <- 'all'
-			object@data@indices <- c(1, ncell(object))
+			object@data@inmemory <- TRUE
+			
+#			object@data@indices <- c(1, ncell(object))
 			object@data@values <- values
 			object <- setMinMax(object)
 			

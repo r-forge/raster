@@ -14,8 +14,9 @@ if (!isGeneric("readAll")) {
 	
 setMethod('readAll', signature(object='RasterLayer'), 
 	function(object){ 
-		object@data@content <- 'all' 
-		object@data@indices <- c(1, ncell(object))
+		object@data@inmemory <- TRUE
+		
+#		object@data@indices <- c(1, ncell(object))
 		object@data@values <- .readRasterLayerValues(object, 1, object@nrows)
 		return(object)
 	}
@@ -34,8 +35,9 @@ setMethod('readAll', signature(object='RasterStack'),
 
 setMethod('readAll', signature(object='RasterBrick'), 
 	function(object){ 
-		object@data@content <- 'all' 
-		object@data@indices <- c(1, ncell(object))
+		object@data@inmemory <- TRUE
+		
+#		object@data@indices <- c(1, ncell(object))
 		object@data@values <- .readRasterBrickValues(object, 1, object@nrows)
 		return(object)
 	}

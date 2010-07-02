@@ -171,7 +171,7 @@
 	if (! is.na(missing_value)) {
 		r@file@nodatavalue <- missing_value
 	}
-	r@data@source <- 'disk'
+	r@data@fromdisk <- TRUE
 	
 	if (dims == 2) {
 		nbands = 1

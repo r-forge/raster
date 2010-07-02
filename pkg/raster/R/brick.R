@@ -59,7 +59,7 @@ setMethod('brick', signature(x='RasterStack'),
 			b@data@nlayers <- nlayers(x)
 			b@data@min <- rep(Inf, b@data@nlayers)
 			b@data@max <- rep(-Inf, b@data@nlayers)
-			b@data@source <- 'ram'
+			b@data@fromdisk <- FALSE
 
 		}
 		layerNames(b) <- layerNames(x)
@@ -71,7 +71,8 @@ setMethod('brick', signature(x='RasterStack'),
 setMethod('brick', signature(x='RasterBrick'), 
 	function(x, ...){
 		x <- clearValues(x)
-		x@data@source <- 'ram'
+		x@data@fromdisk <- FALSE
+
 		filename(x) <- ''
 		return(x)
 	}

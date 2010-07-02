@@ -41,7 +41,8 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 			if (ncol(x) == ncol(newobj) & nrow(x) == nrow(newobj)) {
 				newobj <- setValues(newobj, x@data@values)
 			} else {
-				newobj@data@source <- 'ram'
+				newobj@data@fromdisk <- FALSE
+
 				indices <- cellsFromExtent(x, bb, expand=TRUE)
 				v <- vector(length=length(indices))
 				v[] <- NA

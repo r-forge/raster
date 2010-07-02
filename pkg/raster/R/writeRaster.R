@@ -20,8 +20,8 @@ function(x, filename, format, ...) {
 	filename <- .getExtension(filename, filetype)
 	
 
-	if (dataContent(x) != 'all') {
-		if (dataSource(x) == 'disk') {
+	if (! inMemory(x) ) {
+		if ( fromDisk(x) ) {
 			return( .saveAsRaster(x, filename, format=filetype, ...) )
 		} else {
 			stop('No usable data available for writing')
@@ -49,9 +49,8 @@ function(x, filename, format='raster', bandorder='BIL', ...) {
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
-	dc <- dataContent(x)
-	if (dc != 'all') {
-		if (dataSource(x) == 'disk') {
+	if (! inMemory(x) ) {
+		if ( fromDisk(x) ) {
 			return( .saveAsBrick(x, filename, bandorder=bandorder, format=filetype, ...) )
 		} else {
 			stop('No usable data available for writing.')

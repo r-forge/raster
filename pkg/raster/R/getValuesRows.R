@@ -34,17 +34,17 @@ setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='missing'
 setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='numeric'), 
 function(x, row, nrows) {
 
-	if (!is.atomic(row)) {	stop() }
-	if (!is.atomic(nrows)) { stop() }
-	row <- as.integer(round(row))
-	nrows <- as.integer(round(nrows))
-	if (!(validRow(x, row))) {	stop(paste(row, 'is not a valid rownumber')) }
+	if (! validRow(x, row)) { stop(row, ' is not a valid rownumber') }
 
-	if (dataContent(x) == 'all'){
+	row <- min(x@nrows, max(1, round(row)))
+	endrow <- max(min(x@nrows, row+round(nrows)-1), row)
+	nrows <- endrow - row + 1
+	
+	if (inMemory(x)){
 		startcell <- cellFromRowCol(x, row, 1)
 		endcell <- cellFromRowCol(x, row+nrows-1, x@ncols)
 		return( x@data@values[startcell:endcell] )
-	} else if (dataSource(x) == 'disk') {
+	} else if ( fromDisk(x) ) {
 		return( .readRasterLayerValues(x, row, nrows) )		
 	} else {
 		return( rep(NA, nrows * x@ncols) )
