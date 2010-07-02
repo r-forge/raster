@@ -15,7 +15,7 @@ function(x, mask, filename="", ...){
 
 	compare(x, mask)
 
-	if (dataContent(x) == 'all' & dataContent(mask)=='all') {
+	if ( inMemory(x) & inMemory(mask)=='all') {
 		x[is.na(mask)] <- NA
 		if (filename != '') {
 			x <- writeRaster(x, filename, ...)
@@ -23,8 +23,8 @@ function(x, mask, filename="", ...){
 		return(x)
 		
 	} else if (canProcessInMemory(x, 3)) {
-		if (dataContent(x) != 'all') { x <- readAll(x) }
-		if (dataContent(mask) != 'all') { mask <- readAll(mask) }
+		if (! inMemory(x) ) { x <- readAll(x) }
+		if (! inMemory(mask) ) { mask <- readAll(mask) }
 		
 		x[is.na(mask)] <- NA
 		if (filename != '') {

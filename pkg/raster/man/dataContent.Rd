@@ -1,20 +1,20 @@
-\name{dataProperties}
+\name{data}
 
-\alias{dataContent}
-\alias{dataSource}
+\alias{fromDisk}
+\alias{inMemory}
 
-\title{Data properties}
+\title{Are values in memory and/or on disk?}
 
 \description{ 
 These are helper functons for programmers and for debugging that provide information about the data values that are associated with the object. 
 
-dataContent provides information regrading the values currently in memory (RAM). Possible values are: 'nodata', 'all', 'row', 'block'.
-dataSource returns a value indicating whether the data source is a file on disk or whether it only exists in memory. Possible values are: 'ram' and 'disk'.
+\code{fromDisk} is \code{TRUE} if the data source is a file on disk; and \code{FALSE} if it only exists in memory. 
+\code{inMemory} \code{TRUE} if all values are currently in memory (RAM); and \code{FALSE} if not (in which case they either are on disk, or there are no values).
 }
 
 \usage{
-dataContent(object)
-dataSource(object)
+fromDisk(object)
+inMemory(object)
 }
 
 \arguments{
@@ -22,26 +22,30 @@ dataSource(object)
 }
 
 \value{
-dataContent: 'nodata' or 'all'
-dataSource: 'disk' or 'ram'
+Logical value
 }
 
 \author{Robert J. Hijmans}
 
 \examples{
-#using a new default raster (1 degree global)
-rs <- raster()
-dataContent(rs)
-rs <- setValues(rs, 1:ncell(rs))
-cellValues(rs, c(1, 10, 100))
-dataSource(rs)
-dataContent(rs)
-
 rs <- raster(system.file("external/test.grd", package="raster"))
+inMemory(rs)
+fromDisk(rs)
 rs <- readAll(rs)
-rs
-dataSource(rs)
-dataContent(rs)
+inMemory(rs)
+fromDisk(rs)
+rs <- rs + 1
+inMemory(rs)
+fromDisk(rs)
+rs <- raster(rs)
+inMemory(rs)
+fromDisk(rs)
+rs <- setValues(rs, 1:ncell(rs))
+inMemory(rs)
+fromDisk(rs)
+rs <- writeRaster(rs, filename='test', overwrite=TRUE)
+inMemory(rs)
+fromDisk(rs)
 }
 
 \keyword{ spatial }

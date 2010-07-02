@@ -43,7 +43,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 	thefun <- fun
 
 	if (! inherits(x, 'RasterStack' )) {
-		if (dataSource(x) != 'disk' & dataContent(x) != 'all') {
+		if ( ! fromDisk(x)  & ! inMemory(x) ) {
 			return(outRaster)
 		}
 	}	

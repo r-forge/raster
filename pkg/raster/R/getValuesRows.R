@@ -70,9 +70,9 @@ function(x, row, nrows) {
 	endcell <- cellFromRowCol(x, row+nrows-1, x@ncols)
 
 	readrow <- FALSE
-	if (dataContent(x) == 'nodata') {
+	if (!  inMemory(x) ) {
 		readrow <- TRUE
-	} else if (dataContent(x) == 'all'){
+	} else if ( inMemory(x) ){
 		res <- x@data@values[startcell:endcell,]
 	} else {
 		stop('something is wrong with the RasterLayer dataContent')

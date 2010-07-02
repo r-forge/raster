@@ -58,8 +58,8 @@ setMethod('interpolate', signature(object='Raster'),
 					xyOnly <- TRUE 
 				}
 			} else {
-				if (dataSource(object) == 'ram') {
-					if (dataContent(object) != 'all') {
+				if ( !  fromDisk(object) ) {
+					if (! inMemory(object) ) {
 						warning('"object" has no data, xyOnly set to TRUE')
 						xyOnly <- TRUE 
 					}

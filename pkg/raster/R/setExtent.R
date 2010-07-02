@@ -37,7 +37,7 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 		newobj@extent@xmax <- newobj@extent@xmin + ncol(newobj) * xrs
 		newobj@extent@ymax <- newobj@extent@ymin + nrow(newobj) * yrs
 		
-		if (dataContent(x) == 'all') {
+		if ( inMemory(x) ) {
 			if (ncol(x) == ncol(newobj) & nrow(x) == nrow(newobj)) {
 				newobj <- setValues(newobj, x@data@values)
 			} else {
@@ -53,7 +53,7 @@ setExtent <- function(x, bndbox, keepres=FALSE, snap=FALSE) {
 		
 	} else if (class(x) != "BasicRaster" & class(x) != "RasterStack") {
 		if (ncol(x)==ncol(newobj) & nrow(x)==nrow(newobj))  {
-			if (dataContent(x) == 'all') {
+			if ( inMemory(x) ) {
 				newobj <- setValues(newobj, x@data@values)
 			}	
 		}

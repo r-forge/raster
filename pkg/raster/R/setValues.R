@@ -114,7 +114,7 @@ setMethod('setValues', signature(object='RasterBrick'),
 		if (layer > nlayers(object)) {stop('layer number too high')}
 		
 		if (length(values) == ncell(object)) { 
-			if (dataContent(object) != 'all') { 
+			if ( ! inMemory(object) ) { 
 				atry <- try(object <- readAll(object), silent=T)
 				if (class(atry) == "try-error") {
 					stop("you can only setValues for a single layer if all values are in memory. But values could not be loaded")				

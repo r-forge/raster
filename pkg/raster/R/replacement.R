@@ -29,8 +29,8 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 		}
 
 
-		if (dataContent(x) != 'all') {
-			if (dataSource(x) == 'disk') {
+		if (! inMemory(x) ) {
+			if ( fromDisk(x) ) {
 				x <- try( readAll(x) )
 			} else {
 				x <- try (setValues(x, rep(NA, times=ncell(x))) )

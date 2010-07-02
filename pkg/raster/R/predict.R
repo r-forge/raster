@@ -63,8 +63,8 @@ setMethod('predict', signature(object='Raster'),
 		if (class(object) == 'RasterStack') {
 				if (nlayers(object)==0) { stop('empty RasterStack') }
 		} else {
-			if (dataSource(object) == 'ram') {
-				if (dataContent(object) != 'all') {
+			if ( !  fromDisk(object) ) {
+				if (! inMemory(object) ) {
 					{ stop('No values associated with this Raster object') }
 				}
 			}				

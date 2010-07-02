@@ -95,8 +95,6 @@ function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){
 	outRaster <- writeStart(outRaster, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 	pb <- pbCreate(nrow(outRaster), type=progress)
 	
-#	ds = sapply(rasters, dataSource)
-#	dc = sapply(rasters, dataContent)
 
 	if (nl == 1) {
 		rd <- rep(NA, outRaster@ncols) 

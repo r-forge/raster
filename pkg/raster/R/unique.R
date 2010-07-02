@@ -24,7 +24,7 @@ function(x, progress='') {
 		}
 	} 
 
-	if (dataContent(x) == 'all') {
+	if ( inMemory(x) ) {
 		x <- unique(x@data@values)
 		return(sort(x))
 	} else {

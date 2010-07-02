@@ -10,7 +10,7 @@
 	
 #	object@data@indices = vector(mode='numeric')
 	object@data@values <- vector()
-	if (dataSource(object) == 'ram') {
+	if ( !  fromDisk(object) ) {
 		object@data@min <- Inf
 		object@data@max <- -Inf	
 		object@data@haveminmax <- FALSE
@@ -26,7 +26,7 @@ clearValues <- function(object) {
 		object <- .clearRaster(object)
 	} else if (class(object) == "RasterStack" ) {
 		for (i in seq(along=nlayers(object))) {
-			if (dataSource(object@layers[[i]]) == 'disk') {
+			if (fromDisk(object@layers[[i]])) {
 				object@layers[[i]] <- .clearRaster(object@layers[[i]])
 			}
 		}
@@ -35,7 +35,7 @@ clearValues <- function(object) {
 		object@data@inmemory <- FALSE
 		
 #		object@data@indices = c(0,0)
-		if (dataSource(object) == 'ram') {
+		if ( !  fromDisk(object) ) {
 			object@data@min <- rep(Inf, nlayers(object))
 			object@data@max <- rep(-Inf, nlayers(object))
 			object@data@haveminmax <- FALSE

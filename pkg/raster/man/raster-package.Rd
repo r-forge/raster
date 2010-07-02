@@ -267,8 +267,8 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
   \tabular{ll}{
     \code{\link{readAll}} \tab Read all values into memory \cr
     \code{\link{values}} \tab Returns the values read with read* \cr
-    \code{\link{dataContent}} \tab Are the cell values in memory? \cr
-    \code{\link{dataSource}} \tab What is the source of the values (disk or RAM)? \cr	
+    \code{\link{inMemory}} \tab Are the cell values in memory? \cr
+    \code{\link{fromDisk}} \tab Are the cell values read from a file? \cr	
   }
   Rather then reading data & using values, it is advisable to use \code{\link{getValues}*} functions (see above)
 }
@@ -279,7 +279,6 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
 Basic writing
   \tabular{ll}{
     \code{\link{setValues}} \tab Put new values in a Raster* object \cr
-    \code{\link{dataContent}} \tab Are the cell values in memory? \cr
     \code{\link{writeRaster}} \tab Write all values of Raster* object to disk \cr
     \code{\link{KML}} \tab Save raster as KML file \cr	
   }
