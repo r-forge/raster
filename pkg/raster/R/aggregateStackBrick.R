@@ -33,7 +33,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 	ymn <- ymax(x) - rsteps * yfact * yres(x)
 	xmx <- xmin(x) + csteps * xfact * xres(x)
 		
-	outRaster <- brick(x)
+	outRaster <- brick(x, values=FALSE)
 
 	bndbox <- extent(xmin(x), xmx, ymn, ymax(x))
 	extent(outRaster) <- bndbox
@@ -78,6 +78,8 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 		cells <- cellFromRowCol(x, rows, cols)
 		nrows = yfact
 
+		on.exit( options('warn'= getOption('warn')) )
+		options('warn'=-1) 
 		
 		pb <- pbCreate(rsteps, type=.progress(...))
 		for (r in 1:rsteps) {

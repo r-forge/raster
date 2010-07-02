@@ -67,23 +67,24 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 		if (filename == '') { filename <- rasterTmpFile() }
 	}
 		
-		if (filename == '') {
-			v <- matrix(NA, ncol=nrow(outRaster), nrow=ncol(outRaster))
-		} else {
-			outRaster <- writeStart(outRaster, filename=filename, ...)
-		}
+	if (filename == '') {
+		v <- matrix(NA, ncol=nrow(outRaster), nrow=ncol(outRaster))
+	} else {
+		outRaster <- writeStart(outRaster, filename=filename, ...)
+	}
 		
-  		pb <- pbCreate(rsteps, type=.progress(...))
+  	pb <- pbCreate(rsteps, type=.progress(...))
 		
 		#vv <- matrix(ncol= csteps * yfact, nrow=rsteps * xfact)
-		vv <- matrix(nrow= yfact * xfact, ncol=csteps)
+	vv <- matrix(nrow= yfact * xfact, ncol=csteps)
 
-		on.exit( options('warn'= getOption('warn')) )
-		options('warn'=-1) 
+	on.exit( options('warn'= getOption('warn')) )
+	options('warn'=-1) 
 
-		for (r in 1:rsteps) {
-			startrow <- 1 + (r - 1) * yfact
-			vals <- getValuesBlock(x, startrow, yfact, 1, lastcol)
+	for (r in 1:rsteps) {
+		
+		startrow <- 1 + (r - 1) * yfact
+		vals <- getValuesBlock(x, startrow, yfact, 1, lastcol)
 			
 			if (r==rsteps) { 
 				endrow <- min(x@nrows, (startrow + yfact - 1))
@@ -93,12 +94,10 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 				vvv = vv[1:(nrows*yfact), ]
 				vvv[1:length(vals)] <- vals
 				vv[1:nrow(vvv),] <- vvv
-				
+		
 			} else {
 				vals = matrix(vals, nrow=yfact, byrow=TRUE )
 				vv[1:length(vals)] = vals
-#				vals2 <- matrix(vals, ncol=xfact, byrow=TRUE)
-#				vv[1:length(vals)] <- matrix(as.vector(vals2),nrow=xfact*yfact)
 			}
 			
 			if (is.character(fun)) {
@@ -116,15 +115,15 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 				outRaster <- writeValues(outRaster, vals, r)
 			}
 			pbStep(pb, r) 
-		} 
+	} 
 		
-		pbClose(pb)
-		if (filename == "") { 
-			outRaster <- setValues( outRaster, as.vector(v) )
-		} else {
-			outRaster <- writeStop(outRaster)
-		}
-		return(outRaster)
+	pbClose(pb)
+	if (filename == "") { 
+		outRaster <- setValues( outRaster, as.vector(v) )
+	} else {
+		outRaster <- writeStop(outRaster)
+	}
+	return(outRaster)
 	
 }
 )

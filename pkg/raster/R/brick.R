@@ -43,6 +43,9 @@ setMethod('brick', signature(x='character'),
 
 setMethod('brick', signature(x='Raster'), 
 	function(x, ...) {
+		if (fromDisk(x) & nbands(x) == 1) {
+			return( brick( filename(x) )
+		}
 		b <- new('RasterBrick')
 		return( addLayer(b, x, ..., keepone=TRUE) )
 	}
