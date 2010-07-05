@@ -1,8 +1,8 @@
 Package: raster
 Type: Package
 Title: Geographic analysis and modeling with raster data
-Version: 1.2-9
-Date: 1-July-2010
+Version: 1.2-10
+Date: 5-July-2010
 Depends: methods, sp, R (>= 2.8.0)
 Suggests: rgdal (>= 0.5-33), RNetCDF, igraph, tcltk, lattice
 Author: Robert J. Hijmans & Jacob van Etten
