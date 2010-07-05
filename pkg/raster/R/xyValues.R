@@ -43,16 +43,7 @@ setMethod("xyValues", signature(object='RasterLayer', xy='matrix'),
 		}
 
 		if (! is.null(buffer)) {
-			buffer <- abs(buffer)
-			if (is.atomic(buffer)) {
-				if (buffer!=0)  {
-					return( .xyvBuf(object, xy, buffer, fun, na.rm=na.rm) )
-				}
-			} else {
-				if (min(buffer)<0 | max(buffer)>0) {
-					.xyvBuf(object, xy, buffer, fun, na.rm=na.rm)
-				}
-			}
+			return( .xyvBuf(object, xy, buffer, fun, na.rm=na.rm) )
 		}
 
 		if (method=='bilinear') {
