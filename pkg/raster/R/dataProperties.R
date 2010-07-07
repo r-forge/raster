@@ -30,7 +30,7 @@ dataType <- function(x) {
 }
 
 
-.dataContent <- function(object) {
+dataContent <- function(object) {
 #	return(object@data@content)
 	if (object@data@inmemory) {
 		return('all')
