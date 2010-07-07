@@ -2,6 +2,7 @@
 
 \alias{fromDisk}
 \alias{inMemory}
+\alias{dataContent}
 
 \title{Are values in memory and/or on disk?}
 
@@ -15,6 +16,7 @@ These are helper functons for programmers and for debugging that provide informa
 \usage{
 fromDisk(object)
 inMemory(object)
+dataContent(object)
 }
 
 \arguments{

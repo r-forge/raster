@@ -14,9 +14,11 @@ if (!isGeneric("readAll")) {
 	
 setMethod('readAll', signature(object='RasterLayer'), 
 	function(object){ 
-		object@data@inmemory <- TRUE
+		if (! object@data@fromdisk)  {
+			stop('cannot read values; there is no file associated with this RasterLayer')
+		}
 		
-#		object@data@indices <- c(1, ncell(object))
+		object@data@inmemory <- TRUE
 		object@data@values <- .readRasterLayerValues(object, 1, object@nrows)
 		return(object)
 	}
@@ -35,9 +37,11 @@ setMethod('readAll', signature(object='RasterStack'),
 
 setMethod('readAll', signature(object='RasterBrick'), 
 	function(object){ 
+		if (! object@data@fromdisk)  {
+			stop('cannot read values; there is no file associated with this RasterLayer')
+		}
+
 		object@data@inmemory <- TRUE
-		
-#		object@data@indices <- c(1, ncell(object))
 		object@data@values <- .readRasterBrickValues(object, 1, object@nrows)
 		return(object)
 	}
