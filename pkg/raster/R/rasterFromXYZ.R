@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-rasterFromXYZ <- function(xyz, crs=NA, digits=6) {
+rasterFromXYZ <- function(xyz, res=c(NA, NA), crs=NA, digits=6) {
 	if (inherits(xyz, 'SpatialPoints')) {
 		if (inherits(xyz, 'SpatialPointsDataFrame')) {
 			xyz <- cbind(coordinates(xyz), xyz@data[,1])
@@ -14,21 +14,54 @@ rasterFromXYZ <- function(xyz, crs=NA, digits=6) {
 	}
 	x = sort(unique(xyz[,1]))
 	dx <- x[-1] - x[-length(x)]
-	rx <- min(dx)
-	if ( sum(round(dx %% rx, digits = digits)) > 0 ) {
-		stop('x cell sizes are not regular')
+
+	if (is.na(res[1])) {
+		rx <- min(dx)
+		for (i in 1:10) {
+			rx <- rx / i
+			q <-  sum(round(dx %% rx, digits = digits)) 
+			if ( q == 0 ) {
+				break
+			}
+		}
+		if ( q > 0 ) {
+			stop('x cell sizes are not regular')
+		}
+	} else {
+		rx <- res[1]
+		if ( sum(round(dx %% rx, digits = digits)) > 0 ) {
+			stop('x cell sizes are not regular')
+		}
 	}
+	
 	y = sort(unique(xyz[,2]))
 	dy <- y[-1] - y[-length(x)]
-	ry <- min(dy)
-	if ( sum(round(dy %% ry, digits = digits)) > 0 ) {
-		stop('y cell sizes are not regular')
+
+	if (length(res) == 1) res = c(res, res)
+	if (is.na(res[2])) {
+		ry <- min(dy)
+		for (i in 1:10) {
+			ry <- ry / i
+			q <-  sum(round(dy %% ry, digits = digits)) 
+			if ( q == 0 ) {
+				break
+			}
+		}
+		if ( q > 0 ) {
+			stop('y cell sizes are not regular')
+		}
+	} else {
+		ry <- res[2]
+		if ( sum(round(dy %% ry, digits = digits)) > 0 ) {
+			stop('y cell sizes are not regular')
+		}
 	}
+	
 	minx <- min(x) - 0.5 * rx
 	maxx <- max(x) + 0.5 * rx
 	miny <- min(y) - 0.5 * ry
 	maxy <- max(y) + 0.5 * ry
-	r = raster(xmn=minx, xmx=maxx, ymn=miny, ymx=maxy)
+	r <- raster(xmn=minx, xmx=maxx, ymn=miny, ymx=maxy, crs=crs)
 	res(r) <- c(rx, ry)
 	cells <- cellFromXY(r, xyz[,1:2])
 	if (dim(xyz)[2] > 2) {
