@@ -56,7 +56,9 @@ For example, if an input RasterLayer has 100 columns, and \code{fact=12}, the ou
 (using \code{8 x 12 = 96} of the original columns) or 9 columns (\code{expand=TRUE}). In both cases, the maximum x coordinate of the output RasterLayer would, of course, also be adjusted.
   
 The function \code{fun} should take multiple numbers, and return a single number. For example \code{mean}, \code{modal}, \code{min} or \code{max}. 
+It should also accept a \code{na.rm} argument (or ignore it as one of the 'dots' arguments). 
 }
+
 
 \value{
 A new RasterLayer or RasterBrick object, and in some cases the side effect of a new file on disk.
