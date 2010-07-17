@@ -6,7 +6,7 @@
 
 \description{
 Create a RasterLayer from x, y, z values. x and y must be on a regular grid. If the resolution is not supplied, it is assumed to be the minimum distance between x and y coordinates, but a resolution of up to 10 times smaller is evaluated if a regular grid cannot be created. 
-If the exact properties of the RasterLayer are known beforehand, it may be preferable to simply create a new RaterLayer with the raster function instead, and assign the values in the standard R way (see example below).
+If the exact properties of the RasterLayer are known beforehand, it may be preferable to simply create a new RasterLayer with the raster function instead, and assign the values in the standard R way (see example below).
 }
 
 \usage{
@@ -24,7 +24,7 @@ rasterFromXYZ(xyz, res=c(NA,NA), crs=NA, digits = 6)
 RasterLayer
 }
 
- \seealso{ \code{\link[raster]{pointsToRaster}} }
+ \seealso{ For random-like point distributions, see \code{\link[raster]{pointsToRaster}} }
 
 \author{Robert J. Hijmans }
 
