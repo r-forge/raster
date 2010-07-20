@@ -130,12 +130,12 @@ setMethod ('show' , 'RasterStack',
 			cat('min value   :', paste(minv, collapse=' '), '\n')
 			cat('max value   :', paste(maxv, collapse=' '), '\n')
 		}
-		cat ('xmin        :' , xmin(object), '\n')
-		cat ('xmax        :' , xmax(object), '\n')
-		cat ('ymin        :' , ymin(object), '\n')
-		cat ('ymax        :' , ymax(object), '\n')
-		cat ('xres        :' , xres(object), '\n')
-		cat ('yres        :' , yres(object), '\n')
+		cat ('xmin        :' , as.character(xmin(object)), '\n')
+		cat ('xmax        :' , as.character(xmax(object)), '\n')
+		cat ('ymin        :' , as.character(ymin(object)), '\n')
+		cat ('ymax        :' , as.character(ymax(object)), '\n')
+		cat ('xres        :' , as.character(xres(object)), '\n')
+		cat ('yres        :' , as.character(yres(object)), '\n')
 		cat ('\n')
 	}
 )
