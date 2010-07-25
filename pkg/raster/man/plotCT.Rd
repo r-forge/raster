@@ -19,7 +19,7 @@ Make a plot from a single RasterLayer and a color table. If no color-table is su
 
 \tabular{rll}{
 \tab \code{x} \tab a RasterLayer object \cr
-\tab \code{coltab}  \tab Color table. A vector of RGB values whose indices match the values of the RasterLayer  \cr 
+\tab \code{coltab}  \tab Color table. A vector of RGB values whose indices match the values of the RasterLayer. The matching is zero-based. That is, the first value in \code{coltab} is matched to values that are zero in \code{x}  \cr 
 \tab \code{scale}  \tab Integer. Maximum (possible) value in the three channels \cr 
 \tab \code{maxpixels}  \tab  Maximum number of pixels to use  \cr
 \tab \code{extent}  \tab  An extent object to zoom in a region \cr
@@ -30,6 +30,16 @@ Make a plot from a single RasterLayer and a color table. If no color-table is su
 \author{ Robert J. Hijmans; based on functions in the pixmap package by Friedrich Leisch }
 
 \seealso{ \code{\link[raster]{plotRGB}} }
+
+\examples{
+if (require(rgdal)) {
+
+r <- raster(system.file("external/drg.tif", package="raster"))
+e <- c(-220185.3, -219058.2, -30911.26, -29966.9)
+plotCT(r, extent=e)
+
+}
+}
 
 
 \keyword{methods}

@@ -42,7 +42,7 @@ function(x, coltab=NULL, maxpixels=100000, extent=NULL, axes=TRUE, xlab='', ylab
 	}
 
 	require(grDevices)
-	plot(c(xmin(r), xmax(r)), c(ymin(r), ymax(r)), type = "n", xlab="", ylab="")
+	plot(c(xmin(r), xmax(r)), c(ymin(r), ymax(r)), type = "n", xlab=xlab, ylab=ylab, asp=asp, axes=axes, ...)
 	rasterImage(z, xmin(r), ymin(r), xmax(r),  ymax(r), interpolate=interpolate)
 }
 )
