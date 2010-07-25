@@ -30,7 +30,7 @@ Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStac
 
 \author{ Robert J. Hijmans; based on functions in the pixmap package by Friedrich Leisch }
 
-\seealso{ \code{\link[raster]{plotCT}} }
+\seealso{ \code{\link[raster]{plot}} }
 
 \examples{
 b <- brick(system.file("external/rlogo.grd", package="raster"))

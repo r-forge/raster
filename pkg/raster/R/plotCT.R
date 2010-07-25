@@ -4,14 +4,7 @@
 # Licence GPL v3
 
 
-
-if (!isGeneric("plotCT")) {
-	setGeneric("plotCT", function(x, ...)
-		standardGeneric("plotCT"))
-}	
-
-setMethod("plotCT", signature(x='RasterLayer'), 
-function(x, coltab=NULL, maxpixels=100000, extent=NULL, interpolate=FALSE, axes=FALSE, xlab='', ylab='', asp, ...) { 
+.plotCT <- function(x, maxpixels=500000, extent=NULL, interpolate=FALSE, axes=FALSE, xlab='', ylab='', asp, ...) { 
 	
 	if (!axes) par(plt=c(0,1,0,1))
 	
@@ -44,7 +37,7 @@ function(x, coltab=NULL, maxpixels=100000, extent=NULL, interpolate=FALSE, axes=
 		z <- as.raster(z)
 	} else {
 		z <- matrix(z, nrow=nrow(r), ncol=ncol(r), byrow=T)
-		z <- as.raster(z, max=max(z, na.rm=TRUE))
+		z <- as.raster(z, max=max(z)) #, na.rm=TRUE))
 	}
 
 	require(grDevices)
@@ -52,5 +45,5 @@ function(x, coltab=NULL, maxpixels=100000, extent=NULL, interpolate=FALSE, axes=
 	plot(c(bb[1], bb[2]), c(bb[3], bb[4]), type = "n", xlab=xlab, ylab=ylab, asp=asp, axes=axes, ...)
 	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate, ...)
 }
-)
+
 
