@@ -15,7 +15,7 @@ Make a plot from a single RasterLayer and a color table. If no color-table is su
 \section{Methods}{
 \describe{
 
-\code{plotCT(x, coltab=NULL, maxpixels=100000, extent=NULL, ...)}
+\code{plotCT(x, coltab=NULL, maxpixels=100000, extent=NULL, interpolate=FALSE, axes=FALSE, ...)}
 
 \tabular{rll}{
 \tab \code{x} \tab a RasterLayer object \cr
@@ -23,9 +23,13 @@ Make a plot from a single RasterLayer and a color table. If no color-table is su
 \tab \code{scale}  \tab Integer. Maximum (possible) value in the three channels \cr 
 \tab \code{maxpixels}  \tab  Maximum number of pixels to use  \cr
 \tab \code{extent}  \tab  An extent object to zoom in a region \cr
-\tab \code{...} \tab Any argument that can be passed to \code{\link[graphics]{image}} (graphics package) \cr
+\tab \code{interpolate} \tab Logical. Should the image be interpolated?  \cr 
+\tab \code{axes} \tab Logical. Should axes be drawn?  \cr 
+\tab \code{...} \tab Graphical parameters \cr
 }
 }}
+
+\note{This function uses 'rasterImage()' from the graphics package, which is not available in R versions before 2.11}
 
 \author{ Robert J. Hijmans; based on functions in the pixmap package by Friedrich Leisch }
 
@@ -37,6 +41,9 @@ if (require(rgdal)) {
 r <- raster(system.file("external/drg.tif", package="raster"))
 e <- c(-220185.3, -219058.2, -30911.26, -29966.9)
 plotCT(r, extent=e)
+
+#plotCT(r, extent=e, maxpixels=ncell(r))
+#plotCT(r, extent=e, interpolate=TRUE)
 
 }
 }
