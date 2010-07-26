@@ -7,7 +7,7 @@
 # by Markus Loecher, Sense Networks <markus at sensenetworks.com>
 
 
-gmap <- function (x, exp=1, type='terrain', filename='', key, ...) {
+gmap <- function (x, exp=1, type='terrain', filename='', ...) {
 
 	if (! .requireRgdal() ) { stop('rgdal not available') }
 	
@@ -16,6 +16,8 @@ gmap <- function (x, exp=1, type='terrain', filename='', key, ...) {
 	}
 
 	mxzoom <- function (latrange, lonrange, size = c(640, 640)) {
+	# function from in R package 'RgoogleMaps' 
+	# by Markus Loecher, Sense Networks <markus at sensenetworks.com>
 		SinPhi = sin(latrange * pi/180)
 		normX = lonrange/180
 		normY = (0.5 * log(abs((1 + SinPhi)/(1 - SinPhi))))/pi
@@ -25,6 +27,8 @@ gmap <- function (x, exp=1, type='terrain', filename='', key, ...) {
 	}
 
 	ll2XY <- function (lat, lon, zoom) {
+	# function from in R package 'RgoogleMaps' 
+	# by Markus Loecher, Sense Networks <markus at sensenetworks.com>
 		SinPhi = sin(lat * pi/180)
 		normX = lon/180
 		normY = (0.5 * log((1 + SinPhi)/(1 - SinPhi)))/pi
@@ -36,6 +40,8 @@ gmap <- function (x, exp=1, type='terrain', filename='', key, ...) {
 	}
 
 	xy2ll <- function (MyMap, X, Y) {
+	# function from in R package 'RgoogleMaps' 
+	# by Markus Loecher, Sense Networks <markus at sensenetworks.com>
 		lat.center <- MyMap[[1]]
 		lon.center <- MyMap[[2]]
 		zoom <- MyMap[[3]]
@@ -57,64 +63,73 @@ gmap <- function (x, exp=1, type='terrain', filename='', key, ...) {
 	}
 
 	tile2r <- function (points, center) {
+	# function from in R package 'RgoogleMaps' 
+	# by Markus Loecher, Sense Networks <markus at sensenetworks.com>
 		X <- 256 * (points$Tile[, "X"] - center$Tile[, "X"]) + (points$Coords[, "x"] - center$Coords[, "x"])
 		Y <- -256 * (points$Tile[, "Y"] - center$Tile[, "Y"]) - (points$Coords[, "y"] - center$Coords[, "y"])
 		return(list(X = X, Y = Y))
 	}
 
-	x <- raster(x)
-	if ( .couldBeLonLat(x, FALSE) ) {
-		x <- extent(x)
-	} else {
-		if ( projection(x) == "NA" ) {
-			stop('CRS is unknown, and does not look like Lon/Lat')
-		} else {
-			x <- extent( projectExtent(x, "+proj=longlat +datum=WGS84") )
-		}
-	} 
+	gurl <- "http://maps.google.com/staticmap?"
+		
 	
-	e <- x * exp
-	e@xmin <- max(-180, e@xmin)
-	e@xmax <- min(180, e@xmax)
-	e@ymax <- min(89, e@ymax)
-	e@ymin <- max(-89, e@ymin)
-	
-    lonR <- c(e@xmin, e@xmax)
-	latR <- c(e@ymin, e@ymax)
 
-    size <- c(640, 640)
-    zoom <- min(mxzoom(latR, lonR, size))
-	center <- c(mean(latR), mean(lonR))
+		prj <- projection(x, asText=TRUE)
+		if ( isLonLat(prj) ) {
+			x <- extent(x)
+		} else {
+			if ( prj == "NA" ) {
+				bb <- extent(x)
+				extLL <- (bb@xmin > -366 & bb@xmax < 366 & bb@ymin > -90.1 & bb@ymax < 90.1) 
+				if (extLL) {
+					x <- bb
+				} else {
+				# warning('CRS is unknown, and does not look like Lon/Lat, assuming it is Mercator')
+					rad <- 6378137	
+					p <- t(bbox(x)) 
+					p[, 2] <- pi/2 - 2 * atan(exp(-p[, 2]/rad))
+					p[, 1] <- p[, 1]/rad
+					p <- p / (pi/180)
+					x <- extent(p[1,1], p[2,1], p[1,2], p[2,2])
+				}
+			} else {
+				x <- extent( projectExtent(x, "+proj=longlat +datum=WGS84") )
+			}
+		} 
+		e <- x * exp
+		e@xmin <- max(-180, e@xmin)
+		e@xmax <- min(180, e@xmax)
+		e@ymax <- min(89, e@ymax)
+		e@ymin <- max(-89, e@ymin)
+		
+		lonR <- c(e@xmin, e@xmax)
+		latR <- c(e@ymin, e@ymax)
+
+		size <- c(640, 640)
+		zoom <- min(mxzoom(latR, lonR, size))
+		center <- c(mean(latR), mean(lonR))
  	
-    ll <- ll2XY(latR[1], lonR[1], zoom)
-    ur <- ll2XY(latR[2], lonR[2], zoom)
-    cr <- ll2XY(center[1], center[2], zoom)
-    ll.Rcoords <- tile2r(ll, cr)
-    ur.Rcoords <- tile2r(ur, cr)
-    size[1] <- 2 * max(c(ceiling(abs(ll.Rcoords$X)), ceiling(abs(ur.Rcoords$X)))) +   1
-    size[2] <- 2 * max(c(ceiling(abs(ll.Rcoords$Y)), ceiling(abs(ur.Rcoords$Y)))) +   1
+		ll <- ll2XY(latR[1], lonR[1], zoom)
+		ur <- ll2XY(latR[2], lonR[2], zoom)
+		cr <- ll2XY(center[1], center[2], zoom)
+		ll.Rcoords <- tile2r(ll, cr)
+		ur.Rcoords <- tile2r(ur, cr)
+		size[1] <- 2 * max(c(ceiling(abs(ll.Rcoords$X)), ceiling(abs(ur.Rcoords$X)))) +   1
+		size[2] <- 2 * max(c(ceiling(abs(ll.Rcoords$Y)), ceiling(abs(ur.Rcoords$Y)))) +   1
 
-    if (length(size) < 2) {
-        s <- paste(size, size, sep = "x")
-    } else {
-        s <- paste(size, collapse = "x")
-    }
-
-	if (missing(key)) {
-		KeyFile <- paste(Sys.getenv("HOME"), "/API.key.txt", sep = "")
-		if (file.exists(KeyFile)) {
-			key <- scan(KeyFile, what = "")
+		if (length(size) < 2) {
+			s <- paste(size, size, sep = "x")
 		} else {
-			key <- "ABQIAAAAx_Zq0CG7Dz9YNSzDR0PYtxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQ9M3z-hbUeB-0ItTVP2WPiFXA8PA"
+			s <- paste(size, collapse = "x")
 		}
-	}
 
+		ctr <- paste(center, collapse = ",")
+	
+		gurl <- paste(gurl, "center=", ctr, "&zoom=", zoom, "&size=", s, "&maptype=", type, "&format=gif", "&sensor=false", sep = "")
+	
+	
 	if (trim(filename) == '') filename <- rasterTmpFile()
 	ext(filename) <- 'gif'
-	ctr <- paste(center, collapse = ",")
-	
-	gurl <- "http://maps.google.com/staticmap?"
-    gurl <- paste(gurl, "center=", ctr, "&zoom=", zoom, "&size=", s, "&maptype=", type, "&format=gif", "&key=", key, "&sensor=false", sep = "")
 	download.file(gurl, filename, mode = "wb", quiet = TRUE)
     
 	MyMap <- list(lat.center = center[1], lon.center = center[2], zoom = zoom)
