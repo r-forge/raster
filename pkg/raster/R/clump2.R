@@ -3,11 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-	
-if (!isGeneric("clump2")) {
-	setGeneric("clump2", function(x, ...)
-		standardGeneric("clump2"))
-}	
 
 
 .clump <- function(x, directions) {
@@ -28,8 +23,8 @@ if (!isGeneric("clump2")) {
 	return(x1)
 }
 
-setMethod('clump2', signature(x='RasterLayer'), 
-function(x, filename='', directions=8, ...) {
+
+.clump2 <- function(x, filename='', directions=8, ...) {
 
 	if( !require(igraph)) {
 		stop('you need to install the igraph package to be able to use this function')
@@ -71,7 +66,7 @@ function(x, filename='', directions=8, ...) {
 			rc <- na.omit(unique(cbind(firstrow, lastrow)))
 			rcl <- rbind(rcl, rc)
 		}
-		lastrow <- getValues(xc, nrows(cx))
+		lastrow <- getValues(xc, nrow(xc))
 		
 		maxval <- max(getValues(xc))
 		outRaster <- writeValues(outRaster, getValues(xc, 1, tr$nrows[i]))
@@ -86,5 +81,5 @@ function(x, filename='', directions=8, ...) {
 	outRaster <- reclass(outRaster, cbind(V(rcl),cl))
 	return(outRaster)
 }
-)
+
 

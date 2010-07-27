@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-readCDF <- function(filename, xvar='', yvar='', varname='', bands, type='RasterLayer', sp=FALSE, ...) {
+.readCDF <- function(filename, xvar='', yvar='', varname='', bands, type='RasterLayer', sp=FALSE, ...) {
 
 	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
 	if (missing(filename)) { stop('provide a filename') }
