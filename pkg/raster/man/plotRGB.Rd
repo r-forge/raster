@@ -14,7 +14,7 @@ Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStac
 \section{Methods}{
 \describe{
 
-\code{plotRGB(x, r=1, g=2, b=3, scale=255, maxpixels=100000, extent=NULL, ...)}
+\code{plotRGB(x, r=1, g=2, b=3, scale=255, maxpixels=500000, extent=NULL, ...)}
 
 \tabular{rll}{
 \tab \code{x} \tab a RasterBrick or RasterStack object \cr
