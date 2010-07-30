@@ -63,6 +63,9 @@ r[[,1]]
 # first row
 r[[1,]]
 r[[]]
+
+s <- stack(r,sqrt(r))
+s[1:3]
 }
 
 \keyword{methods}
