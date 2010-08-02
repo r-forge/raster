@@ -48,7 +48,6 @@ function(x, filename='', directions=8, gaps=TRUE, datatype='INT2U', ...) {
 	}
 
 	outRaster <- raster(x)
-	global <- .isGlobalLatLon(outRaster)
 	
 	if (canProcessInMemory(outRaster, 3)) {
 		x <- .smallClump(x, directions)
@@ -105,10 +104,11 @@ function(x, filename='', directions=8, gaps=TRUE, datatype='INT2U', ...) {
 	} else if (!gaps) {
 		un <- unique(outRaster)
 		un <- data.frame(cbind(un, 1:length(un)))
-		outRaster <- subs(outRaster, un, subsWithNA=FALSE, filename=filename, datatype=datatype, ...)
+		return( subs(outRaster, un, subsWithNA=FALSE, filename=filename, datatype=datatype, ...) )
+		
 		
 	} else if (filename != '') {
-		return( writeRaster(outRaster, filename=filename, ...) )
+		return( writeRaster(outRaster, filename=filename, datatype=datatype, ...) )
 		
 	} else {
 		return(outRaster)
