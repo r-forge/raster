@@ -17,13 +17,14 @@ if (!isGeneric("clump")) {
 		return( setValues(x1, NA) )
 	}
 	adjv <- as.vector( t ( adjacency(x1, val, val, directions=directions) ) )
+	cl <- clusters(graph(adjv, directed=FALSE))$membership[val+1]
 	
 	add = val[! val %in% adjv]		   # RH
 	adjv <- c(adjv, rep(add, each=2))  # fixed problem of missing the last single cells, perhaps clumsy?
 	
 	cl <- clusters(graph(adjv, directed=FALSE))$membership[val+1]
-	ucl <- sort(unique(cl))
-	ucl <- data.frame(id=ucl, value=1:length(ucl))
+	#ucl <- sort(unique(cl))
+	#ucl <- data.frame(id=ucl, value=1:length(ucl))
 
 	x1[val] <- as.numeric(as.factor(cl)) # RH force 1 to n
 	return(x1)
