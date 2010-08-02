@@ -45,7 +45,7 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 	e <- intersectExtent(x, y)
 	e <- alignExtent(e, x)
 	
-	if (class(x) == 'RasterBrick') {
+	if (inherits(x, 'RasterBrick')) {
 		outRaster <- brick(x, values=FALSE)	
 	} else {
 		outRaster <- raster(x)

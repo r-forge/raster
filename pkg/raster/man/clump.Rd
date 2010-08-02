@@ -24,8 +24,8 @@ This function requires that the igraph package is available.
 
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{directions}  \tab Default value is 8 (Queen's case), the only valid alternative is 4 (King's case) \cr
-  \tab \code{gaps}  \tab Default value is \code{TRUE}. If \code{TRUE}, there may be 'gaps' in the chunk numbers (e.g. you may have 1, 2, 3 and 5 but not 4. If it is \code{FALSE}, these numbers will be recoded from 1 to n (4 in this example) \cr
+  \tab \code{directions}  \tab Integer. Which cells are considered adjacent? Default value is 8 (Queen's case), the only valid alternative is 4 (King's case) \cr
+  \tab \code{gaps}  \tab Logical. If \code{TRUE} (the default), there may be 'gaps' in the chunk numbers (e.g. you may have clumps with IDs 1, 2, 3 and 5, but not 4). If it is \code{FALSE}, these numbers will be recoded from 1 to n (4 in this example) \cr
   \tab \code{filename}  \tab Output filename. Default = '' \cr
   \tab \code{format}  \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype}  \tab Character. Output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr

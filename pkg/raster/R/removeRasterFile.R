@@ -6,7 +6,10 @@
 
 
 removeRasterFile <- function(raster) {
-	if (class(raster) == 'RasterLayer') {
+	if ( inherits(raster, 'Raster')) {
+		if ( inherits(raster, 'RasterStack')) {
+			stop('cannot do this with a RasterStack')
+		}
 		fname <- filename(raster)
 #  need to close the connection in the object in the Global environement; not here	 ????
 #		raster <- closeConnection(raster)
