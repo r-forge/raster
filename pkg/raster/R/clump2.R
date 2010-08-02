@@ -84,12 +84,15 @@ function(x, filename='', directions=8, gaps=TRUE, ...) {
 				j <- as.integer(names(tt[ which(tt > 1) ]))
 				if ( length(j) > 0 ) {
 					k <- rc[,1] %in% j
+					rc2 <- rc[!k,]
+					rcl <- rbind(rcl, rc2)
 					ss <- rc[k,]
 					h <- cbind(ss[,2], ss[,1])
 					tt2 <- table(h[,1])
 					j2 <- as.integer(names(tt2[ which(tt2 > 1) ]))
 					if (length(j2) > 0) {
-						hh <- sort(unique(h[,2]))
+						k2 <- h[,1] %in% j2
+						hh <- sort(unique(h[k2,2]))
 						if (length(hh) > 1) {
 							hh <- cbind(hh[-1], hh[1])
 							rcl <- rbind(rcl, hh)
@@ -98,9 +101,11 @@ function(x, filename='', directions=8, gaps=TRUE, ...) {
 					}
 					h <- unique(h)
 					xc <- subs(xc, data.frame(h), subsWithNA=FALSE)
-					rc <- rc[!k,]
+					rcl <- rbind(rcl, h)
+					
+				} else {
+					rcl <- rbind(rcl, rc)
 				}
-				rcl <- rbind(rcl, rc)
 			}
 		}
 		lastrow <- getValues(xc, nrow(xc))
@@ -114,6 +119,14 @@ function(x, filename='', directions=8, gaps=TRUE, ...) {
 	
 	# now reclass
 	if (nrow(rcl) > 1) {
+		i = rcl[rcl[,2] %in% rcl[,1],2]
+		s = rcl[rcl[,1] %in% i,]
+		if (nrow(s) > 0) {
+			for (b in 1:nrow(s)) { 
+				rcl[rcl[,2]==s[b,1],2] <- s[b,2] 
+			}
+		}
+	
 		if (gaps) {
 			outRaster <- subs(outRaster, data.frame(rcl), subsWithNA=FALSE, filename=filename, ...)
 			return(outRaster)
