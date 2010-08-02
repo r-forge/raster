@@ -30,7 +30,7 @@ removeRasterFile <- function(raster) {
     } else {
 		stop('only implemented for raster format files')
     }
-	if (class(raster) == 'RasterLayer') {
+	if (inherits(raster, 'RasterLayer')) {
 		return(raster)
 	} else {
 		return('OK')

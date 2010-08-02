@@ -20,7 +20,7 @@ setExtent <- function(x, ext, keepres=FALSE, snap=FALSE) {
 	}
 	newobj@extent <- bb
 
-	if (class(x) == 'RasterStack') {
+	if (inherits(x, 'RasterStack')) {
 		if (keepres) {
 			stop('you cannot use keepres=TRUE with a RasterStack')
 		}

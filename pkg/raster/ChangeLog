@@ -1,3 +1,14 @@
+2Aug-2010
+New clump function
+
+Fixes to subs function (needs more checking)
+
+To allow for better behaviour when using objects derived from Raster* objects (perhaps in other packages), replaced code like
+  if (class(x) == 'RasterLayer') 
+with
+  if (inherits(x, 'RasterLayer'))
+
+
 27-July-2010
 version 1.3-3
 Starting this log
