@@ -4,31 +4,31 @@
 # Licence GPL v3
 
 
-.getxvar <- function(xvar, vars) {
-	if (xvar == '') {
-		if ('x' %in% vars) { xvar <- 'x'
-		} else if ('lon' %in% vars) { xvar <- 'lon' 
-		} else if ('long' %in% vars) { xvar <- 'long' 
-		} else if ('longitude' %in% vars) { xvar <- 'longitude' 
-		} else if ('Longitude' %in% vars) { xvar <- 'Longitude' 
-		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
-		}
-	} else if ( !(xvar %in% vars) ) { stop( paste(xvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
-	return(xvar)
-}
+#.getxvar <- function(xvar, vars) {
+#	if (xvar == '') {
+#		if ('x' %in% vars) { xvar <- 'x'
+#		} else if ('lon' %in% vars) { xvar <- 'lon' 
+#		} else if ('long' %in% vars) { xvar <- 'long' 
+#		} else if ('longitude' %in% vars) { xvar <- 'longitude' 
+#		} else if ('Longitude' %in% vars) { xvar <- 'Longitude' 
+#		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
+#		}
+#	} else if ( !(xvar %in% vars) ) { stop( paste(xvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
+#	return(xvar)
+#}
 
 
-.getyvar <- function(yvar, vars) {
-	if (yvar == '') { 
-		if ('y' %in% vars){ yvar <- 'y'
-		} else if ('lat' %in% vars) { yvar <- 'lat' 
-		} else if ('latitude' %in% vars) { yvar <- 'latitude' 
-		} else if ('Latitude' %in% vars) { yvar <- 'Latitude' 
-		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
-		}
-	} else if (!(yvar %in% vars)) { stop( paste(yvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
-	return(yvar)
-}
+#.getyvar <- function(yvar, vars) {
+#	if (yvar == '') { 
+#		if ('y' %in% vars){ yvar <- 'y'
+#		} else if ('lat' %in% vars) { yvar <- 'lat' 
+#		} else if ('latitude' %in% vars) { yvar <- 'latitude' 
+#		} else if ('Latitude' %in% vars) { yvar <- 'Latitude' 
+#		} else { stop('Cannot find an obvious yvar in file. Select one from:\n', paste(vars, collapse=", "))  
+#		}
+#	} else if (!(yvar %in% vars)) { stop( paste(yvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
+#	return(yvar)
+#}
 
 
 
