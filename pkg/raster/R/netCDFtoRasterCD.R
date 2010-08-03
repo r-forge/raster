@@ -13,7 +13,7 @@
 		} else if ('Longitude' %in% vars) { xvar <- 'Longitude' 
 		} else { stop('Cannot find an obvious xvar in file. Select one from:\n', paste(vars, collapse=", "))  
 		}
-	} else if (!(xvar %in% vars)) { stop( paste(xvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
+	} else if ( !(xvar %in% vars) ) { stop( paste(xvar, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", "))) }	
 	return(xvar)
 }
 
@@ -31,67 +31,89 @@
 }
 
 
-.getVarname <- function(varname, vars) {
-	if (varname == '') { varname <- 'value' }
-	if (!(varname %in% vars)) { stop ( 'varname: ', varname, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", ") ) }
-	return(varname)
+
+.dimNames <- function(nc) {
+	n <- nc$dim
+	nams <- vector(length=n)
+	if (n > 0) {
+		for (i in 1:n) {
+			nams[i] <- nc$dim[[i]]$name
+		}
+	}
+	return(nams)
 }
+
+
+.varIDX <- function(nc, varname='') {
+	n <- nc$nvars
+	vars <- vector(length=n)
+	if (n > 0) {
+		for (i in 1:n) {
+			vars[i] <- nc$var[[i]]$name
+		}
+	}
+
+	if (varname=='') { 
+		nv <- length(vars)
+		if (nv == 0) {
+			stop()
+		} 
+		
+		if (nv  == 1) {
+			varname <- vars
+		} else {
+			# should also check its dimensions with those of x and y 
+			a=NULL
+			for (i in 1:nv) { 
+				a = c(a, nc$var[[i]]$ndims) 
+			}
+			varname <- vars[which.max(a)]
+			warning('varname used is: ', varname, '\nIf that is not correct, set it to one of: ', paste(vars, collapse=", ") )
+		}
+	}
+
+	vix <- which(varname == vars)
+	if (length(vix) == 0) {
+		stop('varname: ', varname, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", ") )
+	}
+	return(vix)
+}
+
 
 .rasterObjectFromCDF <- function(filename, x='', y='', varname='', band=NA, type='RasterLayer', ...) {
 
-	if (!require(RNetCDF)) { stop('You need to install the RNetCDF package first') }
-	nc <- open.nc(filename)
-	on.exit( close.nc(nc) )
+	if (!require(ncdf)) { stop('You need to install the ncdf package first') }
+	nc <- open.ncdf(filename)
+	on.exit( close.ncdf(nc) )
 	
 	conv <- 'CF'
-	natt <- file.inq.nc(nc)$ngatts
-	if (natt > 0) {
-		for (i in 1:natt) {
-			if (att.inq.nc(nc,"NC_GLOBAL", i-1)$name == 'Conventions') {
-				conv <- att.get.nc(nc, "NC_GLOBAL", 'Conventions')
-			}
-		}
-	}	
-	if (substr(conv, 1, 3) == 'RST') {
-		close.nc(nc)
+	
+	
+	conv <- att.get.ncdf(nc, 0,  "Conventions")
+	if (substr(conv$value, 1, 3) == 'RST') {
+		close.ncdf(nc)
 		return( .rasterObjectFromCDFrst(filename, band=band, type='RasterLayer', ...) )
+	} else {
+		# assuming "CF-1.0"
 	}
 	
-	nv <- file.inq.nc(nc)$nvars
-    vars <- vector()
-	for (i in 1:nv) { vars <- c(var.inq.nc(nc,i-1)$name, vars) }
+	vix <- .varIDX(nc, varname)
+	zvar <- nc$var[[vix]]$name
 	
-	if (varname=='') { 
-		a=NULL
-		for (i in 1:nv) { 
-			a = c(a, var.inq.nc(nc, (i-1))$ndims) 
-		}
-		i <- which.max(a) - 1
-		varname <- var.inq.nc(nc, i)$name
-		# should also check its dimensions with those of x and y 
-		warning('Guessing that varname should be: ', varname, '\nIf that is not correct, set it to one of: ', paste(vars, collapse=", ") )
-	}
-
-	zvar <- .getVarname(varname, vars) 
-
-	varinfo <- try(var.inq.nc(nc, zvar))
+	datatype <- .getRasterDTypeFromCDF( nc$var[[vix]]$prec )
 	
-	datatype <- .getRasterDTypeFromCDF(varinfo$type)
 	
-	dims <- varinfo$ndims
+	dims <- nc$var[[vix]]$ndims
 	if (dims== 1) { 
 		stop('"varname" only has a single dimension; I cannot make a RasterLayer from this')
 	} else if (dims > 3) { 
 		stop('"varname" has ', length(dims), ' dimensions, I do not know how to process this')
 	}
 	
-	xvar <- .getxvar(x, vars) 
-	yvar <- .getyvar(y, vars) 
+	ncols <- nc$var[[vix]]$dim[[1]]$len
+	nrows <- nc$var[[vix]]$dim[[2]]$len
 
-	ncols <- dim.inq.nc(nc, xvar)$length
-	nrows <- dim.inq.nc(nc, yvar)$length
-
-	xx <- as.vector(var.get.nc(nc, xvar))
+	xx <- nc$var[[vix]]$dim[[1]]$vals
 	rs <- xx[-length(xx)] - xx[-1]
 	
 	if (! isTRUE ( all.equal( min(rs), max(rs), scale= min(rs)/100 ) ) ) {
@@ -102,7 +124,7 @@
 	resx <- (xrange[2] - xrange[1]) / (ncols-1)
 	rm(xx)
 
-	yy <- as.vector(var.get.nc(nc, yvar))
+	yy <- nc$var[[vix]]$dim[[2]]$vals
 	rs <- yy[-length(yy)] - yy[-1]
 	if (! isTRUE ( all.equal( min(rs), max(rs), scale= min(rs)/100 ) ) ) {
 		stop('cells are not equally spaced; you should extract values as points') }
@@ -119,43 +141,34 @@
 	yrange[1] <- yrange[1] - 0.5 * resy
 	yrange[2] <- yrange[2] + 0.5 * resy
  
-	att <- var.inq.nc(nc, variable=zvar)
 	add_offset <- 0
 	scale_factor <- 1
 	long_name <- zvar
 	missing_value <- NA
 	projection <- NA
-	if (att$natts > 0) {
-		for (i in 0:(att$natts-1)) {
-			if (att.inq.nc(nc, zvar, i)$name == "add_offset") {
-				add_offset <- att.get.nc(nc, zvar, i)
-			}
-			if (att.inq.nc(nc, zvar, i)$name == "scale_factor") {
-				scale_factor <- att.get.nc(nc, zvar, i)
-			}
-			if (att.inq.nc(nc, zvar, i)$name == "long_name") {
-				long_name <- att.get.nc(nc, zvar, i)
-			}
-			if (att.inq.nc(nc, zvar, i)$name == "missing_value") {
-				missing_value <- att.get.nc(nc, zvar, i)
-			}
-			if (att.inq.nc(nc, zvar, i)$name == "grid_mapping") {
-				projection <- att.get.nc(nc, zvar, i)
-			}
-		}
-	}
+	a <- att.get.ncdf(nc, vix, "add_offset")
+	if (a$hasatt) { add_offset <- a$value }
+	a <- att.get.ncdf(nc, vix, "scale_factor")
+	if (a$hasatt) { scale_factor <- a$value }
+	a <- att.get.ncdf(nc, vix, "long_name")
+	if (a$hasatt) { long_name <- a$value }
+	a <- att.get.ncdf(nc, vix, "missing_value")
+	if (a$hasatt) { missing_value <- a$value }
+	a <- att.get.ncdf(nc, vix, "projection")
+	if (a$hasatt ) { projection  <- a$value }
 	
 	prj = list()
 	if (!is.na(projection)) {
-		att <- var.inq.nc(nc, projection)
-		if (att$natts > 0) {
-			for (i in 0:(att$natts-1)) {
-				prj[[i+1]] <- att.get.nc(nc, projection, i)
-				names(prj)[i+1] <- att.inq.nc(nc, projection, i)$name
-			}
+	# TO DO
+#		att <- var.inq.nc(nc, projection)
+#		if (att$natts > 0) {
+#			for (i in 0:(att$natts-1)) {
+#				prj[[i+1]] <- att.get.nc(nc, projection, i)
+#				names(prj)[i+1] <- att.inq.nc(nc, projection, i)$name
+#			}
 		# now what?
 		# projection(r) <- ...
-		} 
+#		} 
 	}
 	
 	if (type == 'RasterLayer') {
@@ -171,8 +184,8 @@
 	r@file@toptobottom <- toptobottom
 	r <- .enforceGoodLayerNames(r, long_name)
 
-	attr(r@data, "xvar") <- xvar
-	attr(r@data, "yvar") <- yvar
+#	attr(r@data, "xvar") <- xvar
+#	attr(r@data, "yvar") <- yvar
 	attr(r@data, "zvar") <- zvar
 	attr(r@data, "add_offset") <- add_offset
 	attr(r@data, "scale_factor") <- scale_factor
@@ -187,12 +200,12 @@
 	if (dims == 2) {
 		nbands = 1
 	} else {
-		r@file@nbands <- as.integer(dim.inq.nc(nc, var.inq.nc(nc, zvar)$dimids[3])$length)
+		r@file@nbands <- nc$var[[vix]]$dim[[3]]$len
 	}
 
 	if (type == 'RasterLayer') {
 		if (is.na(band) | is.null(band)) {
-			if (length(dims)== 3) { 
+			if (dims == 3) { 
 				stop(zvar, 'has three dimensions, provide a "band" value between 1 and ', dims[3])
 			} 
 		} else {

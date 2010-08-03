@@ -4,7 +4,6 @@
 # Licence GPL v3
 
 
-
 if (!isGeneric("sampleRandom")) {
 	setGeneric("sampleRandom", function(x, size, ...)
 		standardGeneric("sampleRandom"))
@@ -31,8 +30,8 @@ function(x, size, na.rm=TRUE, ...) {
 			} else {
 				N <- 2 * size 
 			}	
-			cells <- sampleInt(ncell(x), N)
-			values <- cellValues(x, cells)
+			rcells <- sampleInt(ncell(x), N)
+			values <- cellValues(x, rcells)
 			if (na.rm) {
 				values <- na.omit(values)
 				if (length(values) >= size) {
@@ -46,6 +45,11 @@ function(x, size, na.rm=TRUE, ...) {
 		}
 	} else {
 		stop('No values associated with the Raster object')
+	}
+	d <- dim(values)
+	values <- as.vector(values)
+	if (!is.null(d)) { 
+		dim(values) <- d
 	}
 	return(values)
 }
@@ -64,8 +68,8 @@ setMethod('sampleRandom', signature(x='RasterStack'),
 			} else {
 				N <- 2 * size 
 			}	
-			cells <- sampleInt(ncell(x), N)
-			values <- cellValues(x, cells)
+			rcells <- sampleInt(ncell(x), N)
+			values <- cellValues(x, rcells)
 			if (na.rm) {
 				values <- na.omit(values)
 				if (length(values) >= size) {
@@ -76,6 +80,11 @@ setMethod('sampleRandom', signature(x='RasterStack'),
 					}
 				}
 			}	
+		}
+		d <- dim(values)
+		values <- as.vector(values)
+		if (!is.null(d)) { 
+			dim(values) <- d
 		}
 		return(values)
 	}
