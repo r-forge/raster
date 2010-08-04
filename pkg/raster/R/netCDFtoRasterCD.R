@@ -32,6 +32,47 @@
 
 
 
+
+.doTime <- function(x, nc) {
+	if ( nc$var[[1]]$dim[[3]]$name == 'time' ) {
+		dotime <- TRUE
+
+		un = att.get.ncdf(nc, "time", "units")$value
+		if (substr(un, 1, 10) == "days since") { 
+			startDate = as.Date(substr(un, 12, 22))
+		} else {
+			dotime <- FALSE
+		}
+
+		if (dotime) {
+			cal = att.get.ncdf(nc, "time", "calendar")$value
+			if (cal =='gregorian' | cal=='standard') {
+				greg = TRUE
+			} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
+				greg = FALSE
+			} else {
+				warning('assuming a standard calender')
+			}
+
+			time <- x@zvalue
+			if (greg) {
+				time <- as.Date(time, origin=startDate)
+			} else {
+				a <- as.numeric(time)/365
+				year <- trunc(a)
+				doy <- (time - (year * 365))
+				time <- as.Date(doy, origin=paste(year-1, "-12-31", sep=''))
+			}
+			x@zvalue <- as.character(time)
+			x@zname <- as.character('Date')
+		
+		}
+	}
+	return(x)
+}
+
+
+
 .dimNames <- function(nc) {
 	n <- nc$dim
 	nams <- vector(length=n)
@@ -44,7 +85,7 @@
 }
 
 
-.varIDX <- function(nc, varname='') {
+.varName <- function(nc, varname='') {
 	n <- nc$nvars
 	vars <- vector(length=n)
 	if (n > 0) {
@@ -72,11 +113,11 @@
 		}
 	}
 
-	vix <- which(varname == vars)
-	if (length(vix) == 0) {
+	zvar <- which(varname == vars)
+	if (length(zvar) == 0) {
 		stop('varname: ', varname, ' does not exist in the file. Select one from:\n', paste(vars, collapse=", ") )
 	}
-	return(vix)
+	return(varname)
 }
 
 
@@ -97,23 +138,22 @@
 		# assuming "CF-1.0"
 	}
 	
-	vix <- .varIDX(nc, varname)
-	zvar <- nc$var[[vix]]$name
+	zvar <- .varName(nc, varname)
 	
-	datatype <- .getRasterDTypeFromCDF( nc$var[[vix]]$prec )
+	datatype <- .getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
 	
 	
-	dims <- nc$var[[vix]]$ndims
+	dims <- nc$var[[zvar]]$ndims
 	if (dims== 1) { 
 		stop('"varname" only has a single dimension; I cannot make a RasterLayer from this')
 	} else if (dims > 3) { 
 		stop('"varname" has ', length(dims), ' dimensions, I do not know how to process this')
 	}
 	
-	ncols <- nc$var[[vix]]$dim[[1]]$len
-	nrows <- nc$var[[vix]]$dim[[2]]$len
+	ncols <- nc$var[[zvar]]$dim[[1]]$len
+	nrows <- nc$var[[zvar]]$dim[[2]]$len
 
-	xx <- nc$var[[vix]]$dim[[1]]$vals
+	xx <- nc$var[[zvar]]$dim[[1]]$vals
 	rs <- xx[-length(xx)] - xx[-1]
 	
 	if (! isTRUE ( all.equal( min(rs), max(rs), scale= min(rs)/100 ) ) ) {
@@ -124,7 +164,7 @@
 	resx <- (xrange[2] - xrange[1]) / (ncols-1)
 	rm(xx)
 
-	yy <- nc$var[[vix]]$dim[[2]]$vals
+	yy <- nc$var[[zvar]]$dim[[2]]$vals
 	rs <- yy[-length(yy)] - yy[-1]
 	if (! isTRUE ( all.equal( min(rs), max(rs), scale= min(rs)/100 ) ) ) {
 		stop('cells are not equally spaced; you should extract values as points') }
@@ -146,15 +186,18 @@
 	long_name <- zvar
 	missing_value <- NA
 	projection <- NA
-	a <- att.get.ncdf(nc, vix, "add_offset")
+	unit <- ''
+	a <- att.get.ncdf(nc, zvar, "add_offset")
 	if (a$hasatt) { add_offset <- a$value }
-	a <- att.get.ncdf(nc, vix, "scale_factor")
+	a <- att.get.ncdf(nc, zvar, "scale_factor")
 	if (a$hasatt) { scale_factor <- a$value }
-	a <- att.get.ncdf(nc, vix, "long_name")
+	a <- att.get.ncdf(nc, zvar, "long_name")
 	if (a$hasatt) { long_name <- a$value }
-	a <- att.get.ncdf(nc, vix, "missing_value")
+	a <- att.get.ncdf(nc, zvar, "units")
+	if (a$hasatt) { unit <- a$value }
+	a <- att.get.ncdf(nc, zvar, "missing_value")
 	if (a$hasatt) { missing_value <- a$value }
-	a <- att.get.ncdf(nc, vix, "projection")
+	a <- att.get.ncdf(nc, zvar, "projection")
 	if (a$hasatt ) { projection  <- a$value }
 	
 	prj = list()
@@ -183,7 +226,9 @@
 	r@file@name <- filename
 	r@file@toptobottom <- toptobottom
 	r <- .enforceGoodLayerNames(r, long_name)
-
+	r@unit <- unit
+	
+	
 #	attr(r@data, "xvar") <- xvar
 #	attr(r@data, "yvar") <- yvar
 	attr(r@data, "zvar") <- zvar
@@ -200,9 +245,12 @@
 	if (dims == 2) {
 		nbands = 1
 	} else {
-		r@file@nbands <- nc$var[[vix]]$dim[[3]]$len
+		r@file@nbands <- nc$var[[zvar]]$dim[[3]]$len
+		r@zname <- nc$var[[zvar]]$dim[[3]]$units
+		r@zvalue <- nc$var[[zvar]]$dim[[3]]$vals
+		r <- .doTime(r, nc)
 	}
-
+	
 	if (type == 'RasterLayer') {
 		if (is.na(band) | is.null(band)) {
 			if (dims == 3) { 
@@ -217,11 +265,12 @@
 			} else {
 				r@data@band <- as.integer( min(max(1, band), r@file@nbands) )
 			}
+			r@zvalue <- r@zvalue[r@data@band]
 		} 
 
 	} else {
 		if (length(dims)== 2) { 
-			stop('cannot make a RasterStack or Brick from a data that has only two dimensions (no time step), use raster() instead, and then make a stack or brick from that')	
+			stop('cannot make a RasterStack or RasterBrick from a data that has only two dimensions (no time step), use raster() instead, and then make a stack or brick from that')	
 		} 
 		r@data@nlayers <- r@file@nbands
 	}
@@ -230,4 +279,3 @@
 
 #f = "G:/cmip/ipcc/20c3m/atm/mo/pr/bccr_bcm2_0/run1/pr_A1_1.nc"
 #p = .rasterObjectFromCDF(f, zvar='pr', type='RasterLayer', time=10)
-

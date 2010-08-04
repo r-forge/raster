@@ -4,17 +4,16 @@
 # Licence GPL v3
 
 
-.stackCDF <- function(filename, x='', y='', varname='', bands='') {
+.stackCDF <- function(filename, varname='', bands='') {
 
 	if (!require(ncdf)) { stop('You need to install the ncdf package first') }
 
 	nc <- open.ncdf(filename)
 	on.exit( close.ncdf(nc) )
 
-	vix <- .varIDX(nc, varname)
-	zvar <- nc$var[[vix]]$name
+	zvar <- .varName(nc, varname)
 
-	dims <- nc$var[[vix]]$ndims	
+	dims <- nc$var[[zvar]]$ndims	
 	
 	if (dims== 1) { 
 		stop('zvar only has a single dimension; I cannot make a RasterLayer from this')
