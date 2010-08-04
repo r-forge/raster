@@ -27,10 +27,10 @@
 # plotting with a color table
 	
 	# rasterImage is new in R 2.11
-	v <- version
-	major <- as.numeric( v$major )
-	minor <- as.numeric( v$minor )
-	if (major < 2 | (major == 2 & minor < 11)) stop('You need R version 2.11 or higher to use this function')
+	if (! exists("rasterImage") ) {
+		stop('You need R version 2.11 or higher to use this function')
+	}
+	
 	.warnIfSDI()
 	
 
