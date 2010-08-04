@@ -31,42 +31,53 @@
 #}
 
 
-
-
 .doTime <- function(x, nc) {
-	dotime <- TRUE
-
-		un = att.get.ncdf(nc, "time", "units")$value
-		if (substr(un, 1, 10) == "days since") { 
-			startDate = as.Date(substr(un, 12, 22))
+	dodays <- TRUE
+	dohours <- FALSE
+	
+	un = att.get.ncdf(nc, "time", "units")$value
+	if (substr(un, 1, 10) == "days since") { 
+		startDate = as.Date(substr(un, 12, 22))
+	} else {
+		if (substr(un, 1, 11) == "hours since") { 
+			dohours <- TRUE
+		}
+		dodays <- FALSE
+	}
+	if (dohours) {
+		startTime = substr(un, 13, 30)
+		startTime = strptime(startTime, "%Y-%m-%d %H:%M:%OS")
+		time <- startTime + as.numeric(x@zvalue) * 3600
+		time <- as.character(time)
+		if (!is.na(time[1])) {
+			x@zvalue <- time
+			x@zname <- as.character('Date/time')
+		}
+	}
+	if (dodays) {
+		cal = att.get.ncdf(nc, "time", "calendar")$value
+		if (cal =='gregorian' | cal=='standard') {
+			greg = TRUE
+		} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
+			greg = FALSE
 		} else {
-			dotime <- FALSE
+			greg = TRUE
+			warning('assuming a standard calender')
 		}
 
-		if (dotime) {
-			cal = att.get.ncdf(nc, "time", "calendar")$value
-			if (cal =='gregorian' | cal=='standard') {
-				greg = TRUE
-			} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
-				greg = FALSE
-			} else {
-				greg = TRUE
-				warning('assuming a standard calender')
-			}
-
-			time <- x@zvalue
-			if (greg) {
-				time <- as.Date(time, origin=startDate)
-			} else {
-				a <- as.numeric(time)/365
-				year <- trunc(a)
-				doy <- (time - (year * 365))
-				time <- as.Date(doy, origin=paste(year-1, "-12-31", sep=''))
-			}
-			x@zvalue <- as.character(time)
-			x@zname <- as.character('Date')
+		time <- x@zvalue
+		if (greg) {
+			time <- as.Date(time, origin=startDate)
+		} else {
+			a <- as.numeric(time)/365
+			year <- trunc(a)
+			doy <- (time - (year * 365))
+			time <- as.Date(doy, origin=paste(year-1, "-12-31", sep=''))
+		}
+		x@zvalue <- as.character(time)
+		x@zname <- as.character('Date')
 		
-		}
+	}
 	return(x)
 }
 
