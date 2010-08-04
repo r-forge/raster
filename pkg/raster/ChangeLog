@@ -1,3 +1,8 @@
+4-Aug-2010, version 1.3-10
+
+Expanded sampleRandom by adding a 'cells' and 'extent' argument; 
+
+-------------------------------------------------------------
 3-Aug-2010, version 1.3-9
 
 Switched from RNetCDF to ncdf package for netcdf file support
