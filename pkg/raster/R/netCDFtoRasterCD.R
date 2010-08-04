@@ -34,8 +34,7 @@
 
 
 .doTime <- function(x, nc) {
-	if ( nc$var[[1]]$dim[[3]]$name == 'time' ) {
-		dotime <- TRUE
+	dotime <- TRUE
 
 		un = att.get.ncdf(nc, "time", "units")$value
 		if (substr(un, 1, 10) == "days since") { 
@@ -51,6 +50,7 @@
 			} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
 				greg = FALSE
 			} else {
+				greg = TRUE
 				warning('assuming a standard calender')
 			}
 
@@ -67,7 +67,6 @@
 			x@zname <- as.character('Date')
 		
 		}
-	}
 	return(x)
 }
 
@@ -197,23 +196,17 @@
 	if (a$hasatt) { unit <- a$value }
 	a <- att.get.ncdf(nc, zvar, "missing_value")
 	if (a$hasatt) { missing_value <- a$value }
-	a <- att.get.ncdf(nc, zvar, "projection")
-	if (a$hasatt ) { projection  <- a$value }
-	
+	a <- att.get.ncdf(nc, zvar, "grid_mapping")
+	if ( a$hasatt ) { projection  <- a$value }
+
 	prj = list()
 	if (!is.na(projection)) {
-	# TO DO
-#		att <- var.inq.nc(nc, projection)
-#		if (att$natts > 0) {
-#			for (i in 0:(att$natts-1)) {
-#				prj[[i+1]] <- att.get.nc(nc, projection, i)
-#				names(prj)[i+1] <- att.inq.nc(nc, projection, i)$name
-#			}
-		# now what?
+		att <- nc$var[[projection]]
+		prj <- as.list(unlist(att))
+		# now parse .....
 		# projection(r) <- ...
-#		} 
 	}
-	
+		
 	if (type == 'RasterLayer') {
 		r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
 	} else {
@@ -248,7 +241,10 @@
 		r@file@nbands <- nc$var[[zvar]]$dim[[3]]$len
 		r@zname <- nc$var[[zvar]]$dim[[3]]$units
 		r@zvalue <- nc$var[[zvar]]$dim[[3]]$vals
-		r <- .doTime(r, nc)
+		
+		if ( nc$var[[zvar]]$dim[[3]]$name == 'time' ) {
+			r <- .doTime(r, nc)
+		}
 	}
 	
 	if (type == 'RasterLayer') {
