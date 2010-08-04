@@ -25,10 +25,8 @@
 		
 	}
 
-	if (!is.na(x@file@nodatavalue)) { 
-		d[d==x@file@nodatavalue] <- NA
-	}
-	d <- x@data@add_offset + d * x@data@scale_factor
+	#if (!is.na(x@file@nodatavalue)) { d[d==x@file@nodatavalue] <- NA }
+	#d <- x@data@add_offset + d * x@data@scale_factor
 	
 	if (length(dim(d)) > 1) {
 		if ( x@file@toptobottom ) { 
@@ -57,10 +55,8 @@
 	d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	
 
-	if (!is.na(x@file@nodatavalue)) { 
-		d[d==x@file@nodatavalue] <- NA
-	}
-	d <- x@data@add_offset + d * x@data@scale_factor
+	#if (!is.na(x@file@nodatavalue)) { 	d[d==x@file@nodatavalue] <- NA	}
+	#d <- x@data@add_offset + d * x@data@scale_factor
 	
 	dims = dim(d)
 	if (length(dims) == 3) {

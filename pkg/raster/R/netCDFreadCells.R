@@ -49,10 +49,8 @@
 	}	
 	
 	colrow <- colrow[,3]
-	if (!is.na(x@file@nodatavalue)) { 
-		colrow[colrow==x@file@nodatavalue] <- NA
-	}
-	colrow <- x@data@add_offset + colrow * x@data@scale_factor
+	#if (!is.na(x@file@nodatavalue)) { colrow[colrow==x@file@nodatavalue] <- NA	}
+	#colrow <- x@data@add_offset + colrow * x@data@scale_factor
 
 	return(colrow) 
 }
@@ -89,10 +87,8 @@
 		res[i,] <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	}	
 
-	if (!is.na(x@file@nodatavalue)) { 
-		res[res==x@file@nodatavalue] <- NA
-	}
-	res <- x@data@add_offset + res * x@data@scale_factor
+	#if (!is.na(x@file@nodatavalue)) { res[res==x@file@nodatavalue] <- NA	}
+	#res <- x@data@add_offset + res * x@data@scale_factor
 
 	return(res) 
 }
