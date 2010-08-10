@@ -14,7 +14,7 @@
 # 1) First is it Rgui?
 		options('rasterImageSDIWarningGiven' = TRUE)
 		if (.Platform$OS.type == "windows") {
-			if (.Platform$GUI[1] != "Rgui") { 
+			if (.Platform$GUI[1] == "Rgui") { 
 # RGui SDI mode: returns "R Console", in MDI mode: returns "RGui"
 				if (getIdentification() == "R Console")  {
 					warning ("Because of a bug in SDI raster handling your R graphics window may stop displaying output")
