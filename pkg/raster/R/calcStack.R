@@ -10,8 +10,8 @@ function(x, fun, filename='', ...) {
 
 	nl <- nlayers(x)
 	test <- length(fun(1:nl))
-	if (length(test) != 1) {
-		if (length(test) == nl) {
+	if (test != 1) {
+		if (test == nl) {
 			return( .calcLayers(x, fun, filename, ...) )
 		} else {
 			stop("'fun' does not return the correct number of values. It should be 1 or nlayers(x)") 
