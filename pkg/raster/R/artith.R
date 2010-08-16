@@ -157,8 +157,18 @@ setMethod("Arith", signature(e1='numeric', e2='RasterBrick'),
 
 setMethod("Arith", signature(e1='RasterStack', e2='numeric'),
     function(e1, e2) {
-		for (i in 1:nlayers(e1)) {
-			e1@layers[[i]] <- callGeneric(e1@layers[[i]], e2) 
+		if (length(e2) > 1) {
+			if (length(e2) != nlayers(e1)) {
+				stop('length of e2 > 1 but not equal to nlayers(e1)')
+			}
+			for (i in 1:nlayers(e1)) {
+				e1@layers[[i]] <- callGeneric(e1@layers[[i]], e2[i]) 
+			}
+			
+		} else {
+			for (i in 1:nlayers(e1)) {
+				e1@layers[[i]] <- callGeneric(e1@layers[[i]], e2) 
+			}
 		}
 		return(e1)
 	}
@@ -166,10 +176,7 @@ setMethod("Arith", signature(e1='RasterStack', e2='numeric'),
 
 setMethod("Arith", signature(e1='numeric', e2='RasterStack'),
     function(e1, e2){ 
-		for (i in 1:nlayers(e2)) {
-			e2@layers[[i]] <- callGeneric(e2@layers[[i]], e1) 
-		}
-		return(e2)
+		callGeneric(e2, e1) 
 	}
 )
 
@@ -177,16 +184,29 @@ setMethod("Arith", signature(e1='numeric', e2='RasterStack'),
 
 setMethod("Arith", signature(e1='Extent', e2='numeric'),
 	function(e1, e2){ 
+	
+		if (length(e2) == 1) {
+			x1 = e2
+			x2 = e2
+		} else if (length(e2) == 2) {
+			x1 = e2[1]
+			x2 = e2[2]
+		} else {
+			stop('On an Extent object, you can only use Arith with a single number or with two numbers')
+		}
+
 		r <- e1@xmax - e1@xmin
-		d <- callGeneric(r, e2)
+		d <- callGeneric(r, x1)
 		d <- (d - r) / 2
 		e1@xmax <- e1@xmax + d
 		e1@xmin <- e1@xmin - d
+		
 		r <- e1@ymax - e1@ymin
-		d <- callGeneric(r, e2)
+		d <- callGeneric(r, x2)
 		d <- (d - r) / 2
 		e1@ymax <- e1@ymax + d
 		e1@ymin <- e1@ymin - d
+		
 		return(e1)
 	}
 )
