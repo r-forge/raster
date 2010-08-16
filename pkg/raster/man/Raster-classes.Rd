@@ -7,6 +7,7 @@
 \alias{RasterLayer-class}
 \alias{RasterStack-class}
 \alias{RasterBrick-class}
+\alias{RasterStackBrick-class}
 
 \alias{print,Raster-method}
 \alias{show,BasicRaster-method}

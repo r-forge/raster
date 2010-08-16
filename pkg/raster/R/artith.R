@@ -101,7 +101,33 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 
 setMethod("Arith", signature(e1='RasterBrick', e2='numeric'),
     function(e1, e2) {
-		if (canProcessInMemory(e1, 4)) {
+	
+		if (length(e2) > 1) {
+			if (length(e2) != nlayers(e1)) {
+				stop('length of e2 > 1 but not equal to nlayers(e1)')
+			}
+					
+			if (canProcessInMemory(e1, 3)) {
+				return( setValues(e1, t(callGeneric( t(getValues(e1)), e2))) )
+			}
+			
+			filename <- rasterTmpFile()
+			b <- brick(e1)
+			tr <- blockSize(b)
+			pb <- pbCreate(tr$n, type=.progress())
+			b <- writeStart(b, filename=filename, bandorder='BIL')
+			for (i in 1:tr$n) {
+				v <- t (callGeneric( t(getValues(e1, row=tr$row[i], nrows=tr$size)), e2) )
+				b <- writeValues(b, v, tr$row[i])
+				pbStep(pb, i)
+			}
+			pbClose(pb)
+			return(b)
+		}
+		
+		# else:
+		
+		if (canProcessInMemory(e1, 3)) {
 			return ( setValues(e1,  callGeneric(getValues(e1), e2) ) )
 		} else {
 			filename <- rasterTmpFile()
@@ -110,7 +136,7 @@ setMethod("Arith", signature(e1='RasterBrick', e2='numeric'),
 			pb <- pbCreate(tr$n, type=.progress())
 			b <- writeStart(b, filename=filename, bandorder='BIL')
 			for (i in 1:tr$n) {
-				v <- getValues(e1, row=tr$row[i], nrows=tr$size)
+				v <- callGeneric( getValues(e1, row=tr$row[i], nrows=tr$size), e2)
 				b <- writeValues(b, v, tr$row[i])
 				pbStep(pb, i)
 			}
