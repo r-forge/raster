@@ -17,7 +17,7 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 		}
 
 		if (nl1 > 1 | nl2 > 1) {
-			r <- brick(e1)
+			r <- brick(e1, values=FALSE)
 		} else {
 			r <- raster(e1)
 		}

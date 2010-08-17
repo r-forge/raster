@@ -10,14 +10,16 @@
 Standard arithmic operators for computations with Raster* objects and numeric values. The following operators are available:
 \code{ +, -, *, /, ^, \%\%, \%/\% }
 
-Input Raster* objects should have the same extent, origin and resolution. If only the extent differs, the computation will continue for the intersection of the Raster objects.
-Operators are applied on a cell by cell basis.
+Input Raster* objects should have the same extent, origin and resolution. If only the extent differs, the computation will continue for 
+the intersection of the Raster objects. Operators are applied on a cell by cell basis.
 For a RasterLayer, numeric values are recycled by row.  For a RasterStack or RasterBrick, recycling is done by layer. 
 RasterLayer objects can be combined RasterStack/Brick objects, in which case the RasterLayer is 'recycled'.
 When using multiple RasterStack or RasterBrick objects, the number of layers of these objects needs to be the same. 
+}
 
-\section{details}{
-If the values of the output Raster* cannot be held in memory, they will be saved to a temporary file. You can use \code{\link[raster]{rasterOptions}} to set the default file format, datatype and progress bar.
+\details{
+If the values of the output Raster* cannot be held in memory, they will be saved to a temporary file. 
+You can use \code{\link[raster]{rasterOptions}} to set the default file format, datatype and progress bar.
 }
 
 
