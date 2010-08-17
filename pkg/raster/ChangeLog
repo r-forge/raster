@@ -1,3 +1,11 @@
+14-Aug-2010, version 1.4-1
+
+It is now possible to do Arith (e.g. addition, multiplication) with a RasterStack or Brick using a vector argument of lenght that equals nlayers(object).
+E.g. you can mutliply a RasterStack with 5 layers with vector c(1,3,5,3,1), where indices are matched to layers.
+
+It is also possible to do Arith with mutliple RasterStackBrick objects (as long as nlayers is the same) and with RasterLayer objects.
+
+-------------------------------------------------------------
 4-Aug-2010, version 1.3-10
 
 Expanded sampleRandom by adding a 'cells' and 'extent' argument; 
@@ -17,7 +25,7 @@ Not yet used in writing, or with other formats
 -------------------------------------------------------------
 2-Aug-2010, version 1.3-8
 
-New clump function, also using igraph for large rasters & minor bug fix
+New clump function, now always using igraph (also for large rasters) & minor bug fix
 
 Fixes to subs function (needs more checking)
 
