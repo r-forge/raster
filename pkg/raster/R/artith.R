@@ -5,8 +5,22 @@
 
 
 	
-setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
+setMethod("Arith", signature(e1='Raster', e2='Raster'),
     function(e1, e2){ 
+
+		nl1 <- nlayers(e1)
+		nl2 <- nlayers(e2)
+		if (nl1 > 1 & nl2 > 1) {
+			if (nl1 != nl2) {
+				stop('RasterStacks/Bricks must have the same number of layers')
+			}
+		}
+
+		if (nl1 > 1 | nl2 > 1) {
+			r <- brick(e1)
+		} else {
+			r <- raster(e1)
+		}
 		
 		if ( ! compare(e1, e2, stopiffalse=FALSE) ) {
 			if ( compare(e1, e2, extent=FALSE, rowcol=FALSE, prj=TRUE, res=TRUE, orig=TRUE, stopiffalse=TRUE) ) {
@@ -21,8 +35,6 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 				stop()  # stops anyway because compare returned FALSE
 			}
 		}
-		
-		r <- raster(e1)
 		
 		if (canProcessInMemory(r, 4)) {
 		
@@ -47,6 +59,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='RasterLayer'),
 		}
 	}	
 )
+
 
 
 setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),

@@ -10,7 +10,9 @@
   Standard arithmic operators for computations with Raster* objects and numeric values. The following operators are available:
 \code{ +, -, *, /, ^, \%\%, \%/\% }
   Operators are applied on a cell by cell basis, and single numeric values are recycled. 
-  Input RasterLayers must have the same extent and resolution.
+  Input Raster* objects should have the same extent, origin and resolution. If only the extent differs, the computation will continue for the intersection of the Raster objects.
+  
+  When using multiple RasterStack or RasterBrick objects, the number of layers of these objects needs to be the same. 
 }
 
 \section{details}{
@@ -33,8 +35,10 @@ r2 <- setValues(r1, 1:ncell(r1) / ncell(r1) )
 r3 <- r1 + r2
 r2 <- r1 / 10
 r3 <- r1 * (r2 - 1 + r1^2 / r2)
-b <- brick(r1, r2, r3)
-b <- b * 10
+b1 <- brick(r1, r2, r3)
+b2 <- b1 * 10
+# summing two RasterBricks and one RasterLayer. The RasterLayer is 'recycled'
+b3 <- b1 + b2 + r1
 }
 
 \keyword{methods}
