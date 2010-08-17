@@ -15,8 +15,8 @@
 
 #setMethod("gridDistance", signature(object = "RasterLayer"), def =	
 
-gridDistance <- function(object, originValue, omitValue, filename="", ...) 
-{
+gridDistance <- function(object, originValue, omitValue=NULL, filename="", ...) {
+
 	if( !require(igraph)) {
 		stop('you need to install the igraph package to be able to use this function')
 	}
@@ -125,30 +125,34 @@ gridDistance <- function(object, originValue, omitValue, filename="", ...)
 }
 
 
-.calcDist <- function(object, chunkSize, ftC, oC, perCell=0, startCell=0)
-{
+.calcDist <- function(object, chunkSize, ftC, oC, perCell=0, startCell=0) {
 	shortestPaths <- rep(Inf, times=max(ftC))
-	if(length(oC)>0)
-	{
+	
+	if(length(oC)>0) {
+	
 		lonlat <- .couldBeLonLat(object)
 		adj <- adjacency(object,fromCells=ftC,toCells=ftC,directions=8) #OPTIMIZE: omit oC cells surrounded by other origin cells
 		distGraph <- graph.edgelist(adj-1, directed=FALSE)
-		if (lonlat) 
-		{
+		
+		if (lonlat) {
 			coord <- cbind(xyFromCell(object,adj[,1]+startCell),xyFromCell(object,adj[,2]+startCell))
-			distance <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
+			# distance1 <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
+			# orders of magnitude faster
+			distance <- pointDistance(coord[, 1:2], coord[, 3:4], type='GreatCircle') 
 			E(distGraph)$weight <- distance
-		}
-		else
-		{
+		
+		} else {
 			sameRow <- rowFromCell(object, adj[,1]) == rowFromCell(object, adj[,2]) 
 			sameCol <- colFromCell(object, adj[,1]) == colFromCell(object, adj[,2])
 			E(distGraph)$weight[sameRow] <- xres(object)
 			E(distGraph)$weight[sameCol] <- yres(object)
 			E(distGraph)$weight[!sameCol & !sameRow] <- sqrt(xres(object)^2 + yres(object)^2)
 		}
+		
 		shortestPaths <- pmin(shortestPaths, apply(shortest.paths(distGraph, oC-1) + perCell, 2, min))
-		if(max(ftC) < chunkSize){shortestPaths <- c(shortestPaths,rep(Inf,times=chunkSize-max(ftC)))}
+		if(max(ftC) < chunkSize){ 
+			shortestPaths <- c(shortestPaths,rep(Inf,times=chunkSize-max(ftC)))
+		}
 	}
 	return(shortestPaths)
 }
