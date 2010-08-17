@@ -22,7 +22,7 @@ gridDistance <- function(object, originValue, omitValue=NULL, filename="", ...) 
 	}
 	
 	if (missing(originValue)) stop("you must supply an 'originValue' argument")
-	if (missing(omitValue)) stop("you must supply an 'omitValue' argument")
+	#if (missing(omitValue)) stop("you must supply an 'omitValue' argument")
 	
 	
 	if ((! inMemory(object) ) & ( !  fromDisk(object) )) {

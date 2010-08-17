@@ -15,14 +15,14 @@
 }
 
 \usage{
-gridDistance(object, originValue, omitValue, filename, ...) 
+gridDistance(object, originValue, omitValue=NULL, filename="", ...) 
 }
 
 \arguments{
 \item{object}{a RasterLayer object}
-\item{originValue}{value of the cells from which the distance is calculated}
-\item{omitValue}{value of the cells which cannot be traversed}
-\item{filename}{character. output filename}
+\item{originValue}{value(s) of the cells from which the distance is calculated}
+\item{omitValue}{value(s) of the cells which cannot be traversed (optional)}
+\item{filename}{character. output filename (optional)}
 \item{...}{additional arguments. See Details.}  
 }
 
