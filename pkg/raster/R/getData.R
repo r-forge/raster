@@ -26,7 +26,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 .download <- function(aurl, filename) {
 	fn <- paste(tempfile(), '.download', sep='')
 	res <- download.file(url=aurl, destfile=fn, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
-	if (res) {
+	if (res == 0) {
 		file.rename(fn, filename)
 	} else {
 		stop('could not download the file' )
@@ -176,6 +176,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		}
 	}
 	st <- stack(paste(path, bilfiles, sep=''))
+	projection(st) <- "+proj=longlat +datum=WGS84"
 	return(st)
 }
 

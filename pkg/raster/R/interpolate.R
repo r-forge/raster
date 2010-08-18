@@ -177,7 +177,6 @@ setMethod('interpolate', signature(object='Raster'),
 				predv = matrix(predv, nrow=ncol(predrast))
 				cols = tr$row[i]:(tr$row[i]+dim(predv)[2]-1)
 				v[,cols] <- predv 
-				
 			} else {
 				predrast <- writeValues(predrast, predv, tr$row[i])
 			}
