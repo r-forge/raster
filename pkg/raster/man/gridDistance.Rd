@@ -11,17 +11,16 @@
  The distance is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically meters) when it is projected.
  
  Distances are calculated by summing local distances between cells, which are connected with their neighbours in 8 directions.
-
 }
 
 \usage{
-gridDistance(object, originValue, omitValue=NULL, filename="", ...) 
+gridDistance(x, origin, omit=NULL, filename="", ...) 
 }
 
 \arguments{
-\item{object}{a RasterLayer object}
-\item{originValue}{value(s) of the cells from which the distance is calculated}
-\item{omitValue}{value(s) of the cells which cannot be traversed (optional)}
+\item{x}{a RasterLayer object}
+\item{origin}{value(s) of the cells from which the distance is calculated}
+\item{omit}{value(s) of the cells which cannot be traversed (optional)}
 \item{filename}{character. output filename (optional)}
 \item{...}{additional arguments. See Details.}  
 }
@@ -52,12 +51,12 @@ r <- raster(ncol=10,nrow=10)
 r[] <- 1
 r[48] <- 2
 r[66:68] <- 3
-distRaster <- gridDistance(r,originValue=2,omitValue=3) 
+distRaster <- gridDistance(r,origin=2,omit=3) 
 plot(distRaster)
 
 #UTM small area
 projection(r) <- "+proj=utm +zone=15 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
-distRaster <- gridDistance(r,originValue=2,omitValue=3) 
+distRaster <- gridDistance(r,origin=2,omit=3) 
 plot(distRaster)
 
 }
