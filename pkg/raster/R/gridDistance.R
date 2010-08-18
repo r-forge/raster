@@ -35,7 +35,7 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 		}
 	}
 	
-	if ( canProcessInMemory(x, n=15) ) {
+	if ( canProcessInMemory(x, n=25) ) {
 		outRaster <- raster(x)
 		x <- getValues(x) # to avoid keeping values in memory twice
 		
