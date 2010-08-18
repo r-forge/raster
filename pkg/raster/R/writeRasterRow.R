@@ -37,8 +37,6 @@
 	raster@file@driver <- filetype
 	raster@file@name <- filename
 
-	raster@data@fromdisk <- TRUE
-	
 	return(raster)
 }
 
