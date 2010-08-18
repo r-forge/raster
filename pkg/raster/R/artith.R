@@ -134,6 +134,7 @@ setMethod("Arith", signature(e1='RasterBrick', e2='numeric'),
 				b <- writeValues(b, v, tr$row[i])
 				pbStep(pb, i)
 			}
+			b <- writeStop(b)
 			pbClose(pb)
 			return(b)
 		}
@@ -153,6 +154,7 @@ setMethod("Arith", signature(e1='RasterBrick', e2='numeric'),
 				b <- writeValues(b, v, tr$row[i])
 				pbStep(pb, i)
 			}
+			b <- writeStop(b)
 			pbClose(pb)
 			return(b)
 		}
