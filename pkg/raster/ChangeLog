@@ -1,3 +1,9 @@
+20-Aug-2010, version 1.4-4
+
+Minor bug fixes in crop (reported by Jon Olav Skoien) and in focalNA (reported by Matteo Mattiuzzi)
+Changes in gridDistance to avoid it (igraph) from crashing when using very complex grids.
+-------------------------------------------------------------
+
 14-Aug-2010, version 1.4-2
 Added @data@gain and @data@offset slots to Raster* objects and use these when reading values from file
 v = v * r@gain + r@offset  (suggestion by Jonathan Greenberg)
