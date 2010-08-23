@@ -33,8 +33,9 @@
 			d <- d[, ncol(d):1] 	
 		}
 	}
-	return( as.vector(d) )
-	
+	d <- as.vector(d) 
+	d[d==x@file@nodatavalue] <- NA
+	return(d)	
 }
 	
 	
@@ -68,6 +69,7 @@
 			}
 		} else {
 			dim(d) = c(dims[1] * dims[2], dims[3])
+			d[d==x@file@nodatavalue] <- NA
 			return(d)
 		}
 	} else {
@@ -78,6 +80,8 @@
 		}
 		values = matrix(values, ncol=1)
 	}
+	
+	values[values==x@file@nodatavalue] <- NA
 	return(values)
 }
 
