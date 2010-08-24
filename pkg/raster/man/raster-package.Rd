@@ -50,8 +50,8 @@ Maintainer: Robert J. Hijmans \email{r.hijmans@gmail.com}
 Raster* objects can be created, from scracth or from raster files, with the following functions:
   \tabular{ll}{
     \code{\link{raster}}\tab To create a RasterLayer \cr
-    \code{\link{stack}} \tab To create a RasterStack \cr
-    \code{\link{brick}} \tab To create a RasterBrick \cr
+    \code{\link{stack}} \tab To create a RasterStack (multiple layers)\cr
+    \code{\link{brick}} \tab To create a RasterBrick (multiple layers)\cr
     \code{\link{addLayer}} \tab Add a layer to a RasterStack or RasterBrick \cr
     \code{\link{dropLayer}} \tab Remove a layer from a RasterStack or RasterBrick \cr
     \code{\link{unstack}} \tab Create a list of RasterLayer objects from a RasterStack \cr
@@ -70,7 +70,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{crop}} \tab Select a geographic subset of a Raster* object \cr
     \code{\link{expand}} \tab Enlarge a Raster* object \cr
     \code{\link{trim}} \tab Trim a Raster* object by removing exterior rows and/or columns that only have NA values \cr
-    \code{\link{aggregate}} \tab Combine cells to create larger cells \cr
+    \code{\link{aggregate}} \tab Combine cells of a Raster* object to create larger cells \cr
     \code{\link{disaggregate}} \tab Subdivide cells \cr
     \code{\link{shift}} \tab Move the location of Raster \cr
     \code{\link{flip}} \tab  Flip values horizontally or vertically \cr
@@ -96,10 +96,10 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 \section{IV. Basic computation}{
 
   \tabular{ll}{
-    \code{\link{calc}} \tab Computations on a single RasterLayer, or on a RasterStack or RasterBrick to produce a single RasterLayer \cr
-    \code{\link{overlay}} \tab Computations on mutliple RasterLayer objects \cr
+    \code{\link{calc}} \tab Computations on a single Raster* object \cr
+    \code{\link{overlay}} \tab Computations on multiple RasterLayer objects \cr
     \code{\link{cover}} \tab First layer covers second layer except where the first layer is NA \cr
-    \code{\link{mask}} \tab Use values from first layer except where cells of the second layer are NA (these become NA)\cr
+    \code{\link{mask}} \tab Use values from first Raster except where cells of the mask RaserLayer are NA (these become NA)\cr
     \code{\link{reclass}} \tab Reclassify using a 'from-to-becomes' matrix \cr
     \code{\link{subs}} \tab Substitute values using a 'is-becomes' matrix \cr	
     \code{\link{init}} \tab Initialize cells with new values \cr	
@@ -363,7 +363,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 \section{Acknowledgements}{
 We thank the following persons for suggestions to improve the package: 
 Roger Bivand, Jonathan Greenberg, Herry Herry, Paul Hiemstra, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, Agustin Lobo, 
-Matteo Mattiuzzi, Edzer Pebesma, and Kevin Ummel.
+Matteo Mattiuzzi, Steven Mosher, Edzer Pebesma, Jon Olav Skoien, and Kevin Ummel.
 }
 
 \keyword{package}
