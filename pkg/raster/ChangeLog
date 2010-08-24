@@ -1,6 +1,10 @@
-24-Aug-2010, version 1.4-6
+25-Aug-2010, version 1.4-7
 
-cellValues (and getValues) bug in ncdf brick fixed. (reported by Steven Mosher)
+area now takes na.rm=TRUE and weights=TRUE arguments, and returns a Brick if input is Stack/Brick and na.rm=T. 
+as.logical now works for a multi-layer object
+cellValues (and getValues) bug in ncdf brick fixed. (all based on suggstions/reports by Steven Mosher)
+
+new function 'hasValues' while 'dataContent' has now been removed. 
 -------------------------------------------------------------
 23-Aug-2010, version 1.4-5
 

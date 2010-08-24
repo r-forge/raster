@@ -5,6 +5,7 @@
 \alias{mask}
 \alias{mask,RasterLayer,RasterLayer-method}
 \alias{mask,RasterStackBrick,RasterLayer-method}
+\alias{mask,RasterLayer,RasterStackBrick-method}
 
 \title{mask}
 
