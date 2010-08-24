@@ -1,7 +1,8 @@
 23-Aug-2010, version 1.4-5
 
-Minor bug fix in rasterToPoints with multi-layer objects (reported by Jon Olav Skoien).
 Setting the nodata value with NAvalues now also affects reading of values from netcdf files (suggested by Steven Mosher)
+cellStats now returns values per layer (rather than all combined) (suggested by Steven Mosher)
+Minor bug fix in rasterToPoints with multi-layer objects (reported by Jon Olav Skoien).
 -------------------------------------------------------------
 20-Aug-2010, version 1.4-4
 
