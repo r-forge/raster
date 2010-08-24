@@ -15,7 +15,7 @@ cellStats(x, stat='mean', ...)
 }
 
 \arguments{
- \item{x}{A RasterLayer}
+ \item{x}{A Raster* object}
  \item{stat}{The function to be applied. Either as character: 'mean', 'min', 'max', 'sum', or 'sd'; or a function (see Details) }
  \item{...}{Additional argument. See \code{\link[raster]{rasterOptions}} }  
 }
