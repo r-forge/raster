@@ -6,7 +6,9 @@
 
 .readRowsNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
 
-	if ( x@file@toptobottom ) { row <- x@nrows - row - nrows + 2 }
+	if ( x@file@toptobottom ) { 
+		row <- x@nrows - row - nrows + 2 
+		}
 	
 	nc <- open.ncdf(x@file@name)
 	on.exit( close.ncdf(nc) )
@@ -40,19 +42,20 @@
 	
 	
 	
-.readRowsBrickNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), layer=1, nlayers=nlayers(x)-layer+1) {
+.readRowsBrickNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), layer=1, n=nlayers(x)-layer+1) {
 	
 	if ( x@file@toptobottom ) { row <- x@nrows - row - nrows + 2	}
 	
+	navalue <- x@file@nodatavalue
 	layer   =  min( max( round(layer), 1), nlayers(x))
-	nlayers =  min( max( round(nlayers), 1), nlayers(x)-layer+1 )
+	n =  min( max( round(n), 1), nlayers(x)-layer+1 )
 	
 	nc <- open.ncdf(x@file@name)
 	on.exit( close.ncdf(nc) )
 
 	zvar = x@data@zvar
 	start = c(col, row, layer)
-	count = c(ncols, nrows, nlayers)
+	count = c(ncols, nrows, n)
 	d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	
 
@@ -62,8 +65,8 @@
 	dims = dim(d)
 	if (length(dims) == 3) {
 		if ( x@file@toptobottom ) { 
-			values <- matrix(nrow=nrows*ncols, ncol=nlayers)
-			for (i in 1:nlayers) {
+			values <- matrix(nrow=nrows*ncols, ncol=n)
+			for (i in 1:n) {
 				x <- d[,,i]
 				values[,i] <- as.vector( x[, ncol(x):1] )
 			}
@@ -81,7 +84,7 @@
 		values = matrix(values, ncol=1)
 	}
 	
-	values[values==x@file@nodatavalue] <- NA
+	values[values==navalue] <- NA
 	return(values)
 }
 
