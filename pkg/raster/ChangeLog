@@ -4,7 +4,10 @@ bug fixes:
 writing via gdal did not respond to the 'options' argument (reported by Tom Kurkowski and  Jorrel Aunario)
 cellValues (and getValues) bug in ncdf brick fixed. (reported by Steven Mosher)
 
-new functions:
+new function:
+stackApply applies a function over sets of layers of a RasterStack/Brick
+
+improvements:
 area now takes na.rm=TRUE and weights=TRUE arguments, and returns a Brick if input is Stack/Brick and na.rm=T (suggested by Steven Mosher). 
 as.logical now works for a multi-layer object (suggested by Steven Mosher)
 'hasValues' while 'dataContent' has now been removed. 
