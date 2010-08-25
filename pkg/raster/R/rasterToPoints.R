@@ -5,7 +5,7 @@
 
 
 
-rasterToPoints <- function(x, fun=NULL, spatial=FALSE, progress='') {
+rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 	
 	nl = nlayers(x)
 	if (nl > 1) {
@@ -48,7 +48,7 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, progress='') {
 		Y <- yFromRow(x, 1:nrow(x))
 
 		tr <- blockSize(x)
-		pb <- pbCreate(tr$n, type=progress)
+		pb <- pbCreate(tr$n, type=.progress(...))
 
 		for (i in 1:tr$n) {
 			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)

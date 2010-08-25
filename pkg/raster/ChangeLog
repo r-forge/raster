@@ -1,10 +1,14 @@
 25-Aug-2010, version 1.4-7
 
-area now takes na.rm=TRUE and weights=TRUE arguments, and returns a Brick if input is Stack/Brick and na.rm=T. 
-as.logical now works for a multi-layer object
-cellValues (and getValues) bug in ncdf brick fixed. (all based on suggstions/reports by Steven Mosher)
+bug fixes: 
+writing via gdal did not respond to the 'options' argument (reported by Tom Kurkowski and  Jorrel Aunario)
+cellValues (and getValues) bug in ncdf brick fixed. (reported by Steven Mosher)
 
-new function 'hasValues' while 'dataContent' has now been removed. 
+new functions:
+area now takes na.rm=TRUE and weights=TRUE arguments, and returns a Brick if input is Stack/Brick and na.rm=T (suggested by Steven Mosher). 
+as.logical now works for a multi-layer object (suggested by Steven Mosher)
+'hasValues' while 'dataContent' has now been removed. 
+
 -------------------------------------------------------------
 23-Aug-2010, version 1.4-5
 
