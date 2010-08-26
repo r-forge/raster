@@ -11,7 +11,7 @@
 \title{Add or drop a layer}
 
 \description{
-  A RasterStack is a collection of RasterLayers with the same spatial extent and resolution. A RasterBrick is a multi-layer object.
+  Add or drop a layer to a RasterStack or RasterBrick. A RasterStack is a collection of RasterLayers with the same spatial extent and resolution. A RasterBrick is a multi-layer object.
   With these functions, you can add RasterLayers to, or remove RasterLayers from, a RasterStack or RasterBrick object. 
 }
 
@@ -35,7 +35,7 @@ dropLayer(x, i)
 }
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{raster}}}
+\seealso{ \code{\link[raster]{subset}}}
 
 \examples{
   rasterfile <- system.file("external/test.grd", package="raster")

@@ -55,7 +55,11 @@ function(x, i) {
 			}
 		}
 		x@layernames <- x@layernames[-i]
-		x@data@values <- x@data@values[,-i]
+		x@data@values <- x@data@values[,-i,drop=FALSE]
+		x@data@nlayers <- x@data@nlayers - length(i)
+		x@data@min <- x@data@min[-i]
+		x@data@max <- x@data@max[-i]
+		
 	}
 	return(x)
 }
