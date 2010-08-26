@@ -30,11 +30,11 @@ ext <- function(filename, value=NULL) {
 
 
 'ext<-' <- function(filename, value) {
-	lfn <- nchar(filename)
 	value <- trim(value)
 	if (value != "" & substr(value, 1, 1) != ".") {
 		value <- paste(".", value, sep="") 
 	}
+	lfn <- nchar(filename)
 	fname <- list()
 	for (f in 1:length(filename)) {
 		extstart <- -1
@@ -44,7 +44,7 @@ ext <- function(filename, value=NULL) {
 				break 
 			}
 		}
-		if (extstart > 0) {
+		if (extstart > 0 & (lfn[f] - extstart) < 5) {
 			fname[f] <- paste(substr(filename[f], 1, extstart-1), value, sep="")
 		} else { 
 			fname[f] <- paste(filename[f], value, sep="")  

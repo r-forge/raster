@@ -220,8 +220,10 @@
 		
 	if (type == 'RasterLayer') {
 		r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
+		r <- .enforceGoodLayerNames(r, long_name)
 	} else {
 		r <- brick(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
+		r@title <- long_name
 	}
 	
 	if (xrange[1] < -181 | xrange[2] > 181 | yrange[1] < -91 | yrange[2] > 91) {
@@ -229,7 +231,6 @@
 	}
 	r@file@name <- filename
 	r@file@toptobottom <- toptobottom
-	r <- .enforceGoodLayerNames(r, long_name)
 	r@unit <- unit
 	
 	
@@ -280,6 +281,7 @@
 			stop('cannot make a RasterStack or RasterBrick from a data that has only two dimensions (no time step), use raster() instead, and then make a stack or brick from that')	
 		} 
 		r@data@nlayers <- r@file@nbands
+		try( layerNames(r) <- r@zvalue, silent=TRUE )
 	}
 	return(r)
 }

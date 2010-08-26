@@ -59,6 +59,8 @@ function(x, i) {
 		x@data@nlayers <- x@data@nlayers - length(i)
 		x@data@min <- x@data@min[-i]
 		x@data@max <- x@data@max[-i]
+		x@data@fromdisk <- FALSE
+		x@file@name = ''
 		
 	}
 	return(x)
