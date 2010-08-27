@@ -4,12 +4,15 @@
 # Licence GPL v3
 
 
-stackApply <- function(x, indices, fun, filename='', ...) {
+stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 
 	nl <- nlayers(x)
 	if (nl == 1) { 
-		return( calc(x, fun=fun, filename=filename, ...) )
+		makemat <- TRUE
+	} else {
+		makemat <- FALSE
 	}
+	
 	
 	ind <- vector(length=nl)
 	# perhaps we need recycling:
@@ -38,7 +41,7 @@ stackApply <- function(x, indices, fun, filename='', ...) {
 
 	for (i in 1:tr$n) {
 		a <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
-		
+		if (makemat) { a < - matrix(a, ncol=1) }
 		if (filename != "") {
 			v <- matrix(nrow=tr$nrows[i] * out@ncols, ncol=nlout)
 		} else {
@@ -48,7 +51,7 @@ stackApply <- function(x, indices, fun, filename='', ...) {
 
 		for (j in uin) {
 			k <- which(ind == j)
-			sv <- apply(a[,k,drop=FALSE], 1, fun)
+			sv <- apply(a[,k,drop=FALSE], 1, fun, na.rm=na.rm)
 			if (filename == "") {
 				v[start:end, j] <- sv
 			} else {
