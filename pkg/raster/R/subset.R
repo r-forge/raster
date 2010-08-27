@@ -49,15 +49,30 @@ function(x, subset, drop=TRUE, ...) {
 				drops <- which(! 1:nlayers(x) %in% subset)
 				x <- dropLayer(x, drops)
 			} else {
-				x@data@values <- x@data@values[, index, drop=FALSE]
-				x@layernames <- x@layernames[index]
+				x@data@values <- x@data@values[, subset, drop=FALSE]
+				x@layernames <- x@layernames[subset]
 				x@data@nlayers <- ncol(x@data@layers)
-				x@data@min <- x@data@min[index]
-				x@data@max <- x@data@max[index]
+				x@data@min <- x@data@min[subset]
+				x@data@max <- x@data@max[subset]
 			}
 		} else {
-			x <- stack(x)
-			x <- subset(x, subset=subset, drop=drop, ...)
+			if (length(subset)==1 & drop) {
+				if (x@file@driver == 'netcdf') {
+					x <- raster(filname(x), band=subset, varname=sst@data@zvar)
+				} else {
+					x <- raster(filename(x), band=subset)
+				}			
+			} else {
+				ln <- layerNames(x)
+				na <- NAvalue(x)
+				if (x@file@driver == 'netcdf') {
+					x <- stack(filename(x), bands=subset, varname=sst@data@zvar)
+				} else {
+					x <- stack(filename(x), bands=subset)
+				}
+				layerNames(x) <- ln[subset]
+				NAvalue(x) <- na
+			}
 		}
 	}
 	return(x)	
