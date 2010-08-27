@@ -37,8 +37,8 @@ r <- raster(system.file("external/test.grd", package="raster"))
 x = r
 x[] = 1:ncell(x)
 x <- mask(x, r)
-plot3D(r, drape=x)
-decorate3d(xlab = "x", ylab = "y", zlab = "z", axes=T)
+plot3D(r, drape=x, rgl.material("shininess = 0.0"))
+decorate3d(xlab = "x", ylab = "y", zlab = "z", axes=TRUE)
 }
 
 }
