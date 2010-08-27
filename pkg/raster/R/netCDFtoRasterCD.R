@@ -283,6 +283,10 @@
 		r@data@nlayers <- r@file@nbands
 		try( layerNames(r) <- r@zvalue, silent=TRUE )
 	}
+	
+	natest <- att.get.ncdf(nc, zvar, "_FillValue")
+	if (natest$hasatt) { NAvalue(r) <- natest$value }
+	
 	return(r)
 }
 
