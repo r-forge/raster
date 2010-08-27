@@ -4,7 +4,7 @@
 # Version 0.9
 # Licence GPL v3
 
-ext <- function(filename, value=NULL) {
+ext <- function(filename, value=NULL, maxchar=10) {
 	if (!is.null(value)) {
 		ext(filename) <- value
 		return(filename)
@@ -25,7 +25,9 @@ ext <- function(filename, value=NULL) {
 			ext[f] <- "" 
 		}   
 	}
-	return(unlist(ext) )
+	ext <- unlist(ext)
+	ext[nchar(ext) > maxchar] <- ''
+	return(ext)
 }   
 
 
