@@ -205,8 +205,6 @@
 	if (a$hasatt) { long_name <- a$value }
 	a <- att.get.ncdf(nc, zvar, "units")
 	if (a$hasatt) { unit <- a$value }
-	a <- att.get.ncdf(nc, zvar, "missing_value")
-	if (a$hasatt) { missing_value <- a$value }
 	a <- att.get.ncdf(nc, zvar, "grid_mapping")
 	if ( a$hasatt ) { projection  <- a$value }
 
@@ -242,8 +240,10 @@
 	
 	attr(r, "prj") <- prj 
 	r@file@driver <- "netcdf"	
-	if (! is.na(missing_value)) {
-		r@file@nodatavalue <- missing_value
+	
+	natest <- att.get.ncdf(nc, zvar, "_FillValue")
+	if (natest$hasatt) { 
+		r@file@nodatavalue <- natest$value
 	}
 	r@data@fromdisk <- TRUE
 	
@@ -283,9 +283,6 @@
 		r@data@nlayers <- r@file@nbands
 		try( layerNames(r) <- r@zvalue, silent=TRUE )
 	}
-	
-	natest <- att.get.ncdf(nc, zvar, "_FillValue")
-	if (natest$hasatt) { NAvalue(r) <- natest$value }
 	
 	return(r)
 }
