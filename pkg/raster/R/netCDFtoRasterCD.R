@@ -191,16 +191,9 @@
 	yrange[1] <- yrange[1] - 0.5 * resy
 	yrange[2] <- yrange[2] + 0.5 * resy
  
-#	add_offset <- 0
-#	scale_factor <- 1
 	long_name <- zvar
-	missing_value <- NA
 	projection <- NA
 	unit <- ''
-#	a <- att.get.ncdf(nc, zvar, "add_offset")
-#	if (a$hasatt) { add_offset <- a$value }
-#	a <- att.get.ncdf(nc, zvar, "scale_factor")
-#	if (a$hasatt) { scale_factor <- a$value }
 	a <- att.get.ncdf(nc, zvar, "long_name")
 	if (a$hasatt) { long_name <- a$value }
 	a <- att.get.ncdf(nc, zvar, "units")
