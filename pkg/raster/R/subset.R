@@ -58,7 +58,7 @@ function(x, subset, drop=TRUE, ...) {
 		} else {
 			if (length(subset)==1 & drop) {
 				if (x@file@driver == 'netcdf') {
-					x <- raster(filname(x), band=subset, varname=sst@data@zvar)
+					x <- raster(filname(x), band=subset, varname=x@data@zvar)
 				} else {
 					x <- raster(filename(x), band=subset)
 				}			
@@ -66,7 +66,7 @@ function(x, subset, drop=TRUE, ...) {
 				ln <- layerNames(x)
 				na <- NAvalue(x)
 				if (x@file@driver == 'netcdf') {
-					x <- stack(filename(x), bands=subset, varname=sst@data@zvar)
+					x <- stack(filename(x), bands=subset, varname=x@data@zvar)
 				} else {
 					x <- stack(filename(x), bands=subset)
 				}

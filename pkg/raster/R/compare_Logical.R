@@ -182,6 +182,9 @@ setMethod("Compare", signature(e1='Raster', e2='Raster'),
 		compare(c(e1, e2), extent=TRUE, rowcol=TRUE, prj=TRUE, tolerance=0.0001, stopiffalse=TRUE) 
 		
 		if (nlayers(e1) > 1) {
+			if (nlayers(e2) > 1 & nlayers(e2) != nlayers(e1)) {
+				stop('number of layers of objects do not match')
+			}
 			r <- brick(e1, values=FALSE)
 		} else if (nlayers(e2) > 1) {
 			r <- brick(e2, values=FALSE)
@@ -215,6 +218,9 @@ setMethod("Logic", signature(e1='Raster', e2='Raster'),
 	
 		if (nlayers(e1) > 1) {
 			r <- brick(e1, values=FALSE)
+			if (nlayers(e2) > 1 & nlayers(e2) != nlayers(e1)) {
+				stop('number of layers of objects do not match')
+			}
 		} else if (nlayers(e2) > 1) {
 			r <- brick(e2, values=FALSE)
 		} else {
