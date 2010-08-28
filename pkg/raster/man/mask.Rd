@@ -6,11 +6,12 @@
 \alias{mask,RasterLayer,RasterLayer-method}
 \alias{mask,RasterStackBrick,RasterLayer-method}
 \alias{mask,RasterLayer,RasterStackBrick-method}
+\alias{mask,RasterStackBrick,RasterStackBrick-method}
 
 \title{Mask values in a Raster object}
 
 \description{
-Create a new Raster* object where all cells that are \code{NA} in RasterLayer 'mask' are set to \code{NA}, and that has the same values as \code{x} in the other cells. 
+Create a new Raster* object where all cells that are \code{NA} in a 'mask' object are set to \code{NA}, and that has the same values as \code{x} in the other cells. 
 }
 
 \usage{
@@ -20,7 +21,7 @@ mask(x, mask, ...)
 
 \arguments{
   \item{x}{A Raster* object}
-  \item{mask}{A RasterLayer object}
+  \item{mask}{A Raster* object}
   \item{...}{Additional arguments. See below, under Methods}  
 }
 

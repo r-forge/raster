@@ -93,13 +93,14 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 }  
   
   
-\section{IV. Basic computation}{
+\section{IV. Cell based computation}{
 
   \tabular{ll}{
     \code{\link{calc}} \tab Computations on a single Raster* object \cr
+    \code{\link{stackApply}} \tab Computations on groups of layers in Raster* object \cr
     \code{\link{overlay}} \tab Computations on multiple RasterLayer objects \cr
     \code{\link{cover}} \tab First layer covers second layer except where the first layer is NA \cr
-    \code{\link{mask}} \tab Use values from first Raster except where cells of the mask RaserLayer are NA (these become NA)\cr
+    \code{\link{mask}} \tab Use values from first Raster except where cells of the mask Raster are NA (these become NA)\cr
     \code{\link{reclass}} \tab Reclassify using a 'from-to-becomes' matrix \cr
     \code{\link{subs}} \tab Substitute values using a 'is-becomes' matrix \cr	
     \code{\link{init}} \tab Initialize cells with new values \cr	
@@ -133,7 +134,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 }
 
 
-\section{VII. Coverting spatial data types}{
+\section{VII. Data type conversion}{
 
   \tabular{ll}{
     \code{\link{pointsToRaster}} \tab Summarizing points by raster cells \cr
@@ -161,6 +162,7 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{zonal}} \tab Summarize a RasterLayer by zones in another RasterLayer \cr
   }
 }
+
 
 \section{IX. Accessing values of Raster* object cells}{
 
@@ -263,18 +265,8 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
 }
 
 
-\section{XIII. Reading data}{
-  \tabular{ll}{
-    \code{\link{readAll}} \tab Read all values into memory \cr
-    \code{\link{values}} \tab Returns the values read with read* \cr
-    \code{\link{inMemory}} \tab Are the cell values in memory? \cr
-    \code{\link{fromDisk}} \tab Are the cell values read from a file? \cr	
-  }
-  Rather then reading data & using values, it is advisable to use \code{\link{getValues}*} functions (see above)
-}
-
   
-\section{XIV. Writing data}{
+\section{XIII. Writing files}{
 
 Basic writing
   \tabular{ll}{
@@ -300,7 +292,7 @@ Managing files in the 'native raster format'
 }
 
 
-\section{XV. Extent objects}{
+\section{XIV. Extent objects}{
 
   \tabular{ll}{
     \code{\link{extent}} \tab Create an extent object \cr
@@ -316,7 +308,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 }
 
 
-\section{XVI. Options}{
+\section{XV. Options}{
 
 \tabular{ll}{
   \code{\link{setOptions}} \tab Set session options \cr
@@ -327,21 +319,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 }
 
 
-\section{XVII. For programmers}{
-
-\tabular{ll}{
-  \code{\link{canProcessInMemory}} \tab Test whether a file can be created in memory \cr
-  \code{\link{pbCreate}} \tab Initialize a progress bar  \cr
-  \code{\link{pbStep}} \tab Take a progress bar step \cr
-  \code{\link{pbClose}} \tab Close a progress bar \cr
-  \code{\link{openConnection}} \tab Open a file connection \cr
-  \code{\link{closeConnection}} \tab Close a file connection \cr
-  \code{\link{rasterTmpFile}}  \tab Get a name for a temporary file \cr
-}
-}
-
-
-\section{XVIII. Miscellaneous}{
+\section{XVI. Miscellaneous}{
 
 \tabular{ll}{
     \code{\link{getData}} \tab Download and geographic data\cr
@@ -359,6 +337,21 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
 }
 }
 
+\section{XVII. For programmers}{
+
+\tabular{ll}{
+  \code{\link{canProcessInMemory}} \tab Test whether a file can be created in memory \cr
+  \code{\link{pbCreate}} \tab Initialize a progress bar  \cr
+  \code{\link{pbStep}} \tab Take a progress bar step \cr
+  \code{\link{pbClose}} \tab Close a progress bar \cr
+  \code{\link{openConnection}} \tab Open a file connection \cr
+  \code{\link{closeConnection}} \tab Close a file connection \cr
+  \code{\link{rasterTmpFile}}  \tab Get a name for a temporary file \cr
+  \code{\link{inMemory}} \tab Are the cell values in memory? \cr
+  \code{\link{fromDisk}} \tab Are the cell values read from a file? \cr	
+
+}
+}
 
 \section{Acknowledgements}{
 We thank the following persons for suggestions to improve the package: 
