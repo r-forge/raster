@@ -18,12 +18,12 @@
 \usage{
 addLayer(x, ...) 
 addFiles(x, rasterfiles, bands= rep(1, length(rasterfiles))) 
-dropLayer(x, i) 
+dropLayer(x, i, ...) 
 }
 
 \arguments{
   \item{x}{ a RasterStack or RasterBrick object }
-  \item{...}{Raster* objects or filenames (character) }
+  \item{...}{addLayer: Raster* objects or filenames (character); dropLayer: a filename and other file writing options if \code{x} is a RasterBrick}
   \item{rasterfiles}{ Filename(s) of (a) raster dataset(s) }
   \item{bands}{ a vector or list of bands of raster data files (default values = 1)}
   \item{i}{ a vector of the indices of the layer(s) to remove from a RasterStack }  
