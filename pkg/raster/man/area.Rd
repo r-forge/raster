@@ -35,10 +35,7 @@ The following additional arguments can be passed, to replace default values for 
   \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. Choose from "text", "window", or "" (the default, no progress bar)  \cr
  }
-}
 
-
-\details{
 If \code{x} is a RasterStack/Brick, a RasterBrick will be returned if \code{na.rm=TRUE}. However, if \code{na.rm=FALSE}, a RasterLayer is returned, because the values would be the same for all layers.
 }
 
