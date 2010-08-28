@@ -76,10 +76,10 @@ function(x, i, filename='', ...) {
 			tr <- blockSize(out)
 			pb <- pbCreate(tr$n, type=.progress(...))			
 	
-			for (i in 1:tr$n) {
-				vv <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])[, -i] 
-				out <- writeValues(out, vv, tr$row[i])
-				pbStep(pb, i)
+			for (j in 1:tr$n) {
+				vv <- getValues(x, row=tr$row[j], nrows=tr$nrows[j])[, -i] 
+				out <- writeValues(out, vv, tr$row[j])
+				pbStep(pb, j)
 			}
 			pbClose(pb)
 			out <- writeStop(out)
