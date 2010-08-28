@@ -36,7 +36,7 @@
 		}
 	}
 	d <- as.vector(d) 
-	d[d <= x@file@nodatavalue] <- NA
+	d[d == x@file@nodatavalue] <- NA
 	return(d)	
 }
 	
@@ -74,7 +74,7 @@
 				}
 			} else {
 				dim(d) = c(dims[1] * dims[2], dims[3])
-				d[d <= x@file@nodatavalue] <- NA
+				d[d == x@file@nodatavalue] <- NA
 				return(d)
 			}
 		} else if (length(dims) == 2) {
@@ -107,7 +107,7 @@
 		values = matrix(values, ncol=1)
 	}
 	
-	values[values <= navalue] <- NA
+	values[values == navalue] <- NA
 	return(values)
 }
 

@@ -52,7 +52,7 @@
 	#if (!is.na(x@file@nodatavalue)) { colrow[colrow==x@file@nodatavalue] <- NA	}
 	#colrow <- x@data@add_offset + colrow * x@data@scale_factor
 
-	colrow[colrow <= x@file@nodatavalue] <- NA
+	colrow[colrow == x@file@nodatavalue] <- NA
 	return(colrow) 
 }
 
@@ -91,7 +91,7 @@
 	#if (!is.na(x@file@nodatavalue)) { res[res==x@file@nodatavalue] <- NA	}
 	#res <- x@data@add_offset + res * x@data@scale_factor
 
-	res[res <= x@file@nodatavalue] <- NA
+	res[res == x@file@nodatavalue] <- NA
 	return(res) 
 }
 
