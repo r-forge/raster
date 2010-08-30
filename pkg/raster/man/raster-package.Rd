@@ -282,14 +282,7 @@ Advanced writing of entire files or parts thereof
     \code{\link{writeValues}} \tab Write some values  \cr
     \code{\link{writeStop}} \tab Close the file after writing \cr
 	}
-	
-Managing files in the 'native raster format'
-  \tabular{ll}{
-    \code{\link{moveRasterFile}} \tab Open a file for writing \cr
-    \code{\link{copyRasterFile}} \tab Write some values  \cr
-    \code{\link{removeRasterFile}} \tab Close the file after writing \cr
-	}
-}
+}	
 
 
 \section{XIV. Extent objects}{
