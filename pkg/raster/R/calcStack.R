@@ -38,8 +38,22 @@ function(x, fun, filename='', na.rm=TRUE, ...) {
 	pb <- pbCreate(tr$n, type=.progress(...))			
 
 
-	test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
-	if (isTRUE(test)) { fun <- 'mean' }
+	if (class(fun) != 'character') {
+		test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
+		if (isTRUE(test)) { fun <- 'mean' 
+		} else {
+			test <- try(deparse(fun)[[1]] == '.Primitive(\"sum\")', silent=TRUE)
+			if (isTRUE(test)) { fun <- 'sum' }
+		}
+	}
+	
+	rowcalc <- FALSE
+	if (class(fun) == 'character') {
+		if (! fun %in% c('sum', 'mean') ) {
+			stop("If 'fun' is a character variable, it should be either 'sum' or 'mean'")
+		}
+		rowcalc <- TRUE
+	}
 	
 	if (class(fun) == 'character') {
 		if (! fun %in% c('sum', 'mean') ) {

@@ -29,9 +29,16 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 
 	filename <- trim(filename)
 
+	if (class(fun) != 'character') {
+		test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
+		if (isTRUE(test)) { fun <- 'mean' 
+		} else {
+			test <- try(deparse(fun)[[1]] == '.Primitive(\"sum\")', silent=TRUE)
+			if (isTRUE(test)) { fun <- 'sum' }
+		}
+	}
+
 	rowcalc <- FALSE
-	test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
-	if (isTRUE(test)) { fun <- 'mean' }
 	if (class(fun) == 'character') {
 		if (! fun %in% c('sum', 'mean') ) {
 			stop("If 'fun' is a character variable, it should be either 'sum' or 'mean'")

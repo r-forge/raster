@@ -47,6 +47,15 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 
 	if (! hasValues(x) ) {	return(outRaster) }	
 	
+	if (class(fun) != 'character') {
+		test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
+		if (isTRUE(test)) { fun <- 'mean' 
+		} else {
+			test <- try(deparse(fun)[[1]] == '.Primitive(\"sum\")', silent=TRUE)
+			if (isTRUE(test)) { fun <- 'sum' }
+		}
+	}
+	
 	rowcalc <- FALSE
 	if (class(fun) == 'character') {
 		if (! fun %in% c('sum', 'mean') ) {
@@ -54,6 +63,8 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 		}
 		rowcalc <- TRUE
 	}
+	
+	
 	
 	if (!expand) {
 		lastcol <- csteps * yfact
