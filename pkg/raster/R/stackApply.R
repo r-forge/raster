@@ -70,7 +70,7 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 	if (filename == '') { filename <- rasterTmpFile() } 
 	
 	out <- writeStart(out, filename=filename, ...)
-	tr <- blockSize(out, nlout)
+	tr <- blockSize(out, n=nl+nlout)
 	pb <- pbCreate(tr$n, type=.progress(...))
 
 	v <- matrix(nrow=tr$nrows[1] * out@ncols, ncol=nlout)
@@ -85,7 +85,7 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 					k <- which(ind == j)
 					v[,j] <- rowMeans(a[,k,drop=FALSE], na.rm=na.rm)
 				}
-			} else {
+			} else { # 'sum'
 				for (j in uin) {
 					k <- which(ind == j)
 					v[,j] <- rowSums(a[,k,drop=FALSE], na.rm=na.rm)
