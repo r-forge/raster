@@ -45,16 +45,16 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 	extent(outRaster) <- bndbox
 	rowcol(outRaster) <- c(rsteps, csteps) 
 
+	if (! hasValues(x) ) {	return(outRaster) }	
+	
+	rowcalc <- FALSE
 	if (class(fun) == 'character') {
 		if (! fun %in% c('sum', 'mean') ) {
 			stop("If 'fun' is a character variable, it should be either 'sum' or 'mean'")
 		}
+		rowcalc <- TRUE
 	}
 	
-	if (! fromDisk(x) & ! inMemory(x)) {
-		return(outRaster)
-	}	
-
 	if (!expand) {
 		lastcol <- csteps * yfact
 		lastrow <- rsteps * xfact
@@ -100,7 +100,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 				vv[1:length(vals)] = vals
 			}
 			
-			if (is.character(fun)) {
+			if (rowcalc) {
 				if (fun == 'mean') {
 					vals <- colMeans(vv, na.rm=na.rm )
 				} else {

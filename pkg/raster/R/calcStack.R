@@ -6,7 +6,7 @@
 
 setMethod('calc', signature(x='RasterStackBrick', fun='function'), 
 
-function(x, fun, filename='', ...) {
+function(x, fun, filename='', na.rm=TRUE, ...) {
 
 	nl <- nlayers(x)
 	test <- length(fun(1:nl))
@@ -17,7 +17,11 @@ function(x, fun, filename='', ...) {
 			stop("'fun' does not return the correct number of values. It should be 1 or nlayers(x)") 
 		}
 	}
-
+	test <- try(fun(1:nl, na.rm=TRUE), silent=TRUE)
+	if (class(test) == 'try-error') {
+		stop("'fun' does take an 'na.rm' arugment. Add na.rm or dots (...) to the function arguments") 
+	}
+	
 	filename <- trim(filename)
 	outraster <- raster(x)
 
@@ -33,15 +37,39 @@ function(x, fun, filename='', ...) {
 	tr <- blockSize(outraster)
 	pb <- pbCreate(tr$n, type=.progress(...))			
 
-	for (i in 1:tr$n) {
-		
-		sv <- apply(getValues(x, row=tr$row[i], nrows=tr$nrows[i]) ,  1,  fun)
-		if (filename == "") {
-			v[, tr$row[i]:(tr$row[i]+tr$nrows[i]-1)] <- matrix(sv, nrow=ncol(outraster))
-		} else {
-			outraster <- writeValues(outraster, sv, tr$row[i])
+
+	test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
+	if (isTRUE(test)) { fun <- 'mean' }
+	
+	if (class(fun) == 'character') {
+		if (! fun %in% c('sum', 'mean') ) {
+			stop("If 'fun' is a character variable, it should be either 'sum' or 'mean'")
 		}
-		pbStep(pb) 
+		#suggested by Matteo Mattiuzzi
+		for (i in 1:tr$n) {
+			if(fun == "mean" ) {
+				sv <- rowMeans(getValues(x, row=tr$row[i], nrows=tr$nrows[i]), na.rm=na.rm)
+			} else {
+				sv <- rowSums(getValues(x, row=tr$row[i], nrows=tr$nrows[i]), na.rm=na.rm)
+			}
+			if (filename == "") {
+				v[, tr$row[i]:(tr$row[i]+tr$nrows[i]-1)] <- matrix(sv, nrow=ncol(outraster))
+			} else {
+				outraster <- writeValues(outraster, sv, tr$row[i])
+			}
+			pbStep(pb) 
+		}
+		
+	} else {
+		for (i in 1:tr$n) {
+			sv <- apply(getValues(x, row=tr$row[i], nrows=tr$nrows[i]),  1,  fun, na.rm=na.rm)
+			if (filename == "") {
+				v[, tr$row[i]:(tr$row[i]+tr$nrows[i]-1)] <- matrix(sv, nrow=ncol(outraster))
+			} else {
+				outraster <- writeValues(outraster, sv, tr$row[i])
+			}
+			pbStep(pb) 
+		}
 	}
 
 	if (filename == "") { 	
