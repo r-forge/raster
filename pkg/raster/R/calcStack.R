@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-setMethod('calc', signature(x='RasterStackBrick', fun='function'), 
+setMethod('calc', signature(x='RasterStackBrick', fun='ANY'), 
 
 function(x, fun, filename='', na.rm=TRUE, ...) {
 

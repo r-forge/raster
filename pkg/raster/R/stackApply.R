@@ -29,6 +29,15 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 
 	filename <- trim(filename)
 
+	rowcalc <- FALSE
+	test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
+	if (isTRUE(test)) { fun <- 'mean' }
+	if (class(fun) == 'character') {
+		if (! fun %in% c('sum', 'mean') ) {
+			stop("If 'fun' is a character variable, it should be either 'sum' or 'mean'")
+		}
+		rowcalc <- TRUE
+	}
 	
 	
 	if (canProcessInMemory(out, nl+nlout)) {
@@ -36,10 +45,20 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 		a <- getValues(x)
 		if (makemat) { a < - matrix(a, ncol=1) }
 
-		for (j in uin) {
-			k <- which(ind == j)
-			sv <- apply(a[,k,drop=FALSE], 1, fun, na.rm=na.rm)
-			v[, j] <- sv
+		if (rowcalc) {
+			for (j in uin) {
+				k <- which(ind == j)
+				if (fun == 'mean') {
+					v[, j] <- rowMeans(a[,k,drop=FALSE], na.rm=na.rm)
+				} else {
+					v[, j] <- rowSums(a[,k,drop=FALSE], na.rm=na.rm)				
+				}
+			}
+		} else {
+			for (j in uin) {
+				k <- which(ind == j)
+				v[, j] <- apply(a[,k,drop=FALSE], 1, fun, na.rm=na.rm)
+			}
 		}
 		out <- setValues(out, v)
 		if (filename != "") {
@@ -48,51 +67,41 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 		return(out)
 	}
 	
+	if (filename == '') { filename <- rasterTmpFile() } 
 	
-	
-	if (!canProcessInMemory(out, nlout) & filename == '') {
-		filename <- rasterTmpFile()
-	} 
-	
-	if (filename == '') {
-		v <- matrix(NA, nrow=ncell(out), ncol=nlout)
-	} else {
-		out <- writeStart(out, filename=filename, ...)
-	}
+	out <- writeStart(out, filename=filename, ...)
 	tr <- blockSize(out, nlout)
 	pb <- pbCreate(tr$n, type=.progress(...))
 
+	v <- matrix(nrow=tr$nrows[1] * out@ncols, ncol=nlout)
 	for (i in 1:tr$n) {
 		a <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 		if (makemat) { a < - matrix(a, ncol=1) }
-		if (filename != "") {
-			v <- matrix(nrow=tr$nrows[i] * out@ncols, ncol=nlout)
-		} else {
-			start <- 1 + (tr$row[i]-1) * out@ncols
-			end <- start + tr$nrows[i] * out@ncols - 1
-		}
+		if (i == tr$n) { v <- matrix(nrow=tr$nrows[i] * out@ncols, ncol=nlout) }
 
-		for (j in uin) {
-			k <- which(ind == j)
-			sv <- apply(a[,k,drop=FALSE], 1, fun, na.rm=na.rm)
-			if (filename == "") {
-				v[start:end, j] <- sv
+		if (rowcalc) {
+			if (fun == 'mean') {			
+				for (j in uin) {
+					k <- which(ind == j)
+					v[,j] <- rowMeans(a[,k,drop=FALSE], na.rm=na.rm)
+				}
 			} else {
-				v[,j] <- sv
+				for (j in uin) {
+					k <- which(ind == j)
+					v[,j] <- rowSums(a[,k,drop=FALSE], na.rm=na.rm)
+				}
+			}
+		} else {
+			for (j in uin) {
+				k <- which(ind == j)
+				v[,j] <- apply(a[,k,drop=FALSE], 1, fun, na.rm=na.rm)
 			}
 		}
-		if (filename != "") {
-			out <- writeValues(out, v, tr$row[i])
-		}
+		out <- writeValues(out, v, tr$row[i])
 		pbStep(pb) 
 	}
 
-	if (filename == "") { 	
-		out <- setValues(out, v)		
-	} else {
-		out <- writeStop(out)
-	}
-
+	out <- writeStop(out)
 	pbClose(pb)
 	return(out)
 }

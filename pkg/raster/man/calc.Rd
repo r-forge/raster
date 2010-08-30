@@ -4,7 +4,7 @@
 
 \alias{calc}
 \alias{calc,RasterLayer,function-method}
-\alias{calc,RasterStackBrick,function-method}
+\alias{calc,RasterStackBrick,ANY-method}
 
 \title{Calculate}
 
@@ -27,7 +27,7 @@ calc(x, fun, ...)
 
 \arguments{
   \item{x}{a Raster* object}
-  \item{fun}{a function}
+  \item{fun}{a function, or if \code{x} is a RasterStack or RasterBrick a character value ('sum'  or 'mean'}
   \item{...}{Additional arguments. See Details}  
 }
 
