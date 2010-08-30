@@ -17,7 +17,7 @@ stackApply(x, indices, fun, filename='', na.rm=TRUE, ...)
 \arguments{
   \item{x}{A Raster* object}
   \item{indices}{A vector of length \code{nlayers(x)} with values between 1 and \code{nlayers(x)} }
-  \item{fun}{A function that returns a single value, e.g. \code{mean} or \code{min}, and that takes an 'na.rm' argument. For two functions you can also supply a character value 'sum' or 'mean', making the function much faster}
+  \item{fun}{A function that returns a single value, e.g. \code{mean} or \code{min}, and that takes an 'na.rm' argument}
   \item{na.rm}{Logical. If \code{TRUE}, NA cells are removed from calculations}
   \item{filename}{Character. Optional output filename}
   \item{...}{Additional arguments. See below, under Methods}  
