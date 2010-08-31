@@ -1,11 +1,12 @@
 30-Aug-2010, version 1.5-0
-calc now use rowSums and rowMeans, and automatically detects whether these are appropriate (suggested by Matteo Mattiuzzi). 
-Also implemented in stackApply, and improved (automatic dection) in aggregate.
+
+calc now uses rowSums and rowMeans where appropriate, and automatically detects whether these functions are appropriate (suggested by Matteo Mattiuzzi). This is also implemented in stackApply, and improved (automatic detection) in aggregate.
 removed functions: 'filename<-', values, copryRasterFile, renameRasterFile, removeRasterFile.
 bug fix: RasterBricks sometimes had a link to the filename of the object it was created from in a computation. 
 
 -------------------------------------------------------------
 27-Aug-2010, version 1.4-8
+
 Minor bug fixes in ncdf/brick handling
 
 Bug fixes in dropLayer for a RasterBrick (reported by Steven Mosher)
