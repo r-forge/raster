@@ -155,7 +155,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 		
 		if (filename == "") { 
 			if (weights) {
-				total <- apply(v, 2, sum, na.rm=TRUE)
+				total <- rowSums(v, na.rm=TRUE)
 				v <- t( t(v) / total )
 			}
 			out <- setValues(out, v)

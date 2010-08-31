@@ -20,22 +20,29 @@ cellStats <- function(x, stat='mean', ...) {
 		}
 	}
 	
-	if (nlayers(x) == 1) {
-		makeMat = TRUE
-	} else {
-		makeMat = FALSE
-	}
+	if (nlayers(x) == 1) {	makeMat = TRUE 	} else { makeMat = FALSE }
 	
 	
 	if (class(stat) != 'character') {
 		if ( ! inMemory(x) ) {
 			if (! canProcessInMemory(x)) {
-				stop("RasterLayer is too large. You can use fun='sum', 'mean', 'min', 'max', 'sd', 'countNA', but not a function")
+				stop("Raster object is too large. You can use fun='sum', 'mean', 'min', 'max', 'sd', 'countNA', but not a function")
 			}
 		}
 		x <- getValues(x)
 		if (makeMat) x <- matrix(x, ncol=1)
-		return( apply(x, 2, stat, na.rm=TRUE) )
+		
+		stat <- .makeTextFun(stat)
+		if (class(stat) == 'character') { 
+			if(stat == "mean" ) {
+				return( colMeans(x, na.rm=TRUE) )
+			} else {
+				return( colSums(x, na.rm=TRUE) )
+			}
+		} else {
+			return( apply(x, 2, stat, na.rm=TRUE) )
+		}
+		
 		
 	} else {
 
@@ -51,15 +58,18 @@ cellStats <- function(x, stat='mean', ...) {
 		} else if (stat == 'countNA') {
 			nc <- x@ncols
 			st <- 0	
+			counts <- TRUE
 		} else if (stat == 'skew') {
 			z <- 0
 			st <- 0	
 			zsd <- getzsd(x, ...)
 			zmean <- getzmean(x, ...)
+			counts <- TRUE
 		} else if (stat == 'mean' | stat == 'sd') {
 			st <- 0	
 			sumsq <- 0
 			cnt <- 0
+			counts <- TRUE
 		} else { 
 			stop("invalid 'stat'. Should be 'sum', 'min', 'max', 'sd', 'mean', or 'countNA'") 
 		}
@@ -72,28 +82,36 @@ cellStats <- function(x, stat='mean', ...) {
 			d <- getValues(x, row=tr$row[i], nrows=tr$size)
 			if (makeMat) d <- matrix(d, ncol=1)
 
-			nas <- apply(d, 2, function(x)sum(is.na(x) ))
-			if (min(nas) == nrow(d)) { next }
-			cells <- nrow(d) - nas
+			if (counts) {
+				nas <- apply(d, 2, function(x)sum(is.na(x) ))
+				
+				if (stat != 'countNA') {
+					if (min(nas) == nrow(d)) { next }
+					cells <- nrow(d) - nas
+				}
+			}
 			
-			if (stat == 'sd') {
-				st <- apply(d, 2, sum, na.rm=TRUE) + st
+			if (stat=='mean') {
+				st <- colSums(d, na.rm=TRUE) + st
+				cnt <- cnt + cells
+			
+			} else if (stat=='sum') {
+				st <- colSums(d, na.rm=TRUE) + st
+
+			} else if (stat == 'sd') {
+				st <- colSums(d, na.rm=TRUE) + st
 				cnt <- cnt + cells
 				sumsq <- apply( d^2 , 2, sum) + sumsq
-			
-			} else if (stat=='mean') {
-				st <- apply(d, 2, sum, na.rm=TRUE) + st
-				cnt <- cnt + cells
-				
+
 			} else if (stat=='countNA') {
 				st <- st + nas
 				
 			} else if (stat=='skew') {
 				d <- t( t(d) - zmean )^3
-				st <- apply(d , 2, sum, na.rm=TRUE ) + st
+				st <- colSums(d, na.rm=TRUE) + st
 				z <- z + cells
 			} else {
-				#simple additive functions such as sum, min, max
+				# min, max
 				st <- apply(rbind(d, st), 2, fun, na.rm=TRUE)
 			}
 			
