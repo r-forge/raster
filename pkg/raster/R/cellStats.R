@@ -22,29 +22,42 @@ cellStats <- function(x, stat='mean', ...) {
 	
 	if (nlayers(x) == 1) {	makeMat = TRUE 	} else { makeMat = FALSE }
 	
+
+	stat <- .makeTextFun(stat)
+	tryinmem <- TRUE
+	if (class(stat) == 'character') {
+		if (! stat %in% c('mean', 'sum', 'min', 'max', 'sd', 'countNA')) {
+			tryinmem <- FALSE
+		}
+	}
+		
 	
-	if (class(stat) != 'character') {
-		if ( ! inMemory(x) ) {
-			if (! canProcessInMemory(x)) {
-				stop("Raster object is too large. You can use fun='sum', 'mean', 'min', 'max', 'sd', 'countNA', but not a function")
+	if (tryinmem) {
+		if (canProcessInMemory(x)) {
+			if (class(stat) == 'character') {
+				if (stat == 'min')  { stat <- min 
+				} else if (stat == 'max') { stat <- max 
+				} else if (stat == 'sd') { stat <- sd 
+				} else if (stat == 'countNA') { stat <- function(x, na.rm){ sum(is.na(x)) } }
 			}
-		}
-		x <- getValues(x)
-		if (makeMat) x <- matrix(x, ncol=1)
-		
-		stat <- .makeTextFun(stat)
-		if (class(stat) == 'character') { 
-			if(stat == "mean" ) {
-				return( colMeans(x, na.rm=TRUE) )
+			x <- getValues(x)
+			if (makeMat) x <- matrix(x, ncol=1)
+
+			if (class(stat) == 'character') { 
+				if (stat == "mean" ) {
+					return( colMeans(x, na.rm=TRUE) )
+				} else if (stat == "sum" ) {
+					return( colSums(x, na.rm=TRUE) )
+				} else {
+					stop('? fun unknown')
+				}
 			} else {
-				return( colSums(x, na.rm=TRUE) )
+				return( apply(x, 2, stat, na.rm=TRUE) )
 			}
-		} else {
-			return( apply(x, 2, stat, na.rm=TRUE) )
 		}
-		
-		
 	} else {
+
+		stat <- .makeTextFun(stat)
 
 		st <- NULL
 		counts <- FALSE

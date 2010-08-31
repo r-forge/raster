@@ -7,11 +7,7 @@
 stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 
 	nl <- nlayers(x)
-	if (nl == 1) { 
-		makemat <- TRUE
-	} else {
-		makemat <- FALSE
-	}
+	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
 	
 	
 	ind <- vector(length=nl)
@@ -30,7 +26,10 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 	filename <- trim(filename)
 
 	fun <- .makeTextFun(fun)
-	if (class(fun) == 'character') { rowcalc <- TRUE } else { rowcalc <- FALSE }
+	if (class(fun) == 'character') { 
+		rowcalc <- TRUE 
+		fun <- .getRowFun(fun)
+	} else { rowcalc <- FALSE  	}
 	
 	
 	if (canProcessInMemory(out, nl+nlout)) {
@@ -41,16 +40,12 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 		if (rowcalc) {
 			for (j in uin) {
 				k <- which(ind == j)
-				if (fun == 'mean') {
-					v[, j] <- rowMeans(a[,k,drop=FALSE], na.rm=na.rm)
-				} else {
-					v[, j] <- rowSums(a[,k,drop=FALSE], na.rm=na.rm)				
-				}
+				v[, j] <- fun(a[ , k, drop=FALSE], na.rm=na.rm)
 			}
 		} else {
 			for (j in uin) {
 				k <- which(ind == j)
-				v[, j] <- apply(a[,k,drop=FALSE], 1, fun, na.rm=na.rm)
+				v[, j] <- apply(a[ , k, drop=FALSE], 1, fun, na.rm=na.rm)
 			}
 		}
 		out <- setValues(out, v)
@@ -73,16 +68,9 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 		if (i == tr$n) { v <- matrix(nrow=tr$nrows[i] * out@ncols, ncol=nlout) }
 
 		if (rowcalc) {
-			if (fun == 'mean') {			
-				for (j in uin) {
-					k <- which(ind == j)
-					v[,j] <- rowMeans(a[,k,drop=FALSE], na.rm=na.rm)
-				}
-			} else { # 'sum'
-				for (j in uin) {
-					k <- which(ind == j)
-					v[,j] <- rowSums(a[,k,drop=FALSE], na.rm=na.rm)
-				}
+			for (j in uin) {
+				k <- which(ind == j)
+				v[,j] <- fun(a[,k,drop=FALSE], na.rm=na.rm)
 			}
 		} else {
 			for (j in uin) {

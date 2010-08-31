@@ -4,29 +4,27 @@
 # Licence GPL v3
 
 
-.makeTextFun <- function(fun, names=c('mean', 'sum')) {
+.makeTextFun <- function(fun) {
 	if (class(fun) != 'character') {
-		if ('mean' %in% names) {
-			test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
-			if (isTRUE(test)) { fun <- 'mean' }
-		}
-		test <- try(deparse(fun)[[1]], silent=TRUE)
-		if ('sum' %in% names) {
-			if (test == '.Primitive(\"sum\")') { fun <- 'sum' }
-		}
-		if ('min' %in% names) {
-			if (test == '.Primitive(\"min\")') { fun <- 'min' }
-		}
-		if ('max' %in% names) {
-			if (test == '.Primitive(\"max\")') { fun <- 'max' }
-		}
-	}
-	if (class(fun) == 'character') {
-		if (! fun %in% names ) {
-			stop("If 'fun' is a character variable, it should be one of: ", names)
+		test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
+		if (isTRUE(test)) { fun <- 'mean' 
+		} else {
+			test <- try(deparse(fun)[[1]], silent=TRUE)
+			if (test == '.Primitive(\"sum\")') { fun <- 'sum' 
+			} else if (test == '.Primitive(\"min\")') { fun <- 'min' 
+			} else if (test == '.Primitive(\"max\")') { fun <- 'max' }
 		}
 	}
 	return(fun)
+}
+
+
+.getRowFun <- function(fun) {
+	if (fun == 'mean') { return(rowMeans)
+	} else if (fun == 'sum') { return(rowSums)
+	} else if (fun == 'min') { return(.rowMin)
+	} else if (fun == 'max') { return(.rowMax)
+	} else { stop('unknown fun') }
 }
 
 
@@ -50,21 +48,16 @@ function(x, fun, filename='', na.rm=TRUE, ...) {
 	filename <- trim(filename)
 	outraster <- raster(x)
 
-	fun <- .makeTextFun(fun, c('mean', 'sum', 'min', 'max'))
-	if (class(fun) == 'character') { rowcalc <- TRUE } else { rowcalc <- FALSE }
+	fun <- .makeTextFun(fun)
+	if (class(fun) == 'character') { 
+		rowcalc <- TRUE 
+		fun <- .getRowFun(fun)
+	} else { rowcalc <- FALSE }
 	
 	if (canProcessInMemory(x, 2)) {
 		x <- getValues(x)
-		if (class(fun) == 'character') { #suggested by Matteo Mattiuzzi
-			if(fun == 'mean' ) {
-				x <- rowMeans(x, na.rm=na.rm )
-			} else if (fun == 'sum') {
-				x <- rowSums(x, na.rm=na.rm )
-			} else if (fun == 'min') {
-				x <- .rowMin(x, na.rm=na.rm )
-			} else if (fun == 'max') {
-				x <- .rowMax(x, na.rm=na.rm )
-			}
+		if (rowcalc) { 
+			x <- fun(x, na.rm=na.rm ) #suggested by Matteo Mattiuzzi
 		} else {
 			x <- apply(x, 1, fun, na.rm=na.rm)
 		}
@@ -83,28 +76,18 @@ function(x, fun, filename='', na.rm=TRUE, ...) {
 	tr <- blockSize(outraster)
 	pb <- pbCreate(tr$n, type=.progress(...))			
 
-	if (class(fun) == 'character') {
-		for (i in 1:tr$n) {
-			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
-			if(fun == 'mean' ) {
-				v <- rowMeans(v, na.rm=na.rm )
-			} else if ( fun == 'sum' ) {
-				v <- rowSums(v, na.rm=na.rm )
-			} else if ( fun == 'min') {
-				v <- .rowMin(v, na.rm=na.rm )
-			} else if (fun == 'max' ) {
-				v <- .rowMax(v, na.rm=na.rm )
-			}
-			outraster <- writeValues(outraster, v, tr$row[i])
-			pbStep(pb) 
-		}
+	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
 		
-	} else {
-		for (i in 1:tr$n) {
-			sv <- apply(getValues(x, row=tr$row[i], nrows=tr$nrows[i]),  1,  fun, na.rm=na.rm)
-			outraster <- writeValues(outraster, sv, tr$row[i])
-			pbStep(pb) 
+	for (i in 1:tr$n) {
+		v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
+		if (makemat) { v <- matrix(v, ncol=1) }
+		if (rowcalc) {
+			v <- fun(v, na.rm=na.rm)
+		} else {
+			v <- apply(v, 1, fun, na.rm=na.rm)
 		}
+		outraster <- writeValues(outraster, v, tr$row[i])
+		pbStep(pb) 
 	}
 	outraster <- writeStop(outraster)
 	pbClose(pb)

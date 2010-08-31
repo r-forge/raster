@@ -48,7 +48,10 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 	if (! hasValues(x) ) {	return(outRaster) }	
 
 	fun <- .makeTextFun(fun)
-	if (class(fun) == 'character') { rowcalc <- TRUE } else { rowcalc <- FALSE }
+	if (class(fun) == 'character') { 
+		rowcalc <- TRUE 
+		fun <- .getRowFun(fun)
+	} else { rowcalc <- FALSE }
 	
 	
 	if (!expand) {
@@ -97,11 +100,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 			}
 			
 			if (rowcalc) {
-				if (fun == 'mean') {
-					vals <- colMeans(vv, na.rm=na.rm )
-				} else {
-					vals <- colSums(vv, na.rm=na.rm )			
-				}
+				vals <- fun(t(vv), na.rm=na.rm )
 			} else {
 				vals <- apply(vv, 2, fun, na.rm=na.rm )
 			}
