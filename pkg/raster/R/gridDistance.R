@@ -4,25 +4,20 @@
 # Version 1.0.x
 # Licence GPL v3
 
-#the igraph method is speedy for a low number of origin cells, as it calculates shortest distances for each origin cell individually. 
-# We could -- perhaps -- speed it up for cases with many origin cells by only considering the 'edge' cells (all the others have distance = 0
-# see the edge function. Or perhaps use igraph to compute the edges??? 
-# However, with the new "origin node" approach, these cells would never become active cells in the igraph algorithm. Minimal difference to exclude non-edge cells.
-
 #setGeneric("gridDistance", function(object, ...) standardGeneric("gridDistance"))
 
 #setMethod("gridDistance", signature(object = "RasterLayer"), def =	
 
-gridDistance <- function(x, originValue, omitValue=NULL, filename="", ...) {
+gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 
 	if( !require(igraph)) {
 		stop('you need to install the igraph package to be able to use this function')
 	}
 	
-	if (missing(originValue)) stop("you must supply an 'originValue' argument")
+	if (missing(origin)) stop("you must supply an 'origin' argument")
 	
-	if ((! inMemory(x) ) & ( !  fromDisk(x) )) {
-			stop('cannot compute distance on a RasterLayer with no data')
+	if (! hasValues(x) ) {
+		stop('cannot compute distance on a RasterLayer with no data')
 	}
 	lonlat <- .couldBeLonLat(x)
 	filename <- trim(filename)
@@ -33,12 +28,12 @@ gridDistance <- function(x, originValue, omitValue=NULL, filename="", ...) {
 		}
 	}
 	
-	if ( nrow(x) <= 100 ) { #canProcessInMemory(x, n=25) ) {
+	if ( canProcessInMemory(x, n=25) ) { # need to test more to see how much igraph can deal with
 		outRaster <- raster(x)
 		x <- getValues(x) # to avoid keeping values in memory twice
 		
-		oC <- which(x %in% originValue) 
-		ftC <- which(!(x %in% omitValue))
+		oC <- which(x %in% origin) 
+		ftC <- which(!(x %in% omit))
 		v <- .calcDist(outRaster, ncell(outRaster), ftC, oC, lonlat=lonlat)
 		
 		outRaster <- setValues(outRaster, v)
@@ -60,10 +55,10 @@ gridDistance <- function(x, originValue, omitValue=NULL, filename="", ...) {
 			chunk <- getValues(x, row=tr$row[i], nrows=tr$nrows[i]) 
 			startCell <- (tr$row[i]-1) * ncol(x)
 			chunkSize <- length(chunk)
-			oC <- which(chunk %in% originValue) 
-			ftC <- which(!(chunk %in% omitValue))
+			oC <- which(chunk %in% origin) 
+			ftC <- which(!(chunk %in% omit))
 			if (i < tr$n) {
-				firstRowftC <- which(!(firstRow %in% omitValue)) + chunkSize
+				firstRowftC <- which(!(firstRow %in% omit)) + chunkSize
 				chunkDist <- .calcDist(x, 
 								chunkSize=chunkSize + ncol(x), 
 								ftC=c(ftC, firstRowftC), 
@@ -97,8 +92,8 @@ gridDistance <- function(x, originValue, omitValue=NULL, filename="", ...) {
 			chunk <- getValues(x, row=tr$row[i], nrows=tr$nrows[i]) 
 			chunkSize <- length(chunk)
 			startCell <- (tr$row[i]-1) * ncol(x)
-			oC <- which(chunk %in% originValue) 
-			ftC <- which(!(chunk %in% omitValue))
+			oC <- which(chunk %in% origin) 
+			ftC <- which(!(chunk %in% omit))
 			chunkDist <- getValues(r1, row=tr$row[iM], nrows=tr$nrows[iM])
 			chunkDist[is.na(chunkDist)] <- Inf
 			if (i > 1) {
@@ -113,7 +108,7 @@ gridDistance <- function(x, originValue, omitValue=NULL, filename="", ...) {
 				}
 			lastRow <- chunk[(length(chunk)-ncol(x)+1):length(chunk)]
 			lastRowDist <- chunkDist[(length(chunkDist)-ncol(x)+1):length(chunkDist)]
-			lastRowftC <- which(!(lastRow %in% omitValue))
+			lastRowftC <- which(!(lastRow %in% omit))
 			chunkDist[is.infinite(chunkDist)] <- NA				
 			outRaster <- writeValues(outRaster, chunkDist, tr$row[i])
 			pbStep(pb) 
