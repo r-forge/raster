@@ -4,11 +4,11 @@
 # Licence GPL v3
 
 
-.doTime <- function(x, nc) {
+.doTime <- function(x, nc, zvar) {
 	dodays <- TRUE
 	dohours <- FALSE
 	
-	un = att.get.ncdf(nc, "time", "units")$value
+	un = nc$var[[zvar]]$dim[[3]]$units	
 	if (substr(un, 1, 10) == "days since") { 
 		startDate = as.Date(substr(un, 12, 22))
 	} else {
@@ -28,6 +28,7 @@
 		}
 	}
 	if (dodays) {
+		# cal = nc$var[[zvar]]$dim[[3]]$calendar ?
 		cal = att.get.ncdf(nc, "time", "calendar")$value
 		if (cal =='gregorian' | cal=='standard') {
 			greg = TRUE
@@ -218,7 +219,7 @@
 		r@zvalue <- nc$var[[zvar]]$dim[[3]]$vals
 		
 		if ( nc$var[[zvar]]$dim[[3]]$name == 'time' ) {
-			r <- .doTime(r, nc)
+			r <- .doTime(r, nc, zvar)
 		}
 	}
 	
