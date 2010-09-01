@@ -130,7 +130,7 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 		startNode <- max(adj)+1 #extra node to serve as origin
 		adjP <- rbind(adj, cbind(rep(startNode, times=length(oC)), oC))
 		distGraph <- graph.edgelist(adjP-1, directed=FALSE)
-		if(length(perCell)>1) 
+		if(length(perCell) == 1) 
 		{
 			if(perCell == 0) {perCell <- rep(0, times=length(oC))}
 		}
