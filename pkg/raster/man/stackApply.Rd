@@ -49,8 +49,6 @@ r[]=1:ncell(r)
 s <- brick(r,r,r,r,r,r)
 s <- s * 1:6
 b <- stackApply(s, indices=c(1,1,2,2,3,3), fun=sum)
-# much faster for large stacks:
-b <- stackApply(s, indices=c(1,1,2,2,3,3), fun='sum')
 b
 }
 
