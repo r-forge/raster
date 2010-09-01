@@ -6,14 +6,16 @@
 
 .makeTextFun <- function(fun) {
 	if (class(fun) != 'character') {
-		test <- try(slot(fun, 'generic')  == 'mean', silent=TRUE)
-		if (isTRUE(test)) { fun <- 'mean' 
-		} else {
+		if (is.primitive(fun)) {
 			test <- try(deparse(fun)[[1]], silent=TRUE)
 			if (test == '.Primitive(\"sum\")') { fun <- 'sum' 
 			} else if (test == '.Primitive(\"min\")') { fun <- 'min' 
-			} else if (test == '.Primitive(\"max\")') { fun <- 'max' }
-		}
+			} else if (test == '.Primitive(\"max\")') { fun <- 'max' 
+			}
+		} else {
+			test <- try(slot(fun, 'generic') == 'mean', silent=TRUE)
+			if (isTRUE(test)) { fun <- 'mean' }
+		} 
 	}
 	return(fun)
 }
@@ -28,10 +30,12 @@
 }
 
 
-setMethod('calc', signature(x='RasterStackBrick', fun='ANY'), 
+setMethod('calc', signature(x='RasterStackBrick', fun='function'), 
 function(x, fun, filename='', na.rm=TRUE, ...) {
 
 	nl <- nlayers(x)
+	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
+	
 	test <- length(fun(1:nl))
 	if (test != 1) {
 		if (test == nl) {
@@ -42,7 +46,7 @@ function(x, fun, filename='', na.rm=TRUE, ...) {
 	}
 	test <- try(fun(1:nl, na.rm=TRUE), silent=TRUE)
 	if (class(test) == 'try-error') {
-		stop("'fun' does take an 'na.rm' arugment. Add na.rm or dots (...) to the function arguments") 
+		stop("'fun' does take an 'na.rm' arugment. Add 'na.rm' or '...' to the function arguments") 
 	}
 	
 	filename <- trim(filename)
@@ -56,6 +60,8 @@ function(x, fun, filename='', na.rm=TRUE, ...) {
 	
 	if (canProcessInMemory(x, 2)) {
 		x <- getValues(x)
+		if (makemat) { x <- matrix(x, ncol=1) }
+		
 		if (rowcalc) { 
 			x <- fun(x, na.rm=na.rm ) #suggested by Matteo Mattiuzzi
 		} else {
@@ -76,8 +82,6 @@ function(x, fun, filename='', na.rm=TRUE, ...) {
 	tr <- blockSize(outraster)
 	pb <- pbCreate(tr$n, type=.progress(...))			
 
-	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
-		
 	for (i in 1:tr$n) {
 		v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 		if (makemat) { v <- matrix(v, ncol=1) }

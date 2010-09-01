@@ -4,7 +4,7 @@
 
 \alias{calc}
 \alias{calc,RasterLayer,function-method}
-\alias{calc,RasterStackBrick,ANY-method}
+\alias{calc,RasterStackBrick,function-method}
 
 \title{Calculate}
 
