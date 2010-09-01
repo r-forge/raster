@@ -193,6 +193,7 @@ Maps
     \code{\link{persp}} \tab Perspective plot of a RasterLayer \cr
     \code{\link{contour}} \tab Contour plot of a RasterLayer \cr
     \code{\link{filledContour}} \tab Filled contour plot of a RasterLayer \cr
+    \code{\link{text}} \tab Plot the values of a RasterLayer on top of a map \cr
  }
 
 Interacting with a map (plot of a RasterLayer)
