@@ -132,7 +132,7 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 		distGraph <- graph.edgelist(adjP-1, directed=FALSE)
 		if(length(perCell)>1) 
 		{
-			if(perCell == 0) {perCell <- rep(0, times=length(oC))
+			if(perCell == 0) {perCell <- rep(0, times=length(oC))}
 		}
 		
 		if (lonlat) {
