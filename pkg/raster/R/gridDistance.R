@@ -5,23 +5,21 @@
 # Licence GPL v3
 
 #the igraph method is speedy for a low number of origin cells, as it calculates shortest distances for each origin cell individually. 
-#We could ask the igraph author to make it possible to calculate shortest distance for several origin nodes simultaneously. 
-#However, I think I asked this more than a year ago and he seemed not very convinced.
-
 # We could -- perhaps -- speed it up for cases with many origin cells by only considering the 'edge' cells (all the others have distance = 0
 # see the edge function. Or perhaps use igraph to compute the edges??? 
+# However, with the new "origin node" approach, these cells would never become active cells in the igraph algorithm. Minimal difference to exclude non-edge cells.
 
 #setGeneric("gridDistance", function(object, ...) standardGeneric("gridDistance"))
 
 #setMethod("gridDistance", signature(object = "RasterLayer"), def =	
 
-gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
+gridDistance <- function(x, originValue, omitValue=NULL, filename="", ...) {
 
 	if( !require(igraph)) {
 		stop('you need to install the igraph package to be able to use this function')
 	}
 	
-	if (missing(origin)) stop("you must supply an 'origin' argument")
+	if (missing(originValue)) stop("you must supply an 'originValue' argument")
 	
 	if ((! inMemory(x) ) & ( !  fromDisk(x) )) {
 			stop('cannot compute distance on a RasterLayer with no data')
@@ -39,8 +37,8 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 		outRaster <- raster(x)
 		x <- getValues(x) # to avoid keeping values in memory twice
 		
-		oC <- which(x %in% origin) #select cells not surrounded by other origin cells
-		ftC <- which(!(x %in% omit))
+		oC <- which(x %in% originValue) 
+		ftC <- which(!(x %in% omitValue))
 		v <- .calcDist(outRaster, ncell(outRaster), ftC, oC, lonlat=lonlat)
 		
 		outRaster <- setValues(outRaster, v)
@@ -62,10 +60,10 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 			chunk <- getValues(x, row=tr$row[i], nrows=tr$nrows[i]) 
 			startCell <- (tr$row[i]-1) * ncol(x)
 			chunkSize <- length(chunk)
-			oC <- which(chunk %in% origin) 
-			ftC <- which(!(chunk %in% omit))
+			oC <- which(chunk %in% originValue) 
+			ftC <- which(!(chunk %in% omitValue))
 			if (i < tr$n) {
-				firstRowftC <- which(!(firstRow %in% omit)) + chunkSize
+				firstRowftC <- which(!(firstRow %in% omitValue)) + chunkSize
 				chunkDist <- .calcDist(x, 
 								chunkSize=chunkSize + ncol(x), 
 								ftC=c(ftC, firstRowftC), 
@@ -99,8 +97,8 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 			chunk <- getValues(x, row=tr$row[i], nrows=tr$nrows[i]) 
 			chunkSize <- length(chunk)
 			startCell <- (tr$row[i]-1) * ncol(x)
-			oC <- which(chunk %in% origin) 
-			ftC <- which(!(chunk %in% omit))
+			oC <- which(chunk %in% originValue) 
+			ftC <- which(!(chunk %in% omitValue))
 			chunkDist <- getValues(r1, row=tr$row[iM], nrows=tr$nrows[iM])
 			chunkDist[is.na(chunkDist)] <- Inf
 			if (i > 1) {
@@ -115,7 +113,7 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 				}
 			lastRow <- chunk[(length(chunk)-ncol(x)+1):length(chunk)]
 			lastRowDist <- chunkDist[(length(chunkDist)-ncol(x)+1):length(chunkDist)]
-			lastRowftC <- which(!(lastRow %in% omit))
+			lastRowftC <- which(!(lastRow %in% omitValue))
 			chunkDist[is.infinite(chunkDist)] <- NA				
 			outRaster <- writeValues(outRaster, chunkDist, tr$row[i])
 			pbStep(pb) 
@@ -132,28 +130,29 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 	
 	if(length(oC)>0) {
 	
-		adj <- adjacency(x, fromCells=ftC, toCells=ftC, directions=8) #OPTIMIZE: omit oC cells surrounded by other origin cells
-		distGraph <- graph.edgelist(adj-1, directed=FALSE)
+		adj <- adjacency(x, fromCells=ftC, toCells=ftC, directions=8)
+		startNode <- max(adj)+1 #extra node to serve as origin
+		adjP <- rbind(adj, cbind(rep(startNode, times=length(oC)), oC))
+		distGraph <- graph.edgelist(adjP-1, directed=FALSE)
+		if(perCell == 0) {perCell <- rep(0, times=length(oC))}
 		
 		if (lonlat) {
-			# coord <- cbind(xyFromCell(x,adj[,1]+startCell),xyFromCell(x,adj[,2]+startCell))
-			# distance1 <- apply(coord,1,function(x){pointDistance(x[1:2],x[3:4], type='GreatCircle')})
-			# orders of magnitude faster than apply
 			distance <- pointDistance(xyFromCell(x,adj[,1]+startCell), xyFromCell(x,adj[,2]+startCell), type='GreatCircle') 
-			E(distGraph)$weight <- distance
-		
+			E(distGraph)$weight <- c(distance, perCell)
 		} else {
-			sameRow <- rowFromCell(x, adj[,1]) == rowFromCell(x, adj[,2]) 
-			sameCol <- colFromCell(x, adj[,1]) == colFromCell(x, adj[,2])
+			sameRow <- which(rowFromCell(x, adj[,1]) == rowFromCell(x, adj[,2]))
+			sameCol <- which(colFromCell(x, adj[,1]) == colFromCell(x, adj[,2]))
+			E(distGraph)$weight <- sqrt(xres(x)^2 + yres(x)^2)
 			E(distGraph)$weight[sameRow] <- xres(x)
 			E(distGraph)$weight[sameCol] <- yres(x)
-			E(distGraph)$weight[!sameCol & !sameRow] <- sqrt(xres(x)^2 + yres(x)^2)
+			E(distGraph)$weight[(length(adj[,1])+1):(length(adj[,1])+length(oC))] <- perCell
 		}
 		
-		shortestPaths <- pmin(shortestPaths, apply(shortest.paths(distGraph, oC-1) + perCell, 2, min))
+		shortestPaths <- pmin(shortestPaths, shortest.paths(distGraph, startNode-1))
+		shortestPaths <- shortestPaths[-(length(shortestPaths))]
 		
 		if(max(ftC) < chunkSize){ 
-			shortestPaths <- c( shortestPaths, rep(Inf, times=chunkSize-max(ftC)) )
+			shortestPaths <- c(shortestPaths, rep(Inf, times=chunkSize-max(ftC)))
 		}
 	}
 	return(shortestPaths)
