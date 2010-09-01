@@ -3,7 +3,7 @@
 
 \alias{blockSize}
 
-\title{Write values to a file}
+\title{Block size for writing files}
 
 \description{
 This function can be used to suggest a chunk size, and corresponding row numbers, to be used when processing Raster objects chunk by chunk, normally together with \code{\link{writeValues}}.
