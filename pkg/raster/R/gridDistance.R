@@ -46,7 +46,7 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 		
 	} else 	{
 	
-		tr <- blockSize(x, n=10, minblocks=floor(nrow(x)/100))
+		tr <- blockSize(x, n=10, minblocks=nrow(x)/100)
 		
 		pb <- pbCreate(tr$n*2 - 1, type=.progress(...))
 
