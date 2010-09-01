@@ -14,25 +14,14 @@
 }
 
 \usage{
-<<<<<<< .mine
-gridDistance(x, originValue, omitValue, filename, ...) 
-=======
 gridDistance(x, origin, omit=NULL, filename="", ...) 
->>>>>>> .r1155
 }
 
 \arguments{
-<<<<<<< .mine
-\item{x}{a RasterLayer object}
-\item{originValue}{value of the cells from which the distance is calculated}
-\item{omitValue}{value of the cells which cannot be traversed}
-\item{filename}{character. output filename}
-=======
 \item{x}{a RasterLayer object}
 \item{origin}{value(s) of the cells from which the distance is calculated}
 \item{omit}{value(s) of the cells which cannot be traversed (optional)}
 \item{filename}{character. output filename (optional)}
->>>>>>> .r1155
 \item{...}{additional arguments. See Details.}  
 }
 
