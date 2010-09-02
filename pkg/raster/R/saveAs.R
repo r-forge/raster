@@ -6,7 +6,7 @@
 
 
 .saveAsRaster <- function(x, filename, format, ...) {
-	if ( toupper(x@file@name == toupper(filename) )) {
+	if ( toupper(x@file@name) == toupper(filename) ) {
 		stop('filenames of source and destination should be different')
 	}
 	r <- raster(x)
@@ -28,7 +28,7 @@
 
 .saveAsBrick <- function(x, filename, bandorder='BIL', format, ...) {
 
-		if ( toupper(x@file@name == toupper(filename) )) {
+		if ( toupper(x@file@name) == toupper(filename) ) {
 			stop('filenames of source and destination should be different')
 		}
 		
