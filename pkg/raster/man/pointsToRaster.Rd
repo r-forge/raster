@@ -16,7 +16,8 @@ pointsToRaster(raster, xy, values=1, fun=length, background=NA, filename="", ...
   \item{raster}{RasterLayer object}
   \item{xy}{Matrix of x and y coordinates (in the same map reference system as the raster) or a SpatialPoints* object}
   \item{values}{Vector of length of the number of points (i.e., dim(xy)[1] if xy is a matrix) with the values to be used; alternatively 
-  you can supply a single value which is then assigned to each point} 
+  you can supply a single value which is then assigned to each point. You can also supply a matrix if its number of rows matches the number of points. If the matrix has more than one column, a RasterBrick will be returned with a layer for each column)
+  with a number of layers equal to the number of c} 
   \item{fun}{Function to be applied, on a cell by cell basis, to the points a cell; the default function is \code{length},
   i.e. it returns the number of points in a cell. Typical examples of other functions that can be used are mean, sum, max and 
   \code{function(x)length(unique(x))} to get the number of unique values ('richness'). You can also pass multiple functions 
@@ -28,9 +29,8 @@ pointsToRaster(raster, xy, values=1, fun=length, background=NA, filename="", ...
 
 \details{
 Each point is assinged to a grid cell. The value of a grid cell is determined by the values associated with the points and function fun.
-If you want the count of points in each grid cell, use the (default) \code{length} function. I.e. for each cell it computes the length
-of the vector of points.
-For the sum of the values, use \code{sum}, for a yes/no result, you can use \code{fun=function(x){length(x)>0}}
+If you want to know the number of points in each grid cell, use the (default) \code{length} function. I.e., for each cell it computes the length
+of the vector of points. For the sum of the values, use \code{sum}, for a yes/no result, you can use \code{fun=function(x){length(x)>0}}
 
 For the number of unique values use \code{fun=function(x){length(unique(x))}}
 
