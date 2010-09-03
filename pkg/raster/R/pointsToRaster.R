@@ -12,10 +12,10 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 	nres <- length(fun(1))
 	xy <- .pointsToMatrix(xy)
 
-	cols <- 1
+	ncols <- 1
 	if (NCOL(values) > 1) {
 		if (nres > 1) stop('Either use a single function, or a vector for values')
-		nres <- cols <- ncol(values)
+		nres <- ncols <- ncol(values)
 	} else {
 		if (is.atomic(values) & length(values)==1) {
 			values <- rep(values, dim(xy)[1])
@@ -41,7 +41,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 	if (todisk) {
 		rows <- rowFromCell(rs, cells)
 		cols <- colFromCell(rs, cells)
-		xyarc <- cbind(xy, values, rows, cols)
+		xyarc <- cbind(xy, rows, cols, values)
 		urows <- unique(rows)
 #		urows <- urows[order(urows)]
 		if (nres==1) {
@@ -49,26 +49,28 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			dna[] <- background
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
+			rs@data@nlayers <- nres
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
+			datacols <- 5:ncol(xyarc)
 		}
 		pb <- pbCreate(nrow(rs), type=.progress(...))
 		rs <- writeStart(rs, filename=filename, ...)
 		for (r in 1:rs@nrows) {
 			d <- dna
 			if (r %in% urows) {
-				ss <- subset(xyarc, xyarc[,4] == r)
+				ss <- subset(xyarc, xyarc[,3] == r)
 				#ucols <- unique(ss[,5])
 				#for (c in 1:length(ucols)) {
 				#	sss <- subset(ss, ss[,5] == ucols[c] )
 				#	d[ucols[c]] <- fun(sss[,3])	
 				#}
 				
-				if (cols > 1) {
-					v <- aggregate(values, list(cells), fun)
+				if (ncols > 1) {
+					v <- aggregate(ss[,datacols,drop=FALSE], list(ss[,4]), fun)
 					cells <- as.numeric(v[,1])
 					d[cells, ] <- as.matrix(v)[,-1]
 				} else {
-					v = tapply(ss[,3], ss[,5], fun)
+					v = tapply(ss[,5], ss[,4], fun)
 					cells <- as.numeric(rownames(v))
 					if (nres > 1) {
 						v <- as.matrix(v)
@@ -86,7 +88,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 		pbClose(pb)
 		
 	} else {
-		if (cols > 1) {
+		if (ncols > 1) {
 			v <- aggregate(values, list(cells), fun)
 			cells <- as.numeric(v[,1])
 			v <- as.matrix(v)[,-1]
