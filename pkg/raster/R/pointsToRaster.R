@@ -11,12 +11,18 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 	
 	nres <- length(fun(1))
 	xy <- .pointsToMatrix(xy)
-	
-	if (is.atomic(values) & length(values)==1) {
-		values <- rep(values, dim(xy)[1])
-	}
-	if (dim(xy)[1] != length(values)) {
-		stop('number of points does not match the number of values')
+
+	cols <- 1
+	if (NCOL(values) > 1) {
+		if (nres > 1) stop('Either use a single function, or a vector for values')
+		nres <- cols <- ncol(values)
+	} else {
+		if (is.atomic(values) & length(values)==1) {
+			values <- rep(values, dim(xy)[1])
+		}
+		if (dim(xy)[1] != length(values)) {
+			stop('number of points does not match the number of values')
+		}
 	}
 	
 	
@@ -57,15 +63,20 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 				#	d[ucols[c]] <- fun(sss[,3])	
 				#}
 				
-				v = tapply(ss[,3], ss[,5], fun)
-				cells <- as.numeric(rownames(v))
-				
-				if (nres > 1) {
-					v <- as.matrix(v)
-					v = t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
-					d[cells, ] <- v
+				if (cols > 1) {
+					v <- aggregate(values, list(cells), fun)
+					cells <- as.numeric(v[,1])
+					d[cells, ] <- as.matrix(v)[,-1]
 				} else {
-					d[cells] <- v
+					v = tapply(ss[,3], ss[,5], fun)
+					cells <- as.numeric(rownames(v))
+					if (nres > 1) {
+						v <- as.matrix(v)
+						v = t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
+						d[cells, ] <- v
+					} else {
+						d[cells] <- v
+					}
 				}
 			}
 			rs <- writeValues(rs, d) 
@@ -75,9 +86,16 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 		pbClose(pb)
 		
 	} else {
-		v = tapply(values, cells, fun)
-		cells <- as.numeric(rownames(v))
-		v <- as.matrix(v)
+		if (cols > 1) {
+			v <- aggregate(values, list(cells), fun)
+			cells <- as.numeric(v[,1])
+			v <- as.matrix(v)[,-1]
+		} else {
+			v <- tapply(values, cells, fun)
+			cells <- as.numeric(rownames(v))
+			v <- as.matrix(v)
+		}
+		
 		if(class(v[1]) == "list") {
 			v = t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
 		}
