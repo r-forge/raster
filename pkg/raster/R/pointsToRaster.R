@@ -50,6 +50,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
 			rs@data@nlayers <- nres
+			if (ncols > 1) { rs@layernames <- colnames(values) }
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 			datacols <- 5:ncol(xyarc)
 		}
@@ -106,13 +107,14 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 			vv <- matrix(background, nrow=ncell(rs), ncol=dim(v)[2])
 			vv[cells, ] <- v
 		    rs <- brick(rs)  #  return a'RasterBrick'
-			
 		} else {
 			vv <- 1:ncell(rs)
 			vv[] <- background
 			vv[cells] <- v
 		}
 		rs <- setValues(rs, vv)
+		if (ncols > 1) {rs@layernames = colnames(values)}
+
 		
 		if (filename != "") {
 			rs <- writeRaster(rs, filename=filename, ...)
