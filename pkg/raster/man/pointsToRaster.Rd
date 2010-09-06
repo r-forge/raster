@@ -16,12 +16,13 @@ pointsToRaster(raster, xy, values=1, fun=length, background=NA, filename="", ...
   \item{raster}{RasterLayer object}
   \item{xy}{Matrix of x and y coordinates (in the same map reference system as the raster) or a SpatialPoints* object}
   \item{values}{Vector of length of the number of points (i.e., dim(xy)[1] if xy is a matrix) with the values to be used; alternatively 
-  you can supply a single value which is then assigned to each point. You can also supply a matrix if its number of rows matches the number of points. If the matrix has more than one column, a RasterBrick will be returned with a layer for each column)
-  with a number of layers equal to the number of c} 
+  you can supply a single value which is then assigned to each point. You can also supply a matrix if its number of rows matches the number of points. If the matrix has more than one column, a RasterBrick will be returned, with a layer for each column in \code{values}. }
+  
   \item{fun}{Function to be applied, on a cell by cell basis, to the points a cell; the default function is \code{length},
   i.e. it returns the number of points in a cell. Typical examples of other functions that can be used are mean, sum, max and 
   \code{function(x)length(unique(x))} to get the number of unique values ('richness'). You can also pass multiple functions 
-  using a statement like \code{fun=c(lenght,mean)}}, in which case the returned object is a RasterBrick (multiple layers)
+  using a statement like \code{fun=function(x)c(lenght(x),mean(x))}}, in which case the returned object is a RasterBrick (multiple layers).
+  
   \item{background}{Numeric. The value to be applied to the cells in which no points fall (typically \code{NA} or \code{0})}
   \item{filename}{Character. Output filename}
   \item{...}{Additional arguments. See Details}  

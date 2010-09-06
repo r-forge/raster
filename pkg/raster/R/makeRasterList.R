@@ -15,12 +15,12 @@
 		} else {
 			return(x)
 		}
-	} else if (class(r) == 'RasterLayer') {
-		if (compare & length(x)>0) { compare(x[[1]], r)  }
-		return( c(x, r) )	
+	} else if (inherits(r, 'RasterStack')) {
+		if ( compare & length(x) > 0 ) { compare(x[[1]], r)  }
+		return( c(x, unstack(r)) )
 	} else {
 		if (compare & length(x)>0) { compare(x[[1]], r)  }
-		return( c(x, unstack(r)) )
+		return( c(x, r) )	
 	} 
 }
 

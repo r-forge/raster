@@ -3,6 +3,7 @@
 
 \alias{cover}
 \alias{cover,RasterLayer,RasterLayer-method}
+\alias{cover,RasterStackBrick,Raster-method}
 
 \title{ Cover }
 \description{
