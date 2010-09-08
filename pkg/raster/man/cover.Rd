@@ -1,4 +1,5 @@
 \name{cover}
+
 \docType{methods}
 
 \alias{cover}
@@ -7,23 +8,24 @@
 
 \title{ Cover }
 \description{
- Replace \code{NA} values in the first RasterLayer (x) with the values of the second RasterLayer (y), and so forth for additional RasterLayers.
+ Replace \code{NA} values in the first Raster object (\code{x}) with the values of the second (\code{y}), and so forth for additional Rasters.
+ If \code{x} has mutliple layers, the subsequent Raster objects should have the same number of layers, or have a single layer only (which will be recycled).
 }
 
 
 \section{Methods}{
 \describe{
 \code{cover(x, y, ..., filename="") }
-  \item{\code{x}}{ RasterLayer object }
-  \item{\code{y}}{ RasterLayer object }
-  \item{\code{...}}{ Additional RasterLayer objects or other arguments (see Details) }
+  \item{\code{x}}{ Raster* object }
+  \item{\code{y}}{ Raster* object }
+  \item{\code{...}}{ Additional Raster* objects or other arguments (see Details) }
   \item{\code{filename}}{ filename for the output RasterLayer}
 }}
 
 \details{
-The function returns a RasterLayer with the values of the second RasterLayer (\code{y}) where the first RasterLayer (\code{x}) has \code{NA} values, and the values of the first RasterLayer elsewhere.
 
 \tabular{rll}{
+Additional arguments for writing the results to a file on disk:
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab If \code{TRUE}, "filename" will be overwritten if it exists \cr
@@ -32,7 +34,7 @@ The function returns a RasterLayer with the values of the second RasterLayer (\c
 }
 
 \value{
-A new RasterLayer object, and in some cases the side effect of a new file on disk.
+A RasterLayer or RasterBrick object, and in some cases the side effect of a new file on disk.
 }
 
 \author{Robert J. Hijmans}

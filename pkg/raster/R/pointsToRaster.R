@@ -1,13 +1,19 @@
-# Author: Robert J. Hijmans and Paul Hiemstra
+# Author: Robert J. Hijmans, Paul Hiemstra, Steven Mosher
 # r.hijmans@gmail.com
 # Date :  January 2009
 # Version 0.9
 # Licence GPL v3
 
 
-pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, filename="", ...) {
+pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=TRUE, filename="", ...) {
 
 	rs <- raster(raster)
+	
+	if (is.null(fun)) {
+		if (na.rm) fun=function(x, ...){ length(na.omit(x)) }
+	} else {
+		fun=function(x, ...){ length(x) }
+	}
 	
 	nres <- length(fun(1))
 	xy <- .pointsToMatrix(xy)
@@ -67,11 +73,11 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 				#}
 				
 				if (ncols > 1) {
-					v <- aggregate(ss[,datacols,drop=FALSE], list(ss[,4]), fun)
+					v <- aggregate(ss[,datacols,drop=FALSE], list(ss[,4]), fun, na.rm=na.rm)
 					cells <- as.numeric(v[,1])
 					d[cells, ] <- as.matrix(v)[,-1]
 				} else {
-					v = tapply(ss[,5], ss[,4], fun)
+					v = tapply(ss[,5], ss[,4], fun, na.rm=na.rm)
 					cells <- as.numeric(rownames(v))
 					if (nres > 1) {
 						v <- as.matrix(v)
@@ -90,11 +96,11 @@ pointsToRaster <- function(raster, xy, values=1, fun=length, background=NA, file
 		
 	} else {
 		if (ncols > 1) {
-			v <- aggregate(values, list(cells), fun)
+			v <- aggregate(values, list(cells), fun, na.rm=na.rm)
 			cells <- as.numeric(v[,1])
 			v <- as.matrix(v)[,-1]
 		} else {
-			v <- tapply(values, cells, fun)
+			v <- tapply(values, cells, fun, na.rm=na.rm)
 			cells <- as.numeric(rownames(v))
 			v <- as.matrix(v)
 		}
