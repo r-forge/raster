@@ -48,7 +48,7 @@ The following additional arguments can be passed, to replace default values for 
   RasterLayer object
 }
 
-\author{Robert J. Hijmans & Paul Hiemstra}
+\author{Robert J. Hijmans, Steven Mosher & Paul Hiemstra}
 
 \seealso{ \code{\link[raster]{linesToRaster}}, \code{\link[raster]{polygonsToRaster}},  \code{\link[raster]{rasterFromXYZ}} }
 

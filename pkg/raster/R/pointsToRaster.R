@@ -10,9 +10,11 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 	rs <- raster(raster)
 	
 	if (is.null(fun)) {
-		if (na.rm) fun=function(x, ...){ length(na.omit(x)) }
-	} else {
-		fun=function(x, ...){ length(x) }
+		if (na.rm) {
+			fun=function(x, ...){ length(na.omit(x)) }
+		} else {
+			fun=function(x, ...){ length(x) }
+		}
 	}
 	
 	nres <- length(fun(1))
@@ -95,10 +97,11 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 		pbClose(pb)
 		
 	} else {
+	
 		if (ncols > 1) {
 			v <- aggregate(values, list(cells), fun, na.rm=na.rm)
 			cells <- as.numeric(v[,1])
-			v <- as.matrix(v)[,-1]
+			v <- as.matrix(v)[,-1,drop=FALSE]
 		} else {
 			v <- tapply(values, cells, fun, na.rm=na.rm)
 			cells <- as.numeric(rownames(v))
@@ -119,9 +122,13 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 			vv[cells] <- v
 		}
 		rs <- setValues(rs, vv)
-		if (ncols > 1) {rs@layernames = colnames(values)}
+		if (ncols > 1) {
+			cn <- colnames(values)
+			if (! is.null(cn)) {
+				rs@layernames = cn
+			}	
+		}
 
-		
 		if (filename != "") {
 			rs <- writeRaster(rs, filename=filename, ...)
 		}
