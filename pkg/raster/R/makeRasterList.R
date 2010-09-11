@@ -3,7 +3,7 @@
 # Version 0.9
 # Licence GPL v3
 
-.addToList <- function(x, r, compare, giveError) {
+.addToList <- function(x, r, compare, giveError, unstack) {
 	if (class(r) == 'character') {
 		r <- raster(r)
 		# or r <- unstack(stack(r, -1)) ???
@@ -15,7 +15,7 @@
 		} else {
 			return(x)
 		}
-	} else if (inherits(r, 'RasterStack')) {
+	} else if (unstack & inherits(r, 'RasterStack')) {
 		if ( compare & length(x) > 0 ) { compare(x[[1]], r)  }
 		return( c(x, unstack(r)) )
 	} else {
@@ -26,16 +26,16 @@
 
 
 
-.makeRasterList <- function(..., compare=FALSE, giveError=FALSE, keepone=FALSE) {
+.makeRasterList <- function(..., compare=FALSE, giveError=FALSE, keepone=FALSE, unstack=TRUE) {
 	arg <- list(...)
 	x <- list()
 	for (i in seq(along=arg)) {
 		if (class(arg[[i]]) == 'list') {
 			for (j in seq(along=arg[[i]])) {
-				x <- .addToList(x, arg[[i]][[j]], compare, giveError) 
+				x <- .addToList(x, arg[[i]][[j]], compare, giveError, unstack=unstack) 
 			}
 		} else {
-			x <- .addToList(x, arg[[i]], compare, giveError) 
+			x <- .addToList(x, arg[[i]], compare, giveError, unstack=unstack) 
 		}
 	}
 	for (i in rev(seq(along=x))) {

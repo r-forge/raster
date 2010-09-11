@@ -12,7 +12,7 @@ if (!isGeneric("cover")) {
 setMethod('cover', signature(x='RasterStackBrick', y='Raster'), 
 	function(x, y, ..., filename='', format, datatype, overwrite, progress){ 
 
-	rasters <- .makeRasterList(x, y, ...)
+	rasters <- .makeRasterList(x, y, ..., unstack=FALSE)
 	nl <- sapply(rasters, nlayers)
 	un <- unique(nl)
 	if (length(un) > 3) {
@@ -28,22 +28,8 @@ setMethod('cover', signature(x='RasterStackBrick', y='Raster'),
 	if (missing(format)) { format <- .filetype() } 
 	if (missing(overwrite)) { overwrite <- .overwrite() }
 	if (missing(progress)) { progress <- .progress() }
+	if (missing(datatype)) { datatype <- 'FLT4S' }
 	
-	if (missing(datatype)) {
-# check for boolean data?
-		isInt <- TRUE
-		for (i in 1:length(rasters)) {
-			dtype <- .shortDataType(rasters[[i]]@file@datanotation)
-			if (dtype != 'INT') {
-				isInt <- FALSE
-			}
-		}
-		if (isInt) { 
-			datatype  <- 'INT4S'
-		} else { 
-			datatype <- 'FLT4S'
-		}
-	}
 	filename <- trim(filename )
 
 	if ( canProcessInMemory(x, sum(nl)+nl[1])) {

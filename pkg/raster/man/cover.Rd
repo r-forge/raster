@@ -20,18 +20,17 @@
   \item{\code{y}}{ Raster* object }
   \item{\code{...}}{ Additional Raster* objects or other arguments (see Details) }
   \item{\code{filename}}{ filename for the output RasterLayer}
-}}
 
-\details{
-
-\tabular{rll}{
 Additional arguments for writing the results to a file on disk:
+\tabular{rll}{
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
   \tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
   \tab \code{overwrite} \tab If \code{TRUE}, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
  }
-}
+  
+}}
+
 
 \value{
 A RasterLayer or RasterBrick object, and in some cases the side effect of a new file on disk.
