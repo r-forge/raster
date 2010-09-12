@@ -9,7 +9,7 @@
 \alias{overlay,RasterStackBrick,missing-method}
 \alias{overlay,list,missing-method}
 
-\title{Overlay}
+\title{Overlay Raster objects}
 
 \description{
 Create a new Raster* object, based on two or more existing and Raster* objects. 
@@ -72,13 +72,17 @@ In all cases you can use these arguments:
 In stead of the overlay function you can also use normal aritmethic functions such as \code{*, /, +, -} with RasterLayer objects (see examples), but then you cannot specifiy an output filename. However, the overlay function should be more efficient when using large data files that cannot be loaded into memory, as the use of the standard arithmetic functions might cause the creation of many temporary files.
 
 While you can supply functions such as \code{sum} or \code{mean}, it would be more direct to use the Raster* objects are arguments to those functions (e.g. \code{sum(r1,r2,r3)})  
+
+For "overlays" involving Raster objects and polyongs, lines, or points, see, e.g.:
+\code{ \link[raster]{polygonsToRaster}, \link[raster]{linesToRaster}, \link[raster]{pointsToRaster}, \link[raster]{xyValues}, \link[raster]{polygonValues} }
+
 }
 
 \value{
 Raster* object
 }
 
-\seealso{ \code{ \link[raster]{calc},  \link[raster]{Arith-methods}} }
+\seealso{\code{ \link[raster]{calc},  \link[raster]{Arith-methods}} }
 
 \author{
 Robert J. Hijmans 
