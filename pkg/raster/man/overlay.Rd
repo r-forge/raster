@@ -27,7 +27,7 @@ Formal definition of the overlay method (in the sp package)
 
 \code{overlay(x, y, ...)}
 
-\bold{1) x and y are Raster* objects}
+\bold{1) \code{x} and \code{y} are Raster* objects}
 
 \code{overlay(x, y, ..., fun, datatype, format, overwrite, progress)}
 
@@ -38,21 +38,25 @@ Formal definition of the overlay method (in the sp package)
 \tab \code{fun} \tab the function to be applied. The number of arguments of the function should match the number of Raster objects, or it should take any number of arguments  \cr
 }
   
-  
-\bold{2) x is a RasterLayer object, y is missing (this is equivalent to \code{\link[raster]{calc}})}
+\bold{2) \code{x} is a RasterStack or RasterBrick object, \code{y} is missing}
+
+In this case, the function returns a single RasterLayer based on computations that combine the individual layers of the Raster* object. 
+
+\code{overlay(x, fun, overwrite, format, datatype, progress)}
+\tabular{rll}{
+\tab \code{x}  \tab RasterStack or RasterBrick object \cr
+\tab \code{fun} \tab Function to be applied. The number of arguments of the function should match the number of layers of the RasterStack/Brick object  \cr
+}
+
+
+\bold{3) \code{x} is a RasterLayer object, \code{y} is missing }
+
+This is equivalent to using the \code{\link[raster]{calc}} function 
 
 \code{overlay(x, fun, overwrite, format, datatype, progress)}
 \tabular{rll}{
 \tab \code{x}  \tab RasterLayer object \cr
 \tab \code{fun}  \tab Function to be applied. This should be a function that takes a single argument \cr
-}
-
-  
-\bold{3) x is a RasterStack or RasterBrick object, y is missing}
-\code{overlay(x, fun, overwrite, format, datatype, progress)}
-\tabular{rll}{
-\tab \code{x}  \tab RasterStack or RasterBrick object \cr
-\tab \code{fun} \tab Function to be applied. The number of arguments of the function should match the number of layers of the RasterStack/Brick object  \cr
 }
 
 

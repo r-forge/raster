@@ -46,6 +46,8 @@
 			} else {
 				stop('cannot use this formula')
 			}
+		} else {
+			applymethod <- TRUE # ? or stop()
 		}
 	}
 
