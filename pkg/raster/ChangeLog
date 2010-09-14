@@ -1,3 +1,9 @@
+14-Sep-2010,  version 1.5-6
+
+reclass can now also process a multi-layer Raster object
+cover and overlay can now also process mulitple multi-layer Raster objects to return another multi-layer object
+
+-------------------------------------------------------------
 2-Sep-2010,  version 1.5-2
 
 improved speed of gridDistance (JvE)

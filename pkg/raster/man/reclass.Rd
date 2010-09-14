@@ -42,7 +42,7 @@ The following additional arguments can be passed, to replace default values for 
 A new RasterLayer object, and in some cases the side effect of a new file on disk.
 }
 
-\seealso{ \code{ \link[raster]{calc}} } 
+\seealso{ \code{ \link[raster]{subs}, \link[raster]{calc}} } 
 
 
 \author{Robert J. Hijmans}
