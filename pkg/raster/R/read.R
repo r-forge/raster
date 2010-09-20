@@ -28,7 +28,7 @@ setMethod('readAll', signature(object='RasterStack'),
 	function(object){ 
 		for (i in seq(nlayers(object))) {
 			if (! object@layers[[i]]@data@inmemory  ) {
-				object@layers[[i]]@values <- .readRasterLayerValues(object@layers[[i]], 1, object@nrows) 
+				object@layers[[i]]@data@values <- .readRasterLayerValues(object@layers[[i]], 1, object@nrows) 
 			}
 		}
 		return(object)

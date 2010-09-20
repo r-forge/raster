@@ -25,7 +25,7 @@ gain <- function(x) {
 }
 
 
-'offset<-' <- function(x, value) {
+'off<-' <- function(x, value) {
 	value <- as.numeric(value[1])
 	if (inherits(x, 'RasterStack')) {
 		x@layers <- lapply( x@layers, function(z) { z@data@offset = value; return(z) } )
@@ -36,7 +36,7 @@ gain <- function(x) {
 }
 
 
-offset <- function(x) {
+off <- function(x) {
 	if (inherits(x, 'RasterStack')) {
 		r <- sapply( x@layers, function(z) { z@data@offset } )
 	} else {

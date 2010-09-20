@@ -1,9 +1,9 @@
 \name{Gain and offset}
 
 \alias{gain}
-\alias{offset}
+\alias{off}
 \alias{gain<-}
-\alias{offset<-}
+\alias{off<-}
 
 \title{Gain and offset of values on file}
 
@@ -21,8 +21,8 @@ Note that setting gain and/or offset only affects reading of values from a file,
 \usage{
 gain(x)
 gain(x) <- value
-offset(x)
-offset(x) <- value
+off(x)
+off(x) <- value
 }
 
 \arguments{
@@ -39,10 +39,10 @@ Raster* object or numeric value(s)
 \examples{ 
 r <- raster(system.file("external/test.grd", package="raster"))
 gain(r)
-offset(r)
+off(r)
 r[1505:1510]
 gain(r) <- 10
-offset(r) <- 5
+off(r) <- 5
 r[1505:1510]
 }
 

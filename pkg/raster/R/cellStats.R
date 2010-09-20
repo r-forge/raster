@@ -53,7 +53,7 @@ cellStats <- function(x, stat='mean', ...) {
 					stop('stat (character type) unknown')
 				}	
 			} 
-			return( as.vector( apply(x, 2, stat, na.rm=TRUE) ) )
+			return( ( apply(x, 2, stat, na.rm=TRUE) ) )
 		}
 	} 
 	
