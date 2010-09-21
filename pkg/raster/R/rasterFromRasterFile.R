@@ -94,7 +94,7 @@
 		x@file@bandorder <- bandorder 
 	}
 
-	if (nchar(layernames) > 1) {
+	if (nchar(layernames) > 0) {
 		layernames <- as.vector(unlist(strsplit(layernames, ':')))
 	}
 	if (type == 'RasterBrick') {
