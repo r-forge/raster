@@ -21,8 +21,8 @@ Note that setting gain and/or offset only affects reading of values from a file,
 \usage{
 gain(x)
 gain(x) <- value
-off(x)
-off(x) <- value
+offs(x)
+offs(x) <- value
 }
 
 \arguments{
