@@ -39,10 +39,10 @@ Raster* object or numeric value(s)
 \examples{ 
 r <- raster(system.file("external/test.grd", package="raster"))
 gain(r)
-off(r)
+offs(r)
 r[1505:1510]
 gain(r) <- 10
-off(r) <- 5
+offs(r) <- 5
 r[1505:1510]
 }
 
