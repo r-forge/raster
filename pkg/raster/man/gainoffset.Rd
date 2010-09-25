@@ -1,9 +1,9 @@
 \name{Gain and offset}
 
 \alias{gain}
-\alias{off}
+\alias{offs}
 \alias{gain<-}
-\alias{off<-}
+\alias{offs<-}
 
 \title{Gain and offset of values on file}
 
