@@ -4,7 +4,7 @@
 # Version 0.9
 # Licence GPL v3
 
-.writeRasterAll <- function(raster, filename, ... ) {
+.writeRasterAll <- function(raster, filename, NAvalue, ... ) {
 
 	filetype <- .filetype(...)
 	raster@file@driver <- filetype
@@ -30,6 +30,9 @@
 	datatype <- .datatype(...)
 	dtype <- .shortDataType(datatype)
 	dataType(raster) <- datatype
+	if (!missing(NAvalue)) {
+		raster@file@nodatavalue <- NAvalue
+	}
 	
 	mn <- minValue(raster)
 	mx <- maxValue(raster)
@@ -47,7 +50,7 @@
 		raster@data@values <- as.integer(raster@data@values)
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	}
-
+	
 	dsize <- dataSize(raster@file@datanotation)
 	filecon <- file(fnamevals, "wb")
 	writeBin(raster@data@values , filecon, size = dsize ) 
