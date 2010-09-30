@@ -66,8 +66,8 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	validObject(projection(to, asText=FALSE))
 	projfrom <- projection(from)
 	projto <- projection(to)
-	if (projfrom == "NA") {stop("input projection is NA")}
-	if (projto == "NA") {stop("output projection is NA")}
+	if (projfrom == "NA") { stop("input projection is NA") }
+	if (projto == "NA") { stop("output projection is NA") }
 	
 	pbb <- projectExtent(to, projection(from))
 	bb <- intersectExtent(pbb, from)
@@ -82,10 +82,11 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 
 	filename <- trim(filename)
 	
-	if (inherits(from, 'RasterLayer')) {
+	if ( nlayers(from) == 1) {
 		to <- raster(to)
 	} else {
 		to <- brick(to, values=FALSE)
+		to@data@nlayers <- nlayers(from)
 	}
 	
 	if (!canProcessInMemory(to, 1) && filename == "") {
@@ -96,7 +97,7 @@ projectRaster <- function(from, to, method="ngb", filename="", ...)  {
 	if (inMemory) {
 		v <- matrix(NA, nrow=ncell(to), nlayers(from))
 	} else {
-		to <- writeStart(to, filename=filename, ... )
+		to <- writeStart(to, filename=filename, ...)
 	}
 	
 	tr <- blockSize(to)
