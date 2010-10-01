@@ -20,7 +20,7 @@
 	
 	overwrite <- .overwrite(...)
 	if (!overwrite & (file.exists(fnamehdr) | file.exists(fnamevals))) {
-		stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+		stop(paste(filename,"exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
 	}
 	
 	raster@data@values[is.nan(raster@data@values)] <- NA
