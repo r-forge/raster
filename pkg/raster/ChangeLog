@@ -1,8 +1,14 @@
+2-Oct-2010,  version 1.5-13
+bug fixes in .readRowsAscii (reported by Manuel Spínola), setMinMax
+filenames in Raster objects from working directory now get the full path appended (no errors when the workdir changes)
+new functions (under development): morph, morphMerge
+
+--------------------------------------------
 30-Sep-2010,  version 1.5-12
 New function lineValues (extract values from Raster* by lines, like polygonValues)
 bug fixes: 
 projectRaster now works for RasterStack objects
-focalFilter now works with a 'filename' argument (bug reported by ...)
+focalFilter now works with a 'filename' argument (bug reported by Bill McCoy)
 
 --------------------------------------------
 25-Sep-2010,  version 1.5-11

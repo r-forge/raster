@@ -23,6 +23,7 @@ setMethod('readAll', signature(object='RasterLayer'),
 		options('warn'=-1) 
 		object@data@min <- as.vector( min(object@data@values, na.rm=TRUE ) )
 		object@data@max <- as.vector( max(object@data@values, na.rm=TRUE ) )
+		object@data@haveminmax <- TRUE
 		return(object)
 	}
 )
