@@ -38,6 +38,9 @@ setMethod('raster', signature(x='matrix'),
 
 setMethod('raster', signature(x='character'), 
 	function(x, band=1, values=FALSE, crs=NULL, ...) {
+	
+		x <- .fullFilename(x)
+		
 		r <- .rasterObjectFromFile(x, band=band, objecttype='RasterLayer', ...)
 		if (! is.null(crs)) {
 			projection(r) = crs
