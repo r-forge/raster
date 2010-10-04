@@ -30,9 +30,6 @@
 	datatype <- .datatype(...)
 	dtype <- .shortDataType(datatype)
 	dataType(raster) <- datatype
-	if (!missing(NAvalue)) {
-		raster@file@nodatavalue <- NAvalue
-	}
 	
 	mn <- minValue(raster)
 	mx <- maxValue(raster)
@@ -51,6 +48,10 @@
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
 	}
 	
+
+	if (! missing(NAvalue) ) {
+		raster@file@nodatavalue <- NAvalue
+	}
 	dsize <- dataSize(raster@file@datanotation)
 	filecon <- file(fnamevals, "wb")
 	writeBin(raster@data@values , filecon, size = dsize ) 
