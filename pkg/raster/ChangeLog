@@ -1,3 +1,7 @@
+4-Oct-2010,  version 1.5-14
+raster() now takes an image (list) and coerces it to a RasterLayer
+
+--------------------------------------------
 2-Oct-2010,  version 1.5-13
 bug fixes in .readRowsAscii (reported by Manuel Spínola), setMinMax
 filenames in Raster objects from working directory now get the full path appended (no errors when the workdir changes)

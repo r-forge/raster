@@ -47,7 +47,7 @@ Maintainer: Robert J. Hijmans \email{r.hijmans@gmail.com}
 
 \section{I. Creating Raster* objects}{
 
-Raster* objects can be created, from scracth or from raster files, with the following functions:
+Raster* objects can be created, from scracth, files, or from objects of other classes, with the following functions:
   \tabular{ll}{
     \code{\link{raster}}\tab To create a RasterLayer \cr
     \code{\link{stack}} \tab To create a RasterStack (multiple layers)\cr
@@ -143,6 +143,8 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{rasterToPoints}} \tab Create points from a RasterLayer \cr
     \code{\link{rasterToPolygons}} \tab Create polygons from a RasterLayer \cr
     \code{\link{rasterToContour}} \tab Contour lines from a RasterLayer \cr
+    \code{\link{rasterFromXYZ}} \tab RasterLayer from regularly spaces points\cr
+    \code{\link{raster}} \tab RasterLayer from SpatialGrid*, image, or matrix objects\cr
   }
   
 You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{as(object, 'SpatialGridDataFrame')}  

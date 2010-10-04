@@ -15,13 +15,45 @@ setMethod('raster', signature(x='missing'),
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs) {
 		e <- extent(xmn, xmx, ymn, ymx)
 		if (missing(crs)) {
-			if (e@xmin > -400 & e@xmax < 400 & e@ymin > -90.1 & e@ymax < 90.1) { 
+			if (e@xmin > -360.1 & e@xmax < 360.1 & e@ymin > -90.1 & e@ymax < 90.1) { 
 				crs ="+proj=longlat +datum=WGS84"
 			} else {
 				crs=NA
 			}
 		}
 		r <- raster(e, nrows=nrows, ncols=ncols, crs=crs)
+		return(r)
+	}
+)
+
+
+setMethod('raster', signature(x='list'), 
+	function(x, crs) {
+	# list should represent an "image"
+		if (is.null(x$x)) { stop('list has no "x"') }
+		if (is.null(x$y)) { stop('list has no "y"') }
+		if (is.null(x$z)) { stop('list has no "z"') }
+		if (! all(dim(x$z) == c(length(x$x), length(x$y)))) { stop('"z" does not have the right dimensions') }
+
+		resx <- ( x$x[length(x$x)] - x$x[1] ) / length(x$x)
+		resy <- ( x$y[length(x$y)] - x$y[1] ) / length(x$y)
+		xmn <- min(x$x) - 0.5 * resx
+		xmx <- max(x$x) + 0.5 * resx
+		ymn <- min(x$y) - 0.5 * resy
+		ymx <- max(x$y) + 0.5 * resy
+
+		if (missing(crs)) {
+			if (xmn > -360.1 & xmx < 360.1 & ymn > -90.1 & ymx < 90.1) { 
+				crs = "+proj=longlat +datum=WGS84"
+			} else {
+				crs = NA
+			}
+		}
+		
+		x <- t(x$z)
+		x <- x[nrow(x):1, ]
+		r <- raster( x, xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs )
+		
 		return(r)
 	}
 )
