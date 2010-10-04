@@ -142,21 +142,36 @@ setMethod('raster', signature(x='RasterBrick'),
 			layer <- round(layer)
 		}
 		if (layer > 0) {
-			dindex <- max(1, min(nlayers(x), layer))
+			dindex <- as.integer(max(1, min(nlayers(x), layer)))
 			if ( fromDisk(x) ) {
 				if (dindex != layer) { warning(paste("layer was changed to", dindex))}
-				if (x@file@driver == 'netcdf') {
-					r <- raster(x@file@name, varname=x@data@zvar, band=dindex)				
-				} else {
-					r <- raster(filename(x), band=dindex)
+				
+				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
+				r@file <- x@file
+
+				r@data@offset <- x@data@offset
+				r@data@gain <- x@data@gain
+				r@data@inmemory <- x@data@inmemory
+				r@data@fromdisk <- x@data@fromdisk
+				r@data@isfactor <- x@data@isfactor
+				r@data@haveminmax <- x@data@haveminmax
+
+				r@data@band <- dindex
+				r@data@min <- x@data@min[dindex]
+				r@data@max <- x@data@max[dindex]
+				ln <- x@layernames[dindex]
+				if (! is.na(ln) ) { r@layernames <- ln }
+				zv <- x@zvalue[dindex]
+				if (! is.na(zv) ) { r@zvalue <- zv }
+				if ( x@data@inmemory ) {
+					r@data@values <- x@data@values[,dindex]
 				}
-				layerNames(r) <- layerNames(x)[dindex]
-				extent(r) <- extent(x) # perhaps it was changed by user and different on disk
+				
 			} else {
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
 				if ( inMemory(x) ) {
-					if (dindex != layer) { warning(paste("layer was changed to", dindex))}
-					r <- setValues(r, getValues(x)[,dindex])
+					if ( dindex != layer ) { warning(paste("layer was changed to", dindex)) }
+					r <- setValues(r, x@data@values[,dindex])
 				}
 			}
 			r@data@offset <- x@data@offset
