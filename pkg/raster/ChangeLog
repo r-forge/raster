@@ -1,3 +1,8 @@
+6-Oct-2010,  version 1.5-15
+netcdf files writing in chunks. 
+netcdf create a RasterLayer from a RasterBrick no longer goes to disk (copy parameters in memory)
+
+--------------------------------------------
 4-Oct-2010,  version 1.5-14
 raster() now takes an image (list) and coerces it to a RasterLayer
 

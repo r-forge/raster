@@ -166,8 +166,13 @@ setMethod('raster', signature(x='RasterBrick'),
 				if ( x@data@inmemory ) {
 					r@data@values <- x@data@values[,dindex]
 				}
+				zvar <- try(slot(x@data, 'zvar'), silent=TRUE)
+				if (class(zvar) != 'try-error') {
+					attr(r@data, "zvar") <- zvar
+				}
 				
 			} else {
+			
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
 				if ( inMemory(x) ) {
 					if ( dindex != layer ) { warning(paste("layer was changed to", dindex)) }
