@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-morph <- function(from, to, method='bilinear', filename='', ...) {
+.morph <- function(from, to, method='bilinear', filename='', ...) {
 	
 	warning('this function is still experimental, please provide feedback on odd behavior')
 	
