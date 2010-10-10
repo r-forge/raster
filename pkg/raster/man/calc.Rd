@@ -13,7 +13,7 @@ Calculate values for a new Raster object from another Raster* object, using a fo
 
 If \code{x} is a RasterLayer, \code{fun} should be a function that can take a single value as input, and returns a single value (e.g. \code{sqrt}). 
 
-If \code{x} is a RasterStack or RasterBrick, and \code{fun} returns the same number of values as the input vector (e.g., \code{function(x){ x * 10}}) it, calc returns a RasterBrick. But calc returns a RasterLayer if \code{fun} takes a vector of values as input, and return a single value (e.g. \code{sum}. 
+If \code{x} is a RasterStack or RasterBrick, and \code{fun} returns the same number of values as the input vector (e.g., \code{function(x){ x * 10}}) it, calc returns a RasterBrick. But calc returns a RasterLayer if \code{fun} takes a vector of values as input, and return a single value (e.g. \code{sum}). 
  
 In many cases, what can be achieved with \code{calc} in a more intuitive 'raster-algebra' notation (see \code{\link[raster]{Arith-methods}}). For example, \code{r <- r * 2} rather than \code{r <- calc(r, fun=function(x){x * 2}}. However, \code{calc} should be faster when using complex formulas on large datasets. With \code{calc} it is also easier to set output file preferences if applicable. 
  
