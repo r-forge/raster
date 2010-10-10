@@ -22,7 +22,7 @@ Methods to create a RasterLayer object. RasterLayer objects can be created from 
 
 In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
 
-If you are new to the raster package, first have a look here: \code{\link{raster-package}}.
+For an overview of the functions in the raster package have a look here: \code{\link{raster-package}}.
 }
 
 
