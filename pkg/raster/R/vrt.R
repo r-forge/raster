@@ -5,13 +5,13 @@
 
  
 .vrt <- function(x) {
-	if (inherits(x), 'RasterStack') { stop() }
+	if (inherits(x, 'RasterStack')) { stop() }
 	if (!fromDisk(x)) { stop() }
 	if (x@file@driver != 'raster') { stop() }
 	fn <- fname <- x@file@name
 	ext(fname) <- 'vrt'
 	ext(fn) <- '.gri'	
-	pixsize <- dataSize(dtype)
+	pixsize <- dataSize(x)
 	lineoff <- pixsize * x@ncols
 
 	datatype <- raster:::.getGdalDType(dataType(x))	
