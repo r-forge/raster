@@ -4,50 +4,55 @@
 # Licence GPL v3
 
  
-writeRasterHdr <- function(raster, format) {
-	if (trim(filename(raster)) == '') {
+writeHdr <- function(x, format) {
+	if (trim(filename(x)) == '') {
 		stop('Raster object has no filename')
 	}
 	type <- toupper(format)
 	if (type=="RASTER") {
-		.writeHdrRaster(raster)
+		.writeHdrRaster(x)
+	} else if (type=="VRT") {
+		.writeHdrVRT(x)
+		.writeStx(x)		
 	} else if (type=="BIL") {
-		.writeHdrBIL(raster)
-		.writeStx(raster)
+		.writeHdrBIL(x)
+		.writeStx(x)
 	} else if (type=="BSQ") {
-		.writeHdrBIL(raster, "BSQ")
-		.writeStx(raster)
+		.writeHdrBIL(x, "BSQ")
+		.writeStx(x)
 	} else if (type=="BIP") {
-		.writeHdrBIL(raster, "BIP")
-		.writeStx(raster)
+		.writeHdrBIL(x, "BIP")
+		.writeStx(x)
 	} else if (type=="ERDASRAW") {
-		.writeHdrErdasRaw(raster)
-		.writeStx(raster)
+		.writeHdrErdasRaw(x)
+		.writeStx(x)
 	} else 	if (type=="ENVI") {
-		.writeHdrENVI(raster)
-		.writeStx(raster)
+		.writeHdrENVI(x)
+		.writeStx(x)
 	} else 	if (type=="SAGA") {
-		.writeHdrSAGA(raster)
+		.writeHdrSAGA(x)
 	} else 	if (type=="IDRISI") {
-		.writeHdrIDRISI(raster)
+		.writeHdrIDRISI(x)
 	} else {
 		stop("This file format is not supported")
 	}
+	return( invisible(TRUE) )
  }
 
  
  
-.writeStx <- function(raster, filename='') {
-	if (raster@data@haveminmax) {
+.writeStx <- function(x, filename='') {
+	if (x@data@haveminmax) {
 		if (filename=='') {
-			filename <- filename(raster)
+			filename <- filename(x)
 		} 
 		if (filename!='') {
 			ext(filename) <- ".stx"
 			thefile <- file(filename, "w")  # open a txt file connectionis
-			cat(1, " ", minValue(raster), " ", maxValue(raster), "\n", file = thefile)
+			cat(1, " ", minValue(x), " ", maxValue(x), "\n", file = thefile)
 			close(thefile)
 		}
 	}	
+	return( invisible(TRUE) )
 }
  

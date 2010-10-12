@@ -322,7 +322,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
     \code{\link{getData}} \tab Download and geographic data\cr
     \code{\link{pointDistance}} \tab Distance between points \cr
     \code{\link{readIniFile}} \tab Read a (windows) 'ini' file \cr
-    \code{\link{writeRasterHdr}} \tab Write header file for some raster formats \cr
+    \code{\link{writeHdr}} \tab Write header file for a number of raster formats \cr
     \code{\link{trim}} \tab Remove leading and trainling blanks from a character string \cr
     \code{\link{ext}} \tab Get or set the extentsion of a filename \cr
     \code{\link{cv}} \tab Coefficient of variation  \cr

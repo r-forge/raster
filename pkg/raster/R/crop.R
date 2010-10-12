@@ -51,6 +51,7 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 		outRaster <- raster(x)
 	}
 	outRaster <- setExtent(outRaster, e, keepres=TRUE)
+	outRaster@layernames <- layerNames(x)
 	
 	if (! inMemory(x)  &  ! fromDisk(x) ) {
 		return(outRaster)

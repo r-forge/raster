@@ -37,13 +37,13 @@ function(x, fun, filename='', na.rm, ...) {
 	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
 	
 	test <- length(fun(1:nl))
-	if (test != 1) {
-		if (test == nl) {
-			return( .calcLayers(x, fun, filename, ...) )
-		} else {
-			stop("'fun' does not return the correct number of values. It should be 1 or nlayers(x)") 
-		}
+	if (test == nl) {
+		return( .calcLayers(x, fun, filename, ...) )
 	}
+		#} else {
+		#	stop("'fun' does not return the correct number of values. It should be 1 or nlayers(x)") 
+		#}
+	
 	if (! missing(na.rm)) {
 		test <- try(fun(1:nl, na.rm=TRUE), silent=TRUE)
 		if (class(test) == 'try-error') {
@@ -52,7 +52,12 @@ function(x, fun, filename='', na.rm, ...) {
 	}
 	
 	filename <- trim(filename)
-	outraster <- raster(x)
+	if (test == 1) {
+		out <- raster(x)
+	} else {
+		out <- brick(x, values=FALSE)
+		out@data@nlayers <- test
+	}
 
 	fun <- .makeTextFun(fun)
 	if (class(fun) == 'character') { 
@@ -76,7 +81,12 @@ function(x, fun, filename='', na.rm, ...) {
 				x <- apply(x, 1, fun, na.rm=na.rm)
 			}
 		}
-		x <- setValues(outraster, x)
+		if (is.matrix(x)) {
+			if (dim(x)[2] != test) {
+				x <- t(x)
+			}
+		}
+		x <- setValues(out, x)
 		if (filename != '') {
 			x <- writeRaster(x, filename, ...)
 		}
@@ -87,8 +97,8 @@ function(x, fun, filename='', na.rm, ...) {
 	
 	if (filename == '') { filename <- rasterTmpFile()	} 
 	
-	outraster <- writeStart(outraster, filename=filename, ...)
-	tr <- blockSize(outraster)
+	out <- writeStart(out, filename=filename, ...)
+	tr <- blockSize(out)
 	pb <- pbCreate(tr$n, type=.progress(...))			
 
 	if (missing(na.rm)) {
@@ -100,7 +110,7 @@ function(x, fun, filename='', na.rm, ...) {
 			} else {
 				v <- apply(v, 1, fun)
 			}
-			outraster <- writeValues(outraster, v, tr$row[i])
+			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb) 
 		}
 	} else {
@@ -112,13 +122,13 @@ function(x, fun, filename='', na.rm, ...) {
 			} else {
 				v <- apply(v, 1, fun, na.rm=na.rm)
 			}
-			outraster <- writeValues(outraster, v, tr$row[i])
+			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb) 
 		}
 	}
-	outraster <- writeStop(outraster)
+	out <- writeStop(out)
 	pbClose(pb)
-	return(outraster)
+	return(out)
 }
 )
 
