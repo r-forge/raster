@@ -11,9 +11,8 @@
 	ext(fname) <- 'vrt'
 	ext(fn) <- '.gri'	
 	pixsize <- dataSize(x@file@datanotation)
-	
-	# BSQ
 	nbands <- nlayers(x)
+	
 	bandorder <- x@file@bandorder
 	if (bandorder == 'BIL') {
 		pixoff <- pixsize
@@ -31,7 +30,7 @@
 		imgoff <- (1:nbands)-1 
 	}
 
-	datatype <- raster:::.getGdalDType(x@file@datanotation)	
+	datatype <- .getGdalDType(x@file@datanotation)	
 	
 	if (x@file@byteorder == "little") { 
 		byteorder <- "LSB" 
@@ -47,7 +46,7 @@
 	cat('<VRTDataset rasterXSize="', x@ncols, '" rasterYSize="', x@nrows, '">\n' , sep = "", file = f)
 	cat('<GeoTransform>', e@xmin, ', ', r[1], ', ', rotation, ', ', e@ymax, ', ', 0.0, ', ', -1*r[2], '</GeoTransform>\n', sep = "", file = f)
 	if (prj != "NA") {
-		cat('<SRS>', prj  ,'</SRS>\n', sep = "", file = f)
+		cat('<SRS>', prj ,'</SRS>\n', sep = "", file = f)
 	}
 	
 	for (i in 1:nlayers(x)) {
@@ -59,8 +58,8 @@
 		cat('\t\t<LineOffset>', lineoff, '</LineOffset>\n', sep = "", file = f)
 		cat('\t\t<ByteOrder>', byteorder, '</ByteOrder>\n', sep = "", file = f)
 		cat('\t\t<NoDataValue>', x@file@nodatavalue, '</NoDataValue>\n', sep = "", file = f)
-		cat('\t\t<Offset>0.0</Offset>\n', sep = "", file = f)
-		cat('\t\t<Scale>1.0</Scale>\n', sep = "", file = f)
+		cat('\t\t<Offset>', x@data@offset, '</Offset>\n', sep = "", file = f)
+		cat('\t\t<Scale>', x@data@gain, '</Scale>\n', sep = "", file = f)
 		cat('\t</VRTRasterBand>\n', sep = "", file = f)
 	}
 	cat('</VRTDataset>\n', sep = "", file = f)
