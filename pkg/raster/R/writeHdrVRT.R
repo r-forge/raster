@@ -5,9 +5,6 @@
 
  
 .writeHdrVRT <- function(x) {
-	if (inherits(x, 'RasterStack')) { stop('Only applicable to RasterLayer and RasterBrick classes (and their derivatives)') }
-	if (!fromDisk(x)) { stop('Object does not refer to a file on disk') }
-	if (! raster:::.isNativeDriver(x@file@driver) ) { stop('This is not a "native" file format') } 
 	
 	fn <- fname <- x@file@name
 

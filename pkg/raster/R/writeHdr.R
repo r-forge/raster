@@ -5,9 +5,10 @@
 
  
 writeHdr <- function(x, format) {
-	if (trim(filename(x)) == '') {
-		stop('Raster object has no filename')
-	}
+
+	if (inherits(x, 'RasterStack')) { stop('Only applicable to RasterLayer and RasterBrick classes (and their derivatives)') }
+	if (x@file@name == '') { stop('Object has no filename') }
+
 	type <- toupper(format)
 	if (type=="RASTER") {
 		.writeHdrRaster(x)
