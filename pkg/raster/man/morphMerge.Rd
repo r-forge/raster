@@ -13,7 +13,7 @@ Morph Raster* objects to a merged Raster* object.
 }
 
 \usage{
-morphMerge(x, y, ..., crs, res, method='bilinear', filename='')
+morphMerge(x, y, ..., crs, res, fun, method='bilinear', filename='')
 }
 
 \arguments{
@@ -22,6 +22,7 @@ morphMerge(x, y, ..., crs, res, method='bilinear', filename='')
   \item{...}{Additional Raster* objects and other arguments. See below, under Methods}  
   \item{crs}{ object}
   \item{res}{ object}
+  \item{fun}{ A function }
   \item{method}{ object}
   \item{filename}{ object}
 }

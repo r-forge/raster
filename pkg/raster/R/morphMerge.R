@@ -3,11 +3,11 @@
 # Version 1,0
 # Licence GPL v3
 
-morphMerge <- function(x, y, ..., crs, res, method='bilinear', filename='') {
+morphMerge <- function(x, y, ..., crs, res, fun, method='bilinear', filename='') {
 
 	warning('this function is still experimental, please provide feedback on odd behavior')
 	
-	if (missing(res)) { stop('provide a res a./rugment') }
+	if (missing(res)) { stop('provide a res argument') }
 	if (missing(crs)) { stop('provide a crs argument') }
 	if ( projection(crs) == 'NA' ) { stop('crs cannot be NA') }
 	validObject(projection(crs, asText=FALSE))
@@ -31,7 +31,10 @@ morphMerge <- function(x, y, ..., crs, res, method='bilinear', filename='') {
 			rl[[i]] <- resample(rl[[i]], rc, method=method)
 		}
 	}
-	r <- cover(rl, filename=filename, format=filetype, datatype=datatype, overwrite=overwrite)
+	if (missing(fun)) {
+		r <- cover(rl, filename=filename, format=filetype, datatype=datatype, overwrite=overwrite)
+	} else {
+		r <- mosaic(rl, filename=filename, fun=fun, format=filetype, datatype=datatype, overwrite=overwrite)
+	}
+	return(r)
 }
-
-

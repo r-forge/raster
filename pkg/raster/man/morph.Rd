@@ -24,7 +24,6 @@ morph(from, to, method='bilinear', filename='', ...)
   \item{...}{Additional Raster* objects and other arguments. See below, under Methods}  
 }
 
-
 \details{
 yadiya
 }

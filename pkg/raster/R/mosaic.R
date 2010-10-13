@@ -128,9 +128,8 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	on.exit( options('warn'= w) )
 	
 	if (rowcalc) {
-
 		for (r in 1:nrow(outraster)) {
-			rdd = rd
+			rdd <- rd
 			for (i in 1:length(rasters)) { 
 				if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
 					rdd[ids[,i], i] <- getValues(rasters[[i]], r+1-rowcol[i,1])
@@ -152,7 +151,7 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	
 	} else {
 		for (r in 1:nrow(outraster)) {
-			rdd = rd
+			rdd <- rd
 			for (i in 1:length(rasters)) { 
 				if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
 					rdd[ids[,i], i] <- getValues(rasters[[i]], r+1-rowcol[i,1])
