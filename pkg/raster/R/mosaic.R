@@ -10,6 +10,29 @@ if (!isGeneric("mosaic")) {
 		standardGeneric("mosaic"))
 }	
 
+
+setMethod('mosaic', signature(x='list', y='missing'), 
+function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwrite, progress) { 
+	
+	if (missing(fun)) {	stop('you need to supply a function with a fun=   argument') } 
+	if (missing(format)) {	format <- .filetype() } 
+	if (missing(overwrite)) {	overwrite <- .overwrite() }
+	if (missing(progress)) { progress <- .progress() }
+	
+	if (! all(sapply(lst, function(x) inherits(x, 'RasterLayer')))) {
+		stop('elements of "x" should all inherit from RasterLayer')
+	}
+	
+	if (length(x) < 2) {
+		stop()
+	} else if (length(x) == 2) {
+		r <- mosaic(x[[1]], x[[2]], fun=fun, na.rm=na.rm, tolerance=tolerance, filename=filename, format=format, overwrite=overwrite, progress=progress)
+	} else {
+		r <- mosaic(x[[1]], x[[2]], x[[3:length(x)]], fun=fun, na.rm=na.rm, tolerance=tolerance, filename=filename, format=format, overwrite=overwrite, progress=progress)
+	}
+	return(r)
+} )
+
 setMethod('mosaic', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwrite, progress) { 
 	
@@ -94,6 +117,14 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	}
 	emptyrow <- rep(NA, ncol(outraster))
 	
+	fun <- .makeTextFun(fun)
+	if (class(fun) == 'character') { 
+		rowcalc <- TRUE 
+		fun <- .getRowFun(fun)
+	} else { rowcalc <- FALSE }
+	
+	
+	
 	for (r in 1:nrow(outraster)) {
 		rdd = rd
 		for (i in 1:length(rasters)) { 
@@ -102,7 +133,17 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 			}	
 		}
 		
-		res <- apply(rdd, 1, FUN=fun, na.rm=na.rm)
+		w <- getOption('warn')
+		on.exit( options('warn'= w) )
+		options('warn'=-1) 
+		
+		if (rowcalc) { 
+			res <- fun(rdd, na.rm=na.rm ) 
+		} else {
+			res <- apply(rdd, 1, FUN=fun, na.rm=na.rm)
+		}
+		
+		options('warn'=w) 
 		
 		if (todisk) {
 			outraster <- writeValues(outraster, res, r)
