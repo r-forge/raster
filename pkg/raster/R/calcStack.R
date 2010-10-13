@@ -36,9 +36,15 @@ function(x, fun, filename='', na.rm, ...) {
 	nl <- nlayers(x)
 	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
 	
-	test <- length(fun(1:nl))
-	if (test == nl) {
-		return( .calcLayers(x, fun, filename, ...) )
+	tst <- dim(fun(rbind(1:nl, 1:nl, 1:nl)))
+	test <- dim(tst)
+	
+	if (! is.null(test)) {
+		if (test[1] == 3 & test[2] == nl) {
+			return( .calcLayers(x, fun, filename, ...) )
+		}
+	} else {
+		test <- length(tst)
 	}
 		#} else {
 		#	stop("'fun' does not return the correct number of values. It should be 1 or nlayers(x)") 

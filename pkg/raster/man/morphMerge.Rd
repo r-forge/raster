@@ -13,7 +13,7 @@ Morph Raster* objects to a merged Raster* object.
 }
 
 \usage{
-morphMerge(x, y, ..., crs, res, fun, method='bilinear', filename='')
+morphMerge(x, y, ..., crs, res, fun, na.rm=TRUE, tolerance=0.05, method='bilinear', filename='')
 }
 
 \arguments{
@@ -23,6 +23,8 @@ morphMerge(x, y, ..., crs, res, fun, method='bilinear', filename='')
   \item{crs}{ object}
   \item{res}{ object}
   \item{fun}{ A function }
+  \item{na.rm}{for fun }
+  \item{tolerance}{Numeric. Difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal}  
   \item{method}{ object}
   \item{filename}{ object}
 }

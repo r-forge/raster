@@ -22,15 +22,9 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	if (! all(sapply(x, function(x) inherits(x, 'RasterLayer')))) {
 		stop('elements of "x" should all inherit from RasterLayer')
 	}
+
+	do.call(mosaic, x, tolerance=tolerance, filename=filename, format=format, overwrite=overwrite, progress=progress)
 	
-	if (length(x) < 2) {
-		stop()
-	} else if (length(x) == 2) {
-		r <- mosaic(x[[1]], x[[2]], fun=fun, na.rm=na.rm, tolerance=tolerance, filename=filename, format=format, overwrite=overwrite, progress=progress)
-	} else {
-		r <- mosaic(x[[1]], x[[2]], x[[3:length(x)]], fun=fun, na.rm=na.rm, tolerance=tolerance, filename=filename, format=format, overwrite=overwrite, progress=progress)
-	}
-	return(r)
 } )
 
 setMethod('mosaic', signature(x='RasterLayer', y='RasterLayer'), 
@@ -43,6 +37,7 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	if (missing(progress)) { progress <- .progress() }
 
 	dots <- list(...)
+	dots <- unlist(dots) #  make simple list
 	rasters <- c(x, y)
 	if (length(dots) > 0) {
 		for (i in 1:length(dots)) {

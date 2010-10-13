@@ -3,7 +3,7 @@
 # Version 1,0
 # Licence GPL v3
 
-morphMerge <- function(x, y, ..., crs, res, fun, method='bilinear', filename='') {
+morphMerge <- function(x, y, ..., crs, res, fun, na.rm=TRUE, tolerance=0.05, method='bilinear', filename='') {
 
 	warning('this function is still experimental, please provide feedback on odd behavior')
 	
@@ -25,16 +25,21 @@ morphMerge <- function(x, y, ..., crs, res, fun, method='bilinear', filename='')
 	for (i in 1:length(rl)) {
 		ex <- ep[[i]] + max(res)
 		rc <- crop(r, ex) 
-		if ( projection(crs) != projection(rl[[i]]) ) {
+		
+		test <- compare(rl[[i]], rc, extent=FALSE, rowcol=FALSE, prj=TRUE, res=TRUE, orig=TRUE, tolerance=tolerance, stopiffalse=TRUE)
+		if (test) {
+			# do nothing
+		} else if ( projection(crs) != projection(rl[[i]]) ) {
 			rl[[i]] <- projectRaster( rl[[i]], rc, method=method )
 		} else {
 			rl[[i]] <- resample(rl[[i]], rc, method=method)
 		}
 	}
 	if (missing(fun)) {
-		r <- cover(rl, filename=filename, format=filetype, datatype=datatype, overwrite=overwrite)
+		r <- merge(rl,                        tolerance=tolerance, filename=filename, format=filetype, datatype=datatype, overwrite=overwrite)
 	} else {
-		r <- mosaic(rl, filename=filename, fun=fun, format=filetype, datatype=datatype, overwrite=overwrite)
+		r <- mosaic(rl, fun=fun, na.rm=na.rm, tolerance=tolerance, filename=filename, format=filetype, datatype=datatype, overwrite=overwrite)
 	}
 	return(r)
 }
+
