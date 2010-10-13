@@ -19,7 +19,7 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	if (missing(overwrite)) {	overwrite <- .overwrite() }
 	if (missing(progress)) { progress <- .progress() }
 	
-	if (! all(sapply(lst, function(x) inherits(x, 'RasterLayer')))) {
+	if (! all(sapply(x, function(x) inherits(x, 'RasterLayer')))) {
 		stop('elements of "x" should all inherit from RasterLayer')
 	}
 	
@@ -124,35 +124,53 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	} else { rowcalc <- FALSE }
 	
 	
+	w <- getOption('warn')
+	on.exit( options('warn'= w) )
 	
-	for (r in 1:nrow(outraster)) {
-		rdd = rd
-		for (i in 1:length(rasters)) { 
-			if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
-				rdd[ids[,i], i] <- getValues(rasters[[i]], r+1-rowcol[i,1])
-			}	
-		}
+	if (rowcalc) {
+
+		for (r in 1:nrow(outraster)) {
+			rdd = rd
+			for (i in 1:length(rasters)) { 
+				if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
+					rdd[ids[,i], i] <- getValues(rasters[[i]], r+1-rowcol[i,1])
+				}	
+			}
 		
-		w <- getOption('warn')
-		on.exit( options('warn'= w) )
-		options('warn'=-1) 
-		
-		if (rowcalc) { 
+			options('warn'=-1) 
 			res <- fun(rdd, na.rm=na.rm ) 
-		} else {
+			options('warn'=w) 
+		
+			if (todisk) {
+				outraster <- writeValues(outraster, res, r)
+			} else {
+				v[,r] = res
+			}
+			pbStep(pb, r)
+		}
+		pbClose(pb)
+	
+	} else {
+		for (r in 1:nrow(outraster)) {
+			rdd = rd
+			for (i in 1:length(rasters)) { 
+				if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
+					rdd[ids[,i], i] <- getValues(rasters[[i]], r+1-rowcol[i,1])
+				}	
+			}
+			options('warn'=-1) 
 			res <- apply(rdd, 1, FUN=fun, na.rm=na.rm)
-		}
+			options('warn'=w) 
 		
-		options('warn'=w) 
-		
-		if (todisk) {
-			outraster <- writeValues(outraster, res, r)
-		} else {
-			v[,r] = res
+			if (todisk) {
+				outraster <- writeValues(outraster, res, r)
+			} else {
+				v[,r] = res
+			}
+			pbStep(pb, r)
 		}
-		pbStep(pb, r)
+		pbClose(pb)
 	}
-	pbClose(pb)
 	
 	if (todisk) {
 		outraster <- writeStop(outraster)
