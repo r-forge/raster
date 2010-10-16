@@ -1,3 +1,8 @@
+15-Oct-2010,  version 1.6-1
+writeHdr can now write VRT (GDAL virtual raster) header files to accompany .gri files such that these can be viewed in e.g. ArcGIS and QGIS.
+Adjustments to calc to allow it to return any number of layers from a computation on a multiple layer object
+
+--------------------------------------------
 6-Oct-2010,  version 1.5-15
 netcdf files writing in chunks. 
 netcdf create a RasterLayer from a RasterBrick no longer goes to disk (copy parameters in memory)
