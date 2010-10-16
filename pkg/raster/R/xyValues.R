@@ -43,6 +43,7 @@ setMethod("xyValues", signature(object='RasterLayer', xy='matrix'),
 		}
 
 		if (! is.null(buffer)) {
+			if (method != 'simple') { warning('method argument is ignored when a buffer is used') }
 			return( .xyvBuf(object, xy, buffer, fun, na.rm=na.rm) )
 		}
 
@@ -87,16 +88,8 @@ setMethod("xyValues", signature(object='RasterBrick', xy='matrix'),
 		}
 		
 		if (! is.null(buffer)) {
-			buffer <- abs(buffer)
-			if (is.atomic(buffer)) {
-				if (buffer!=0)  {
-					return( .xyvBuf(object, xy, buffer, fun, na.rm) )
-				}
-			} else {
-				if (min(buffer)<0 | max(buffer)>0) {
-					.xyvBuf(object, xy, buffer, fun, na.rm)
-				}
-			}
+			if (method != 'simple') { warning('method argument is ignored when a buffer is used') }
+			return( .xyvBuf(r, xy, buffer, fun, na.rm) )
 		}
 
 		if (method == 'bilinear') {

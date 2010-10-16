@@ -80,7 +80,7 @@ xyValues(r, xy[1:3,], buffer=100000, fun=mean)
  s <- raster(r)
  for (i in 1:length(z)) { s[z[[i]]] <- i }
 ## compare with raster that is not longitude/latitude
- projection(r) <- NA 
+ projection(r) <- "+proj=UTM +zone=17" 
  xy[,1] <- 50
  z <- xyValues(r, xy, buffer=8)
  for (i in 1:length(z)) { s[z[[i]]] <- i }
