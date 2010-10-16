@@ -52,32 +52,46 @@ projectExtent <- function(object, crs) {
 }
 
 
-projectRaster <- function(from, to, method="bilinear", filename="", ...)  {
+projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ...)  {
+
 	if (! .requireRgdal() ) { stop('rgdal not available') }
+
+	validObject(projection(from, asText=FALSE))
+	projfrom <- projection(from)
+	if (projfrom == "NA") { stop("input projection is NA") }
 	
-	if (! inherits(from, 'RasterStack' )) {
-		if ( ! inMemory(from) & ! fromDisk(from) ) {
-			stop('no vales for "from". Nothing to do.')
+	if (missing(to)) {
+		if (missing(res)) {
+			stop("both 'to' and 'res' arguments missing. Provide one of these two.")
 		}
+		if (missing(crs)) {
+			stop("'res' provided, but 'crs' argument is missing.")
+		}
+		to <- projectExtent(from, crs)
+		res(to) <- res
+		projto <- projection(to)
+	} else {
+		projto <- projection(to)
+		if (projto == "NA") { 
+			if (missing(crs) | is.na(crs) | crs == 'NA' ) {
+				stop("output projection is NA") 
+			} else {
+				projection(to) <- crs
+			}
+		} 
 	}
 
 	validObject(to)
-	validObject(projection(from, asText=FALSE))
 	validObject(projection(to, asText=FALSE))
-	projfrom <- projection(from)
-	projto <- projection(to)
-	if (projfrom == "NA") { stop("input projection is NA") }
-	if (projto == "NA") { stop("output projection is NA") }
+
 	if (identical(projfrom, projto)) {
-		if ( identical( as(from, 'BasicRaster'), as(to, 'BasicRaster') ) ) {
-			warning('nothing to do; returning "from"')
-			return(from)
-		} else {
-			warning('projections are the same, using resample')
-			return( resample(from, to, method=method, filename=filename, ...  ) ) 
-		}
+		stop('projections of "from" and "to" are the same')
 	}	
-	
+
+	if ( ! hasValues(from) ) {
+		return(to)
+	}
+
 	pbb <- projectExtent(to, projection(from))
 	bb <- intersectExtent(pbb, from)
 	validObject(bb)

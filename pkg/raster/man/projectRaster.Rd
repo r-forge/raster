@@ -3,36 +3,40 @@
 \alias{projectRaster}
 \alias{projectExtent}
 
-\title{project a RasterLayer}
+\title{Project a Raster object}
 
 \description{
 Project the values of a RasterLayer to a new RasterLayer with another coordinate reference system. 
 
 \code{projecExtent} returns a RasterLayer with a projected extent, but without any values. This RasterLayer can then 
-be used as \code{'to'} RasterLayer in \code{projectRaster}. \code{projectRaster} computes values for the cells of the new RasterLayer.
+be adjusted (e.g. by setting its resolution) and used as \code{'to'} Raster object in \code{projectRaster}. 
+\code{projectRaster} computes values for the cells of the new Raster object.
 }
 
 \usage{
-projectRaster(from, to, method="bilinear", filename="", ...) 
+projectRaster(from, to, res, crs, method="bilinear", filename="", ...) 
 projectExtent(object, crs)
 }
 
 \arguments{
-  \item{from}{a Raster* object}
-  \item{to}{a Raster* object}
-  \item{method}{method used to compute values for the new RasterLayer. Either 'ngb' (nearest neighbor) or 'bilinear' (bilinear interpolation).}
-  \item{filename}{character. output filename}  
-  \item{...}{additional arguments. See Details.}    
-  \item{object}{Extent or Raster* object}
-  \item{crs}{Character or object of class CRS. PROJ4 type description of the coordinate reference system}
+  \item{from}{Raster* object}
+  \item{to}{Raster* object with the parameters to which 'from' should be projected}
+  \item{res}{Single or (vector of) two numerics. To set the output resolution if 'to' is missing}
+  \item{crs}{Character or object of class 'CRS'. PROJ.4 description of the coordinate reference system. In projectRaster this is used to set the output CRS if 'to' is missing, or if 'to' has no valid CRS}
+  \item{method}{Method used to compute values for the new RasterLayer. Either 'ngb' (nearest neighbor), which is useful for categorical variables, or (the default value) 'bilinear' (bilinear interpolation), which is appropriate for continuous variables.}
+  \item{filename}{Character. output filename}  
+  \item{...}{Additional arguments. See Details.}    
+  \item{object}{Raster* object}
 
 }
 
 \details{
-First create a template RasterLayer with an extent in the coordinate system of the crs you want to project to. You can use \code{projectExtent} for this
-or an existing Raster* object.
-Also set the number of rows and columns (or the resolution), and perhaps adjust the extent. The resolution of the output raster should normally be similar to that of the input raster.
-Then use that object to project the input RasterLayer to. 
+There are two approaches you can follow to project the values of a Raster object.
+1) First create a template Raster with the CRS you want to project to. To do so, you can use \code{projectExtent} for this
+or an existing Raster* object. Also set the number of rows and columns (or the resolution), and perhaps adjust the extent. The resolution of the output raster should normally be similar to that of the input raster. Then use that object to project the input Raster object to. 
+This is the preferred method because you have most control. For example you can assure that the resulting Raster object lines up with other Raster objects.
+
+2) Do not provie a "to" argument, but provide a "res" and "crs" argument.
 
 Projection is performed using the PROJ.4 library accesed through the rgdal package. 
 
@@ -78,6 +82,9 @@ res(pr) <- 200000
 
 # project the values of RasterLayer 'r' to the new RasterLayer 'projras'
 pr <- projectRaster(r, pr)
+# alternatively
+pr2 <- projectRaster(r, crs=newproj, res=20000)
+
 # inverse projection, back to the properties of 'r'
 inv <- projectRaster(pr, r)
 
