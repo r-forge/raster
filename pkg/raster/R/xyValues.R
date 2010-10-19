@@ -74,13 +74,13 @@ setMethod("xyValues", signature(object='RasterBrick', xy='matrix'),
 
 		dots <- list(...)
 		layer <- dots$layer
-		n <- dots$nl
-		nls <- nlayers(object)
+		nl <- dots$nl
+		nlyrs <- nlayers(object)
 	
 		if (is.null(layer)) { layer <- 1 } 
-		if (is.null(n)) { n <- nls } 
-		layer <- min(max(1, round(layer)), nls)
-		n <- min(max(1, round(n)), nls-layer+1)
+		if (is.null(nl)) { nl <- nlyrs } 
+		layer <- min(max(1, round(layer)), nlyrs)
+		nl <- min(max(1, round(nl)), nlyrs-layer+1)
 	
 		if (dim(xy)[2] != 2) {
 			stop('xy has wrong dimensions; there should be 2 columns only' )
@@ -88,17 +88,16 @@ setMethod("xyValues", signature(object='RasterBrick', xy='matrix'),
 		
 		if (! is.null(buffer)) {
 			if (method != 'simple') { warning('method argument is ignored when a buffer is used') }
-			return( .xyvBuf(object, xy, buffer, fun, na.rm, layer=layer, n=n) )
+			return( .xyvBuf(object, xy, buffer, fun, na.rm, layer=layer, n=nl) )
 		}
 
 		if (method == 'bilinear') {
-			result <- .bilinearValue(object, xy, layer=layer, n=n)
-			return(result)		
+			return ( .bilinearValue(object, xy, layer=layer, n=nl) )
 	
 		} else if (method=='simple') {
 		
 			cells <- cellFromXY(object, xy)
-			return( cellValues(object, cells, layer=layer, n=n) )
+			return( cellValues(object, cells, layer=layer, n=nl) )
 			
 		} else {
 			stop('invalid method argument. Should be simple or bilinear.')
