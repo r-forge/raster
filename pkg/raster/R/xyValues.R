@@ -5,14 +5,18 @@
 # Licence GPL v3
 
 
-
-xyValues <- function(object, xy, ...) {
+warnExtract <- function(n=4) {
 	d <- getOption('rasterExtractWarningGiven')
 	if (is.null(d)) { d <- 1 } else { d <- as.numeric(d) + 1 }
-	if (d < 4) {
+	if (d < n) {
 		warning('xyValues is an obsolete function. Use "extract"')
 		options('rasterExtractWarningGiven' = d)
 	}
+}
+
+
+xyValues <- function(object, xy, ...) {
+	warnExtract()
 	extract(object, xy, ...)
 }
 

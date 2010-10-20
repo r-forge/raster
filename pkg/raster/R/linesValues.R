@@ -7,12 +7,7 @@
 
 
 lineValues <- function(lns, x, ...) {
-	d <- getOption('rasterExtractWarningGiven')
-	if (is.null(d)) { d <- 1 } else { d <- as.numeric(d) + 1 }
-	if (d < 5) {
-		warning('lineValues is an obsolete function. Use "extract"')
-		options('rasterExtractWarningGiven' = d)
-	}
+	warnExtract(6)
 	extract(x, lns, ...)
 }
 

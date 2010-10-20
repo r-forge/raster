@@ -14,7 +14,7 @@ setMethod('extract', signature(x='Raster', y='vector'),
 function(x, y, ...){ 
 	y <- round(y)
 	if (length(y) == 2) {
-		warning("returning values at _cell numbers_ : ", y[1], " and ", y[2])
+		warning("returning values at CELL NUMBERS (not coordiantes) : ", y[1], " and ", y[2])
 	}
 	return( .cellValues(x, y, ...) )
 })
