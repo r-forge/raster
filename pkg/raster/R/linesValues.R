@@ -34,7 +34,7 @@ lineValues <- function(lns, x, ...) {
 			rc <- linesToRaster(pp, rc, silent=TRUE)
 			xy <- rasterToPoints(rc)[,-3]
 			if (length(xy) > 0) { # always TRUE?
-				res[[i]] <- xyValues(x, xy)
+				res[[i]] <- .xyValues(x, xy, ...)
 			} 
 		}
 	}

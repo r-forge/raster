@@ -12,25 +12,30 @@ if (!isGeneric("extract")) {
 
 setMethod('extract', signature(x='Raster', y='vector'), 
 function(x, y, ...){ 
-	return(cellValues(x, y, ...))
+	y <- round(y)
+	if (length(y) == 2) {
+		warning("returning values at _cell numbers_ : ", y[1], " and ", y[2])
+	}
+	return( .cellValues(x, y, ...) )
 })
 
 
 setMethod('extract', signature(x='Raster', y='matrix'), 
 function(x, y, ...){ 
-	return(xyValues(x, y, ...))
+	return( .xyValues(x, y, ...) )
 })
+
 
 
 setMethod('extract', signature(x='Raster', y='data.frame'), 
 function(x, y, ...){ 
-	return(xyValues(x, y, ...))
+	return( .xyValues(x, as.matrix(y), ...))
 })
 
 
 setMethod('extract', signature(x='Raster', y='SpatialPoints'), 
 function(x, y, ...){ 
-	return(xyValues(x, y, ...))
+	return( .xyValues(x, coordinates(y), ...))
 })
 
 
@@ -50,6 +55,18 @@ function(x, y, ...){
 
 setMethod('extract', signature(x='Raster', y='Extent'), 
 function(x, y, ...){ 
-	return( getValues(crop(x, y, ...)) )
+	nlyrs <- nlayers(x)
+
+	if (nlyrs > 1) {
+		if (missing(layer)) { layer <- 1 } 
+		if (missing(nl)) { nl <- nlyrs } 
+		layer <- min(max(1, round(layer)), nlyrs)
+		nl <- min(max(1, round(nl)), nlyrs-layer+1)
+		x <- getValues(crop(x, y, ...))
+		return( x[ , layer:(layer+nl-1)] )
+	} else {
+		return( getValues(crop(x, y, ...)) )
+	}
+	
 })
 

@@ -21,7 +21,7 @@ function(x,i,j,...,drop=TRUE) {
 	if ( inMemory(x) ) {
 		return(x@data@values[i=cells, , drop=drop])
 	} else {
-		return(cellValues(x, cells))
+		return( .cellValues(x, cells) )
 	}
 }
 )

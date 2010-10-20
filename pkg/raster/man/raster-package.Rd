@@ -171,10 +171,7 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
   \tabular{ll}{
     \code{\link{getValues}} \tab Get all cell values (will fail with very large rasters and limited computer memory), or a row of values (safer) \cr
     \code{\link{getValuesBlock}} \tab Get values for a block (a rectangular area defined by start and end row and column \cr
-    \code{\link{xyValues}} \tab Use points (optionally with a buffer) to extract cell values \cr
-    \code{\link{cellValues}} \tab Use cell numbers to extract cell values \cr
-    \code{\link{lineValues}} \tab Use a SpatialLines* object to extract cell values \cr
-    \code{\link{polygonValues}} \tab Use a SpatialPolygons* object to extract cell values \cr
+    \code{\link{extract}} \tab Use cell numbers, points, lines, polygons, or an extent to extract values from a Raster* object\cr
     \code{\link{focalValues}} \tab Extract values for focal cells\cr
     \code{\link{sampleRandom}} \tab Random sample \cr
     \code{\link{sampleRegular}} \tab Regular sample \cr

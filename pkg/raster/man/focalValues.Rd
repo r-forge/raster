@@ -32,7 +32,7 @@ Additional arguments that can be suplied to this function:
 A two column matrix. The first column has the column numbers, the second has the focal values. 
 }
 
-\seealso{ \code{\link[raster]{cellValues}},  \code{\link[raster]{xyValues}}, \code{\link[raster]{polygonValues}}, \code{\link[raster]{focal}}}
+\seealso{ \code{\link[raster]{extract}},  \code{\link[raster]{focal}}}
 
 \author{Robert J. Hijmans }
 

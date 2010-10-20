@@ -43,7 +43,7 @@ polygonValues <- function(p, x, ...) {
 			
 			if (length(xy) > 0)  {  # catch holes or very small polygons
 				if (weights) {
-					value <- xyValues(x, xy)
+					value <- .xyValues(x, xy, ...)
 					if (cellnumbers) {
 						cell <- cellFromXY(x, xy)
 						res[[i]] <- cbind(cell, value, weight)
@@ -51,7 +51,7 @@ polygonValues <- function(p, x, ...) {
 						res[[i]] <- cbind(value, weight)
 					}
 				} else {
-					res[[i]] <- xyValues(x, xy)
+					res[[i]] <- .xyValues(x, xy, ...)
 				}
 			} else {
 				# do nothing; res[[i]] <- NULL

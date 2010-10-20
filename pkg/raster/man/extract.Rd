@@ -11,26 +11,33 @@
 \alias{extract,Raster,SpatialPolygons-method}
 \alias{extract,Raster,Extent-method}
 
-\title{Extract values from Raster object using other spatial data}
+\title{Extract values from Raster objects}
 
 \description{
-Extract data from a Raster object at the locations of other spatial data (i.e. a spatial query). This _generic_ function will replace a number of existing functions in this package (cellValues, xyValues, lineValues, and polygonValues)
+Extract data from a Raster object using cell numbers or the locations of other spatial data (i.e. a spatial query). 
 }
 
 \usage{
 extract(x, y, ...) 
 }
 
-
 \arguments{
   \item{x}{Raster* object}
-  \item{y}{A vector (representing cell numbers) or a two-column data.frame or matrix (representing points), or a SpatialPoints, SpatialLines, SpatialPolygons, or Extent object }
+  \item{y}{A vector (representing cell numbers); a SpatialPoints object or a two-column data.frame or matrix (representing points); 
+  or a SpatialLines, or SpatialPolygons object; or an Extent object }
   \item{...}{Additional arguments, see under Details}  
 }
 
-
 \details{
-Additional arguments that can be suplied to this function if \code{y} represents \bold{points}:
+\bold{# points #}
+
+If \code{y} represents points, \code{extract} returns the values of a Raster* object for the cells in which a set of points fall. 
+
+Values can be extracted through bilinear interpolation of the values of the four cells nearest to each point. 
+
+It is also possible to supply a buffer to select values for cells within a certain distance around each point (see Details).
+
+Additional arguments that can be suplied to this function if \code{y} represents points:
 
 1) \code{method}. If \code{method='simple'} (the default), values for the cell a point falls in are returned. The 
 alternative is \code{method='bilinear'}, in which case the returned values are interpolated from the values of the four nearest raster cells.
@@ -44,14 +51,16 @@ take a single numeric vector as argument and return a single values (e.g. mean, 
 
 4) \code{na.rm}. Only useful when \code{fun} is supplied. If \code{na.rm=TRUE} (the default value), NA values are removed before fun is applied. 
 
-Multi-layer Raster* objects accept these two additional arguments:
 
-5) \code{layer}. Integer. First layer for which you want values 
+\bold{# polygons #}
 
-6) \code{nl}. Integer. Number of layers for which you want values
+If \code{y} represents \bold{polygons}, the \code{extract} method returns the values of the cells of a Raster* object that is covered by a polygon.
+A cell is covered if its center is inside the polygon (but see the \code{weights} option for considering partly covered cells).
+Relatively small polygons (e.g. those smaller than a single cell of the RasterLayer), or polygons with an odd shape, may not return any values 
+if they do not cover any RasterLayer cell centers. In some cases, you could use the centroids of such polygons, for example using
+\code{xyValues(coordinates(p))} or \code{xyValues(coordinates(p), method='bilinear')}. Additional arguments that can be suplied to this function 
+if \code{y} represents polygons are:
 
-
-Additional arguments that can be suplied to this function if \code{y} represents \bold{polygons}:
 1) \code{fun}. Function to summarize the values (e.g. \code{mean})
 
 If no \code{fun} argument is supplied:
@@ -61,14 +70,36 @@ If no \code{fun} argument is supplied:
 3) \code{cellnumbers}. If \code{cellnumbers=TRUE} and \code{weights=TRUE}, cellnumbers will also be returned. 
 
 
+\bold{# lines #}
+
 Additional arguments that can be suplied to this function if \code{y} represents \bold{lines}:
+
 \code{fun}. Function to summarize the values (e.g. \code{mean})
+
+
+\bold{# Multi-layer objects #}
+
+If \code{x} is a RasterStack or RasterBrick object, \code{extract} accepts these two additional arguments:
+
+1)\code{layer}. Integer. First layer for which you want values 
+
+2 \code{nl}. Integer. Number of layers for which you want values
+
 }
+
 
 
 \value{
-Vector, matrix, or list
+A vector for RasterLayer objects, and a matrix for a RasterStack or RasterBrick object.
+A list if \code{y} is a SpatialPolygons* or SpatialLines* object or if a \code{buffer} argument is used.
 }
+
+
+\note{This generic function has replaced four other functions in this package (cellValues, xyValues, lineValues, and polygonValues)}
+
+
+\seealso{ \code{\link[raster]{getValues}}, \code{\link[sp]{SpatialPolygons}}, \code{\link[sp]{SpatialLines}}  }
+
 
 \author{Robert J. Hijmans}
 
@@ -80,27 +111,29 @@ r[] <- 1:ncell(r)
 ###############################
 # extract values by cell number
 ###############################
-extract(r, 2:5)
+extract(r, c(1:2, 10, 100))
+s <- stack(r, sqrt(r), r/r)
+extract(s, c(1, 10, 100), layer=2, n=2)
 
 ###############################
 # extract values with points
 ###############################
 xy <- cbind(-50, seq(-80, 80, by=20))
-xyValues(r, xy)
-xyValues(r, xy, method='bilinear')
+extract(r, xy)
+extract(r, xy, method='bilinear')
 
 # examples with a buffer
-xyValues(r, xy[1:3,], buffer=1000000)
-xyValues(r, xy[1:3,], buffer=1000000, fun=mean)
+extract(r, xy[1:3,], buffer=1000000)
+extract(r, xy[1:3,], buffer=1000000, fun=mean)
 
 ## illustrating the varying size of a buffer (expressed in meters) on a longitude/latitude raster
- z <- xyValues(r, xy, buffer=1000000)
+ z <- extract(r, xy, buffer=1000000)
  s <- raster(r)
  for (i in 1:length(z)) { s[z[[i]]] <- i }
 ## compare with raster that is not longitude/latitude
  projection(r) <- "+proj=UTM +zone=17" 
  xy[,1] <- 50
- z <- xyValues(r, xy, buffer=8)
+ z <- extract(r, xy, buffer=8)
  for (i in 1:length(z)) { s[z[[i]]] <- i }
  plot(s)
 # library(maptools)

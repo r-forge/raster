@@ -36,7 +36,7 @@ function(x,i,j,...,drop=TRUE) {
 	if ( inMemory(x) ) {
 		x@data@values[i, drop=drop]
 	} else {
-		return(cellValues(x, i))
+		return( .cellValues(x, i) )
 	}
 }
 )
@@ -55,7 +55,7 @@ function(x,i,j,...,drop=TRUE) {
 		i <- as.logical( getValues(i) ) 
 	}
 	
-	return(cellValues(x, i))
+	return( .cellValues(x, i) )
 }
 )
 

@@ -128,7 +128,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 		unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
 		
-		vals <- xyValues(from, unProjXY, method=method)
+		vals <- .xyValues(from, unProjXY, method=method)
 		
 		if (inMemory) {
 			start <- cellFromRowCol(to, tr$row[i], 1)

@@ -31,7 +31,7 @@ function(x,i,j,...,drop=TRUE) {
 		} else {
 			cells <- cellFromRowColCombine(x, i, j)
 		}
-		return(cellValues(x, cells))
+		return( .readCells(x, cells) )
 	}
 }
 )

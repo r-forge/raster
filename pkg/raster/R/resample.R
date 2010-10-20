@@ -49,7 +49,7 @@ resample <- function(from, to, method, filename="", ...)  {
 		r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 		xy <- xyFromCell(to, cellFromRowCol(to, tr$row[i], 1) : cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to)) ) 
 
-		vals <- xyValues(from, xy, method=method)
+		vals <- .xyValues(from, xy, method=method)
 
 		if (inMemory) {
 			start <- cellFromRowCol(to, tr$row[i], 1)
