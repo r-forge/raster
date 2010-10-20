@@ -7,7 +7,7 @@
 \alias{mosaic,list,missing-method}
 
 \title{ 
-mosaic RasterLayers
+Merge RasterLayers using a function for overlapping areas
 }
 
 \description{
