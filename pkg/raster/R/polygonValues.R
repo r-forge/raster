@@ -4,15 +4,13 @@
 # Licence GPL v3
 
 
+polygonValues <- function(p, x, ...) {	
+	warning('polygonValues is an obsolete function. Use "extract"')
+	extract(x, p, ...)
+}
 
-if (!isGeneric("polygonValues")) {
-	setGeneric("polygonValues", function(p, x, ...)
-		standardGeneric("polygonValues"))
-}	
 
-
-setMethod("polygonValues", signature(p='SpatialPolygons', x='Raster'), 
-function(p, x, fun, weights=FALSE, cellnumbers=FALSE, ...) {
+.polygonValues <- function(x, p, fun, weights=FALSE, cellnumbers=FALSE, ...) {
 	spbb <- bbox(p)
 	rsbb <- bbox(x)
 	addres <- max(res(x))
@@ -80,6 +78,6 @@ function(p, x, fun, weights=FALSE, cellnumbers=FALSE, ...) {
 	}
 	res
 }
-)
+
 
 

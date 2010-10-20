@@ -52,10 +52,17 @@ Multi-layer Raster* objects accept these two additional arguments:
 
 
 Additional arguments that can be suplied to this function if \code{y} represents \bold{polygons}:
+1) \code{fun}. Function to summarize the values (e.g. \code{mean})
 
-1) \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. This option can be useful if the polygons are small relative to the cells size of the RasterLayer
+If no \code{fun} argument is supplied:
 
-2) \code{cellnumbers}. If \code{cellnumbers=TRUE} and \code{weights=TRUE}, cellnumbers will also be returned. 
+2) \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. This option can be useful if the polygons are small relative to the cells size of the RasterLayer
+
+3) \code{cellnumbers}. If \code{cellnumbers=TRUE} and \code{weights=TRUE}, cellnumbers will also be returned. 
+
+
+Additional arguments that can be suplied to this function if \code{y} represents \bold{lines}:
+\code{fun}. Function to summarize the values (e.g. \code{mean})
 }
 
 

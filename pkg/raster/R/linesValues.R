@@ -5,14 +5,14 @@
 
 
 
-if (!isGeneric("lineValues")) {
-	setGeneric("lineValues", function(lns, x, ...)
-		standardGeneric("lineValues"))
-}	
+
+lineValues <- function(lns, x, ...) {
+	warning('lineValues is an obsolete function. Use "extract"')
+	extract(x, lns, ...)
+}
 
 
-setMethod("lineValues", signature(lns='SpatialLines', x='Raster'), 
-function(lns, x, fun, ...) {
+.lineValues <- function(x, lns, fun, ...) {
 	spbb <- bbox(lns)
 	rsbb <- bbox(x)
 	addres <- max(res(x))
@@ -54,6 +54,6 @@ function(lns, x, fun, ...) {
 	}
 	res
 }
-)
+
 
 

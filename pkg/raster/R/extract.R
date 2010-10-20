@@ -36,14 +36,14 @@ function(x, y, ...){
 
 setMethod('extract', signature(x='Raster', y='SpatialLines'), 
 function(x, y, ...){ 
-	lineValues(y, x, ...)
+	.lineValues(x, y, ...)
 })
 
 
 
 setMethod('extract', signature(x='Raster', y='SpatialPolygons'), 
 function(x, y, ...){ 
-	polygonValues(y, x, ...)
+	.polygonValues(x, y, ...)
 })
 
 
