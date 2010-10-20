@@ -23,20 +23,15 @@ extract(x, y, ...)
 
 \arguments{
   \item{x}{Raster* object}
-  \item{y}{A vector (representing cell numbers); a SpatialPoints object or a two-column data.frame or matrix (representing points); 
-  or a SpatialLines, or SpatialPolygons object; or an Extent object }
+  \item{y}{A vector (representing cell numbers); or a SpatialPoints object or a two-column data.frame or matrix (representing points); 
+  or a \code{\link[sp]{SpatialPolygons}}, \code{\link[sp]{SpatialLines}}, or Extent object }
   \item{...}{Additional arguments, see under Details}  
 }
 
 \details{
-\bold{# points #}
+\bold{= points =}
 
 If \code{y} represents points, \code{extract} returns the values of a Raster* object for the cells in which a set of points fall. 
-
-Values can be extracted through bilinear interpolation of the values of the four cells nearest to each point. 
-
-It is also possible to supply a buffer to select values for cells within a certain distance around each point (see Details).
-
 Additional arguments that can be suplied to this function if \code{y} represents points:
 
 1) \code{method}. If \code{method='simple'} (the default), values for the cell a point falls in are returned. The 
@@ -52,9 +47,9 @@ take a single numeric vector as argument and return a single values (e.g. mean, 
 4) \code{na.rm}. Only useful when \code{fun} is supplied. If \code{na.rm=TRUE} (the default value), NA values are removed before fun is applied. 
 
 
-\bold{# polygons #}
+\bold{= polygons =}
 
-If \code{y} represents \bold{polygons}, the \code{extract} method returns the values of the cells of a Raster* object that is covered by a polygon.
+If \code{y} represents polygons, the \code{extract} method returns the values of the cells of a Raster* object that is covered by a polygon.
 A cell is covered if its center is inside the polygon (but see the \code{weights} option for considering partly covered cells).
 Relatively small polygons (e.g. those smaller than a single cell of the RasterLayer), or polygons with an odd shape, may not return any values 
 if they do not cover any RasterLayer cell centers. In some cases, you could use the centroids of such polygons, for example using
@@ -65,40 +60,41 @@ if \code{y} represents polygons are:
 
 If no \code{fun} argument is supplied:
 
-2) \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. This option can be useful if the polygons are small relative to the cells size of the RasterLayer
+2) \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction
+ of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. 
+ This option can be useful if the polygons are small relative to the cells size of the RasterLayer
 
 3) \code{cellnumbers}. If \code{cellnumbers=TRUE} and \code{weights=TRUE}, cellnumbers will also be returned. 
 
 
-\bold{# lines #}
+\bold{= lines =}
 
-Additional arguments that can be suplied to this function if \code{y} represents \bold{lines}:
+If \code{y} represents lines, the following additional argument can be suplied to this function:
 
-\code{fun}. Function to summarize the values (e.g. \code{mean})
+1) \code{fun}. Function to summarize the values (e.g. \code{mean})
 
 
-\bold{# Multi-layer objects #}
+\bold{= Multi-layer objects =}
 
-If \code{x} is a RasterStack or RasterBrick object, \code{extract} accepts these two additional arguments:
+If \code{x} is a RasterStack or RasterBrick object, \code{extract} accepts, in addition to the arguments listed above,
+these two additional arguments:
 
 1)\code{layer}. Integer. First layer for which you want values 
 
 2 \code{nl}. Integer. Number of layers for which you want values
-
 }
-
 
 
 \value{
 A vector for RasterLayer objects, and a matrix for a RasterStack or RasterBrick object.
-A list if \code{y} is a SpatialPolygons* or SpatialLines* object or if a \code{buffer} argument is used.
+A list if \code{y} is a SpatialPolygons* or SpatialLines* object or if a \code{buffer} argument is used (without a function).
 }
 
 
 \note{This generic function has replaced four other functions in this package (cellValues, xyValues, lineValues, and polygonValues)}
 
 
-\seealso{ \code{\link[raster]{getValues}}, \code{\link[sp]{SpatialPolygons}}, \code{\link[sp]{SpatialLines}}  }
+\seealso{ \code{\link{getValues}}, \code{\link{focalValues}} }
 
 
 \author{Robert J. Hijmans}
