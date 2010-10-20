@@ -153,7 +153,7 @@ but does not copy the filename nor the data associated with the original Raster 
 
 \details{
 New RasterLayer objects normally have no values in memory. 
-If they are created from a file on disk, you can access values with \code{\link[raster]{getValues}), \link[raster]{xyValues}} and related functions.
+If they are created from a file on disk, you can access values with \code{\link[raster]{getValues}), \link[raster]{extract}} and related functions.
 You can assign new values with  \code{\link[raster]{setValues}} and with \code{\link[raster]{replacement}}.
 }
 

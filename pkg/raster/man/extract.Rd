@@ -53,7 +53,7 @@ If \code{y} represents polygons, the \code{extract} method returns the values of
 A cell is covered if its center is inside the polygon (but see the \code{weights} option for considering partly covered cells).
 Relatively small polygons (e.g. those smaller than a single cell of the RasterLayer), or polygons with an odd shape, may not return any values 
 if they do not cover any RasterLayer cell centers. In some cases, you could use the centroids of such polygons, for example using
-\code{xyValues(coordinates(p))} or \code{xyValues(coordinates(p), method='bilinear')}. Additional arguments that can be suplied to this function 
+\code{extract(x, coordinates(y))} or \code{extract(x, coordinates(y), method='bilinear')}. Additional arguments that can be suplied to this function 
 if \code{y} represents polygons are:
 
 1) \code{fun}. Function to summarize the values (e.g. \code{mean})

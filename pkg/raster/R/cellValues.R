@@ -1,16 +1,15 @@
 # Author: Robert J. Hijmans
 # contact: r.hijmans@gmail.com
 # Date : November 2008
-# Version 0.9
+# Version 1.0
 # Licence GPL v3
-
-###   cellValues   ###
 
 cellValues <- function(x, cells, ...) { 
 	d <- getOption('rasterExtractWarningGiven')
 	if (is.null(d)) { d <- 1 } else { d <- as.numeric(d) + 1 }
-	if (d < 3) {
+	if (d < 4) {
 		warning('cellValues is an obsolete function. Use "extract"')
+		options('rasterExtractWarningGiven' = d)
 	}
 	extract(x, cells, ...)
 }
