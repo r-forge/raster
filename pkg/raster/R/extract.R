@@ -52,7 +52,6 @@ function(x, y, ...){
 })
 
 
-
 setMethod('extract', signature(x='Raster', y='Extent'), 
 function(x, y, ...){ 
 	nlyrs <- nlayers(x)
@@ -70,3 +69,7 @@ function(x, y, ...){
 	
 })
 
+#setMethod('extract', signature(x='Spatial', y='Spatial'), 
+#function(x, y, ...){ 
+#	return( overlay(x, y, ...) )
+#})

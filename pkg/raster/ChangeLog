@@ -1,3 +1,8 @@
+19-Oct-2010,  version 1.6-2
+New generic function 'extract', to replace xyValues, cellValues, lineValues, polygonValues
+Improvements to rasterFromXYZ (thanks to Thiago Veloso).
+
+--------------------------------------------
 15-Oct-2010,  version 1.6-1
 writeHdr can now write VRT (GDAL virtual raster) header files to accompany .gri files such that these can be viewed in e.g. ArcGIS and QGIS.
 Adjustments to calc to allow it to return any number of layers from a computation on a multiple layer object

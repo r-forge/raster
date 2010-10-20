@@ -3,6 +3,7 @@
 # Version 1,0
 # Licence GPL v3
 
+
 morphMerge <- function(x, y, ..., crs, res, fun, na.rm=TRUE, tolerance=0.05, method='bilinear', filename='') {
 
 	warning('this function is still experimental, please provide feedback on odd behavior')

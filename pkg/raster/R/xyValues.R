@@ -7,7 +7,11 @@
 
 
 xyValues <- function(object, xy, ...) {
-	warning('xyValues is an obsolete function. Use "extract"')
+	d <- getOption('rasterExtractWarningGiven')
+	if (is.null(d)) { d <- 1 } else { d <- as.numeric(d) + 1 }
+	if (d < 3) {
+		warning('xyValues is an obsolete function. Use "extract"')
+	}
 	extract(object, xy, ...)
 }
 
