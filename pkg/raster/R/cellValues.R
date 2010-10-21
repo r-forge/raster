@@ -5,7 +5,7 @@
 # Licence GPL v3
 
 cellValues <- function(x, cells, ...) { 
-	warnExtract()
+	.warnExtract()
 	extract(x, cells, ...)
 }
 

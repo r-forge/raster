@@ -5,7 +5,7 @@
 
 
 polygonValues <- function(p, x, ...) {	
-	warnExtract(6)
+	.warnExtract(6)
 	extract(x, p, ...)
 }
 
