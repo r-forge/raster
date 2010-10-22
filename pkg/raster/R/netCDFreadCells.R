@@ -70,13 +70,13 @@
 
 
 
-.readBrickCellsNetCDF <- function(x, cells, layer, nlayers) {
+.readBrickCellsNetCDF <- function(x, cells, layer, nl) {
 
 		
 	if (length(cells) > 1000) {
 		if (canProcessInMemory(x, 2)) {
 # read all
-			endlayer = layer+nlayers-1
+			endlayer = layer+nl-1
 			r <- getValues(x)
 			r <- r[cells, layer:endlayer]
 			return(r)
@@ -93,12 +93,22 @@
 	nc <- open.ncdf(x@file@name)
 	on.exit( close.ncdf(nc) )
 	
-	count = c(1, 1, nlayers)
-	res <- matrix(nrow=length(cells), ncol=nlayers)
-	for (i in 1:length(cells)) {
-		start = c(cols[i], rows[i], layer)
-		res[i,] <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
-	}	
+	
+	if (nc$var[[zvar]]$ndims == 2) {
+		count = c(1, 1)
+		res <- matrix(nrow=length(cells), ncol=1)
+		for (i in 1:length(cells)) {
+			start = c(cols[i], rows[i])
+			res[i] <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+		}	
+	} else {
+		count = c(1, 1, nl)
+		res <- matrix(nrow=length(cells), ncol=nlayers)
+		for (i in 1:length(cells)) {
+			start = c(cols[i], rows[i], layer)
+			res[i,] <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+		}	
+	}
 
 	#if (!is.na(x@file@nodatavalue)) { res[res==x@file@nodatavalue] <- NA	}
 	#res <- x@data@add_offset + res * x@data@scale_factor
