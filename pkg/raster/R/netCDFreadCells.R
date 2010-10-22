@@ -40,13 +40,25 @@
 	nc <- open.ncdf(x@file@name)
 	on.exit( close.ncdf(nc) )
 	
-	count = c(x@ncols, 1, 1)
-	for (i in 1:length(rows)) {
-		start = c(1, readrows[i], time)
-		values <- as.vector(get.var.ncdf(nc, varid=zvar, start=start, count=count))
-		thisrow <- subset(colrow, colrow[,2] == rows[i])
-		colrow[colrow[,2]==rows[i], 3] <- values[thisrow[,1]]
-	}	
+	
+#####			
+	if (nc$var[[zvar]]$ndims == 2) {
+		count = c(x@ncols, 1)
+		for (i in 1:length(rows)) {
+			start = c(1, readrows[i])
+			values <- as.vector(get.var.ncdf(nc, varid=zvar, start=start, count=count))
+			thisrow <- subset(colrow, colrow[,2] == rows[i])
+			colrow[colrow[,2]==rows[i], 3] <- values[thisrow[,1]]
+		}	
+	} else {
+		count = c(x@ncols, 1, 1)
+		for (i in 1:length(rows)) {
+			start = c(1, readrows[i], time)
+			values <- as.vector(get.var.ncdf(nc, varid=zvar, start=start, count=count))
+			thisrow <- subset(colrow, colrow[,2] == rows[i])
+			colrow[colrow[,2]==rows[i], 3] <- values[thisrow[,1]]
+		}	
+	}
 	
 	colrow <- colrow[,3]
 	#if (!is.na(x@file@nodatavalue)) { colrow[colrow==x@file@nodatavalue] <- NA	}
