@@ -191,7 +191,7 @@ If you use multiple \verb@Raster*@ objects (in functions where this is relevant,
 
 When you use multiple multi-layer objects these must all have the same number or layers, but you can also mix in \verb@RasterLayer@ objects, in which case the \verb@RasterLayer@ object is 'recycled'.
 
-Summary functions {\bf (min, max, mean, prod, sum, Median, cv, range, any, all)} always return a \verb@RasterLayer@ object. Perhaps this is not obvious when using functions like {\bf min, sum or mean}. Use \{bf cellStats} if instead of a \verb@RasterLayer@ you want a single number summarizing the cell values of each layer. 
+Summary functions {\bf (min, max, mean, prod, sum, Median, cv, range, any, all)} always return a \verb@RasterLayer@ object. Perhaps this is not obvious when using functions like {\bf min, sum or mean}. Use {\bf cellStats} if instead of a \verb@RasterLayer@ you want a single number summarizing the cell values of each layer. 
 
 <<raster-3b>>=
 a <- mean(r,s,10)
@@ -205,7 +205,7 @@ cellStats(sst, 'sum')
 
 \section{'High-level' functions}
 
-Several 'high level' functions have been implemented for \verb@RasterLayer@ objects. With 'high level' functions we refer to those functions that you would normally find in a GIS program that supports raster data (such as IDRISI, GRASS, or GRID module in ArcInfo workstation). All these functions work for raster datasets that cannot be loaded into memory. Here we briefly discuss some of these functions. See the help files for more detailed descriptions of each function.
+Several 'high level' functions have been implemented for \verb@RasterLayer@ objects. With 'high level' functions we refer to those functions that you would normally find in a GIS program that supports raster data (such as IDRISI, GRASS, or the GRID module in ArcInfo workstation). All these functions work for raster datasets that cannot be loaded into memory. Here we briefly discuss some of these functions. See the help files for more detailed descriptions of each function.
 
 The high-level functions have some arguments in common. The first argument is typically 'x' or 'object' and can be a \verb@RasterLayer@, and in some cases a \verb@RasterStack@ or \verb@RasterBrick@ . It is followed by one or more arguments specific to the function (either additional \verb@RasterLayer@ objects or parameters), followed by a filename="" and ... arguments. The default filename is an empty character "". If you do not specify a filename, the default action for the function is to return a \verb@RasterLayer@ that only exists in memory. However, if the function will create a \verb@RasterLayer@ that is too large to hold memory it is written  to a temporary file instead. The ...  argument allows for setting additional arguments that are relevant when writing values to a file: the file format, datatype, and a logical value indicating whether existing files should be overwritten. 
 
