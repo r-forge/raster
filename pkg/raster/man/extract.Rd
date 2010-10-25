@@ -3,6 +3,8 @@
 \docType{methods}
 
 \alias{extract}
+\alias{extract,Raster,missing-method}
+\alias{extract,Spatial,Raster-method}
 \alias{extract,Raster,vector-method}
 \alias{extract,Raster,matrix-method}
 \alias{extract,Raster,data.frame-method}
@@ -14,7 +16,11 @@
 \title{Extract values from Raster objects}
 
 \description{
-Extract data from a Raster object using cell numbers or the locations of other spatial data (i.e. a spatial query). 
+Extract data from a Raster object using cell numbers or the locations of other spatial data (i.e. a spatial query). You can use coordinates (points), lines, polygons or an Extent (rectangle) object.
+
+
+This function has replaced four other functions in this package (cellValues, xyValues, lineValues, and polygonValues)
+
 }
 
 \usage{
@@ -89,9 +95,6 @@ these two additional arguments:
 A vector for RasterLayer objects, and a matrix for a RasterStack or RasterBrick object.
 A list if \code{y} is a SpatialPolygons* or SpatialLines* object or if a \code{buffer} argument is used (without a function).
 }
-
-
-\note{This generic function has replaced four other functions in this package (cellValues, xyValues, lineValues, and polygonValues)}
 
 
 \seealso{ \code{\link{getValues}}, \code{\link{focalValues}} }

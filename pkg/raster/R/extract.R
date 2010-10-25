@@ -10,6 +10,34 @@ if (!isGeneric("extract")) {
 }	
 
 
+setMethod('extract', signature(x='Raster', y='missing'), 
+function(x, y, ...){ 
+
+	dots <- list(...)
+	# backwards compatability
+	if (! is.null(dots$cells)) {
+		return( .cellValues(x, ...) )
+	}
+	if (! is.null(dots$xy)) {
+		return( .xyValues(x, ...) )
+	}
+	if (! is.null(dots$p)) {
+		return( .polygonValues(x, ...) )
+	}
+	if (! is.null(dots$lns)) {
+		return( .lineValues(x, ...) )
+	}
+	
+	# focal values
+	if (! (is.null(dots$r) & is.null(dots$ngb) )) {
+		return( focalValues(x, ...) )
+	}
+	stop('I do not understand what you want me to do')
+	
+})
+
+
+
 setMethod('extract', signature(x='Raster', y='vector'), 
 function(x, y, ...){ 
 	y <- round(y)
@@ -45,10 +73,15 @@ function(x, y, ...){
 })
 
 
-
 setMethod('extract', signature(x='Raster', y='SpatialPolygons'), 
 function(x, y, ...){ 
 	.polygonValues(x, y, ...)
+})
+
+setMethod('extract', signature(x='Spatial', y='Raster'), 
+function(x, y, ...){ 
+# For backwards compatibility
+	stop('the order of the first two arguments is reversed' )
 })
 
 
