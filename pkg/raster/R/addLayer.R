@@ -82,70 +82,93 @@ function(x, ..., keepone=FALSE) {
 
 	rasters <- .makeRasterList(..., keepone=keepone)
 	if (length(rasters)==0) { return(x) }
+
+	nl <- nlayers(x) + length(rasters)
+	
+	# to do makes this method memory safe. For now:
+	
+	if (! canProcessInMemory(x, nl) ) {
+		stop('Files too large, create a RasterStack instead')
+	}
+	
+	
+	if (nlayers(x) == 0) {
+		r <- rasters[[1]]
+		x@nrows <- nrow(r)
+		x@ncols <- ncol(r)
+		x@extent <- extent(r)
+		projection(x) <- projection(r)
+		if (! fromDisk(r)  & ! inMemory(r) ) {
+			# done
+		} else {
+			nl <- 1
+			if (trim(r@layernames) != "") {
+				cname <- trim(r@layernames)
+			} else {
+				cname <- "layer1"
+			}
+			x@layernames <- cname
+			x@data@values <- as.matrix(getValues(r))
+			x@data@nlayers <- as.integer(1)
+			x@data@inmemory <- TRUE
+			
+			x@data@min <- r@data@min
+			x@data@max <- r@data@max			
+		}
+		rasters <- rasters[[-1]]
+		if (length(rasters)==0) { return(x) }
+	} 	
+	
+	
+	if (! inMemory(x) ) {
+		if (! fromDisk(x) ) { 
+			stop('Cannot add a RasterLayer with no associated data in memory or on disk to a RasterBrick')
+		} else {
+			x <- readAll(x)
+		}
+	}
+
 	
 	for (i in 1:length(rasters)) { 
 
 		r <- rasters[[i]]
-
-		if (nlayers(x) == 0) {
-			x@nrows <- nrow(r)
-			x@ncols <- ncol(r)
-			x@extent <- extent(r)
-			projection(x) <- projection(r)
-			if (! fromDisk(r)  & ! inMemory(r) ) {
-				# done
-			} else {
-				nl <- 1
-				if (trim(r@layernames) != "") {
-					cname <- trim(r@layernames)
-				} else {
-					cname <- "layer1"
-				}
-				x@layernames <- cname
-				x@data@values <- as.matrix(getValues(r))
-				x@data@nlayers <- as.integer(1)
-				x@data@inmemory <- TRUE
-				
-				x@data@min <- r@data@min
-				x@data@max <- r@data@max			
-			}
-		} else {
-			
-			if (x@file@driver != '') {
-				x@file@driver <- ''
-				x@file@name <- ''
-			}
-	
-			if (!compare(c(x, r))) { 
-				stop(paste("could not add r:", filename(r))) 
-			}
-				
-			if (! fromDisk(r) ) {
-				if (! inMemory(r) ) { 
-					stop('Cannot add a RasterLayer with no associated data in memory or on disk to a RasterBrick')
-				}
-			}
-			
-			x@data@values <- cbind(x@data@values, getValues(r))
-				
-			nl <- x@data@nlayers + 1 
-			x@data@nlayers <- as.integer(nl)
-			cn <- trim(r@layernames)
-			if (cn == "") {
-				cn <- paste("layer", nl, sep="")
-			}
-			count <- 1
-			for (j in 1:(nl-1)) {
-				if ( cn == layerNames(x)[j] ) { 
-					count <- count + 1 
-					cn <- paste(cn, "_", count, sep="")
-				}
-			}	
-			x@layernames[nl] <- cn
-			x@data@min[nl] <- r@data@min
-			x@data@max[nl] <- r@data@max			
+		
+		if (x@file@driver != '') {
+			x@file@driver <- ''
+			x@file@name <- ''
 		}
-	}	
+	
+		if (!compare(c(x, r))) { 
+			stop(paste("could not add r:", filename(r))) 
+		}
+
+			
+		if (! fromDisk(r) ) {
+			if (! inMemory(r) ) { 
+				stop('Cannot add a RasterLayer with no associated data in memory or on disk to a RasterBrick')
+			}
+		}
+			
+		x@data@values <- cbind(x@data@values, getValues(r))
+				
+		nl <- x@data@nlayers + 1 
+		x@data@nlayers <- as.integer(nl)
+		cn <- trim(r@layernames)
+		if (cn == "") {
+			cn <- paste("layer", nl, sep="")
+		}
+		count <- 1
+		for (j in 1:(nl-1)) {
+			if ( cn == layerNames(x)[j] ) { 
+				count <- count + 1 
+				cn <- paste(cn, "_", count, sep="")
+			}
+		}	
+		x@layernames[nl] <- cn
+		x@data@min[nl] <- r@data@min
+		x@data@max[nl] <- r@data@max			
+	}
+		
 	return(x)
 }	
 )
