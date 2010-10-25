@@ -16,15 +16,22 @@ function(x, y, ...){
 	dots <- list(...)
 	# backwards compatability
 	if (! is.null(dots$cells)) {
+		warning("the 'cells' argument is depracated")
 		return( .cellValues(x, ...) )
 	}
 	if (! is.null(dots$xy)) {
+		warning("the 'xy' argument is depracated")
+		if (! is.matrix(dots$xy) ) {
+			stop('xy must be a matrix')
+		}
 		return( .xyValues(x, ...) )
 	}
 	if (! is.null(dots$p)) {
+		warning("the 'p' argument is depracated")
 		return( .polygonValues(x, ...) )
 	}
 	if (! is.null(dots$lns)) {
+		warning("the 'lns' argument is depracated")
 		return( .lineValues(x, ...) )
 	}
 	
