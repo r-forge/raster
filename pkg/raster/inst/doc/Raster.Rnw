@@ -36,7 +36,7 @@ A notable feature of the \verb@raster@ package is that it can work with raster d
 
 To understand what is covered in this vignette, you must understand the basics of the \R language. There is a multitude of on-line and other resources that can help you to get acqainted with \R. The \verb@raster@ package does not operate in isolation. For example, it depends on the \verb@sp@ package and uses the classes defined in that package for vector type data. See the vignette and help pages of that package or Bivand {\it et al} (2008). Bivand {\it et al} provide an introduction to handling spatial data in \R, and to statistically oriented spatial data analysis (such as inference from spatial data, point pattern analysis, and geostatistics) and some of the \R packages that can be used for that (it does not mention the 'raster' package as the book came out before it was developed. 
 
-In the next section, I discuss some general aspects of the design of the package, notably the structure of the main classes, and what they represent. The use of the package is illustrated in subsequent sections. 
+In the next section, I discuss some general aspects of the design of the package, notably the structure of the main classes, and what they represent. The use of the package is illustrated in subsequent sections. \verb@raster@ has a large number of functions, not all of them are discussed here, and those that are discussed are mentioned only briefly. See the help files of the package for more information on individual functions and {\bf help("raster-package")} for an index of functions by topic.
 
 
 \section{Classes}

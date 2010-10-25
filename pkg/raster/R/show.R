@@ -67,8 +67,8 @@ setMethod ('show' , 'RasterLayer',
 					cat('min value   : ? \n')
 					cat('max value   : ? \n')
 				} else {
-					cat('min value   :  \n')
-					cat('max value   :  \n')		
+					cat('min value   : NA \n')
+					cat('max value   : NA \n')		
 				}
 			}
 		}
