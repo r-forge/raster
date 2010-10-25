@@ -65,9 +65,9 @@ The three classes described above inherit from the \verb@Raster@ class (that mea
 
 An object of class \verb@Extent@ has four slots: xmin, xmax, ymin, and ymax. These represent the minimum and maximum x and y coordinates of the of the Raster object. These would be, for example,  -180, 180, -90, and 90, for a global raster with longitude/latitude coordinates.  Note that some file systems (and perhaps some software as well) use the coordinates of the center of extreme cells, rather than the extremes of the entire raster. 
 
-\verb@Raster@  is a virtual class. This means that it cannot be instantiated (you cannot create objects from this class). It was created to allow the definition of methods for that class. These methods will be dispatched when called with a descendent of the class (i.e. when the method is called with a \verb@RasterLayer@, \verb@RasterBrick@  or \verb@RasterStack@ object as argument). This allows for efficient code writing because many methods are the same for any of these three classes, and hence a single method for 'Raster' suffices. 
+\verb@Raster@  is a virtual class. This means that it cannot be instantiated (you cannot create objects from this class). It was created to allow the definition of methods for that class. These methods will be dispatched when called with a descendent of the class (i.e. when the method is called with a \verb@RasterLayer@, \verb@RasterBrick@  or \verb@RasterStack@ object as argument). This allows for efficient code writing because many methods are the same for any of these three classes, and hence a single method for \verb@Raster@ suffices. 
 
-\verb@RasterStackBrick@  is a class union of the \verb@RasterStack@ and \verb@RasterBrick@  class. This is a also a virtual class. It allows defining methods that apply to both a \verb@RasterStack@ and to a \verb@RasterBrick@. Like with the Raster class its purpose is efficiency in code and documentation. 
+\verb@RasterStackBrick@ is a class union of the \verb@RasterStack@ and \verb@RasterBrick@ class. This is a also a virtual class. It allows defining methods that apply to both a \verb@RasterStack@ and to a \verb@RasterBrick@. Like with the \verb@Raster@ class its purpose is efficiency in code and documentation. 
 
 
 \section{Creating Raster* objects}
@@ -77,7 +77,7 @@ A \verb@RasterLayer@ can easily be created from scratch using the function {\bf 
 Here is an example of creating and changing a \verb@RasterLayer@ object 'r' from scratch.
 <<raster-1>>=
 library(raster)
-# \verb@RasterLayer@ with the default characteristics
+# \RasterLayer with the default characteristics
 r <- raster()
 r
 # Other characteristics
@@ -147,7 +147,7 @@ b1 <- brick(r1, r2, r3)
 # equivalent to:
 b2 <- brick(s)
 
-# create a \verb@RasterBrick@  from file
+# create a RasterBrick  from file
 b <- brick(system.file("external/rlogo.grd", package="raster"))
 b
 nlayers(b)
