@@ -38,9 +38,11 @@ This is the preferred method because you have most control. For example you can 
 
 2) Do not provie a "to" argument, but provide a "res" and "crs" argument.
 
+ 
+
 Projection is performed using the PROJ.4 library accesed through the rgdal package. 
 
-The best place to find PROJ4 coordinate reference system descriptions is \url{http://www.spatialreference.org}. 
+One of the best places to find PROJ.4 coordinate reference system descriptions is \url{http://www.spatialreference.org}. 
 
 You can also consult this page: \url{http://www.remotesensing.org/geotiff/proj_list/} to find the parameter options and names for projections.
 
@@ -94,6 +96,12 @@ inv <- projectRaster(pr, r)
 # inv <- projectRaster(pr, r, method='bilinear')
 # dif <- r - inv
 # plot(dif)
+
+
+# Meuse data to lon/lat
+# meuse <- raster(system.file("external/test.grd", package="raster"))
+# meusell <- projectRaster(meuse, res=0.0008333333, crs="+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+
 }
 }
 
