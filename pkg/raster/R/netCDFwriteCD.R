@@ -4,17 +4,17 @@
 # Licence GPL v3
 
 
-.rasterSaveAsNetCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, convention='CF') {
+.rasterSaveAsNetCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, convention='CF', ...) {
 
 	if (convention=='RST') {
-		x <- .startWriteCDFrst(x, filename=filename, datatype=datatype, overwrite=overwrite)
+		x <- .startWriteCDFrst(x, filename=filename, datatype=datatype, overwrite=overwrite, ...)
 		if (inherits(x, 'RasterBrick')) {
 			x <- .writeValuesBrickCDFrst(x, getValues(x) )	
 		} else {
 			x <- .writeValuesCDFrst(x, getValues(x))
 		}
 	} else {
-		x <- .startWriteCDF(x, filename=filename, datatype=datatype, overwrite=overwrite)
+		x <- .startWriteCDF(x, filename=filename, datatype=datatype, overwrite=overwrite, ...)
 		if (inherits(x, 'RasterBrick')) {
 			x <- .writeValuesBrickCDF(x, getValues(x) )	
 		} else {
@@ -26,20 +26,20 @@
 }
 
 
-.startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, xname, yname, zname, ...) {
+.startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, varname, longname, xname, yname, zname, zunit, ...) {
 
 	if (!require(ncdf)) { stop('You need to install the ncdf package') }
 
 	filename = trim(filename)
 	if (filename == '') { stop('provide a filename') }
-	ext(filename) <- .defaultExtension(format='CDF')
+	ext(filename) <- raster:::.defaultExtension(format='CDF')
 	if (file.exists(filename) & !overwrite) {
 		stop('file exists, use overwrite=TRUE to overwrite it')
 	}
 	
 	dataType(x) <- datatype
 	
-	datatype = .getNetCDFDType(datatype)
+	datatype = raster:::.getNetCDFDType(datatype)
 	
 	if (.couldBeLonLat(x)) {
 		if (missing(xname)) xname = 'longitude'
@@ -51,22 +51,31 @@
 		unit = 'meter' # probably
 	}
 	
-	if (missing(zname))  zname = 'value'
+	
+	if (missing(zunit))  zunit <- 'unknown'
+	if (missing(zname))  zname <- 'value'
 	x@zname <- zname
+	if (missing(varname))  varname <- 'variable'
+	x@title <- varname
+	if (missing(longname))  longname <- varname
+	
 	
 	xdim <- dim.def.ncdf( xname, unit,  xFromCol(x, 1:ncol(x)) )
 	ydim <- dim.def.ncdf( yname, unit, yFromRow(x, 1:nrow(x)) )
 	if (inherits(x, 'RasterBrick')) {
-		zdim <- dim.def.ncdf( 'z', 'unit', 1:nlayers(x), unlim=TRUE )
-		vardef <- var.def.ncdf( zname, 'unit', list(xdim,ydim,zdim), -3.4e+38 )
+		zv <- 1:nlayers(x)
+		zv[] <- as.numeric(x@zvalue)
+		zv[is.na(zv)] <- 0
+		zdim <- dim.def.ncdf( zname, zunit, zv, unlim=TRUE )
+		vardef <- var.def.ncdf( varname, zunit, list(xdim,ydim,zdim), -3.4e+38 )
 	} else {
-		vardef <- var.def.ncdf( zname, 'unit', list(xdim,ydim), -3.4e+38 )
+		vardef <- var.def.ncdf( varname, zunit, list(xdim,ydim), -3.4e+38 )
 	}
 	nc <- create.ncdf(filename, vardef)
 	
-	att.put.ncdf(nc, zname, '_FillValue', x@file@nodatavalue)
-	att.put.ncdf(nc, zname, 'missing_value', x@file@nodatavalue)
-	att.put.ncdf(nc, zname, 'long_name', layerNames(x))
+	att.put.ncdf(nc, varname, '_FillValue', x@file@nodatavalue)
+	att.put.ncdf(nc, varname, 'missing_value', x@file@nodatavalue)
+	att.put.ncdf(nc, varname, 'long_name', longname)
 	att.put.ncdf(nc, 0, 'Conventions', 'CF-1.4')
 	pkgversion = drop(read.dcf(file=system.file("DESCRIPTION", package='raster'), fields=c("Version")))
 	att.put.ncdf(nc, 0, 'created_by', paste('R, raster package, version', pkgversion))
@@ -87,13 +96,13 @@
 	nc <- open.ncdf(x@file@name, write=TRUE)
 	on.exit( close.ncdf(nc) )
 	
-	att.put.ncdf(nc, x@zname, 'min', as.numeric(x@data@min))
-	att.put.ncdf(nc, x@zname, 'max', as.numeric(x@data@max))
+	att.put.ncdf(nc, x@title, 'min', as.numeric(x@data@min))
+	att.put.ncdf(nc, x@title, 'max', as.numeric(x@data@max))
 
 	if (inherits(x, 'RasterBrick')) {
-		r <- brick(x@file@name, zvar='value')
+		r <- brick(x@file@name)
 	} else {
-		r <- raster(x@file@name, zvar='value')
+		r <- raster(x@file@name)
 	}
 	
 	return(r)
@@ -113,7 +122,7 @@
 	v <- matrix(v, ncol=nr)
 
 	nc <- open.ncdf(x@file@name, write=TRUE)
-	try ( put.var.ncdf(nc, x@zname, v, start=c(1, start), count=c(x@ncols, nr)) )
+	try ( put.var.ncdf(nc, x@title, v, start=c(1, start), count=c(x@ncols, nr)) )
 	
 	close.ncdf(nc)
 	return(x)
@@ -155,7 +164,7 @@
 	v <- array(v, c(rows, ncols, nl))
 	
 	nc <- open.ncdf(x@file@name, write=TRUE)
-	try ( put.var.ncdf(nc, 'value', v, start=c(1, start, lstart), count=c(ncols, rows, lend) ) )
+	try ( put.var.ncdf(nc, x@title, v, start=c(1, start, lstart), count=c(ncols, rows, lend) ) )
 	close.ncdf(nc)
 	
 	return(x)
