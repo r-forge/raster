@@ -26,7 +26,7 @@
 }
 
 
-.startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, ...) {
+.startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, xname, yname, zname, ...) {
 
 	if (!require(ncdf)) { stop('You need to install the ncdf package') }
 
@@ -42,20 +42,21 @@
 	datatype = .getNetCDFDType(datatype)
 	
 	if (.couldBeLonLat(x)) {
-		xname = 'longitude'
-		yname = 'latitude'
+		if (missing(xname)) xname = 'longitude'
+		if (missing(yname)) yname = 'latitude'
 		unit = 'degrees'
 	} else {
-		xname = 'northing'
-		yname = 'easting'	
+		if (missing(xname)) xname = 'northing'
+		if (missing(yname)) yname = 'easting'	
 		unit = 'meter' # probably
 	}
 	
+	if (missing(zname))  zname = 'z'
 	
 	xdim <- dim.def.ncdf( xname, unit,  xFromCol(x, 1:ncol(x)) )
 	ydim <- dim.def.ncdf( yname, unit, yFromRow(x, 1:nrow(x)) )
 	if (inherits(x, 'RasterBrick')) {
-		zdim <- dim.def.ncdf( 'z', 'unit', 1:nlayers(x), unlim=TRUE )
+		zdim <- dim.def.ncdf( zname, 'unit', 1:nlayers(x), unlim=TRUE )
 		vardef <- var.def.ncdf( 'value', 'unit', list(xdim,ydim,zdim), -3.4e+38 )
 	} else {
 		vardef <- var.def.ncdf( 'value', 'unit', list(xdim,ydim), -3.4e+38 )
