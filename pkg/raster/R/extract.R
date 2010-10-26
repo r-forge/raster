@@ -37,12 +37,7 @@ function(x, y, ...){
 	
 	# focal values
 	if ( ! is.null(dots$row) ) {
-		ngb <- dots$ngb
-		if (is.null(ngb)) {
-			return( .focalValues(x, row=dots$row) )
-		} else {
-			return( .focalValues(x, row=dots$row, ngb=ngb) )
-		}
+		return( .focalValues(x, ...) )
 	}
 	stop('I do not understand what you want me to do')
 	
@@ -98,23 +93,34 @@ function(x, y, ...){
 
 
 setMethod('extract', signature(x='Raster', y='Extent'), 
-function(x, y, ...){ 
-	nlyrs <- nlayers(x)
+ 	function(x, y, layer, nl, ...) {
+		e <- intersectExtent(x, y)
+		e <- alignExtent(x, e)
+		row = rowFromY(x, e@ymax)
+		lastrow = rowFromY(x, e@ymin)
+		nrows = lastrow-row+1
+		col = colFromX(x, e@xmin)
+		lastcol = colFromX(x, e@xmax)
+		ncols = lastcol-col+1
+		v <- getValuesBlock(x, row, nrows, col, ncols)  
+		
+		nlyrs <- nlayers(x)
+		if (nlyrs > 1) {
+			if (missing(layer)) { layer <- 1 } 
+			if (missing(nl)) { nl <- nlyrs } 
+			layer <- min(max(1, round(layer)), nlyrs)
+			nl <- min(max(1, round(nl)), nlyrs-layer+1)
+			v <- v[ , layer:(layer+nl-1)] 
+		}
 
-	if (nlyrs > 1) {
-		if (missing(layer)) { layer <- 1 } 
-		if (missing(nl)) { nl <- nlyrs } 
-		layer <- min(max(1, round(layer)), nlyrs)
-		nl <- min(max(1, round(nl)), nlyrs-layer+1)
-		x <- getValues(crop(x, y, ...))
-		return( x[ , layer:(layer+nl-1)] )
-	} else {
-		return( getValues(crop(x, y, ...)) )
+		return(v)
 	}
-	
-})
+)
+
+
 
 #setMethod('extract', signature(x='Spatial', y='Spatial'), 
 #function(x, y, ...){ 
 #	return( overlay(x, y, ...) )
 #})
+

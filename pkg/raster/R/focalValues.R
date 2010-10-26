@@ -14,7 +14,7 @@ focalValues <- function(x, ...) {
 }
 	
 	
-.focalValues <- function(x, row, ngb=3) {
+.focalValues <- function(x, row, ngb=3, layer, nl, ...) {
 
 	if (missing(row)) stop('You must provide a row number "row=" argument')
 
@@ -47,18 +47,29 @@ focalValues <- function(x, ...) {
 	id = cbind(rep(1:cols, each=nrow(idx)), id)
 	id = subset(id, id[,2]>0)
 
-	nl <- nlayers(x)
-	if (nl == 1) {
+	nls <- nlayers(x)
+	
+	if (nls == 1) {
 		ngbdata = matrix(getValuesBlock(x, r1, nrows), ncol=ncol(x))
 		v = cbind( id[,1], as.vector(ngbdata)[id[,2]] )
 		colnames(v) <- c('col', 'value')
+		
 	} else {
+	
+		nlyrs <- nls
+		if (missing(layer)) { layer <- 1 } 
+		if (missing(nl)) { nl <- nlyrs } 
+		layer <- min(max(1, round(layer)), nlyrs)
+		nl <- min( max(1, round(nl)), nlyrs-layer+1 )
+		lyrs <- layer:(layer+nl-1)
+		
 		alldata <- getValuesBlock(x, r1, nrows)
 		v <- matrix(nrow=nrow(id), ncol=nl+1)
-		colnames(v) <- c('col', layerNames(x))
+		colnames(v) <- c('col', layerNames(x)[lyrs])
 		v[,1] <- id[,1]
 		for (i in 1:nl) {
-			ngbdata <- matrix(alldata[,i], ncol=ncol(x))
+			j <- lyrs[i]
+			ngbdata <- matrix( alldata[,j], ncol=ncol(x) )
 			v[,i+1] <- as.vector(ngbdata)[id[,2]] 
 		}
 	}
