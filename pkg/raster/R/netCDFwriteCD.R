@@ -51,21 +51,22 @@
 		unit = 'meter' # probably
 	}
 	
-	if (missing(zname))  zname = 'z'
+	if (missing(zname))  zname = 'value'
+	x@zname <- zname
 	
 	xdim <- dim.def.ncdf( xname, unit,  xFromCol(x, 1:ncol(x)) )
 	ydim <- dim.def.ncdf( yname, unit, yFromRow(x, 1:nrow(x)) )
 	if (inherits(x, 'RasterBrick')) {
-		zdim <- dim.def.ncdf( zname, 'unit', 1:nlayers(x), unlim=TRUE )
-		vardef <- var.def.ncdf( 'value', 'unit', list(xdim,ydim,zdim), -3.4e+38 )
+		zdim <- dim.def.ncdf( 'z', 'unit', 1:nlayers(x), unlim=TRUE )
+		vardef <- var.def.ncdf( zname, 'unit', list(xdim,ydim,zdim), -3.4e+38 )
 	} else {
-		vardef <- var.def.ncdf( 'value', 'unit', list(xdim,ydim), -3.4e+38 )
+		vardef <- var.def.ncdf( zname, 'unit', list(xdim,ydim), -3.4e+38 )
 	}
 	nc <- create.ncdf(filename, vardef)
 	
-	att.put.ncdf(nc, 'value', '_FillValue', x@file@nodatavalue)
-	att.put.ncdf(nc, 'value', 'missing_value', x@file@nodatavalue)
-	att.put.ncdf(nc, 'value', 'long_name', layerNames(x))
+	att.put.ncdf(nc, zname, '_FillValue', x@file@nodatavalue)
+	att.put.ncdf(nc, zname, 'missing_value', x@file@nodatavalue)
+	att.put.ncdf(nc, zname, 'long_name', layerNames(x))
 	att.put.ncdf(nc, 0, 'Conventions', 'CF-1.4')
 	pkgversion = drop(read.dcf(file=system.file("DESCRIPTION", package='raster'), fields=c("Version")))
 	att.put.ncdf(nc, 0, 'created_by', paste('R, raster package, version', pkgversion))
@@ -86,8 +87,8 @@
 	nc <- open.ncdf(x@file@name, write=TRUE)
 	on.exit( close.ncdf(nc) )
 	
-	att.put.ncdf(nc, 'value', 'min', as.numeric(x@data@min))
-	att.put.ncdf(nc, 'value', 'max', as.numeric(x@data@max))
+	att.put.ncdf(nc, x@zname, 'min', as.numeric(x@data@min))
+	att.put.ncdf(nc, x@zname, 'max', as.numeric(x@data@max))
 
 	if (inherits(x, 'RasterBrick')) {
 		r <- brick(x@file@name, zvar='value')
@@ -112,7 +113,7 @@
 	v <- matrix(v, ncol=nr)
 
 	nc <- open.ncdf(x@file@name, write=TRUE)
-	try ( put.var.ncdf(nc, 'value', v, start=c(1, start), count=c(x@ncols, nr)) )
+	try ( put.var.ncdf(nc, x@zname, v, start=c(1, start), count=c(x@ncols, nr)) )
 	
 	close.ncdf(nc)
 	return(x)
