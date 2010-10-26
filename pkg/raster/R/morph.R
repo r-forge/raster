@@ -3,7 +3,6 @@
 # Version 1.0
 # Licence GPL v3
 
-
 morph <- function(from, to, method='bilinear', filename='', ...) {
 	 
 	 
