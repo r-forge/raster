@@ -9,6 +9,7 @@
 	
 
 focalValues <- function(x, ...) {
+	.warnExtract(6)
 	.focalValues(x, ...)
 }
 	
@@ -53,12 +54,13 @@ focalValues <- function(x, ...) {
 		colnames(v) <- c('col', 'value')
 	} else {
 		alldata <- getValuesBlock(x, r1, nrows)
-		v <- id[,1,drop=FALSE]
-		for (i in 1:nl) {
-			ngbdata = matrix(alldata[,i], ncol=ncol(x))
-			v <- cbind( v, as.vector(ngbdata)[id[,2]] )
-		}
+		v <- matrix(nrow=nrow(id), ncol=nl+1)
 		colnames(v) <- c('col', layerNames(x))
+		v[,1] <- id[,1]
+		for (i in 1:nl) {
+			ngbdata <- matrix(alldata[,i], ncol=ncol(x))
+			v[,i+1] <- as.vector(ngbdata)[id[,2]] 
+		}
 	}
 	return(v)
 }

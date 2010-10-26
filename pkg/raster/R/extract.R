@@ -36,7 +36,7 @@ function(x, y, ...){
 	}
 	
 	# focal values
-	if ( is.null(dots$row) ) {
+	if ( ! is.null(dots$row) ) {
 		ngb <- dots$ngb
 		if (is.null(ngb)) {
 			return( .focalValues(x, row=dots$row) )

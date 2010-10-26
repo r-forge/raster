@@ -1,5 +1,6 @@
 25-Oct-2010,  version 1.6-5
 Merged 'focalValues' into 'extract' 
+Temporary files are now only deleted (at startup of raster) if they are at least 24 hrs old
 Generic function 'cut' implemented for Raster objects (suggested by Steven Mosher)
 Bug fix in addLayer with RasterBrick (reported by Steven Mosher)
 

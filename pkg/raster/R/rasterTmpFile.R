@@ -44,11 +44,10 @@ rasterTmpFile <- function()  {
 removeTmpFiles <- function(h=24) {
 	
 # remove files in the temp folder that are > h hours old	
+	warnopt <- getOption('warn')
+	on.exit(options('warn'= warnopt))
+
 	d <- .removeTrailingSlash(.tmpdir())
-
-	on.exit(options('warn'= getOption('warn')))
-	options('warn'=-1) 
-
 	f <- list.files(path=d, pattern='raster_tmp*', full.names=TRUE)
 	fin <- file.info(f)
 	dif <- Sys.time() - fin$mtime
@@ -62,7 +61,7 @@ removeTmpFiles <- function(h=24) {
 #	if (file.exists(d)) {
 #		unlink(paste(d, "/raster_tmp_*", sep=""), recursive = FALSE)
 #	}
-
+	options('warn'=warnopt) 
 }
 
 showTmpFiles <- function() {

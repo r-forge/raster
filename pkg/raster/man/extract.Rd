@@ -173,7 +173,7 @@ v
 # mean for each polygon
 unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=TRUE) else NA ))
 
-# v <- polygonValues(r, polys, weights=TRUE)
+# v <- extract(r, polys, weights=TRUE)
 # v
 ## weighted mean for each polygon
 # unlist(lapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  ))
@@ -191,7 +191,8 @@ extract(r, e)
 ###############################
 # focal values
 ###############################
-focalValues(r, row=5)
+f <- extract(r, row=5, ngb=3)
+f[1:15, ]
 
 }
 

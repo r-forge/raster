@@ -9,7 +9,7 @@
 	d <- getOption('rasterExtractWarningGiven')
 	if (is.null(d)) { d <- 1 } else { d <- as.numeric(d) + 1 }
 	if (d < n) {
-		warning('xyValues is an obsolete function. Use "extract"')
+		warning('this is an obsolete function. Use "extract"')
 		options('rasterExtractWarningGiven' = d)
 	}
 }
