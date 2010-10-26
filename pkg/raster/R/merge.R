@@ -10,7 +10,8 @@
 setMethod('merge', signature(x='list', y='missing'), 
 function(x, y, ..., tolerance=0.05, filename="", format, overwrite, progress) { 
 	
-	if (missing(format)) {	format <- .filetype() } 
+	filename <- trim(filename)
+	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) {	overwrite <- .overwrite() }
 	if (missing(progress)) { progress <- .progress() }
 	
@@ -27,7 +28,8 @@ function(x, y, ..., tolerance=0.05, filename="", format, overwrite, progress) {
 setMethod('merge', signature(x='Raster', y='Raster'), 
 function(x,y,..., tolerance=0.05, filename="", format, overwrite, progress){ 
 
-	if (missing(format)) { format <- .filetype()} 
+	filename <- trim(filename)
+	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
 	if (missing(progress)) { progress <- .progress() }
 

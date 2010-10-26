@@ -27,12 +27,14 @@ function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwr
 	
 } )
 
+
 setMethod('mosaic', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, ..., fun, na.rm=TRUE, tolerance=0.05, filename="", format, overwrite, progress) { 
 	
 	if (missing(fun)) {	stop('you need to supply a function with a fun=   argument') } 
-	
-	if (missing(format)) {	format <- .filetype() } 
+
+	filename <- trim(filename)
+	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) {	overwrite <- .overwrite() }
 	if (missing(progress)) { progress <- .progress() }
 
