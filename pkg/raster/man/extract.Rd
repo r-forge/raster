@@ -19,7 +19,7 @@
 Extract data from a Raster object using cell numbers or the locations of other spatial data (i.e. a spatial query). You can use coordinates (points), lines, polygons or an Extent (rectangle) object.
 
 
-This function has replaced four other functions in this package (cellValues, xyValues, lineValues, and polygonValues)
+This function has replaced four other functions in this package (cellValues, xyValues, lineValues, polygonValues, and focalValues)
 
 }
 
@@ -80,6 +80,15 @@ If \code{y} represents lines, the following additional argument can be suplied t
 1) \code{fun}. Function to summarize the values (e.g. \code{mean})
 
 
+\bold{= Focal values =}
+
+If \code{y} is missing, you can supply two arguments to get 'focal' values (i.e. the values in a neighborhood around each cell)
+
+1) \code{row}. row number (this is a required argument). 
+
+2) \code{ngb}. The neighborhood to consider. Either a single integer or a vector of two integers. Default is 3. 
+
+
 \bold{= Multi-layer objects =}
 
 If \code{x} is a RasterStack or RasterBrick object, \code{extract} accepts, in addition to the arguments listed above,
@@ -93,11 +102,12 @@ these two additional arguments:
 
 \value{
 A vector for RasterLayer objects, and a matrix for a RasterStack or RasterBrick object.
-A list if \code{y} is a SpatialPolygons* or SpatialLines* object or if a \code{buffer} argument is used (without a function).
+A list if \code{y} is a SpatialPolygons* or SpatialLines* object or if a \code{buffer} argument is used (but not a \code{fun} argument).
+focal values are returned as a n column matrix. The first column has the column numbers, the remaining has the focal values for each layer. 
 }
 
 
-\seealso{ \code{\link{getValues}}, \code{\link{focalValues}} }
+\seealso{ \code{\link{getValues}} }
 
 
 \author{Robert J. Hijmans}
@@ -177,6 +187,11 @@ extract(r, e)
 #plot(r)
 #plot(e, add=T)
 
+
+###############################
+# focal values
+###############################
+focalValues(r, row=5)
 
 }
 

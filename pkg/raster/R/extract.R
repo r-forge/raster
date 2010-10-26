@@ -36,8 +36,13 @@ function(x, y, ...){
 	}
 	
 	# focal values
-	if (! (is.null(dots$r) & is.null(dots$ngb) )) {
-		return( focalValues(x, ...) )
+	if ( is.null(dots$row) ) {
+		ngb <- dots$ngb
+		if (is.null(ngb)) {
+			return( .focalValues(x, row=dots$row) )
+		} else {
+			return( .focalValues(x, row=dots$row, ngb=ngb) )
+		}
 	}
 	stop('I do not understand what you want me to do')
 	

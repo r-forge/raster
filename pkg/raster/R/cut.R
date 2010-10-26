@@ -13,6 +13,11 @@ setMethod('cut', signature(x='Raster'),
 
 function(x, ..., filename='', format, datatype='INT2S', overwrite, progress)  {
 	
+	if (! hasValues(x) ) { 
+		warning('x has no values, nothing to do')
+		return(x) 
+	}
+	
 	filename <- trim(filename)
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}

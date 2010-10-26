@@ -1,4 +1,5 @@
 25-Oct-2010,  version 1.6-5
+Merged 'focalValues' into 'extract' 
 Generic function 'cut' implemented for Raster objects (suggested by Steven Mosher)
 Bug fix in addLayer with RasterBrick (reported by Steven Mosher)
 
@@ -27,7 +28,7 @@ netcdf create a RasterLayer from a RasterBrick no longer goes to disk (copy para
 
 --------------------------------------------
 4-Oct-2010,  version 1.5-14
-raster() now takes an image (list) and coerces it to a RasterLayer
+raster() now also takes an "image" (a list with x, y and z) argument and coerces it to a RasterLayer
 
 --------------------------------------------
 2-Oct-2010,  version 1.5-13

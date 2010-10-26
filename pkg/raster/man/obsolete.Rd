@@ -1,9 +1,8 @@
-\name{polygonValues}
-
-\docType{methods}
+\name{obsolete}
 
 \alias{polygonValues}
 \alias{lineValues}
+\alias{focalValues}
 
 \title{ Extract values from a RasterLayer by polygons or lines}
 
@@ -14,6 +13,7 @@ Obsolete functions. Use \code{\link[raster]{extract}} in stead.
 \usage{
 polygonValues(p, x, ...)
 lineValues(lns, x, ...)
+focalValues(x, ...)
 }
 
 \arguments{
