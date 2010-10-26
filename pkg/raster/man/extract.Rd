@@ -107,7 +107,7 @@ focal values are returned as a n column matrix. The first column has the column 
 }
 
 
-\seealso{ \code{\link{getValues}} }
+\seealso{ \code{\link{values}} }
 
 
 \author{Robert J. Hijmans}

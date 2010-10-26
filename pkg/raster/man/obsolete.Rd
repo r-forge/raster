@@ -4,7 +4,7 @@
 \alias{lineValues}
 \alias{focalValues}
 
-\title{ Extract values from a RasterLayer by polygons or lines}
+\title{ Obsolete functions }
 
 \description{
 Obsolete functions. Use \code{\link[raster]{extract}} in stead.
