@@ -66,11 +66,13 @@ polygonValues <- function(p, x, ...) {
 			res <- unlist(lapply(res, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  ))
 		} else {
 			i <- sapply(res, is.null)
-			j <- vector(length=length(i))
-			j[i] <- NA
 			if (nlayers(x) > 1) {
-				j[!i] <- sapply(res[!i], function(x) apply(x, 2, fun))
+				j <- matrix(ncol=nlayers(x), nrow=length(res))
+				j[!i] <- t(sapply(res[!i], function(x) apply(x, 2, fun)))
+				colnames(j) <- layerNames(x)
 			} else {
+				j <- vector(length=length(i))
+				j[i] <- NA
 				j[!i] <- sapply(res[!i], fun)
 			}
 			res <- j
