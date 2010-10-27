@@ -26,7 +26,7 @@
 }
 
 
-.startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, varname, longname, xname, yname, zname, zunit, ...) {
+.startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, varname, varunit, longname, xname, yname, zname, zunit, ...) {
 
 	if (!require(ncdf)) { stop('You need to install the ncdf package') }
 
@@ -57,6 +57,7 @@
 	x@zname <- zname
 	if (missing(varname))  varname <- 'variable'
 	x@title <- varname
+	if (missing(varunit))  varunit <- ''
 	if (missing(longname))  longname <- varname
 	
 	
@@ -67,9 +68,9 @@
 		zv[] <- as.numeric(x@zvalue)
 		zv[is.na(zv)] <- 0
 		zdim <- dim.def.ncdf( zname, zunit, zv, unlim=TRUE )
-		vardef <- var.def.ncdf( varname, zunit, list(xdim,ydim,zdim), -3.4e+38 )
+		vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim,zdim), -3.4e+38 )
 	} else {
-		vardef <- var.def.ncdf( varname, zunit, list(xdim,ydim), -3.4e+38 )
+		vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim), -3.4e+38 )
 	}
 	nc <- create.ncdf(filename, vardef)
 	
