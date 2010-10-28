@@ -31,18 +31,9 @@
 	return(sp)
 }
 
-setAs('Raster', 'SpatialPointsDataFrame', 
-	function(from) { 
-		return(rasterToPoints(from, spatial=TRUE)) 
-	}
-)
 
-setAs('Raster', 'SpatialPoints', 
-	function(from) { 
-		sp <- SpatialPoints(rasterToPoints(from, spatial=FALSE)[,1:2])
-		return(sp)
-	}
-)
+# To sp pixel/grid objects	
+
 
 setAs('Raster', 'SpatialPixels', 
 	function(from) { return(.asSpGrid(from, type='pixel', FALSE)) }
@@ -59,6 +50,30 @@ setAs('Raster', 'SpatialGrid',
 setAs('Raster', 'SpatialGridDataFrame', 
 	function(from) { return(.asSpGrid(from, type='grid', TRUE)) }
 )
+
+
+# To sp vector objects	
+
+setAs('RasterLayer', 'SpatialPolygonsDataFrame', 
+	function(from){ return( rasterToPolygons(from)) }
+)
+
+setAs('Extent', 'SpatialPolygonsDataFrame', 
+	function(from){ return( polygonFromExtent(from)) }
+)
+
+setAs('Raster', 'SpatialPoints', 
+	function(from) { 
+		return( SpatialPoints(rasterToPoints(from, spatial=FALSE)[,1:2]) )
+	}
+)
+
+setAs('Raster', 'SpatialPointsDataFrame', 
+	function(from) { 
+		return( rasterToPoints(from, spatial=TRUE) ) 
+	}
+)
+
 
 # to RasterLayer
 
@@ -122,19 +137,6 @@ setAs('RasterLayer', 'matrix',
 
 
 	
-# Between Raster and sp vector objects	
-setAs('RasterLayer', 'SpatialPointsDataFrame', 
-	function(from){ return( rasterToPoints(from)) }
-)
-
-setAs('RasterLayer', 'SpatialPolygonsDataFrame', 
-	function(from){ return( rasterToPolygons(from)) }
-)
-
-setAs('Extent', 'SpatialPolygonsDataFrame', 
-	function(from){ return( polygonFromExtent(from)) }
-)
-
 
 # spatstat
 setAs('im', 'RasterLayer', 
