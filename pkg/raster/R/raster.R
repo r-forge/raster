@@ -214,7 +214,7 @@ setMethod('raster', signature(x='SpatialGrid'),
 		r <- raster(extent(x))
 		projection(r) <- x@proj4string
 		dim(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
-		if (class(x) == 'SpatialGridDataFrame') {
+		if (inherits(x, 'SpatialGridDataFrame')) {
 			if (dim(x@data)[2] > 0) {
 				layer = layer[1]
 				if (is.numeric(layer)) {
@@ -250,7 +250,7 @@ setMethod('raster', signature(x='SpatialGrid'),
 
 setMethod('raster', signature(x='SpatialPixels'), 
 	function(x, layer=1){
-		if (class(x) == 'SpatialPixelsDataFrame') {
+		if (inherits(x, 'SpatialPixelsDataFrame')) {
 			x <- as(x[layer], 'SpatialGridDataFrame')
 			return(raster(x, 1))
 		} else {

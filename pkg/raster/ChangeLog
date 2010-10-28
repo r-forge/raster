@@ -1,4 +1,5 @@
 27-Oct-2010,  version 1.6-7
+Additional options to linesToRaster (to match polygonsToRaster)
 as.matrix implemented for Raster* objects (suggested by Michael Sumner)
 
 --------------------------------------------
