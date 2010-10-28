@@ -1,60 +1,41 @@
 \name{dimensions}
 
-\alias{ncol}
-\alias{nrow}
-\alias{nrow,BasicRaster-method}
-\alias{ncol,BasicRaster-method}
-\alias{dim,BasicRaster-method}
-\alias{ncell}
-\alias{ncell,ANY-method}
-\alias{ncell,Raster-method}
-\alias{nrow<-}
-\alias{ncol<-}
-\alias{rowcol<-}
+\alias{dim, BasicRaster-method}
+\alias{dim<-,RasterLayer-method}
+\alias{dim<-,RasterBrick-method}
+
+\docType{methods}
 
 
 \title{Dimensions of a Raster* object}
 
 \description{
- Get the number of rows, columns, or cells of a Raster* object; or set the number of rows and/columns
+Get (or set) the number of rows, columns, and layers of a Raster* object. You cannot use this function to set the dimentions of a RasterStack object.
 }
 
-\usage{
-ncol(x)
-nrow(x)
-ncell(x)
-ncol(x) <- value
-nrow(x) <- value
-rowcol(x) <- value
-}
+\section{Methods}{
+\describe{
+\code{contour(x, y=1, maxpixels=100000, ...)}
 
-
-\arguments{
- \item{x}{a Raster* object}
- \item{value}{row or column number or both }  
+\tabular{rll}{
+\tab \code{x} \tab Raster* object (only RasterLayer and RasterBrick for dim<-) \cr
+\tab \code{value} \tab row or column number. For dim<- it can be a row _and_ column number (for a RasterLayer and a RasterBrick) or a row and column number _and_ the number of layers (only for a RasterBrick)  \cr
 }
+}}
 
 \value{
-a number
+Integer
 }
 
-\seealso{ \code{\link[raster]{extent}}, \code{\link[raster]{resolution}} }
-
+\seealso{ \code{\link{extent}, \link{res}} }
 
 \author{ Robert J. Hijmans }
 
-
 \examples{
 r <- raster()
-ncell(r)
-ncol(r)
-nrow(r)
 dim(r)
-
-nrow(r) <- 18
-ncol(r) <- 36
-# equivalent to
-rowcol(r) <- c(18, 36) 
+dim(r) <- c(18, 36) 
+dim(r)
 }
 
 \keyword{spatial}

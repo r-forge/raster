@@ -121,7 +121,7 @@ setMethod('brick', signature(x='SpatialGrid'),
 		b <- brick()
 		extent(b) <- extent(x)
 		projection(b) <- x@proj4string
-		rowcol(b) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
+		dim(b) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
 		
 		if (class(x) == 'SpatialGridDataFrame') {
 			for (i in 1:ncol(x@data)) {
