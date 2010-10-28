@@ -114,7 +114,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 		
 	pbClose(pb)
 	if (filename == "") { 
-		outRaster <- setValues( outRaster, as.vector(v) )
+		values(outRaster) <- as.vector(v)
 	} else {
 		outRaster <- writeStop(outRaster)
 	}

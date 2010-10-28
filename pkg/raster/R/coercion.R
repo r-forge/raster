@@ -9,10 +9,10 @@
 		
 	crs = projection(object, FALSE)
 	if (type=='pixel') {
-		values <- rasterToPoints(object, fun=NULL, spatial=FALSE)
-		pts <- SpatialPoints(values[,1:2])
+		v <- rasterToPoints(object, fun=NULL, spatial=FALSE)
+		pts <- SpatialPoints(v[,1:2])
 		if (dataframe) {
-			sp <- SpatialPixelsDataFrame(points=pts, data=data.frame(values=values[,3]), proj4string=crs) 	
+			sp <- SpatialPixelsDataFrame(points=pts, data=data.frame(values=v[,3]), proj4string=crs) 	
 		} else {
 			sp <- SpatialPixels(points=pts, proj4string=crs)
 		}
