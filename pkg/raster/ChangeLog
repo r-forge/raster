@@ -1,5 +1,9 @@
+27-Oct-2010,  version 1.6-7
+as.matrix implemented for Raster* objects (suggested by Michael Sumner)
+
+--------------------------------------------
 26-Oct-2010,  version 1.6-6
-writeRaster now takes optional arguments xname, yname, zname for writing netcdf files. 
+writeRaster now takes optional arguments varname, varunit, longname, xname, yname, zname, zunit, for writing netcdf files (requested by Mario Frasca). 
 
 --------------------------------------------
 25-Oct-2010,  version 1.6-5
