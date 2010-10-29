@@ -1,6 +1,7 @@
 \name{dimensions}
 
 \alias{dim, BasicRaster-method}
+\alias{dim, RasterStackBrick-method}
 \alias{dim<-,RasterLayer-method}
 \alias{dim<-,RasterBrick-method}
 

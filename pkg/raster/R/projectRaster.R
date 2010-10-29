@@ -52,6 +52,23 @@ projectExtent <- function(object, crs) {
 }
 
 
+.computeRes <- function(raster, crs) {
+	x <- xmax(raster) - xmin(raster)
+	y <- ymax(raster) - ymin(raster)
+	res <- res(raster)
+	x1 <- x - 0.5 * res[1]
+	x2 <- x + 0.5 * res[1]
+	y1 <- y - 0.5 * res[2]
+	y2 <- y + 0.5 * res[2]
+	xy <- cbind(c(x1, x2, x, x), c(y, y, y1, y2))
+	pXY <- .Call("transform", projection(raster), crs, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+	pXY <- cbind(pXY[[1]], pXY[[2]])
+	res <- c((pXY[2,1] - pXY[1,1]), (pXY[4,2] - pXY[3,2]))
+	# abs should not be necessary, but who knows what a projection might do?
+	abs( signif(res, digits=3) )
+}
+
+
 projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ...)  {
 
 	if (! .requireRgdal() ) { stop('rgdal not available') }
@@ -61,15 +78,29 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	if (projfrom == "NA") { stop("input projection is NA") }
 	
 	if (missing(to)) {
-		if (missing(res)) {
-			stop("both 'to' and 'res' arguments missing. Provide one of these two.")
-		}
 		if (missing(crs)) {
 			stop("'res' provided, but 'crs' argument is missing.")
 		}
 		to <- projectExtent(from, crs)
+		if (missing(res)) {
+			res <- .computeRes(from, crs)
+		}
 		res(to) <- res
 		projto <- projection(to)
+
+		# add some cells to capture curvature
+		e <- extent(to)
+		add <- max(10, min(dim(to)[1:2])/10) * max(res)
+		e@ymin <- e@ymin - add
+		e@ymax <- e@ymax + add
+		if (!is.character(projto)) projto <- projto@projargs
+		if (substr(projto, 1, 13) == "+proj=longlat") {
+			e@xmin <- max(-180, e@xmin)
+			e@xmax <- min(180, e@xmax)
+			e@ymin <- max(-90, e@ymin)
+			e@ymax <- min(90, e@ymax)
+		}
+		to <- expand(to, e)
 	} else {
 		projto <- projection(to)
 		if (projto == "NA") { 

@@ -24,6 +24,11 @@ resample <- function(from, to, method, filename="", ...)  {
 		to <- brick(to, values=FALSE)
 	}
 
+	resdif <- max(res(to) / res(from))
+	if (resdif > 3) {
+		warning('you are resampling to a raster with a much larger cell size, perhaps you should use "aggregate" first')
+	}
+	
 	e = intersectExtent(from, to, validate=TRUE)
 	
 	if (is.null(filename)){filename <- ""}

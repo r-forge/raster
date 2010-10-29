@@ -5,8 +5,13 @@
 
 
 setMethod('dim', signature(x='BasicRaster'), 
-	function(x){ return(c(nrow(x), ncol(x), nlayers(x)))}
+	function(x){ return(c(nrow(x), ncol(x))) }
 )
+
+setMethod('dim', signature(x='RasterStackBrick'), 
+	function(x){ return(c(nrow(x), ncol(x), nlayers(x))) }
+)
+
 
 setMethod('nrow', signature(x='BasicRaster'), 
 	function(x){ return(x@nrows)}
