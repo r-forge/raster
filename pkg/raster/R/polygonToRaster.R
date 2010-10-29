@@ -304,7 +304,7 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 		if (filename == "") {
 			v[,r] <- rv
 		} else {
-			raster <- writeValues(raster, rv)
+			raster <- writeValues(raster, rv, r)
 		}
 		pbStep(pb, r)
 	}
@@ -416,7 +416,7 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 		if (filename == "") {
 			v[,rr] <- av
 		} else {
-			bigraster <- writeValues(bigraster, av)
+			bigraster <- writeValues(bigraster, av, rr)
 		}
 		pbStep(pb, rr)
 	}

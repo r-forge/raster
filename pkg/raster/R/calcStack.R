@@ -36,7 +36,7 @@ function(x, fun, filename='', na.rm, ...) {
 	nl <- nlayers(x)
 	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
 	
-	tst <- dim(fun(rbind(1:nl, 1:nl, 1:nl)))
+	tst <- fun(rbind(1:nl, 1:nl, 1:nl))
 	test <- dim(tst)
 	
 	if (! is.null(test)) {

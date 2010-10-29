@@ -270,7 +270,7 @@ linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, upda
 		if (filename == "") {
 			v[,r] <- rv
 		} else {
-			raster <- writeValues(raster, rv)
+			raster <- writeValues(raster, rv, r)
 		}
 		
 		pbStep(pb, r)
