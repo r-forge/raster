@@ -1,8 +1,8 @@
 \name{indexing}
+
 \docType{methods}
 
 \alias{[,Raster-method}
-\alias{[,RasterStack,ANY,missing-method}
 \alias{[,Raster,ANY,missing-method}
 \alias{[,Raster,Spatial,missing-method}
 
@@ -12,14 +12,12 @@
 \alias{[<-,RasterLayer-method}
 \alias{[<-,RasterLayer,ANY,missing-method}
 
-\title{Values from index and replacement}
+\title{Get or replace values of Raster objects}
 
 \description{
-Show or replace values of 
-
-  \code{object[x]} can be used to access or set values of a Raster* object, using cell numbers as index. 
+ \code{object[[i]]} can be used toGet or set values of a Raster* object, when \code{i} is a vector of cell numbers or a Spatial* object (which is a wrapper around \code{\link{extract}}). 
   
-  \code{object[[r,c]]} can be used to access values of a RasterLayer object, using row and column numbers as index. 
+ \code{object[[r,c]]} can be used to access values of a RasterLayer object, using row and column numbers as index. 
 }
 
 
@@ -43,7 +41,7 @@ Arguments
 
 }}
 
-\seealso{ \code{\link[raster]{getValues}} , \code{\link[raster]{setValues}} }
+\seealso{ \code{\link{getValues}, \link{setValues}, \link{extract}} }
 
 
 \examples{

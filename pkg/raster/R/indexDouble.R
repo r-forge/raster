@@ -4,6 +4,7 @@
 # Licence GPL v3
 
 
+
 setMethod("[[", c("RasterLayer","ANY", "ANY"),
 function(x,i,j,...,drop=TRUE) {
 
