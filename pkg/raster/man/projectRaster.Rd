@@ -36,7 +36,7 @@ There are two approaches you can follow to project the values of a Raster object
 or an existing Raster* object. Also set the number of rows and columns (or the resolution), and perhaps adjust the extent. The resolution of the output raster should normally be similar to that of the input raster. Then use that object to project the input Raster object to. 
 This is the preferred method because you have most control. For example you can assure that the resulting Raster object lines up with other Raster objects.
 
-2) Do not provie a "to" argument, but provide a "crs" argument, and, optinally, a 'res' argument.
+2) Do not provide a "to" argument, but provide a "crs" argument, and, optionally, a 'res' argument.
 
  
 
@@ -87,21 +87,24 @@ res(pr) <- 200000
 pr <- projectRaster(r, pr)
 # alternatively
 pr2 <- projectRaster(r, crs=newproj, res=20000)
+# or
+# pr3 <- projectRaster(r, crs=newproj)
 
 # inverse projection, back to the properties of 'r'
 inv <- projectRaster(pr, r)
 
-## using a higher resolution and bilinear interpolation
-# res(pr) <- 10000
-# pr <- projectRaster(r, pr, method='bilinear')
-# inv <- projectRaster(pr, r, method='bilinear')
-# dif <- r - inv
-# plot(dif)
-
+## using a higher resolution
+\dontrun{
+res(pr) <- 10000
+pr <- projectRaster(r, pr, method='bilinear')
+inv <- projectRaster(pr, r, method='bilinear')
+dif <- r - inv
+plot(dif)
 
 # Meuse data to lon/lat
-# meuse <- raster(system.file("external/test.grd", package="raster"))
-# meusell <- projectRaster(meuse, res=0.0008333333, crs="+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+meuse <- raster(system.file("external/test.grd", package="raster"))
+meusell <- projectRaster(meuse, res=0.0008333333, crs="+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+}
 
 }
 }
