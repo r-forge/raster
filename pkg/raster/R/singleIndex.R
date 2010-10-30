@@ -4,6 +4,15 @@
 # Licence GPL v3
 
 
+setMethod("[", c("Raster", "Spatial", "missing"),
+function(x,i,j,...,drop=TRUE) {
+	if (inherits(i, 'SpatialGrid') | inherits(i, 'SpatialPixels')) {
+		i <-  as(i, 'SpatialPoints')
+	}
+	extract(x, i)
+})
+
+
 setMethod("[", c("Raster","ANY", "missing"),
 function(x,i,j,...,drop=TRUE) {
 	

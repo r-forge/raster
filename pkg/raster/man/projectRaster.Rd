@@ -99,8 +99,9 @@ pr3 <- projectRaster(r, pr3)
 # inverse projection, back to the properties of 'r'
 inv <- projectRaster(pr3, r)
 
-## using a higher resolution
 \dontrun{
+
+# using a higher resolution
 res(pr) <- 10000
 pr <- projectRaster(r, pr, method='bilinear')
 inv <- projectRaster(pr, r, method='bilinear')

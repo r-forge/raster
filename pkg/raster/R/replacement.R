@@ -28,6 +28,20 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 			return(x)
 		}
 
+		if (inherits(i, 'Spatial')) {
+			if (inherits(i, 'SpatialPolygons')) {
+				v <- 1:length(i@polygons)
+				v[] <- value
+				return(polygonsToRaster(i, x, field=v, overlap='last', mask=FALSE, updateRaster=TRUE, updateValue="all", silent=TRUE) )
+			}
+			if (inherits(i, 'SpatialLines')) {
+				v <- 1:length(i@lines)
+				v[] <- value
+				return(linesToRaster(i, x, field=v, overlap='last', mask=FALSE, updateRaster=TRUE, updateValue="all", silent=TRUE) )
+			}
+			stop('currently only implemented for SpatialLines* and SpatialPolygons*, not for other Spatial* objects')
+		}
+		
 
 		if (! inMemory(x) ) {
 			if ( fromDisk(x) ) {
@@ -41,7 +55,7 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 		}
 		
 		
-		if (class(i) == "RasterLayer") {
+		if (inherits(i, "RasterLayer")) {
 			i <- as.logical( getValues(i) ) 
 		}
 		if (!is.logical(i)) {

@@ -4,6 +4,7 @@
 \alias{[,Raster-method}
 \alias{[,RasterStack,ANY,missing-method}
 \alias{[,Raster,ANY,missing-method}
+\alias{[,Raster,Spatial,missing-method}
 
 \alias{[[,RasterLayer,ANY,ANY-method}
 \alias{[[,RasterStackBrick,ANY,ANY-method}
