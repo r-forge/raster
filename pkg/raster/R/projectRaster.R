@@ -12,6 +12,16 @@ projectExtent <- function(object, crs) {
 	projfrom <- projection(object)
 	projto <- projection(crs)
 	
+#	rs <- res(object)
+#	xmn <- object@extent@xmin - 0.5 * rs[1]
+#	xmx <- object@extent@xmax + 0.5 * rs[1]
+#	ymn <- object@extent@ymin - 0.5 * rs[2]
+#	ymx <- object@extent@ymax + 0.5 * rs[2]
+#	xha <- (xmn + xmx) / 2
+#	yha <- (ymn + ymx) / 2
+#	xy <- matrix(c(xmn, ymx, xha, ymx, xmx, ymx, xmn, yha, xha, yha, xmx, yha, xmn, ymn, xha, ymn, xmx, ymn), ncol=2, byrow=T)
+	
+	
 	xy1 <- xyFromCell(object, cellFromCol(object, 1))
 	xy1[,1] <- xy1[,1] - 0.5 * xres(object)
 	xy1[1,2] <- xy1[1,2] + 0.5 * yres(object)
@@ -21,8 +31,18 @@ projectExtent <- function(object, crs) {
 	xy2[,1] <- xy2[,1] + 0.5 * xres(object)
 	xy2[1,2] <- xy2[1,2] + 0.5 * yres(object)
 	xy2[nrow(object),2] <- xy2[nrow(object),2] + 0.5 * yres(object)
+
+	xy3 <- xyFromCell(object, cellFromRow(object, 1))
+	xy3[,2] <- xy3[,2] + 0.5 * yres(object)
+	xy3[1,1] <- xy3[1,1] - 0.5 * xres(object)
+	xy3[ncol(object),1] <- xy3[ncol(object),1] + 0.5 * xres(object)
 	
-	xy <- rbind(xy1, xy2)
+	xy4 <- xyFromCell(object, cellFromRow(object, nrow(object)))
+	xy4[,2] <- xy4[,2] + 0.5 * yres(object)
+	xy4[1,1] <- xy4[1,1] - 0.5 * xres(object)
+	xy4[ncol(object),1] <- xy4[ncol(object),1] + 0.5 * xres(object)
+	
+	xy <- rbind(xy1, xy2, xy3, xy4)
 	
 	res <- .Call("transform", projfrom, projto, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 	
@@ -90,7 +110,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 
 		# add some cells to capture curvature
 		e <- extent(to)
-		add <- max(10, min(dim(to)[1:2])/10) * max(res)
+		add <- min(5, min(dim(to)[1:2])/10) * max(res)
 		e@ymin <- e@ymin - add
 		e@ymax <- e@ymax + add
 		if (!is.character(projto)) projto <- projto@projargs
