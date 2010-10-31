@@ -5,12 +5,25 @@
 
 
 
-setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
+
+setReplaceMethod("[", "RasterLayer",
 	function(x, i, j, value) {
+
+	if (! missing(j) ) { 
+		if (! is.numeric(j)) { 
+			stop('the second argument must be numeric (or missing)') 
+		}	
+		if (! missing(i)) {
+			if (! (is.numeric(i) | is.logical(i)) ) {
+				stop('you cannot supply a second argument if the first is not numeric or logical') 		
+			}
+		}
+	}
+
+	if (! is.numeric(value) & !is.logical(value)) { value <- as.numeric(value) }
 		
-		if (!is.numeric(value)) value <- as.numeric(value)
-		
-		if  (missing(i)) {
+	if ( missing(i) ) {
+		if (missing(j)) {
 			if (length(value) == ncell(x)) {
 				x <- try( setValues(x, value))
 			} else if (length(value) == 1) {
@@ -26,8 +39,10 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 				stop('cannot replace values on this raster (it is too large')
 			}
 			return(x)
-		}
-
+		} else {
+			i <- cellFromCol(x, j)
+		} 
+	} else {
 		if (inherits(i, 'Spatial')) {
 			if (inherits(i, 'SpatialPolygons')) {
 				v <- 1:length(i@polygons)
@@ -40,34 +55,46 @@ setReplaceMethod("[", c("RasterLayer", "ANY", "missing"),
 				return(linesToRaster(i, x, field=v, overlap='last', mask=FALSE, updateRaster=TRUE, updateValue="all", silent=TRUE) )
 			}
 			stop('currently only implemented for SpatialLines* and SpatialPolygons*, not for other Spatial* objects')
-		}
-		
-
-		if (! inMemory(x) ) {
-			if ( fromDisk(x) ) {
-				x <- try( readAll(x) )
+		} else if (inherits(i, "RasterLayer")) {
+			if (compare(x, i, stopiffalse=FALSE, showwarning=FALSE)) {
+				i <- as.logical( getValues(i) ) 
 			} else {
-				x <- try (setValues(x, rep(NA, times=ncell(x))) )
+				i <- extent(i)
 			}
-			if (class(x) == 'try-error') {
-				stop('cannot replace values on this raster (it is too large')
+		} else if (inherits(i, "Extent")) {
+			i <- cellsFromExtent(x, i)
+		} else if (missing(j)) {
+			theCall <- sys.call(-1)
+			narg <- length(theCall)-length(match.call(call=sys.call(-1)))
+			if (narg > 0) {
+				i <- cellFromRow(x, i)
 			}
+		} else {
+			i <- cellFromRowColCombine(x, i, j)
 		}
-		
-		
-		if (inherits(i, "RasterLayer")) {
-			i <- as.logical( getValues(i) ) 
-		}
-		if (!is.logical(i)) {
-			i <- subset(i, i >= 1 & i <= ncell(x))
-		}
-
-		x@data@values[i] <- value
-		x@data@fromdisk <- FALSE
-		x@file@name <- ""
-		x@file@driver <- ""
-		x <- setMinMax(x)
-		return(x)
 	}
+
+	i <- na.omit(i)
+	if (! is.logical(i) ) {
+		i <- subset(i, i >= 1 & i <= ncell(x))
+	}
+	
+	if (! inMemory(x) ) {
+		if ( fromDisk(x) ) {
+			x <- try( readAll(x) )
+		} else {
+			x <- try (setValues(x, rep(NA, times=ncell(x))) )
+		}
+		if (class(x) == 'try-error') {
+			stop('cannot replace values on this raster (it is too large')
+		}
+	}
+		
+		
+	x@data@values[i] <- value
+	x <- setMinMax(x)
+	x <- .clearFile(x)
+	return(x)
+}
 )
 

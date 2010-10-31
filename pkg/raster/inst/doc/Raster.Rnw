@@ -77,11 +77,13 @@ A \verb@RasterLayer@ can easily be created from scratch using the function {\bf 
 Here is an example of creating and changing a \verb@RasterLayer@ object 'r' from scratch.
 <<raster-1>>=
 library(raster)
-# \RasterLayer with the default characteristics
+# \RasterLayer with the default parameters
 r <- raster()
 r
-# Other characteristics
+
+# With other parameters
 r <- raster(ncol=36, nrow=18, xmn=-1000, xmx=1000, ymn=-100, ymx=900)
+# that can be changed
 res(r)
 res(r) <- 100
 res(r)
@@ -93,7 +95,7 @@ projection(r) <- "+proj=utm +zone=48 +datum=WGS84"
 r
 @
 
-Objects r created in the example above only consist of a 'skeleton', that is, we have defined the number of rows and columns, and where the raster is located in geographic space, but there are no cell-values associated with it. Below I illustrate how values can be set, and how they can be accessed again.
+Objects 'r' created in the example above only consist of a 'skeleton', that is, we have defined the number of rows and columns, and where the raster is located in geographic space, but there are no cell-values associated with it. Below I illustrate how values can be set, and how they can be accessed again.
 
 <<raster-1a, fig=TRUE , echo=TRUE>>=
 r <- raster(ncol=10, nrow=10)
@@ -105,12 +107,6 @@ hasValues(r)
 inMemory(r)
 values(r)[1:10]
 
-# indexing
-r[] <- 1:ncell(r)
-values(r)[1:10]
-
-# the extract function with a vector of cell numbers
-extract(r, 1:10)
 plot(r, main='Raster with 100 cells')
 @
 
@@ -158,16 +154,6 @@ r <- raster(b, layer=2)
 r <- raster(system.file("external/rlogo.grd", package="raster"), band=2)
 @
 
-Multi-layer Raster objects can be plotted as individual layers
-<<raster-2c, fig=TRUE , echo=TRUE>>=
-plot(b)
-@
-
-They can also be combined into a single image, by assigning indiviudal layers to one of the three color channels (red, green and blue):
-<<raster-2d, fig=TRUE , echo=TRUE>>=
-plotRGB(b, r=1, g=2, b=3)
-@
-
 
 \section{Raster algebra}
 
@@ -202,6 +188,8 @@ sst
 cellStats(st, 'sum')
 cellStats(sst, 'sum')
 @
+
+
 
 \section{'High-level' functions}
 
@@ -294,9 +282,28 @@ crosstab(r*3, s)
 Several generic functions have been implemented for Raster* objects to create maps and other plot types. Use 'plot' to create a map of a RasterLayer.
 When plot is used with a \verb@RasterLayer@, it uses code taken from the image.plot function in the fields package, which calls the function 'image' (but, by default, adds a legend). It is also possible to directly call {\bf image}. You can zoom in using 'zoom' and clicking on the map twice (to indicate where to zoom to). After plotting a \verb@RasterLayer@ you can add vector type spatial data (points, lines, polygons). You can do this with functions points, lines, polygons if you are using the basic R data structures or plot(object, add=TRUE) if you are using Spatial* objects as defined in the sp package. When plot is used with a multi-layer Raster* object, all layers are plotted (up to 16), unless the layers desired are indicated with an additional argument.
 
+Multi-layer Raster objects can be plotted as individual layers
+<<raster-2c, fig=TRUE , echo=TRUE>>=
+plot(b)
+@
+
+They can also be combined into a single image, by assigning indiviudal layers to one of the three color channels (red, green and blue):
+<<raster-2d, fig=TRUE , echo=TRUE>>=
+plotRGB(b, r=1, g=2, b=3)
+@
+
+
 You can also use the following functions with a \verb@RasterLayer@ as argument: {\bf hist, persp, contour}, and {\bf density}. See the help files for more info. You can use {\bf plot3D} to create an interactive 3D plot (you need the rgl package for this).
 
 With {\bf click} it is possible to interactively query a Raster* object by clicking once or several times on a map plot.
+
+
+\section{Writing files}
+
+\subsection{File format}
+
+Raster can read most, and write several raster file formats, via the \verb@rgdal@ package. However, it directly reads and writes a native 'rasterfile' format. A rasterfile consists of two files: a binary sequential data file and a text header file. The header file is of the "windows .ini" type. When reading, you do not have to specify the file format, but you do need to do that when writing (except when using the default native format). This file format is also used in DIVA-GIS (\url{http://www.diva-gis.org/}). See the help files for functions {\bf writeRaster} and {\bf saveAs}.
+
 
 
 \section{Row, column and cell numbers}
@@ -355,19 +362,15 @@ Note that in the above examples values are retrieved using cell numbers. That is
 
 <<raster-13>>=
 r[1]
-r[[1,1]]
-r[[1:3,1:3]]
-r[[75:90, 15]]
+r[2,2]
+r[1,]
+r[,1]
+r[1:3,1:3]
 @
 
 Accessing values through this type of indexing should be avoided inside functions as it is less efficient than accessing values via functions like {\bf getValues}. 
 
 
-\section{Writing files}
-
-\subsection{File format}
-
-Raster can read most, and write several raster file formats, via the \verb@rgdal@ package. However, it directly reads and writes a native 'rasterfile' format. A rasterfile consists of two files: a binary sequential data file and a text header file. The header file is of the "windows .ini" type. When reading, you do not have to specify the file format, but you do need to do that when writing (except when using the default native format). This file format is also used in DIVA-GIS (\url{http://www.diva-gis.org/}). See the help files for functions {\bf writeRaster} and {\bf saveAs}.
 
 
 \section{Session options}

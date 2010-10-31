@@ -48,5 +48,6 @@ clearValues <- function(x) {
 .clearFile <- function(x) {
 	x@file@name <- ''
 	x@data@fromdisk <- FALSE
+	x@file@driver <- ""
 	return(x)
 }
