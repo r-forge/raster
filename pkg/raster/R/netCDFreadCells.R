@@ -50,10 +50,18 @@
 			thisrow <- subset(colrow, colrow[,2] == rows[i])
 			colrow[colrow[,2]==rows[i], 3] <- v[thisrow[,1]]
 		}	
-	} else {
+	} else if (nc$var[[zvar]]$ndims == 3) {
 		count = c(x@ncols, 1, 1)
 		for (i in 1:length(rows)) {
 			start = c(1, readrows[i], time)
+			v <- as.vector(get.var.ncdf(nc, varid=zvar, start=start, count=count))
+			thisrow <- subset(colrow, colrow[,2] == rows[i])
+			colrow[colrow[,2]==rows[i], 3] <- v[thisrow[,1]]
+		}	
+	} else {
+		count = c(x@ncols, 1, 1, 1)
+		for (i in 1:length(rows)) {
+			start = c(1, readrows[i], 1, time)
 			v <- as.vector(get.var.ncdf(nc, varid=zvar, start=start, count=count))
 			thisrow <- subset(colrow, colrow[,2] == rows[i])
 			colrow[colrow[,2]==rows[i], 3] <- v[thisrow[,1]]
@@ -85,7 +93,8 @@
 
 	
 # read cell by cell
-	zvar = x@data@zvar
+	zvar <- x@data@zvar
+	dim3 <- x@data@dim3
 	cols <- colFromCell(x, cells)
 	rows <- rowFromCell(x, cells)
 	if ( x@file@toptobottom ) { rows <- x@nrows - rows + 1 }
@@ -101,11 +110,18 @@
 			start = c(cols[i], rows[i])
 			res[i] <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 		}	
-	} else {
+	} else if (nc$var[[zvar]]$ndims == 3) {
 		count = c(1, 1, nl)
-		res <- matrix(nrow=length(cells), ncol=nlayers)
+		res <- matrix(nrow=length(cells), ncol=nl)
 		for (i in 1:length(cells)) {
 			start = c(cols[i], rows[i], layer)
+			res[i,] <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+		}	
+	} else {
+		count = c(1, 1, 1, nl)
+		res <- matrix(nrow=length(cells), ncol=nl)
+		for (i in 1:length(cells)) {
+			start = c(cols[i], rows[i], 1, layer)
 			res[i,] <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 		}	
 	}

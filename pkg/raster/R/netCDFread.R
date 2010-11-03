@@ -20,12 +20,17 @@
 		count = c(ncols, nrows)
 		d <- get.var.ncdf( nc,  varid=zvar,  start=start, count=count )
 
-	} else {
+	} else if (nc$var[[zvar]]$ndims == 3) {
 		start = c(col, row, x@data@band)
 		count = c(ncols, nrows, 1)
 		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 		
+	} else {
+		start = c(col, row, 1, x@data@band)
+		count = c(ncols, nrows, 1, 1)
+		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	}
+	
 
 	#if (!is.na(x@file@nodatavalue)) { d[d==x@file@nodatavalue] <- NA }
 	#d <- x@data@add_offset + d * x@data@scale_factor
@@ -54,9 +59,16 @@
 	on.exit( close.ncdf(nc) )
 
 	zvar = x@data@zvar
-	start = c(col, row, layer)
-	count = c(ncols, nrows, n)
-	d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+	
+	if (nc$var[[zvar]]$ndims == 4) {
+		start = c(col, row, 1, layer)
+		count = c(ncols, nrows, 1, n)
+		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+	} else {
+		start = c(col, row, layer)
+		count = c(ncols, nrows, n)
+		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+	}
 	
 
 	#if (!is.na(x@file@nodatavalue)) { 	d[d==x@file@nodatavalue] <- NA	}
