@@ -105,7 +105,7 @@
 }
 
 
-.rasterObjectFromCDF <- function(filename, x='', y='', varname='', band=NA, type='RasterLayer', ...) {
+.rasterObjectFromCDF <- function(filename, varname='', band=NA, type='RasterLayer', lvar=3, level=1, ...) {
 
 	if (!require(ncdf)) { stop('You need to install the ncdf package first') }
 	nc <- open.ncdf(filename)
@@ -129,11 +129,18 @@
 	if (dims== 1) { 
 		stop(zvar, ' only has a single dimension; I cannot make a RasterLayer from this')
 	} else if (dims == 4) { 
-		warning(zvar, ' has 4 dimensions, I am using: ', nc$var[[zvar]]$dim[[1]]$name, ', ', nc$var[[zvar]]$dim[[2]]$name, ', ', nc$var[[zvar]]$dim[[4]]$name )
-		dim3 <- dims
+	
+		if (lvar == 4) { 
+			dim3 <- 3 
+			level <- max(1, min(round(level), nc$var[[zvar]]$dim[[4]]$len))
+
+		} else { 
+			dim3 <- 4 
+			level <- max(1, min(round(level), nc$var[[zvar]]$dim[[3]]$len))
+		}
+		
 	} else if (dims > 4) { 
-		warning(zvar, ' has more than 4 dimensions, I give up')
-		dim3 <- dims
+		warning(zvar, ' has more than 4 dimensions, I do not know what to do')
 	}
 	
 	ncols <- nc$var[[zvar]]$dim[[1]]$len
@@ -205,6 +212,8 @@
 #	attr(r@data, "yvar") <- yvar
 	attr(r@data, "zvar") <- zvar
 	attr(r@data, "dim3") <- dim3
+	attr(r@data, "level") <- level
+	
 #	attr(r@data, "add_offset") <- add_offset
 #	attr(r@data, "scale_factor") <- scale_factor
 	

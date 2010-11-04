@@ -8,7 +8,7 @@
 
 	if ( x@file@toptobottom ) { 
 		row <- x@nrows - row - nrows + 2 
-		}
+	}
 	
 	nc <- open.ncdf(x@file@name)
 	on.exit( close.ncdf(nc) )
@@ -16,19 +16,25 @@
 	zvar <- x@data@zvar
 		
 	if (nc$var[[zvar]]$ndims == 2) {
-		start = c(col, row)
-		count = c(ncols, nrows)
+		start <- c(col, row)
+		count <- c(ncols, nrows)
 		d <- get.var.ncdf( nc,  varid=zvar,  start=start, count=count )
 
 	} else if (nc$var[[zvar]]$ndims == 3) {
-		start = c(col, row, x@data@band)
-		count = c(ncols, nrows, 1)
+		start <- c(col, row, x@data@band)
+		count <- c(ncols, nrows, 1)
 		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 		
 	} else {
-		start = c(col, row, 1, x@data@band)
-		count = c(ncols, nrows, 1, 1)
-		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+		if (x@data@dim3 == 4) {
+			start <- c(col, row, x@data@level, x@data@band)
+			count <- c(ncols, nrows, x@data@level, 1)
+			d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+		} else {
+			start <- c(col, row, x@data@band, x@data@level)
+			count <- c(ncols, nrows, 1, x@data@level)
+			d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+		}
 	}
 	
 
@@ -61,14 +67,18 @@
 	zvar = x@data@zvar
 	
 	if (nc$var[[zvar]]$ndims == 4) {
-		start = c(col, row, 1, layer)
-		count = c(ncols, nrows, 1, n)
-		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
+		if (x@data@dim3 == 4) {
+			start = c(col, row, x@data@level, layer)
+			count = c(ncols, nrows, x@data@level, n)
+		} else {
+			start = c(col, row, layer, x@data@level)
+			count = c(ncols, nrows, n, x@data@level)
+		}		
 	} else {
 		start = c(col, row, layer)
 		count = c(ncols, nrows, n)
-		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	}
+	d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	
 
 	#if (!is.na(x@file@nodatavalue)) { 	d[d==x@file@nodatavalue] <- NA	}

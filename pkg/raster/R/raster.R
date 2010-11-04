@@ -169,6 +169,8 @@ setMethod('raster', signature(x='RasterBrick'),
 				zvar <- try(slot(x@data, 'zvar'), silent=TRUE)
 				if (class(zvar) != 'try-error') {
 					attr(r@data, "zvar") <- zvar
+					attr(r@data, "dim3") <- x@data@dim3
+					attr(r@data, "level") <- x@data@level
 				}
 				
 			} else {
