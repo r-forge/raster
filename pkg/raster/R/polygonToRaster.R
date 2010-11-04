@@ -58,7 +58,25 @@
 
 
 
+
+
+.warnRasterize <- function(n=4) {
+	d <- getOption('rasterRasterizeWarningGiven')
+	if (is.null(d)) { d <- 1 } else { d <- as.numeric(d) + 1 }
+	if (d < n) {
+		warning('this is an obsolete function. Use "rasterize"')
+		options('rasterRasterizeWarningGiven' = d)
+	}
+}
+
+
 polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", getCover=FALSE, filename="", silent=FALSE, ...) {
+	.warnRasterize()
+	.polygonsToRaster(p, raster, field, overlap, mask, updateRaster, updateValue, getCover, filename, silent, ...)
+}
+
+
+.polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", getCover=FALSE, filename="", silent=FALSE, ...) {
 						
 	if (! inherits(p, 'SpatialPolygons') ) {
 		stop('The first argument should be an object of the "SpatialPolygons*" lineage')

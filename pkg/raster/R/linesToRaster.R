@@ -103,6 +103,12 @@
 
 
 linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", ...) {
+	.warnRasterize()
+	.linesToRaster(lns, raster, field, overlap, mask, updateRaster, updateValue, filename, ...)
+}
+
+
+.linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", ...) {
 
 	filename <- trim(filename)
 

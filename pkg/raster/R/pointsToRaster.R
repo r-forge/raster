@@ -6,6 +6,13 @@
 
 
 pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=TRUE, filename="", ...) {
+	.warnRasterize()
+	.pointsToRaster(raster, xy, values, fun, background, na.rm, filename, ...)
+}
+
+
+
+.pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=TRUE, filename="", ...) {
 
 	rs <- raster(raster)
 	
@@ -18,9 +25,17 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 	}
 	
 	nres <- length(fun(1))
+
+	if (is.character(values)) {
+		if (inherits(xy, 'SpatialPointsDataFrame')) {
+			values <- xy@data[,values]
+		}
+	}
+
 	xy <- .pointsToMatrix(xy)
 
 	ncols <- 1
+	
 	if (NCOL(values) > 1) {
 		if (nres > 1) stop('Either use a single function, or a vector for values')
 		nres <- ncols <- ncol(values)
