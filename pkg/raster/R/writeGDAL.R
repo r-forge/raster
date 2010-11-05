@@ -1,4 +1,3 @@
-# R function for the raster package
 # Author: Robert J. Hijmans
 # contact: r.hijmans@gmail.com
 # Date : January 2009
@@ -32,8 +31,8 @@
 }
 
 .getGDALtransient <- function(r, filename, options, NAvalue, ...)  {
-    nbands = nlayers(r)
-	r = raster(r)
+    nbands <- nlayers(r)
+	r <- raster(r)
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
 	gdalfiletype <- .filetype(...)
@@ -93,7 +92,7 @@
 	nl <- nlayers(raster)
 	if (nl == 1) {
 		v <- as.matrix(raster)
-		v[is.na(v)] = raster@file@nodatavalue
+		v[is.na(v)] <- raster@file@nodatavalue
 		x <- putRasterData(raster@file@transient, t(v), band=1, c(0, 0)) 
 	} else {
 	    for (i in 1:nl) {

@@ -4,14 +4,17 @@
 # Licence GPL v3
 
 
-.rasterFromGDAL <- function(filename, band, type) {	
+.rasterFromGDAL <- function(filename, band, type, fixGeoref=FALSE) {	
 	if (! .requireRgdal() ) { stop('package rgdal is not available') }
 
 	# suppressing the geoTransform warning...
 	w <- getOption('warn')
 	on.exit(options('warn'= w))
 	options('warn'=-1) 
-	gdalinfo <- GDALinfo(filename, silent=TRUE)
+	gdalinfo <- try(GDALinfo(filename, silent=TRUE, returnRAT=TRUE), silent=TRUE)
+	if (class(gdalinfo) == 'try-error') {
+		gdalinfo <- try(GDALinfo(filename, silent=TRUE), silent=TRUE)
+	}
 	options('warn'= w) 
 
 	nc <- as.integer(gdalinfo[["columns"]])
@@ -28,14 +31,14 @@
 	yx <- yn + gdalinfo[["res.y"]] * nr
 	yx <- round(yx, digits=9)
 
-	#isPoint <- FALSE
+	#fixGeo <- FALSE
 	#3v <- attr(gdalinfo, 'mdata')
 	#if (! is.null(v) ) {
 	#	for (i in 1:length(v)) {
 	#		if (v[i] == "AREA_OR_POINT=Area") {
 	#			break
 	#		} else if (v[i] == "AREA_OR_POINT=Point") {
-	#			isPoint <- TRUE
+	#			fixGeo <- TRUE
 	#			break
 	#		}
 	#	}
@@ -63,21 +66,19 @@
 		ct <- getColorTable( gd )
 		if (! is.null(ct)) { x@legend@colortable <- ct }
 		GDAL.close(gd)
-		
 	}
 
 	
-	#if (isPoint) {
-	#	xx <- x
-	#	nrow(xx) <- nrow(xx) - 1
-	#	ncol(xx) <- ncol(xx) - 1
-	#	rs <- res(xx)
-	#	xmin(x) <- xmin(x) - 0.5 * rs[1]
-	#	xmax(x) <- xmax(x) + 0.5 * rs[1]
-	#	ymin(x) <- ymin(x) - 0.5 * rs[2]
-	#	ymax(x) <- ymax(x) + 0.5 * rs[2]
-	#}
-	
+	if (fixGeoref) {
+		xx <- x
+		nrow(xx) <- nrow(xx) - 1
+		ncol(xx) <- ncol(xx) - 1
+		rs <- res(xx)
+		xmin(x) <- xmin(x) - 0.5 * rs[1]
+		xmax(x) <- xmax(x) + 0.5 * rs[1]
+		ymin(x) <- ymin(x) - 0.5 * rs[2]
+		ymax(x) <- ymax(x) + 0.5 * rs[2]
+	}
 	
 	shortname <- gsub(" ", "_", ext(basename(filename), ""))
 	x <- .enforceGoodLayerNames(x, shortname)
@@ -108,14 +109,21 @@
 		minv <- minmax[1]
 		maxv <- minmax[2]
 		if ( is.finite(minv) & is.finite(maxv) ) x@data@haveminmax <- TRUE 
-		
-		RAT <- try( attr(gdalinfo, 'RATlist'), silent=TRUE )
-		if (class(RAT) != 'try-error') {
-			x@data@isfactor = TRUE
-			# ....
+	
+		RAT <- attr(gdalinfo, 'RATlist')
+		if (! is.null(RAT[[1]])) {
+			x@data@isfactor <- TRUE
+			#x@data@attributes <- data.frame(RAT[[1]], stringsAsFactors=FALSE)
+			usage <- attr(RAT, 'GFT_usage')
+			if (usage[1] != "GFU_MinMax") {
+				warning('usage[1] != GFU_MinMax')
+					# process min/max
+			} else {
+				if (usage[2] != "GFU_PixelCount") {
+					warning('usage[2] != GFU_PixelCount')
+				}
+			}
 		}
-		
-		
 	}
 	
 	dataType(x) <- datatype
