@@ -27,12 +27,13 @@ This feature is under development, and whether a layer is defined as a factor or
 \usage{
 is.factor(x)
 asFactor(x, ...)
-labels(x)
-labels(x) <- value
+labels(object, ...)
+labels(object) <- value
 }
 
 \arguments{
   \item{x}{A Raster* object}
+  \item{object}{A Raster* object}
   \item{value}{list}
   \item{...}{Additional arguments}
 }

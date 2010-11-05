@@ -99,6 +99,7 @@
 		minv[minv == -4294967295] <- Inf
 		maxv[maxv == 4294967295] <- -Inf
 		if ( is.finite(minv) && is.finite(maxv) ) x@data@haveminmax <- TRUE 
+		
 	} else {
 		try ( datatype <- .getRasterDType ( as.character( attr(gdalinfo, 'df')[band, 1]) ), silent=TRUE )
 		minmax <- c(Inf, -Inf)
@@ -110,20 +111,29 @@
 		maxv <- minmax[2]
 		if ( is.finite(minv) & is.finite(maxv) ) x@data@haveminmax <- TRUE 
 	
-		RAT <- attr(gdalinfo, 'RATlist')
-		if (! is.null(RAT[[1]])) {
-			x@data@isfactor <- TRUE
-			x@data@attributes <- data.frame(RAT[[1]], stringsAsFactors=FALSE)
-			usage <- attr(RAT, 'GFT_usage')
-			if (usage[1] != "GFU_MinMax") {
-				warning('usage[1] != GFU_MinMax')
+	}
+
+	RAT <- attr(gdalinfo, 'RATlist')
+	if (! is.null(RAT)) {
+		att <- vector(length=nlayers(x), mode='list')
+		for (i in 1:length(RAT)) {
+			if (! is.null(RAT[[i]])) {
+				att[[i]] <- data.frame(RAT[[1]], stringsAsFactors=FALSE)
+				
+				usage <- attr(RAT, 'GFT_usage')
+				if (usage[1] != "GFU_MinMax") {
+					warning('usage[1] != GFU_MinMax')
 					# process min/max
-			} else {
-				if (usage[2] != "GFU_PixelCount") {
-					warning('usage[2] != GFU_PixelCount')
+				} else {
+					if (usage[2] != "GFU_PixelCount") {
+						warning('usage[2] != GFU_PixelCount')
+					}
 				}
+				
 			}
 		}
+		x@data@isfactor <- TRUE
+		x@data@attributes <- att
 	}
 	
 	dataType(x) <- datatype

@@ -24,46 +24,46 @@ setMethod('is.factor', signature(x='RasterStack'),
 
 
 if (!isGeneric("labels")) {
-	setGeneric("labels", function(x)
+	setGeneric("labels", function(object, ...)
 		standardGeneric("labels"))
 }	
 
-setMethod('labels', signature(x='Raster'), 
-	function(x) {
-		return(x@data@attributes)
+setMethod('labels', signature(object='Raster'), 
+	function(object, ...) {
+		return(object@data@attributes)
 	}
 )
 
-setMethod('labels', signature(x='RasterStack'), 
-	function(x) {
-		sapply(x@layers, function(x) x@data@attributes) 
+setMethod('labels', signature(object='RasterStack'), 
+	function(object, ...) {
+		sapply(object@layers, function(x) x@data@attributes) 
 	}
 )
 
 
 if (!isGeneric("labels<-")) {
-	setGeneric("labels<-", function(x, value)
+	setGeneric("labels<-", function(object, value)
 		standardGeneric("labels<-"))
 }	
 
 
-setMethod('labels<-', signature(x='RasterLayer', value='list'), 
-	function(x, value) {
+setMethod('labels<-', signature(object='RasterLayer', value='list'), 
+	function(object, value) {
 		if (length(value) != 1) {
 			stop('lenght(value) != 1')
 		}
-		x@data@attributes <- value
-		return(x)
+		object@data@attributes <- value
+		return(object)
 	}
 )
 
-setMethod('labels<-', signature(x='RasterBrick', value='list'), 
-	function(x, value) {
-		if (length(value) != nlayers(x)) {
-			stop('lenght(value) != nlayers(x)')
+setMethod('labels<-', signature(object='RasterBrick', value='list'), 
+	function(object, value) {
+		if (length(value) != nlayers(object)) {
+			stop('lenght(value) != nlayers(object)')
 		}
-		x@data@attributes <- value
-		return(x)
+		object@data@attributes <- value
+		return(object)
 	}
 )
 
