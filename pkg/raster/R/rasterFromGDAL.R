@@ -113,7 +113,7 @@
 		RAT <- attr(gdalinfo, 'RATlist')
 		if (! is.null(RAT[[1]])) {
 			x@data@isfactor <- TRUE
-			#x@data@attributes <- data.frame(RAT[[1]], stringsAsFactors=FALSE)
+			x@data@attributes <- data.frame(RAT[[1]], stringsAsFactors=FALSE)
 			usage <- attr(RAT, 'GFT_usage')
 			if (usage[1] != "GFU_MinMax") {
 				warning('usage[1] != GFU_MinMax')

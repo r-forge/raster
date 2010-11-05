@@ -55,21 +55,16 @@ setMethod ('show' , 'RasterLayer',
 #		if (dataContent(object) == 'nodata') { cat('vals in mem : none', '\n')
 #		} else { cat('vals in mem :', dataContent(object) , '\n') }
 						
-		if (is.factor(object)) {
-			cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
-			cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
-		} else {
-			if (object@data@haveminmax) {
-				cat('min value   :' , minValue(object), '\n')
-				cat('max value   :' , maxValue(object), '\n')
-			} else { 
-				if (object@data@fromdisk) {
-					cat('min value   : ? \n')
-					cat('max value   : ? \n')
-				} else {
-					cat('min value   : NA \n')
-					cat('max value   : NA \n')		
-				}
+		if (object@data@haveminmax) {
+			cat('min value   :' , minValue(object), '\n')
+			cat('max value   :' , maxValue(object), '\n')
+		} else { 
+			if (object@data@fromdisk) {
+				cat('min value   : ? \n')
+				cat('max value   : ? \n')
+			} else {
+				cat('min value   : NA \n')
+				cat('max value   : NA \n')		
 			}
 		}
 		cat('projection  :' , projection(object, TRUE), '\n')
@@ -82,6 +77,12 @@ setMethod ('show' , 'RasterLayer',
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 		cat ('\n')
+		if (is.factor(object)) {
+			cat('factor levels (value attributes)\n')
+			print(object@data@attributes[[1]])
+			# cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
+			# cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
+		}
 	}
 )
 
