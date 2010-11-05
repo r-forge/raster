@@ -108,13 +108,19 @@
 		minv <- minmax[1]
 		maxv <- minmax[2]
 		if ( is.finite(minv) & is.finite(maxv) ) x@data@haveminmax <- TRUE 
+		
+		RAT <- try( attr(gdalinfo, 'RATlist'), silent=TRUE )
+		if (class(RAT) != 'try-error') {
+			x@data@isfactor = TRUE
+			# ....
+		}
+		
+		
 	}
 	
 	dataType(x) <- datatype
 	x@data@min <- minv 
 	x@data@max <- maxv
-	
-
 	
 #oblique.x   0  #oblique.y   0 
 	return(x)
