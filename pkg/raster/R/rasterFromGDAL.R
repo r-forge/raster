@@ -134,7 +134,7 @@
 						}
 					}
 				}
-				x@data@isfactor[i] <- TRUE  # should be vector! 
+				x@data@isfactor[i] <- TRUE 
 			}
 		}
 		x@data@attributes <- att

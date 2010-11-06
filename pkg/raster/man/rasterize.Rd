@@ -78,7 +78,7 @@ A polygon value is transferred to a raster-cell if it covers the center of the c
 }
 
 \value{
-RasterLayer
+RasterLayer or RasterBrick
 }
 
 \seealso{ \code{\link{extract}} }
