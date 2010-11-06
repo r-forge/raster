@@ -108,23 +108,28 @@ linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, upda
 }
 
 
-.linesToRaster <- function(lns, raster, field=0, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="NA", filename="", ...) {
+.linesToRaster <- function(lns, raster, field=0, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", filename="", ...) {
 
 	filename <- trim(filename)
 
 	if (mask & update) { 
-		stop('use either "mask" OR "updateRaster"')
+		stop('use either "mask=TRUE" OR "update=TRUE" (or neither)')
 	}
 	if (mask) { 
 		oldraster <- raster 
 	}
 	if (update) {
 		oldraster <- raster 
-		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
-			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
-		}
+		if (!is.numeric(updateValue)) {
+			if (is.na(updateValue)) {
+				updateValue <- 'NA'
+			} else if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all')) {
+				stop('updateValue should be either "all", "NA", "!NA"')
+			}
+		} 
 	}
 
+	
 	if (is.character(fun)) {
 		if (!(fun %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
 			stop('invalid character value for fun')
@@ -282,10 +287,10 @@ linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, upda
 			rv <- oldvals
 		} else if (update) {
 			oldvals <- getValues(oldraster, r)
-			if (updateValue == "all") {
+			if (is.numeric(updateValue)) {
+				ind <- which(oldvals == updateValue & !is.na(rv))
+			} else if (updateValue == "all") {
 				ind <- which(!is.na(rv))
-			} else if (updateValue == "zero") {
-				ind <- which(oldvals==0 & !is.na(rv))
 			} else if (updateValue == "NA") {
 				ind <- which(is.na(oldvals))
 			} else {

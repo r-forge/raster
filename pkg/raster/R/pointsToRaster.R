@@ -12,31 +12,58 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 
 
 
-.pointsToRaster <- function(xy, raster, field=1, fun=NULL, background=NA, mask=FALSE, update=FALSE, updateValue='NA', filename="", na.rm=TRUE, ...) {
+.pointsToRaster <- function(xy, raster, field=1, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...) {
 
 	rs <- raster(raster)
 	
 	if (mask & update) { 
-		stop('use either "mask" OR "update"')
+		stop('use either "mask=TRUE" OR "update=TRUE", or neither')
 	} else if (mask) { 
 		oldraster <- raster 
 	} else if (update) {
 		oldraster <- raster 
-		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
-			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
-		}
+		if (!is.numeric(updateValue)) {
+			if (is.na(updateValue)) {
+				updateValue <- 'NA'
+			} else if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all')) {
+				stop('updateValue should be either "all", "NA", "!NA"')
+			}
+		} 
 	}
 	
-	
-	if (is.null(fun)) {
-		if (na.rm) {
-			fun=function(x, ...){ length(na.omit(x)) }
+
+	if (is.character(fun)) {
+		if (!(fun %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
+			stop('invalid value for fun')
+		}
+		if (fun == 'sum') {
+			fun <- sum
+		} else if (fun == 'min') {
+			fun <- min
+		} else if (fun == 'max') {
+			fun <- max
 		} else {
-			fun=function(x, ...){ length(x) }
+			if (na.rm) {
+				if (fun == 'first') {
+					fun <- function(x, ...) { na.omit(x[1]) }
+				} else if (fun == 'last') {
+					fun <- function(x, ...) { x <- na.omit(x); x[length(x)] }
+				} else if (fun == 'count') {
+					fun <- function(x, ...) length(na.omit(x))
+				}
+			} else {
+				if (fun == 'first') {
+					fun <- function(x, ...) { x[1] }
+				} else if (fun == 'last') {
+					fun <- function(x, ...) { x[length(x)] }
+				} else if (fun == 'count') {
+					fun <- function(x, ...) length(x)
+				}
+			}
 		}
 	}
 	
-	nres <- length(fun(1))
+	nres <- max(length(fun(1)), length(fun(1:5)))
 
 	if (is.character(field)) {
 		if (inherits(xy, 'SpatialPointsDataFrame')) {
@@ -49,7 +76,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 	ncols <- 1
 	
 	if (NCOL(field) > 1) {
-		if (nres > 1) stop('Either use a single function, or a vector for field')
+		if (nres > 1) stop('Either use a single function for "fun", or a single vector for "field"')
 		nres <- ncols <- ncol(field)
 	} else {
 		if (is.atomic(field) & length(field)==1) {
