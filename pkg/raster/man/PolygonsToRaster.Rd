@@ -23,7 +23,7 @@ polygonsToRaster(p, raster, field=0, overlap='last', mask=FALSE, updateRaster=FA
   \item{getCover}{Logical. If \code{TRUE}, the fraction of each grid cell that is covered by the polygons is returned (and the values of \code{field, overlap, mask}, and \code{updateRaster} are ignored. The fraction covered is estimated by dividing each cell into 100 subcells and determining presence/absence of the polygon in the center of each subcell}    
   \item{filename}{Character. Output filename }
   \item{silent}{Logical. If \code{TRUE}, feedback on the polygon count is suppressed}    
-  \item{...}{Additional arguments. See Details.}    
+  \item{...}{Additional arguments}    
 }
 
 \author{Robert J. Hijmans}

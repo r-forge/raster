@@ -101,6 +101,8 @@
 		try ( maxv <- as.numeric( attr(gdalinfo, 'df')[, 3] ) , silent=TRUE ) 
 		minv[minv == -4294967295] <- Inf
 		maxv[maxv == 4294967295] <- -Inf
+		minv <- as.vector(as.matrix(minv))
+		maxv <- as.vector(as.matrix(maxv))
 		if ( is.finite(minv) && is.finite(maxv) ) x@data@haveminmax <- TRUE 
 		
 	} else {
@@ -110,11 +112,14 @@
 		if (all( minmax == c(-4294967295, 4294967295))) {
 			minmax <- c(Inf, -Inf)
 		}
-		minv <- minmax[1]
-		maxv <- minmax[2]
+		minv <- as.vector(as.matrix(minmax[1]))
+		maxv <- as.vector(as.matrix(minmax[2]))
 		if ( is.finite(minv) & is.finite(maxv) ) x@data@haveminmax <- TRUE 
 	
 	}
+	dataType(x) <- datatype
+	x@data@min <- minv
+	x@data@max <- maxv
 
 	RAT <- attr(gdalinfo, 'RATlist')
 	if (! is.null(RAT)) {
@@ -139,10 +144,6 @@
 		}
 		x@data@attributes <- att
 	}
-	
-	dataType(x) <- datatype
-	x@data@min <- minv 
-	x@data@max <- maxv
 	
 #oblique.x   0  #oblique.y   0 
 	return(x)
