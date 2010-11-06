@@ -11,10 +11,13 @@
 	w <- getOption('warn')
 	on.exit(options('warn'= w))
 	options('warn'=-1) 
-	gdalinfo <- try(GDALinfo(filename, silent=TRUE, returnRAT=TRUE), silent=TRUE)
-	if (class(gdalinfo) == 'try-error') {
-		gdalinfo <- try(GDALinfo(filename, silent=TRUE), silent=TRUE)
+	
+	if (packageVersion('rgdal') > '0.6-28') {
+		gdalinfo <- do.call(GDALinfo, list(filename, silent=TRUE, returnRAT=TRUE))
+	} else {
+		gdalinfo <- do.call(GDALinfo, list(filename, silent=TRUE))
 	}
+		
 	options('warn'= w) 
 
 	nc <- as.integer(gdalinfo[["columns"]])
