@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.rasterFromGDAL <- function(filename, band, type, fixGeoref=FALSE) {	
+.rasterFromGDAL <- function(filename, band, type, fixGeoref=FALSE, silent=TRUE) {	
 	if (! .requireRgdal() ) { stop('package rgdal is not available') }
 
 	# suppressing the geoTransform warning...
@@ -13,9 +13,9 @@
 	options('warn'=-1) 
 	
 	if (packageVersion('rgdal') > '0.6-28') {
-		gdalinfo <- do.call(GDALinfo, list(filename, silent=TRUE, returnRAT=TRUE))
+		gdalinfo <- do.call(GDALinfo, list(filename, silent=silent, returnRAT=TRUE))
 	} else {
-		gdalinfo <- do.call(GDALinfo, list(filename, silent=TRUE))
+		gdalinfo <- do.call(GDALinfo, list(filename, silent=silent))
 	}
 		
 	options('warn'= w) 
@@ -121,21 +121,22 @@
 		att <- vector(length=nlayers(x), mode='list')
 		for (i in 1:length(RAT)) {
 			if (! is.null(RAT[[i]])) {
-				att[[i]] <- data.frame(RAT[[1]], stringsAsFactors=FALSE)
+				att[[i]] <- data.frame(RAT[[i]], stringsAsFactors=FALSE)
 				
-				usage <- attr(RAT, 'GFT_usage')
-				if (usage[1] != "GFU_MinMax") {
-					warning('usage[1] != GFU_MinMax')
-					# process min/max
-				} else {
-					if (usage[2] != "GFU_PixelCount") {
-						warning('usage[2] != GFU_PixelCount')
+				if (! silent) {
+					usage <- attr(RAT[[i]], 'GFT_usage')
+					if (! isTRUE(usage[1] == "GFU_MinMax")) {
+						warning('usage[1] != GFU_MinMax')
+						# process min/max
+					} else {
+						if (! isTRUE(usage[2] == "GFU_PixelCount")) {
+							warning('usage[2] != GFU_PixelCount')
+						}
 					}
 				}
-				
+				x@data@isfactor[i] <- TRUE  # should be vector! 
 			}
 		}
-		x@data@isfactor <- TRUE
 		x@data@attributes <- att
 	}
 	
