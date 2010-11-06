@@ -7,14 +7,26 @@
 
 pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=TRUE, filename="", ...) {
 	.warnRasterize()
-	.pointsToRaster(raster, xy, values, fun, background, na.rm, filename, ...)
+	.pointsToRaster(xy=xy, raster=raster, field=values, fun=fun, background=background, na.rm=na.rm, filename=filename, ...)
 }
 
 
 
-.pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=TRUE, filename="", ...) {
+.pointsToRaster <- function(xy, raster, field=1, fun=NULL, background=NA, mask=FALSE, update=FALSE, updateValue='NA', filename="", na.rm=TRUE, ...) {
 
 	rs <- raster(raster)
+	
+	if (mask & update) { 
+		stop('use either "mask" OR "update"')
+	} else if (mask) { 
+		oldraster <- raster 
+	} else if (update) {
+		oldraster <- raster 
+		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
+			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
+		}
+	}
+	
 	
 	if (is.null(fun)) {
 		if (na.rm) {
@@ -26,9 +38,9 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 	
 	nres <- length(fun(1))
 
-	if (is.character(values)) {
+	if (is.character(field)) {
 		if (inherits(xy, 'SpatialPointsDataFrame')) {
-			values <- xy@data[,values]
+			field <- xy@data[,field]
 		}
 	}
 
@@ -36,15 +48,15 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 
 	ncols <- 1
 	
-	if (NCOL(values) > 1) {
-		if (nres > 1) stop('Either use a single function, or a vector for values')
-		nres <- ncols <- ncol(values)
+	if (NCOL(field) > 1) {
+		if (nres > 1) stop('Either use a single function, or a vector for field')
+		nres <- ncols <- ncol(field)
 	} else {
-		if (is.atomic(values) & length(values)==1) {
-			values <- rep(values, dim(xy)[1])
+		if (is.atomic(field) & length(field)==1) {
+			field <- rep(field, dim(xy)[1])
 		}
-		if (dim(xy)[1] != length(values)) {
-			stop('number of points does not match the number of values')
+		if (dim(xy)[1] != length(field)) {
+			stop('number of points does not match the number of field')
 		}
 	}
 	
@@ -64,7 +76,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 	if (todisk) {
 		rows <- rowFromCell(rs, cells)
 		cols <- colFromCell(rs, cells)
-		xyarc <- cbind(xy, rows, cols, values)
+		xyarc <- cbind(xy, rows, cols, field)
 		urows <- unique(rows)
 #		urows <- urows[order(urows)]
 		if (nres==1) {
@@ -73,7 +85,7 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
 			rs@data@nlayers <- nres
-			if (ncols > 1) { rs@layernames <- colnames(values) }
+			if (ncols > 1) { rs@layernames <- colnames(field) }
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 			datacols <- 5:ncol(xyarc)
 		}
@@ -105,20 +117,43 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 					}
 				}
 			}
+			
+# need to check if nlayers matches ncols (how many layers returned?)
+			if (mask) {
+				oldvals <- getValues(oldraster, r)
+				ind <- which(is.na(d))
+				oldvals[ind] <- NA
+				d <- oldvals
+			} else if (update) {
+				oldvals <- getValues(oldraster, r)
+				if (updateValue == "all") {
+					ind <- which(!is.na(d))
+				} else if (updateValue == "zero") {
+					ind <- which(oldvals==0 & !is.na(d))
+				} else if (updateValue == "NA") {
+					ind <- which(is.na(oldvals))
+				} else {
+					ind <- which(!is.na(oldvals) & !is.na(d))
+				}
+				oldvals[ind] <- d[ind]
+				d <- oldvals
+			}
+			
 			rs <- writeValues(rs, d, r) 
 			pbStep(pb, r)
 		}
+		
 		rs <- writeStop(rs)
 		pbClose(pb)
 		
 	} else {
 	
 		if (ncols > 1) {
-			v <- aggregate(values, list(cells), fun, na.rm=na.rm)
+			v <- aggregate(field, list(cells), fun, na.rm=na.rm)
 			cells <- as.numeric(v[,1])
 			v <- as.matrix(v)[,-1,drop=FALSE]
 		} else {
-			v <- tapply(values, cells, fun, na.rm=na.rm)
+			v <- tapply(field, cells, fun, na.rm=na.rm)
 			cells <- as.numeric(rownames(v))
 			v <- as.matrix(v)
 		}
@@ -136,9 +171,30 @@ pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=
 			vv[] <- background
 			vv[cells] <- v
 		}
+		
+		if (mask) {
+			oldvals <- getValues(oldraster, r)
+			ind <- which(is.na(vv))
+			oldvals[ind] <- NA
+			vv <- oldvals
+		} else if (update) {
+			oldvals <- getValues(oldraster, r)
+			if (updateValue == "all") {
+				ind <- which(!is.na(vv))
+			} else if (updateValue == "zero") {
+				ind <- which(oldvals==0 & !is.na(vv))
+			} else if (updateValue == "NA") {
+				ind <- which(is.na(oldvals))
+			} else {
+				ind <- which(!is.na(oldvals) & !is.na(vv))
+			}
+			oldvals[ind] <- d[ind]
+			d <- oldvals
+		}
+	
 		rs <- setValues(rs, vv)
 		if (ncols > 1) {
-			cn <- colnames(values)
+			cn <- colnames(field)
 			if (! is.null(cn)) {
 				rs@layernames = cn
 			}	

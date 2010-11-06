@@ -76,7 +76,7 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 }
 
 
-.polygonsToRaster <- function(p, raster, field=0, fun='last', mask=FALSE, update=FALSE, updateValue="NA", getCover=FALSE, filename="", silent=FALSE, ...) {
+.polygonsToRaster <- function(p, raster, field=0, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="NA", getCover=FALSE, filename="", silent=FALSE, ...) {
 						
 	if (! inherits(p, 'SpatialPolygons') ) {
 		stop('The first argument should be an object of the "SpatialPolygons*" lineage')
@@ -105,19 +105,18 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 	
 	if (mask & update) { 
 		stop('use either "mask" OR "update"')
-	}
-	
-	if (mask) { 
+	} else if (mask) { 
 		oldraster <- raster 
 		#update <- TRUE 
-	}
-	if (update) {
+	} else if (update) {
 		oldraster <- raster 
 		if (!(updateValue == 'NA' | updateValue == '!NA' | updateValue == 'all' | updateValue == 'zero')) {
 			stop('updateValue should be either "all", "NA", "!NA", or "zero"')
 		}
 	}
+	
 	raster <- raster(raster)
+	
 	if (projection(p) != "NA") {
 		projection(raster) = projection(p)
 	}
@@ -354,6 +353,8 @@ polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, upd
 			}
 			oldvals[ind] <- rv[ind]
 			rv <- oldvals
+		} else {
+			rv[is.na(rv)] <- background
 		}
 
 		if (filename == "") {

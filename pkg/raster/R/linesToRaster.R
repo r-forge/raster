@@ -108,7 +108,7 @@ linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, upda
 }
 
 
-.linesToRaster <- function(lns, raster, field=0, fun='last', mask=FALSE, update=FALSE, updateValue="NA", filename="", ...) {
+.linesToRaster <- function(lns, raster, field=0, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="NA", filename="", ...) {
 
 	filename <- trim(filename)
 
@@ -293,6 +293,8 @@ linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, upda
 			}
 			oldvals[ind] <- rv[ind]
 			rv <- oldvals
+		} else {
+			rv[is.na(rv)] <- background
 		}
 
 		

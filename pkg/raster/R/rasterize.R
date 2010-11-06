@@ -12,13 +12,13 @@ if (!isGeneric("rasterize")) {
 
 setMethod('rasterize', signature(x='matrix', y='Raster'), 
 function(x, y, ...){ 
-	return( .pointsToRaster(y, x, ...))
+	return( .pointsToRaster(x, y, ...))
 })
 
 
 setMethod('rasterize', signature(x='SpatialPoints', y='Raster'), 
 function(x, y, ...){ 
-	return( .pointsToRaster(y, x, ...))
+	return( .pointsToRaster(x, y, ...))
 })
 
 
