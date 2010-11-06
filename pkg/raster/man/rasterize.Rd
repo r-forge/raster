@@ -12,7 +12,7 @@
 \title{Rasterize points, lines, or polygons}
 
 \description{
-Transfer values associate with 'vector' type spatial data (points, lines, polygons) to the raster cells with which they overlap spatially. 
+Transfer values associate with 'vector' type spatial data (points, lines, polygons) to the spatially overlapping raster cells. 
 
 This function has replaced the obsolete functions pointsToRaster, linesToRaster, and polygonsToRaster.
 }
