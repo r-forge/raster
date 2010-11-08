@@ -9,8 +9,16 @@ setMethod ('print' , 'Raster',
 			nc <- open.ncdf(x@file@name)
 			print(nc)
 			close.ncdf(nc)
-		}
-		else callNextMethod(x, ...)
+		} else if (is.factor(x)) {
+			cat('factor levels (value attributes)\n')
+			f <- x@data@attributes[[1]]
+			if (nrow(f) > 15) { 
+				f <- f[1:15,]
+			}
+			print(f)
+			# cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
+			# cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
+		} else callNextMethod(x, ...)
 	}
 )
 
@@ -77,12 +85,6 @@ setMethod ('show' , 'RasterLayer',
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 		cat ('\n')
-		if (is.factor(object)) {
-			cat('factor levels (value attributes)\n')
-			print(object@data@attributes[[1]])
-			# cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
-			# cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
-		}
 	}
 )
 

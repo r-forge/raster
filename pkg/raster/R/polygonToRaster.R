@@ -70,13 +70,18 @@
 }
 
 
-polygonsToRaster <- function(p, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", getCover=FALSE, filename="", silent=FALSE, ...) {
+polygonsToRaster <- function(p, raster, field=0, overlap='last', ...) {
 	.warnRasterize()
-	.polygonsToRaster(p, raster, field=field, fun=overlap, mask=mask, update=updateRaster, updateValue=updateValue, getCover=getCover, filename=filename, silent=silent, ...)
+	.polygonsToRaster(p, raster, field=field, fun=overlap, ...)
 }
 
 
 .polygonsToRaster <- function(p, raster, field=0, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", getCover=FALSE, filename="", silent=FALSE, ...) {
+
+	dots <- list(...)
+	if (!is.null(dots$overlap)) { stop('argument "overlap" is no longer available. Use "fun"') } 
+	if (!is.null(dots$updateRaster)) { stop('argument "updateRaster" is no longer available. Use "update"') } 
+
 						
 	if (! inherits(p, 'SpatialPolygons') ) {
 		stop('The first argument should be an object of the "SpatialPolygons*" lineage')

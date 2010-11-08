@@ -102,14 +102,19 @@
 }
 
 
-linesToRaster <- function(lns, raster, field=0, overlap='last', mask=FALSE, updateRaster=FALSE, updateValue="NA", filename="", ...) {
+linesToRaster <- function(lns, raster, field=0, overlap='last', ...) {
 	.warnRasterize()
-	.linesToRaster(lns=lns, raster=raster, field=field, fun=overlap, mask=mask, update=updateRaster, updateValue=updateValue, filename=filename, ...)
+	.linesToRaster(lns=lns, raster=raster, field=field, fun=overlap, ...)
 }
 
 
 .linesToRaster <- function(lns, raster, field=0, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", filename="", ...) {
 
+	dots <- list(...)
+	if (!is.null(dots$overlap)) { stop('argument "overlap" is no longer available. Use "fun"') } 
+	if (!is.null(dots$updateRaster)) { stop('argument "updateRaster" is no longer available. Use "update"') } 
+	
+	
 	filename <- trim(filename)
 
 	if (mask & update) { 

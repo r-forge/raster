@@ -5,9 +5,9 @@
 # Licence GPL v3
 
 
-pointsToRaster <- function(raster, xy, values=1, fun=NULL, background=NA, na.rm=TRUE, filename="", ...) {
+pointsToRaster <- function(raster, xy, values=1, fun, ...) {
 	.warnRasterize()
-	.pointsToRaster(xy=xy, raster=raster, field=values, fun=fun, background=background, na.rm=na.rm, filename=filename, ...)
+	.pointsToRaster(xy=xy, raster=raster, field=values, fun=fun, ...)
 }
 
 

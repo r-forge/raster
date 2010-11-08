@@ -18,7 +18,7 @@ You should supply a function \code{fun} to set the way that the RasterLayers are
 
 If a single mutli-layer object is provided, its layers are treated as individual RasterLayers. If multiple multi-layer objects are provided, they should have the same number of layers, and a brick with the same number of layers is returned (objects could also have a single layer, which is recycled).
 
-You can also supply a function such as \code{sum}, that takes \code{n} arguments. Note that the function must work for vectors (not only single numbers)
+You can also supply a function such as \code{sum}, that takes \code{n} arguments. Note that the function must work for vectors (not only single numbers). That is, it must return the same number of elements as its input vectors.
 }
 
 \section{Methods}{
@@ -77,8 +77,7 @@ In stead of the overlay function you can also use normal aritmethic functions su
 
 While you can supply functions such as \code{sum} or \code{mean}, it would be more direct to use the Raster* objects are arguments to those functions (e.g. \code{sum(r1,r2,r3)})  
 
-For "overlays" involving Raster objects and polyongs, lines, or points, see, e.g.:
-\code{ \link[raster]{polygonsToRaster}, \link[raster]{linesToRaster}, \link[raster]{pointsToRaster}, \link[raster]{extract}}
+See \code{\link{rasterize}} and \code{\link{extract}} for "overlays" involving Raster* objects and polygons, lines, or points.
 
 }
 

@@ -71,7 +71,7 @@ There is one additional argument:
 A polygon value is transferred to a raster-cell if it covers the center of the cell. Either values associated with each polygon, or a polygon ID is transferred. Holes in polygons are recognized if they are correctly specified. The following additional arguments are available:
 
 \tabular{rll}{
-\tab \code{getCover} \tab Logical. If \code{TRUE}, the fraction of each grid cell that is covered by the polygons is returned (and the values of \code{field, overlap, mask}, and \code{update} are ignored. The fraction covered is estimated by dividing each cell into 100 subcells and determining presence/absence of the polygon in the center of each subcell \cr
+\tab \code{getCover} \tab Logical. If \code{TRUE}, the fraction of each grid cell that is covered by the polygons is returned (and the values of \code{field, fun, mask}, and \code{update} are ignored. The fraction covered is estimated by dividing each cell into 100 subcells and determining presence/absence of the polygon in the center of each subcell \cr
 
 \tab \code{silent} \tab Logical. If \code{TRUE}, feedback on the polygon count is suppressed. Default is \code{FALSE} \cr
 }
@@ -120,7 +120,7 @@ r <- rasterize(lines, r)
 plot(r)
 plot(lines, add=TRUE)
 
-r <- rasterize(lines, r, overlap='count')
+r <- rasterize(lines, r, fun='count')
 plot(r)
 
 r[] <- 1:ncell(r)
@@ -140,7 +140,7 @@ pols <- SpatialPolygons( list(  Polygons(list(Polygon(p1), Polygon(hole)), 1), P
 pols@polygons[[1]]@Polygons[[2]]@hole <- TRUE
 
 r <- raster(ncol=180, nrow=90)
-r <- rasterize(pols, r, overlap='sum')
+r <- rasterize(pols, r, fun='sum')
 \dontrun{
 plot(r)
 plot(pols, add=T)
@@ -150,7 +150,7 @@ p5 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),  c(-25, -15), c(-180,0), 
 addpoly <- SpatialPolygons(list(Polygons(list(Polygon(p5)), 1)))
 addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
 addpoly@data[1,1] <- 10
-r2 <- rasterize(addpoly, r, field=1, updateRaster=TRUE, updateValue="NA")
+r2 <- rasterize(addpoly, r, field=1, update=TRUE, updateValue="NA")
 plot(r2)
 plot(pols, border="blue", lwd=2, add=TRUE)
 plot(addpoly, add=TRUE, border="red", lwd=2)
