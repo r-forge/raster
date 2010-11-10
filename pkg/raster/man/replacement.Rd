@@ -3,7 +3,8 @@
 \docType{methods}
 
 
-\alias{[[,Raster,ANY,ANY-method}
+\alias{[[,RasterLayer,ANY,ANY-method}
+\alias{[[,RasterStackBrick,ANY,ANY-method}
 \alias{[,Raster,ANY,ANY-method}
 \alias{[,Raster,Spatial,missing-method}
 
