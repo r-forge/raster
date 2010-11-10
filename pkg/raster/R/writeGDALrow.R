@@ -11,6 +11,8 @@
 	attr(raster@file, "transient") <- temp[[1]]
 	raster@file@nodatavalue <- temp[[2]]
 	attr(raster@file, "options") <- temp[[3]]
+	
+	raster@file@datanotation <- .getRasterDType(temp[[4]])
 	raster@file@driver <- 'gdal'
 	raster@data@fromdisk <- TRUE
 	raster@file@name <- filename
