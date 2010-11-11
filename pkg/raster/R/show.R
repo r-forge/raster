@@ -3,8 +3,12 @@
 # Version 0.9
 # Licence GPL v3
 
-setMethod ('print' , 'Raster', 
+
+setMethod ('print' , 'RasterLayer', 
 	function(x, ...) {
+		if (inherits(x, 'RasterStack')) {
+			show(x)
+		}
 		if (x@file@driver == 'netcdf') {
 			nc <- open.ncdf(x@file@name)
 			print(nc)
