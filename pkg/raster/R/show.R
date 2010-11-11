@@ -4,25 +4,26 @@
 # Licence GPL v3
 
 
-setMethod ('print' , 'RasterLayer', 
+setMethod ('print' , 'Raster', 
 	function(x, ...) {
 		if (inherits(x, 'RasterStack')) {
 			show(x)
-		}
-		if (x@file@driver == 'netcdf') {
-			nc <- open.ncdf(x@file@name)
-			print(nc)
-			close.ncdf(nc)
-		} else if (is.factor(x)) {
-			cat('factor levels (value attributes)\n')
-			f <- x@data@attributes[[1]]
-			if (nrow(f) > 15) { 
-				f <- f[1:15,]
-			}
-			print(f)
+		} else {
+			if (x@file@driver == 'netcdf') {
+				nc <- open.ncdf(x@file@name)
+				print(nc)
+				close.ncdf(nc)
+			} else if (is.factor(x)) {
+				cat('factor levels (value attributes)\n')
+				f <- x@data@attributes[[1]]
+				if (nrow(f) > 15) { 
+					f <- f[1:15,]
+				}
+				print(f)
 			# cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
 			# cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
-		} else callNextMethod(x, ...)
+			} else callNextMethod(x, ...)
+		}
 	}
 )
 
