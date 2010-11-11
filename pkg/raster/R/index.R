@@ -11,7 +11,7 @@ function(x,i,j,...,drop=TRUE) {
 
 setMethod("[[", "RasterStackBrick",
 function(x,i,j,...,drop=TRUE) {
-	if (! missing(i)) { stop('you must provide an index') }
+	if ( missing(i)) { stop('you must provide an index') }
 	if (! is.numeric(i)) { stop('you must provide a numeric index') }
 	if (! missing(j)) { warning('second index is ignored') }
 	i <- round(i)

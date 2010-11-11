@@ -17,6 +17,8 @@
 \code{object[i]} can be used to access values of a Raster* object, using cell numbers. You can also use row and column numbers as index, using \code{object[i,j]} or \code{object[i,]} or \code{object[,j]}. In addition you can supply a SpatialPolygons, SpatialLines or SpatialPoints object (as in \code{link{extract}}. If you supply a RasterLayer, its values will be used as logical (TRUE/FALSE) indices if both Raster objects have the same extent and resolution; otherwise the cell values within the extent of the RasterLayer are returned.
 
 You can also set values of a RasterLayer object, when \code{i} is a vector of cell numbers or a Spatial* object. 
+
+Double brackes '[[ ]]' can be used to extract one or more layers from a multi-layer object.
 }
 
 \section{Methods}{
@@ -67,8 +69,9 @@ r[1,]
 r[,1]
 r[1:2, 1:2]
 
-s <- stack(r,sqrt(r))
+s <- stack(r, sqrt(r))
 s[1:3]
+s[[2]]
 }
 
 \keyword{methods}
