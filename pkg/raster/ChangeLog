@@ -1,5 +1,6 @@
 --------------------------------------------
 13-Nov-2010,  version 1.6-18
+Started support for multi-core/cluster processing (together with Matteo Mattiuzzi)
 Added drop=FALSE to "[" methods, to return a Raster*. 
 
 --------------------------------------------
