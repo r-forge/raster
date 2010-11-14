@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# International Rice Research Institute
 # Date :  April 2009
 # Version 0.9
 # Licence GPL v3
@@ -7,6 +6,7 @@
 
 rasterFromCells <- function(object, cells) {
 	x <- unique(cells)
+	x <- subset(x, x > 0 & x <= ncell(object))
 	cols <- colFromCell(object, x)
 	rows <- rowFromCell(object, x)
 	res <- res(object)

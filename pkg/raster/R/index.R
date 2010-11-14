@@ -39,12 +39,17 @@ function(x, i, j, ... ,drop=TRUE) {
 	if (inherits(i, 'SpatialGrid') | inherits(i, 'SpatialPixels')) {
 		i <-  as(i, 'SpatialPoints')
 	}
-	extract(x, i, ...)
+	if (drop) {
+		extract(x, i, ...)
+	} else {
+		x <- crop(x, i, ...)
+		rasterize(i, x, mask=TRUE, ...)
+	}
 })
 
 
 setMethod("[", "Raster",
-function(x,i,j,drop=TRUE) {
+function(x, i, j, drop=TRUE) {
 	
 	if (! hasValues(x) ) {
 		stop('no data associated with this RasterLayer object')
@@ -63,7 +68,11 @@ function(x,i,j,drop=TRUE) {
 	
 	if (missing(i)) {
 		if (missing(j)) {
-			return(getValues(x))
+			if (drop) {
+				return(getValues(x))
+			} else {
+				return(as.matrix(x))
+			}
 		} else {
 			i <- cellFromCol(x, j)
 		}
@@ -71,7 +80,11 @@ function(x,i,j,drop=TRUE) {
 		if (inherits(i, "RasterLayer")) {
 			i <- 1:ncell(i)[ as.logical( getValues(i) ) ]
 		} else if (inherits(i, "Extent")) {
-			return( extract(x, i) )
+			if (drop) {
+				return( extract(x, i) )
+			} else {
+				return( crop(x, i) )
+			}
 		} else {
 			if (missing(j)) {
 				theCall <- sys.call(-1)
@@ -88,6 +101,21 @@ function(x,i,j,drop=TRUE) {
 	if (nacount > 0) {
 		warning('some indices are invalid (NA returned)')
 	}	
-	return( .cellValues(x, i) )
+	if (drop) {
+		return( .cellValues(x, i) )
+	} else {
+		r <- raster(rasterFromCells(x, i))
+		newi <- cellFromXY(r, xyFromCell(x, i))
+		if (nlayers(x) > 1) {
+			r <- brick(r)
+			v <- matrix(NA, nrow=ncell(r), ncol=nlayers(x))
+			v[newi,] <- .cellValues(x, i)
+			v <- setValues(r, v)
+			return(v)
+		} else {
+			r[newi] <- .cellValues(x, i)
+			return(r)
+		}
+	}
 }
 )
