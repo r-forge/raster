@@ -71,7 +71,7 @@ function(x, i, j, drop=TRUE) {
 			if (drop) {
 				return(getValues(x))
 			} else {
-				return(as.matrix(x))
+				return(x)
 			}
 		} else {
 			i <- cellFromCol(x, j)
@@ -104,7 +104,7 @@ function(x, i, j, drop=TRUE) {
 	if (drop) {
 		return( .cellValues(x, i) )
 	} else {
-		r <- raster(rasterFromCells(x, i))
+		r <- rasterFromCells(x, i, values=FALSE)
 		newi <- cellFromXY(r, xyFromCell(x, i))
 		if (nlayers(x) > 1) {
 			r <- brick(r)
