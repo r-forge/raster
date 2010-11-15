@@ -1,4 +1,9 @@
 --------------------------------------------
+14-Nov-2010,  version 1.6-19
+Fixed bug in .stopGDALwrting
+Experimental support for multicore in functions projectRaster and distance
+
+--------------------------------------------
 13-Nov-2010,  version 1.6-18
 Started support for multi-core/cluster processing (together with Matteo Mattiuzzi)
 Fixed bug in aggregate with unequal x and y fact (thanks to Kevin Ummel for reporting)
