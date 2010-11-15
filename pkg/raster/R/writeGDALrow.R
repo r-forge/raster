@@ -23,9 +23,10 @@
 
 .stopGDALwriting <- function(raster) {
 
+	nl <- nlayers(raster)
+
 	if (packageDescription('rgdal')$Version > '0.6-28') {
 	
-		nl <- nlayers(raster)
 		if (nl == 1) {
 			if (raster@data@haveminmax) {
 				if (inMemory(raster)) {

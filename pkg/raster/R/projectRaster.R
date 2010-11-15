@@ -99,11 +99,11 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	
 	if (missing(to)) {
 		if (missing(crs)) {
-			stop("'res' provided, but 'crs' argument is missing.")
+			stop("'crs' argument is missing.")
 		}
 		to <- projectExtent(from, crs)
 		if (missing(res)) {
-			res <- .computeRes(from, crs)
+			res <- raster:::.computeRes(from, crs)
 		}
 		res(to) <- res
 		projto <- projection(to)
@@ -173,10 +173,15 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	
 	if (.doCluster()) {
 		
-		cat('using cluster!\n')
-		
 		cl <- .makeCluster()
+		nodes <- min(ceiling(to@nrows/10), length(cl)) # at least 10 rows per node
 		
+		cat('Using cluster with', nodes, 'nodes\n')
+		flush.console()
+		
+		tr <- blockSize(to, minblocks=nodes)
+		pb <- pbCreate(tr$n, type=.progress(...))
+
 		clFun <- function(i) {
 			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 			xy <- xyFromCell(to, cellFromRowCol(to, tr$row[i], 1) : cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to)) ) 
@@ -185,35 +190,35 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			raster:::.xyValues(from, unProjXY, method=method)
 		}
 		
-		ncl <- length(cl)
-		tr <- blockSize(to, minblocks=ncl)
-		pb <- pbCreate(tr$n, type=.progress(...))
-		
-        submit <- function(node, job) {
-			sendCall(cl[[node]], clFun, job, tag=job)
-		}
-		
-        for (i in 1:ncl) {
-			submit(i, i)
+		# for debugging
+		# clusterExport(cl,c("tr", "projto", "projfrom", "method", "from", "to"))
+        for (i in 1:nodes) {
+			sendCall(cl[[i]], clFun, i, tag=i)
 		}
 		        
 		if (inMemory) {
 			for (i in 1:tr$n) {
-				d <- recvOneResult(cl)
-				start <- cellFromRowCol(to, tr$row[d$tag], 1)
-				end <- cellFromRowCol(to, tr$row[d$tag]+tr$nrows[d$tag]-1, to@ncols)
-				v[start:end, ] <- d$value
-				submit(d$node, i)
+				d <- recvOneData(cl)
+				if (! d$value$success) {
+					stop('cluster error')
+				}
+				start <- cellFromRowCol(to, tr$row[d$value$tag], 1)
+				end <- cellFromRowCol(to, tr$row[d$value$tag]+tr$nrows[d$value$tag]-1, to@ncols)
+				v[start:end, ] <- d$value$value
+				if ((nodes + i) <= tr$n) {
+					sendCall(cl[[d$node]], clFun, i, tag=i)
+				}
 				pbStep(pb)
 			}
-			v[] = as.numeric(v)
 			
 		} else {
 		
 			for (i in 1:tr$n) {
-				d <- recvOneResult(cl)
-				to <- writeValues(to, d$value, tr$row[d$tag])
-				submit(d$node, i)
+				d <- recvOneData(cl)
+				to <- writeValues(to, d$value$value, tr$row[d$value$tag])
+				if ((nodes + i) <= tr$n) {
+					sendCall(cl[[d$node]], clFun, nodes+i, tag=i)
+				}
 				pbStep(pb)
 			}
 		}

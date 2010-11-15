@@ -41,15 +41,15 @@ setCluster <- function(n, type) {
 	if (! require(snow) ) {
 		stop('you need to install the "snow" package')
 	}
-	if (missing(type)) {
-		type <- getClusterOption("type")
-		cat('cluster type:', type, '\n')
-	}
 	if (missing(n)) {
 		n <- .detectCores()
 		cat(n, 'cores detected\n')
 	}
 	if (n > 1) {
+		if (missing(type)) {
+			type <- getClusterOption("type")
+			cat('cluster type:', type, '\n')
+		}
 		options(rasterCluster = TRUE)
 		options(rasterClusterCores = n)
 		options(rasterClusterType = type)
@@ -83,10 +83,10 @@ setCluster <- function(n, type) {
 
 	pkgs <- .packages()
 	i <- which(pkgs %in% c("stats", "graphics", "grDevices", "utils", "datasets", "methods", "base"))
-	pkgs <- pkgs[-i]
+	pkgs <- rev(pkgs[-i])
 
 	for (pk in pkgs) {
-		clusterCall(cl, library, pk, character.only=T )
+		clusterCall(cl, library, pk, character.only=TRUE )
 	}
 	return(cl)
 }
