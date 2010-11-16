@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.rasterFromGDAL <- function(filename, band, type, fixGeoref=FALSE, silent=TRUE) {	
+.rasterFromGDAL <- function(filename, band, type, silent=TRUE) {	
 	if (! .requireRgdal() ) { stop('package rgdal is not available') }
 
 	# suppressing the geoTransform warning...
@@ -34,18 +34,19 @@
 	yx <- yn + gdalinfo[["res.y"]] * nr
 	yx <- round(yx, digits=9)
 
-	#fixGeo <- FALSE
-	#3v <- attr(gdalinfo, 'mdata')
-	#if (! is.null(v) ) {
-	#	for (i in 1:length(v)) {
-	#		if (v[i] == "AREA_OR_POINT=Area") {
-	#			break
-	#		} else if (v[i] == "AREA_OR_POINT=Point") {
-	#			fixGeo <- TRUE
-	#			break
-	#		}
-	#	}
-	#}
+
+	fixGeoref <- FALSE
+	v <- attr(gdalinfo, 'mdata')
+	if (! is.null(v) ) {
+		for (i in 1:length(v)) {
+			if (v[i] == "AREA_OR_POINT=Area") {
+				break
+			} else if (v[i] == "AREA_OR_POINT=Point") {
+				fixGeoref <- TRUE
+				break
+			}
+		}
+	}
 	
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs="")
@@ -73,6 +74,7 @@
 
 	
 	if (fixGeoref) {
+		cat('fixing "AREA_OR_POINT=Point" georef')
 		xx <- x
 		nrow(xx) <- nrow(xx) - 1
 		ncol(xx) <- ncol(xx) - 1
