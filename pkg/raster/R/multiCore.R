@@ -6,16 +6,17 @@
 
 # taken from pkg multicore:
 # detect the number of [virtual] CPUs (cores)
-.multiCoreDetectCores <- function(all.tests = FALSE) {
+.multicoreDetectCores <- function(all.tests = FALSE) {
   # feel free to add tests - those are the only ones I could test [SU]
 	systems <- list(darwin  = "/usr/sbin/sysctl -n hw.ncpu 2>/dev/null",
 					linux   = "grep processor /proc/cpuinfo 2>/dev/null|wc -l",
 					irix    = c("hinv |grep Processors|sed 's: .*::'", "hinv|grep '^Processor '|wc -l"),
 					solaris = "/usr/sbin/psrinfo -v|grep 'Status of.*processor'|wc -l")
+					
 	for (i in seq(systems)) {
 		if(all.tests || length(grep(paste("^", names(systems)[i], sep=''), R.version$os))) {
 			for (cmd in systems[i]) {
-				a <- gsub("^ +","",system(cmd, TRUE)[1])
+				a <- gsub("^ +", "", system(cmd, TRUE)[1])
 				if (length(grep("^[1-9]", a))) {
 					return(as.integer(a))
 				}
@@ -31,7 +32,7 @@
 		nn <- length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1)) # tested on XP
 	} else {
 		# detect the number of [virtual] CPUs (cores)
-		nn <- .multiCoreDetectCores(all.tests)
+		nn <- .multicoreDetectCores(all.tests)
 	}
 	return(nn)
 }
@@ -62,10 +63,10 @@ setCluster <- function(n, type) {
 
 .doCluster <- function() {
 	rc <- options("rasterCluster")[[1]]
-	if (is.null(rc)) { 
-		return(FALSE)
-	} else { 
-		return(rc) 
+	if ( isTRUE(rc) ) {
+		return(TRUE)
+	} else {
+		return(FALSE) 	
 	}
 }
 
@@ -76,10 +77,6 @@ setCluster <- function(n, type) {
 	nodes <- options("rasterClusterCores")[[1]]
 	cltype <- options("rasterClusterType")[[1]]
 	cl <- makeCluster(nodes, type=cltype) 
-# load libraries on the nodes
-#	clusterEvalQ(cl, library(raster))
-#	if ('rgdal' %in% libraries) clusterEvalQ(cl, library(rgdal))
-#	if ('igraph' %in% libraries) clusterEvalQ(cl, library(igraph))
 
 	pkgs <- .packages()
 	i <- which(pkgs %in% c("stats", "graphics", "grDevices", "utils", "datasets", "methods", "base"))
