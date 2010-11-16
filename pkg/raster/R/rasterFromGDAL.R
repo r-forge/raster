@@ -75,13 +75,10 @@
 	
 	if (fixGeoref) {
 		cat('fixing "AREA_OR_POINT=Point" georef')
-		xx <- x
-		nrow(xx) <- nrow(xx) - 1
-		ncol(xx) <- ncol(xx) - 1
-		rs <- res(xx)
+		rs <- res(x)
 		xmin(x) <- xmin(x) - 0.5 * rs[1]
-		xmax(x) <- xmax(x) + 0.5 * rs[1]
-		ymin(x) <- ymin(x) - 0.5 * rs[2]
+		xmax(x) <- xmax(x) - 0.5 * rs[1]
+		ymin(x) <- ymin(x) + 0.5 * rs[2]
 		ymax(x) <- ymax(x) + 0.5 * rs[2]
 	}
 	
