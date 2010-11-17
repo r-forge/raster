@@ -82,6 +82,8 @@ function(x, filename='', ...) {
 				}
 				pbStep(pb)
 			}
+			out <- setValues(out, as.vector(v)) 
+			
 		} else {
 			for (r in 1:nrow(out)) {
 				d <- recvOneData(cl)
@@ -94,36 +96,48 @@ function(x, filename='', ...) {
 				}
 				pbStep(pb, r)
 			}
+			out <- writeStop(out)
 		}
 	
+		.returnCluster(cl)
+
 	} else {	
 	
-		for (r in 1:nrow(out)) {	
-			vals <- getValues(x, r)
-			i = which(is.na(vals))
-			vals[] <- 0
-			if (length(i) > 0) {
-				xy[,2] <- yFromRow(out, r)
-				for (c in i) {
-					vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
+		if (filename=="") {
+			for (r in 1:nrow(out)) {	
+				vals <- getValues(x, r)
+				i = which(is.na(vals))
+				vals[] <- 0
+				if (length(i) > 0) {
+					xy[,2] <- yFromRow(out, r)
+					for (c in i) {
+						vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
+					}
 				}
-			}
-			if (filename == "") {
 				v[,r] <- vals
-			} else {
-				out <- writeValues(out, vals, r)
+				pbStep(pb, r) 	
 			}
-			pbStep(pb, r) 	
-		}	
+			out <- setValues(out, as.vector(v)) 
+			
+		} else {
+			for (r in 1:nrow(out)) {	
+				vals <- getValues(x, r)
+				i = which(is.na(vals))
+				vals[] <- 0
+				if (length(i) > 0) {
+					xy[,2] <- yFromRow(out, r)
+					for (c in i) {
+						vals[c] <- min( pointDistance(xy[c,], pts, type=disttype) )
+					}
+				}
+				out <- writeValues(out, vals, r)
+				pbStep(pb, r) 	
+			}
+			out <- writeStop(out)
+		}
 	}
-	
 	pbClose(pb)
 	
-	if (filename == "") { 
-		out <- setValues(out, as.vector(v)) 
-	} else {
-		out <- writeStop(out)
-	}
 	return(out)
 }
 )

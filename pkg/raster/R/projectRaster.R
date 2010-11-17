@@ -223,6 +223,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			}
 		}	
 		
+		.returnCluster(cl)
+		
 	} else {
 	
 		tr <- blockSize(to)

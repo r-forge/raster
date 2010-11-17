@@ -3,42 +3,6 @@
 # Version 1.0
 # Licence GPL v3
 
-
-.detectCores <- function(all.tests = FALSE) {
-
-	multicoreDetectCores <- function(all.tests = FALSE) {
-	# taken from pkg multicore:
-	# detect the number of [virtual] CPUs (cores)
-	
-	# feel free to add tests - those are the only ones I could test [SU]
-		systems <- list(darwin  = "/usr/sbin/sysctl -n hw.ncpu 2>/dev/null",
-					linux   = "grep processor /proc/cpuinfo 2>/dev/null|wc -l",
-					irix    = c("hinv |grep Processors|sed 's: .*::'", "hinv|grep '^Processor '|wc -l"),
-					solaris = "/usr/sbin/psrinfo -v|grep 'Status of.*processor'|wc -l")
-					
-		for (i in seq(systems)) {
-			if(all.tests || length(grep(paste("^", names(systems)[i], sep=''), R.version$os))) {
-				for (cmd in systems[i]) {
-					a <- gsub("^ +", "", system(cmd, TRUE)[1])
-					if (length(grep("^[1-9]", a))) {
-						return(as.integer(a))
-					}
-				}
-			}	
-		}		
-		return(1)
-	}
-
-	
-	if (.Platform$OS.type == 'windows') {
-		nn <- length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1))
-	} else {
-		nn <- multicoreDetectCores(all.tests)
-	}
-	return(nn)
-}
-
-
 beginCluster <- function(n, type) {
 	if (! require(snow) ) {
 		stop('you need to install the "snow" package')
@@ -86,6 +50,26 @@ endCluster <- function() {
 	return(FALSE)
 }
 
+
+.getCluster <- function() {
+	cl <- get('raster_Cluster_raster_Cluster', envir=.GlobalEnv)
+	cl <- .addPackages(cl, exclude=c('raster', 'sp'))
+	rm('raster_Cluster_raster_Cluster', envir=.GlobalEnv)
+	options( rasterCluster = FALSE )
+	return(cl)
+}
+
+
+.returnCluster <- function(cl) {
+	if (missing(cl)) { 
+		warning('no cluster returned' )
+	} else {
+		assign('raster_Cluster_raster_Cluster', cl, envir = .GlobalEnv)
+		options(rasterCluster = TRUE)
+	}
+}
+
+
 .addPackages <- function(cl, exclude=NULL) {
 	pkgs <- .packages()
 	i <- which( pkgs %in% c(exclude, "stats", "graphics", "grDevices", "utils", "datasets", "methods", "base") )
@@ -97,11 +81,35 @@ endCluster <- function() {
 }
 
 
-.getCluster <- function() {
-	cl <- get('raster_Cluster_raster_Cluster', envir=.GlobalEnv)
-	cl <- .addPackages(cl, exclude=c('raster', 'sp'))
-	assign('raster_Cluster_raster_Cluster', cl, envir = .GlobalEnv)
-	return(cl)
+.detectCores <- function(all.tests = FALSE) {
+
+	multicoreDetectCores <- function(all.tests = FALSE) {
+	# taken from pkg multicore:
+	# detect the number of [virtual] CPUs (cores)
+	
+	# feel free to add tests - those are the only ones I could test [SU]
+		systems <- list(darwin  = "/usr/sbin/sysctl -n hw.ncpu 2>/dev/null",
+					linux   = "grep processor /proc/cpuinfo 2>/dev/null|wc -l",
+					irix    = c("hinv |grep Processors|sed 's: .*::'", "hinv|grep '^Processor '|wc -l"),
+					solaris = "/usr/sbin/psrinfo -v|grep 'Status of.*processor'|wc -l")
+					
+		for (i in seq(systems)) {
+			if(all.tests || length(grep(paste("^", names(systems)[i], sep=''), R.version$os))) {
+				for (cmd in systems[i]) {
+					a <- gsub("^ +", "", system(cmd, TRUE)[1])
+					if (length(grep("^[1-9]", a))) {
+						return(as.integer(a))
+					}
+				}
+			}	
+		}		
+		return(1)
+	}
+	
+	if (.Platform$OS.type == 'windows') {
+		nn <- length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1))
+	} else {
+		nn <- multicoreDetectCores(all.tests)
+	}
+	return(nn)
 }
-
-
