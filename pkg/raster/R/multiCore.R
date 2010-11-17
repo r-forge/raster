@@ -4,45 +4,50 @@
 # Licence GPL v3
 
 
-# taken from pkg multicore:
-# detect the number of [virtual] CPUs (cores)
-.multicoreDetectCores <- function(all.tests = FALSE) {
-  # feel free to add tests - those are the only ones I could test [SU]
-	systems <- list(darwin  = "/usr/sbin/sysctl -n hw.ncpu 2>/dev/null",
+.detectCores <- function(all.tests = FALSE) {
+
+	multicoreDetectCores <- function(all.tests = FALSE) {
+	# taken from pkg multicore:
+	# detect the number of [virtual] CPUs (cores)
+	
+	# feel free to add tests - those are the only ones I could test [SU]
+		systems <- list(darwin  = "/usr/sbin/sysctl -n hw.ncpu 2>/dev/null",
 					linux   = "grep processor /proc/cpuinfo 2>/dev/null|wc -l",
 					irix    = c("hinv |grep Processors|sed 's: .*::'", "hinv|grep '^Processor '|wc -l"),
 					solaris = "/usr/sbin/psrinfo -v|grep 'Status of.*processor'|wc -l")
 					
-	for (i in seq(systems)) {
-		if(all.tests || length(grep(paste("^", names(systems)[i], sep=''), R.version$os))) {
-			for (cmd in systems[i]) {
-				a <- gsub("^ +", "", system(cmd, TRUE)[1])
-				if (length(grep("^[1-9]", a))) {
-					return(as.integer(a))
+		for (i in seq(systems)) {
+			if(all.tests || length(grep(paste("^", names(systems)[i], sep=''), R.version$os))) {
+				for (cmd in systems[i]) {
+					a <- gsub("^ +", "", system(cmd, TRUE)[1])
+					if (length(grep("^[1-9]", a))) {
+						return(as.integer(a))
+					}
 				}
-			}
-		}	
-	}		
-	return(1)
-}
+			}	
+		}		
+		return(1)
+	}
 
-
-.detectCores <- function(all.tests = FALSE) {
+	
 	if (.Platform$OS.type == 'windows') {
-		nn <- length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1)) # tested on XP
+		nn <- length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1))
 	} else {
-		# detect the number of [virtual] CPUs (cores)
-		nn <- .multicoreDetectCores(all.tests)
+		nn <- multicoreDetectCores(all.tests)
 	}
 	return(nn)
 }
-
 
 
 beginCluster <- function(n, type) {
 	if (! require(snow) ) {
 		stop('you need to install the "snow" package')
 	}
+
+	if (exists('raster_Cluster_raster_Cluster', envir=.GlobalEnv)) {
+		endCluster()
+	}
+
 	if (missing(n)) {
 		n <- .detectCores()
 		cat(n, 'cores detected\n')
@@ -54,7 +59,7 @@ beginCluster <- function(n, type) {
 		}
 		cl <- makeCluster(n, type) 
 		clusterCall(cl, library, 'raster', character.only=TRUE )
-		raster_Cluster_raster_Cluster <<- cl
+		assign('raster_Cluster_raster_Cluster', cl, envir = .GlobalEnv)
 		options(rasterCluster = TRUE)
 	} else {
 		stop('only 1 core detected. No cluster made')	
@@ -62,34 +67,37 @@ beginCluster <- function(n, type) {
 	}
 }
 
+
 endCluster <- function() {
 	options(rasterCluster = FALSE)
-	stopCluster(.getCluster())
-	rm(raster_Cluster_raster_Cluster, envir=.GlobalEnv)
-}
-
-
-
-.getCluster <- function() {
-	return(get('raster_Cluster_raster_Cluster', envir=.GlobalEnv))
-}
-
-.doCluster <- function() {
-	rc <- options("rasterCluster")[[1]]
-	if ( isTRUE(rc) ) {
-		cl <- .getCluster()
-		pkgs <- .packages()
-		i <- which( pkgs %in% c("raster", "sp", "stats", "graphics", "grDevices", "utils", "datasets", "methods", "base") )
-		pkgs <- rev( pkgs[-i] )
-		for ( pk in pkgs ) {
-			clusterCall(cl, library, pk, character.only=TRUE )
-		}
-		raster_Cluster_raster_Cluster <<- cl
-		return(TRUE)
-	} else {
-		return(FALSE) 	
+	if (exists('raster_Cluster_raster_Cluster', envir=.GlobalEnv)) {
+		stopCluster( get('raster_Cluster_raster_Cluster', envir=.GlobalEnv) )
+		rm('raster_Cluster_raster_Cluster', envir=.GlobalEnv)
 	}
 }
 
+
+.doCluster <- function() {
+	if ( isTRUE( options('rasterCluster')[[1]] ) ) {
+		if (exists('raster_Cluster_raster_Cluster', envir=.GlobalEnv)) {
+			return(TRUE)
+		}
+	} 
+	return(FALSE)
+}
+
+
+.getCluster <- function() {
+	cl <- get('raster_Cluster_raster_Cluster', envir=.GlobalEnv)
+	
+	pkgs <- .packages()
+	i <- which( pkgs %in% c("raster", "sp", "stats", "graphics", "grDevices", "utils", "datasets", "methods", "base") )
+	pkgs <- rev( pkgs[-i] )
+	for ( pk in pkgs ) {
+		clusterCall(cl, library, pk, character.only=TRUE )
+	}
+	assign('raster_Cluster_raster_Cluster', cl, envir = .GlobalEnv)
+	return(cl)
+}
 
 

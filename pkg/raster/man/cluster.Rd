@@ -6,7 +6,7 @@
 \title{Use a cluster or multi-core CPU}
 
 \description{
-Initialize or delete a cluster object to be used by functions that support it. This creates (or removes) the object 'raster_Cluster_raster_Cluster' in the global environment.
+Initialize or delete a 'snow' cluster object to be used by functions that support it. This creates (or removes) the object 'raster_Cluster_raster_Cluster' in the global environment.
 }
 
 \usage{
