@@ -58,7 +58,7 @@ beginCluster <- function(n, type) {
 			cat('cluster type:', type, '\n')
 		}
 		cl <- makeCluster(n, type) 
-		clusterCall(cl, library, 'raster', character.only=TRUE )
+		cl <- .addPackages(cl)
 		assign('raster_Cluster_raster_Cluster', cl, envir = .GlobalEnv)
 		options(rasterCluster = TRUE)
 	} else {
@@ -86,16 +86,20 @@ endCluster <- function() {
 	return(FALSE)
 }
 
-
-.getCluster <- function() {
-	cl <- get('raster_Cluster_raster_Cluster', envir=.GlobalEnv)
-	
+.addPackages <- function(cl, exclude=NULL) {
 	pkgs <- .packages()
-	i <- which( pkgs %in% c("raster", "sp", "stats", "graphics", "grDevices", "utils", "datasets", "methods", "base") )
+	i <- which( pkgs %in% c(exclude, "stats", "graphics", "grDevices", "utils", "datasets", "methods", "base") )
 	pkgs <- rev( pkgs[-i] )
 	for ( pk in pkgs ) {
 		clusterCall(cl, library, pk, character.only=TRUE )
 	}
+	return(cl)
+}
+
+
+.getCluster <- function() {
+	cl <- get('raster_Cluster_raster_Cluster', envir=.GlobalEnv)
+	cl <- .addPackages(cl, exclude=c('raster', 'sp'))
 	assign('raster_Cluster_raster_Cluster', cl, envir = .GlobalEnv)
 	return(cl)
 }
