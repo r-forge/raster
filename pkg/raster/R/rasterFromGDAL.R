@@ -4,7 +4,8 @@
 # Licence GPL v3
 
 
-.rasterFromGDAL <- function(filename, band, type, silent=TRUE) {	
+.rasterFromGDAL <- function(filename, band, type, RAT=FALSE, silent=TRUE) {	
+
 	if (! .requireRgdal() ) { stop('package rgdal is not available') }
 
 	# suppressing the geoTransform warning...
@@ -12,7 +13,7 @@
 	on.exit(options('warn'= w))
 	options('warn'=-1) 
 	
-	if (packageDescription('rgdal')$Version > '0.6-28') {
+	if (packageDescription('rgdal')$Version > '0.6-28'  &  RAT) {
 		gdalinfo <- do.call(GDALinfo, list(filename, silent=silent, returnRAT=TRUE))
 	} else {
 		gdalinfo <- do.call(GDALinfo, list(filename, silent=silent))
@@ -89,8 +90,7 @@
 	x@file@driver <- 'gdal' 
 	projection(x) <- attr(gdalinfo, "projection")
 	x@data@fromdisk <- TRUE
-	
-	
+		
 	datatype <- "FLT4S"
 	minv = 	rep(Inf, nlayers(x))
 	maxv = 	rep(-Inf, nlayers(x))
