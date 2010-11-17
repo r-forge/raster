@@ -38,7 +38,8 @@
 }
 
 
-setCluster <- function(n, type) {
+
+beginCluster <- function(n, type) {
 	if (! require(snow) ) {
 		stop('you need to install the "snow" package')
 	}
@@ -51,40 +52,44 @@ setCluster <- function(n, type) {
 			type <- getClusterOption("type")
 			cat('cluster type:', type, '\n')
 		}
+		cl <- makeCluster(n, type) 
+		clusterCall(cl, library, 'raster', character.only=TRUE )
+		raster_Cluster_raster_Cluster <<- cl
 		options(rasterCluster = TRUE)
-		options(rasterClusterCores = n)
-		options(rasterClusterType = type)
 	} else {
+		stop('only 1 core detected. No cluster made')	
 		options(rasterCluster = FALSE)
-		options(rasterClusterCores = 1)
-		options(rasterClusterType = '')
 	}
+}
+
+endCluster <- function() {
+	options(rasterCluster = FALSE)
+	stopCluster(.getCluster())
+	rm(raster_Cluster_raster_Cluster, envir=.GlobalEnv)
+}
+
+
+
+.getCluster <- function() {
+	return(get('raster_Cluster_raster_Cluster', envir=.GlobalEnv))
 }
 
 .doCluster <- function() {
 	rc <- options("rasterCluster")[[1]]
 	if ( isTRUE(rc) ) {
+		cl <- .getCluster()
+		pkgs <- .packages()
+		i <- which( pkgs %in% c("raster", "sp", "stats", "graphics", "grDevices", "utils", "datasets", "methods", "base") )
+		pkgs <- rev( pkgs[-i] )
+		for ( pk in pkgs ) {
+			clusterCall(cl, library, pk, character.only=TRUE )
+		}
+		raster_Cluster_raster_Cluster <<- cl
 		return(TRUE)
 	} else {
 		return(FALSE) 	
 	}
 }
 
-.makeCluster <- function() {
-	if (! require(snow) ) {
-		stop('you need to install the "snow" package')
-	}
-	nodes <- options("rasterClusterCores")[[1]]
-	cltype <- options("rasterClusterType")[[1]]
-	cl <- makeCluster(nodes, type=cltype) 
 
-	pkgs <- .packages()
-	i <- which(pkgs %in% c("stats", "graphics", "grDevices", "utils", "datasets", "methods", "base"))
-	pkgs <- rev(pkgs[-i])
-
-	for (pk in pkgs) {
-		clusterCall(cl, library, pk, character.only=TRUE )
-	}
-	return(cl)
-}
 

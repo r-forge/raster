@@ -46,7 +46,7 @@ function(x, filename='', ...) {
 	pb <- pbCreate(nrow(out), type=.progress(...))
 	
 	if (.doCluster() ) {
-		cl <- .makeCluster()
+		cl <- .getCluster()
 		nodes <- min(nrow(out), length(cl)) # at least 1 row
 		
 		cat('Using cluster with', nodes, 'nodes\n')
@@ -95,7 +95,6 @@ function(x, filename='', ...) {
 				pbStep(pb, r)
 			}
 		}
-		stopCluster(cl)
 	
 	} else {	
 	
