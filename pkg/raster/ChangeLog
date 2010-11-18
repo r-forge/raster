@@ -1,4 +1,9 @@
 --------------------------------------------
+17-Nov-2010,  version 1.6-22
+NAflag honored when writing ascii file. 
+multicore support for resample
+
+--------------------------------------------
 15-Nov-2010,  version 1.6-20
 Bug fix in pairs (David Ramsey)
 Bug fix in rasterize with lines (Julian Burgos)
