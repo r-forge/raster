@@ -174,6 +174,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	if (.doCluster()) {
 		
 		cl <- .getCluster()
+		on.exit( .returnCluster(cl) )
+
 		nodes <- min(ceiling(to@nrows/10), length(cl)) # at least 10 rows per node
 		
 		cat('Using cluster with', nodes, 'nodes\n')
@@ -223,7 +225,6 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			}
 		}	
 		
-		.returnCluster(cl)
 		
 	} else {
 	

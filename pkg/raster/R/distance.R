@@ -47,6 +47,8 @@ function(x, filename='', ...) {
 	
 	if (.doCluster() ) {
 		cl <- .getCluster()
+		on.exit( .returnCluster(cl) )
+		
 		nodes <- min(nrow(out), length(cl)) # at least 1 row
 		
 		cat('Using cluster with', nodes, 'nodes\n')
@@ -99,8 +101,6 @@ function(x, filename='', ...) {
 			out <- writeStop(out)
 		}
 	
-		.returnCluster(cl)
-
 	} else {	
 	
 		if (filename=="") {

@@ -52,6 +52,8 @@ resample <- function(from, to, method, filename="", ...)  {
 	if (.doCluster()) {
 	
 		cl <- .getCluster()
+		on.exit( .returnCluster(cl) )
+		
 		nodes <- min(ceiling(to@nrows/10), length(cl)) # at least 10 rows per node
 		
 		cat('Using cluster with', nodes, 'nodes\n')
@@ -100,8 +102,6 @@ resample <- function(from, to, method, filename="", ...)  {
 			to <- writeStop(to)	
 		}	
 		
-		.returnCluster(cl)
-
 	} else {
 		tr <- blockSize(to)
 		pb <- pbCreate(tr$n, type=.progress(...))
