@@ -3,6 +3,25 @@
 # Version 0.9
 # Licence GPL v3
 
+.gdFixGeoref <- function(gdalinfo) {
+	gdversion = getGDALVersionInfo()
+	gdversion = trim(substr(gdversion, 5, 10))
+	test <- gdversion < '1.8.0'	
+	if (test) {
+		v <- attr(gdalinfo, 'mdata')
+		if (! is.null(v) ) {
+			for (i in 1:length(v)) {
+				if (v[i] == "AREA_OR_POINT=Area") {
+					return(FALSE)
+				} else if (v[i] == "AREA_OR_POINT=Point") {
+					return(TRUE)
+				}
+			}
+		}
+	}
+	return(FALSE)
+}
+
 
 .rasterFromGDAL <- function(filename, band, type, RAT=FALSE, silent=TRUE) {	
 
@@ -35,19 +54,8 @@
 	yx <- yn + gdalinfo[["res.y"]] * nr
 	yx <- round(yx, digits=9)
 
-
 	fixGeoref <- FALSE
-	v <- attr(gdalinfo, 'mdata')
-	if (! is.null(v) ) {
-		for (i in 1:length(v)) {
-			if (v[i] == "AREA_OR_POINT=Area") {
-				break
-			} else if (v[i] == "AREA_OR_POINT=Point") {
-				fixGeoref <- TRUE
-				break
-			}
-		}
-	}
+	try( fixGeoref <- .gdFixGeoref(gdalinfo), silent=TRUE )
 	
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs="")
@@ -75,7 +83,7 @@
 
 	
 	if (fixGeoref) {
-		cat('fixing "AREA_OR_POINT=Point" georef')
+		cat('Fixing "AREA_OR_POINT=Point" georeference\n')
 		rs <- res(x)
 		xmin(x) <- xmin(x) - 0.5 * rs[1]
 		xmax(x) <- xmax(x) - 0.5 * rs[1]
