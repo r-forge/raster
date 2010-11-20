@@ -74,11 +74,8 @@ function(x, filename='', ...) {
 		if (filename=="") {
 			for (r in 1:nrow(out)) {
 				d <- recvOneData(cl)
-				if (! d$value$success) {
-					stop('cluster error')
-				}
+				if (! d$value$success) { stop('cluster error') }
 				v[,d$value$tag] <- d$value$value
-
 				if ((nodes + r) <= out@nrows) {
 					sendCall(cl[[d$node]], clFun, nodes+r, tag=nodes+r)
 				}
@@ -89,9 +86,7 @@ function(x, filename='', ...) {
 		} else {
 			for (r in 1:nrow(out)) {
 				d <- recvOneData(cl)
-				if (! d$value$success) {
-					stop('cluster error')
-				}
+				if (! d$value$success) { stop('cluster error') }
 				out <- writeValues(out, as.vector(d$value$value), d$value$tag)
 				if ((nodes + r) <= out@nrows) {
 					sendCall(cl[[d$node]], clFun, nodes+r, tag=nodes+r)

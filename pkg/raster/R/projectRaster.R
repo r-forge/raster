@@ -205,7 +205,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 					stop('cluster error')
 				}
 				start <- cellFromRowCol(to, tr$row[d$value$tag], 1)
-				end <- cellFromRowCol(to, tr$row[d$value$tag]+tr$nrows[d$value$tag]-1, to@ncols)
+				end <- cellFromRowCol(to, tr$row[d$value$tag] + tr$nrows[d$value$tag]-1, to@ncols)
 				v[start:end, ] <- d$value$value
 				if ((nodes + i) <= tr$n) {
 					sendCall(cl[[d$node]], clFun, i, tag=i)
@@ -217,6 +217,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		
 			for (i in 1:tr$n) {
 				d <- recvOneData(cl)
+				if (! d$value$success ) { stop('cluster error') }
 				to <- writeValues(to, d$value$value, tr$row[d$value$tag])
 				if ((nodes + i) <= tr$n) {
 					sendCall(cl[[d$node]], clFun, nodes+i, tag=i)
@@ -224,7 +225,6 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 				pbStep(pb)
 			}
 		}	
-		
 		
 	} else {
 	
