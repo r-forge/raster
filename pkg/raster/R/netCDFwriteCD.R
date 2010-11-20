@@ -68,7 +68,7 @@
 	if (inherits(x, 'RasterBrick')) {
 		zv <- 1:nlayers(x)
 		zv[] <- as.numeric(x@zvalue)
-		if (any(is.na(z))) {
+		if (any(is.na(zv))) {
 			zv <- 1:nlayers(x)
 		}
 		zdim <- dim.def.ncdf( zname, zunit, zv, unlim=TRUE )
