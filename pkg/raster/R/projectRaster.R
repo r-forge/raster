@@ -200,6 +200,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		        
 		if (inMemory) {
 			for (i in 1:tr$n) {
+				pbStep(pb, i)
 				d <- recvOneData(cl)
 				if (! d$value$success) {
 					stop('cluster error')
@@ -210,19 +211,18 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 				if ((nodes + i) <= tr$n) {
 					sendCall(cl[[d$node]], clFun, i, tag=i)
 				}
-				pbStep(pb)
 			}
 			
 		} else {
 		
 			for (i in 1:tr$n) {
+				pbStep(pb, i)
 				d <- recvOneData(cl)
 				if (! d$value$success ) { stop('cluster error') }
 				to <- writeValues(to, d$value$value, tr$row[d$value$tag])
 				if ((nodes + i) <= tr$n) {
 					sendCall(cl[[d$node]], clFun, nodes+i, tag=i)
 				}
-				pbStep(pb)
 			}
 		}	
 		
