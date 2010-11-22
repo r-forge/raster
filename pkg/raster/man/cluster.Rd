@@ -8,9 +8,11 @@
 \description{
 Create or delete a 'snow' cluster object. This object provides _experimental_ support for cluster or multi-core computing with a few 'raster' functions that support it. 
 
-beginCluster creates the object 'raster_Cluster_raster_Cluster' in the global environment. It determines the number of nodes (cores) that are available and uses all of them (unless the argument \code{n} is used and it is a smaller number). 
+beginCluster creates the cluster object. It determines the number of nodes (cores) that are available and uses all of them (unless the argument \code{n} is used). 
 
 endCluster closes the cluster and removes the object.
+
+The use of the cluster by functions is automatic, but has only been implemented in a few functions.  
 }
 
 \usage{
@@ -28,7 +30,7 @@ Functions that are 'cluster-enabled' are: \link{projectRaster}, \link{resample},
 }
 
 \value{
-None. The side effect is to create or delete the cluster object.
+None. The side effect is to create or delete a cluster object.
 }
 
 \examples{

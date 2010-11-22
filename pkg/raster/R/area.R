@@ -44,9 +44,9 @@ setMethod('area', signature(x='RasterLayer'),
 			out <- writeStart(out, filename=filename, ...)
 		}
 
-		dy <- pointDistance(c(0,0),c(0, yres(out) ),'GreatCircle')
+		dy <- pointDistance(c(0,0),c(0, yres(out) ), longlat=TRUE)
 		y <- yFromRow(out, 1:nrow(out))
-		dx <- pointDistance(cbind(0, y), cbind(xres(out), y), 'GreatCircle')
+		dx <- pointDistance(cbind(0, y), cbind(xres(out), y), longlat=TRUE)
 
 		
 
@@ -121,9 +121,9 @@ setMethod('area', signature(x='RasterStackBrick'),
 			out <- writeStart(out, filename=filename, ...)
 		}
 
-		dy <- pointDistance(c(0,0),c(0, yres(out) ),'GreatCircle')
+		dy <- pointDistance(c(0,0),c(0, yres(out) ), longlat=TRUE)
 		y <- yFromRow(out, 1:nrow(out))
-		dx <- pointDistance(cbind(0, y), cbind(xres(out), y), 'GreatCircle')
+		dx <- pointDistance(cbind(0, y), cbind(xres(out), y), longlat=TRUE)
 
 		if (.doCluster() ) {
 			cl <- .getCluster()
