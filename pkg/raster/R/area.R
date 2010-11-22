@@ -49,47 +49,6 @@ setMethod('area', signature(x='RasterLayer'),
 		dx <- pointDistance(cbind(0, y), cbind(xres(out), y), 'GreatCircle')
 
 		
-		if (.doCluster() ) {
-			cl <- .getCluster()
-			on.exit( .returnCluster(cl) )
-			nodes <- min(nrow(out), length(cl))	
-			cat( 'Using cluster with', nodes, 'nodes\n' )
-			flush.console()		
-				
-			tr <- blockSize(out, minblocks=nodes)
-			pb <- pbCreate(tr$n, type=.progress(...))
-
-			clFun <- function(i) {
-				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-				vv <- dx[r] * dy / 1000000
-				vv <- rep(vv, each=out@ncols)
-				if (na.rm) {
-					a <- getValues(x, tr$row[i], tr$nrows[i])
-					vv[is.na(a)] <- NA
-				}
-				return(vv)
-			}
-				
-		    for (i in 1:nodes) {
-				sendCall(cl[[i]], clFun, i, tag=i)
-			}
-
-			for (i in 1:tr$n) {
-				d <- recvOneData(cl)
-				if (! d$value$success ) { stop('cluster error') }
-				if (filename == "") {
-					r <- tr$row[d$value$tag]:(tr$row[d$value$tag]+tr$nrows[d$value$tag]-1)
-					v[,r] <- d$value$value
-				} else {
-					out <- writeValues(out, d$value$value, tr$row[d$value$tag])
-				}
-				if ((nodes + i) <= tr$n) {
-					sendCall(cl[[d$node]], clFun, nodes+i, tag=i)
-				}
-				pbStep(pb, i) 	
-			}		
-			
-		} else {
 
 			tr <- blockSize(out)
 			pb <- pbCreate(tr$n, type=.progress(...))
@@ -109,7 +68,7 @@ setMethod('area', signature(x='RasterLayer'),
 				}
 				pbStep(pb, i)
 			}
-		}
+
 		pbClose(pb)
 		
 		if (filename == "") { 

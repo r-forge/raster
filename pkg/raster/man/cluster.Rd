@@ -24,7 +24,7 @@ endCluster()
 }
 
 \details{
-Functions that are 'cluster-enabled' are: \link{projectRaster}, \link{resample}, \link{distance}, \link{area}.
+Functions that are 'cluster-enabled' are: \link{projectRaster}, \link{resample}, \link{distance}.
 }
 
 \value{
