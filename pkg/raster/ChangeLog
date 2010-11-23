@@ -1,4 +1,10 @@
 --------------------------------------------
+23-Nov-2010,  version 1.7-1
+New version of alignExtent (bug reporated by Keven Ummel)
+overlay now allows for RasterStackBrick / RasterLayer combination (bug reporated by Keven Ummel)
+cluster object stored as 'option'
+
+--------------------------------------------
 17-Nov-2010,  version 1.6-22
 NAflag honored when writing ascii file. 
 multicore support for resample

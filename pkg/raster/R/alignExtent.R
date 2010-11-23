@@ -5,8 +5,8 @@
 # Licence GPL v3
 
 
-
 alignExtent <- function(extent, object) {
+
 	extent <- extent(extent)
 	if (!inherits(object, 'BasicRaster')) { stop('object should inherit from BasicRaster') }
 	res <- res(object)

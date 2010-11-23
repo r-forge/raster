@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-setMethod('overlay', signature(x='RasterStackBrick', y='RasterStackBrick'), 
+setMethod('overlay', signature(x='RasterStackBrick', y='Raster'), 
 function(x, y, ..., fun, filename=""){ 
 	
 	if (missing(fun)) { 
@@ -15,7 +15,9 @@ function(x, y, ..., fun, filename=""){
 	nl <- sapply(rasters, nlayers)
 	un <- unique(nl)
 	if (length(un) > 1) {
-		stop('number of layers does not match')
+		if (! (min(un) == 1 & length(un) == 2) )
+			stop('number of layers does not match')
+		}
 	} 
 		
 	return(.overlayList(rasters, fun=fun, filename=filename, ...))
