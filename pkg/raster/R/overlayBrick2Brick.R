@@ -15,7 +15,7 @@ function(x, y, ..., fun, filename=""){
 	nl <- sapply(rasters, nlayers)
 	un <- unique(nl)
 	if (length(un) > 1) {
-		if (! (min(un) == 1 & length(un) == 2) )
+		if (! (min(un) == 1 & length(un) == 2) ) {
 			stop('number of layers does not match')
 		}
 	} 

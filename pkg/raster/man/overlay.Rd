@@ -4,10 +4,9 @@
 
 \alias{overlay}
 \alias{overlay,RasterLayer,RasterLayer-method}
-\alias{overlay,RasterStackBrick,RasterStackBrick-method}
+\alias{overlay,RasterStackBrick,Raster-method}
 \alias{overlay,RasterLayer,missing-method}
 \alias{overlay,RasterStackBrick,missing-method}
-\alias{overlay,list,missing-method}
 
 \title{Overlay Raster objects}
 
