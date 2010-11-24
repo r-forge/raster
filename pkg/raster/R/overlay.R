@@ -17,12 +17,6 @@ function(x, y, ..., fun, filename="", datatype, format, overwrite, progress){
 
 	rasters <- .makeRasterList(x, y, ..., unstack=FALSE)
 	
-	nl <- sapply(rasters, nlayers)
-	un <- unique(nl)
-	if ( max( max(un) %% un ) > 0) {
-		stop('number of layers does not match (and cannot be recycled): ', paste(un, collapse=', '))
-	} 
-	
 	return(.overlayList(rasters, fun=fun, filename=filename, datatype=datatype, format=format, overwrite=overwrite, progress=progress))
 }
 )

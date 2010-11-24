@@ -15,7 +15,6 @@
 	if ( max( max(un) %% un ) > 0) {
 		stop('number of layers does not match (and cannot be recycled): ', paste(un, collapse=', '))
 	} 
-	
 
 	filename <- trim(filename)
 	nl <- sapply(x, nlayers)
