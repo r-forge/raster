@@ -1,7 +1,12 @@
 --------------------------------------------
+24-Nov-2010,  version 1.7-2
+crosstab can now return results in 'long' format
+more complete and flexible recycling in overlay and Arith
+
+--------------------------------------------
 23-Nov-2010,  version 1.7-1
-New version of alignExtent (bug reporated by Keven Ummel)
-overlay now allows for RasterStackBrick / RasterLayer combination (bug reporated by Keven Ummel)
+New version of alignExtent (bug reported by Keven Ummel)
+overlay now allows for RasterStackBrick / RasterLayer combination (bug reported by Keven Ummel)
 cluster object stored as 'option'
 
 --------------------------------------------
