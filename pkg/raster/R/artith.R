@@ -10,13 +10,9 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 
 		nl1 <- nlayers(e1)
 		nl2 <- nlayers(e2)
-		if (nl1 > 1 & nl2 > 1) {
-			if (nl1 != nl2) {
-				stop('RasterStacks/Bricks must have the same number of layers')
-			}
-		}
+		nl <- max(nl1, nl2)
 
-		if (nl1 > 1 | nl2 > 1) {
+		if (nl > 1) {
 			r <- brick(e1, values=FALSE)
 		} else {
 			r <- raster(e1)
@@ -37,20 +33,34 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 		}
 		
 		if (canProcessInMemory(r, 4)) {
-		
-			return( setValues(r, values=callGeneric( getValues(e1), getValues(e2))) )
+			if (nl1 == nl2 ) {
+				return( setValues(r, values=callGeneric( getValues(e1), getValues(e2))) )
+			} else {
+				v <- matrix(callGeneric( as.vector(getValues(e1)), as.vector(getValues(e2))), ncol=nl)
+				return( setValues(r, v) )
+			}
 			
 		} else {
 		
 			tr <- blockSize(e1)
 			pb <- pbCreate(tr$n, type=.progress())			
 			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
-			for (i in 1:tr$n) {
-				v1 <- getValues(e1, row=tr$row[i], nrows=tr$nrows[i])
-				v2 <- getValues(e2, row=tr$row[i], nrows=tr$nrows[i])
-				v <- callGeneric( v1, v2 )
-				r <- writeValues(r, v, tr$row[i])
-				pbStep(pb, i) 	
+			if (nl1 == nl2 ) {
+				for (i in 1:tr$n) {
+					v1 <- getValues(e1, row=tr$row[i], nrows=tr$nrows[i])
+					v2 <- getValues(e2, row=tr$row[i], nrows=tr$nrows[i])
+					v <- callGeneric( v1, v2 )
+					r <- writeValues(r, v, tr$row[i])
+					pbStep(pb, i) 	
+				}
+			} else {
+				for (i in 1:tr$n) {
+					v1 <- as.vector(getValues(e1, row=tr$row[i], nrows=tr$nrows[i]))
+					v2 <- as.vector(getValues(e2, row=tr$row[i], nrows=tr$nrows[i]))
+					v <- matrix(callGeneric( v1, v2 ), ncol=nl)
+					r <- writeValues(r, v, tr$row[i])
+					pbStep(pb, i) 	
+				}
 			}
 			r <- writeStop(r)
 			pbClose(pb)
