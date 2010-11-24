@@ -34,8 +34,8 @@ None. The side effect is to create or delete a cluster object.
 }
 
 \examples{
-if (require(snow)) {
 
+\dontrun{
 beginCluster()
 
 r <- raster(ncol=36, nrow=18)
@@ -44,7 +44,6 @@ r[500] <- 1
 dist <- distance(r) 
 
 endCluster()
-
 }
 }
 
