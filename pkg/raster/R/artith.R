@@ -3,8 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-
-	
 setMethod("Arith", signature(e1='Raster', e2='Raster'),
     function(e1, e2){ 
 
@@ -12,6 +10,10 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 		nl2 <- nlayers(e2)
 		nl <- max(nl1, nl2)
 
+		if ( nl %% min(nl1, nl2) > 0) {
+			stop('number of layers does not match (and they cannot be recycled)')
+		} 
+		
 		if (nl > 1) {
 			r <- brick(e1, values=FALSE)
 		} else {

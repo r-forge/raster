@@ -9,6 +9,13 @@
 	
 	if (length(x) < 1) { stop('no Rasters') }
 	compare(x)
+	
+	nl <- sapply(x, nlayers)
+	un <- unique(nl)
+	if ( max( max(un) %% un ) > 0) {
+		stop('number of layers does not match (and cannot be recycled): ', paste(un, collapse=', '))
+	} 
+	
 
 	filename <- trim(filename)
 	nl <- sapply(x, nlayers)
