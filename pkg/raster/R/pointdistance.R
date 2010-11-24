@@ -45,9 +45,9 @@ pointDistance <- function (point1, point2, longlat=FALSE,  ...) {
 		}
 		if (type == 'Euclidean') { longlat <- FALSE } else { longlat <- TRUE }
 		if (longlat) {
-			warning("type='Euclidean' is a depracated argument. Use 'longlat=TRUE'")
+			# warning("type='Euclidean' is a depracated argument. Use 'longlat=TRUE'")
 		} else {
-			warning("type='GreatCircle' is a depracated argument. Use 'longlat=FALSE'")
+			# warning("type='GreatCircle' is a depracated argument. Use 'longlat=FALSE'")
 		}
 	}		
 
