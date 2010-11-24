@@ -6,11 +6,11 @@
 \alias{boxplot,Raster-method}
 
 \title{
-Box plot or Raster objects
+Box plot of Raster objects
 }
 
 \description{
-Box plots of layers in a Raster objects
+Box plot of layers in a Raster object
 }
 
 
