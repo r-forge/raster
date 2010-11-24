@@ -36,7 +36,7 @@ boxplot(x, ...)
 }
 
 \seealso{
-\code{\link{boxplot}}
+\code{\link{pairs}, \link{hist}}
 }
 
 \examples{
