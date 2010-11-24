@@ -12,10 +12,12 @@
 
 	filename <- trim(filename)
 	nl <- sapply(x, nlayers)
-	if (nl[1] == 1) {
+	maxnl <- max(nl)
+	if (maxnl == 1) {
 		outraster <- raster(x[[1]])
 	} else {
 		outraster <- brick(x[[1]], values=FALSE)
+		outraster@data@nlayers <- as.integer(max(nl))
 	}
 
 	testmat <- matrix(1:10, nrow=10, ncol=length(x)) 
@@ -60,13 +62,14 @@
 			}
 			
 		} else {
-			vallist <- list()
 			for (i in 1:length(x)) {
-				vallist[[i]] <- getValues(x[[i]])
-				x[[i]] <- clearValues(x[[i]])
+				x[[i]] <- as.vector(getValues(x[[i]]))
 			}
 			pbStep(pb, 2)
-			vals <- do.call(fun, vallist)
+			vals <- do.call(fun, x)
+			if (maxnl > 1) {
+				vals <- matrix(vals, ncol=maxnl)
+			}
 		}
 		
 		outraster <- setValues(outraster, vals)
@@ -110,9 +113,12 @@
 			vallist <- list()
 			for (i in 1:tr$n) {
 				for (j in 1:length(x)) {
-					vallist[[j]] <- getValues(x[[j]], row=tr$row[i], nrows=tr$size)
+					vallist[[j]] <- as.vector( getValues(x[[j]], row=tr$row[i], nrows=tr$size) )
 				}	
 				vv <- do.call(fun, vallist)
+				if (maxnl > 1) {
+					vv <- matrix(vv, ncol=maxnl)
+				}
 				outraster <- writeValues(outraster, vv, tr$row[i])
 				pbStep(pb, i)
 			}
