@@ -46,10 +46,6 @@ function(x, fun, filename='', na.rm, ...) {
 		}
 	} 
 	
-		#} else {
-		#	stop("'fun' does not return the correct number of values. It should be 1 or nlayers(x)") 
-		#}
-	
 	if (! missing(na.rm)) {
 		test <- try(fun(1:nl, na.rm=TRUE), silent=TRUE)
 		if (class(test) == 'try-error') {
@@ -122,6 +118,12 @@ function(x, fun, filename='', na.rm, ...) {
 			} else {
 				v <- apply(v, 1, fun)
 			}
+			if (is.matrix(v)) {
+				if (dim(v)[2] != test) {
+					v <- t(v)
+				}
+			}
+
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb) 
 		}
@@ -133,6 +135,11 @@ function(x, fun, filename='', na.rm, ...) {
 				v <- fun(v, na.rm=na.rm)
 			} else {
 				v <- apply(v, 1, fun, na.rm=na.rm)
+			}
+			if (is.matrix(v)) {
+				if (dim(v)[2] != test) {
+					v <- t(v)
+				}
 			}
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb) 
