@@ -148,10 +148,10 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	validObject(bb)
 
 	bb <- extent(projectExtent(from, projection(to)))
-	startrow <- max(rowFromY(to, bb@ymax) - 1, 1, na.rm=TRUE)
-	endrow <- min(rowFromY(to, bb@ymin) + 1, to@nrows, na.rm=TRUE)
-	startcol <- max(colFromX(to, bb@xmin) - 1, 1, na.rm=TRUE)
-	endcol <- min(colFromX(to, bb@xmax) + 1, to@ncols, na.rm=TRUE)
+	startrow <- max(rowFromY(to, bb@ymax) - 10, 1, na.rm=TRUE)
+	endrow <- min(rowFromY(to, bb@ymin) + 10, to@nrows, na.rm=TRUE)
+	startcol <- max(colFromX(to, bb@xmin) - 10, 1, na.rm=TRUE)
+	endcol <- min(colFromX(to, bb@xmax) + 10, to@ncols, na.rm=TRUE)
 		
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }
 	if (method=='ngb') { method <- 'simple' } # for extract (.xyValues)
