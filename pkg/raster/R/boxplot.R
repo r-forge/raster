@@ -11,12 +11,19 @@ if (!isGeneric("boxplot")) {
 
 setMethod('boxplot', signature(x='Raster'), 
 	function(x, maxpixels=100000, ...) {
-		d = sampleRegular(x, maxpixels)
-		if (nlayers(x) == 1) {
-			d <- matrix(d)
+		nl <- nlayers(x)
+		cn <- layerNames(x)
+		if ( canProcessInMemory(x)) {
+			x <- getValues(x)
+		} else {
+			warning('taking a sample of ', maxpixels, ' cells')
+			x = sampleRegular(x, maxpixels)
+		}	
+		if (nl == 1) {
+			x <- matrix(x)
 		}
-		colnames(d) <- layerNames(x)
-		boxplot(d, ...)
+		colnames(x) <- cn
+		boxplot(x, ...)
 	}
 )
 

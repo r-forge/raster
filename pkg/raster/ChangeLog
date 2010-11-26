@@ -1,4 +1,8 @@
 --------------------------------------------
+26-Nov-2010,  version 1.7-3
+Fixed data handling error causing full memory in extract(points, buffer) (reported by Steve Mosher)
+
+--------------------------------------------
 24-Nov-2010,  version 1.7-2
 crosstab can now return results in 'long' format
 more complete and flexible recycling in overlay and Arith

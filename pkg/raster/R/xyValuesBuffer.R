@@ -27,14 +27,14 @@
 		bufx2 <- buffer / pointDistance(cbind(0, ymn), cbind(1, ymn), longlat=TRUE)
 		bufx <- pmax(bufx1, bufx2)
 
-		cn <- colFromX(obj, xy[,1]-buffer)
-		cx <- colFromX(obj, xy[,1]+buffer)
-		cn[is.na(cn) &  (xy[,1]-buffer <= xmin(obj) & xy[,1]+buffer >= xmin(obj))] <- 1
-		cx[is.na(cx) &  (xy[,1]-buffer <= xmax(obj) & xy[,1]+buffer > xmax(obj))] <- ncol(obj)
-		rn <- rowFromY(obj, xy[,2]+buffer)
-		rx <- rowFromY(obj, xy[,2]-buffer)
-		rn[is.na(rn) &  (xy[,2]-buffer <= ymax(obj) & xy[,2]+buffer >= ymax(obj))] <- 1
-		rx[is.na(rx) &  (xy[,2]-buffer <= ymin(obj) & xy[,2]+buffer >= ymin(obj))] <- nrow(obj)
+		cn <- colFromX(obj, xy[,1]-bufx)
+		cx <- colFromX(obj, xy[,1]+bufx)
+		cn[is.na(cn) &  (xy[,1]-bufx <= xmin(obj) & xy[,1]+bufx >= xmin(obj))] <- 1
+		cx[is.na(cx) &  (xy[,1]-bufx <= xmax(obj) & xy[,1]+bufx > xmax(obj))] <- ncol(obj)
+		rn <- rowFromY(obj, xy[,2]+bufy)
+		rx <- rowFromY(obj, xy[,2]-bufy)
+		rn[is.na(rn) &  (xy[,2]-bufy <= ymax(obj) & xy[,2]+bufy >= ymax(obj))] <- 1
+		rx[is.na(rx) &  (xy[,2]-bufy <= ymin(obj) & xy[,2]+bufy >= ymin(obj))] <- nrow(obj)
 
 		if (.doCluster()) {
 			cl <- .getCluster()
