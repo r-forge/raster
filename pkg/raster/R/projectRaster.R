@@ -103,7 +103,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		}
 		to <- projectExtent(from, crs)
 		if (missing(res)) {
-			res <- raster:::.computeRes(from, crs)
+			res <- .computeRes(from, crs)
 		}
 		res(to) <- res
 		projto <- projection(to)
@@ -147,8 +147,14 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	bb <- intersectExtent(pbb, from)
 	validObject(bb)
 
+	bb <- extent(projectExtent(from, projection(to)))
+	startrow <- max(rowFromY(to, bb@ymax) - 1, 1, na.rm=TRUE)
+	endrow <- min(rowFromY(to, bb@ymin) + 1, to@nrows, na.rm=TRUE)
+	startcol <- max(colFromX(to, bb@xmin) - 1, 1, na.rm=TRUE)
+	endcol <- min(colFromX(to, bb@xmax) + 1, to@ncols, na.rm=TRUE)
+		
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }
-	if (method=='ngb') { method <- 'simple' } # for xyValues
+	if (method=='ngb') { method <- 'simple' } # for extract (.xyValues)
 
 	filename <- trim(filename)
 	
@@ -186,10 +192,21 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 
 		clFun <- function(i) {
 			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-			xy <- xyFromCell(to, cellFromRowCol(to, tr$row[i], 1) : cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to)) ) 
-			unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
-			unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
-			raster:::.xyValues(from, unProjXY, method=method)
+
+			if (max(r) < startrow | min(r) > endrow) {
+				vals <- rep(NA, times=tr$nrows[i] * to@ncols)
+			} else {
+				srow <- max(startrow, tr$row[i])
+				erow <- min(endrow, (tr$row[i]+tr$nrows[i]-1))
+				nrows <- erow-srow+1
+				xy <- xyFromCell(to, cellFromRowColCombine(to, srow:erow, startcol:endcol) ) 
+				unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+				unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
+				vals <- matrix(NA, nrow=tr$nrows[i], ncol=to@ncols)
+				vals[(srow:erow)-tr$row[i]+1, startcol:endcol] <- matrix(.xyValues(from, unProjXY, method=method), nrow=nrows, byrow=TRUE)
+				vals <- as.vector(t(vals))
+			}
+			return(vals)
 		}
 		
 		# for debugging
@@ -232,13 +249,19 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		pb <- pbCreate(tr$n, type=.progress(...))
 		for (i in 1:tr$n) {
 			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-			xy <- xyFromCell(to, cellFromRowCol(to, tr$row[i], 1) : cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to)) ) 
-
-			unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
-			unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
-		
-			vals <- .xyValues(from, unProjXY, method=method)
-		
+			if (max(r) < startrow | min(r) > endrow) {
+				vals <- rep(NA, times=tr$nrows[i] * to@ncols)
+			} else {
+				srow <- max(startrow, tr$row[i])
+				erow <- min(endrow, (tr$row[i]+tr$nrows[i]-1))
+				nrows <- erow-srow+1
+				xy <- xyFromCell(to, cellFromRowColCombine(to, srow:erow, startcol:endcol) ) 
+				unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+				unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
+				vals <- matrix(NA, nrow=tr$nrows[i], ncol=to@ncols)
+				vals[(srow:erow)-tr$row[i]+1, startcol:endcol] <- matrix(.xyValues(from, unProjXY, method=method), nrow=nrows, byrow=TRUE)
+				vals <- as.vector(t(vals))
+			}
 			if (inMemory) {
 				start <- cellFromRowCol(to, tr$row[i], 1)
 				end <- cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, to@ncols)

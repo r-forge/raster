@@ -107,21 +107,60 @@
 		rn[is.na(rn) &  (xy[,2]-buffer <= ymax(obj) & xy[,2]+buffer >= ymax(obj))] <- 1
 		rx[is.na(rx) &  (xy[,2]-buffer <= ymin(obj) & xy[,2]+buffer >= ymin(obj))] <- nrow(obj)
 
-		
-		for (i in 1:nrow(xy)) {
-			s <- sum(rn[i], rx[i], cn[i], cx[i])
-			if (is.na(s)) {
-				cv[[i]] <- NA
-			} else {
-				vals <- getValuesBlock(object, rn[i], rx[i]-rn[i]+1, cn[i], cx[i]-cn[i]+1)
-				cells <- cellFromRowColCombine(obj, rn[i]:rx[i], cn[i]:cx[i])
-				coords <- xyFromCell(obj, cells)
-				pd <- cbind(pointDistance(xy[i,], coords, longlat=FALSE), vals)
-				if (nrow(pd) > 1) {
-					cv[[i]] <- pd[pd[,1] <= buffer[i], -1]
-				#	cells <- unique(c(cells, centralcells[i]))
+
+		if (.doCluster()) {
+			cl <- .getCluster()
+			on.exit( .returnCluster(cl) )
+			nodes <- min(nrow(xy), length(cl))
+			cat('Using cluster with', nodes, 'nodes\n')
+			flush.console()
+			clFun <- function(i) {
+				s <- sum(rn[i], rx[i], cn[i], cx[i])
+				if (is.na(s)) {
+					return(NULL)
+				} else {
+					vals <- getValuesBlock(object, rn[i], rx[i]-rn[i]+1, cn[i], cx[i]-cn[i]+1)
+					cells <- cellFromRowColCombine(obj, rn[i]:rx[i], cn[i]:cx[i])
+					coords <- xyFromCell(obj, cells)
+					pd <- cbind(pointDistance(xy[i,], coords, longlat=TRUE), vals)
+					return(pd)
+				}
+			}
+
+			for (i in 1:nodes) {
+				sendCall(cl[[i]], clFun, i, tag=i)
+			}
+			for (i in 1:nrow(xy)) {
+				d <- recvOneData(cl)
+				if (! d$value$success) {
+					stop('cluster error')
+				} else if (is.null(d$value$value)) {
+					cv[[i]] <- NA
+				} else if (nrow(d$value$value) > 1) {
+					cv[[i]] <- d$value$value[d$value$value[,1] <= buffer[i], -1]
 				} else { 
-					cv[[i]] <- pd[,-1]
+					cv[[i]] <- d$value$value[,-1]
+				}
+				if ((nodes + i) <= nrow(xy)) {
+					sendCall(cl[[d$node]], clFun, i, tag=i)
+				}
+			}
+		} else {
+			for (i in 1:nrow(xy)) {
+				s <- sum(rn[i], rx[i], cn[i], cx[i])
+				if (is.na(s)) {
+					cv[[i]] <- NA
+				} else {
+					vals <- getValuesBlock(object, rn[i], rx[i]-rn[i]+1, cn[i], cx[i]-cn[i]+1)
+					cells <- cellFromRowColCombine(obj, rn[i]:rx[i], cn[i]:cx[i])
+					coords <- xyFromCell(obj, cells)
+					pd <- cbind(pointDistance(xy[i,], coords, longlat=FALSE), vals)
+					if (nrow(pd) > 1) {
+						cv[[i]] <- pd[pd[,1] <= buffer[i], -1]
+					#	cells <- unique(c(cells, centralcells[i]))
+					} else { 
+						cv[[i]] <- pd[,-1]
+					}
 				}
 			}
 		}
