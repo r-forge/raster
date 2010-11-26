@@ -36,16 +36,16 @@ function(x, fun, filename='', na.rm, ...) {
 	nl <- nlayers(x)
 	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
 	
-	tst <- fun(rbind(1:nl, 1:nl, 1:nl))
-	test <- dim(tst)
-	
-	if (! is.null(test)) {
-		if (test[1] == 3 & test[2] == nl) {
-			return( .calcLayers(x, fun, filename, ...) )
+	tst <- try( fun(rbind(1:nl, 1:nl, 1:nl)), silent=TRUE )
+	if ( class(tst) != 'try-error') {
+		test <- dim(tst)
+		if (! is.null(test)) {
+			if (test[1] == 3 & test[2] == nl) {
+				return( .calcLayers(x, fun, filename, ...) )
+			}
 		}
-	} else {
-		test <- length(tst)
-	}
+	} 
+	
 		#} else {
 		#	stop("'fun' does not return the correct number of values. It should be 1 or nlayers(x)") 
 		#}
@@ -53,9 +53,15 @@ function(x, fun, filename='', na.rm, ...) {
 	if (! missing(na.rm)) {
 		test <- try(fun(1:nl, na.rm=TRUE), silent=TRUE)
 		if (class(test) == 'try-error') {
-			stop("'fun' does take an 'na.rm' arugment. Add 'na.rm' or '...' to the function arguments") 
+			stop("cannot use this function. Perhaps add 'na.rm' or '...' to the function arguments?") 
+		}
+	} else {
+		test <- try(fun(1:nl), silent=TRUE)
+		if (class(test) == 'try-error') {
+			stop("cannot use this function") 
 		}
 	}
+	test <- length(test)
 	
 	filename <- trim(filename)
 	if (test == 1) {
