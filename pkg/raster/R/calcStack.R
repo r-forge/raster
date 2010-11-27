@@ -36,18 +36,8 @@ function(x, fun, filename='', na.rm, ...) {
 	nl <- nlayers(x)
 	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
 	
-	tst <- try( fun(rbind(1:nl, 1:nl, 1:nl)), silent=TRUE )
-	if ( class(tst) != 'try-error') {
-		test <- dim(tst)
-		if (! is.null(test)) {
-			if (test[1] == 3 & test[2] == nl) {
-				return( .calcLayers(x, fun, filename, ...) )
-			}
-		}
-	} 
-	
 	if (! missing(na.rm)) {
-		test <- try(fun(1:nl, na.rm=TRUE), silent=TRUE)
+		test <- try(fun(1:nl, na.rm=na.rm), silent=TRUE)
 		if (class(test) == 'try-error') {
 			stop("cannot use this function. Perhaps add 'na.rm' or '...' to the function arguments?") 
 		}
@@ -57,9 +47,8 @@ function(x, fun, filename='', na.rm, ...) {
 			stop("cannot use this function") 
 		}
 	}
+
 	test <- length(test)
-	
-	filename <- trim(filename)
 	if (test == 1) {
 		out <- raster(x)
 	} else {
@@ -71,8 +60,12 @@ function(x, fun, filename='', na.rm, ...) {
 	if (class(fun) == 'character') { 
 		rowcalc <- TRUE 
 		fun <- .getRowFun(fun)
-	} else { rowcalc <- FALSE }
+	} else { 
+		rowcalc <- FALSE 
+	}
 	
+	filename <- trim(filename)
+
 	if (canProcessInMemory(x, 2)) {
 		x <- getValues(x)
 		if (makemat) { x <- matrix(x, ncol=1) }
@@ -98,7 +91,7 @@ function(x, fun, filename='', na.rm, ...) {
 		if (filename != '') {
 			x <- writeRaster(x, filename, ...)
 		}
-		return ( x)		
+		return(x)		
 	}
 
 # else 
