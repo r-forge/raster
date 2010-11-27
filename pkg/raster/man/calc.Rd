@@ -60,15 +60,15 @@ r[] <- 1:ncell(r)
 
 # multiply values with 10
 fun <- function(x) { x * 10 }
-rc <- calc(r, fun)
+rc1 <- calc(r, fun)
 
 # set values below 100 to NA. 
 fun <- function(x) { x[x<100] <- NA; return(x) }
-rc <- calc(r, fun)
+rc2 <- calc(r, fun)
 
 # set NA values to -9999
 fun <- function(x) { x[is.na(x)] <- -9999; return(x)} 
-rc <- calc(rc, fun)
+rc3 <- calc(rc2, fun)
 
 # using a RasterStack as input
 s <- stack(r, r*2, sqrt(r))
@@ -92,15 +92,15 @@ rs4 <- calc(s, fun=function(x){x[1]+x[2]*x[3]})
 r <- raster(nrow=10, ncol=10)
 s1 <- s2<- list()
 for (i in 1:12) {
-       s1[i] <- setValues(r, rnorm(ncell(r), i, 3) )
-       s2[i] <- setValues(r, rnorm(ncell(r), i, 3) )
+	s1[i] <- setValues(r, rnorm(ncell(r), i, 3) )
+	s2[i] <- setValues(r, rnorm(ncell(r), i, 3) )
 }
 s1 <- stack(s1)
 s2 <- stack(s2)
 
 # regression of values in one brick (or stack) with another
 s <- stack(s1, s2)
-# s1 and s2 have 12 layers
+# s1 and s2 have 12 layers; coefficients[2] is the slope
 fun <- function(x) { lm(x[1:12] ~ x[13:24])$coefficients[2] }
 x1 <- calc(s, fun)
 
