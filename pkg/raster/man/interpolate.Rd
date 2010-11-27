@@ -59,24 +59,26 @@ a RasterLayer object
 \author{ Robert J. Hijmans}
 
 \examples{
+
+\dontrun{
+
 ## Thin plate spline interpolation with x and y only
-#library(fields) 
-#r <- raster(system.file("external/test.grd", package="raster"))
-#ra <- aggregate(r, 10)
-#xy <- data.frame(xyFromCell(ra, 1:ncell(ra)))
-#v <- getValues(ra)
-#tps <- Tps(xy, v)
-#p <- raster(r)
-#p <- interpolate(p, tps)
-#p <- mask(p, r)
-#plot(p)
-#se <- interpolate(p, tps, fun=predict.se)
-#se <- mask(se, r)
-#plot(se)
+library(fields) 
+r <- raster(system.file("external/test.grd", package="raster"))
+ra <- aggregate(r, 10)
+xy <- data.frame(xyFromCell(ra, 1:ncell(ra)))
+v <- getValues(ra)
+tps <- Tps(xy, v)
+p <- raster(r)
+p <- interpolate(p, tps)
+p <- mask(p, r)
+plot(p)
+se <- interpolate(p, tps, fun=predict.se)
+se <- mask(se, r)
+plot(se)
 
 
 ##gstat examples
-\dontrun{
 library(gstat)
 ## inverse distance weighted interpolation with gstat
 r <- raster(system.file("external/test.grd", package="raster"))
@@ -93,7 +95,6 @@ g <- gstat(NULL, "log.zinc", log(zinc)~1, meuse, model = m)
 projection(r) <- projection(meuse)
 x <- interpolate(r, g)
 }
-
 }
 
 \keyword{methods}
