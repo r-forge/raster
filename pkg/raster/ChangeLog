@@ -5,7 +5,7 @@ Fixed calc for regression functions
 --------------------------------------------
 26-Nov-2010,  version 1.7-3
 Fixed data handling error causing full memory in extract(points, buffer) (reported by Steve Mosher)
-Fixed bug in projectRaster when projecting a raster from a regional crs to a global crs that caused the values to duplicate (reported by Bart)
+Fixed bug in projectRaster when projecting a raster from a regional crs to a global crs that caused the values to duplicate (reported by Bart Kranstauber)
 
 --------------------------------------------
 24-Nov-2010,  version 1.7-2

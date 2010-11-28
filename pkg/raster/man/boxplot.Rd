@@ -30,7 +30,7 @@ boxplot(x, ...)
 
 \tabular{rll}{
 \tab \code{maxpixels} \tab Integer. Number of pixels to sample from each layer of large Raster objects \cr
-\tab \code{...} \tab Argument passed to \code{graphics::\link{boxplot}} \cr
+\tab \code{...} \tab Argument passed to \code{graphics::\link[graphics]{boxplot}} \cr
 }		
 }
 }
@@ -45,8 +45,10 @@ r1[] <- rnorm(ncell(r1), 100, 40)
 r2[] <- rnorm(ncell(r1), 80, 10)
 r3[] <- rnorm(ncell(r1), 120, 30)
 s <- stack(r1, r2, r3)
+layerNames(s) <- c('A', 'B', 'C')
 
-boxplot(s, notch=TRUE, col=c('red', 'blue', 'orange'), main='A box plot', ylab='random  numbers' )
+boxplot(s, notch=TRUE, col=c('red', 'blue', 'orange'), main='Box plot', ylab='random  numbers' )
+
 }
 
 \author{
