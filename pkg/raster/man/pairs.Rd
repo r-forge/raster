@@ -6,13 +6,12 @@
 \alias{pairs,RasterStackBrick-method}
 
 \title{
-Pair plots
+Pairs plot (matrix of scatterplots)
 }
 
 \description{
 Pair plots of layers in a RasterStack or RasterBrick
 }
-
 
 \usage{
 pairs(x, ...)
@@ -23,10 +22,9 @@ pairs(x, ...)
 \item{...}{Additional arguments. See Methods}
 }
 
-
 \section{Methods}{
 \describe{
-	\code{pairs(x, hist=TRUE, cor=TRUE, maxpixels=100000)}
+\code{pairs(x, hist=TRUE, cor=TRUE, maxpixels=100000)}
 
 \tabular{rll}{
 \tab \code{hist} \tab Logical. If \code{TRUE} a histogram of the values is shown on the diagonal\cr
@@ -37,13 +35,20 @@ pairs(x, ...)
 }
 
 \seealso{
-\code{\link{boxplot}, \link{hist}}
+\code{\link{boxplot}, \link{hist}, \link{density}}
 }
 
 \examples{
 r <- raster(system.file("external/test.grd", package="raster") )
 s <- stack(r, 1/r, sqrt(r))
 pairs(s)
+
+\dontrun{
+# to make indvidual histograms:
+hist(r)
+# or scatter plots:
+plot(r, 1/r)
+}
 }
 
 \author{

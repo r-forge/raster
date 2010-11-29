@@ -136,7 +136,8 @@ setMethod("Arith", signature(e1='RasterStackBrick', e2='numeric'),
 			}
 					
 			if (canProcessInMemory(e1, 3)) {
-				return( setValues(e1, t(callGeneric( t(getValues(e1)), e2))) )
+				b <- brick(e1, values=FALSE)
+				return( setValues(b, t(callGeneric( t(getValues(e1)), e2))) )
 			}
 			
 			filename <- rasterTmpFile()
@@ -157,7 +158,8 @@ setMethod("Arith", signature(e1='RasterStackBrick', e2='numeric'),
 		# else:
 		
 		if (canProcessInMemory(e1, 3)) {
-			return ( setValues(e1,  callGeneric(getValues(e1), e2) ) )
+			b <- brick(e1, values=FALSE)
+			return ( setValues(b,  callGeneric(getValues(e1), e2) ) )
 		} else {
 			filename <- rasterTmpFile()
 			b <- brick(e1)

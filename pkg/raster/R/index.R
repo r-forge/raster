@@ -104,6 +104,7 @@ function(x, i, j, drop=TRUE) {
 	if (drop) {
 		return( .cellValues(x, i) )
 	} else {
+		i <- na.omit(i)
 		r <- rasterFromCells(x, i, values=FALSE)
 		newi <- cellFromXY(r, xyFromCell(x, i))
 		if (nlayers(x) > 1) {

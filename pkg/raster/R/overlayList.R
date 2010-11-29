@@ -88,6 +88,7 @@
 		}
 		pbStep(pb, 3)
 		pbClose(pb)
+		return(outraster)
 		
 	} else {
 	

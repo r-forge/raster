@@ -20,24 +20,20 @@ A RasterStack can be created from RasterLayer objects, or from raster files, or 
 
 \section{Methods}{
 \describe{
-\code{stack(x, ...)}
+\code{stack(x, ..., bands=NULL)}
 
-  \item{\code{x}}{ filename (character), Raster* object, SpatialGrid*, SpatialPixels*, or list (of filenames and/or Raster* objects) }
-  \item{\code{...}}{additional RasterLayer objects (or filenames) }
-  \item{bands}{ optional argument. a vector or list of bands of raster data files}
+\item{\code{x}}{ filename (character), Raster* object, SpatialGrid*, SpatialPixels*, or list (of filenames and/or Raster* objects) }
+\item{\code{...}}{additional RasterLayer objects (or filenames) }
+\item{\code{bands}}{Which bands (layers) of the file should be used (default is all layers)}
 
 \code{x} can be a filename from which a RasterLayer can be created (with \code{raster}, a Raster* object, 
 or a list of filenames and/or Raster* objects.
 
-The argument \code{bands} can be used to pass a vector of band numbers to indicated which band of a file (in a multiband file) should be used. 
-A band numbers < 1 will lead to inclusion of all bands into the RasterStack. 
-
-If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted, except for the optional \code{bands} argument
-
+If \code{x} is a \code{list}, additional arguments  \code{...} are ignored.
 }}
 
 \value{
-  a RasterStack object
+RasterStack
 }
 
 \author{Robert J. Hijmans}
@@ -45,10 +41,10 @@ If \code{x} is a \code{list}, no additional arguments  \code{...} are accepted, 
 \seealso{ \code{\link[raster]{addLayer}}, \code{\link[raster]{dropLayer}}, \code{\link[raster]{raster}} }
 
 \examples{
-  fn <- system.file("external/test.grd", package="raster")
-  s <- stack(fn, fn)
-  r <- raster(fn)
-  s <- stack(r, fn) 
+fn <- system.file("external/test.grd", package="raster")
+s <- stack(fn, fn)
+r <- raster(fn)
+s <- stack(r, fn) 
 }
 
 \keyword{methods}

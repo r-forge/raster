@@ -3,8 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-
-
 if (!isGeneric("stack")) {
 	setGeneric("stack", function(x, ...)
 		standardGeneric("stack"))
@@ -23,7 +21,7 @@ function(x, ..., bands=NULL) {
 			stop("if you supply a 'bands' argument. you can only supply a single Raster object" )
 		}
 	}
-	rlist <- .makeRasterList(x, ..., keepone=FALSE)
+	rlist <- .makeRasterList(x, ..., keepone=TRUE)
 	return(stack(rlist, bands))	
 } )
 
@@ -85,7 +83,21 @@ function(x, bands=NULL, ...) {
 			stop("Arguments should be Raster* objects or filenames")	
 		}
 	}
-	return(addLayer(new("RasterStack"), r))
+	if (length(r) == 1) {
+		r <- r[[1]]
+		if (hasValues(r)) {
+			return(addLayer(new("RasterStack"), r))
+		} else{
+			x <- new("RasterStack")
+			x@nrows <- r@nrows
+			x@ncols <- r@ncols
+			x@extent <- r@extent
+			x@crs <- r@crs
+			return(x)
+		}
+	} else {
+		return(addLayer(new("RasterStack"), r))
+	}
 } )
 
 
