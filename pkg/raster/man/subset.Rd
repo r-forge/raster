@@ -2,13 +2,13 @@
 
 \alias{subset}
 \alias{subset,RasterStack-method}
-\alias{subset,RasterBrick-method}
+\alias{subset,Raster-method}
 
 
 \title{Subset layers in a Raster* object}
 
 \description{
-  Extract layers from a RasterStack or RasterBrick object.  
+  Extract layers from a Raster* object.  
 }
 
 \usage{
@@ -16,7 +16,7 @@ subset(x, ...)
 }
 
 \arguments{
-	\item{x}{RasterStack or RasterBrick object }
+	\item{x}{Raster object }
 	\item{...}{Additional arguments: 
 	
 	\code{subset}, which should indicate the layers (represented as integer or by their name). 
