@@ -15,14 +15,9 @@ function(x) {
 )
 
 setMethod("stack", signature(x='Raster'), 
-function(x, ..., bands=NULL) {
-	if (!is.null(bands)) {
-		if (length(list(...)) > 0) {
-			stop("if you supply a 'bands' argument. you can only supply a single Raster object" )
-		}
-	}
+function(x, ...) {
 	rlist <- .makeRasterList(x, ..., keepone=TRUE)
-	return(stack(rlist, bands))	
+	return( stack(rlist) )
 } )
 
 
@@ -31,7 +26,7 @@ setMethod("stack", signature(x='character'),
 function(x, ..., bands=NULL, varname='') {
 	if (!is.null(bands)) {
 		if (length(list(...)) > 0) {
-			stop("if you supply a 'bands' argument. you can only supply a single Raster object" )
+			stop("if you supply a 'bands' argument, you can only supply a single filename")
 		}
 	}
     if ( varname != '') {
@@ -50,31 +45,30 @@ function(x, bands=NULL, ...) {
 	}
 	j <- 0
 	r <- list()
-	if (is.null(bands)) { bands = rep(-1, length(x)) }
+
+	if (is.character(x) & length(x) == 1 & !is.null(bands)) {
+		first <- raster(x[[1]])
+		bands <- bands[bands %in% 1:nbands(first)]
+		if (length(bands) == 0) {
+			stop('no valid bands supplied')
+		}
+		for (b in bands) {
+			r[b] <- first
+			r[[b]]@data@band <- b
+		}
+	}
 	
 	for (i in seq(along=x)) {
 		j <- j + 1
 		if (is.character(x[[i]])) {
-#			if (is.null(bands)) {
-#				r[j] <- raster(x[[i]])
-#			} else if (bands[[i]] > 0) {
-			if (bands[[i]] > 0) {
-				r[j] <- raster(x[[i]], band=bands[[i]])
-				if (length(bands) > 1 & length(x) == 1) {
-					# single file, multuple bands
-					for (q in 2:length(bands)) {
-						r[q] <- raster(x[[i]], band=bands[[q]])
-					}
-				}
-			} else {
-				# all bands
-				r[j] <- raster(x[[i]], band=1)
-				bds <- nbands(r[[j]])
-				if (bds > 1) {
-					for (b in 2:bds) {
-						j <- j + 1
-						r[j] <- raster(x[[i]], band=b)
-					}
+			# all bands
+			r[j] <- raster(x[[i]], band=1)
+			bds <- nbands(r[[j]])
+			if (bds > 1) {
+				for (b in 2:bds) {
+					j <- j + 1
+					r[j] <- r[[j-1]]
+					r[[j]]@data@band <- b
 				}
 			}
 		} else if (extends(class(x[[i]]), "Raster")) {
@@ -83,11 +77,12 @@ function(x, bands=NULL, ...) {
 			stop("Arguments should be Raster* objects or filenames")	
 		}
 	}
-	if (length(r) == 1) {
+	
+	if ( length(r) == 1 ) {
 		r <- r[[1]]
-		if (hasValues(r)) {
-			return(addLayer(new("RasterStack"), r))
-		} else{
+		if ( hasValues(r) ) {
+			return( addLayer( new("RasterStack"), r) )
+		} else {
 			x <- new("RasterStack")
 			x@nrows <- r@nrows
 			x@ncols <- r@ncols
@@ -98,7 +93,8 @@ function(x, bands=NULL, ...) {
 	} else {
 		return(addLayer(new("RasterStack"), r))
 	}
-} )
+}
+)
 
 
 setMethod("stack", signature(x='SpatialGridDataFrame'), 
