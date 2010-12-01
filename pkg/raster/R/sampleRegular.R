@@ -4,9 +4,9 @@
 # Licence GPL v3
 
 
-sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
+..sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
 	if (inherits(x, 'RasterLayer')) {
-		return(.sampleRegular(x, n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners))
+		return( .sampleRegular(x, n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners))
 	} else {
 	# ugly & inefficient hack :
 		if (asRaster) {
@@ -19,10 +19,10 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 					v[,i] = .sampleRegular(raster(x, i), n=size, extent=extent, cells=cells, asRaster=asRaster, corners=corners)@data@values
 				}
 			}
-			b = brick(xx)
-			xx <- setValues(xx, v)
-			layerNames(xx) <- layerNames(x)
-			return(xx)
+			b <- brick(xx)
+			b <- setValues(b, v)
+			layerNames(b) <- layerNames(x)
+			return(b)
 		} else {
 			for (i in 1:nlayers(x)) {
 				if (i==1) {
@@ -40,9 +40,11 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 }	
 
 
-.sampleRegular <- function(x, n, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
-
-	if (n<1) {stop('n < 1')}
+sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE) {
+	
+	size <- round(size)
+	if (size < 1) { stop('size < 1') }
+	n <- size
 	
 	if (is.null(extent)) {
 		if (n >= ncell(x)) {
@@ -124,16 +126,16 @@ sampleRegular <- function(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, cor
 			nrow(outras) <- nr
 			ncol(outras) <- nc
 		}
+		if (nlayers(x) > 1) {
+			outras <- brick(outras, nl=nalyers(x))
+		}
 		outras <- setValues(outras, m)
 		return(outras)
 	} else {
 		if (cells) {
-			#cell <- cellFromRowCol(raster, rep(rows, each=nc), rep(cols, times=nr))
-			cell <- cbind(cell, m)
-			colnames(cell)[2] <- 'value'
-			return(cell)
-		} else {
-			return(m)
-		}
+			m <- cbind(cell, m)
+			colnames(m)[2:ncol(m)] <- layerNames(x)
+		} 
+		return(m)
 	}	
 }
