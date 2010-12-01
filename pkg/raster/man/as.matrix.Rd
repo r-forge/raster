@@ -24,8 +24,8 @@ as.array(x, ...)
 }
 
 \arguments{
- \item{x}{Raster* object}
- \item{...}{Additional arguments. None implemented}
+ \item{x}{ Raster* object }
+ \item{...}{ Additional arguments. \code{maxpixels} to regularly subsample very large objects }
 }
   
 
