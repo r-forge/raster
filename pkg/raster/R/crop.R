@@ -43,9 +43,6 @@ function(x, y, filename='', datatype=dataType(x), ...) {
 	nc <- ncol(outRaster)
 	nr <- row2 - row1 + 1
 	
-	datatype=dataType(x)
-
-	
 	if (canProcessInMemory(outRaster, 3)) {
 		x <- getValuesBlock(x, row1, nrows=nr, col=col1, ncols=nc)
 		outRaster <- setValues(outRaster, x)
