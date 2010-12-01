@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-setOptions <- function(format, overwrite, datatype, tmpdir, progress, timer, chunksize, maxmemory, todisk, setfileext, usecluster) {
+setOptions <- function(format, overwrite, datatype, tmpdir, progress, timer, chunksize, maxmemory, todisk, setfileext) {
 	
 	setFiletype <- function(format) {
 		if (.isSupportedFormat(format)) {	options(rasterFiletype = format)	
@@ -101,7 +101,7 @@ setOptions <- function(format, overwrite, datatype, tmpdir, progress, timer, chu
 	if (!missing(setfileext)) { setFileExt(setfileext) }
 	if (!missing(maxmemory)) { setMaxMemorySize(maxmemory) }
 	if (!missing(chunksize)) { setChunksize(chunksize) }
-	if (!missing(usecluster)) { setCluster(usecluster) }
+#	if (!missing(usecluster)) { setCluster(usecluster) }
 }
 
 

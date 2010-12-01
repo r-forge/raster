@@ -25,7 +25,7 @@ showOptions <- function() {
 	cat('maxmemory :', .maxmemory(), '\n')
 	cat('tmpdir    :', .tmpdir(), '\n')
 	cat('setfileext:', .setfileext(), '\n')
-	cat('usecluster:', .usecluster(), '\n')
+#	cat('usecluster:', .usecluster(), '\n')
 	if (.toDisk()) {
 		cat('toDisk    : TRUE\n')
 	}
@@ -41,7 +41,7 @@ clearOptions <- function() {
 	options(rasterMaxMemory = 100000000)
 	options(setfileext = TRUE)
 	options(rasterTmpDir = .tmpdir())
-	options(rasterUseCluster = FALSE)
+#	options(rasterUseCluster = FALSE)
 		
 	fn <- paste(R.home(component="etc"), '/', 'Rprofile.site', sep='')
 	lst <- readLines(fn)
