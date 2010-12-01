@@ -1,4 +1,15 @@
 --------------------------------------------
+29-Nov-2010,  version 1.7-6
+New function as.array
+improved sampleRegular for multi-layer objects
+
+--------------------------------------------
+28-Nov-2010,  version 1.7-5
+Code simplications for 'raster', 'stack', and 'brick' functions
+raster no longer has the "values" argument (use setValues)
+When adding layers to a RasterBrick, a RasterStack will be returned.
+
+--------------------------------------------
 26-Nov-2010,  version 1.7-4
 Fixed calc for regression functions
 

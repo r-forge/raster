@@ -38,13 +38,20 @@ RasterStack
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link[raster]{addLayer}}, \code{\link[raster]{dropLayer}}, \code{\link[raster]{raster}} }
+\seealso{ \code{\link[raster]{addLayer}, \link[raster]{dropLayer}, \link[raster]{raster}, \link[raster]{brick}} }
 
 \examples{
+# file with one layer
 fn <- system.file("external/test.grd", package="raster")
 s <- stack(fn, fn)
 r <- raster(fn)
 s <- stack(r, fn) 
+nlayers(s)
+
+# file with three layers
+slogo <- stack(system.file("external/rlogo.grd", package="raster")) 
+nlayers(slogo)
+slogo
 }
 
 \keyword{methods}
