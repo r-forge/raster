@@ -78,7 +78,7 @@ function(x, i, j, drop=TRUE) {
 		}
 	} else {
 		if (inherits(i, "RasterLayer")) {
-			i <- 1:ncell(i)[ as.logical( getValues(i) ) ]
+			i <- (1:ncell(i))[ as.logical( getValues(i) ) ]
 		} else if (inherits(i, "Extent")) {
 			if (drop) {
 				return( extract(x, i) )

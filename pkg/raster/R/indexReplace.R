@@ -4,8 +4,6 @@
 # Licence GPL v3
 
 
-
-
 setReplaceMethod("[", "RasterLayer",
 	function(x, i, j, value) {
 
@@ -86,7 +84,7 @@ setReplaceMethod("[", "RasterLayer",
 			x <- try (setValues(x, rep(NA, times=ncell(x))) )
 		}
 		if (class(x) == 'try-error') {
-			stop('cannot replace values on this raster (it is too large')
+			stop('cannot do in-memory replace values on this raster (it is too large)')
 		}
 	}
 		
