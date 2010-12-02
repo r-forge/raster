@@ -43,6 +43,10 @@ setMethod('brick', signature(x='character'),
 
 setMethod('brick', signature(x='RasterLayer'), 
 	function(x, ..., values=TRUE, filename='', format,  datatype, overwrite, progress) {
+		if (!values) {
+			b <- brick(x@extent, nrows=nrow(x), ncols=ncol(x), crs=projection(x))
+			return(b)
+		}	
 		x <- stack(x, ...)
 		filename <- trim(filename)
 		if (missing(format)) { format <- .filetype(filename=filename) } 

@@ -112,13 +112,7 @@
 	on.exit( close.ncdf(nc) )
 	
 	conv <- att.get.ncdf(nc, 0, "Conventions")
-	if (substr(conv$value, 1, 3) == 'RST') {
-		close.ncdf(nc)
-		return( .rasterObjectFromCDFrst(filename, band=band, type='RasterLayer', ...) )
-	} else {
-		conv <- 'CF'
-		# assuming "CF-1.0"
-	}
+	# assuming "CF-1.0"
 	
 	zvar <- .varName(nc, varname)
 	

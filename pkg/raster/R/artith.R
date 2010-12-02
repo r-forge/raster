@@ -162,7 +162,7 @@ setMethod("Arith", signature(e1='RasterStackBrick', e2='numeric'),
 			return ( setValues(b,  callGeneric(getValues(e1), e2) ) )
 		} else {
 			filename <- rasterTmpFile()
-			b <- brick(e1)
+			b <- brick(e1, values=FALSE)
 			tr <- blockSize(b)
 			pb <- pbCreate(tr$n, type=.progress())
 			b <- writeStart(b, filename=filename, bandorder='BIL')
