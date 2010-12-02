@@ -183,7 +183,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 				}
 			} else if (x@file@bandorder=='BIP') {
 				writeBin(as.vector(t(v)), x@file@con, size=x@file@dsize )
-			} else if (x@file@bandorder=='BSAQ') {
+			} else if (x@file@bandorder=='BSQ') {
 				stop('BSQ not yet implemented for chunk writing of native files')
 			} else {
 				stop('unknown band order')
