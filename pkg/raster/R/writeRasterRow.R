@@ -40,7 +40,7 @@
 	raster@file@driver <- filetype
 	raster@file@name <- filename
 	if (! bandorder %in% c('BIL', 'BIP', 'BSQ')) {
-		stop('bandorder much be one of "BIL" or "BIP"')
+		stop('bandorder must be one of "BIL" or "BIP"')
 	}
 	raster@file@bandorder <- bandorder
 	
