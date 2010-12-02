@@ -66,7 +66,7 @@ function(x, bands=NULL, ...) {
 			if (bds > 1) {
 				for (b in 2:bds) {
 					j <- j + 1
-					r[j] <- raster(x[[i]], band=1)
+					r[j] <- raster(x[[i]], band=b)
 				}
 			}
 		} else if (extends(class(x[[i]]), "Raster")) {
