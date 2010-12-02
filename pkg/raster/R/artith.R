@@ -109,7 +109,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 		if (canProcessInMemory(e2, 4)) {
 			return( setValues(r, callGeneric(as.numeric(e1), getValues(e2))) )
 		} else {
-			tr <- blockSize(e1)
+			tr <- blockSize(e2)
 			pb <- pbCreate(tr$n, type=.progress())			
 			r <- writeStart(r, filename=rasterTmpFile(), format=.filetype(), overwrite=TRUE )
 			for (i in 1:tr$n) {
