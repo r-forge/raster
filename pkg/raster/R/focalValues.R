@@ -50,7 +50,7 @@ focalValues <- function(x, ...) {
 	nls <- nlayers(x)
 	
 	if (nls == 1) {
-		ngbdata = matrix(getValuesBlock(x, r1, nrows), ncol=ncol(x))
+		ngbdata = matrix(getValuesBlock(x, r1, nrows), ncol=ncol(x), byrow=TRUE)
 		v = cbind( id[,1], as.vector(ngbdata)[id[,2]] )
 		colnames(v) <- c('col', 'value')
 		

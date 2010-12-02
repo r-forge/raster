@@ -256,7 +256,7 @@
 		r@data@nlayers <- r@file@nbands
 		r@data@min <- rep(Inf, r@file@nbands)
 		r@data@max <- rep(-Inf, r@file@nbands)
-		try( layerNames(r) <- r@zvalue, silent=TRUE )
+		try( layerNames(r) <- as.character(r@zvalue), silent=TRUE )
 	}
 	
 	return(r)

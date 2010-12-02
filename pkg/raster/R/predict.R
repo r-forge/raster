@@ -47,9 +47,14 @@ setMethod('predict', signature(object='Raster'),
 		}
 			
 		
+		
 		f <- names( which(dataclasses == 'factor') )
 		if (length(f) > 0) { 
 			haveFactor <- TRUE 
+			factlevels <- list()
+			for (i in 1:length(f)) {
+				factlevels[[i]] <- levels(model$data[f][,1])
+			}
 		} else {
 			haveFactor <- FALSE
 		}
@@ -95,6 +100,8 @@ setMethod('predict', signature(object='Raster'),
 			blockvals <- as.data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
 			if (haveFactor) {
 				for (i in 1:length(f)) {
+					v <- blockvals[,f[i]]
+					v[! v %in% factlevels[i]] <- NA
 					blockvals[,f[i]] <- as.factor(blockvals[,f[i]])
 				}
 			}
