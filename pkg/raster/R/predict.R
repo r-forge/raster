@@ -99,10 +99,11 @@ setMethod('predict', signature(object='Raster'),
 		
 			blockvals <- as.data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
 			if (haveFactor) {
-				for (i in 1:length(f)) {
-					v <- blockvals[,f[i]]
-					v[! v %in% factlevels[i]] <- NA
-					blockvals[,f[i]] <- as.factor(blockvals[,f[i]])
+				for (j in 1:length(f)) {
+					fv <- blockvals[,f[j]]
+					fv[! fv %in% factlevels[[j]] ] <- NA
+					blockvals[,f[j]] <- as.factor(fv)
+					na.rm <- TRUE
 				}
 			}
 			if (! is.null(const)) {
@@ -134,15 +135,15 @@ setMethod('predict', signature(object='Raster'),
 					if (isTRUE(dim(predv)[2] > 1)) {
 						predv = predv[,index]
 					}
-				}
-						
-				if (na.rm) {  
-					naind <- as.vector(attr(blockvals, "na.action"))
-					if (!is.null(naind)) {
-						p <- napred
-						p[-naind] <- predv
-						predv <- p
-						rm(p)
+										
+					if (na.rm) {  
+						naind <- as.vector(attr(blockvals, "na.action"))
+						if (!is.null(naind)) {
+							p <- napred
+							p[-naind] <- predv
+							predv <- p
+							rm(p)
+						}
 					}
 				}
 			}
@@ -152,7 +153,7 @@ setMethod('predict', signature(object='Raster'),
 		
 			if (filename == '') {
 				cells = cellFromRowCol(predrast, tr$row[i], 1):cellFromRowCol(predrast, tr$row[i]+tr$nrows[i]-1, ncol(predrast))
-				a = v[cells, ] <- predv 
+				v[cells, ] <- predv 
 			} else {
 				predrast <- writeValues(predrast, predv, tr$row[i])
 			}
