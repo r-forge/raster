@@ -98,6 +98,7 @@ setMethod('predict', signature(object='Raster'),
 			rr <- firstrow + tr$row[i] - 1
 		
 			blockvals <- as.data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
+			colnames(blockvals) <- lyrnames
 			if (haveFactor) {
 				for (j in 1:length(f)) {
 					fv <- blockvals[,f[j]]
