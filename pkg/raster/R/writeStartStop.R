@@ -143,7 +143,7 @@ setMethod('writeValues', signature(x='RasterLayer'),
 
 
 setMethod('writeValues', signature(x='RasterBrick'), 
-	function(x, v, start) {
+	function(x, v, start=1) {
 	
 		v[is.infinite(v)] <- NA
 		
@@ -174,6 +174,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 			options('warn'= w) 
 		
 			if (x@file@bandorder=='BIL') {
+			
 				loop <- nrow(v) / x@ncols
 				start <- 1
 				for (i in 1:loop) {
@@ -181,10 +182,20 @@ setMethod('writeValues', signature(x='RasterBrick'),
 					writeBin(as.vector(v[start:end,]), x@file@con, size=x@file@dsize )
 					start <- end + 1
 				}
+				
 			} else if (x@file@bandorder=='BIP') {
+			
 				writeBin(as.vector(t(v)), x@file@con, size=x@file@dsize )
+				
 			} else if (x@file@bandorder=='BSQ') {
-				stop('BSQ not yet implemented for chunk writing of native files')
+			
+				start <- (start-1) * x@ncols * x@file@dsize
+				nc <- ncell(x) * x@file@dsize
+				for (i in 1:ncol(v)) {
+					pos <- start + nc * (i-1)
+					seek(x@file@con, pos, rw='w')
+					writeBin(v[,i], x@file@con, size=x@file@dsize )
+				}
 			} else {
 				stop('unknown band order')
 			}

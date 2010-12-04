@@ -41,7 +41,7 @@ function(x, filename, format, ...) {
 )
 
 
-setMethod('writeRaster', signature(x='RasterBrick', filename='character'), 
+setMethod('writeRaster', signature(x='RasterStackBrick', filename='character'), 
 function(x, filename, bandorder='BIL', format, ...) {
 
 	filename <- .fullFilename(filename)
@@ -52,7 +52,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 		if ( fromDisk(x) ) {
 			return( .saveAsBrick(x, filename, bandorder=bandorder, format=filetype, ...) )
 		} else {
-			stop('No usable data available for writing.')
+			stop('No cell values available for writing.')
 		}
 	}
 
@@ -63,29 +63,6 @@ function(x, filename, bandorder='BIL', format, ...) {
 	} else {
 		return ( .writeGDALall(x, filename=filename, format=filetype, ...) )
 	}
-}
-)
-
-
-setMethod('writeRaster', signature(x='RasterStack', filename='character'), 
-function(x, filename, bandorder='BIL', format, ...) {
-
-	filename <- .fullFilename(filename)
-	filetype <- .filetype(format=format, filename=filename)
-	filename <- .getExtension(filename, filetype)
-
-	b <- brick(x, values=FALSE)
-	b <- writeStart(b, filename=filename, bandorder=bandorder, format=filetype, ...)
-	tr <- blockSize(b)
-	pb <- pbCreate(tr$n, type=.progress(...))
-	for (i in 1:tr$n) {
-		v <- getValues(x, row=tr$row[i], nrows=tr$size)
-		b <- writeValues(b, v, tr$row[i])
-		pbStep(pb, i)
-	}
-	pbClose(pb)
-	b <- writeStop(b)
-	return(invisible(b))
 }
 )
 

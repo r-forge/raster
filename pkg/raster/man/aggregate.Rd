@@ -19,12 +19,12 @@ aggregate(x, ...)
 }
 
 \arguments{
-  \item{x}{A RasterLayer object}
+  \item{x}{A Raster* object}
   \item{...}{Additional arguments. See under Details}  
 }
 
 \details{
- A full call to the aggregate method for a RasterLayer is:
+ A full call to the aggregate method for a Raster* object is:
 
 \code{aggregate(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ... ) }
 

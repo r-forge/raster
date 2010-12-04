@@ -51,11 +51,27 @@ function(x, values) {
 )
 	
 
+setMethod('setValues', signature(x='RasterStack'), 
+  function(x, values, layer=-1) {
 
+    layer <- layer[1]
+
+    if (layer<1) {
+		b <- brick(x, values=FALSE)
+		return(setValues(b, values))
+	} else {
+		b <- brick(x, values=TRUE)
+		return(setValues(b, values, layer))
+	}
+   }	
+ )
+	
 setMethod('setValues', signature(x='RasterBrick'), 
   function(x, values, layer=-1) {
-  
-	if ( ! (is.vector(values) | is.matrix(values)) ) {
+	
+	layer <- layer[1]
+	
+    if ( ! (is.vector(values) | is.matrix(values)) ) {
 		stop('values must be a vector or a matrix')
 	}
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {

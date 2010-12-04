@@ -30,7 +30,7 @@
 	raster <- closeConnection(raster)
 
 	# add the 'sparse' key word to the hdr file!!!
-	writeHdr(raster) 
+	hdr(raster) 
 	return(raster)
 } 
 
