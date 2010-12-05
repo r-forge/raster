@@ -104,7 +104,7 @@ setMethod('predict', signature(object='Raster'),
 					fv <- blockvals[,f[j]]
 					fv[! fv %in% factlevels[[j]] ] <- NA
 					blockvals[,f[j]] <- as.factor(fv)
-					na.rm <- TRUE
+					#na.rm <- TRUE
 				}
 			}
 			if (! is.null(const)) {
