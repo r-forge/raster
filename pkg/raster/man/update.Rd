@@ -5,10 +5,13 @@
 \alias{update}
 \alias{update,RasterLayer-method}
 
-\title{Update cells of "raster" files}
+\title{Update cells of files (on disk)}
 
 \description{
-Update values of a "raster" file (i.e. the values in a file on disk). New experimental function. So far only for single layer files.
+Update cell values of a file (i.e. the values in a file on disk). 
+New experimental function. So far only for RasterLayer objects (that are linked to a file).
+
+User beware: this function _will_ change your files (first make a copy if you are not sure what you are doing).
 }
 
 \usage{

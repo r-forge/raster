@@ -111,7 +111,7 @@ setMethod('getValuesBlock', signature(x='RasterLayer', row='numeric'),
 		} 
 	
 		if (format=='matrix') {
-			res = matrix(res, nrow=nrows , ncol=ncols )
+			res = matrix(res, nrow=nrows , ncol=ncols, byrow=TRUE )
 			colnames(res) <- col:lastcol
 			rownames(res) <- row:lastrow
 		}
