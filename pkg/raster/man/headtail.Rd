@@ -4,13 +4,15 @@
 
 \alias{head}
 \alias{head,RasterLayer-method}
+\alias{head,RasterStackBrick-method}
 \alias{tail}
 \alias{tail,RasterLayer-method}
+\alias{tail,RasterStackBrick-method}
 
 \title{Show the head or tail of the values of a RasterLaayer}
 
 \description{
-Show the head (first rows/columns) or tail (last rows/columns) of the cell values of a RasterLayer
+Show the head (first rows/columns) or tail (last rows/columns) of the cell values of a Raster* object. 
 }
 
 \usage{
@@ -19,8 +21,8 @@ tail(x, ...)
 }
 
 \arguments{
-  \item{x}{RasterLayer}
-  \item{...}{Additional arguments: \code{rows=10} and \code{cols=20}, to set the maximum number of rows and columns that is shows}
+  \item{x}{Raster* object}
+  \item{...}{Additional arguments: \code{rows=10} and \code{cols=20}, to set the maximum number of rows and columns that is shown. For RasterStack and RasterBrick objects there is an additional argument \code{lyrs} }
 }
 
 \value{

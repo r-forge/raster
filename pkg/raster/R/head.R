@@ -33,3 +33,27 @@ setMethod('tail', signature(x='RasterLayer'),
 		return(v)
 	}
 )
+
+
+
+setMethod('head', signature(x='RasterStackBrick'), 
+	function(x, cols=10, rows=2, layers=10, ...) {
+		nr <- min(x@nrows, max(1, rows))
+		nc <- min(x@ncols, max(1, cols))
+		nl <- min(nlayers(x), max(1, layers))
+		v <- getValuesBlock(x, 1, nrows=nr, ncols=nc, format='matrix')
+		return(v)
+	}
+)
+
+setMethod('tail', signature(x='RasterStackBrick'), 
+	function(x, cols=10, rows=2, layers=10, ...) {
+		nr <- min(x@nrows, max(1, rows))
+		nc <- min(x@ncols, max(1, cols))
+		nl <- min(nlayers(x), max(1, layers))
+		sr <- x@nrows - nr + 1
+		sc <- x@ncols - nc + 1
+		v <- getValuesBlock(x, row=sr, nrows=nr, col=sc, ncols=nc, format='matrix')
+		return(v)
+	}
+)
