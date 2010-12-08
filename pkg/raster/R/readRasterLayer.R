@@ -64,7 +64,7 @@
 
 		if (! object@file@toptobottom ) {
 			endrow <- object@nrows - startrow + 1
-			startrow <- endrow - nrow + 1
+			startrow <- endrow - nrows + 1
 		}
 		dtype <- substr(object@file@datanotation, 1, 3)
 		if (dtype == "INT" | dtype == "LOG" ) { 
