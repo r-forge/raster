@@ -31,30 +31,3 @@
 
 
 
-.saveAsBrick <- function(x, filename, bandorder='BIL', format, ...) {
-
-		if ( toupper(x@file@name) == toupper(filename) ) {
-			stop('filenames of source and destination should be different')
-		}
-		
-		if (format=='raster') {
-			return( .writeBrick(object=x, filename=filename, bandorder=bandorder, format=format, ...)) 
-			
-		} else {
-			b <- brick(x, values=FALSE)
-			tr <- blockSize(b)
-			pb <- pbCreate(tr$n, type=.progress(...))
-			b <- writeStart(b, filename=filename, bandorder=bandorder, format=format, ...)
-			for (i in 1:tr$n) {
-				v <- getValues(x, row=tr$row[i], nrows=tr$size)
-				b <- writeValues(b, v, tr$row[i])
-				pbStep(pb, i)
-			}
-			b <- writeStop(b)
-			pbClose(pb)
-			return(b)
-		}
-	}
-
-
-

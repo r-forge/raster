@@ -53,7 +53,7 @@ setMethod('predict', signature(object='Raster'),
 			haveFactor <- TRUE 
 			factlevels <- list()
 			for (i in 1:length(f)) {
-				factlevels[[i]] <- levels(model$data[f][,1])
+				factlevels[[i]] <- levels( model$data[f][,1] )
 			}
 		} else {
 			haveFactor <- FALSE
@@ -73,7 +73,7 @@ setMethod('predict', signature(object='Raster'),
 		napred <- rep(NA, ncol(predrast)*tr$size )
 
 		if (inherits(object, 'RasterStackBrick')) {
-				if (nlayers(object)==0) { stop('empty Raster object') }
+			if (nlayers(object)==0) { stop('empty Raster object') }
 		} else {
 			if ( !  fromDisk(object) ) {
 				if (! inMemory(object) ) {
@@ -101,8 +101,12 @@ setMethod('predict', signature(object='Raster'),
 			colnames(blockvals) <- lyrnames
 			if (haveFactor) {
 				for (j in 1:length(f)) {
+					fl <- NULL
+					try(fl <- factlevels[[j]], silent=TRUE)
 					fv <- blockvals[,f[j]]
-					fv[! fv %in% factlevels[[j]] ] <- NA
+					if (!is.null(fl)) {
+						fv[! fv %in% factlevels[[j]] ] <- NA 
+					}
 					blockvals[,f[j]] <- as.factor(fv)
 					#na.rm <- TRUE
 				}
@@ -126,7 +130,7 @@ setMethod('predict', signature(object='Raster'),
 				if (nrow(blockvals) == 0 ) {
 					predv <- napred
 				} else {
-					predv <- fun(model, blockvals, ...)	
+					predv <- fun(model, blockvals)	
 					if (class(predv)[1] == 'list') {
 						predv = unlist(predv)
 						if (length(predv) != nrow(blockvals)) {

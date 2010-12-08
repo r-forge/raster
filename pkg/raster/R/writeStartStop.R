@@ -5,19 +5,19 @@
 
 if (!isGeneric('writeStart')) {
 	setGeneric('writeStart', function(x, filename, ...)
-		standardGeneric('writeStart')) 
-}  
+		standardGeneric('writeStart'))
+}
 
 if (!isGeneric('writeStop')) {
 	setGeneric('writeStop', function(x)
-		standardGeneric('writeStop')) 
-}  
+		standardGeneric('writeStop'))
+}
 	
 if (!isGeneric('writeValues')) {
 	setGeneric('writeValues', function(x, v, ...)
 		standardGeneric('writeValues')) 
-}  
-	
+}
+
 
 setMethod('writeStart', signature(x='RasterLayer', filename='character'), 
 function(x, filename, options=NULL, format, ...) {
