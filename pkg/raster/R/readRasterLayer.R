@@ -92,7 +92,7 @@
 		object <- closeConnection(object)
 			
 		if (! object@file@toptobottom ) {
-			result <- t(matrix(result, nrow=ncol(object), ncol=nrows))
+			result <- t(matrix(result, nrow=ncols, ncol=nrows))
 			result <- result[nrows:1,]
 			result <- as.vector(t(result))
 		}
