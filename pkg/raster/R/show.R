@@ -61,8 +61,8 @@ setMethod ('show' , 'RasterLayer',
 		cat('class       :' , class(object), '\n')
 		cat('filename    :' , filename(object), '\n')
 		if (nbands(object) > 1) { cat('band        :' , band(object), '\n')	}	
-		cat('dimensions  : ', nrow(object), ', ', ncol(object), ' (nrow, ncol)\n', sep="") 
-
+		cat('dimensions  : ', nrow(object), ', ', ncol(object), ', 1  (nrow, ncol, nlayers)\n', sep="" ) 
+#
 #		cat('nrow        :' , nrow(object), '\n')
 #		cat('ncol        :' , ncol(object), '\n')
 		cat('ncell       :' , ncell(object), '\n')
@@ -103,9 +103,10 @@ setMethod ('show' , 'RasterBrick',
 		cat ('class       :' , class ( object ) , '\n')
 		cat ('filename    :' , filename(object), '\n')
 		nl <- nlayers(object)
-		cat ('nlayers     :' , nl, '\n')
-		cat ('nrow        :' , nrow(object), '\n')
-		cat ('ncol        :' , ncol(object), '\n')
+#		cat ('nlayers     :' , nl, '\n')
+		cat ('dimensions  : ', nrow(object), ', ', ncol(object), ', ', nl, '  (nrow, ncol, nlayers)\n', sep="" ) 
+#		cat ('nrow        :' , nrow(object), '\n')
+#		cat ('ncol        :' , ncol(object), '\n')
 		cat ('ncell       :' , ncell(object), '\n')
 		cat ('projection  :' , projection(object, TRUE), '\n')
 		if (nl > 0) {
@@ -140,10 +141,12 @@ setMethod ('show' , 'RasterStack',
 			cat ('filename    :' , filename(object), '\n')
 		}
 		nl <- nlayers(object)
-		cat ('nlayers     :' , nl, '\n')
-		if (nl > 0) {
-			cat ('nrow        :' , nrow(object), '\n')
-			cat ('ncol        :' , ncol(object), '\n')
+		if (nl == 0) {
+			cat ('nlayers     :' , nl, '\n')
+		} else {
+			cat ('dimensions  : ', nrow(object), ', ', ncol(object), ', ', nl, '  (nrow, ncol, nlayers)\n', sep="" ) 
+#			cat ('nrow        :' , nrow(object), '\n')
+#			cat ('ncol        :' , ncol(object), '\n')
 			cat ('ncell       :' , ncell(object), '\n')
 			cat ('projection  :' , projection(object, TRUE), '\n')
 			minv <- format(minValue(object), digits=2)

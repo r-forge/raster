@@ -1,3 +1,11 @@
+12-Dec-2010,  version 1.7-12
+new function 'update' to change values of a file linked to a RasterLayer object
+bug fixes in read/write SAGA format (and uses rgdal now for reading, when possible, but not yet for writing).
+improvements in writing RasterBrick objects to native format files.
+bug fixes in 'predict' with models that have factor variables.
+bug fixes in 'predict' for (some) model objects that are not standard (S3) models.
+
+--------------------------------------------
 2-Dec-2010,  version 1.7-8
 bug fix in extract by focal area (thanks to Matteo Mattiuzzi)
 predict automatic removal (to NA) of factor levels not used to build the model

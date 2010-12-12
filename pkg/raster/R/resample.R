@@ -65,7 +65,7 @@ resample <- function(from, to, method, filename="", ...)  {
 		clFun <- function(i) {
 			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 			xy <- xyFromCell(to, cellFromRowCol(to, tr$row[i], 1) : cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to)) ) 
-			raster:::.xyValues(from, xy, method=method)
+			.xyValues(from, xy, method=method)
 		}
 		
         for (i in 1:nodes) {

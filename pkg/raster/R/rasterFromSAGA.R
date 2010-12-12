@@ -62,10 +62,24 @@
 	x@data@haveminmax <- FALSE
 	x@file@nodatavalue <- nodataval
 
-	if (inidatatype == 'INTEGER') {
+	if (inidatatype == 'BIT') {
+		stop('cannot process BIT data')
+	} else if (inidatatype == 'BYTE') {
+		dataType(x) <- 'INT1S'
+	} else if (inidatatype == 'BYTE_UNSIGNED') {
+		dataType(x) <- 'INT1U'
+	} else if (inidatatype == 'SHORTINT') {
 		dataType(x) <- 'INT2S'
+	} else if (inidatatype == 'SHORTINT_UNSIGNED') {
+		dataType(x) <- 'INT2U'
+	} else if (inidatatype == 'INTEGER') {
+		dataType(x) <- 'INT4S'
+	} else if (inidatatype == 'INTEGER_UNSIGNED') {
+		dataType(x) <- 'INT4U'
 	} else if (inidatatype == 'FLOAT') {
 		dataType(x) <- 'FLT4S'
+	} else if (inidatatype == 'DOUBLE') {
+		dataType(x) <- 'FLT8S'
 	}
 	
 	if (byteorder) { 
@@ -79,6 +93,5 @@
 	x@file@driver <- 'SAGA'
     return(x)
 }
-
 
 

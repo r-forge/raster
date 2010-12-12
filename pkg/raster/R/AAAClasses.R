@@ -75,8 +75,7 @@ setClass('RasterFile',
 		bandorder ='character',
 		offset='integer',
 		toptobottom='logical',
-		driver ='character',
-		type ='character'
+		driver ='character'
 		),
 	prototype (	
 	    name = '',
@@ -87,8 +86,7 @@ setClass('RasterFile',
 		bandorder = 'BIL',
 		offset = as.integer(0),
 		toptobottom = TRUE,
-		driver = '', # raster or gdal
-		type = '' 
+		driver = '' # raster or gdal
 	),
 	validity = function(object) {
 		c1 <- datanotation %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S')
