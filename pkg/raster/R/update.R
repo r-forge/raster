@@ -11,23 +11,46 @@ if (!isGeneric("update")) {
 
 setMethod('update', signature(object='RasterLayer'), 
 function(object, v, cell) {
-	
-	cell <- round(cell[1]) 
-	stopifnot(cell > 0)
-	stopifnot( is.vector(v) ) 
-	if ((length(v) + cell - 1) > ncell(object)) { 
-		stop('attempting to update beyond end of file') 
-	}
-	
+
 	if (!fromDisk(object)) { 
-		stop('object has no values on disk, nothing to update')
-		cell <- cell:(cell+length(v)-1)
-		object[cell] <- v
-		return(object)
+		stop('object is not associated with a file on disk.')
+	}
+
+	cell <- na.omit(round(cell))
+	stopifnot(length(cell) > 0)
+	
+	if (is.matrix(v)) {
+		if (length(cell) > 1) {
+			warning('only first cell used')
+			cell <- cell[1] 
+		}
+		stopifnot(cell > 0)
+		
+		rc <- rowColFromCell(object, cell)
+		if ((nrow(v) + rc[1] - 1) > nrow(object)) { 
+			stop('attempting to update beyond end of file') 
+		}
+		if ((ncol(v) + rc[2] - 1) > ncol(object)) { 
+			stop('attempting to update beyond end of file') 
+		}
+		dm <- dim(v)
+		mat <- TRUE
+	} else {
+		stopifnot( is.vector(v) ) 
+		if (length(cell) > 1) {
+			stopifnot(length(cell) == length(v))
+			stopifnot(max(cell) <= ncell(object))
+			stopifnot(min(cell) > 0)
+		} else {
+			stopifnot(cell > 0)
+			if ((length(v) + cell - 1) > ncell(object)) {
+				stop('attempting to update beyond end of file') 
+			}
+		}
+		mat <- FALSE
 	}
 
 	band <- band(object)
-	
 	driver <- object@file@driver
 
 	datatype <- object@file@datanotation
@@ -39,8 +62,11 @@ function(object, v, cell) {
 		v <- as.integer(v)  
 	}
 	v[is.infinite(v)] <- NA
-
+	if (mat) {
+		dim(v) <- dm
+	}
 	
+	setminmax <- FALSE
 	if (object@data@haveminmax) {
 		rsd <- na.omit(v) 
 		newmin <- FALSE
@@ -60,7 +86,11 @@ function(object, v, cell) {
 			object@data@max <- maxv
 			setminmax <- TRUE
 		} else {
-			oldv <- na.omit(.cellValues(object, cell:(cell+length(v)-1)))
+			if (length(cell) == 1) {
+				oldv <- na.omit(.cellValues(object, cell:(cell+length(v)-1)))
+			} else {
+				oldv <- na.omit(.cellValues(object, cell))
+			}
 			if (length(oldv) > 0) {
 				oldmin <- min(oldv)
 				oldmax <- max(oldv)
@@ -80,9 +110,7 @@ function(object, v, cell) {
 			}
 			
 			if (! (lostmin | lostmax) ) {
-				if (! (newmin | newmax) ) {
-					setminmax <- FALSE
-				} else {
+				if (newmin | newmax) {
 					object@data@min <- min(object@data@min, minv)
 					object@data@max <- max(object@data@max, maxv)
 					setminmax <- TRUE
@@ -105,28 +133,53 @@ function(object, v, cell) {
 	
 	if (driver == 'gdal') {	
 		gdal <- new("GDALDataset", filename(object))
-		cell <- cell:(cell+length(v)-1)
-		rows <- rowFromCell(object, cell) - 1
-		cols <- colFromCell(object, cell) - 1
-		rows <- unique(rows)
-		cols <- unique(cols)
-		nr <- length(rows)
-		if (nr == 1) {
-			putRasterData(gdal, v, band=band, offset=c(rows, cols[1]))
-		} else {
-			offset <- c(rows[1], cols[1])
-			nc <- object@ncols - cols[1]
-			putRasterData(gdal, v[1:nc], band=band, offset=offset)
-			v <- v[-(1:nc)]
-			if (nr > 2) {
-				nrows <- nr-2
-				n <- nrows * object@ncols
-				putRasterData(gdal, v[1:n], band=band, offset=c(rows[2], 0))
-				v <- v[-(1:n)]
-			}
-			putRasterData(gdal, v, band=band, offset=c(rows[nr], 0))
+		on.exit( GDAL.close(gdal) )
+
+		dr <- getDriverName(getDriver(gdal))
+		if (! dr %in% .gdalWriteFormats()[,1]) {
+			stop('cannot update this file format (GDAL driver)')
 		}
 		
+		if (is.matrix(v)) {
+
+			startrow <- rowFromCell(object, cell) - 1
+			startcol <- colFromCell(object, cell) - 1
+			putRasterData(gdal, t(v), band=band, offset= c(startrow, startcol) )
+
+		} else {
+		
+			if (length(cell) == 1) {
+				cell <- cell:(cell+length(v)-1)
+				rows <- rowFromCell(object, cell) - 1
+				cols <- colFromCell(object, cell) - 1
+				rows <- unique(rows)
+				cols <- unique(cols)
+				nr <- length(rows)
+				if (nr == 1) {
+					putRasterData(gdal, v, band=band, offset=c(rows, cols[1]))
+				} else {
+					offset <- c(rows[1], cols[1])
+					nc <- object@ncols - cols[1]
+					putRasterData(gdal, v[1:nc], band=band, offset=offset)
+					v <- v[-(1:nc)]
+					if (nr > 2) {
+						nrows <- nr-2
+						n <- nrows * object@ncols
+						putRasterData(gdal, v[1:n], band=band, offset=c(rows[2], 0))
+						v <- v[-(1:n)]
+					}
+					putRasterData(gdal, v, band=band, offset=c(rows[nr], 0))
+				} 
+			} else {
+				rows <- rowFromCell(object, cell) - 1
+				cols <- colFromCell(object, cell) - 1
+				for (i in 1:length(cell)) {
+					putRasterData(gdal, v[i], band=band, offset=c(rows[i], cols[i]))
+				} 
+			}
+			
+		}
+
 		if (setminmax) {	
 			b <- new("GDALRasterBand", gdal, band)
 			statistics <- c(object@data@min, object@data@max, NA, NA)
@@ -134,25 +187,49 @@ function(object, v, cell) {
 			#GDAL.close(b)
 		}
 
-		GDAL.close(gdal)
 		return(object)
 	}	
 
+	
+
 	if (.isNativeDriver(driver)) {
+	
+		# need to support this too:
+		stopifnot(object@file@toptobottom)
+		
 		minv <- object@data@min
 		maxv <- object@data@max
 			
-		object <- writeStart(object, filename(object), update=TRUE, format='raster', datatype=datatype, overwrite=TRUE)
+		object <- writeStart(object, filename(object), update=TRUE, format=driver, datatype=datatype, overwrite=TRUE)
+		
 		if (dtype == "INT" | dtype == "LOG") { 
 			v[is.na(v)] <- as.integer(object@file@nodatavalue)		
 		} else { 
-			v  <- as.numeric(v) 
+			v[] <- as.numeric(v) 
 		}
 
-		pos <- (cell-1) * object@file@dsize
-		seek(object@file@con, pos, rw='w')
-		writeBin(v, object@file@con, size=object@file@dsize )
-
+		if (is.matrix(v)) {
+			for (r in 1:nrow(v)) {
+				pos <- (cell-1) * object@file@dsize
+				seek(object@file@con, pos, rw='w')
+				writeBin(v[r,], object@file@con, size=object@file@dsize )
+				cell <- cell + object@ncols
+			}
+		
+		} else {
+			if (length(cell) == 1) {
+				pos <- (cell-1) * object@file@dsize
+				seek(object@file@con, pos, rw='w')
+				writeBin(v, object@file@con, size=object@file@dsize )
+			} else {
+				for (i in 1:length(cell)) {
+					pos <- (cell[i]-1) * object@file@dsize
+					seek(object@file@con, pos, rw='w')
+					writeBin(v[i], object@file@con, size=object@file@dsize )
+				}
+			}
+		}
+		
 		object@data@min <- minv
 		object@data@max <- maxv
 		object@data@haveminmax <- TRUE

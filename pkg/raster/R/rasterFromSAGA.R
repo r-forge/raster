@@ -62,7 +62,9 @@
 	x@data@haveminmax <- FALSE
 	x@file@nodatavalue <- nodataval
 
-	if (inidatatype == 'FLOAT') {
+	if (inidatatype == 'INTEGER') {
+		dataType(x) <- 'INT2S'
+	} else if (inidatatype == 'FLOAT') {
 		dataType(x) <- 'FLT4S'
 	}
 	

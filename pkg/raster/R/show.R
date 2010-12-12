@@ -61,9 +61,13 @@ setMethod ('show' , 'RasterLayer',
 		cat('class       :' , class(object), '\n')
 		cat('filename    :' , filename(object), '\n')
 		if (nbands(object) > 1) { cat('band        :' , band(object), '\n')	}	
-		cat('nrow        :' , nrow(object), '\n')
-		cat('ncol        :' , ncol(object), '\n')
+		cat('dimensions  : ', nrow(object), ', ', ncol(object), ' (nrow, ncol)\n', sep="") 
+
+#		cat('nrow        :' , nrow(object), '\n')
+#		cat('ncol        :' , ncol(object), '\n')
 		cat('ncell       :' , ncell(object), '\n')
+		
+		
 #		cat('data type   :' , object@file@datanotation, '\n')
 #		if (dataContent(object) == 'nodata') { cat('vals in mem : none', '\n')
 #		} else { cat('vals in mem :', dataContent(object) , '\n') }
