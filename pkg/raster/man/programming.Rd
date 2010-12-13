@@ -29,7 +29,7 @@ pbCreate(nsteps, type, style=3)
 pbStep(pb, step=NULL, label='step')
 pbClose(pb, timer)
 getCluster()
-returnCluster(cl)
+returnCluster()
 }
 
 \arguments{
@@ -43,7 +43,6 @@ returnCluster(cl)
   \item{step}{which step is this ( 1 <= step <= nsteps ). If step is \code{NULL}, a single step is taken }
   \item{label}{label for the non-text progress bars}
   \item{timer}{Logical. If \code{TRUE}, time to completion will be printed. If missing, the value will be taken from the rasterOptions}
-  \item{cl}{snow cluster object}
 }
 
 \value{

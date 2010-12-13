@@ -21,7 +21,9 @@
 
 \section{Introduction}
 
-The '\verb@raster@' package has a number of 'low-level' functions (e.g. to read and write files) that allow you to write your own 'high-level' functions. Here I explain how to use these low-level functions in developing 'memory-safe' high-level functions. With 'memory-safe' I refer to function that can process raster files that are too large to be loaded into memory. To understand this article you should be already somewhat familiar with the raster package. It is also helpful to have some general knowledge of S4 classes and methods.
+The '\verb@raster@' package has a number of 'low-level' functions (e.g. to read and write files) that allow you to write your own 'high-level' functions. Here I explain how to use these low-level functions in developing 'memory-safe' high-level functions. With 'memory-safe' I refer to function that can process raster files that are too large to be loaded into memory. To understand the material discussed in this vignette you should be already somewhat familiar with the raster package. It is also helpful to have some general knowledge of S4 classes and methods.
+
+I should also note that if you are not sure, you probably do not need to read this vignette, or use the functions described herein. That is, the high-level functions in the raster package are already based on these techniques, and they are very flexible. It is likely that you can accomplish your goals with the functions already available in 'raster' and that you do not need to write your own. 
 
 \section{How not to do it}
 
@@ -308,5 +310,95 @@ setMethod('f9', signature(x='RasterLayer'),
 
 s <- f9(r)
 @
+
+
+\section{Mutli-core functions}
+
+Below is an example of an implementation of a customized raster function that can use multiple processors (cores), via the snow package. This is still very much under development, but you can try it at your own risk.
+
+First we define a snow cluster enabled function. Below is a simple example:
+
+<<code-clus1>>=
+clusfun <- function(x, filename="", ...) {
+
+	out <- raster(x)
+
+	cl <- getCluster()
+	on.exit( returnCluster() )
+	
+	nodes <- length(cl)
+	
+	bs <- blockSize(x, minblocks=nodes*4)
+	pb <- pbCreate(bs$n, type='')
+
+	# the function to be used (simple example)
+	clFun <- function(i) {
+		v <- getValues(x, bs$row[i], bs$nrows[i])
+		v <- v / 100 
+		return(v)
+	}
+
+	# get all nodes going
+	for (i in 1:nodes) {
+		sendCall(cl[[i]], clFun, i, tag=i)
+    }
+
+	filename <- trim(filename)
+	#if (!canProcessInMemory(out) & filename == "") {
+	#	filename <- rasterTmpFile()
+	#}
+	
+	if (filename != "") {
+		out <- writeStart(out, filename=filename, ... )
+		for (i in 1:bs$n) {
+			# receive results from a node
+			d <- recvOneData(cl)
+			out <- writeValues(out, d$value$value, bs$row[d$value$tag])
+			
+			# still need to send more data?
+			ni <- nodes + i
+			if (ni <= bs$n) {
+				sendCall(cl[[d$node]], clFun, ni, tag=ni)
+			}	
+			pbStep(pb)
+		}
+		out <- writeStop(out)
+		
+	} else {
+	
+		vv <- matrix(ncol=nrow(out), nrow=ncol(out))
+		for (i in 1:bs$n) {
+			# receive results from a node
+			d <- recvOneData(cl)
+			cat('received block:', d$value$tag, '\n')
+			flush.console()
+
+			cols <- bs$row[d$value$tag]:(bs$row[d$value$tag]+bs$nrows[d$value$tag]-1)	
+			vv[,cols] <- matrix(d$value$value, nrow=out@ncols)
+			# still need to send more data?
+			ni <- nodes + i
+			if (ni <= bs$n) {
+				sendCall(cl[[d$node]], clFun, ni, tag=ni)
+			}	
+			pbStep(pb)
+		}
+		out <- setValues(out, as.vector(vv))
+	}
+	pbClose(pb)
+	
+	return(out)
+}	
+@
+
+To use snow with raster, you need to set up a cluster first:
+
+beginCluster()
+
+Now we can run the function:
+
+r <- raster()
+r[] <- ncell(r):1
+x <- clusfun(r)
+
 
 \end{document}

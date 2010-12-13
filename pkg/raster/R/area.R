@@ -127,7 +127,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 
 		if (.doCluster() ) {
 			cl <- getCluster()
-			on.exit( returnCluster(cl) )
+			on.exit( returnCluster() )
 			nodes <- min(nrow(out), length(cl))	
 			cat( 'Using cluster with', nodes, 'nodes\n' )
 			flush.console()		
@@ -164,7 +164,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 				}
 
 				if ((nodes + i) <= tr$n) {
-					sendCall(cl[[d$node]], clFun, nodes+i, tag=i)
+					sendCall(cl[[d$node]], clFun, nodes+i, tag=nodes+i)
 				}
 				pbStep(pb, i) 	
 			}		

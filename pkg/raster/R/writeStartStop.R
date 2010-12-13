@@ -115,6 +115,8 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			} else { 
 				v  <- as.numeric( v ) 
 			}
+			start <- (start-1) * x@ncols * x@file@dsize
+			seek(x@file@con, start, rw='w')			
 			writeBin(v, x@file@con, size=x@file@dsize )
 			
 		} else if ( x@file@driver == 'netcdf') {
@@ -172,9 +174,13 @@ setMethod('writeValues', signature(x='RasterBrick'),
 			x@data@min <- pmin(x@data@min, rng[1,])
 			x@data@max <- pmax(x@data@max, rng[2,])
 			options('warn'= w) 
-		
+
+			
 			if (x@file@bandorder=='BIL') {
 			
+				start <- (start-1) * x@ncols * x@file@dsize
+				seek(x@file@con, start, rw='w')			
+				
 				loop <- nrow(v) / x@ncols
 				start <- 1
 				for (i in 1:loop) {
@@ -185,6 +191,8 @@ setMethod('writeValues', signature(x='RasterBrick'),
 				
 			} else if (x@file@bandorder=='BIP') {
 			
+				start <- (start-1) * x@ncols * x@file@dsize
+				seek(x@file@con, start, rw='w')			
 				writeBin(as.vector(t(v)), x@file@con, size=x@file@dsize )
 				
 			} else if (x@file@bandorder=='BSQ') {
