@@ -192,7 +192,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 			} else if (x@file@bandorder=='BIP') {
 			
 				start <- (start-1) * x@ncols * x@file@dsize * nlayers(x)
-				seek(x@file@con, start, rw='w')			
+				seek(x@file@con, start, rw='w')	
 				writeBin(as.vector(t(v)), x@file@con, size=x@file@dsize )
 				
 			} else if (x@file@bandorder=='BSQ') {

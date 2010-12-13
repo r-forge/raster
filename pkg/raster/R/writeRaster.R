@@ -60,9 +60,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 
 	if ( inMemory(x) ) {
 	
-		if (.isNativeDriver(filetype)) {
-			return( .writeBrick(object=x, filename=filename, format=filetype, bandorder=bandorder, ...) )
-		} else if (filetype=='CDF') {
+		if (filetype=='CDF') {
 			x <- .startWriteCDF(x, filename=filename,  ...)
 			x <- .writeValuesBrickCDF(x, getValues(x) )	
 			return( .stopWriteCDF(x) )
