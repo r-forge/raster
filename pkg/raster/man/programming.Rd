@@ -1,4 +1,4 @@
-\name{Function writing}
+\name{Programming}
 
 \alias{closeConnection}
 \alias{openConnection}
@@ -6,11 +6,13 @@
 \alias{pbCreate} 
 \alias{pbStep} 
 \alias{pbClose} 
+\alias{getCluster}
+\alias{returnCluster}
 
-\title{ Helper functions to use in new functions you develop}
+\title{Helper functions for programming}
 
 \description{ 
-low level functions for programmers 
+These are low level functions that can be used by programmers to develop new functions. If in doubt, it is almost certain that you do not need these as these functions are already embedded in all other functions in the raster package.
 
 \code{canProcessInMemory} is typically used within functions. In the raster package this function is used to determine if the amount of memory needed for the function is available. If there is not enough memory available, the function returns \code{FALSE}, and the function that called it will write the results to a temporary file. 
 
@@ -26,6 +28,8 @@ openConnection(raster, silent=FALSE)
 pbCreate(nsteps, type, style=3)
 pbStep(pb, step=NULL, label='step')
 pbClose(pb, timer)
+getCluster()
+returnCluster(cl)
 }
 
 \arguments{
@@ -39,15 +43,19 @@ pbClose(pb, timer)
   \item{step}{which step is this ( 1 <= step <= nsteps ). If step is \code{NULL}, a single step is taken }
   \item{label}{label for the non-text progress bars}
   \item{timer}{Logical. If \code{TRUE}, time to completion will be printed. If missing, the value will be taken from the rasterOptions}
+  \item{cl}{snow cluster object}
 }
 
 \value{
 canProcessInMemory: logical
 
 closeHandle: RasterLayer object
+
+getCluster: snow cluster object
 }
 
 \author{Robert J. Hijmans}
+
 
 \examples{
 r <- raster(nrow=100, ncol=100)
@@ -57,3 +65,4 @@ canProcessInMemory(r, 2)
 }
 
 \keyword{ spatial }
+

@@ -50,20 +50,24 @@ endCluster <- function() {
 }
 
 
-.getCluster <- function() {
+getCluster <- function() {
 	cl <- getOption('rasterClusterObject')
+	if (is.null(cl)) { stop('no cluster available, first use "beginCluster"') }
 	cl <- .addPackages(cl, exclude=c('raster', 'sp'))
-	options(rasterClusterObject = cl)
+
+	options( rasterClusterObject = NULL )
 	options( rasterCluster = FALSE )
+
 	return(cl)
 }
 
 
-.returnCluster <- function(cl) {
+returnCluster <- function(cl) {
 	if (missing(cl)) { 
 		warning('no cluster returned' )
 	} else {
-		options(rasterCluster = TRUE)
+		options(rasterClusterObject = cl)
+		options( rasterCluster = TRUE )
 	}
 }
 

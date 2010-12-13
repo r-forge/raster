@@ -46,8 +46,8 @@ function(x, filename='', ...) {
 	pb <- pbCreate(nrow(out), type=.progress(...))
 	
 	if (.doCluster() ) {
-		cl <- .getCluster()
-		on.exit( .returnCluster(cl) )
+		cl <- getCluster()
+		on.exit( returnCluster(cl) )
 		
 		nodes <- min(nrow(out), length(cl)) # at least 1 row
 		

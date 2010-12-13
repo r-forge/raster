@@ -126,8 +126,8 @@ setMethod('area', signature(x='RasterStackBrick'),
 		dx <- pointDistance(cbind(0, y), cbind(xres(out), y), longlat=TRUE)
 
 		if (.doCluster() ) {
-			cl <- .getCluster()
-			on.exit( .returnCluster(cl) )
+			cl <- getCluster()
+			on.exit( returnCluster(cl) )
 			nodes <- min(nrow(out), length(cl))	
 			cat( 'Using cluster with', nodes, 'nodes\n' )
 			flush.console()		

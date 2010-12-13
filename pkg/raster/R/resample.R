@@ -51,8 +51,8 @@ resample <- function(from, to, method, filename="", ...)  {
 
 	if (.doCluster()) {
 	
-		cl <- .getCluster()
-		on.exit( .returnCluster(cl) )
+		cl <- getCluster()
+		on.exit( returnCluster(cl) )
 		
 		nodes <- min(ceiling(to@nrows/10), length(cl)) # at least 10 rows per node
 		

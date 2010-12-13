@@ -37,8 +37,8 @@
 		rx[is.na(rx) &  (xy[,2]-bufy <= ymin(obj) & xy[,2]+bufy >= ymin(obj))] <- nrow(obj)
 
 		if (.doCluster()) {
-			cl <- .getCluster()
-			on.exit( .returnCluster(cl) )
+			cl <- getCluster()
+			on.exit( returnCluster(cl) )
 			nodes <- min(nrow(xy), length(cl))
 			cat('Using cluster with', nodes, 'nodes\n')
 			flush.console()
@@ -109,8 +109,8 @@
 
 
 		if (.doCluster()) {
-			cl <- .getCluster()
-			on.exit( .returnCluster(cl) )
+			cl <- getCluster()
+			on.exit( returnCluster(cl) )
 			nodes <- min(nrow(xy), length(cl))
 			cat('Using cluster with', nodes, 'nodes\n')
 			flush.console()
