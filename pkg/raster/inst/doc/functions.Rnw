@@ -350,38 +350,30 @@ clusfun <- function(x, filename="", ...) {
 	
 	if (filename != "") {
 		out <- writeStart(out, filename=filename, ... )
-		for (i in 1:bs$n) {
-			# receive results from a node
-			d <- recvOneData(cl)
-			out <- writeValues(out, d$value$value, bs$row[d$value$tag])
-			
-			# still need to send more data?
-			ni <- nodes + i
-			if (ni <= bs$n) {
-				sendCall(cl[[d$node]], clFun, ni, tag=ni)
-			}	
-			pbStep(pb)
-		}
-		out <- writeStop(out)
-		
 	} else {
-	
 		vv <- matrix(ncol=nrow(out), nrow=ncol(out))
-		for (i in 1:bs$n) {
-			# receive results from a node
-			d <- recvOneData(cl)
-			cat('received block:', d$value$tag, '\n')
-			flush.console()
+	}
+	for (i in 1:bs$n) {
+		# receive results from a node
+		d <- recvOneData(cl)
 
+		if (filename != "") {
+			out <- writeValues(out, d$value$value, bs$row[d$value$tag])
+		} else {
 			cols <- bs$row[d$value$tag]:(bs$row[d$value$tag]+bs$nrows[d$value$tag]-1)	
 			vv[,cols] <- matrix(d$value$value, nrow=out@ncols)
-			# still need to send more data?
-			ni <- nodes + i
-			if (ni <= bs$n) {
-				sendCall(cl[[d$node]], clFun, ni, tag=ni)
-			}	
-			pbStep(pb)
 		}
+		
+		# need to send more data?
+		ni <- nodes + i
+		if (ni <= bs$n) {
+			sendCall(cl[[d$node]], clFun, ni, tag=ni)
+		}	
+		pbStep(pb)
+	}
+	if (filename != "") {
+		out <- writeStop(out)
+	} else {
 		out <- setValues(out, as.vector(vv))
 	}
 	pbClose(pb)
@@ -390,15 +382,13 @@ clusfun <- function(x, filename="", ...) {
 }	
 @
 
-To use snow with raster, you need to set up a cluster first:
+To use snow with raster, you need to set up a cluster first (only once during a session). After that we can run the function:
 
-beginCluster()
-
-Now we can run the function:
-
+<<code-clus2>>=
+# beginCluster()
 r <- raster()
 r[] <- ncell(r):1
-x <- clusfun(r)
-
+#x <- clusfun(r)
+@
 
 \end{document}
