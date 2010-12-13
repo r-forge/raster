@@ -1,3 +1,8 @@
+13-Dec-2010,  version 1.7-13
+Native file format can now write in any (row) order.
+Small bug fix in .polygonValues (thanks to Aman Verma)
+
+--------------------------------------------
 12-Dec-2010,  version 1.7-12
 new function 'update' to change values of a file linked to a RasterLayer object
 bug fixes in read/write SAGA format (and uses rgdal now for reading, when possible, but not yet for writing).
