@@ -178,7 +178,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 			
 			if (x@file@bandorder=='BIL') {
 			
-				start <- (start-1) * x@ncols * x@file@dsize
+				start <- (start-1) * x@ncols * x@file@dsize * nlayers(x)
 				seek(x@file@con, start, rw='w')			
 				
 				loop <- nrow(v) / x@ncols
@@ -191,7 +191,7 @@ setMethod('writeValues', signature(x='RasterBrick'),
 				
 			} else if (x@file@bandorder=='BIP') {
 			
-				start <- (start-1) * x@ncols * x@file@dsize
+				start <- (start-1) * x@ncols * x@file@dsize * nlayers(x)
 				seek(x@file@con, start, rw='w')			
 				writeBin(as.vector(t(v)), x@file@con, size=x@file@dsize )
 				
