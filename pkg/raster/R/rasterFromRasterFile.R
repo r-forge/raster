@@ -9,6 +9,7 @@
 	if (!file.exists( valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
 	}	
+	
 	filename <- .setFileExtensionHeader(filename, "raster")
 	
 	ini <- readIniFile(filename)
@@ -119,6 +120,10 @@
 	x@data@fromdisk <- TRUE
 	
 	x@file@driver <- "raster"
+
+	if( dataSize(x) * ncell(x) !=  file.info(valuesfile)$size ) {
+		warning('size of values file does not match the number of cells (given the data type)')
+	}
 	
     return(x)
 }
