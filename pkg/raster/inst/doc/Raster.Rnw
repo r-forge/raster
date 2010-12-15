@@ -34,7 +34,7 @@ The \verb@raster@ package has functions for creating, reading, manipulating, and
 
 A notable feature of the \verb@raster@ package is that it can work with raster datasets that are stored on disk and are too large to be loaded into memory. The package can work with large files because it creates objects from these files that only contain information about the structure of the data, such as the number of rows and columns, the spatial extent, and the filename, but it does not attempt to read all the cell values and keep them in (RAM) memory. In computations with these objects, data is read and processed in chunks. If no output filename is specified to a function, and the output raster is too large to keep in memory, the results are written to a temporary file. 
 
-To understand what is covered in this vignette, you must understand the basics of the \R language. There is a multitude of on-line and other resources that can help you to get acqainted with \R. The \verb@raster@ package does not operate in isolation. For example, it uses classes defined in the \verb@sp@ package for vector type data. See the vignette and help pages of that package or Bivand {\it et al}. (2008). Bivand {\it et al}., provide an introduction to handling spatial data in \R, and to statistically oriented spatial data analysis (such as inference from spatial data, point pattern analysis, and geostatistics) and some of the \R packages that can be used for that. 
+To understand what is covered in this vignette, you must understand the basics of the \R language. There is a multitude of on-line and other resources that can help you to get acquainted with \R. The \verb@raster@ package does not operate in isolation. For example, it uses classes defined in the \verb@sp@ package for vector type data. See the vignette and help pages of that package or Bivand {\it et al}. (2008). Bivand {\it et al}., provide an introduction to handling spatial data in \R, and to statistically oriented spatial data analysis (such as inference from spatial data, point pattern analysis, and geostatistics) and some of the \R packages that can be used for that. 
 
 In the next section, some general aspects of the design of the package are discussed, notably the structure of the main classes, and what they represent. The use of the package is illustrated in subsequent sections. \verb@raster@ has a large number of functions, not all of them are discussed here, and those that are discussed are mentioned only briefly. See the help files of the package for more information on individual functions and {\bf help("raster-package")} for an index of functions by topic.
 
@@ -45,7 +45,7 @@ The package is built around a number of 'S4' classes of which the \verb@RasterLa
 
 \subsection{RasterLayer}
 
-A \verb@RasterLayer@ object represents a single-variable raster dataset. A \verb@RasterLayer@ object always stores a number of fundamental parameters to describe it. These include the number of columns and rows, the extent (the coordinates of its 'bounding box'), and the coordinate reference system (the 'map projection', although this can be \verb@NA@). In addition, a \verb@RasterLayer@ can store information about the file in which the raster cell values are stored (if there is such a file). A \verb@RasterLayer@ can also hold the raster cell values themselves.
+A \verb@RasterLayer@ object represents a single-variable raster dataset. A \verb@RasterLayer@ object always stores a number of fundamental parameters to describe it. These include the number of columns and rows, the extent (the coordinates of its 'bounding box'), and the coordinate reference system (the 'map projection', although this can be \verb@NA@). In addition, a \verb@RasterLayer@ can store information about the file in which the raster cell values are stored (if there is such a file). A \verb@RasterLayer@ can also hold the raster cell values (in RAM memory).
 
 \subsection{RasterStack and RasterBrick}
 
@@ -62,7 +62,7 @@ Below is some more detail, you do not need to read or understand this section to
 
 The three classes described above inherit from the \verb@Raster@ class (that means they are derived from this more basic 'parent' class by adding something to that class) which itself inherits from the \verb@BasicRaster@ class. The \verb@BasicRaster@ only has a few properties (referred to as 'slots' in S4 speak): the number of columns and rows, the coordinate reference system (which itself is an object of class \verb@CRS@, which is defined in package '\verb@sp@') and the spatial extent, which is an object of class \verb@Extent@.  
 
-An object of class \verb@Extent@ has four slots: xmin, xmax, ymin, and ymax. These represent the minimum and maximum x and y coordinates of the of the Raster object. These would be, for example,  -180, 180, -90, and 90, for a global raster with longitude/latitude coordinates.  Note that some file systems (and perhaps some software as well) use the coordinates of the center of extreme cells, but raster uses the coordiantes of the extremes (corners) of the entire raster. 
+An object of class \verb@Extent@ has four slots: xmin, xmax, ymin, and ymax. These represent the minimum and maximum x and y coordinates of the of the Raster object. These would be, for example,  -180, 180, -90, and 90, for a global raster with longitude/latitude coordinates.  Note that some file systems (and perhaps some software as well) use the coordinates of the center of extreme cells, but raster uses the coordinates of the extremes (corners) of the entire raster. 
 
 \verb@Raster@  is a virtual class. This means that it cannot be instantiated (you cannot create objects from this class). It was created to allow the definition of methods for that class. These methods will be dispatched when called with a descendent of the class (i.e. when the method is called with a \verb@RasterLayer@, \verb@RasterBrick@  or \verb@RasterStack@ object as argument). This allows for efficient code writing because many methods are the same for any of these three classes, and hence a single method for \verb@Raster@ suffices. 
 
@@ -71,7 +71,7 @@ An object of class \verb@Extent@ has four slots: xmin, xmax, ymin, and ymax. The
 
 \section{Creating Raster* objects}
 
-A \verb@RasterLayer@ can easily be created from scratch using the function {\bf raster}. The default settings will create a global raster data structure with a longitude/latitude coordinate reference system and 1 by 1 degree cells. You can change these settings by providing additional arguments such as {\it nrow}, {\it ncol}, to the function. You can also change these parameters after creating the object. In some cases, for example when you change the number of columns or rows, you will loose the values associated with the \verb@RasterLayer@ (or the link to a file if there was one). If you set the projection, this is only to properly define it, not to change it. To tranform a \verb@RasterLayer@ to another coordinate reference system (projection) you can can use the function {\bf projectRaster}. 
+A \verb@RasterLayer@ can easily be created from scratch using the function {\bf raster}. The default settings will create a global raster data structure with a longitude/latitude coordinate reference system and 1 by 1 degree cells. You can change these settings by providing additional arguments such as {\it nrow}, {\it ncol}, to the function. You can also change these parameters after creating the object. In some cases, for example when you change the number of columns or rows, you will lose the values associated with the \verb@RasterLayer@ (or the link to a file if there was one). If you set the projection, this is only to properly define it, not to change it. To transform a \verb@RasterLayer@ to another coordinate reference system (projection) you can use the function {\bf projectRaster}. 
 
 Here is an example of creating and changing a \verb@RasterLayer@ object 'r' from scratch.
 <<raster-1>>=
@@ -199,14 +199,14 @@ Several 'high level' functions have been implemented for \verb@RasterLayer@ obje
 
 The high-level functions have some arguments in common. The first argument is typically 'x' or 'object' and can be a \verb@RasterLayer@, or, in most cases, a \verb@RasterStack@ or \verb@RasterBrick@. It is followed by one or more arguments specific to the function (either additional \verb@RasterLayer@ objects or other arguments), followed by a filename="" and "..." arguments. 
 
-The default filename is an empty character "". If you do not specify a filename, the default action for the function is to return a \verb@Raster*@ object that only exists in memory. However, if the function will create a \verb@Raster*@ object that is too large to hold memory it is written  to a temporary file instead.
+The default filename is an empty character "". If you do not specify a filename, the default action for the function is to return a \verb@Raster*@ object that only exists in memory. However, if the function will create a \verb@Raster*@ object that is too large to hold memory it is written to a temporary file instead.
 
 The "..."  argument allows for setting additional arguments that are relevant when writing values to a file: the file format, datatype (e.g. integer or real values), and a logical value indicating whether existing files should be overwritten. 
 
 
 \subsection{Modifying the structure of a Raster* object}
 
-There are several functions that deal with modifying the structure of \verb@Raster*@ objects. The {\bf crop} function lets you take a geographic subset of a larger RasterLayer. You can crop a \verb@Raster*@ by providing an extent object or another spatial object from which an extent can be extracted (objects from classes deriving from Raster and from Spatial in the sp package). An easy way to get an extent object is to plot a \verb@RasterLayer@ and then use {\bf drawExtent()} to visually determine the new extent (bounding box) to provide to the crop function. 
+There are several functions that deal with modifying the structure of \verb@Raster*@ objects. The {\bf crop} function lets you take a geographic subset of a larger RasterLayer. You can crop a \verb@Raster*@ by providing an extent object or another spatial object from which an extent can be extracted (objects from classes deriving from Raster and from Spatial in the sp package). An easy way to get an extent object is to plot a \verb@RasterLayer@ and then use {\bf drawExtent} to visually determine the new extent (bounding box) to provide to the crop function. 
 
 {\bf trim} crops a \verb@RasterLayer@ by removing the outer rows and columns that only contain NA values. In contrast, {\bf expand} adds new rows and/or columns with NA values. The purpose of this could be to create a new \verb@RasterLayer@ of the same extent of another larger \verb@RasterLayer@ such that the can be used in raster algebra. 
 
@@ -214,7 +214,7 @@ The {\bf merge} function lets you merge 2 or more \verb@RasterLayer@ objects int
 
 {\bf aggregate} and {\bf disaggregate} allow for changing the resolution of a Raster* object. In the case of {\bf aggregate}, you need to specify a function determining what to do with the grouped cell values (e.g. {\bf mean}). It is possible to specify different (dis) aggregation factors in the x and y direction. {\bf aggregate} and {\bf disaggregate} are the best functions when adjusting cells size only, with an integer step (e.g. each side 2 times smaller or larger), but in some cases that is not possible. 
 
-For example, you may need nearly the same cell size, while shifting the cell centers. In those cases, the {\bf resample} function might be used. It can do either nearest neighbor assignments (for categorical data) or bilinear interpolation (for non-categorical data). Simple linear shifts of a Raster object can be accomplished with the {\bf shift} function or with the {\bf extent} function. resample should not be used to create a Raster* object with much larger resolution. If such ajustments need to be made then you can first use aggregate. 
+For example, you may need nearly the same cell size, while shifting the cell centers. In those cases, the {\bf resample} function might be used. It can do either nearest neighbor assignments (for categorical data) or bilinear interpolation (for non-categorical data). Simple linear shifts of a Raster object can be accomplished with the {\bf shift} function or with the {\bf extent} function. {\bf resample} should not be used to create a Raster* object with much larger resolution. If such adjustments need to be made then you can first use aggregate. 
 
 With the {\bf projectRaster} function you can transform values of \verb@Raster*@ object to a new object with a different coordinate reference system.
 
@@ -269,10 +269,10 @@ There are three focal (neighorhood) functions: {\bf focal}, {\bf focalFilter}, {
 
 \subsection{Distance}
 
-There are a number of distance related functions. {\bf distance} computes the shortest distance to cells that are not NA. {\bf pointDistance} computes the shortest distance to any point in a set of points. {\bf gridDistance} computes the distance when following grid cells that can be traversed (e.g. exluding water bodies). {\bf direction} computes the direction towards (or from) the nearest cell that is not NA. {\bf adjacency} determines which cells are adjacent to other cells, and {\bf pointDistance} computes distance between points. See the gdistance package (on R-Forge) for more adanced distance calculations (cost distance, resistance distance)
+There are a number of distance related functions. {\bf distance} computes the shortest distance to cells that are not NA. {\bf pointDistance} computes the shortest distance to any point in a set of points. {\bf gridDistance} computes the distance when following grid cells that can be traversed (e.g. excluding water bodies). {\bf direction} computes the direction towards (or from) the nearest cell that is not NA. {\bf adjacency} determines which cells are adjacent to other cells, and {\bf pointDistance} computes distance between points. See the gdistance package (on R-Forge) for more advanced distance calculations (cost distance, resistance distance)
 
 \subsection{Spatial configuration}
-Function {\bf clump} identifies groups of cells that are connected. {\bf edge} identifies edges, that is transitions beween cell values. {\bf area} computes the size of each grid cell (for unprojected rasters)
+Function {\bf clump} identifies groups of cells that are connected. {\bf edge} identifies edges, that is, transitions between cell values. {\bf area} computes the size of each grid cell (for unprojected rasters)
 
 \subsection{Predictions}
 The package has two functions to make model predictions to (potentially very large) rasters. {\bf predict} takes a multilayer raster and a fitted model as arguments. Fitted models can be of various classes, including glm, gam, randomforest, and brt. Function {\bf interpolate} is similar but is for models that use coordinates as predictor variables, for example in kriging and spline interpolation.
@@ -286,7 +286,7 @@ Point to raster conversion is often done with the purpose to analyze the point d
 
 Polygon to raster conversion is typically done to create a \verb@RasterLayer@ that can act as a mask, i.e. to set to NA a set of cells of a \verb@Raster@ object, or to summarize values on a raster by zone. For example a country polygon is transferred to a raster that is then used to set all the cells outside that country to NA; whereas polygons representing administrative regions such as states can be transferred to a raster to summarize raster values by state. 
 
-It is also possible to convert the valus of a \verb@RasterLayer@ to points or polygons, using {\bf rasterToPoints} and {\bf rasterToPolygons}. Both functions only return values for cells that are not NA. Unlike {\bf rasterToPolygons}, {\bf rasterToPoints} is reasonably efficient and allows you to provide a function to subset the output before it is produced (which can be necessary for very large rasters as the point object is created in memory). 
+It is also possible to convert the values of a \verb@RasterLayer@ to points or polygons, using {\bf rasterToPoints} and {\bf rasterToPolygons}. Both functions only return values for cells that are not NA. Unlike {\bf rasterToPolygons}, {\bf rasterToPoints} is reasonably efficient and allows you to provide a function to subset the output before it is produced (which can be necessary for very large rasters as the point object is created in memory). 
 
 
 \section{Summary functions}
@@ -316,7 +316,7 @@ b <- brick(system.file("external/rlogo.grd", package="raster"))
 plot(b)
 @
 
-They can also be combined into a single image, by assigning indiviudal layers to one of the three color channels (red, green and blue):
+They can also be combined into a single image, by assigning individual layers to one of the three color channels (red, green and blue):
 <<raster-20b, fig=TRUE , echo=TRUE>>=
 plotRGB(b, r=1, g=2, b=3)
 @
@@ -432,7 +432,7 @@ news <- stack(sgdf)
 
 \section{Extending raster objects}
 
-It is straightforward to build on the Raster* objecs using the S4 inheritance mechanism. Say you need objects that behave like a \verb@RasterLayer@, but have some additional proerties that you need to use in your own functions (S4 methods). See John Chambers' book "Software for Data Analysis, Programming with R" (Springer, 2008), and the help pages of the Methods package for more info. Below is an example:
+It is straightforward to build on the Raster* objects using the S4 inheritance mechanism. Say you need objects that behave like a \verb@RasterLayer@, but have some additional properties that you need to use in your own functions (S4 methods). See Chambers (2009) and the help pages of the Methods package for more info. Below is an example:
 
 <<raster-32, fig=TRUE>>=
 setClass ('myRaster',
