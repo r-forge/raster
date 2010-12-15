@@ -10,14 +10,14 @@
 
 	filename = trim(filename)
 	if (filename == '') { stop('provide a filename') }
-	ext(filename) <- raster:::.defaultExtension(format='CDF')
+	ext(filename) <- .defaultExtension(format='CDF')
 	if (file.exists(filename) & !overwrite) {
 		stop('file exists, use overwrite=TRUE to overwrite it')
 	}
 	
 	dataType(x) <- datatype
 	
-	datatype = raster:::.getNetCDFDType(datatype)
+	datatype = .getNetCDFDType(datatype)
 	
 	if (.couldBeLonLat(x)) {
 		if (missing(xname)) xname = 'longitude'

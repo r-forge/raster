@@ -244,8 +244,96 @@ function(object, v, cell) {
 		return( object )
 	}
 
-	if (driver == 'ncdf') {	
-		stop('not yet implemented for ncdf files')
+	if (driver == 'netcdf') {
+		nc <- open.ncdf(object@file@name, write=TRUE)
+		on.exit( close.ncdf(nc) )
+		zvar <- object@data@zvar
+		dims <- nc$var[[zvar]]$ndims
+		bnd <- band(object)
+
+		if (dims > 4) {
+			stop('not yet implemented for high dimensional (>4) ncdf files')
+		}
+		if (is.matrix(v)) {
+			startrow <- rowFromCell(object, cell)
+			startcol <- colFromCell(object, cell)
+			if (nc$var[[zvar]]$ndims == 2) {
+				try ( put.var.ncdf(nc, zvar, v, start=c(startcol, startrow), count=c(ncol(v), nrow(v))) )
+			} else if (nc$var[[zvar]]$ndims == 3) {
+				try ( put.var.ncdf(nc, zvar, v, start=c(startcol, startrow, bnd), count=c(ncol(v), nrow(v), 1)) )
+			} else if (nc$var[[zvar]]$ndims == 4) {
+				try ( put.var.ncdf(nc, zvar, v, start=c(startcol, startrow, object@data@level, bnd), count=c(ncol(v), nrow(v), 1, 1)) )
+			}
+			
+		} else {
+			if (length(cell) == 1) {
+				cell <- cell:(cell+length(v)-1)
+				rows <- rowFromCell(object, cell)
+				cols <- colFromCell(object, cell)
+				rows <- unique(rows)
+				cols <- unique(cols)
+				nr <- length(rows)
+				if (nr == 1) {
+					#v <- as.matrix(v)
+					if (nc$var[[zvar]]$ndims == 2) {
+						try ( put.var.ncdf(nc, zvar, v, start=c(cols[1], rows), count=c(length(cols), 1)) )
+					} else if (nc$var[[zvar]]$ndims == 3) {
+						try ( put.var.ncdf(nc, zvar, v, start=c(cols[1], rows, bnd), count=c(length(cols), 1, 1)) )
+					} else if (nc$var[[zvar]]$ndims == 4) {
+						try ( put.var.ncdf(nc, zvar, v, start=c(cols[1], rows, object@data@level, bnd), count=c(length(cols), 1, 1, 1)) )
+					}
+				} else {	
+					offset <- c(cols[1], rows[1])
+					ncols <- object@ncols - cols[1]
+					vv <- v[1:ncols]
+					if (nc$var[[zvar]]$ndims == 2) {
+						try ( put.var.ncdf(nc, zvar, vv, start=c(cols[1], rows), count=c(length(cols), 1)) )
+					} else if (nc$var[[zvar]]$ndims == 3) {
+						try ( put.var.ncdf(nc, zvar, vv, start=c(cols[1], rows, bnd), count=c(length(cols), 1, 1)) )
+					} else if (nc$var[[zvar]]$ndims == 4) {
+						try ( put.var.ncdf(nc, zvar, vv, start=c(cols[1], rows, object@data@level, bnd), count=c(length(cols), 1, 1, 1)) )
+					}
+					v <- v[-(1:nc)]
+					if (nr > 2) {
+						vv <- v[1:n]
+						nrows <- nr-2
+						n <- nrows * object@ncols
+						if (nc$var[[zvar]]$ndims == 2) {
+							try ( put.var.ncdf(nc, zvar, vv, start=c(1, rows), count=c(ncols, 1)) )
+						} else if (nc$var[[zvar]]$ndims == 3) {
+							try ( put.var.ncdf(nc, zvar, vv, start=c(1, rows, bnd), count=c(ncols, 1, 1)) )
+						} else if (nc$var[[zvar]]$ndims == 4) {
+							try ( put.var.ncdf(nc, zvar, vv, start=c(1, rows, object@data@level, bnd), count=c(ncols, 1, 1, 1)) )
+						}
+						v <- v[-(1:n)]
+					}
+					if (nc$var[[zvar]]$ndims == 2) {
+						try ( put.var.ncdf(nc, zvar, vv, start=c(1, rows), count=c(1, rows[nr])) )
+					} else if (nc$var[[zvar]]$ndims == 3) {
+						try ( put.var.ncdf(nc, zvar, vv, start=c(1, rows, bnd), count=c(1, rows[nr], 1)) )
+					} else if (nc$var[[zvar]]$ndims == 4) {
+						try ( put.var.ncdf(nc, zvar, vv, start=c(1, rows, object@data@level, bnd), count=c(1, rows[nr], 1, 1)) )
+					}
+				} 
+			} else {
+				rows <- rowFromCell(object, cell)
+				cols <- colFromCell(object, cell)
+				if (nc$var[[zvar]]$ndims == 2) {
+					for (i in 1:length(cell)) {
+						try ( put.var.ncdf(nc, zvar, v[i], start=c(cols[i], rows[i]), count=c(1, 1)) )
+					}
+				} else if (nc$var[[zvar]]$ndims == 3) {
+					for (i in 1:length(cell)) {
+						try ( put.var.ncdf(nc, zvar, v[i], start=c(cols[i], rows[i], bnd), count=c(1, 1, 1)) )
+					}
+				} else if (nc$var[[zvar]]$ndims == 4) {
+					for (i in 1:length(cell)) {
+						try ( put.var.ncdf(nc, zvar, v[i], start=c(cols[i], rows[i], object@data@level, bnd), count=c(1, 1, 1, 1)) )
+					}
+				}
+			}
+		}
+		return( object )
 	}
 	
 	stop('not implemented for:  ', driver, '  files')

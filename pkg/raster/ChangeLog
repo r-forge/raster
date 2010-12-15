@@ -1,3 +1,7 @@
+14-Dec-2010,  version 1.7-14
+update can now update netcdf files
+
+--------------------------------------------
 13-Dec-2010,  version 1.7-13
 Native file format can now write in any (row) order.
 Small bug fix in .polygonValues (thanks to Aman Verma)

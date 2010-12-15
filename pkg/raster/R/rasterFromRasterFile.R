@@ -121,7 +121,8 @@
 	
 	x@file@driver <- "raster"
 
-	if( dataSize(x) * ncell(x) * nbands(x) !=  file.info(valuesfile)$size ) {
+#	if( dataSize(x) * (ncell(x) * nbands(x) + x@file@offset) !=  file.info(valuesfile)$size ) {
+	if( (dataSize(x) * ncell(x) * nbands(x))  !=  file.info(valuesfile)$size ) {
 		warning('size of values file does not match the number of cells (given the data type)')
 	}
 	

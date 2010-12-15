@@ -28,11 +28,11 @@
 	} else {
 		if (x@data@dim3 == 4) {
 			start <- c(col, row, x@data@level, x@data@band)
-			count <- c(ncols, nrows, x@data@level, 1)
+			count <- c(ncols, nrows, 1, 1)
 			d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 		} else {
 			start <- c(col, row, x@data@band, x@data@level)
-			count <- c(ncols, nrows, 1, x@data@level)
+			count <- c(ncols, nrows, 1, 1)
 			d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 		}
 	}
