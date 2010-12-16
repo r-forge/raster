@@ -152,11 +152,13 @@ setMethod('predict', signature(object='Raster'),
 				}
 			}
 
-			# to change factor to numeric; should keep track of this to return a factor type RasterLayer
 			if (is.list(predv)) {
 				predv <- unlist(predv)
 			}
-			predv[] = as.numeric(predv)
+			if (is.factor(predv)) {
+				# should keep track of this to return a factor type RasterLayer
+				predv <- as.integer(as.character(predv))
+			}
 		
 			if (filename == '') {
 				cells = cellFromRowCol(predrast, tr$row[i], 1):cellFromRowCol(predrast, tr$row[i]+tr$nrows[i]-1, ncol(predrast))
