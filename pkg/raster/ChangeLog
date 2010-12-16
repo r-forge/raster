@@ -1,3 +1,7 @@
+16-Dec-2010,  version 1.7-15
+When creating a stack from a list, the names of the list elements are used as layernames (suggested by Bart Kranstauber)
+
+--------------------------------------------
 14-Dec-2010,  version 1.7-14
 update can now update netcdf files
 
