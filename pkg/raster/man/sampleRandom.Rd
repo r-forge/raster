@@ -19,15 +19,15 @@ sampleRandom(x, size, ...)
   \item{size}{positive integer giving the number of items to choose.}  
   \item{...}{Additional arguments: 
   
-	\code{na.rm} If \code{TRUE} NA values are removed from random sample
+	\code{na.rm}  Logical. If \code{TRUE}. NA values are removed from random sample
 	
-	\code{extent} Extent. To limit regular sampling to the area within the extent  
+	\code{extent}  Extent. To limit regular sampling to the area within the extent  
 	
-	\code{cells} Logical. If \code{TRUE}, sampled cell numbers are also returned
+	\code{cells}  Logical. If \code{TRUE}, sampled cell numbers are also returned
 	
-	\code{rowcol} Logical. If \code{TRUE}, sampled row and column numbers are also returned
+	\code{rowcol}  Logical. If \code{TRUE}, sampled row and column numbers are also returned
 
-	\code{sp} Logical. If \code{TRUE}, a SpatialPointsDataFrame is returned
+	\code{sp}  Logical. If \code{TRUE}, a SpatialPointsDataFrame is returned
 	}
 }
 

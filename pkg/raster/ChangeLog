@@ -1,3 +1,7 @@
+17-Dec-2010,  version 1.7-16
+sampleRandom has two new arguments: rowcol to return row and column number, and sp to return a SpatialPointsDataFrame (suggested by Agustin Lobo)
+
+--------------------------------------------
 16-Dec-2010,  version 1.7-15
 When creating a stack from a list, the names of the list elements are used as layernames (suggested by Bart Kranstauber)
 
