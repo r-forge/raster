@@ -1,4 +1,4 @@
-\name{Sample}
+\name{sampleRandom}
 
 \alias{sampleRandom}
 \alias{sampleRandom,Raster-method}

@@ -78,7 +78,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 			b <- brick(x, values=FALSE)
 			tr <- blockSize(b)
 			pb <- pbCreate(tr$n, type=.progress(...))
-			b <- writeStart(b, filename=filename, bandorder=bandorder, format=format, ...)
+			b <- writeStart(b, filename=filename, bandorder=bandorder, format=filetype, ...)
 			for (i in 1:tr$n) {
 				v <- getValues(x, row=tr$row[i], nrows=tr$size)
 				b <- writeValues(b, v, tr$row[i])

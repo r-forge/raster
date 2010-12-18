@@ -1,4 +1,4 @@
-\name{Sample}
+\name{sampleRegular}
 
 \alias{sampleRegular}
 
