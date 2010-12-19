@@ -9,7 +9,7 @@
 \title{Update raster cells of files (on disk)}
 
 \description{
-Update cell values of a file (i.e., cell values on disk). 
+Update cell values of a file (i.e., cell values on disk) associated with a RasterLayer or RasterBrick. 
 
 User beware: this function _will_ make changes to your file (first make a copy if you are not sure what you are doing).
 
@@ -23,17 +23,19 @@ update(object, ...)
 }
 
 \arguments{
-  \item{object}{RasterLayer that is associated with a file}
+  \item{object}{RasterLayer or RasterBrick that is associated with a file}
   \item{...}{Additional arguments. 
   
   \code{v} - vector or matrix with new values 
   
   \code{cell} - cell from where to start writing. Or a vector of cell numbers if v is a vector of the same lenght.
+
+  \code{band} - band (layer) to update (for RasterBrick objects).
   }  
 }
 
 \value{
-RasterLayer
+RasterLayer or RasterBrick
 }
 
 \author{Robert J. Hijmans}
@@ -59,6 +61,7 @@ as.matrix(r)
 m = matrix(1:10, ncol=2)
 r <- update(r, v=m, cell=2)
 as.matrix(r)
+
 }
 
 \keyword{methods}
