@@ -2,7 +2,6 @@
 # Date : December 2010
 # Version 0.9
 # Licence GPL v3
-
 	
 if (!isGeneric("update")) {
 	setGeneric("update", function(object, ...)
@@ -17,87 +16,38 @@ function(object, v, cell) {
 	}
 
 	band <- band(object)
-
 	cell <- na.omit(round(cell))
-	stopifnot(length(cell) > 0)
 
 	driver <- object@file@driver
 	if (.isNativeDriver(driver)) {
-		# need to support this too:
 		stopifnot(object@file@toptobottom)
-		if (nbands(object) > 1) {
-			stop('not implemented for native format files with multiple bands')
-		}
-	}
-	
-	
-	if (is.matrix(v)) {
-		if (length(cell) > 1) {
-			warning('only first cell used')
-			cell <- cell[1] 
-		}
-		stopifnot(cell > 0)
-		
-		rc <- rowColFromCell(object, cell)
-		if ((nrow(v) + rc[1] - 1) > nrow(object)) { 
-			stop('attempting to update beyond end of file') 
-		}
-		if ((ncol(v) + rc[2] - 1) > ncol(object)) { 
-			stop('attempting to update beyond end of file') 
-		}
-		dm <- dim(v)
-		mat <- TRUE
-	} else {
-		stopifnot( is.vector(v) ) 
-		if (length(cell) > 1) {
-			stopifnot(length(cell) == length(v))
-			stopifnot(max(cell) <= ncell(object))
-			stopifnot(min(cell) > 0)
-		} else {
-			stopifnot(cell > 0)
-			if ((length(v) + cell - 1) > ncell(object)) {
-				stop('attempting to update beyond end of file') 
-			}
-		}
-		mat <- FALSE
-	}
 
+		if (nbands(object) > 1) {
+			b <- brick(filename(object), native=TRUE)
+			b <- update(b, v, cell, band=band(object))
+			r <- raster(filename(object), band=band(object))
+			return(r)
+		}
+	}
+	
 	datatype <- object@file@datanotation
 	dtype <- substr(datatype, 1, 3)
-	if (dtype == "INT" ) { 
-		v <- as.integer(round(v)) 
-	} else if ( dtype =='LOG' ) {
-		v[v != 1] <- 0
-		v <- as.integer(v)  
-	}
-	v[is.infinite(v)] <- NA
-	if (mat) {
-		dim(v) <- dm
-	}
+	v <- .checkData(object, v, cell, dtype)
 	
 	setminmax <- FALSE
 	if (object@data@haveminmax) {
-		lst <- .updateMinMax(object, v, cell, band) 
+		lst <- .updateMinMax(object, v, cell, 1) # band=1 because there is only one set of min/max values
 		object <- lst[[1]]
 		setminmax <- lst[[2]]
 	}
 
-	
 	if (driver == 'gdal') {	
-	
 		return( .updateGDAL(object, v, cell, band, setminmax) )
-		
-	} else if (driver == 'netcdf') {
-	
+	} else if (driver == 'netcdf') {	
 		return( .updateNCDF(object, v, cell, band ) )
-		
 	} else if (.isNativeDriver(driver)) {
-		
 		return( .updateNativeSingle(object, v, cell, band, driver, datatype ) )
-	
 	}	
-
-
 	
 	stop('not implemented for:  ', driver, '  files')
 }	
@@ -112,57 +62,13 @@ function(object, v, cell, band) {
 		stop('object is not associated with a file on disk.')
 	}
 
-	stopifnot(band > 0)
-	stopifnot(band <= nbands(object))
+	stopifnot(band > 0 & band <= nbands(object))
 
 	cell <- na.omit(round(cell))
-	stopifnot(length(cell) > 0)
-	
-	if (is.matrix(v)) {
-		if (length(cell) > 1) {
-			warning('only first cell used')
-			cell <- cell[1] 
-		}
-		stopifnot(cell > 0)
-		
-		rc <- rowColFromCell(object, cell)
-		if ((nrow(v) + rc[1] - 1) > nrow(object)) { 
-			stop('attempting to update beyond end of file') 
-		}
-		if ((ncol(v) + rc[2] - 1) > ncol(object)) { 
-			stop('attempting to update beyond end of file') 
-		}
-		dm <- dim(v)
-		mat <- TRUE
-	} else {
-		stopifnot( is.vector(v) ) 
-		if (length(cell) > 1) {
-			stopifnot(length(cell) == length(v))
-			stopifnot(max(cell) <= ncell(object))
-			stopifnot(min(cell) > 0)
-		} else {
-			stopifnot(cell > 0)
-			if ((length(v) + cell - 1) > ncell(object)) {
-				stop('attempting to update beyond end of file') 
-			}
-		}
-		mat <- FALSE
-	}
-
-	driver <- object@file@driver
 
 	datatype <- object@file@datanotation
 	dtype <- substr(datatype, 1, 3)
-	if (dtype == "INT" ) { 
-		v <- as.integer(round(v)) 
-	} else if ( dtype =='LOG' ) {
-		v[v != 1] <- 0
-		v <- as.integer(v)  
-	}
-	v[is.infinite(v)] <- NA
-	if (mat) {
-		dim(v) <- dm
-	}
+	v <- .checkData(object, v, cell, dtype)
 	
 	setminmax <- FALSE
 	if (object@data@haveminmax) {
@@ -174,28 +80,23 @@ function(object, v, cell, band) {
 		}
 	}
 
+	driver <- object@file@driver
+
 	if (driver == 'gdal') {	
 		return( .updateGDAL(object, v, cell, band, setminmax) )
-		
 	} else if (driver == 'netcdf') {
 		return( .updateNCDF(object, v, cell, band ) )
-		
 	} else if (.isNativeDriver(driver)) {
-
+		stopifnot(object@file@toptobottom)
 		return ( .updateNativeMultiple(object, v, cell, band, driver, datatype ) )
 	}
-	
+
 	stop('not implemented for:  ', driver, '  files')
 }
 )
 
 
 .updateNativeSingle <- function(object, v, cell, band, driver, datatype) {
-	# need to support this too:
-		#stopifnot(object@file@toptobottom)
-		#if (nbands(object) > 1) {
-		#	stop('not implemented for native format files with multiple bands')
-		#}
 		
 		minv <- object@data@min
 		maxv <- object@data@max
@@ -521,6 +422,53 @@ function(object, v, cell, band) {
 	return(object)
 }
 
+
+.checkData <- function(object, v, cell, dtype) {
+	stopifnot(length(cell) > 0)
+
+	if (is.matrix(v)) {
+		if (length(cell) > 1) {
+			warning('only first cell used')
+			cell <- cell[1] 
+		}
+		stopifnot(cell > 0)
+		
+		rc <- rowColFromCell(object, cell)
+		if ((nrow(v) + rc[1] - 1) > nrow(object)) { 
+			stop('attempting to update beyond end of file') 
+		}
+		if ((ncol(v) + rc[2] - 1) > ncol(object)) { 
+			stop('attempting to update beyond end of file') 
+		}
+		dm <- dim(v)
+		mat <- TRUE
+	} else {
+		stopifnot( is.vector(v) ) 
+		if (length(cell) > 1) {
+			stopifnot(length(cell) == length(v))
+			stopifnot(max(cell) <= ncell(object))
+			stopifnot(min(cell) > 0)
+		} else {
+			stopifnot(cell > 0)
+			if ((length(v) + cell - 1) > ncell(object)) {
+				stop('attempting to update beyond end of file') 
+			}
+		}
+		mat <- FALSE
+	}
+
+	if (dtype == "INT" ) { 
+		v <- as.integer(round(v)) 
+	} else if ( dtype =='LOG' ) {
+		v[v != 1] <- 0
+		v <- as.integer(v)  
+	}
+	v[is.infinite(v)] <- NA
+	if (mat) {
+		dim(v) <- dm
+	}
+	return(v)
+}
 
 
 .updateMinMax <- function(object, v, cell, band) {
