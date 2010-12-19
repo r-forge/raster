@@ -24,7 +24,7 @@ function(x, maxpixels, ...) {
 	ar <- array(NA, dm)
 	x <- getValues(x)
 	for (i in 1:dm[3]) {
-		ar[,,i] <- matrix(x[,i], nrow=dm[1])
+		ar[,,i] <- matrix(x[,i], nrow=dm[1], byrow=TRUE)
 	}
 	ar
 } )
