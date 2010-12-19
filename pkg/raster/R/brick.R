@@ -180,7 +180,7 @@ setMethod('brick', signature(x='array'),
 		}
 		b <- brick(xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs)
 		dim(b) <- dm
-		setValues(b, matrix(sapply(x, as.vector), ncol=dm[3]))
+		setValues(b, matrix(as.vector(x), ncol=dm[3]))
 	}
 )
 
