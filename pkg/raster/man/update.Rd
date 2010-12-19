@@ -4,6 +4,7 @@
 
 \alias{update}
 \alias{update,RasterLayer-method}
+\alias{update,RasterBrick-method}
 
 \title{Update raster cells of files (on disk)}
 

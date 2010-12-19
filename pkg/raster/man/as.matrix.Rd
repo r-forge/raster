@@ -2,9 +2,9 @@
 
 \alias{as.matrix}
 \alias{as.array}
-\alias{as.array,Raster-method}
+\alias{as.array,RasterStackBrick-method}
 \alias{as.array,RasterLayer-method}
-\alias{as.matrix,Raster-method}
+\alias{as.matrix,RasterStackBrick-method}
 \alias{as.matrix,RasterLayer-method}
   
 \title{Get a matrix with raster cell values}

@@ -10,11 +10,11 @@ function(x, maxpixels, ...) {
 	if (! missing(maxpixels)) {
 		x <- sampleRegular(x, maxpixels, asRaster=TRUE)
 	}
-	x <- array(as.matrix(x), c(dim(x), 1))
+	x <- array(as.matrix(x), c(dim(x)))
 	x
 } )
 
-setMethod('as.array', signature(x='Raster'), 
+setMethod('as.array', signature(x='RasterStackBrick'), 
 function(x, maxpixels, ...) {
 	if (!hasValues(x)) { stop("'x' has no values") }
 	if (! missing(maxpixels)) {
