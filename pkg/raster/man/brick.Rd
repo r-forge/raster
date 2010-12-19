@@ -13,6 +13,7 @@
 \alias{brick,missing-method}
 \alias{brick,SpatialPixels-method}
 \alias{brick,SpatialGrid-method}
+\alias{brick,array-method}
 
 \title{ Create a RasterBrick object}
 

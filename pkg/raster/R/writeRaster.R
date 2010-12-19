@@ -20,10 +20,24 @@ function(x, filename, format, ...) {
 	filename <- .getExtension(filename, filetype)
 	
 	if (! inMemory(x) ) {
-		if ( fromDisk(x) ) {
-			return( .saveAsRaster(x, filename, format=filetype, ...) )
-		} else {
-			stop('No usable data available for writing')
+		if (! fromDisk(x) ) {
+			stop('No usable data available for writing')			
+		} else {	
+			if ( toupper(x@file@name) == toupper(filename) ) {
+				stop('filenames of source and target should be different')
+			}
+			r <- raster(x)
+			tr <- blockSize(r)
+			pb <- pbCreate(tr$n, type=.progress(...))			
+			r <- writeStart(r, filename=filename, format=filetype, ...)
+			for (i in 1:tr$n) {
+				v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
+				r <- writeValues(r, v, tr$row[i])
+				pbStep(pb, i) 			
+			}
+			r <- writeStop(r)
+			pbClose(pb)
+			return(r)
 		}
 	}
 
@@ -95,3 +109,35 @@ function(x, filename, bandorder='BIL', format, ...) {
 	}
 }
 )
+
+
+
+.writeBrick <- function(object, filename, bandorder='BIL', format='raster', ...) {
+
+	if (! format %in% c("raster", "BIL", "BSQ", "BIP") ) {
+		stop('format should be one of "raster", "BIL", "BSQ", "BIP"')
+	}
+	if ( format %in% c("BIL", "BSQ", "BIP") ) { bandorder <- format }
+	if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) { stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'") }
+	
+	out <- brick(object, values=FALSE)
+	nl <- out@data@nlayers
+
+	out <- writeStart(out, filename, bandorder=bandorder, ...)
+	
+	if (inMemory(object)) {
+		out <- writeValues(out, getValues(object))
+	} else {
+		tr <- blockSize(object)
+		pb <- pbCreate(tr$n, type=.progress(...))
+		for (i in 1:tr$n) {
+			out <- writeValues(out, getValues(object, tr$row[i], tr$nrows[i]), tr$row[i])
+			pbStep(pb, i)
+		}
+		pbClose(pb)
+	}
+	
+	out <- writeStop(out)
+	return( out )
+}
+

@@ -5,7 +5,7 @@
 \title{Regular sample}
 
 \description{
-Take a systematic sample from a Raster object. 
+Take a systematic sample from a Raster* object. 
 }
 
 \usage{
@@ -24,6 +24,9 @@ sampleRegular(x, size, extent=NULL, cells=FALSE, asRaster=FALSE, corners=FALSE)
 \value{
 A vector, matrix (if cells=TRUE; or for a multi-layered object), or RasterLayer (if asRaster=TRUE)
 }
+
+\seealso{\code{\link{sampleRandom}}}
+
 
 \author{Robert J. Hijmans}
 

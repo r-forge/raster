@@ -1,3 +1,8 @@
+19-Dec-2010,  version 1.7-17
+brick method for argument x=array
+'update' now also works for a RasterBrick 
+
+--------------------------------------------
 17-Dec-2010,  version 1.7-16
 sampleRandom has two new arguments: rowcol to return row and column number, and sp to return a SpatialPointsDataFrame (suggested by Agustin Lobo)
 

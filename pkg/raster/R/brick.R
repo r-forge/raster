@@ -172,3 +172,15 @@ setMethod('brick', signature(x='SpatialPixels'),
 )
 
 
+setMethod('brick', signature(x='array'), 
+	function(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA) {
+		dm <- dim(x)
+		if (length(dm) != 3) {
+			stop('array has wrong number of dimensions (needs to be 3)')
+		}
+		b <- brick(xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs)
+		dim(b) <- dm
+		setValues(b, matrix(sapply(x, as.vector), ncol=dm[3]))
+	}
+)
+
