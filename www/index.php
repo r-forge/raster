@@ -43,15 +43,14 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p>The purpose of the 'raster' package is to provide easy to use functions for raster manipulation and analysis. These include high level functions such as overlay, merge, aggregate, projection, resample, distance, polygon to raster conversion. All these functions work for very large raster datasets that cannot be loaded into memory. In addition, the package provides lower level functions such as row by row reading and writing (to many formats via rgdal) for building other functions.</p>
+<p>The purpose of the 'raster' package is to provide easy to use functions for raster type spatial data manipulation and analysis. The functions in this package include high level functions such as overlay, merge, aggregate, projection, resample, distance, and polygon to raster conversion. All these functions work for very large raster datasets that cannot be loaded into RAM memory. In addition, the package provides lower level functions such as row by row reading and writing (to many formats via rgdal) for building other functions.</p>
 </br>
-<p>In the current version we are developing the basic functions (nearly complete). The design has emphasised simplicity over speed. In later versions we will work on improving speed, which can be very important given the very large size of raster datasets.</p>
+<p>The package is build around a number of S4 classes of which the RasterLayer, RasterStack, and RasterBrick classes are the most important. Many generic methods are implemented for RasterLayers (arithmic, logical, plot, hist, ...). All code is written in R. 
+</p>
 </br>
-<p>Currently all code is written in R, for is clarity, and ease of adapation. However, in some future version we would like to also implement C functions to speed up processing of very large datasets. The package is build around a number of S4 classes of which the RasterLayer and RasterStack classes are the most important. Many generic methods are implemented for RasterLayers (arithmic, logical, plot, hist, ...).</p>
+<p>The raster package is used by other packages, including 'dismo' <a href="http://gdistance.r-forge.r-project.org/">gdistance</a> for matrix based (cost, resistance) distance calculations.</p>
 </br>
-<p>The raster package is used in a number of other packages, including <a href="http://gdistance.r-forge.r-project.org/">gdistance</a> for matrix based (cost, resistance) distance calculations; and RemoteSensing and geodata (both currently part of the <a href="http://r-forge.r-project.org/R/?group_id=249">Rgis</a> project).</p>
-</br>
-<p>One of the main reasons for developing this package is that we would like to build a bridge to - the powerful statistics and modeling of - R for the "GIS" community. Our perspective is that standard GIS is too map-centric, and that proper data-analysis needs tools that are more model and data centric.</p>
+<p>One of the main reasons for developing this package is that we would like to build a bridge to - the powerful statistics and modeling of - R for the "GIS" community.</p>
 </br>
 We welcome your feedback and suggestions.
 </br></br>

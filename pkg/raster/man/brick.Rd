@@ -34,7 +34,7 @@ A RasterBrick can be created from RasterLayer objects, from a RasterStack, or fr
 \section{Methods}{
 \describe{
 
-\bold{1) Create a RasterBrick object from a file}
+\bold{1) Create a RasterBrick from a file}
 
 \code{brick(x, ...)}
 
@@ -56,7 +56,7 @@ For netCDF files (CF convention):
 To read netCDF files, the \code{ncdf} package needs to be available. 
 
 
-\bold{2) Create a RasterBrick object from scratch}
+\bold{2) Create a RasterBrick from scratch}
 
 \code{brick(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs="+proj=longlat +datum=WGS84")}
 
@@ -72,7 +72,7 @@ To read netCDF files, the \code{ncdf} package needs to be available.
 (item \code{x} is 'missing' in this case)
 
  
-\bold{3) Create a RasterBrick object from an Extent object}
+\bold{3) Create a RasterBrick from an Extent object}
   
 \code{brick(x, nrows=10, ncols=10, crs=NA)}
 
@@ -81,10 +81,10 @@ To read netCDF files, the \code{ncdf} package needs to be available.
  \tab \code{nrows} \tab number of rows  \cr
  \tab \code{ncols} \tab number of columns \cr
   \tab \code{crs} \tab Character or object of class CRS. PROJ4 type description of a Coordinate Reference System (map projection) \cr
-}}
+}
 
 
-\bold{4) Create a RasterBrick object from a RasterStack object. }
+\bold{4) Create a RasterBrick from a RasterStack}
 
 \code{brick(x, values=TRUE)}
 
@@ -94,7 +94,7 @@ To read netCDF files, the \code{ncdf} package needs to be available.
 }
 
 
-\bold{5) Create a RasterBrick object from a RasterLayer or RasterBrick object.} 
+\bold{5) Create a RasterBrick from a RasterLayer or RasterBrick} 
 
 \code{brick(x)}
 
@@ -105,12 +105,12 @@ This copies the parameters of a RasterStack object to a new RasterBrick. The val
 }
 
 
-\bold{6) Create a RasterBrick from a SpatialPixels* or SpatialGrid* object.}
+\bold{6) Create a RasterBrick from a SpatialPixels* or SpatialGrid*}
 
 \code{brick(x, layer=0)}
 
 
-\bold{7) Create a RasterLayer object from an array } 
+\bold{7) Create a RasterBrick from an array } 
 
 The default extent is set to be between 0 and 1 in the x and y direction but can be changed at creation of the RasterLayer object or later. You can also provide a projection.  
 
@@ -126,7 +126,7 @@ The default extent is set to be between 0 and 1 in the x and y direction but can
  \tab \code{transpose} \tab Logical. Transpose the data? \cr
 }
 
-}
+}}
 
 
 
