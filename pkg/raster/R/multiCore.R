@@ -16,19 +16,16 @@ beginCluster <- function(n, type) {
 		n <- .detectCores()
 		cat(n, 'cores detected\n')
 	}
-	if (n > 0) {
-		if (missing(type)) {
-			type <- getClusterOption("type")
-			cat('cluster type:', type, '\n')
-		}
-		cl <- makeCluster(n, type) 
-		cl <- .addPackages(cl)
-		options(rasterClusterObject = cl)
-		options(rasterCluster = TRUE)
-	} else {
-		stop('zero cores... No cluster made')	
-		options(rasterCluster = FALSE)
+
+	if (missing(type)) {
+		type <- getClusterOption("type")
+		cat('cluster type:', type, '\n')
 	}
+
+	cl <- makeCluster(n, type) 
+	cl <- .addPackages(cl)
+	options(rasterClusterObject = cl)
+	options(rasterCluster = TRUE)
 }
 
 
