@@ -99,8 +99,8 @@ setMethod ('show' , 'RasterBrick',
 					maxv <- c(maxv[1:10], '...')
 				}
 			} else {
-				minv <- rep('?', min(nl, 10))
-				maxv <- rep('?', min(nl, 10))
+				minv <- rep('NA', min(nl, 10))
+				maxv <- rep('NA', min(nl, 10))
 			}
 			cat('min values  :', paste(minv, collapse=' '), '\n')
 			cat('max values  :', paste(maxv, collapse=' '), '\n')

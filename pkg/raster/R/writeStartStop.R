@@ -48,12 +48,13 @@ function(x, filename, options=NULL, format, ...) {
 	if (filetype=='ascii') { stop('ascii files cannot write multi-layer files') }
 	native <- filetype %in% c(.nativeDrivers(), 'ascii')
 	if (native) { 
-		return( .startRasterWriting(x, filename, format=filetype, ...) )
+		x <- .startRasterWriting(x, filename, format=filetype, ...) 
 	} else if ( filetype == 'CDF' ) { 
 		x <- .startWriteCDF(x, filename, ...)
 	} else {
-		return( .startGDALwriting(x, filename, options=options, format=filetype, ...) )
+		x <- .startGDALwriting(x, filename, options=options, format=filetype, ...) 
 	}
+	return(x)
 })
 
 
