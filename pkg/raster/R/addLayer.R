@@ -1,9 +1,7 @@
-# R package 'raster'
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
 # Date : September 2009
 # Version 0.9
 # Licence GPL v3
-
 
 	
 if (!isGeneric("addLayer")) {
@@ -57,12 +55,9 @@ function(x, ...) {
 		
 
 	x@layers <- c(x@layers, rasters)
-	lyrns <- layerNames(x)
-	i <- which(lyrns == "")
-	lyrns[i] <- paste("layer", i, sep="")
-	layerNames(x) <- lyrns
+	lyrns <- sapply(x@layers, layerNames)
+	layerNames(x) <- .makeUniqueNames(lyrns)
 
-	
 	return(x)
 }	
 )
