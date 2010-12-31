@@ -3,7 +3,6 @@
 # Version 0.9
 # Licence GPL v3
 
-
 xmin <- function(object) {
 	return(extent(object)@xmin)
 }
@@ -21,21 +20,29 @@ ymax <- function(object) {
 }
 
 xres <- function(object) {
-	return ( (xmax(object) - xmin(object)) / ncol(object))  
+	if (!inherits(object, 'BasicRaster')) { object <- raster(object) }
+	e <- object@extent
+	return ( (e@xmax - e@xmin) / object@ncols )  
 }
 
 yres <- function(object) {
-	return ( (ymax(object) - ymin(object)) / nrow(object))  
+	if (!inherits(object, 'BasicRaster')) { object <- raster(object) }
+	e <- object@extent
+	return ( (e@ymax - e@ymin) / object@nrows )  
 }
 
 res <- function(object) {
-	return(c(xres(object), yres(object)))
+	if (!inherits(object, 'BasicRaster')) { object <- raster(object) }
+	return( c(xres(object), yres(object)))
 }
 
 
 origin <- function(object) {
-	x <- xmin(object) - xres(object)*(round(xmin(object) / xres(object)))
-	y <- ymax(object) - yres(object)*(round(ymax(object) / yres(object)))
+	if (!inherits(object, 'BasicRaster')) { object <- raster(object) }
+	e <- object@extent
+	r <- c(xres(object), yres(object))
+	x <- e@xmin - r[1]*(round(e@xmin / r[1]))
+	y <- e@ymax - r[2]*(round(e@ymax / r[2]))
 	return(c(x, y))
 }
 
