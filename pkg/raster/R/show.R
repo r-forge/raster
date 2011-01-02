@@ -43,8 +43,7 @@ setMethod ('show' , 'Extent',
 setMethod ('show' , 'BasicRaster', 
 	function(object) {
 		cat('class       :' , class(object), '\n')
-		cat('nrow        :' , nrow(object), '\n')
-		cat('ncol        :' , ncol(object), '\n')
+		cat('dimensions  : ', nrow(object), ', ', ncol(object), ', (nrow, ncol)\n', sep="" ) 
 		cat('ncell       :' , ncell(object), '\n')
 		cat('projection  :' , projection(object, TRUE), '\n')
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
