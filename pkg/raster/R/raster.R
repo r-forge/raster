@@ -82,10 +82,10 @@ setMethod('raster', signature(x='character'),
 )
 
 
-setMethod('raster', signature(x='Raster'), 
+setMethod('raster', signature(x='BasicRaster'), 
 	function(x) {
 		e <- x@extent
-		r <- raster(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=projection(x))
+		r <- raster(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
 		return(r)
 	}
 )

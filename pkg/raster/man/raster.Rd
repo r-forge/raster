@@ -6,7 +6,7 @@
 \alias{raster,missing-method}
 \alias{raster,character-method}
 \alias{raster,Extent-method}
-\alias{raster,Raster-method}
+\alias{raster,BasicRaster-method}
 \alias{raster,RasterStack-method}
 \alias{raster,RasterBrick-method}
 \alias{raster,Spatial-method}
