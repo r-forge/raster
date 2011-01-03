@@ -90,7 +90,6 @@ setMethod ('show' , 'RasterLayer',
 setMethod ('show' , 'RasterBrick',
 	function ( object ) {
 		cat ('class       :' , class ( object ) , '\n')
-		#cat ('filename    :' , filename(object), '\n')
 		nl <- nlayers(object)
 		cat ('dimensions  : ', nrow(object), ', ', ncol(object), ', ', nl, '  (nrow, ncol, nlayers)\n', sep="" ) 
 		cat ('ncell       :' , ncell(object), '\n')
@@ -141,9 +140,9 @@ setMethod ('show' , 'RasterStack',
 		} else {
 			cat ('dimensions  : ', nrow(object), ', ', ncol(object), ', ', nl, '  (nrow, ncol, nlayers)\n', sep="" ) 
 			cat ('ncell       :' , ncell(object), '\n')
+			cat ('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 			cat ('projection  :' , projection(object, TRUE), '\n')
 			cat ('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
-			cat ('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 			
 			minv <- format(minValue(object), digits=2)
 			maxv <- format(maxValue(object), digits=2)
