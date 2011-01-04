@@ -60,8 +60,11 @@
 	}
 	navalue <- x@file@nodatavalue
 	
-
-	n <- nlayers(x)
+	
+	#n the true number of layers
+	#nn the span of layers between the first and the last
+	#alyrs, the layers requested, scaled to start at one.
+	n <- nn <- nlayers(x)
 	if (missing(lyrs)) {
 		layer <- 1
 		lyrs <- 1:n
@@ -72,7 +75,10 @@
 		}
 		layer <- lyrs[1]
 		n <- length(lyrs)
+		nn <- lyrs[length(lyrs)] - lyrs[1] + 1
 	}
+	alyrs <- lyrs - lyrs[1] + 1
+	lns <- layerNames(x)[lyrs]
 	
 	nrows <- min(round(nrows), x@nrows-row+1)
 	ncols <- min((x@ncols-col+1), ncols)
@@ -88,14 +94,14 @@
 	if (nc$var[[zvar]]$ndims == 4) {
 		if (x@data@dim3 == 4) {
 			start = c(col, row, x@data@level, layer)
-			count = c(ncols, nrows, x@data@level, n)
+			count = c(ncols, nrows, x@data@level, nn)
 		} else {
 			start = c(col, row, layer, x@data@level)
-			count = c(ncols, nrows, n, x@data@level)
+			count = c(ncols, nrows, nn, x@data@level)
 		}		
 	} else {
 		start = c(col, row, layer)
-		count = c(ncols, nrows, n)
+		count = c(ncols, nrows,  nn)
 	}
 	d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	
@@ -109,19 +115,19 @@
 		if (length(dims) == 3) {
 			if ( x@file@toptobottom ) { 
 				v <- matrix(nrow=nrows*ncols, ncol=n)
-				for (i in lyrs) {
-					x <- d[,,i]
+				for (i in 1:length(alyrs)) {
+					x <- d[,,alyrs[i]]
 					v[,i] <- as.vector( x[, ncol(x):1] )
 				}
 			} else {
 				dim(d) = c(dims[1] * dims[2], dims[3])
-				d <- d[, lyrs, drop=FALSE]
+				d <- d[, alyrs, drop=FALSE]
 				d[d == x@file@nodatavalue] <- NA
 				return(d)
 			}
 		} else if (length(dims) == 2) {
 			if (nrows==1) {
-				d <- d[,lyrs,drop=FALSE]
+				d <- d[ , alyrs,drop=FALSE]
 				d[d == navalue] <- NA
 				return(d)
 				
@@ -137,7 +143,7 @@
 				if ( x@file@toptobottom ) { 
 					d <- d[nrow(d):1, ]
 				}
-				d <- d[ ,lyrs,drop=FALSE]
+				d <- d[ , alyrs, drop=FALSE]
 				d[d == navalue] <- NA
 				return(d)
 			}
@@ -146,7 +152,7 @@
 			if ( x@file@toptobottom & nrows > 1) {
 				d <- rev(d)
 			}
-			v[] <- d[,lyrs,drop=FALSE]
+			v[] <- d[, alyrs,drop=FALSE]
 		}
 	} else {
 		if ( x@file@toptobottom ) { 
@@ -159,6 +165,7 @@
 	}
 	
 	v[v == navalue] <- NA
+	colnames(v) <- lns
 	return(v)
 }
 
