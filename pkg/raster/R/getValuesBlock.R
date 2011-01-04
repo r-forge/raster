@@ -79,7 +79,7 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 			
 		} else if ( fromDisk(x) ) {
 			if (x@file@driver == 'netcdf') {
-				return(.readRowsBrickNetCDF(x, row, nrows, col, ncols, nlyrs=nlyrs))
+				return(.readRowsBrickNetCDF(x, row, nrows, col, ncols, n=nlyrs))
 			} else {
 				res <- matrix(ncol=nlyrs, nrow=nrows*ncols)
 				for (i in 1:nlyrs) {
