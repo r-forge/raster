@@ -316,7 +316,7 @@ It is also possible to use Arithmetic functions with Extent objects (but these w
     \code{\link{cv}} \tab Coefficient of variation  \cr
     \code{\link{modal}} \tab Modal value  \cr
     \code{\link{Median}} \tab Median value \cr
-    \code{\link{sampleInt}} \tab Random sample of integer values \cr
+    \code{\link{sampleInt}} \tab Random sample of (possibly very large) range of integer values \cr
     \code{\link{showTmpFiles}} \tab Show temporary files \cr
     \code{\link{removeTmpFiles}} \tab Remove temporary files \cr
 }
