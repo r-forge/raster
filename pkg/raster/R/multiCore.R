@@ -100,7 +100,7 @@ returnCluster <- function() {
 		return(1)
 	}
 	
-	if (!exists(readRegistry)) { readRegistry <- function(...)(NULL) } #to stop NOTE: .detectCores: no visible global function definition for ‘readRegistry’
+	if (!exists('readRegistry')) { readRegistry <- function(...)(NULL) } #to stop NOTE: .detectCores: no visible global function definition for ‘readRegistry’
 
 	if (.Platform$OS.type == 'windows') {
 		nn <- length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1))
