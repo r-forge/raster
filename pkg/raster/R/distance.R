@@ -129,7 +129,8 @@ function(x, filename='', ...) {
 				if (length(i) > 0) {
 					xy[,2] <- yFromRow(out, r)
 					for (c in i) {
-						vals[c] <- min( pointDistance(xy[c,], pts, longlat=longlat) )
+#						vals[c] <- min( pointDistance(xy[c,], pts, longlat=longlat) )
+						vals[c] <- min( distfun(xy[c,1], xy[c,2], pts[,1], pts[,2]) )
 					}
 				}
 				out <- writeValues(out, vals, r)
