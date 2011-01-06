@@ -33,10 +33,12 @@ setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='missing'
 
 setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='numeric'), 
 function(x, row, nrows, format='') {
-
-	if (! validRow(x, row)) { stop(row, ' is not a valid rownumber') }
-	row <- min(x@nrows, max(1, round(row)))
-	endrow <- max(min(x@nrows, row+round(nrows)-1), row)
+	row <- round(row)
+	nrows <- round(nrows)
+	stopifnot(validRow(x, row))
+	stopifnot(nrows > 0)
+	row <- min(x@nrows, max(1, row))
+	endrow <- max(min(x@nrows, row+nrows-1), row)
 	nrows <- endrow - row + 1
 	
 	if (inMemory(x)){
@@ -50,7 +52,8 @@ function(x, row, nrows, format='') {
 	}
 	if (format=='matrix') { 
 		v <- matrix(v, nrow=nrows, byrow=TRUE) 
-		rownames(res) <- row:(row+nrows-1)
+		rownames(v) <- row:(row+nrows-1)
+		colnames(v) <- 1:ncol(v)
 	} 
 	return(v)
 }
