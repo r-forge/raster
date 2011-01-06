@@ -32,7 +32,7 @@ setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='missing'
 )
 
 setMethod('getValues', signature(x='RasterLayer', row='numeric', nrows='numeric'), 
-function(x, row, nrows) {
+function(x, row, nrows, format='') {
 
 	if (! validRow(x, row)) { stop(row, ' is not a valid rownumber') }
 	row <- min(x@nrows, max(1, round(row)))
@@ -42,15 +42,19 @@ function(x, row, nrows) {
 	if (inMemory(x)){
 		startcell <- cellFromRowCol(x, row, 1)
 		endcell <- cellFromRowCol(x, row+nrows-1, x@ncols)
-		return( x@data@values[startcell:endcell] )
+		v <-  x@data@values[startcell:endcell] 
 	} else if ( fromDisk(x) ) {
-		return( .readRasterLayerValues(x, row, nrows) )		
+		v <- .readRasterLayerValues(x, row, nrows) 
 	} else {
-		return( rep(NA, nrows * x@ncols) )
+		v <- rep(NA, nrows * x@ncols) 
 	}
+	if (format=='matrix') { 
+		v <- matrix(v, nrow=nrows, byrow=TRUE) 
+		rownames(res) <- row:(row+nrows-1)
+	} 
+	return(v)
 }
 )
-
 
 setMethod('getValues', signature(x='RasterBrick', row='numeric', nrows='missing'), 
 	function(x, row, nrows) {
