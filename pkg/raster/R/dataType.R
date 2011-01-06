@@ -70,8 +70,13 @@
 #		}
 		
 		if (size == '4') {
-			x@file@datanotation <- 'INT4S'
-			x@file@nodatavalue <- -2147483647
+			if (signed) {
+				x@file@datanotation <- 'INT4S'
+				x@file@nodatavalue <- -2147483647
+			} else {
+				x@file@datanotation <- 'INT4U'
+				x@file@nodatavalue <- 4294967295
+			}
 		} else if (size == '2') {
 			if (signed) {
 				x@file@datanotation <- 'INT2S'

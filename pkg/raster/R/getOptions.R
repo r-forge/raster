@@ -110,7 +110,7 @@
 			return('FLT4S') 
 		} 
 	} 
-	if (! datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S')) {
+	if (! datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'FLT4S', 'FLT8S')) {
 		warning(datatype, ' is an invalid datatype, changed to FLT4S')
 	}
 	return(datatype)
