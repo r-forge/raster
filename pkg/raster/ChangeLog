@@ -1,3 +1,7 @@
+--- 7-Jan-2011,  version 1.7-25
+Fixed projectRaster for multi-layer objects (bug reported by Alison Mynsberge)
+bug fix in sampleInt with very large numbers (as.integer set them to NA)
+
 --- 4-Jan-2011,  version 1.7-21
 Bug fix in reading values from Bricks from ncdf files (reported by Martin Brandt)
 
