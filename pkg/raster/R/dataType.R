@@ -75,7 +75,8 @@
 				x@file@nodatavalue <- -2147483647
 			} else {
 				x@file@datanotation <- 'INT4U'
-				x@file@nodatavalue <- 4294967295
+				#x@file@nodatavalue <- 4294967295
+				x@file@nodatavalue <- 2147483647
 			}
 		} else if (size == '2') {
 			if (signed) {

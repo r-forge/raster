@@ -51,6 +51,10 @@
 		if (mn < -2147483647 | mx > 2147483648 ) {
 			ok <- FALSE
 		}
+	} else if (dtype == 'INT4U') {
+		if (mn < 0 | mx > 2147483648 ) {
+			ok <- FALSE
+		}
 	} else if (dtype == 'INT8S') {
 		if (mn < -2^63/2 | mx > 2^64/2) {
 			ok <- FALSE

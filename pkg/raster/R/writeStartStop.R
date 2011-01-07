@@ -97,7 +97,7 @@ setMethod('writeValues', signature(x='RasterLayer'),
 		
 		if ( x@file@driver == 'gdal' ) {
 			off = c(start-1, 0)
-			if (x@file@datanotation == 'INT1U') {
+			if (substr(x@file@datanotation,5,5) == 'U') {
 				v[v < 0] <- NA
 			}
 			v[is.na(v)] <- x@file@nodatavalue

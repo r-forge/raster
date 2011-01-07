@@ -13,6 +13,11 @@
 	filename <- .setFileExtensionHeader(filename, filetype)
 	fnamevals <- .setFileExtensionValues(filename, filetype)
 	datatype <- .datatype(...)
+	
+	if (datatype == 'INT4U') { 
+		warning('INT4U not supported for native formats')
+	}
+	
 	dataType(raster) <- datatype
 	if (!missing(NAflag)) {
 		raster@file@nodatavalue <- NAflag

@@ -27,6 +27,9 @@
 	raster <- setMinMax(raster)
 
 	datatype <- .datatype(...)
+	if (datatype == 'INT4U') { 
+		warning('INT4U not supported for native formats')
+	}
 	dtype <- .shortDataType(datatype)
 	dataType(raster) <- datatype
 	
