@@ -75,7 +75,6 @@
 	} else if (inidatatype == 'INTEGER') {
 		dataType(x) <- 'INT4S'
 	} else if (inidatatype == 'INTEGER_UNSIGNED') {
-		stop('data type INT4U not supported')
 		dataType(x) <- 'INT4U'
 	} else if (inidatatype == 'FLOAT') {
 		dataType(x) <- 'FLT4S'

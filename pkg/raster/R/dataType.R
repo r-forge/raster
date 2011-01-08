@@ -41,7 +41,7 @@
 
 # now for real
 	
-	if (!(substr(datatype, 1, 4) %in% c('LOG1', 'INT1', 'INT2', 'INT4', 'INT8', 'INT1', 'INT2', 'INT4', 'INT8', 'FLT4', 'FLT8'))) {
+	if (!(substr(datatype, 1, 4) %in% c('LOG1', 'INT1', 'INT2', 'INT4', 'FLT4', 'FLT8'))) {
 		stop('not a valid data type')
 	}
 	type <- substr(datatype,1,3)
@@ -75,8 +75,7 @@
 				x@file@nodatavalue <- -2147483647
 			} else {
 				x@file@datanotation <- 'INT4U'
-				#x@file@nodatavalue <- 4294967295
-				x@file@nodatavalue <- 2147483647
+				x@file@nodatavalue <- 4294967295
 			}
 		} else if (size == '2') {
 			if (signed) {
@@ -94,9 +93,9 @@
 				x@file@datanotation <- 'INT1U'
 				x@file@nodatavalue <- 255
 			}
-		} else if (size == '8') {
-			x@file@nodatavalue <- -9223372036854775808
-			x@file@datanotation <- 'INT8S'							
+#		} else if (size == '8') {
+#			x@file@nodatavalue <- -9223372036854775808
+#			x@file@datanotation <- 'INT8S'							
 		} else {
 			stop("invalid datasize for this datatype") 
 		}

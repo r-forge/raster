@@ -37,10 +37,9 @@ The following datatypes are available:
 \code{INT2S} \tab -32,767\tab  32,767 \cr
 \code{INT2U} \tab 0 \tab  65,534 \cr
 \code{INT4S} \tab -2,147,483,647 \tab 2,147,483,647 \cr
-\code{INT8S} \tab -9,223,372,036,854,775,807 \tab  9,223,372,036,854,775,807 \cr
-\code{INT8U} \tab 0 \tab  18,446,744,073,709,551,614 \cr
-\code{FLT4S} \tab -3.4E38 \tab  3.4E38 \cr
-\code{FLT8S} \tab -1.7E308 \tab   1.7E308 \cr
+\code{INT4U} \tab 0 \tab 4,294,967,296 \cr
+\code{FLT4S} \tab -3.4e+38 \tab  3.4e+38 \cr
+\code{FLT8S} \tab -1.7e+308 \tab   1.7e+308 \cr
 }
 
 For all integer types, except the single byte types, the lowest (signed) or highest (unsigned) value is used to store NA. 

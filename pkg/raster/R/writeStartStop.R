@@ -100,6 +100,11 @@ setMethod('writeValues', signature(x='RasterLayer'),
 			if (substr(x@file@datanotation,5,5) == 'U') {
 				v[v < 0] <- NA
 			}
+			if (x@file@datanotation == 'INT4U') {
+				i <- v > 2147483648
+				v[i] <- v[i] - 2147483648
+			}
+			
 			v[is.na(v)] <- x@file@nodatavalue
 			v = matrix(v, nrow=x@ncols)
 			

@@ -33,7 +33,7 @@
 # what are these?  CInt16', 'CInt32',   'CFloat32', 'CFloat64')	 "as in C"?
 # this needs to get fancier; depending on object and the abilties of the drivers
 .getGdalDType <- function(dtype, format='') {
-	if (!(dtype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT8S', 'INT1U', 'INT2U', 'INT4U', 'FLT4S', 'FLT8S'))) {
+	if (!(dtype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT1U', 'INT2U', 'INT4U', 'FLT4S', 'FLT8S'))) {
 		stop('not a valid data type')
 	}
 	type <- .shortDataType(dtype)
