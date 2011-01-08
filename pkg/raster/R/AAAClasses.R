@@ -79,7 +79,7 @@ setClass('RasterFile',
 		),
 	prototype (	
 	    name = '',
-		datanotation='FLT4S',
+		datanotation='FLT8S',
 		byteorder = .Platform$endian,
 		nodatavalue = -3.4E38,
 		nbands = as.integer(1),

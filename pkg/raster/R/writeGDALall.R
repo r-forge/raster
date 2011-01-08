@@ -16,6 +16,10 @@
 		raster <- as.matrix(raster)
 		if (substr(out@file@datanotation, 5, 5) == 'U') {
 			raster[raster < 0] <- NA
+			if (out@file@datanotation <- 'INT4U') {
+				out@file@nodatavalue <- 2147483647
+				raster[raster > 2147483647] <- out@file@nodatavalue
+			}
 		} 
 		raster[is.na(raster)] <- out@file@nodatavalue
 		
@@ -26,6 +30,11 @@
 		raster <- getValues(raster)
 		if (substr(out@file@datanotation, 5, 5) == 'U') {
 			raster[raster < 0] <- NA
+			raster[raster < 0] <- NA
+			if (out@file@datanotation <- 'INT4U') {
+				out@file@nodatavalue <- 2147483647
+				raster[raster > 2147483647] <- out@file@nodatavalue
+			}
 		} 
 		raster[is.na(raster)] = out@file@nodatavalue
 

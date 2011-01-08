@@ -35,11 +35,15 @@
 	if (dtype == 'INT' ) {
 		datatype <- .checkIntDataType(mn, mx, datatype)
 		dataType(raster) <- datatype
-		if (datatype == 'INT4U') { 
+		if (substr(datatype, 5 , 5) == 'U') { 
 			raster@data@values[raster@data@values < 0] <- NA
-			raster@data@values[is.na(raster@data@values)] <- raster@file@nodatavalue
-			i <- raster@data@values > 2147483647
-			raster@data@values[i] <- 2147483647 - raster@data@values[i]
+			if (datatype == 'INT4U') { 
+				raster@data@values[is.na(raster@data@values)] <- raster@file@nodatavalue
+				i <- raster@data@values > 2147483647
+				raster@data@values[i] <- 2147483647 - raster@data@values[i]
+			} else {
+				raster@data@values[is.na(raster@data@values)] <- raster@file@nodatavalue
+			}
 		} else {
 			raster@data@values[is.na(raster@data@values)] <- raster@file@nodatavalue
 		}
@@ -47,10 +51,6 @@
 		
 	} else if ( dtype =='FLT') {
 		raster@data@values <- as.numeric(raster@data@values)
-		if (is.na(mn)) { dataType(raster) <- 'FLT8S'
-		} else if (mn < -3.4E38 | mx > 3.4E38) { dataType(raster) <- 'FLT8S'
-		} else { dataType(raster) <- 'FLT4S'
-		}	
 	} else if ( dtype =='LOG') {
 		raster@data@values <- as.integer(raster@data@values)
 		raster@data@values[is.na(raster@data@values)] <- as.integer(raster@file@nodatavalue)
