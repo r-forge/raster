@@ -26,7 +26,7 @@ pbCreate <- function(nsteps, type='text', style=3) {
 
 
 
-pbStep <- function(pb, step=NULL, label='step') {
+pbStep <- function(pb, step=NULL, label='') {
 	pbclass <- class(pb)
 	if (pbclass=="txtProgressBar") {
 		if (is.null(step)) { step = pb$getVal() + 1 }

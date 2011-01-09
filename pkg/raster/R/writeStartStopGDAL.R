@@ -17,7 +17,6 @@
 	raster@data@fromdisk <- TRUE
 	raster@file@name <- filename
 	return(raster)
-	
 }
 
 
