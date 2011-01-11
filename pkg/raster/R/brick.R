@@ -198,3 +198,8 @@ setMethod('brick', signature(x='array'),
 	}
 )
 
+setMethod('brick', signature(x='kasc'), 
+	function(x) {
+		as(x, 'RasterBrick')
+	}
+)
