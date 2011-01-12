@@ -388,7 +388,7 @@ clusfun <- function(x, filename="", ...) {
 }	
 @
 
-To use snow with raster, you need to set up a cluster first, with  'beginCluster' (only once during a session). After that we can run the function (remove the #):
+To use snow with raster, you need to set up a cluster first, with  'beginCluster' (only once during a session). After that we can run the function:
 
 <<code-clus2>>=
 r <- raster()
