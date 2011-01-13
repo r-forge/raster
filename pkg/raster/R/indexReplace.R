@@ -55,7 +55,8 @@ setReplaceMethod("[", "RasterLayer",
 			stop('currently only implemented for SpatialLines* and SpatialPolygons*, not for other Spatial* objects')
 		} else if (inherits(i, "RasterLayer")) {
 			if (compare(x, i, stopiffalse=FALSE, showwarning=FALSE)) {
-				i <- as.logical( getValues(i) ) 
+				i <- as.logical( getValues(i) )
+				i[is.na(i)] <- FALSE
 			} else {
 				i <- extent(i)
 			}
