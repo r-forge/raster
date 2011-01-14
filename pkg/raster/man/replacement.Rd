@@ -1,4 +1,4 @@
-\name{indexing}
+\name{replacement}
 
 \docType{methods}
 
@@ -35,6 +35,7 @@ Double brackes '[[ ]]' can be used to extract one or more layers from a multi-la
 \bold{Get values}
 
 \code{x[i]}
+
 \code{x[i,j]}
 
 Arguments
@@ -48,6 +49,7 @@ Arguments
 \bold{Set values}
 
 \code{x[i] <- value}
+
 \code{x[i,j] <- value}
 
 Arguments

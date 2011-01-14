@@ -5,7 +5,18 @@
 # Licence GPL v3
 
 
-.writeGDALall <- function(raster, filename, options=NULL, ...) {
+
+.writeGDALall <- function(x, filename, options=NULL, ...) {
+	
+	x <- .startGDALwriting(x, filename, options, ...)
+	x <- writeValues(x, values(x), start=1)
+	.stopGDALwriting(x)
+
+}
+	
+
+
+...writeGDALall <- function(raster, filename, options=NULL, ...) {
 
 	if (! .requireRgdal() ) { stop('rgdal not available') }
 
@@ -43,6 +54,12 @@
 			x <- putRasterData(out@file@transient, v, band=i, c(0, 0))
 		}
 	}	
+	
+	if (raster@data@haveminmax) {
+		out@data@min <- raster@data@min
+		out@data@max <- raster@data@max
+		out@data@haveminmax <- TRUE
+	}
 	
 	return( .stopGDALwriting(out) )
 }
