@@ -8,7 +8,11 @@
 \alias{[,Raster,ANY,ANY-method}
 \alias{[,Raster,Spatial,missing-method}
 
-\alias{[<-,RasterLayer-method}
+\alias{[<-,RasterLayer,ANY-method}
+\alias{[<-,RasterLayer,RasterLayer-method}
+\alias{[<-,RasterLayer,Spatial-method}
+\alias{[<-,RasterLayer,Extent-method}
+
 
 \title{Extract or replace cell values of a Raster object}
 
