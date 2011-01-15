@@ -5,13 +5,24 @@
 
 \alias{[[,RasterLayer,ANY,ANY-method}
 \alias{[[,RasterStackBrick,ANY,ANY-method}
-\alias{[,Raster,ANY,ANY-method}
-\alias{[,Raster,Spatial,missing-method}
 
-\alias{[<-,RasterLayer,ANY-method}
-\alias{[<-,RasterLayer,RasterLayer-method}
-\alias{[<-,RasterLayer,Spatial-method}
-\alias{[<-,RasterLayer,Extent-method}
+\alias{[,Raster,Spatial,missing-method}
+\alias{[,Raster,RasterLayer,missing-method}
+\alias{[,Raster,Extent,missing-method}
+\alias{[,Raster,numeric,numeric-method}
+\alias{[,Raster,numeric,missing-method}
+\alias{[,Raster,missing,numeric-method}
+\alias{[,Raster,missing,missing-method}
+\alias{[,Raster,logical,missing-method}
+
+\alias{[<-,RasterLayer,numeric,numeric-method}
+\alias{[<-,RasterLayer,numeric,missing-method}
+\alias{[<-,RasterLayer,logical,missing-method}
+\alias{[<-,RasterLayer,missing,numeric-method}
+\alias{[<-,RasterLayer,missing,missing-method}
+\alias{[<-,RasterLayer,RasterLayer,missing-method}
+\alias{[<-,RasterLayer,Spatial,missing-method}
+\alias{[<-,RasterLayer,Extent,missing-method}
 
 
 \title{Extract or replace cell values of a Raster object}

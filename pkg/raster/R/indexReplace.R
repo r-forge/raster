@@ -4,14 +4,9 @@
 # Licence GPL v3
 
 
-
-setReplaceMethod("[", c("RasterLayer", "RasterLayer"),
+setReplaceMethod("[", c("RasterLayer", "RasterLayer", "missing"),
 	function(x, i, j, value) {
 
-		if (! missing(j) ) { 
-			stop('if the first index is a RasterLayer object, there cannot be a second index') 
-		}	
-	
 		if (! hasValues(i) ) {
 			i <- cellsFromExtent(x, i)
 			
@@ -23,30 +18,22 @@ setReplaceMethod("[", c("RasterLayer", "RasterLayer"),
 			i <- cellsFromExtent(x, i)
 		}		
 	
-		return(callNextMethod(x, i, j, value=value))
+		.replace(x, i, value=value) 
 	}
 )
 
 
-setReplaceMethod("[", c("RasterLayer", "Extent"),
+setReplaceMethod("[", c("RasterLayer", "Extent", "missing"),
 	function(x, i, j, value) {
-
-		if (! missing(j) ) { 
-			stop('if the first index is an Extent oject, there cannot be a second index') 
-		}	
-		
-		i <- cellsFromExtent(x, i)
-		return(callNextMethod(x, i, j, value=value))
-	}
-)
-
-setReplaceMethod("[", c("RasterLayer", "Spatial"),
-	function(x, i, j, value) {
-
-		if (! missing(j) ) { 
-			stop('if the first index is a Spatial* object, there cannot be a second index') 
-		}	
 	
+		i <- cellsFromExtent(x, i)
+		.replace(x, i, value=value)
+	}
+)
+
+setReplaceMethod("[", c("RasterLayer", "Spatial", "missing"),
+	function(x, i, j, value) {
+
 		if (inherits(i, 'SpatialPolygons')) {
 			v <- 1:length(i@polygons)
 			v[] <- value
@@ -59,74 +46,76 @@ setReplaceMethod("[", c("RasterLayer", "Spatial"),
 			
 		} else { # if (inherits(i, 'SpatialPoints')) {
 			i <- cellsFromXY(x, coordinates(i))
-			return( callNextMethod(x, i, j, value=value) )
+			return( .replace(x, i, value=value) )
 		}
 	}
 )
 
 
-
-setReplaceMethod("[", c("RasterLayer","ANY"),
+setReplaceMethod("[", c("RasterLayer","missing","missing"),
 	function(x, i, j, value) {
-
-	if (! missing(j) ) { 
-		if (! is.numeric(j)) { 
-			stop('the second argument must be numeric (or missing)') 
-		}	
-		if (! missing(i)) {
-			if (! is.numeric(i)) {
-				stop('the first index must be numeric if you supply a second index') 
+	
+		if (length(value) == ncell(x)) {
+			x <- try( setValues(x, value))
+		} else if (length(value) == 1) {
+			x <- try( setValues(x, rep(value, times=ncell(x))) )
+		} else {
+			v <- try( vector(length=ncell(x)) )
+			if (class(x) != 'try-error') {
+				v[] <- value
+				x <- try( setValues(x, v) )
 			}
 		}
-	} 
+		if (class(x) == 'try-error') {
+			stop('cannot replace values on this raster (it is too large')
+		}
+		return(x)
+	
+	}
+)
+
+setReplaceMethod("[", c("RasterLayer", "numeric", "numeric"),
+	function(x, i, j, value) {
+		i <- cellFromRowColCombine(x, i, j)
+		.replace(x, i, value)
+	}
+)	
+
+setReplaceMethod("[", c("RasterLayer","missing", "numeric"),
+	function(x, i, j, value) {
+		j <- cellFromCol(x, j)
+		.replace(x, j, value=value)
+	}
+)
+
+
+setReplaceMethod("[", c("RasterLayer","numeric", "missing"),
+	function(x, i, j, value) {
+		theCall <- sys.call(-1)
+		narg <- length(theCall)-length(match.call(call=sys.call(-1)))
+		if (narg > 0) {
+			i <- cellFromRow(x, i)
+		}
+		.replace(x, i=i, value=value)
+	}
+)
+
+
+
+
+setReplaceMethod("[", c("RasterLayer", "logical", "missing"),
+	function(x, i, j, value) {
+		.replace(x, i, value)
+	}
+)	
+
+
+.replace <- function(x, i, value) {
 
 	if (! is.numeric(value) & !is.logical(value)) { 
 		value <- as.numeric(value) 
 	}
 		
-	if ( missing(i) ) {
-	
-		if (missing(j)) {
-			# all cells
-			
-			if (length(value) == ncell(x)) {
-				x <- try( setValues(x, value))
-			} else if (length(value) == 1) {
-				x <- try( setValues(x, rep(value, times=ncell(x))) )
-			} else {
-				v <- try( vector(length=ncell(x)) )
-				if (class(x) != 'try-error') {
-					v[] <- value
-					x <- try( setValues(x, v) )
-				}
-			}
-			if (class(x) == 'try-error') {
-				stop('cannot replace values on this raster (it is too large')
-			}
-			return(x)
-			
-		} else {
-			# columns
-			i <- cellFromCol(x, j)
-		} 
-		
-	} else {
-
-		if (! (is.numeric(i) | is.logical(i)) ) {
-			stop('the first index must be numeric or logical') 
-		}
-	
-		if (missing(j)) {
-			theCall <- sys.call(-1)
-			narg <- length(theCall)-length(match.call(call=sys.call(-1)))
-			if (narg > 0) {
-				i <- cellFromRow(x, i)
-			}
-		} else {
-			i <- cellFromRowColCombine(x, i, j)
-		}
-	}
-
 	if ( is.logical(i) ) {
 		i[is.na(i)] <- FALSE
 	} else {
@@ -151,5 +140,5 @@ setReplaceMethod("[", c("RasterLayer","ANY"),
 	x <- .clearFile(x)
 	return(x)
 }
-)
+
 
