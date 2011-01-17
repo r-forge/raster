@@ -25,6 +25,7 @@ beginCluster <- function(n, type) {
 	cl <- makeCluster(n, type) 
 	cl <- .addPackages(cl)
 	options(rasterClusterObject = cl)
+	options(rasterClusterCores = length(cl))
 	options(rasterCluster = TRUE)
 }
 
