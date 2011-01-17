@@ -24,7 +24,7 @@ function(x, ...) {
 
 	if (nlayers(x) > 0) {
 		compare(c(x, rasters))
-	} else if (length(rasters) > 0) {
+	} else if (length(rasters) > 1) {
 		compare(rasters)
 	}
 		
