@@ -26,8 +26,8 @@ compare <- function(x, ..., extent=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=
 		if (extent) {
 			if (!(isTRUE(all.equal(extent(objects[[1]]), extent(objects[[i]]), tolerance=tolerance, scale=minres )))) {
 				result <- FALSE
-				if (stopiffalse) { stop('Different bounding box') }
-				if (showwarning) { warning('Different bounding box') }
+				if (stopiffalse) { stop('Different extent') }
+				if (showwarning) { warning('Different extent') }
 			}	
 		}	
 		if (rowcol) {
