@@ -39,7 +39,7 @@ clearOptions()
 \item{progress}{Character. Valid values are "text",  "window" and "" (the default in most functions, no progress bar)}
 \item{timer}{Logical. If \code{TRUE}, the time it took to complete the function is printed}
 \item{chunksize}{Integer. Maximum number of cells to read/write in a single chunk while processing (chunk by chunk) disk based Raster* objects}
-\item{maxmemory}{Integer. Maximum number of cells to read into memomery. I.e., if a Raster* object has more than this number of cells, \code{\link[raster]{canProcessInMemory}} will return \code{TRUE} }
+\item{maxmemory}{Integer. Maximum number of cells to read into memomery. I.e., if a Raster* object has more than this number of cells, \code{\link[raster]{canProcessInMemory}} will return \code{FALSE} }
 \item{todisk}{Logical. For debugging only. Default is \code{FALSE} and should normally not be changed. If \code{TRUE}, results are always written to disk, even if no filename is supplied (a temporary filename is used)}
 \item{setfileext}{Logical. Default is \code{TRUE}. If \code{TRUE}, the file extension will be changed when writing (if known for the file type). E.g. GTiff files will be saved with the .tif extension)}
 }
