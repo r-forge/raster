@@ -40,7 +40,7 @@ cellFromPolygon(object, p, weights=FALSE)
   \item{xy}{matrix of x and y coordinates, or a SpatialPoints or SpatialPointsDataFrame object}
   \item{lns}{SpatialLines object}
   \item{p}{SpatialPolygons object}
-  \item{weights}{Logical. If \code{TRUE}, the percentage of each cell that is covered is also returned}
+  \item{weights}{Logical. If \code{TRUE}, the fraction of each cell that is covered is also returned}
 }
   
 \details{
@@ -49,6 +49,10 @@ cellFromPolygon(object, p, weights=FALSE)
 
 \value{
 row, column or cell number(s). cellFromLine and cellFromPolygon return a list. 
+}
+
+\seealso{
+\code{\link{xyFromCell}}
 }
 
 \author{Robert J. Hijmans }
