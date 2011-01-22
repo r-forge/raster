@@ -1,3 +1,6 @@
+--- 22-Jan-2011,  version 1.7-31
+new functions cellFromLines, cellFromPolygons (suggested by Brian Oney)
+
 --- 17-Jan-2011,  version 1.7-28
 bug fix in update (reported by Matteo Mattiuzi) 
 calc can now return multiple layers when the input is a RasterLayer (Neil Best)
