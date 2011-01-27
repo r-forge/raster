@@ -133,7 +133,10 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		rc <- paste(row, col, sep='') 
 		zip <- paste(var, '_', rc, '.zip', sep='')
 		zipfile <- paste(path, zip, sep='')
-		if (var  != 'bio') {
+		if (var  == 'alt') {
+			bilfiles <- paste(var, '_', rc, '.bil', sep='')
+			hdrfiles <- paste(var, '_', rc, '.hdr', sep='')			
+		} else if (var  != 'bio') {
 			bilfiles <- paste(var, 1:12, '_', rc, '.bil', sep='')
 			hdrfiles <- paste(var, 1:12, '_', rc, '.hdr', sep='')
 		} else {
