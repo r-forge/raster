@@ -1,3 +1,6 @@
+--- 26-Jan-2011,  version 1.7-32
+ncdf write now honours the datatype argument. Code changes as suggested by Stefan Schlaffer
+
 --- 22-Jan-2011,  version 1.7-31
 new functions cellFromLines, cellFromPolygons (suggested by Brian Oney)
 
