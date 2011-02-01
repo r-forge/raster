@@ -165,7 +165,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		to <- brick(to, values=FALSE)
 		to@data@nlayers <- nl
 	}
-	
+
 	if (!canProcessInMemory(to, 1) && filename == "") {
 		filename <- rasterTmpFile()
 	}
@@ -200,13 +200,13 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 				srow <- max(startrow, tr$row[i])
 				erow <- min(endrow, (tr$row[i]+tr$nrows[i]-1))
 				nrows <- erow-srow+1
-				xy <- xyFromCell(to, cellFromRowColCombine(to, srow:erow, startcol:endcol) ) 
+				cells <- cellFromRowColCombine(to, srow:erow, startcol:endcol)
+				xy <- xyFromCell(to, cells ) 
 				unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 				unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
-				iv <- matrix(FALSE, nrow=tr$nrows[i], ncol=to@ncols)
-				iv[(srow:erow)-tr$row[i]+1, startcol:endcol] <- TRUE
+				cells <- cells - (tr$row[i] - 1) * to@ncols
 				vals <- matrix(NA, nrow=tr$nrows[i] * to@ncols, ncol=nl)
-				vals[iv,] <- .xyValues(from, unProjXY, method=method)
+				vals[cells,] <- .xyValues(from, unProjXY, method=method)
 			}
 			return(vals)
 		}
@@ -258,14 +258,14 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 				srow <- max(startrow, tr$row[i])
 				erow <- min(endrow, (tr$row[i]+tr$nrows[i]-1))
 				nrows <- erow-srow+1
-				xy <- xyFromCell(to, cellFromRowColCombine(to, srow:erow, startcol:endcol) ) 
+				cells <- cellFromRowColCombine(to, srow:erow, startcol:endcol)
+				xy <- xyFromCell(to, cells ) 
 				unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 				unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
-				iv <- matrix(FALSE, nrow=tr$nrows[i], ncol=to@ncols)
-				iv[(srow:erow)-tr$row[i]+1, startcol:endcol] <- TRUE
+
+				cells <- cells - (tr$row[i] - 1) * to@ncols
 				vals <- matrix(NA, nrow=tr$nrows[i] * to@ncols, ncol=nl)
-				vals[iv,] <- .xyValues(from, unProjXY, method=method)
-				#vals <- as.vector(t(vals))
+				vals[cells,] <- .xyValues(from, unProjXY, method=method)
 			}
 			if (inMemory) {
 				start <- cellFromRowCol(to, tr$row[i], 1)

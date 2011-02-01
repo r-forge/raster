@@ -1,3 +1,6 @@
+--- 31-Jan-2011,  version 1.7-33
+Fixed bug in projectRaster (reported by Bart Kranstauber) that was created with bug fix on 7-Jan-2011 
+
 --- 26-Jan-2011,  version 1.7-32
 ncdf write now honours the datatype argument. Code changes as suggested by Stefan Schlaffer
 
