@@ -26,6 +26,9 @@
 	test1 <- try ( apply(testmat, 1, fun) , silent=TRUE )
 	if (class(test1) != "try-error") {
 		doapply <- TRUE
+		if (! is.null(dim(test1))) {
+			test1 <- t(test1)
+		}
 		nlout <- NCOL(test1)
 	} else {
 		doapply <- FALSE
