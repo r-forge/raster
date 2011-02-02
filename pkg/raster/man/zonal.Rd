@@ -21,7 +21,10 @@ zonal(x, zones, stat='mean', digits=0, progress)
 }
 
 \details{
-If \code{stat} is a \code{function}, \code{zonal} will fail (gracefully) for very large RasterLayers
+If \code{stat} is a \code{function}, \code{zonal} will fail (gracefully) for very large RasterLayers.
+The function should accept a \code{na.rm} argument (always \code{TRUE}), although you could write your own function that changes this. 
+For example, \code{fun=length} will fail, but \code{fun(x, ...)=length(x)} will work (the '...' arguments catches the na.rm argument, but it is ignored). 
+\code{fun(x, na.rm){mean(x, na.rm=FALSE)}} will also change the default \code{na.rm=TRUE} setting.
 }
 
 \value{
