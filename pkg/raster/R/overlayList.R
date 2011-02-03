@@ -52,7 +52,7 @@
 		if (doapply) {
 			valmat <- matrix(nrow=ncell(outraster)*max(nl), ncol=length(x)) 
 			for (i in 1:length(x)) {
-				if (ncell(x[[i]] < nrow(valmat))) {
+				if (ncell(x[[i]]) < nrow(valmat)) {
 					valmat[,i] <- as.vector(getValues(x[[i]])) * rep(1, nrow(valmat))
 				} else {
 					valmat[,i] <- as.vector(getValues(x[[i]]))
@@ -100,7 +100,7 @@
 					valmat = matrix(nrow=tr$nrows[i]*ncol(outraster)*max(nl) , ncol=length(x))
 				}
 				for (j in 1:length(x)) {
-					if (ncell(x[[i]] < nrow(valmat))) {
+					if (ncell(x[[i]]) < nrow(valmat)) {
 						valmat[,j] <- as.vector(getValues(x[[j]], row=tr$row[i], nrows=tr$size)) * rep(1, nrow(valmat))
 					} else {
 						valmat[,j] <- as.vector(getValues(x[[j]], row=tr$row[i], nrows=tr$size))
