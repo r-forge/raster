@@ -12,7 +12,7 @@ ncdf write now honours the datatype argument. Code changes as suggested by Stefa
 new functions cellFromLines, cellFromPolygons (suggested by Brian Oney)
 
 --- 17-Jan-2011,  version 1.7-28
-bug fix in update (reported by Matteo Mattiuzi) 
+bug fix in update (reported by Matteo Mattiuzzi) 
 calc can now return multiple layers when the input is a RasterLayer (Neil Best)
 bug fix in extract with buffer for non-long/lat rasters (reported by Richard Plant)
 

@@ -16,6 +16,11 @@ function(x, fun, filename='', ...) {
 		stop('RasterLayer has no cell values in memory or on disk')
 	}
 
+	return( calc(stack(x), fun, filename=filename, ...) )
+	
+	
+	# ignored for now..
+	
 	test = try(fun(x[1]), silent=TRUE)
 	if (class(test) == 'try-error') {
 		stop("function 'fun' is not valid here")
