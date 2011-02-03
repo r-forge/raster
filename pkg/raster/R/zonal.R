@@ -3,7 +3,7 @@
 # Version 0.9
 # Licence GPL v3
 
-zonal <- function(x, zones, stat='mean', digits=0, progress) {
+zonal <- function(x, zones, stat='mean', digits=0, na.rm=TRUE, progress) {
 
 	compare(c(x, zones))
 	
@@ -26,7 +26,7 @@ zonal <- function(x, zones, stat='mean', digits=0, progress) {
 		rm(x)
 		d <- cbind(d, round(getValues(zones), digits=digits))
 		rm(zones)
-		alltab <- aggregate(d[,1:(ncol(d)-1)], by=list(d[,ncol(d)]), FUN=fun, na.rm=TRUE) 
+		alltab <- aggregate(d[,1:(ncol(d)-1)], by=list(d[,ncol(d)]), FUN=fun, na.rm=na.rm) 
 		stat <- deparse(substitute(stat))
 			
 	} else {
@@ -56,15 +56,15 @@ zonal <- function(x, zones, stat='mean', digits=0, progress) {
 			d <- getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i])
 			d <- cbind(d,  round(getValuesBlock(zones, row=tr$row[i], nrows=tr$nrows[i]), digits=digits))
 			if (nrow(d) > 0) {
-				alltab <- rbind(alltab, aggregate(d[,1:(ncol(d)-1)], by=list(d[,ncol(d)]), FUN=fun, na.rm=TRUE)) 
+				alltab <- rbind(alltab, aggregate(d[,1:(ncol(d)-1)], by=list(d[,ncol(d)]), FUN=fun, na.rm=na.rm)) 
 				if (counts) {
-					cnttab <- rbind(cnttab, aggregate(d[,1:(ncol(d)-1)], by=list(d[,ncol(d)]), FUN=length, na.rm=TRUE)) 
+					cnttab <- rbind(cnttab, aggregate(d[,1:(ncol(d)-1)], by=list(d[,ncol(d)]), FUN=length, na.rm=na.rm)) 
 				}
 			
 				if (length(alltab) > 10000) {
-					alltab <- aggregate(alltab[,2:ncol(alltab)], by=list(alltab[,1]), FUN=fun, na.rm=TRUE) 
+					alltab <- aggregate(alltab[,2:ncol(alltab)], by=list(alltab[,1]), FUN=fun, na.rm=na.rm) 
 					if (counts) {
-						cnttab <- aggregate(cnttab[,2:ncol(cnttab)], by=list(cnttab[,1]), FUN=sum, na.rm=TRUE) 
+						cnttab <- aggregate(cnttab[,2:ncol(cnttab)], by=list(cnttab[,1]), FUN=sum, na.rm=na.rm) 
 					}
 				}
 			}
@@ -72,7 +72,7 @@ zonal <- function(x, zones, stat='mean', digits=0, progress) {
 		}
 		pbClose(pb)
 			
-		alltab <- aggregate(alltab[,2:ncol(alltab)], by=list(alltab[,1]), FUN=fun) 	
+		alltab <- aggregate(alltab[,2:ncol(alltab)], by=list(alltab[,1]), FUN=fun, na.rm=na.rm) 	
 		if (counts) {
 			cnttab <- aggregate(cnttab[,2:ncol(cnttab)], by=list(cnttab[,1]), FUN=sum) 
 			alltab[2:ncol(alltab)] <- alltab[2:ncol(alltab)] / cnttab[2:ncol(alltab)]
