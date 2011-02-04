@@ -4,7 +4,6 @@
 # Licence GPL v3
 
 
-
 rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 	
 	nl = nlayers(x)
@@ -69,7 +68,7 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 	}
 	
 	if (spatial) {
-		v = data.frame(xyv[,-c(1:2)])
+		v = data.frame(xyv[ ,-c(1:2), drop=FALSE])
 		colnames(v) <- laynam
 		return( SpatialPointsDataFrame(coords=xyv[,1:2], data=v, proj4string=crs ) )
 		
