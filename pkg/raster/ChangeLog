@@ -1,3 +1,6 @@
+--- 4-Feb-2011,  version 1.7-35
+Changes to reclass such that a function like sum returns an object with the (highest) number of layers of the input objects (suggested by Neil Best)
+
 --- 2-Feb-2011,  version 1.7-34
 Bug fix in zonal; it did not ignore NA values. (reported by Kevin Ummel)
 Changes to reclass and calc (suggested by Neil Best)

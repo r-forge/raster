@@ -11,14 +11,14 @@
 	compare(x)
 	
 	nl <- sapply(x, nlayers)
-	un <- unique(nl)
+	maxnl <- max(nl)
 
 	filename <- trim(filename)
 
 	testmat <- NULL
 	testlst <- vector(length=length(x), mode='list')
 	for (i in 1:length(testlst)) {
-		v <- extract(x[[i]], 1:5)		
+		v <- as.vector(extract(x[[i]], 1:5))
 		testmat <- cbind(testmat, v)
 		testlst[[i]] <- as.vector(v)
 	}
@@ -28,6 +28,8 @@
 		doapply <- TRUE
 		if (! is.null(dim(test1))) {
 			test1 <- t(test1)
+		} else {
+			test1 <- matrix(test1, ncol=maxnl)
 		}
 		nlout <- NCOL(test1)
 	} else {
@@ -50,7 +52,7 @@
 		pb <- pbCreate(3, type=.progress(...))			
 		pbStep(pb, 1)
 		if (doapply) {
-			valmat <- matrix(nrow=ncell(outraster)*max(nl), ncol=length(x)) 
+			valmat <- matrix(nrow=ncell(outraster)*maxnl, ncol=length(x)) 
 			for (i in 1:length(x)) {
 				if (ncell(x[[i]]) < nrow(valmat)) {
 					valmat[,i] <- as.vector(getValues(x[[i]])) * rep(1, nrow(valmat))
@@ -94,10 +96,10 @@
 		pb <- pbCreate(tr$n, type=.progress(...))			
 
 		if (doapply) { 
-			valmat = matrix(nrow=tr$nrows[1]*ncol(outraster)*max(nl), ncol=length(x)) 
+			valmat = matrix(nrow=tr$nrows[1]*ncol(outraster)*maxnl, ncol=length(x)) 
 			for (i in 1:tr$n) {
 				if (i == tr$n) {
-					valmat = matrix(nrow=tr$nrows[i]*ncol(outraster)*max(nl) , ncol=length(x))
+					valmat = matrix(nrow=tr$nrows[i]*ncol(outraster)*maxnl , ncol=length(x))
 				}
 				for (j in 1:length(x)) {
 					if (ncell(x[[i]]) < nrow(valmat)) {
