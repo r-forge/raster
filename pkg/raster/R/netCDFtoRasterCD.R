@@ -216,7 +216,12 @@
 	
 	natest <- att.get.ncdf(nc, zvar, "_FillValue")
 	if (natest$hasatt) { 
-		r@file@nodatavalue <- natest$value
+		r@file@nodatavalue <- as.numeric(natest$value)
+	} else {
+		natest <- att.get.ncdf(nc, zvar, "missing_value")
+		if (natest$hasatt) { 
+			r@file@nodatavalue <- as.numeric(natest$value)
+		}
 	}
 	r@data@fromdisk <- TRUE
 	
