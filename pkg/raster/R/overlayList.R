@@ -44,8 +44,7 @@
 	if (nlout == 1) {
 		outraster <- raster(x[[1]])
 	} else {
-		outraster <- brick(x[[1]], values=FALSE)
-		outraster@data@nlayers <- as.integer(nlout)
+		outraster <- brick(raster(x[[1]]))
 	}
 	
 	if ( canProcessInMemory(outraster, sum(nl)) ) {
@@ -76,12 +75,11 @@
 			vals <- do.call(fun, x)
 			vals <- matrix(vals, nrow=ncell(outraster))
 		}
-		
+		pbStep(pb, 3)
 		outraster <- setValues(outraster, vals)
 		if (filename != "") { 
 			outraster <- writeRaster(outraster, filename=filename, ...) 
 		}
-		pbStep(pb, 3)
 		pbClose(pb)
 		return(outraster)
 		
