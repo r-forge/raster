@@ -26,10 +26,10 @@
 	}
 	
 	thefile <- file(hdrfile, "w")  # open an txt file connectionis
-	cat('file format : IDRISI Raster A.1', "\n", file = thefile)
+	cat('file format : IDRISI Raster A.1\n', file = thefile)
 	cat('file title  : ', layerNames(raster), "\n", sep='', file = thefile)
 	cat('data type   : ', pixtype, "\n", sep='', file = thefile)
-	cat('file type   : binary', "\n", sep='', file = thefile)
+	cat('file type   : binary\n', sep='', file = thefile)
 	cat('columns     : ', ncol(raster), "\n", sep='', file = thefile)
 	cat('rows        : ', nrow(raster), "\n", sep='', file = thefile)
 	cat('ref. system : ', refsystem, "\n", sep='', file = thefile)
@@ -45,11 +45,11 @@
 	cat('max. value  : ', maxValue(raster), "\n", sep='', file = thefile)
   	cat('display min : ', minValue(raster), "\n", sep='', file = thefile)
   	cat('display max : ', maxValue(raster), "\n", sep='', file = thefile)
-	cat('value units : unspecified', "\n", file = thefile)
-	cat('value error : unknown', "\n", file = thefile)
+	cat('value units : unspecified\n', file = thefile)
+	cat('value error : unknown\n', file = thefile)
 	cat('flag value  : ', .nodatavalue(raster), "\n", sep='', file = thefile)
 	cat("flag def'n  : no data\n", file = thefile)
-	cat('legend cats : 0', "\n", file = thefile)
+	cat('legend cats : 0\n', file = thefile)
 
 	close(thefile)
 	
