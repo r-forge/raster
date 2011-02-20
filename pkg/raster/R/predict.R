@@ -11,11 +11,11 @@ if (!isGeneric("predict")) {
 setMethod('predict', signature(object='Raster'), 
 	function(object, model, filename="", fun=predict, ext=NULL, const=NULL, index=1, se.fit=FALSE, na.rm=TRUE, progress='', ...) {
 	
-
-		if ( class(model)[1] %in% c('Bioclim', 'Domain', 'Mahalanobis', 'MaxEnt', 'ConvexHull') ) { 
-			return ( predict(model, object, filename=filename, ext=ext, ...) ) 
+		if (inherits(model, 'DistModel')) {
+			# models defined in package 'dismo'
+			return ( predict(model, object, filename=filename, ext=ext, progress=progress, ...) ) 
 		}
-	
+
 		if (se.fit) {
 			predrast <- brick(object, values=FALSE)
 			predrast@data@nlayers <- as.integer(2)
