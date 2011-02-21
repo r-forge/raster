@@ -112,7 +112,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 		
 	} else {
 			
-		if ( toupper(x@file@name) == toupper(filename) ) {
+		if ( toupper(filename(x)) == toupper(filename) ) {
 			stop('filenames of source and destination should be different')
 		}
 		

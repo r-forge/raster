@@ -1,3 +1,6 @@
+--- 21-Feb-2011,  version 1.7-42
+A number of buglets fixed. Thanks to Jon Olav Skoien, Kevin Ummel & Matteo Mattiuzzi
+
 --- 4-Feb-2011,  version 1.7-35
 Changes to reclass such that a function like sum returns an object with the (highest) number of layers of the input objects (suggested by Neil Best)
 
