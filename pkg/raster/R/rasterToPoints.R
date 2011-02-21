@@ -24,9 +24,11 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 		}
 	}
 
+	if (spatial) {
+		laynam <- .enforceGoodLayerNames(x, returnNames=TRUE)
+	}
 	
 	if (canProcessInMemory(x, 3)) {
-		if (spatial) laynam <- .enforceGoodLayerNames(x, returnNames=TRUE)
 		
 		xyv <- cbind(xyFromCell(x, 1:ncell(x)), getValues(x))
 		x = NULL
