@@ -16,10 +16,13 @@ function(x, y, method="bilinear", filename="", ...)  {
 	
 	# y do: compare projections of x and y
 		
-	if (nlayers(x) == 1) {
+	ln <- layerNames(x)
+	nl <- nlayers(x)
+	if (nl == 1) {
 		y <- raster(y)
 	} else {
 		y <- brick(y, values=FALSE)
+		y@data@nlayers <- nl
 	}
 	
 	if (!hasValues(x)) {
@@ -51,7 +54,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 	
 	inMemory <- filename == ""
 	if (inMemory) {
-		v <- matrix(NA, nrow=ncell(y), nlayers(x))
+		v <- matrix(NA, nrow=ncell(y), ncol=nlayers(x))
 	} else {
 		y <- writeStart(y, filename=filename, ... )
 	}
@@ -144,6 +147,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 	}
 
 	pbClose(pb)
+	layerNames(y) <- ln
 	return(y)
 	
 }

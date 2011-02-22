@@ -1,3 +1,6 @@
+--- 22-Feb-2011,  version 1.7-43
+resample no longer looses layer names (reported by Brian Anacker)
+
 --- 21-Feb-2011,  version 1.7-42
 A number of buglets fixed. Thanks to Jon Olav Skoien, Kevin Ummel & Matteo Mattiuzzi
 

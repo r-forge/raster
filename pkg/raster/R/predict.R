@@ -123,7 +123,7 @@ setMethod('predict', signature(object='Raster'),
 
 			if (se.fit) {
 			
-				predv <- predict(model, blockvals, se.fit=TRUE, ...)
+				predv <- fun(model, blockvals, se.fit=TRUE, ...)
 				predv <- cbind(as.vector(predv$fit), as.vector(predv$se.fit))
 			
 			}  else {
