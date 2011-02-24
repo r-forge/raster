@@ -110,6 +110,14 @@ plot(dif)
 # Meuse data to long/lat
 meuse <- raster(system.file("external/test.grd", package="raster"))
 meusell <- projectRaster(meuse, res=1/1200, crs="+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+
+
+# Goode's homolosine projection, global grid
+r <- raster()
+r[] <- 1:ncell(r)
+# note the "+over" argument to avoid wrapping around the globe
+goode <- "+proj=goode +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +over"
+z <- projectRaster(r, crs=goode, method='ngb')
 }
 }
 }
