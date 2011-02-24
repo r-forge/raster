@@ -132,7 +132,6 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			}
 		} 
 	}
-	projto <- paste(projto, "+over")
 
 	validObject(to)
 	validObject(projection(to, asText=FALSE))
@@ -141,6 +140,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		stop('projections of "from" and "to" are the same')
 	}	
 
+	projto <- paste(projto, "+over")
 	if ( ! hasValues(from) ) {
 		return(to)
 	}
