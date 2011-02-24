@@ -128,10 +128,11 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			if (missing(crs) | is.na(crs) | crs == 'NA' ) {
 				stop("output projection is NA") 
 			} else {
-				projection(to) <- crs
+				projto <- projection(to) <- crs
 			}
 		} 
 	}
+	projto <- paste(projto, "+over")
 
 	validObject(to)
 	validObject(projection(to, asText=FALSE))
