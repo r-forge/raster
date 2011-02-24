@@ -168,7 +168,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		to@data@nlayers <- nl
 	}
 
-	if (!canProcessInMemory(to, nlayers(to)) && filename == "") {
+	if (!canProcessInMemory(to, n=nlayers(to)*2) && filename == "") {
 		filename <- rasterTmpFile()
 	}
 
@@ -250,8 +250,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		
 	} else {
 		# this seems to need smaller chunks
-		cz <- max(5, 0.1 * .chunksize() / nlayers(to))
-		tr <- blockSize(to, chunksize=cz)
+		#cz <- max(5, 0.1 * .chunksize() / nlayers(to))
+		tr <- blockSize(to)
 		
 		pb <- pbCreate(tr$n, type=.progress(...))
 		for (i in 1:tr$n) {
