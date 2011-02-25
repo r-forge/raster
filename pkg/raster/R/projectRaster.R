@@ -102,9 +102,10 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		if (missing(crs)) {
 			stop("'crs' argument is missing.")
 		}
-		to <- projectExtent(from, crs)
+		crs2 <- paste(crs, "+over")
+		to <- projectExtent(from, crs2)
 		if (missing(res)) {
-			res <- .computeRes(from, crs)
+			res <- .computeRes(from, crs2)
 		}
 		res(to) <- res
 		projto <- projection(to)
@@ -114,6 +115,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		add <- min(5, min(dim(to)[1:2])/10) * max(res)
 		e@ymin <- e@ymin - add
 		e@ymax <- e@ymax + add
+		e@xmin <- e@xmin - add
+		e@xmax <- e@xmax + add
 		if (!is.character(projto)) projto <- projto@projargs
 		if (substr(projto, 1, 13) == "+proj=longlat") {
 			e@xmin <- max(-180, e@xmin)
@@ -140,7 +143,6 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		stop('projections of "from" and "to" are the same')
 	}	
 
-	projto <- paste(projto, "+over")
 	if ( ! hasValues(from) ) {
 		return(to)
 	}
@@ -168,7 +170,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		to@data@nlayers <- nl
 	}
 
-	if (!canProcessInMemory(to, n=nlayers(to)*2) && filename == "") {
+	if (!canProcessInMemory(to, n=nl*2) && filename == "") {
 		filename <- rasterTmpFile()
 	}
 
@@ -250,8 +252,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		
 	} else {
 		# this seems to need smaller chunks
-		#cz <- max(5, 0.1 * .chunksize() / nlayers(to))
-		tr <- blockSize(to)
+		cz <- max(5, 0.1 * .chunksize() / nlayers(to))
+		tr <- blockSize(to, cz)
 		
 		pb <- pbCreate(tr$n, type=.progress(...))
 		for (i in 1:tr$n) {
