@@ -52,7 +52,7 @@ function(x, y, filename='', value=NA, ...) {
 		}
 	} 
 	
-	if (canProcessInMemory(outRaster, 2)) {
+	if (canProcessInMemory(outRaster)) {
 		d <- matrix(nrow=ncell(outRaster), ncol=nlayers(x))
 		d[] <- value
 		cells <- cellsFromExtent(outRaster, extent(x))
