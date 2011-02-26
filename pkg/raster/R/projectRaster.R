@@ -206,11 +206,11 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 				nrows <- erow-srow+1
 				cells <- cellFromRowColCombine(to, srow:erow, startcol:endcol)
 				xy <- xyFromCell(to, cells ) 
-				unProjXY <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
-				unProjXY <- cbind(unProjXY[[1]], unProjXY[[2]])
+				xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+				xy <- cbind(xy[[1]], xy[[2]])
 				cells <- cells - (tr$row[i] - 1) * to@ncols
 				vals <- matrix(NA, nrow=tr$nrows[i] * to@ncols, ncol=nl)
-				vals[cells,] <- .xyValues(from, unProjXY, method=method)
+				vals[cells,] <- .xyValues(from, xy, method=method)
 			}
 			return(vals)
 		}
@@ -263,14 +263,13 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			} else {
 				srow <- max(startrow, tr$row[i])
 				erow <- min(endrow, (tr$row[i]+tr$nrows[i]-1))
-				nrows <- erow-srow+1
 				cells <- cellFromRowColCombine(to, srow:erow, startcol:endcol)
 				xy <- xyFromCell(to, cells ) 
-				unp <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
-				unp <- cbind(unp[[1]], unp[[2]])
+				xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+				xy <- cbind(xy[[1]], xy[[2]])
 				cells <- cells - (tr$row[i] - 1) * to@ncols
 				vals <- matrix(NA, nrow=tr$nrows[i] * to@ncols, ncol=nl)
-				vals[cells,] <- .xyValues(from, unp, method=method)
+				vals[cells,] <- .xyValues(from, xy, method=method)
 			}
 			if (inMemory) {
 				start <- cellFromRowCol(to, tr$row[i], 1)
