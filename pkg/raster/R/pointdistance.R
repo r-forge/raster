@@ -71,7 +71,10 @@ pointDistance <- function (p1, p2, longlat=FALSE,  ...) {
 			warning("type='GreatCircle' is a depracated argument. Use 'longlat=FALSE'")
 		}
 	}		
+	if (longlat == 'GreatCircle') longlat <- TRUE
+	if (longlat == 'Euclidean') longlat <- FALSE
 
+	
 	p1 <- .pointsToMatrix(p1)
 	if (missing(p2)) {
 		return(.distm(p1, longlat))
