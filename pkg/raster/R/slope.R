@@ -6,8 +6,8 @@
 
 slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, ...) {
 	
-	type <- tolower(type)
-	stopifnot(type %in% c('', 'slope', 'aspect'))
+	type <- trim(tolower(type))
+	stopifnot(type %in% c('', 'both' , 'slope', 'aspect'))
 	unit <- tolower(unit)
 	stopifnot(unit %in% c('degrees', ''))
 	filename <- trim(filename)
@@ -81,25 +81,23 @@ slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, 
 hillShade1 <- function(alt, zenith, azimuth, filename='', ...) {
 	zenith <- zenith * pi/180
 	azimuth <- azimuth * pi/180
-	slopeasp <- slopeAspect(alt, filename='', type='both', unit='', rotateAspect=TRUE) 
+	slopeasp <- slopeAspect(alt, filename='', type='', unit='', rotateAspect=TRUE) 
 	x <- cos(slopeasp[[1]]) * cos(zenith) + sin(slopeasp[[1]]) * sin(zenith) * cos(azimuth-slopeasp[[2]])
 	filename <- trim(filename)
 	if (filename != "") {
 		x <- writeRaster(x, filename, ...)
 	}
 	return(x)
-#	plot(x, col=gray(1:100/100))
 }
 
 
 hillShade2 <- function(slope, aspect, zenith, azimuth, filename='', ...) {
-	zenith = zenith * pi/180
-	azimuth = azimuth * pi/180
+	zenith <- zenith * pi/180
+	azimuth <- azimuth * pi/180
 	x <- cos(slope) * cos(zenith) + sin(slope) * sin(zenith) * cos(azimuth-aspect)
 	if (filename != "") {
 		x <- writeRaster(x, filename, ...)
 	}
 	return(x)
-#	plot(x, col=gray(1:100/100))
 }
 
