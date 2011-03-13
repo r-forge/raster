@@ -1,7 +1,7 @@
 
 hillShade <- function(alt, zenith, azimuth, filename='', ...) {
 	sa <- slopeAspect(alt, filename='', type='', unit='') 
-	hillShade2(sa[[1]], sa[[2]], zenith, azimuth, filename, ...)
+	hillShade2(sa[[1]], sa[[2]], zenith, azimuth, filename=filename, ...)
 }
 
 

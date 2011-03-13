@@ -4,11 +4,11 @@
 # Licence GPL v3
 
 
-slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, ...) {
+slopeAspect <- function(alt, filename='', type='both', unit='', ...) {
 	
 	type <- trim(tolower(type))
 	stopifnot(type %in% c('', 'both' , 'slope', 'aspect'))
-	unit <- tolower(unit)
+	unit <- trim(tolower(unit))
 	stopifnot(unit %in% c('degrees', ''))
 	filename <- trim(filename)
 	
@@ -30,8 +30,8 @@ slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, 
 		
 	} else {
 	
-		fX <- fX / xres
-		fY <- fY / yres
+		fX <- fX / (8 * xres)
+		fY <- fY / (8 * yres)
 		zx <- focalFilter(alt, fX)
 		zy <- focalFilter(alt, fY)
 	}
@@ -40,35 +40,31 @@ slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, 
 		
 		x <- sqrt( zy^2 + zx^2 ) 
 		if (unit == 'degrees') {
-			x <- atan(x) / (pi / 180)
+			x <- atan(x) * (180 / pi)
 		}
 		layerNames(x) <- 'slope'
 		
 	} else if (type == 'aspect') {
 		x <- atan2(zy, zx)
-		if (rotateAspect) {
-			x <- x %% (2*pi) 
-		}
+		x <- ((0.5*pi)-x) %% (2*pi)
 		if (unit == 'degrees') {
-			x <- x / (pi / 180)
+			x <- x * (180/pi)
 		}
 		layerNames(x) <- 'aspect'
 		
 	} else {
-		slope <- sqrt( zy^2 + zx^2 ) 
+		x <- sqrt( zy^2 + zx^2 ) 
 		aspect <- atan2(zy, zx) 
-		if (rotateAspect) {
-			aspect <- aspect %%(2*pi) 
-		}
+		aspect <- ((0.5*pi)-aspect) %% (2*pi)
 		
 		if (unit == 'degrees') {
-			slope <- atan(slope) / (pi / 180)
-			aspect <- aspect / (pi / 180)
+			x <- atan(x) * (180/pi)
+			aspect <- aspect * (180/pi)
 		}
 		
-		layerNames(slope) <- 'slope'
+		layerNames(x) <- 'slope'
 		layerNames(aspect) <- 'aspect'
-		x <- stack(slope, aspect)
+		x <- stack(x, aspect)
 	}
 
 	if (filename != "") {
