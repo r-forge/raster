@@ -18,14 +18,15 @@ slopeAspect <- function(alt, filename='', type='both', unit='', ...) {
 	fX <- matrix(c(-1,-2,-1,0,0,0,1,2,1), nrow=3) * -1
 	fY <- matrix(c(-1,0,1,-2,0,2,-1,0,1), nrow=3) 
 	
-	if (raster:::.couldBeLonLat(alt)) {
+	if (.couldBeLonLat(alt, warnings=TRUE)) {
+	
 		yres <- pointDistance(cbind(0,0), cbind(0,yres), longlat=TRUE)
-		fY <- fY / yres
+		fY <- fY / (8 * yres)
 		zy <- focalFilter(alt, fY)
 		zx <- focalFilter(alt, fX)
 		
 		y <- yFromRow(alt, 1:nrow(alt))
-		dx <- raster:::.haversine(-xres, y, xres, y) / 3
+		dx <- (8/3) * .haversine(-xres, y, xres, y)
 		zx <- t( t(zx) / dx)
 		
 	} else {
