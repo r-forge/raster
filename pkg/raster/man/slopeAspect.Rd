@@ -21,7 +21,6 @@ slopeAspect(alt, filename='', type='', unit='', rotateAspect=FALSE, ...)
   \item{...}{Standard additional arguments for writing RasterLayer files}
 }
 
-\seealso{ \code{\link{hillShade2}} }
 
 \author{Robert J. Hijmans}
 

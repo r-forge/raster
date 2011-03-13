@@ -77,27 +77,3 @@ slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, 
 	return(x)
 }
 
-
-hillShade1 <- function(alt, zenith, azimuth, filename='', ...) {
-	zenith <- zenith * pi/180
-	azimuth <- azimuth * pi/180
-	slopeasp <- slopeAspect(alt, filename='', type='', unit='', rotateAspect=TRUE) 
-	x <- cos(slopeasp[[1]]) * cos(zenith) + sin(slopeasp[[1]]) * sin(zenith) * cos(azimuth-slopeasp[[2]])
-	filename <- trim(filename)
-	if (filename != "") {
-		x <- writeRaster(x, filename, ...)
-	}
-	return(x)
-}
-
-
-hillShade2 <- function(slope, aspect, zenith, azimuth, filename='', ...) {
-	zenith <- zenith * pi/180
-	azimuth <- azimuth * pi/180
-	x <- cos(slope) * cos(zenith) + sin(slope) * sin(zenith) * cos(azimuth-aspect)
-	if (filename != "") {
-		x <- writeRaster(x, filename, ...)
-	}
-	return(x)
-}
-
