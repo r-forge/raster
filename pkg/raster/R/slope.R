@@ -40,14 +40,14 @@ slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, 
 		
 		x <- sqrt( zy^2 + zx^2 ) 
 		if (unit == 'degrees') {
-			x = atan(x) / (pi / 180)
+			x <- atan(x) / (pi / 180)
 		}
 		layerNames(x) <- 'slope'
 		
 	} else if (type == 'aspect') {
 		x <- atan2(zy, zx)
 		if (rotateAspect) {
-			x = x %%(2*pi) 
+			x <- x %% (2*pi) 
 		}
 		if (unit == 'degrees') {
 			x <- x / (pi / 180)
@@ -58,7 +58,7 @@ slopeAspect <- function(alt, filename='', type='', unit='', rotateAspect=FALSE, 
 		slope <- sqrt( zy^2 + zx^2 ) 
 		aspect <- atan2(zy, zx) 
 		if (rotateAspect) {
-			aspect = aspect %%(2*pi) 
+			aspect <- aspect %%(2*pi) 
 		}
 		
 		if (unit == 'degrees') {
