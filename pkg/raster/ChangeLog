@@ -1,3 +1,6 @@
+--- 13-Mar-2011, version 1.8-2
+new function 'slopeAspect' that computes slope and/or aspect
+
 --- 10-Mar-2011, version 1.8-1
 Fixed errir that occured in extract (.polygonValues) when a polygon smaller than the cell size and weights=T (reproted by Xin Lin)
 
