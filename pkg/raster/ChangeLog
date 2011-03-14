@@ -1,6 +1,6 @@
 --- 13-Mar-2011, version 1.8-2
 new function 'slopeAspect' that computes slope and/or aspect
-non-experted classes prefixed with a '.' (to pass check in R 1.13.0)
+non-exported classes prefixed with a '.' (to pass check in R 2.13.0)
 
 --- 10-Mar-2011, version 1.8-1
 Fixed error that occured in extract (.polygonValues) when a polygon smaller than the cell size and weights=T (reported by Xin Lin)
