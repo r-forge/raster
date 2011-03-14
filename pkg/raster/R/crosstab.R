@@ -17,14 +17,14 @@ setMethod('crosstab', signature(x='RasterLayer', y='RasterLayer'),
 		if (missing(progress)) { progress <- .progress() }
 
 		if (canProcessInMemory(x, 3) | ( inMemory(x) & inMemory(y) )) {
-			res <- table(first=round(getValues(x), digits=digits), second=round(getValues(y), digits=digits)) 
+			res <- table(first=round(getValues(x), digits=digits), second=round(getValues(y), digits=digits), ...) 
 		} else {
 			res=NULL
 			tr <- blockSize(x, n=2)
 			pb <- pbCreate(tr$n, type=progress)	
 			for (i in 1:tr$n) {
 			
-				d <- table( round(getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]), digits=digits), round(getValuesBlock(y, row=tr$row[i], nrows=tr$nrows[i]), digits=digits))
+				d <- table( round(getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]), digits=digits), round(getValuesBlock(y, row=tr$row[i], nrows=tr$nrows[i]), digits=digits), ...)
 				if (length(dim(d))==1) {
 					first = as.numeric(names(d))
 					second = first
