@@ -4,35 +4,40 @@
 # Licence GPL v3
 
 
-slopeAspect <- function(alt, filename='', type='both', unit='', ...) {
-	
+slopeAspect <- function(alt, filename='', type='both', unit='', neighbors=8, ...) {
 	type <- trim(tolower(type))
 	stopifnot(type %in% c('', 'both' , 'slope', 'aspect'))
 	unit <- trim(tolower(unit))
 	stopifnot(unit %in% c('degrees', ''))
 	filename <- trim(filename)
+	stopifnot(neighbors %in% c(4, 8))
 	
 	res <- res(alt)
-	xres <- res[1]
-	yres <- res[2]
-	fX <- matrix(c(-1,-2,-1,0,0,0,1,2,1), nrow=3) * -1
-	fY <- matrix(c(-1,0,1,-2,0,2,-1,0,1), nrow=3) 
+	dx <- res[1]
+	dy <- res[2]
+	if (neighbors == 8) {
+		fX <- matrix(c(-1,-2,-1,0,0,0,1,2,1), nrow=3) / -8
+		fY <- matrix(c(-1,0,1,-2,0,2,-1,0,1), nrow=3) / 8
+	} else { # neighbors == 4
+		fX <- matrix(c(0,-1,0,0,0,0,0,1,0), nrow=3) / -2
+		fY <- matrix(c(0,0,0,-1,0,1,0,0,0), nrow=3) / 2
+	}
 	
 	if (.couldBeLonLat(alt, warnings=TRUE)) {
 	
-		yres <- pointDistance(cbind(0,0), cbind(0,yres), longlat=TRUE)
-		fY <- fY / (8 * yres)
+		dy <- pointDistance(cbind(0,0), cbind(0, dy), longlat=TRUE)
+		fY <- fY / dy
 		zy <- focalFilter(alt, fY)
 		zx <- focalFilter(alt, fX)
 		
 		y <- yFromRow(alt, 1:nrow(alt))
-		dx <- (8/3) * .haversine(-xres, y, xres, y)
+		dx <- .haversine(-dx, y, dx, y) / 3
 		zx <- t( t(zx) / dx)
 		
 	} else {
 	
-		fX <- fX / (8 * xres)
-		fY <- fY / (8 * yres)
+		fX <- fX / dx
+		fY <- fY / dy
 		zx <- focalFilter(alt, fX)
 		zy <- focalFilter(alt, fY)
 	}

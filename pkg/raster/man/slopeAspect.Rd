@@ -5,11 +5,11 @@
 \title{Slope and aspect}
 
 \description{
-Compute slope and/or aspect from elevation data. Elevation data should be in map units (typically meter for projected rasters), or in meters when the CRS is longitude/latitude. 
+Compute slope and/or aspect from elevation data. Elevation data should be in map units (typically meter for projected raster data), or in meters when the coordinate reference system (CRS) is longitude/latitude. 
 }
 
 \usage{
-slopeAspect(alt, filename='', type='', unit='', ...)  
+slopeAspect(alt, filename='', type='', unit='', neighbors=8, ...)  
 }
 
 \arguments{
@@ -17,11 +17,22 @@ slopeAspect(alt, filename='', type='', unit='', ...)
   \item{filename}{Character. Filename. optional}
   \item{type}{Character. 'slope', 'aspect', or 'both' (=default, slope and aspect)}
   \item{unit}{Character. 'degrees' or '' (=default, radians for aspect, and fraction for slope) }
+  \item{neighbors}{Integer. Indicating how many neighboring cells to use to compute slope for any cell. Either 8 (queen case) or 4 (rook case), see Details.}
   \item{...}{Standard additional arguments for writing RasterLayer files}
 }
 
+\details{
+When neighbors==4, it is computed according to Fleming and Hoffer (1979) & Ritter (1987). When neigbors==8, slope is computed according to Horn (1981). The Horn algorithm may be best for rough surfaces, and the Fleming and Hoffer algorithm may be better for smoother surfaces (Jones, 1997; Burrough and McDonnell, 1998). 
+}
+
+\references{
+Burrough, P., and R.A. McDonnell, 1998. Principles of Geographical Information Systems. Oxford University Press. 
+Horn, B.K.P., 1981. Hill shading and the refectance map. Proc. IEEE 69(1):14-47
+Fleming, M.D. and Hoffer, R.M., 1979. Machine processing of landsat MSS data and DMA topographic data for forest cover type mapping. LARS Technical Report 062879. Laboratory for Applications of Remote Sensing, Purdue University, West Lafayette, Indiana.
+Jones, K.H., 1998. A comparison of algorithms used to compute hill slope as a property of the DEM. Computers & Geosciences 24(4): 315-323 
+Ritter, P., 1987. A vector-based slope and aspect generation algorithm. Photogrammetric Engineering and Remote Sensing 53 (8):1109-1111
+}
 
 \author{Robert J. Hijmans}
-
 
 \keyword{spatial}
