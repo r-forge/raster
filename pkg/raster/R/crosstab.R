@@ -42,15 +42,16 @@ setMethod('crosstab', signature(x='RasterLayer', y='RasterLayer'),
 		}
 		
 		if (long) {
-			aa = as.numeric(rownames(res))
-			bb = as.numeric(colnames(res))
-			cc = rep(aa, length(bb))
-			dd = rep(bb, each=length(aa))
-			res = cbind(cc, dd, as.vector(res))
-			colnames(res) <- c('first', 'second', 'value')
+			#aa = as.numeric(rownames(res))
+			#bb = as.numeric(colnames(res))
+			#cc = rep(aa, length(bb))
+			#dd = rep(bb, each=length(aa))
+			#res = cbind(cc, dd, as.vector(res))
+			#colnames(res) <- c('first', 'second', 'value')
+			return( as.data.frame(res) )
+		} else {
+			return(res)
 		}
-		
-		return(res)
 	}
 )
 
