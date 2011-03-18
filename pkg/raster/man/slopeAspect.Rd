@@ -9,7 +9,7 @@ Compute slope and/or aspect from elevation data. Elevation data should be in map
 }
 
 \usage{
-slopeAspect(dem, filename='', type='', unit='', neighbors=8, ...)  
+slopeAspect(dem, filename='', type='', unit='', neighbors=8, flatAspect, ...)  
 }
 
 \arguments{
@@ -18,6 +18,7 @@ slopeAspect(dem, filename='', type='', unit='', neighbors=8, ...)
   \item{type}{Character. 'slope', 'aspect', or 'both' (=default, slope and aspect)}
   \item{unit}{Character. 'degrees' or '' (=default, radians for aspect, and fraction for slope) }
   \item{neighbors}{Integer. Indicating how many neighboring cells to use to compute slope for any cell. Either 8 (queen case) or 4 (rook case), see Details.}
+  \item{flatAspect}{Numeric or NA. What value to use for aspect when slope is zero (and hence the aspect is undefined)? The default value is 90 degrees (or 0.5*pi radians) }
   \item{...}{Standard additional arguments for writing RasterLayer files}
 }
 

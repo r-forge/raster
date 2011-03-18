@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, ...) {
+slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, flatAspect, ...) {
 	type <- trim(tolower(type))
 	stopifnot(type %in% c('', 'both' , 'slope', 'aspect'))
 	unit <- trim(tolower(unit))
@@ -56,6 +56,10 @@ slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, ...
 		if (unit == 'degrees') {
 			x <- x * (180/pi)
 		}
+		if (!missing (flatAspect)) {
+			slope <-  sqrt( zy^2 + zx^2 ) 
+			aspect <- overlay(x, slope, fun=function(x, y) { x[y==0] <- flatAspect; return(x) } )
+		}
 		layerNames(x) <- 'aspect'
 		
 	} else {
@@ -66,6 +70,9 @@ slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, ...
 		if (unit == 'degrees') {
 			x <- atan(x) * (180/pi)
 			aspect <- aspect * (180/pi)
+		}
+		if (!missing (flatAspect)) {
+			aspect <- overlay(aspect, x, fun=function(x, y) { x[y==0] <- flatAspect; return(x) } )
 		}
 		
 		layerNames(x) <- 'slope'
