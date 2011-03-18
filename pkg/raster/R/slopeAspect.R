@@ -4,16 +4,16 @@
 # Licence GPL v3
 
 
-slopeAspect <- function(alt, filename='', type='both', unit='', neighbors=8, ...) {
+slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, ...) {
 	type <- trim(tolower(type))
 	stopifnot(type %in% c('', 'both' , 'slope', 'aspect'))
 	unit <- trim(tolower(unit))
 	stopifnot(unit %in% c('degrees', ''))
 	filename <- trim(filename)
 	stopifnot(neighbors %in% c(4, 8))
-	stopifnot(projection(alt) != "NA")
+	stopifnot(projection(dem) != "NA")
 	
-	res <- res(alt)
+	res <- res(dem)
 	dx <- res[1]
 	dy <- res[2]
 	if (neighbors == 8) {
@@ -24,13 +24,13 @@ slopeAspect <- function(alt, filename='', type='both', unit='', neighbors=8, ...
 		fY <- matrix(c(0,0,0,-1,0,1,0,0,0), nrow=3) / 2
 	}
 	
-	if (isLonLat(alt)) {
+	if (isLonLat(dem)) {
 		dy <- pointDistance(cbind(0,0), cbind(0, dy), longlat=TRUE)
 		fY <- fY / dy
-		zy <- focalFilter(alt, fY)
-		zx <- focalFilter(alt, fX)
+		zy <- focalFilter(dem, fY)
+		zx <- focalFilter(dem, fX)
 		
-		y <- yFromRow(alt, 1:nrow(alt))
+		y <- yFromRow(dem, 1:nrow(dem))
 		dx <- .haversine(-dx, y, dx, y) / 3
 		zx <- t( t(zx) / dx)
 		
@@ -38,8 +38,8 @@ slopeAspect <- function(alt, filename='', type='both', unit='', neighbors=8, ...
 	
 		fX <- fX / dx
 		fY <- fY / dy
-		zx <- focalFilter(alt, fX)
-		zy <- focalFilter(alt, fY)
+		zx <- focalFilter(dem, fX)
+		zy <- focalFilter(dem, fY)
 	}
 
 	if (type == 'slope') {

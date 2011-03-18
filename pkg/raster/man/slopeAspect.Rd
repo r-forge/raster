@@ -9,11 +9,11 @@ Compute slope and/or aspect from elevation data. Elevation data should be in map
 }
 
 \usage{
-slopeAspect(alt, filename='', type='', unit='', neighbors=8, ...)  
+slopeAspect(dem, filename='', type='', unit='', neighbors=8, ...)  
 }
 
 \arguments{
-  \item{alt}{RasterLayer object with elevation values in map units, or in meters when the crs is longitude/latitude}
+  \item{dem}{RasterLayer object with elevation values in map units, or in meters when the crs is longitude/latitude}
   \item{filename}{Character. Filename. optional}
   \item{type}{Character. 'slope', 'aspect', or 'both' (=default, slope and aspect)}
   \item{unit}{Character. 'degrees' or '' (=default, radians for aspect, and fraction for slope) }
@@ -22,14 +22,18 @@ slopeAspect(alt, filename='', type='', unit='', neighbors=8, ...)
 }
 
 \details{
-When neighbors==4, slope and aspect are computed according to Fleming and Hoffer (1979) & Ritter (1987). When neigbors==8, slope and aspect are computed according to Horn (1981). The Horn algorithm may be best for rough surfaces, and the Fleming and Hoffer algorithm may be better for smoother surfaces (Jones, 1997; Burrough and McDonnell, 1998). 
+When neighbors==4, slope and aspect are computed according to Fleming and Hoffer (1979) and Ritter (1987). When neigbors==8, slope and aspect are computed according to Horn (1981). The Horn algorithm may be best for rough surfaces, and the Fleming and Hoffer algorithm may be better for smoother surfaces (Jones, 1997; Burrough and McDonnell, 1998). 
 }
 
 \references{
-Burrough, P., and R.A. McDonnell, 1998. Principles of Geographical Information Systems. Oxford University Press. 
-Horn, B.K.P., 1981. Hill shading and the refectance map. Proc. IEEE 69(1):14-47
+Burrough, P., and R.A. McDonnell, 1998. Principles of Geographical Information Systems. Oxford University Press.
+
 Fleming, M.D. and Hoffer, R.M., 1979. Machine processing of landsat MSS data and DMA topographic data for forest cover type mapping. LARS Technical Report 062879. Laboratory for Applications of Remote Sensing, Purdue University, West Lafayette, Indiana.
+
+Horn, B.K.P., 1981. Hill shading and the reflectance map. Proceedings of the IEEE 69(1):14-47
+
 Jones, K.H., 1998. A comparison of algorithms used to compute hill slope as a property of the DEM. Computers & Geosciences 24(4): 315-323 
+
 Ritter, P., 1987. A vector-based slope and aspect generation algorithm. Photogrammetric Engineering and Remote Sensing 53 (8):1109-1111
 }
 

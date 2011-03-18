@@ -2,12 +2,12 @@
 
 \alias{hillShade}
 
-\title{Hillshade}
+\title{Hill shading}
 
 \description{
 Compute hill shade from slope and aspect layers. Slope should be expressed as a tangent (fraction), and aspect layers should be in radians. Slope and aspect can be computed with \code{\link{slopeAspect}}. 
 
-Hill-shade is often used as a backdrop on top of which another, semi-transparant, layer is drawn.
+A hill shade layer is often used as a backdrop on top of which another, semi-transparant, layer is drawn.
 }
 
 \usage{
@@ -26,6 +26,11 @@ hillShade(slope, aspect, zenith, azimuth, filename='', ...)
 \seealso{ \code{\link{slopeAspect}} }
 
 \author{Andrew Bevan & Robert J. Hijmans}
+
+
+\references{
+Horn, B.K.P., 1981. Hill shading and the reflectance map. Proceedings of the IEEE 69(1):14-47
+}
 
 \keyword{spatial}
 
