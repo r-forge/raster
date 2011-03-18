@@ -11,6 +11,7 @@ slopeAspect <- function(alt, filename='', type='both', unit='', neighbors=8, ...
 	stopifnot(unit %in% c('degrees', ''))
 	filename <- trim(filename)
 	stopifnot(neighbors %in% c(4, 8))
+	stopifnot(projection(alt) != "NA")
 	
 	res <- res(alt)
 	dx <- res[1]
@@ -23,8 +24,7 @@ slopeAspect <- function(alt, filename='', type='both', unit='', neighbors=8, ...
 		fY <- matrix(c(0,0,0,-1,0,1,0,0,0), nrow=3) / 2
 	}
 	
-	if (.couldBeLonLat(alt, warnings=TRUE)) {
-	
+	if (isLonLat(alt)) {
 		dy <- pointDistance(cbind(0,0), cbind(0, dy), longlat=TRUE)
 		fY <- fY / dy
 		zy <- focalFilter(alt, fY)
