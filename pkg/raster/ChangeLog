@@ -1,3 +1,7 @@
+--- 18-Mar-2011, version 1.8-5
+new function 'hillshade'
+new cellvalues argument to extract with lines
+
 --- 13-Mar-2011, version 1.8-2
 new function 'slopeAspect' that computes slope and/or aspect
 non-exported classes prefixed with a '.' (to pass check in R 2.13.0)
