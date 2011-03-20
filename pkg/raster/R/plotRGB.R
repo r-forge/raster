@@ -14,14 +14,6 @@ if (!isGeneric("plotRGB")) {
 setMethod("plotRGB", signature(x='RasterStackBrick'), 
 function(x, r=1, g=2, b=3, scale=255, maxpixels=500000, extent=NULL, interpolate=FALSE, axes=TRUE, xlab='', ylab='', asp, alpha, ...) { 
 	
-	# rasterImage is new in R 2.11
-	if (! exists("rasterImage") ) {
-		.oldPlotRGB(x, r, g, b, scale, maxpixels, extent, axes, xlab, ylab, asp, ...)
-		return(NULL)
-	}
-	
-	.warnIfSDI()
-	
 	if (!axes) par(plt=c(0,1,0,1))
 
  	if (missing(asp)) {
