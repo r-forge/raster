@@ -55,8 +55,8 @@ function(x, r=1, g=2, b=3, scale=255, maxpixels=500000, extent=NULL, interpolate
 		if (yres(r) %% 1 == 0) yticks = round(yticks)
 		axis(1, at=xticks)
 		axis(2, at=yticks, las = 1)
-		axis(3, at=xticks, labels=FALSE, lwd.ticks=0)
-		axis(4, at=yticks, labels=FALSE, lwd.ticks=0)
+		#axis(3, at=xticks, labels=FALSE, lwd.ticks=0)
+		#axis(4, at=yticks, labels=FALSE, lwd.ticks=0)
 	}	
 }
 )
