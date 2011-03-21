@@ -87,7 +87,7 @@ If no \code{fun} argument is supplied:
 
 
 
-\bold{= Focal values =}
+\bold{= focal values =}
 
 If \code{y} is missing, you can supply two arguments to get 'focal' values (i.e. the values in a neighborhood around each cell)
 
@@ -96,7 +96,7 @@ If \code{y} is missing, you can supply two arguments to get 'focal' values (i.e.
 2) \code{ngb}. The neighborhood to consider. Either a single integer or a vector of two integers. Default is 3. See \code{\link{focal}} 
 
 
-\bold{= All multi-layer objects =}
+\bold{= all multi-layer objects =}
 
 If \code{x} is a RasterStack or RasterBrick object, \code{extract} accepts, in addition to the arguments listed above,
 these two additional arguments:
