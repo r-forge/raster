@@ -1,3 +1,6 @@
+--- 20-Mar-2011, version 1.8-6
+added "alpha" (transparancy) argument to plot
+
 --- 18-Mar-2011, version 1.8-5
 new function 'hillshade'
 new cellvalues argument to extract with lines
