@@ -26,6 +26,9 @@ slopeAspect(dem, filename='', type='', unit='', neighbors=8, flatAspect, ...)
 When neighbors==4, slope and aspect are computed according to Fleming and Hoffer (1979) and Ritter (1987). When neigbors==8, slope and aspect are computed according to Horn (1981). The Horn algorithm may be best for rough surfaces, and the Fleming and Hoffer algorithm may be better for smoother surfaces (Jones, 1997; Burrough and McDonnell, 1998). 
 }
 
+\seealso{ \code{\link{hillShade}} }
+
+
 \references{
 Burrough, P., and R.A. McDonnell, 1998. Principles of Geographical Information Systems. Oxford University Press.
 

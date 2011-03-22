@@ -23,6 +23,7 @@ hillShade(slope, aspect, declination, direction, filename='', ...)
   \item{...}{Standard additional arguments for writing RasterLayer files}
 }
 
+
 \seealso{ \code{\link{slopeAspect}} }
 
 \author{Andrew Bevan & Robert J. Hijmans}
@@ -30,6 +31,17 @@ hillShade(slope, aspect, declination, direction, filename='', ...)
 
 \references{
 Horn, B.K.P., 1981. Hill shading and the reflectance map. Proceedings of the IEEE 69(1):14-47
+}
+
+
+\examples{
+\dontrun{
+dem <- getData('alt', country='CHE')
+slas <- slopeAspect(dem)
+hill <- hillShade(slas[[1]], slas[[2]], 40, 270)
+plot(hill, col=grey(0:100/100), legend=FALSE, main='Switzerland')
+plot(dem, col=rainbow(25), alpha=0.35, add=TRUE)
+}
 }
 
 \keyword{spatial}
