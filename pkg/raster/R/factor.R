@@ -42,27 +42,27 @@ setMethod('labels', signature(object='RasterStack'),
 
 
 if (!isGeneric("labels<-")) {
-	setGeneric("labels<-", function(object, value)
+	setGeneric("labels<-", function(object, values)
 		standardGeneric("labels<-"))
 }	
 
 
-setMethod('labels<-', signature(object='RasterLayer', value='list'), 
-	function(object, value) {
-		if (length(value) != 1) {
-			stop('length(value) != 1')
+setMethod('labels<-', signature(object='RasterLayer', values='list'), 
+	function(object, values) {
+		if (length(values) != 1) {
+			stop('length(values) != 1')
 		}
-		object@data@attributes <- value
+		object@data@attributes <- values
 		return(object)
 	}
 )
 
-setMethod('labels<-', signature(object='RasterBrick', value='list'), 
-	function(object, value) {
-		if (length(value) != nlayers(object)) {
-			stop('length(value) != nlayers(object)')
+setMethod('labels<-', signature(object='RasterBrick', values='list'), 
+	function(object, values) {
+		if (length(values) != nlayers(object)) {
+			stop('length(values) != nlayers(object)')
 		}
-		object@data@attributes <- value
+		object@data@attributes <- values
 		return(object)
 	}
 )
@@ -82,25 +82,30 @@ setMethod('asFactor', signature(x='ANY'),
 
 setMethod('asFactor', signature(x='RasterLayer'), 
 	function(x, values=NULL, ...) {
-		x@data@isfactor = TRUE
+		x@data@isfactor <- TRUE
 		if (is.null(values) ) {
-			x <- round(x)
-			x@data@atttributes <- list(data.frame(VALUE=unique(x)))
+			#x <- round(x) #this makes slot isfactor FALSE again
+			x@data@attributes <- list(data.frame(VALUE=unique(x)))
 		} else {
 			x@data@attributes <- values
-		}			
+		}	
 		return(x)
 	}
 )
 
+.asFactor <- function(x, values){
+
+		return(x)
+}		
+
 setMethod('asFactor', signature(x='RasterBrick'), 
 	function(x, values=NULL, ...) {
-		x@data@isfactor = TRUE
+		x@data@isfactor <- TRUE
 		if (is.null(values) ) {
-			x <- round(x)
-			x@data@atttributes <- list(data.frame(VALUE=unique(x)))
+			#x <- round(x) #this makes slot isfactor FALSE again
+			x@data@attributes <- list(data.frame(VALUE=unique(x)))
 		} else {
-			x@data@atttributes <- values
+			x@data@attributes <- values
 		}			
 		return(x)
 	}
