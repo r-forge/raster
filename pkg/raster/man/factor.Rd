@@ -50,6 +50,7 @@ Raster* object
 r <- raster(nrow=10, ncol=10)
 r[] <- (runif(ncell(r)) * 10)
 is.factor(r)
+r <- round(r)
 f <- asFactor(r)
 is.factor(f)
 }
