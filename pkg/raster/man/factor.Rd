@@ -34,7 +34,7 @@ labels(object) <- value
 \arguments{
   \item{x}{A Raster* object}
   \item{object}{A Raster* object}
-  \item{value}{list}
+  \item{values}{list}
   \item{...}{Additional arguments}
 }
 
@@ -50,6 +50,8 @@ Raster* object
 r <- raster(nrow=10, ncol=10)
 r[] <- (runif(ncell(r)) * 10)
 is.factor(r)
+f <- asFactor(r)
+is.factor(f)
 }
 
 \keyword{methods}
