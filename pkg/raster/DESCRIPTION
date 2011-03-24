@@ -1,7 +1,7 @@
 Package: raster
 Type: Package
 Title: Geographic analysis and modeling with raster data
-Version: 1.8-6
+Version: 1.8-7
 Date: 18-March-2011
 Depends: methods, sp, R (>= 2.11.0)
 Suggests: rgdal (>= 0.5-33), ncdf, igraph, snow, tcltk, lattice, rgl
