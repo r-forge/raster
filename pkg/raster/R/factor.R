@@ -42,27 +42,27 @@ setMethod('labels', signature(object='RasterStack'),
 
 
 if (!isGeneric("labels<-")) {
-	setGeneric("labels<-", function(object, values)
+	setGeneric("labels<-", function(object, value)
 		standardGeneric("labels<-"))
 }	
 
 
-setMethod('labels<-', signature(object='RasterLayer', values='list'), 
-	function(object, values) {
-		if (length(values) != 1) {
-			stop('length(values) != 1')
+setMethod('labels<-', signature(object='RasterLayer', value='list'), 
+	function(object, value) {
+		if (length(value) != 1) {
+			stop('length(value) != 1')
 		}
-		object@data@attributes <- values
+		object@data@attributes <- value
 		return(object)
 	}
 )
 
-setMethod('labels<-', signature(object='RasterBrick', values='list'), 
-	function(object, values) {
-		if (length(values) != nlayers(object)) {
-			stop('length(values) != nlayers(object)')
+setMethod('labels<-', signature(object='RasterBrick', value='list'), 
+	function(object, value) {
+		if (length(value) != nlayers(object)) {
+			stop('length(value) != nlayers(object)')
 		}
-		object@data@attributes <- values
+		object@data@attributes <- value
 		return(object)
 	}
 )
@@ -81,31 +81,31 @@ setMethod('asFactor', signature(x='ANY'),
 )
 
 setMethod('asFactor', signature(x='RasterLayer'), 
-	function(x, values=NULL, ...) {
+	function(x, value=NULL, ...) {
 		x@data@isfactor <- TRUE
-		if (is.null(values) ) {
+		if (is.null(value) ) {
 			#x <- round(x) #this makes slot isfactor FALSE again
 			x@data@attributes <- list(data.frame(VALUE=unique(x)))
 		} else {
-			x@data@attributes <- values
+			x@data@attributes <- value
 		}	
 		return(x)
 	}
 )
 
-.asFactor <- function(x, values){
+.asFactor <- function(x, value){
 
 		return(x)
 }		
 
 setMethod('asFactor', signature(x='RasterBrick'), 
-	function(x, values=NULL, ...) {
+	function(x, value=NULL, ...) {
 		x@data@isfactor <- TRUE
-		if (is.null(values) ) {
+		if (is.null(value) ) {
 			#x <- round(x) #this makes slot isfactor FALSE again
 			x@data@attributes <- list(data.frame(VALUE=unique(x)))
 		} else {
-			x@data@attributes <- values
+			x@data@attributes <- value
 		}			
 		return(x)
 	}

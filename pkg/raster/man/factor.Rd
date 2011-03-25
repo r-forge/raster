@@ -34,7 +34,7 @@ labels(object) <- value
 \arguments{
   \item{x}{A Raster* object}
   \item{object}{A Raster* object}
-  \item{values}{list}
+  \item{value}{list}
   \item{...}{Additional arguments}
 }
 
