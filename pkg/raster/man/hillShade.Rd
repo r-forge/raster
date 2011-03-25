@@ -40,7 +40,7 @@ dem <- getData('alt', country='CHE')
 slas <- slopeAspect(dem)
 hill <- hillShade(slas[[1]], slas[[2]], 40, 270)
 plot(hill, col=grey(0:100/100), legend=FALSE, main='Switzerland')
-plot(dem, col=rainbow(25), alpha=0.35, add=TRUE)
+plot(dem, col=rainbow(25, alpha=0.35), add=TRUE)
 }
 }
 
