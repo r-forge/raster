@@ -1,3 +1,6 @@
+--- 25-Mar-2011, version 1.8-8
+Bug fix in crop with RasterStack introduced in version 1.7-48 to keep the colortable when doing crop (reported by Kevin Ummel)
+
 --- 24-Mar-2011, version 1.8-7
 Fixed error in asFactor
 
