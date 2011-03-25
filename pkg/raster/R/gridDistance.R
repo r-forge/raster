@@ -28,8 +28,8 @@ gridDistance <- function(x, origin, omit=NULL, filename="", ...) {
 		}
 	}
 	
-#	if ( canProcessInMemory(x, n=25) ) { 
-	if ( ncell(x) <= 100000 ) { # need to test more to see how much igraph can deal with
+	# keep  canProcessInMemory for debugging
+	if ( canProcessInMemory(x, n=5) & ncell(x) <= 100000 ) { # need to test more to see how much igraph can deal with
 		outRaster <- raster(x)
 		x <- getValues(x) # to avoid keeping values in memory twice
 		
