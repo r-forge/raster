@@ -1,3 +1,6 @@
+--- 26-Mar-2011, version 1.8-9
+Bug fix in gridDistance with some large rasters that cannot be processed in memory (reported by Kevin Ummel)
+
 --- 25-Mar-2011, version 1.8-8
 Bug fix in crop with RasterStack introduced in version 1.7-48 to keep the colortable when doing crop (reported by Kevin Ummel)
 
