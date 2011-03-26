@@ -4,6 +4,12 @@
 # Licence GPL v3
 
 
+if (!isGeneric("calc")) {
+	setGeneric("calc", function(x, fun, ...)
+		standardGeneric("calc"))
+}	
+
+
 .makeTextFun <- function(fun) {
 	if (class(fun) != 'character') {
 		if (is.primitive(fun)) {
@@ -30,7 +36,7 @@
 }
 
 
-setMethod('calc', signature(x='RasterStackBrick', fun='function'), 
+setMethod('calc', signature(x='Raster', fun='function'), 
 function(x, fun, filename='', na.rm, ...) {
 
 	nl <- nlayers(x)
@@ -66,7 +72,7 @@ function(x, fun, filename='', na.rm, ...) {
 	
 	filename <- trim(filename)
 
-	if (canProcessInMemory(x, nlayers(x) + 2)) {
+	if (canProcessInMemory(x, max(nlayers(x), nlayers(out)) * 2)) {
 		x <- getValues(x)
 		if (makemat) { x <- matrix(x, ncol=1) }
 		if (missing(na.rm)) {
