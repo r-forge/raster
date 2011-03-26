@@ -5,6 +5,7 @@
 
 
 hillShade <- function(slope, aspect, declination, direction, filename='', ...) {
+	compare(slope, aspect)
 	declination <- declination * pi/180
 	direction <- direction * pi/180
 	x <- cos(slope) * cos(declination) + sin(slope) * sin(declination) * cos(direction-aspect)
