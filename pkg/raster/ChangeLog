@@ -1,3 +1,6 @@
+--- 6-Apr-2011, version 1.8-10
+Bug fix in cellStats with 'sd' and large files (reported by John Donoghue)
+
 --- 26-Mar-2011, version 1.8-9
 Bug fix in gridDistance with some large rasters that cannot be processed in memory (reported by Kevin Ummel)
 
