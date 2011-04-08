@@ -32,6 +32,7 @@ cellStats <- function(x, stat='mean', ...) {
 	if (nlayers(x) == 1) {	makeMat = TRUE 	} else { makeMat = FALSE }
 	
 
+	
 	stat <- .makeTextFun(stat)
 	tryinmem <- TRUE
 	if (class(stat) == 'character') {
@@ -61,9 +62,9 @@ cellStats <- function(x, stat='mean', ...) {
 				} else if (stat == "sum" ) {
 					return( colSums(x, na.rm=TRUE) )
 				
-				} else if (stat == 'min')  { stat <- min 
+				} else if (stat == 'min') { stat <- min 
 				} else if (stat == 'max') { stat <- max 
-				} else if (stat == 'sd') { stat <- stdev 
+				} else if (stat == 'sd')  { stat <- sd 
 				} else if (stat == 'countNA') { stat <- function(x, na.rm){ sum(is.na(x)) } 
 				} else {
 					stop('stat (character type) unknown')
@@ -155,7 +156,8 @@ cellStats <- function(x, stat='mean', ...) {
 		
 	if (stat == 'sd') {
 		meansq <- (st/cnt)^2
-		st <- sqrt( (1 / cnt) * sumsq - meansq )
+		# cnt/(cnt-1) to use n-1, as in sd 
+		st <- sqrt(( (sumsq / cnt) - meansq ) * (cnt/(cnt-1)))
 	} else if (stat == 'mean') {
 		st <- st / cnt
 	} else if (stat == 'skew') {
