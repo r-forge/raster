@@ -1,4 +1,4 @@
---- 11-Apr-2011, version 1.8-11
+--- 11-Apr-2011, version 1.8-12
 Major bug fix in focalFilter. In previous versoins results were wrong for filters larger than 3x3 !
 Thanks to Nick Hamm, Andy Wilson for reporting
 
