@@ -34,18 +34,14 @@ focalFilter <- function(raster, filter, fun=sum, filename="", ...) {
 	limrow <- floor(ngb[1] / 2)
 	ngbdata <- matrix(NA, nrow=0, ncol=ncol(ngbgrid))
 # add all rows needed for first ngb, minus 1 that will be read in first loop	
-
-	for (r in 1:limrow) {
-		ngbdata <- getValues(raster, 1, limrow)
-		ngbdata <- matrix(ngbdata, nrow=limrow)
-	}
+	ngbdata <- getValues(raster, 1, limrow)
+	ngbdata <- matrix(ngbdata, nrow=limrow)
 
 	res <- vector(length=ncol(ngbdata))
 
 	filename <- trim(filename)
 	if (!canProcessInMemory(ngbgrid, 2) && filename == '') {
-		filename <- rasterTmpFile()
-								
+		filename <- rasterTmpFile()			
 	}
 	
 	if (filename == '') {
