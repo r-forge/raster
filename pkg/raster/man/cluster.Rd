@@ -16,13 +16,14 @@ The use of the cluster by functions is automatic, but has only been implemented 
 }
 
 \usage{
-beginCluster(n, type)
+beginCluster(n, type, nice)
 endCluster()
 }
 
 \arguments{
 \item{n}{Integer. The number of nodes to be used (optional)}
 \item{type}{Character. The cluster type to be used (optional)}
+\item{nice}{Integer. To set the prioirty for the workers, between -20 and 20 (UNIX like platforms only)}
 }
 
 \details{
