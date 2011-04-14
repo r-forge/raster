@@ -11,25 +11,35 @@
 	return(mI)
 }
 
+# focw <- ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)]
+
 
 Moran <- function(x, ngb=3, filter=FALSE) {
 	z <- x - cellStats(x, mean)
 	if (filter) {
+		if (max(dim(ngb) %% 2)) {
+			stop('filter must be square')
+		}
+		if (ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)] != 0) {
+			warning('central cell of weights matrix (filter) was set to zero')
+			ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)] <- 0
+		}
 		wZiZj <- focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE)	
+		wZiZj <- overlay(wZiZj, z, fun=function(x,y){ x * y })
 	} else {
 		wZiZj <- focal(z, ngb=ngb, fun=sum, na.rm=TRUE)
+		wZiZj <- overlay(wZiZj, z, fun=function(x,y){ (x-y) * y })
 	}
-	wZiZj <- overlay(wZiZj, z, fun=function(x,y){ (x-y) * y })
 	wZiZj <- cellStats(wZiZj, sum)
 	z2 <- cellStats(z*z, sum)
 	n <- ncell(z) - cellStats(z, 'countNA')
 	# weights
 	if (filter) {
-		if (sum(! unique(filter) %in% 0:1) > 0) {
-			zz <- z / z
-			w  <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
+		if (sum(! unique(ngb) %in% 0:1) > 0) {
+			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))
+			w <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
 		} else {
-			w <- focalFilter(z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )	
+			w <- focalFilter( z, filter=ngb, fun=function(x, ...){ length(na.omit(x))-1 } )	
 		}
 	} else {
 		w <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
@@ -49,13 +59,22 @@ MoranLocal <- function(x, ngb=3, filter=FALSE) {
 	z  <- x - cellStats(x, mean) 
 	#weights
 	if (filter) {
-		if (sum(! unique(filter) %in% 0:1) > 0) {
-			zz <- z / z
+		if (max(dim(ngb) %% 2)) {
+			stop('filter must be square')
+		}
+
+		if ( ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)] != 0 ) {
+			warning('central cell of weights matrix (filter) was set to zero')
+			ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)] <- 0
+		}
+
+		if (sum(! unique(ngb) %in% 0:1) > 0) {
+			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))
 			w  <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
 		} else {
-			w  <- focalFilter( z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
+			w <- focalFilter( z, filter=ngb, fun=function(x, ...){ length(na.omit(x))-1 } )	
 		}
-		lz <- (focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE) - z) / w
+		lz <- (focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE) ) / w
 	} else {
 		w  <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
 		lz <- (focal(z, ngb=ngb, fun=sum, na.rm=TRUE) - z) / w	
