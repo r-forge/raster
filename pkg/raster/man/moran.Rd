@@ -31,8 +31,8 @@ A single value (global Moran) or a RasterLayer (local Moran)
 \examples{
 r <- raster(nrows=10, ncols=10)
 r[] <- 1:ncell(r)
-Moran(x)
-MoranLocal(x)
+Moran(r)
+MoranLocal(r)
 }
 
 \keyword{spatial}
