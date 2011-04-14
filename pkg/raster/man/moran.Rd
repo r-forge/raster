@@ -17,7 +17,7 @@
 \arguments{
   \item{x}{RasterLayer}
   \item{ngb}{The neighborhood (as defined in \code{\link{focal}}) or, if \code{filter=TRUE}, a "filter" (as defined in \code{\link{focalFilter}}) }
-  \item{filter}{Boolean. If \code{TRUE}, ngb should be a 'filter' (matrix of spatial weights) }
+  \item{filter}{Boolean. If \code{TRUE}, ngb should be a 'filter' (the local matrix of spatial weights). The value of the central cell should be (have a weight of) zero }
 }
 
 
@@ -30,8 +30,9 @@ The default setting uses a 3x3 neighborhoud to compute 'Queen's case' indices. Y
 }
 
 \note{
-The results with a neighborhood and a filter are currently not exactely the same; because if edge effects with focalFilter. This will hopefully be fixed soon.
-See the spdep package for more flexibility
+The results with a neighborhood and a filter are currently not exactely the same. This is because of edge effects with focalFilter. This will hopefully be fixed soon.
+
+See the spdep package for more general and flexibile approaches
 }
 
 \author{Robert J. Hijmans and Babak Naimi}
@@ -43,7 +44,7 @@ Moran(r)
 x1 <- MoranLocal(r)
 
 # Rook's case
-f <- matrix(c(0,1,0,1,1,1,0,1,0), nrow=3)
+f <- matrix(c(0,1,0,1,0,1,0,1,0), nrow=3)
 x2 <- MoranLocal(r, ngb=f, filter=TRUE)
 }
 

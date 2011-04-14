@@ -16,14 +16,13 @@
 	return(mI)
 }
 
-# focw <- ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)]
 
 
 Moran <- function(x, ngb=3, filter=FALSE) {
 	z <- x - cellStats(x, mean)
 	if (filter) {
-		if (max(dim(ngb) %% 2)) {
-			stop('filter must be square')
+		if (min(dim(ngb) %% 2)==0) {
+			stop('dimensions of filter must be uneven')
 		}
 		if (ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)] != 0) {
 			warning('central cell of weights matrix (filter) was set to zero')
@@ -60,8 +59,8 @@ MoranLocal <- function(x, ngb=3, filter=FALSE) {
 	z  <- x - cellStats(x, mean) 
 	#weights
 	if (filter) {
-		if (max(dim(ngb) %% 2)) {
-			stop('filter must be square')
+		if (min(dim(ngb) %% 2)==0) {
+			stop('dimensions of filter must be uneven')
 		}
 
 		if ( ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)] != 0 ) {
