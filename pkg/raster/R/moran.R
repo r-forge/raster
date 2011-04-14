@@ -12,29 +12,54 @@
 }
 
 
-Moran <- function(x) {
+Moran <- function(x, ngb=3, filter=FALSE) {
 	z <- x - cellStats(x, mean)
-	wZiZj <- (focal(z, fun='sum', na.rm=TRUE) - z) * z
+	if (filter) {
+		if (sum(! unique(filter) %in% 0:1) > 0) {
+			stop('this filter is not allowed')
+			# this would affect the weights and needs to be dealt with
+		}
+		wZiZj <- focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE)	
+	} else {
+		wZiZj <- focal(z, ngb=ngb, fun=sum, na.rm=TRUE)
+	}
+	wZiZj <- overlay(wZiZj, z, fun=function(x,y){ (x-y) * y })
 	wZiZj <- cellStats(wZiZj, sum)
 	z2 <- cellStats(z*z, sum)
 	n <- ncell(z) - cellStats(z, 'countNA')
 	# weights
-	w <- focal( z, fun=function(x, ...){ max(0, sum(!is.na(x))-1) } )
+	if (filter) {
+		w <- focalFilter(z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )	
+	} else {
+		w <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
+	}
 	NS0 <- n / cellStats(w, sum)
 	mI <- NS0 * wZiZj / z2
 	return(mI)
 }
 
 
-MoranLocal <- function(x) { 
+MoranLocal <- function(x, ngb=3, filter=FALSE) { 
+	if (filter) {
+		if (sum(! unique(filter) %in% 0:1) > 0) {
+			stop('this filter is not allowed')
+			# this would affect the weights and needs to be dealt with
+		}
+	}
+	
 	n <- ncell(x) - cellStats(x, 'countNA')
 	s2 <-  cellStats(x, sd)^2 
 	# adjust variance denominator from n-1 to n 
 	s2 <- (s2 * (n-1)) / n 
 	z  <- x - cellStats(x, mean) 
 	#weights
-	w  <- focal( x, fun=function(x, ...){ max(0, sum(!is.na(x))-1) } )
-	lz <- (focal(z, fun='sum', na.rm=TRUE) - z) / w
+	if (filter) {
+		w  <- focalFilter( z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
+		lz <- (focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE) - z) / w
+	} else {
+		w  <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
+		lz <- (focal(z, ngb=ngb, fun=sum, na.rm=TRUE) - z) / w	
+	}
 	(z / s2) * lz
 } 
 
