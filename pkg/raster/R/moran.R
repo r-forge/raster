@@ -52,10 +52,6 @@ Moran <- function(x, ngb=3, filter=FALSE) {
 
 MoranLocal <- function(x, ngb=3, filter=FALSE) { 
 	
-	n <- ncell(x) - cellStats(x, 'countNA')
-	s2 <-  cellStats(x, sd)^2 
-	# adjust variance denominator from n-1 to n 
-	s2 <- (s2 * (n-1)) / n 
 	z  <- x - cellStats(x, mean) 
 	#weights
 	if (filter) {
@@ -72,13 +68,19 @@ MoranLocal <- function(x, ngb=3, filter=FALSE) {
 			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))
 			w  <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
 		} else {
-			w <- focalFilter( z, filter=ngb, fun=function(x, ...){ length(na.omit(x))-1 } )	
+			w  <- focalFilter( z, filter=ngb, fun=function(x, ...){ length(na.omit(x))-1 } )	
 		}
 		lz <- (focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE) ) / w
 	} else {
 		w  <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
 		lz <- (focal(z, ngb=ngb, fun=sum, na.rm=TRUE) - z) / w	
 	}
+
+	n <- ncell(x) - cellStats(x, 'countNA')
+	s2 <-  cellStats(x, sd)^2 
+	# adjust variance denominator from n-1 to n 
+	s2 <- (s2 * (n-1)) / n 
+
 	(z / s2) * lz
 } 
 
