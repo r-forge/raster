@@ -11,7 +11,7 @@
 
 \usage{
  Moran(x) 
- MoralLocal(x)
+ MoranLocal(x)
 }
 
 \arguments{
