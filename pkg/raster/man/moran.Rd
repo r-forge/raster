@@ -27,7 +27,6 @@ A single value (global Moran) or a RasterLayer (local Moran)
 
 \details{
 The default setting uses a 3x3 neighborhoud to compute 'Queen's case' indices. You can use a filter to do other things, such as Rook's case, or different lags. 
-Note, however, that the filter should consist of only the value 1 or 0 & 1. Other values are currently not allowed. 
 }
 
 \note{

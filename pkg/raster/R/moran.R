@@ -15,10 +15,6 @@
 Moran <- function(x, ngb=3, filter=FALSE) {
 	z <- x - cellStats(x, mean)
 	if (filter) {
-		if (sum(! unique(filter) %in% 0:1) > 0) {
-			stop('this filter is not allowed')
-			# this would affect the weights and needs to be dealt with
-		}
 		wZiZj <- focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE)	
 	} else {
 		wZiZj <- focal(z, ngb=ngb, fun=sum, na.rm=TRUE)
@@ -29,7 +25,12 @@ Moran <- function(x, ngb=3, filter=FALSE) {
 	n <- ncell(z) - cellStats(z, 'countNA')
 	# weights
 	if (filter) {
-		w <- focalFilter(z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )	
+		if (sum(! unique(filter) %in% 0:1) > 0) {
+			zz <- z / z
+			w  <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
+		} else {
+			w <- focalFilter(z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )	
+		}
 	} else {
 		w <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
 	}
@@ -40,12 +41,6 @@ Moran <- function(x, ngb=3, filter=FALSE) {
 
 
 MoranLocal <- function(x, ngb=3, filter=FALSE) { 
-	if (filter) {
-		if (sum(! unique(filter) %in% 0:1) > 0) {
-			stop('this filter is not allowed')
-			# this would affect the weights and needs to be dealt with
-		}
-	}
 	
 	n <- ncell(x) - cellStats(x, 'countNA')
 	s2 <-  cellStats(x, sd)^2 
@@ -54,7 +49,12 @@ MoranLocal <- function(x, ngb=3, filter=FALSE) {
 	z  <- x - cellStats(x, mean) 
 	#weights
 	if (filter) {
-		w  <- focalFilter( z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
+		if (sum(! unique(filter) %in% 0:1) > 0) {
+			zz <- z / z
+			w  <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
+		} else {
+			w  <- focalFilter( z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
+		}
 		lz <- (focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE) - z) / w
 	} else {
 		w  <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
