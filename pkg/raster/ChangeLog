@@ -1,6 +1,9 @@
+--- 14-Apr-2011, version 1.8-13
+Added new functions Moran (global) and MoranLocal
+
 --- 11-Apr-2011, version 1.8-12
 Major bug fix in focalFilter. In previous versoins results were wrong for filters larger than 3x3 !
-Thanks to Nick Hamm, Andy Wilson for reporting
+Thanks to Nick Hamm & Andy Wilson for reporting
 
 --- 7-Apr-2011, version 1.8-10
 Bug fix in cellStats with 'sd' and large files (reported by John Donoghue)
