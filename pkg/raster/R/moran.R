@@ -19,16 +19,10 @@
 
 
 Moran <- function(x, w=3) {
+
 	z <- x - cellStats(x, mean)
 	if (is.matrix(w)) {
-		if (min(dim(w) %% 2)==0) {
-			stop('dimensions of filter must be uneven')
-		}
-		if (w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] != 0) {
-			warning('central cell of weights matrix (filter) was set to zero')
-			w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
-		}
-		stopifnot(all(w >= 0))
+		w <- .getFilter(w)
 		
 		wZiZj <- focalFilter(z, filter=w, fun=sum, na.rm=TRUE, pad=TRUE)
 		wZiZj <- overlay(wZiZj, z, fun=function(x,y){ x * y })
@@ -63,14 +57,7 @@ MoranLocal <- function(x, w=3) {
 	z  <- x - cellStats(x, mean) 
 	#weights
 	if (is.matrix(w)) {
-		if (min(dim(w) %% 2)==0) {
-			stop('dimensions of filter must be uneven')
-		}
-		if ( w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] != 0 ) {
-			warning('central cell of weights matrix (filter) was set to zero')
-			w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
-		}
-		stopifnot(all(w >= 0))
+		w <- .getFilter(w)
 
 		if (sum(! unique(w) %in% 0:1) > 0) {
 			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))

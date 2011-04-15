@@ -3,8 +3,9 @@
 # Version 1.0
 # Licence GPL v3
 
-Geary <- function(x, w=3) {
-	
+
+
+.getFilter <- function(w) {
 	if (!is.matrix(w)) {
 		w <- .checkngb(w)
 		w <- matrix(1, nr=w[1], nc=(w[2]))
@@ -19,7 +20,15 @@ Geary <- function(x, w=3) {
 	if (min(dim(w) %% 2)==0) {
 		stop('dimensions of weights matrix (filter) must be uneven')
 	}
+	w
+}
+	
+	
 
+Geary <- function(x, w=3) {
+	
+	w <- .getFilter(w)
+	
 	i <- trunc(length(w)/2)+1 
 
 	n <- ncell(x) - cellStats(x, 'countNA')
@@ -39,5 +48,25 @@ Geary <- function(x, w=3) {
 	z <- 2 * cellStats(W, sum) * cellStats((x - cellStats(x, mean))^2, sum)
 	
 	(n-1)*Eij/z
+}
+
+
+
+
+GearyLocal <- function(x, w=3) { 
+
+	w <- .getFilter(w)
+	i <- trunc(length(w)/2)+1 
+	fun <- function(x,...) sum(w*(x-x[i])^2, ...)
+	w2 <- w
+	w2[] <- 1
+	Eij <- focalFilter(x, filter=w2, fun=fun, na.rm=TRUE, pad=TRUE)
+
+	s2 <-  cellStats(x, sd)^2 
+	if (ncell(x) < 1000000) { n <- ncell(x) - cellStats(x, 'countNA' )
+	} else { n <- ncell(x) }
+	
+	s2 <- (s2 * (n-1)) / n 
+	Eij / s2
 }
 

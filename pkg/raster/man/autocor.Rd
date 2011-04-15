@@ -3,17 +3,19 @@
 \alias{Geary}
 \alias{Moran}
 \alias{MoranLocal}
+\alias{GearyLocal}
 
 \title{Spatial autocorrelation}
 
 \description{
-Compute Moran's I or Geary's C measuers of global spatial autocorrelation in a RasterLayer, or compute the the local Moran index.
+Compute Moran's I or Geary's C measuers of global spatial autocorrelation in a RasterLayer, or compute the the local Moran or Geary index (Anselin, 1995).
 }
 
 \usage{
 Geary(x, w=3)
 Moran(x, w=3)
 MoranLocal(x, w=3)
+GearyLocal(x, w=3)
 }
 
 \arguments{
