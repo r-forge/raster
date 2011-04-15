@@ -17,7 +17,7 @@ MoranLocal(x, ngb=3, filter=FALSE)
 \arguments{
   \item{x}{RasterLayer}
   \item{ngb}{The neighborhood (as defined in \code{\link{focal}}) or, if \code{filter=TRUE}, a "filter" (as defined in \code{\link{focalFilter}}) }
-  \item{filter}{Boolean. If \code{TRUE}, ngb should be a 'filter' (the local matrix of spatial weights). The value of the central cell should be (have a weight of) zero }
+  \item{filter}{Boolean. If \code{TRUE}, \code{ngb} should be a 'filter' (the local matrix of spatial weights). The value of the central cell should be (have a weight of) zero }
 }
 
 
@@ -26,7 +26,7 @@ A single value (Moran's I) or a RasterLayer (Local Moran values)
 }
 
 \details{
-The default setting uses a 3x3 neighborhoud to compute 'Queen's case' indices. You can use a filter to do other things, such as Rook's case, or different lags. 
+The default setting uses a 3x3 neighborhoud to compute "Queen's case" indices. You can use a filter to do other things, such as Rook's case, or different lags. 
 }
 
 \seealso{
@@ -36,10 +36,9 @@ The spdep package for additional and more general approaches for computing indic
 \author{Robert J. Hijmans and Babak Naimi}
 
 \references{
-Moran, P.A.P., 1950. Notes on Continuous Stochastic Phenomena. Biometrika 37:17–23.
-Anselin, L., 1995. Local Indicators of Spatial Association-LISA. Geographical Analysis 27:93–115
+Moran, P.A.P., 1950. Notes on continuous stochastic phenomena. Biometrika 37:17-23
+Anselin, L., 1995. Local indicators of spatial association-LISA. Geographical Analysis 27:93-115
 }
-
 
 \examples{
 r <- raster(nrows=10, ncols=10)
