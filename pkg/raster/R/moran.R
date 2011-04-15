@@ -28,7 +28,7 @@ Moran <- function(x, ngb=3, filter=FALSE) {
 			warning('central cell of weights matrix (filter) was set to zero')
 			ngb[ceiling(dim(ngb)[1]/2), ceiling(dim(ngb)[2]/2)] <- 0
 		}
-		wZiZj <- focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE)	
+		wZiZj <- focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE, pad=TRUE)
 		wZiZj <- overlay(wZiZj, z, fun=function(x,y){ x * y })
 	} else {
 		wZiZj <- focal(z, ngb=ngb, fun=sum, na.rm=TRUE)
@@ -41,9 +41,9 @@ Moran <- function(x, ngb=3, filter=FALSE) {
 	if (filter) {
 		if (sum(! unique(ngb) %in% 0:1) > 0) {
 			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))
-			w <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
+			w <- focalFilter( zz, filter=ngb, fun=sum, na.rm=TRUE, pad=TRUE ) 
 		} else {
-			w <- focalFilter( z, filter=ngb, fun=function(x, ...){ length(na.omit(x))-1 } )	
+			w <- focalFilter( z, filter=ngb, fun=function(x, ...){  sum(!is.na(x))-1 }, pad=TRUE )
 		}
 	} else {
 		w <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
@@ -70,11 +70,12 @@ MoranLocal <- function(x, ngb=3, filter=FALSE) {
 
 		if (sum(! unique(ngb) %in% 0:1) > 0) {
 			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))
-			w  <- focalFilter( zz, filter=ngb, fun=function(x, ...){ sum(x, na.rm=TRUE ) } )
+			w  <- focalFilter( zz, filter=ngb, fun=sum, na.rm=TRUE, pad=TRUE)
 		} else {
-			w  <- focalFilter( z, filter=ngb, fun=function(x, ...){ length(na.omit(x))-1 } )	
+			w  <- focalFilter( z, filter=ngb, fun=function(x, ...){ sum(!is.na(x))-1 }, na.rm=TRUE , pad=TRUE)	
 		}
-		lz <- (focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE) ) / w
+		lz <- (focalFilter(z, filter=ngb, fun=sum, na.rm=TRUE, pad=TRUE) ) / w
+		
 	} else {
 		w  <- focal( z, ngb=ngb, fun=function(x, ...){ sum(!is.na(x))-1 } )
 		lz <- (focal(z, ngb=ngb, fun=sum, na.rm=TRUE) - z) / w	
