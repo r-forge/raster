@@ -13,13 +13,14 @@ Geary <- function(x, w=3) {
 		if (w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] != 0) {
 			warning('central cell of weights matrix (filter) was set to zero')
 			w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
-		}
+		}		
+		stopifnot(all(w >= 0))
 	}
 	if (min(dim(w) %% 2)==0) {
 		stop('dimensions of weights matrix (filter) must be uneven')
 	}
 
-	i <- trunc(length(x)/2)+1 
+	i <- trunc(length(w)/2)+1 
 
 	n <- ncell(x) - cellStats(x, 'countNA')
 	
@@ -32,7 +33,8 @@ Geary <- function(x, w=3) {
 		x <- calc(x, fun=function(x) ifelse(is.na(x), NA ,1))
 		W <- focalFilter(x, filter=w, fun=sum, na.rm=TRUE, pad=TRUE ) 
 	} else {
-		W <- focalFilter(x, filter=w, fun=function(x, ...){  sum(!is.na(x))-1 }, pad=TRUE )
+		w[w==0] <- NA
+		W <- focalFilter(x, filter=w, fun=function(x, ...){  sum(!is.na(x)) }, pad=TRUE )
 	}
 	z <- 2 * cellStats(W, sum) * cellStats((x - cellStats(x, mean))^2, sum)
 	

@@ -28,6 +28,8 @@ Moran <- function(x, w=3) {
 			warning('central cell of weights matrix (filter) was set to zero')
 			w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
 		}
+		stopifnot(all(w >= 0))
+		
 		wZiZj <- focalFilter(z, filter=w, fun=sum, na.rm=TRUE, pad=TRUE)
 		wZiZj <- overlay(wZiZj, z, fun=function(x,y){ x * y })
 	} else {
@@ -43,7 +45,9 @@ Moran <- function(x, w=3) {
 			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))
 			W <- focalFilter( zz, filter=w, fun=sum, na.rm=TRUE, pad=TRUE ) 
 		} else {
-			W <- focalFilter( z, filter=w, fun=function(x, ...){  sum(!is.na(x))-1 }, pad=TRUE )
+			w2 <- w
+			w2[w2==0] <- NA
+			W <- focalFilter( z, filter=w2, fun=function(x, ...){  sum(!is.na(x)) }, pad=TRUE )
 		}
 	} else {
 		W <- focal( z, ngb=w, fun=function(x, ...){ sum(!is.na(x))-1 } )
@@ -62,17 +66,19 @@ MoranLocal <- function(x, w=3) {
 		if (min(dim(w) %% 2)==0) {
 			stop('dimensions of filter must be uneven')
 		}
-
 		if ( w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] != 0 ) {
 			warning('central cell of weights matrix (filter) was set to zero')
 			w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
 		}
+		stopifnot(all(w >= 0))
 
 		if (sum(! unique(w) %in% 0:1) > 0) {
 			zz <- calc(z, fun=function(x) ifelse(is.na(x), NA ,1))
 			W  <- focalFilter( zz, filter=w, fun=sum, na.rm=TRUE, pad=TRUE)
 		} else {
-			W  <- focalFilter( z, filter=w, fun=function(x, ...){ sum(!is.na(x))-1 }, na.rm=TRUE , pad=TRUE)	
+			w2 <- w
+			w2[w2==0] <- NA
+			W  <- focalFilter( z, filter=w2, fun=function(x, ...){ sum(!is.na(x)) }, na.rm=TRUE , pad=TRUE)	
 		}
 		lz <- (focalFilter(z, filter=w, fun=sum, na.rm=TRUE, pad=TRUE) ) / W
 		
@@ -88,46 +94,5 @@ MoranLocal <- function(x, w=3) {
 
 	(z / s2) * lz
 } 
-
-
-
-
-
-Geary <- function(x, w=3) {
-	
-	if (!is.matrix(w)) {
-		w <- .checkngb(w)
-		w <- matrix(1, nr=w[1], nc=(w[2]))
-		w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
-	} else {
-		if (w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] != 0) {
-			warning('central cell of weights matrix (filter) was set to zero')
-			w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
-		}
-	}
-	if (min(dim(w) %% 2)==0) {
-		stop('dimensions of weights matrix (filter) must be uneven')
-	}
-
-	i <- trunc(length(x)/2)+1 
-
-	n <- ncell(x) - cellStats(x, 'countNA')
-	
-	fun <- function(x,...) sum(w*(x-x[i])^2, ...)
-	w2 <- w
-	w2[] <- 1
-	Eij <- cellStats(focalFilter(x, filter=w2, fun=fun, na.rm=TRUE, pad=TRUE), sum)
-
-	if (sum(! unique(w) %in% 0:1) > 0) {
-		x <- calc(x, fun=function(x) ifelse(is.na(x), NA ,1))
-		W <- focalFilter(x, filter=w, fun=sum, na.rm=TRUE, pad=TRUE ) 
-	} else {
-		W <- focalFilter(x, filter=w, fun=function(x, ...){  sum(!is.na(x))-1 }, pad=TRUE )
-	}
-	z <- 2 * cellStats(W, sum) * cellStats((x - cellStats(x, mean))^2, sum)
-	
-	(n-1)*Eij/z
-}
-
 
 
