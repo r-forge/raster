@@ -1,23 +1,24 @@
-\name{moran}
+\name{autocorrelation}
 
+\alias{Geary}
 \alias{Moran}
 \alias{MoranLocal}
 
-\title{Moran index}
+\title{Spatial autocorrelation}
 
 \description{
-Compute global or local Moran index (I) of spatial autocorrelation
+Compute Moran's I or Geary's C measuers of global spatial autocorrelation in a RasterLayer, or compute the the local Moran index.
 }
 
 \usage{
-Moran(x, ngb=3, filter=FALSE)
-MoranLocal(x, ngb=3, filter=FALSE)
+Geary(x, w=3)
+Moran(x, w=3)
+MoranLocal(x, w=3)
 }
 
 \arguments{
   \item{x}{RasterLayer}
-  \item{ngb}{The neighborhood (as defined in \code{\link{focal}}) or, if \code{filter=TRUE}, a "filter" (as defined in \code{\link{focalFilter}}) }
-  \item{filter}{Boolean. If \code{TRUE}, \code{ngb} should be a 'filter' (the local matrix of spatial weights). The value of the central cell should be (have a weight of) zero }
+  \item{w}{Spatial weights. Either a single number or a vector of two numbers to define a neighborhood (as in \code{\link{focal}}) or, if \code{filter=TRUE}, a rectangular mattrix with uneven sides (a "filter" as in \code{\link{focalFilter}}) }
 }
 
 
@@ -37,18 +38,25 @@ The spdep package for additional and more general approaches for computing indic
 
 \references{
 Moran, P.A.P., 1950. Notes on continuous stochastic phenomena. Biometrika 37:17-23
+
+Geary, R.C., 1954. The Contiguity Ratio and Statistical Mapping. The Incorporated Statistician 5: 115-145
+
 Anselin, L., 1995. Local indicators of spatial association-LISA. Geographical Analysis 27:93-115
+
+\url{http://en.wikipedia.org/wiki/Indicators_of_spatial_association}
 }
 
 \examples{
 r <- raster(nrows=10, ncols=10)
 r[] <- 1:ncell(r)
 Moran(r)
+Geary(r)
+
 x1 <- MoranLocal(r)
 
 # Rook's case
 f <- matrix(c(0,1,0,1,0,1,0,1,0), nrow=3)
-x2 <- MoranLocal(r, ngb=f, filter=TRUE)
+x2 <- MoranLocal(r, w=f)
 }
 
 \keyword{spatial}
