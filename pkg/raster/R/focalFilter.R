@@ -4,8 +4,6 @@
 # Licence GPL v3
 
 
-# obsolete functions
-
 .calcFilter <- function(rows, colnrs, res, filter, fun, na.rm) {
 #	res[] <- NA
     for (i in 1:dim(rows)[2]) {
