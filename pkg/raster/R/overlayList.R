@@ -97,10 +97,6 @@
 		
 		tr <- blockSize(outraster, n=length(x))
 		pb <- pbCreate(tr$n, type=.progress(...))
-
-		outraster <- writeStart(outraster, filename=filename)
-		tr <- blockSize(outraster, n=length(x))
-		pb <- pbCreate(tr$n, type="")
 		
 		if (doapply) { 
 			valmat = matrix(nrow=tr$nrows[1]*ncol(outraster)*maxnl, ncol=length(x)) 
