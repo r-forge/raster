@@ -12,14 +12,16 @@
 
 
 .isGlobalLatLon <- function(raster) {
-	if (.couldBeLonLat(raster)) {
-		tolerance <- 0.1
-		scale <- xres(raster)
-		if (isTRUE(all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale)) & isTRUE(all.equal(xmax(raster), 180, tolerance=tolerance, scale=scale))) {
-			return(TRUE)
+	res <- FALSE
+	tolerance <- 0.1
+	scale <- xres(raster)
+	if (isTRUE(all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale)) & 
+		isTRUE(all.equal(xmax(raster),  180, tolerance=tolerance, scale=scale))) {
+		if (.couldBeLonLat(raster)) {
+ 			res <- TRUE
 		}
 	}
-	return(FALSE)
+	res
 }
 
 #Costumized (internal) functions can be created for each number of directions and for upper, middle and lower rows to optimize the code for row-level processing. 32 directions can be created if higher precision is needed.

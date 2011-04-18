@@ -18,10 +18,8 @@
 }
 
 
-focalFilter <- function(x, filter, fun=sum, filename="", na.rm=FALSE, pad=FALSE, padValue=NA, ...) {
-	if (pad) {
-		return(.focalFilterPad(x, filter, fun, filename, na.rm, padValue, ...))
-	}
+.focalFilterNoPad <- function(x, filter, fun=sum, filename="", na.rm=FALSE, ...) {
+
 	if (!is.matrix(filter)) { stop('filter must be a matrix') }
 	ngb <- dim(filter)
 	if (prod(ngb) == 0) { stop('ncol and nrow of filter must be > 0') }

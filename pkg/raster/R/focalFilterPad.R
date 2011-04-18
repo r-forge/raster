@@ -4,7 +4,8 @@
 # Licence GPL v3
 
 
-.calcFilter2 <- function(rows, colnrs, res, filter, fun, na.rm) {
+..calcFilter2 <- function(rows, colnrs, res, filter, fun, na.rm) {
+# not used
     for (i in 1:length(res)) {	
 		d <- rows[, colnrs[i, ]]
 		res[i] <- fun(d * filter, na.rm=na.rm)
@@ -13,27 +14,40 @@
 }
 
 
-.focalFilterPad <- function(x, filter, fun=sum, filename="", na.rm=FALSE, padValue=NA, ...) {
+
+focalFilter <- function(x, filter, fun=sum, filename="", na.rm=FALSE, pad=TRUE, padValue=NA, ...) {
+	if (!pad) {
+		return(.focalFilterNoPad(x=x, filter=filter, fun=fun, filename=filename, na.rm=na.rm, ...))
+	}
+
 	if (!is.matrix(filter)) { stop('filter must be a matrix') }
 	ngb <- dim(filter)
 	if (prod(ngb) == 0) { stop('ncol and nrow of filter must be > 0') }
+	if (min(ngb%%2) == 0) { stop('filter must have uneven sides') }	
 
 	ngbgrid <- raster(x)
-
+	glob <- .isGlobalLatLon(x)
+	
 	limcol <- floor(ngb[2] / 2)
 	colnrs <- (-limcol+1):(ncol(ngbgrid)+limcol)
 	colnrs <- .embed(colnrs, ngb[2]) + limcol 
-#	colnrs[colnrs > ncol(ngbgrid) | colnrs < 0] <- 0
-
-	limrow <- floor(ngb[1] / 2)
-	ngbdata <- matrix(padValue, ncol=ncol(x)+2*limcol, nrow=nrow(filter)) 
-	colrange <- (limcol+1):(ncol(ngbdata)-limcol)
-
-	for (i in 1:limrow) {
-		ngbdata[i+limrow+1, colrange] <- getValues(x, i)
+	if (glob) {
+		padfc <- 1:limcol
+		fc <- padfc + limcol
+		lc <- (ncol(ngbgrid)+1):(ncol(ngbgrid)+limcol)
+		padlc <- lc + limcol
 	}
 	
-#	ngbdata[(limrow+1):nrow(ngbdata), colrange] <- matrix(getValues(x, 1, limrow), ncol=ncol(x))
+	limrow <- floor(ngb[1] / 2)
+	ngbdata <- matrix(padValue, ncol=ncol(x)+2*limcol, nrow=nrow(filter), byrow=TRUE) 
+	colrange <- (limcol+1):(ncol(ngbdata)-limcol)
+
+	fr <- (nrow(ngbdata)-limrow+1):nrow(ngbdata)
+	ngbdata[fr, colrange] <- matrix(getValues(x, 1, limrow), nrow=limrow, byrow=TRUE)
+	if (glob) {
+		ngbdata[fr, padfc] <- ngbdata[fr, lc]
+		ngbdata[fr, padlc] <- ngbdata[fr, fc]				
+	}
 	
 	res <- rep(NA, ncol(ngbgrid))
 	
@@ -51,7 +65,6 @@
 
 	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
 
-	
 	lastrow <- nrow(filter)
 	rrows <- 1:(lastrow-1)
 	
@@ -60,12 +73,18 @@
 		if (rr <= nrow(ngbgrid)) {
 			ngbdata[rrows,] <- ngbdata[rrows+1,]
 			ngbdata[lastrow, colrange] <- getValues(x, rr)
+			if (glob) {
+				ngbdata[lastrow, padfc] <- ngbdata[lastrow, lc]
+				ngbdata[lastrow, padlc] <- ngbdata[lastrow, fc]				
+			}
 		} else {
 			ngbdata[rrows,] <- ngbdata[rrows+1,]
 			ngbdata[lastrow, ] <- padValue
 		}
 		
-		ngbvals <- .calcFilter2(ngbdata, colnrs, res, filter, fun=fun, na.rm=na.rm)
+		d <- matrix(as.vector(ngbdata[, t(colnrs)]), nrow=length(filter)) * as.vector(filter)
+		ngbvals <- apply(d, 2, FUN=fun, na.rm=na.rm)
+		
 		if (filename != "") {
 			ngbgrid <- writeValues(ngbgrid, ngbvals, r)
 		} else {
@@ -82,4 +101,4 @@
 	}
 	return(ngbgrid)
 }
-	
+

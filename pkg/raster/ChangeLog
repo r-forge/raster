@@ -1,6 +1,9 @@
+--- 17-Apr-2011, version 1.8-14
+focalFilter now using the correct "padding" for global lon/lat data (first & last columns touch)
+
 --- 14-Apr-2011, version 1.8-13
 Added new functions Geary, Moran (global) and MoranLocal
-New option to focalFilter "pad" to better deal with edge effects
+New option to focalFilter: "pad" to better deal with edge effects
 
 --- 11-Apr-2011, version 1.8-12
 Major bug fix in focalFilter. In previous versoins results were wrong for filters larger than 3x3 !
