@@ -1,3 +1,6 @@
+--- 25-Apr-2011, version 1.8-15
+focal now correct for global lon/lat data (first & last columns touch)
+
 --- 17-Apr-2011, version 1.8-14
 focalFilter now using the correct "padding" for global lon/lat data (first & last columns touch)
 

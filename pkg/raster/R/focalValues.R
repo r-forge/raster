@@ -9,8 +9,7 @@
 	
 
 focalValues <- function(x, ...) {
-	.warnExtract(6)
-	.focalValues(x, ...)
+	stop('function has been removed. Use "extract" instead')
 }
 	
 	

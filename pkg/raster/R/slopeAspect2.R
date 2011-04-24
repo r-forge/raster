@@ -23,23 +23,31 @@
 		fX <- matrix(c(0,-1,0,0,0,0,0,1,0), nrow=3) / -2
 		fY <- matrix(c(0,0,0,-1,0,1,0,0,0), nrow=3) / 2
 	}
+	f <- matrix(1,3,3)
 	
 	if (isLonLat(dem)) {
 		dy <- pointDistance(cbind(0,0), cbind(0, dy), longlat=TRUE)
 		fY <- fY / dy
-		zy <- focalFilter(dem, fY)
-		zx <- focalFilter(dem, fX)
 		
+		fun1 <- function(x, ...) cbind(sum(x * fX), sum(x * fY))
+		zx <- stack(focalFilter(dem, f, fun=fun1))
+		zy <- zx[[2]]
+		zx <- zx[[1]]
+
 		y <- yFromRow(dem, 1:nrow(dem))
 		dx <- .haversine(-dx, y, dx, y) / 3
 		zx <- t( t(zx) / dx)
 		
 	} else {
-	
 		fX <- fX / dx
 		fY <- fY / dy
-		zx <- focalFilter(dem, fX)
-		zy <- focalFilter(dem, fY)
+		fun2 <- function(x, ...) cbind(sum(x * fX), sum(x * fY))
+		zx <- focalFilter(dem, f, fun=fun2)
+		zy <- zx[[2]]
+		zx <- zx[[1]]
+		
+		#zx <- focalFilter(dem, fX)
+		#zy <- focalFilter(dem, fY)
 	}
 
 	if (type == 'slope') {

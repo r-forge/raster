@@ -4,25 +4,6 @@
 # Version 0.9
 # Licence GPL v3
 
-.cs <- function(a,b) {
-	aRep <- rep(a,times=length(b))
-	out <- cbind(aRep,as.integer(aRep+rep(b,each=length(a))),deparse.level=0)
-	return(out)
-}
-
-
-.isGlobalLatLon <- function(raster) {
-	res <- FALSE
-	tolerance <- 0.1
-	scale <- xres(raster)
-	if (isTRUE(all.equal(xmin(raster), -180, tolerance=tolerance, scale=scale)) & 
-		isTRUE(all.equal(xmax(raster),  180, tolerance=tolerance, scale=scale))) {
-		if (.couldBeLonLat(raster)) {
- 			res <- TRUE
-		}
-	}
-	res
-}
 
 #Costumized (internal) functions can be created for each number of directions and for upper, middle and lower rows to optimize the code for row-level processing. 32 directions can be created if higher precision is needed.
 #adjraster <- function(raster, directions, outerMeridianConnect) {
@@ -34,10 +15,16 @@
 #	return(raster)
 #}
 
+.cs <- function(a,b) {
+	aRep <- rep(a,times=length(b))
+	out <- cbind(aRep,as.integer(aRep+rep(b,each=length(a))),deparse.level=0)
+	return(out)
+}
+
 
 adjacency <- function(raster, fromCells, toCells, directions) {
 
-	outerMeridianConnect <- .isGlobalLatLon(raster)
+	outerMeridianConnect <- .isGlobalLonLat(raster)
 
 	if (directions=="Bishop") { return(.adjBishop(raster, fromCells, toCells, outerMeridianConnect)) }
 
