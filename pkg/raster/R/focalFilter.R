@@ -58,19 +58,15 @@ focalFilter <- function(x, filter, fun=sum, filename="", na.rm=FALSE, pad=TRUE, 
 		if (!inMemory(x)) {
 			x <- readAll(x)
 		}
+		v <- matrix(NA, ncol=nrow(out), nrow=ncol(out))
 	} else {
 		inMem <- FALSE
 		if (filename == '') {
 			filename <- rasterTmpFile()			
 		}
-	}
-	
-	if (inMem) {
-		v <- matrix(NA, ncol=nrow(out), nrow=ncol(out))
-	} else {
 		out <- writeStart(out, filename=filename, ...)
 	}
-
+	
 	pb <- pbCreate(nrow(out), type=.progress(...))
 
 	lastrow <- nrow(filter)
