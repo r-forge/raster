@@ -124,7 +124,7 @@
 		if ( is.finite(minv) & is.finite(maxv) ) x@data@haveminmax <- TRUE 
 	
 	}
-	dataType(x) <- datatype
+	x@file@datanotation <- datatype
 	x@data@min <- minv
 	x@data@max <- maxv
 

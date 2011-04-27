@@ -1,3 +1,7 @@
+--- 27-Apr-2011, version 1.8-16
+default NA value for reading files via gdal is now -Inf such that values are not inadvertedly classified as NA (thanks to bug report by Agustin Lobo) when using e.g. INT2U datatype.
+further adjustments needed for writing.
+
 --- 25-Apr-2011, version 1.8-15
 focal now correct for global lon/lat data (first & last columns touch)
 
