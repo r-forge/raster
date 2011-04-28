@@ -38,7 +38,7 @@ clearOptions <- function() {
 	options(rasterProgress = 'none')
 	options(rasterTimer = FALSE)
 	options(rasterChunkSize = 1000000)
-	options(rasterMaxMemory = 100000000)
+	options(rasterMaxMemory = 10000000)
 	options(setfileext = TRUE)
 	options(rasterTmpDir = .tmpdir())
 #	options(rasterUseCluster = FALSE)
