@@ -171,32 +171,28 @@ setMethod('brick', signature(x='SpatialPixels'),
 	}
 )
 
-
 setMethod('brick', signature(x='array'), 
 	function(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, transpose=FALSE) {
 		dm <- dim(x)
 		if (is.matrix(x)) {
 			stop('cannot coerce a matrix to a RasterBrick')
 		}
-		if (length(dm) != 3) {
-			stop('array has wrong number of dimensions (needs to be 3)')
-		}
 		b <- brick(xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs)
-		v <- matrix(as.vector(x), ncol=dm[3])
-		if (transpose) {
+        if (transpose) {
 			dim(b) <- c(dm[2], dm[1], dm[3])
-			for (i in 1:ncol(v)) {
-				v[,i] <- as.vector(matrix(v[,i], ncol=dm[2]))
-			}
-		} else {
+        } else {
 			dim(b) <- dm
-			for (i in 1:ncol(v)) {
-				v[,i] <- as.vector(t(matrix(v[,i], ncol=dm[2])))
-			}
 		}
-		setValues(b, v)
-	}
+		# aperm etc suggested by Justin M
+		# https://r-forge.r-project.org/forum/message.php?msg_id=4312
+		x <- aperm(x, perm=c(2,1,3))
+		attributes(x) <- NULL
+		dim(x) <- c(dm[1] * dm[2], dm[3])
+		setValues(b, x)
+	} 
 )
+	
+
 
 setMethod('brick', signature(x='kasc'), 
 	function(x) {
