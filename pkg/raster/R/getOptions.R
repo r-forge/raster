@@ -81,6 +81,17 @@
 }
 
 
+.tolerance <- function() {
+	d <- getOption('rasterTolerance')
+	if (is.null(d)) {
+		d <- 0.1
+	} else {
+		d <- max(0.000000001, min(d, 0.5))
+	}
+	return(d)
+}
+
+
 .overwrite <- function(..., overwrite) {
 	if (missing(overwrite)) { 
 		overwrite <- getOption('rasterOverwrite')

@@ -28,11 +28,9 @@
 compare <- function(x, ..., extent=TRUE, rowcol=TRUE, prj=TRUE, res=FALSE, orig=FALSE, tolerance, stopiffalse=TRUE, showwarning=FALSE) {
 
 	if (missing(tolerance)) {
-		tolerance <- options("rasterTolerance")$rasterTolerance
-		if (is.null(tolerance)) {
-			tolerance <- 0.05
-		}
+		tolerance <- .tolerance()
 	}
+	
 	result <- TRUE
 	firstproj <- NA
 	objects <- c(x, list(...))
