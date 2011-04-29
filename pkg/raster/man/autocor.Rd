@@ -25,7 +25,7 @@ GearyLocal(x, w=3)
 
 
 \value{
-A single value (Moran's I) or a RasterLayer (Local Moran values)
+A single value (Moran's I or Geary's C) or a RasterLayer (Local Moran or Geary values)
 }
 
 \details{
