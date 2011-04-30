@@ -41,12 +41,7 @@
 	cat("NODATA_value", x@file@nodatavalue, "\n", file = thefile)
 	close(thefile) #close connection
 	
-	p4s <- try(	showWKT(projection(x), file = NULL, morphToESRI = TRUE) )
-	if (class(p4s) != 'try-error') {
-		ext(filename) <- '.prj'
-		cat(p4s, file=filename)
-	}
-	
+	hdr(x, "PRJ")
 	return(x)
 	
 }
