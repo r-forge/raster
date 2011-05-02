@@ -41,7 +41,6 @@
 	cat("NODATA_value", x@file@nodatavalue, "\n", file = thefile)
 	close(thefile) #close connection
 	
-	hdr(x, "PRJ")
 	return(x)
 	
 }
