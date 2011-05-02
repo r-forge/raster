@@ -118,7 +118,7 @@
 	if (missing(datatype)) { 
 		datatype <- getOption('rasterDatatype')
 		if (is.null(datatype)) {
-			return('FLT8S') 
+			return('FLT4S') 
 		} 
 	} 
 	if (! datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT1U', 'INT2U', 'INT4U', 'FLT4S', 'FLT8S')) {
