@@ -1,3 +1,9 @@
+--- 2-May-2011, version 1.8-17
+Faster setvalues with an array and 'brick' and 'setValues' (code changes provided by Justin McGrath)
+Fixed a problem with a few functions set warnings to -1 and did not reset it (reported by Justin McGrath)
+New option in 'hdr' to write ESRI .prj files. 
+New global option "tolerance" that is used to assess whether Raster* objects have the same origin/resolution
+
 --- 27-Apr-2011, version 1.8-16
 default NA value for reading files via gdal is now -Inf such that values are not inadvertedly classified as NA (thanks to bug report by Agustin Lobo) when using e.g. INT2U datatype.
 further adjustments needed for writing.

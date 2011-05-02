@@ -186,7 +186,7 @@ setMethod('brick', signature(x='array'),
 			dim(b) <- c(dm[2], dm[1], dm[3])
 		} else {
 			dim(b) <- dm
-			# aperm etc suggested by Justin M
+			# aperm etc suggested by Justin McGrath
 			# https://r-forge.r-project.org/forum/message.php?msg_id=4312
 			x = aperm(x, perm=c(2,1,3))
 		}
