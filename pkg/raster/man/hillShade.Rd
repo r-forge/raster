@@ -11,14 +11,14 @@ A hill shade layer is often used as a backdrop on top of which another, semi-tra
 }
 
 \usage{
-hillShade(slope, aspect, declination, direction, filename='', ...)  
+hillShade(slope, aspect, angle=45, direction=0, filename='', ...)  
 }
 
 \arguments{
   \item{slope}{RasterLayer object with slope values (in radians) }
   \item{aspect}{RasterLayer object with aspect values (in radians) }
-  \item{declination}{ The height of the light source (sun) expressed in degrees}
-  \item{direction}{ The direction (azimuth) of the light source (sun) expressed in degrees}
+  \item{angle}{ The the elevation angle of the light source (sun), in degrees}
+  \item{direction}{ The direction (azimuth) angle of the light source (sun), in degrees}
   \item{filename}{Character. Optional filename}
   \item{...}{Standard additional arguments for writing RasterLayer files}
 }
@@ -26,7 +26,7 @@ hillShade(slope, aspect, declination, direction, filename='', ...)
 
 \seealso{ \code{\link{slopeAspect}} }
 
-\author{Andrew Bevan & Robert J. Hijmans}
+\author{Andrew Bevan, Robert J. Hijmans}
 
 
 \references{
