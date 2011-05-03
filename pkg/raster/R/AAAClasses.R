@@ -150,6 +150,7 @@ setClass ('.RasterLegend',
 		type = 'character',
 		values = 'vector',
 		color = 'vector',
+		names = 'vector',
 		colortable = 'vector'
 		),
 	prototype (

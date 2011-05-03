@@ -5,7 +5,7 @@
 \title{Hill shading}
 
 \description{
-Compute hill shade from slope and aspect layers. Slope should be expressed as a tangent (fraction), and aspect layers should be in radians. Slope and aspect can be computed with \code{\link{slopeAspect}}. 
+Compute hill shade from slope and aspect layers (both in radians). Slope and aspect can be computed with \code{\link{slopeAspect}}. 
 
 A hill shade layer is often used as a backdrop on top of which another, semi-transparant, layer is drawn.
 }
@@ -15,8 +15,8 @@ hillShade(slope, aspect, declination, direction, filename='', ...)
 }
 
 \arguments{
-  \item{slope}{RasterLayer object with slope values expressed as a fraction (tangent) }
-  \item{aspect}{RasterLayer object with aspect values expressed as radians }
+  \item{slope}{RasterLayer object with slope values (in radians) }
+  \item{aspect}{RasterLayer object with aspect values (in radians) }
   \item{declination}{ The height of the light source (sun) expressed in degrees}
   \item{direction}{ The direction (azimuth) of the light source (sun) expressed in degrees}
   \item{filename}{Character. Optional filename}

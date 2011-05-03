@@ -4,11 +4,11 @@
 # Licence GPL v3
 
 
-slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, flatAspect, ...) {
+slopeAspect <- function(dem, filename='', type='both', unit='radians', neighbors=8, flatAspect, ...) {
 	type <- trim(tolower(type))
 	stopifnot(type %in% c('', 'both' , 'slope', 'aspect'))
 	unit <- trim(tolower(unit))
-	stopifnot(unit %in% c('degrees', ''))
+	stopifnot(unit %in% c('degrees', 'radians'))
 	filename <- trim(filename)
 	stopifnot(neighbors %in% c(4, 8))
 	stopifnot(projection(dem) != "NA")
@@ -44,9 +44,9 @@ slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, fla
 
 	if (type == 'slope') {
 		
-		x <- sqrt( zy^2 + zx^2 ) 
+		x <- atan( sqrt( zy^2 + zx^2 ) )
 		if (unit == 'degrees') {
-			x <- atan(x) * (180 / pi)
+			x <- x * (180 / pi)
 		}
 		layerNames(x) <- 'slope'
 		
@@ -63,12 +63,12 @@ slopeAspect <- function(dem, filename='', type='both', unit='', neighbors=8, fla
 		layerNames(x) <- 'aspect'
 		
 	} else {
-		x <- sqrt( zy^2 + zx^2 ) 
+		x <- atan( sqrt( zy^2 + zx^2 ) )
 		aspect <- atan2(zy, zx) 
 		aspect <- ((0.5*pi)-aspect) %% (2*pi)
 		
 		if (unit == 'degrees') {
-			x <- atan(x) * (180/pi)
+			x <- x * (180/pi)
 			aspect <- aspect * (180/pi)
 		}
 		if (!missing (flatAspect)) {
