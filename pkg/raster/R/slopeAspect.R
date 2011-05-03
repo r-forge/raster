@@ -4,14 +4,24 @@
 # Licence GPL v3
 
 
-slopeAspect <- function(dem, filename='', type='both', unit='radians', neighbors=8, flatAspect, ...) {
-	type <- trim(tolower(type))
-	stopifnot(type %in% c('', 'both' , 'slope', 'aspect'))
+slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radians', neighbors=8, flatAspect, ...) {
+
+	stopifnot(neighbors %in% c(4, 8))
+	stopifnot(projection(dem) != "NA")
 	unit <- trim(tolower(unit))
 	stopifnot(unit %in% c('degrees', 'radians'))
 	filename <- trim(filename)
-	stopifnot(neighbors %in% c(4, 8))
-	stopifnot(projection(dem) != "NA")
+
+	out <- trim(tolower(out))
+	stopifnot(all(out %in% c('slope', 'aspect')))
+	
+	
+	if (length(out) == 1) {
+		type <- out
+	} else {
+		type <- 'both'
+	}
+	
 	
 	res <- res(dem)
 	dx <- res[1]
