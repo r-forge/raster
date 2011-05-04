@@ -5,7 +5,7 @@
 \title{Zonal statistics}
 
 \description{
-Compute zonal statistics. That is, cross-tabulate the values of a Raster* object based on a "zones" RasterLayer. 
+Compute zonal statistics, values of a Raster* object for each "zone" in a RasterLayer. 
 }
 
 \usage{
