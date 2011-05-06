@@ -1,3 +1,6 @@
+--- 5-May-2011, version 1.8-18
+Changes to calc and overlay to allow for more complex functions
+
 --- 2-May-2011, version 1.8-17
 Faster setvalues with an array and 'brick' and 'setValues' (code changes provided by Justin McGrath)
 Fixed a problem with a few functions set warnings to -1 and did not reset it (reported by Justin McGrath)
