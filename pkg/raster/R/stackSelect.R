@@ -3,8 +3,14 @@
 # Version 1
 # Licence GPL v3
 
+	
+if (!isGeneric("stackSelect")) {
+	setGeneric("stackSelect", function(x, y, ...)
+		standardGeneric("stackSelect"))
+}	
 
-stackSelect <- function(x, y, filename='', ...) {
+setMethod('stackSelect', signature(x='RasterStackBrick', y='RasterLayer'), 
+function(x, y, filename='', ...) {
 
 	nl <- nlayers(x)
 	stopifnot(nlayers(y) == 1)
@@ -45,5 +51,5 @@ stackSelect <- function(x, y, filename='', ...) {
 	pbClose(pb)
 	return(out)
 }
-	
+)	
 
