@@ -66,7 +66,9 @@
 			valmat <- matrix(nrow=ncell(out)*maxnl, ncol=length(x)) 
 			for (i in 1:length(x)) {
 				if (ncell(x[[i]]) < nrow(valmat)) {
+					options('warn'=-1) 
 					valmat[,i] <- as.vector(getValues(x[[i]])) * rep(1, nrow(valmat))
+					options('warn'= w) 
 				} else {
 					valmat[,i] <- as.vector(getValues(x[[i]]))
 				}

@@ -23,7 +23,7 @@ function(x, y, ..., fun, filename="", datatype, format, overwrite, progress){
 
 
 setMethod('overlay', signature(x='Raster', y='missing'), 
-function(x, y, ..., fun, filename="", datatype, format, overwrite, progress, unstack){ 
+function(x, y, ..., fun, filename="", datatype, format, overwrite, progress, unstack=TRUE){ 
 	if (missing(fun)) { 
 		stop("you must supply a function 'fun'.\nE.g., 'fun=function(x,y){return(x+y)} or fun=sum'") 
 	}
@@ -32,7 +32,6 @@ function(x, y, ..., fun, filename="", datatype, format, overwrite, progress, uns
 	if (missing(datatype)) { datatype <- .datatype() }
 	if (missing(overwrite)) { overwrite <- .overwrite() }
 	if (missing(progress)) { progress <- .progress() }
-	if (missing(unstack)) { unstack=TRUE }
 	
 	x <- .makeRasterList(x, ..., unstack=unstack)
 	
