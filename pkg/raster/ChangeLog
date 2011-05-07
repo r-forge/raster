@@ -1,5 +1,6 @@
 --- 5-May-2011, version 1.8-18
 Changes to calc and overlay to allow for more complex functions
+Changes to stackSelect to allow (optionally recycled) layer selection with a multi-layer object 
 
 --- 2-May-2011, version 1.8-17
 Faster setvalues with an array and 'brick' and 'setValues' (code changes provided by Justin McGrath)
