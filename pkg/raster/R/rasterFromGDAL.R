@@ -40,6 +40,13 @@
 		
 	options('warn'= w) 
 
+	obx <- gdalinfo[["oblique.x"]]
+	oby <- gdalinfo[["oblique.y"]]
+	if (obx != 0 | oby != 0) {
+		warning('raster does not support oblique files')
+		stop()
+	}
+	
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
 	
