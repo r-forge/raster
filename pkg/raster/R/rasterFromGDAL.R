@@ -44,6 +44,18 @@
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
 
+	xn <- gdalinfo[["ll.x"]]
+	xn <- round(xn, digits=9)
+
+	xx <- xn + gdalinfo[["res.x"]] * nc
+	xx <- round(xx, digits=9)
+
+	yn <- gdalinfo[["ll.y"]]
+	yn <- round(yn, digits=9)
+	yx <- yn + gdalinfo[["res.y"]] * nr
+	yx <- round(yx, digits=9)
+
+
 	rotated <- FALSE
 	obx <- gdalinfo[["oblique.x"]]
 	oby <- gdalinfo[["oblique.y"]]
@@ -90,19 +102,8 @@
 		#yn  <- min(crd[,2])
 		#yx  <- max(crd[,2])
 		
-	} else {
+	} 
 	
-		xn <- gdalinfo[["ll.x"]]
-		xn <- round(xn, digits=9)
-
-		xx <- xn + gdalinfo[["res.x"]] * nc
-		xx <- round(xx, digits=9)
-	
-		yn <- gdalinfo[["ll.y"]]
-		yn <- round(yn, digits=9)
-		yx <- yn + gdalinfo[["res.y"]] * nr
-		yx <- round(yx, digits=9)
-	}
 	
 	fixGeoref <- FALSE
 	try( fixGeoref <- .gdFixGeoref(gdalinfo), silent=TRUE )
