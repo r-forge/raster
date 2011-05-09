@@ -31,10 +31,34 @@ setClass('Extent',
 )
 
 
+setClass('.Rotation',
+	representation (
+		geotrans = 'numeric',
+		transfun = 'function',
+		xrotation = 'numeric',
+		yrotation = 'numeric',
+		upperleft = 'numeric',
+		lowerleft = 'numeric',
+		upperright = 'numeric',
+		lowerright = 'numeric'
+	),	
+	prototype (	
+		xrotation = 0,
+		yrotation = 0,
+		upperleft = c(0, 1),
+		lowerleft = c(0, 0),
+		upperright = c(1, 1),
+		lowerright = c(1, 0)
+	)
+)
+
+
 setClass ('BasicRaster',
 	representation (
 		title = 'character',
 		extent = 'Extent',
+		rotated = 'logical',
+		rotation = '.Rotation',
 		ncols ='integer',
 		nrows ='integer',
 		crs = 'CRS',
@@ -44,6 +68,7 @@ setClass ('BasicRaster',
 		unit = 'vector'
 	),
 	prototype (	
+		rotated = FALSE,
 		ncols= as.integer(1),
 		nrows= as.integer(1),
 		layernames=c(""),

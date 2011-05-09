@@ -23,6 +23,7 @@
 }
 
 
+
 .rasterFromGDAL <- function(filename, band, type, RAT=FALSE, silent=TRUE) {	
 
 	if (! .requireRgdal() ) { stop('package rgdal is not available') }
@@ -40,27 +41,69 @@
 		
 	options('warn'= w) 
 
+	nc <- as.integer(gdalinfo[["columns"]])
+	nr <- as.integer(gdalinfo[["rows"]])
+
+	rotated <- FALSE
 	obx <- gdalinfo[["oblique.x"]]
 	oby <- gdalinfo[["oblique.y"]]
 	if (obx != 0 | oby != 0) {
-		warning('raster does not support oblique files')
-		stop()
+		warning('\n\n This file has a rotation!\n raster does not support such files!!\n Continue at your own peril!!!\n')
+
+		gd <- GDAL.open(filename)
+		geoTrans <- .Call("RGDAL_GetGeoTransform", gd, PACKAGE = "rgdal")
+		GDAL.close(gd)
+
+		## adapted from rgdal::getGeoTransFunc
+		if (attr(geoTrans, "CE_Failure")) {
+			stop("Rotated values in file, but GeoTransform values not available")
+		}
+		rotMat <- matrix(geoTrans[c(2, 3, 5, 6)], 2)
+		invMat <- solve(rotMat)
+		
+		offset <- geoTrans[c(1, 4)]
+		gt <- function(x, inv=FALSE) {
+			if (inv) {
+				x <- t(t(x) - c(offset[1], offset[2]))
+				return( x %*% invMat )
+			} else {
+				x <- x %*% rotMat
+				return( t(t(x) + c(offset[1], offset[2])) )
+			}
+		}
+		## end adpated from rgdal::getGeoTransFunc
+		
+		crd <- gt(cbind(c(1, 1, nc, nc)-1, c(1, nr, 1, nr)-1))
+		rot <- new(".Rotation")
+		rot@geotrans <- geoTrans
+		rot@transfun <- gt
+		rot@xrotation <- obx
+		rot@yrotation <- oby
+		rot@upperleft <- crd[1,]
+		rot@lowerleft <- crd[2,]
+		rot@upperright <- crd[3,]
+		rot@lowerright <- crd[4,]
+		rotated <- TRUE
+
+		xn  <- min(crd[,1])
+		xx  <- max(crd[,1])
+		yn  <- min(crd[,2])
+		yx  <- max(crd[,2])
+		
+	} else {
+	
+		xn <- gdalinfo[["ll.x"]]
+		xn <- round(xn, digits=9)
+
+		xx <- xn + gdalinfo[["res.x"]] * nc
+		xx <- round(xx, digits=9)
+	
+		yn <- gdalinfo[["ll.y"]]
+		yn <- round(yn, digits=9)
+		yx <- yn + gdalinfo[["res.y"]] * nr
+		yx <- round(yx, digits=9)
 	}
 	
-	nc <- as.integer(gdalinfo[["columns"]])
-	nr <- as.integer(gdalinfo[["rows"]])
-	
-	xn <- gdalinfo[["ll.x"]]
-	xn <- round(xn, digits=9)
-
-	xx <- xn + gdalinfo[["res.x"]] * nc
-	xx <- round(xx, digits=9)
-	
-	yn <- gdalinfo[["ll.y"]]
-	yn <- round(yn, digits=9)
-	yx <- yn + gdalinfo[["res.y"]] * nr
-	yx <- round(yx, digits=9)
-
 	fixGeoref <- FALSE
 	try( fixGeoref <- .gdFixGeoref(gdalinfo), silent=TRUE )
 	
@@ -96,6 +139,10 @@
 		xmax(x) <- xmax(x) - 0.5 * rs[1]
 		ymin(x) <- ymin(x) + 0.5 * rs[2]
 		ymax(x) <- ymax(x) + 0.5 * rs[2]
+	}
+	if (rotated) {
+		x@rotated <- TRUE
+		x@rotation <- rot
 	}
 	
 	shortname <- gsub(" ", "_", ext(basename(filename), ""))
