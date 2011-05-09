@@ -85,10 +85,10 @@
 		rot@lowerright <- crd[4,]
 		rotated <- TRUE
 
-		xn  <- min(crd[,1])
-		xx  <- max(crd[,1])
-		yn  <- min(crd[,2])
-		yx  <- max(crd[,2])
+		#xn  <- min(crd[,1])
+		#xx  <- max(crd[,1])
+		#yn  <- min(crd[,2])
+		#yx  <- max(crd[,2])
 		
 	} else {
 	
