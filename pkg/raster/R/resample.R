@@ -82,6 +82,7 @@ function(x, y, method="bilinear", filename="", ...)  {
         for (i in 1:nodes) {
 			sendCall(cl[[i]], clFun, i, tag=i)
 		}
+		ni <- i
 
 		if (inMemory) {
 			for (i in 1:tr$n) {
@@ -93,7 +94,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 				end <- cellFromRowCol(y, tr$row[d$value$tag]+tr$nrows[d$value$tag]-1, y@ncols)
 				v[start:end, ] <- d$value$value
 
-				ni <- nodes + 1
+				ni <- ni + 1
 				if (ni <= tr$n) {
 					sendCall(cl[[d$node]], clFun, ni, tag=ni)
 				}
@@ -106,7 +107,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 			for (i in 1:tr$n) {
 				d <- recvOneData(cl)
 				y <- writeValues(y, d$value$value, tr$row[d$value$tag])
-				ni <- nodes+1
+				ni <- ni + 1
 				if (ni <= tr$n) {
 					sendCall(cl[[d$node]], clFun, ni, tag=ni)
 				}
