@@ -86,6 +86,10 @@ setMethod('raster', signature(x='BasicRaster'),
 	function(x) {
 		e <- x@extent
 		r <- raster(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
+		if (x@rotated) {
+			r@rotated <- TRUE
+			r@rotation <- x@rotation
+		}
 		return(r)
 	}
 )

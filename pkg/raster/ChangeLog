@@ -1,3 +1,7 @@
+--- 9-May-2011, version 1.8-20
+A warning is given when a rotated image is used (suggested by Agustin Lobo)
+Very limited initial support for rotated images. Many of the existing functions will work with these images, but results can be wrong. Should work OK for simple raster algebra etc. but probably not when joining data spatially.  Although baisc extract with coordinates shold work OK now. 
+
 --- 5-May-2011, version 1.8-18
 Changes to calc and overlay to allow for more complex functions
 Changes to stackSelect to allow (optionally recycled) layer selection with a multi-layer object 

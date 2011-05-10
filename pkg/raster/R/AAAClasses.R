@@ -35,16 +35,12 @@ setClass('.Rotation',
 	representation (
 		geotrans = 'numeric',
 		transfun = 'function',
-		xrotation = 'numeric',
-		yrotation = 'numeric',
 		upperleft = 'numeric',
 		lowerleft = 'numeric',
 		upperright = 'numeric',
 		lowerright = 'numeric'
 	),	
 	prototype (	
-		xrotation = 0,
-		yrotation = 0,
 		upperleft = c(0, 1),
 		lowerleft = c(0, 0),
 		upperright = c(1, 1),
