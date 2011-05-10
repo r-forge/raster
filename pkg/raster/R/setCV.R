@@ -8,8 +8,6 @@
 	x	
 }
 
-
-
 #val <- c(-1, -0.3, -0.2, 0, 0.1, 0.3, 0.4, 0.6, 0.8, 1, 10)
 #ct <- c(col2rgb("white"),col2rgb("blue"),rgb(205,193,173, maxColorValue = 255), rgb(150,150,150, maxColorValue = 255), rgb(120,100,51, maxColorValue = 255), rgb(120,200,100, maxColorValue = 255), rgb(28,144,3, maxColorValue = 255), rgb(6,55,0, maxColorValue = 255), rgb(10,30,25, maxColorValue = 255), rgb(6,27,7, maxColorValue = 255))
 

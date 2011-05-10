@@ -38,8 +38,8 @@ cellFromXY <- function(object, xy) {
 	}
 
 	if (object@rotated) {
-		rowcol <- object@rotation@transfun(xy, inv=TRUE)
-		cell <- (rowcol[,2]-1) * object@ncols + rowcol[,1]
+		cr <- object@rotation@transfun(xy, inv=TRUE)
+		cell <- (cr[,2]-1) * object@ncols + cr[,1]
 	} else {
 		rownr <- rowFromY(object, y) - 1
 		colnr <- colFromX(object, x)
@@ -79,17 +79,14 @@ rowFromY <- function ( object, y )	{
 	
 
 xyFromCell <- function(object, cell, spatial=FALSE) {
-	xy <- matrix(data = NA, ncol=2, nrow=length(cell))
-	colnames(xy) <- c("x", "y")	
-
-	xy[,1] <- colFromCell(object, cell)
-	xy[,2] <- rowFromCell(object, cell)
 	if (object@rotated) {
-		xy <- object@rotation@transfun(xy)
+		xy <- object@rotation@transfun( cbind(colFromCell(object, cell), rowFromCell(object, cell)) )
 	} else {
-		xy[,1] <- xFromCol(object, xy[,1])
-		xy[,2] <- yFromRow(object, xy[,2]) 		
+		xy <- matrix(data = NA, ncol=2, nrow=length(cell))
+		xy[,1] <- xFromCol(object, colFromCell(object, cell))
+		xy[,2] <- yFromRow(object, rowFromCell(object, cell))
 	}
+	colnames(xy) <- c("x", "y")	
 	if (spatial) {
 		xy <- SpatialPoints(xy, projection(object, asText=FALSE))
 	}

@@ -60,7 +60,7 @@
 	obx <- gdalinfo[["oblique.x"]]
 	oby <- gdalinfo[["oblique.y"]]
 	if (obx != 0 | oby != 0) {
-		warning('\n\n This file has a rotation!\n raster has very limited support such files!!\n Results could be wrong!!!\n Continue at your own peril!!!!\n')
+		warning('\n\n This file has a rotation\n raster has very limited support such files and results of data processing could be wrong.\n Continue at your own risk!\n')
 
 		gd <- GDAL.open(filename)
 		geoTrans <- .Call("RGDAL_GetGeoTransform", gd, PACKAGE = "rgdal")
@@ -79,7 +79,7 @@
 				x <- t(t(x) - c(offset[1], offset[2]))
 				x <- round( x %*% invMat  + 0.5 )
 				x[x < 1] <- NA
-				x[x[,1] > nr | x[,2] > nc, ] <- NA
+				x[x[,1] > nc  | x[,2] > nr, ] <- NA
 			} else {
 				x <- (x - 0.5) %*% rotMat
 				x <- t(t(x) + c(offset[1], offset[2])) 
@@ -98,10 +98,10 @@
 		rot@lowerright <- crd[4,]
 		rotated <- TRUE
 
-		#xn  <- min(crd[,1])
-		#xx  <- max(crd[,1])
-		#yn  <- min(crd[,2])
-		#yx  <- max(crd[,2])
+		xn  <- min(crd[,1])
+		xx  <- max(crd[,1])
+		yn  <- min(crd[,2])
+		yx  <- max(crd[,2])
 		
 	} 
 	

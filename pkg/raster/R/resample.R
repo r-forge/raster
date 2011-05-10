@@ -48,7 +48,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 	
 	if (is.null(filename)){ filename <- "" }
 	
-	if (!canProcessInMemory(y, 3) && filename == '') {
+	if (!canProcessInMemory(y, 2*nl) && filename == '') {
 		filename <- rasterTmpFile()	
 	}
 	
@@ -74,7 +74,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		pb <- pbCreate(tr$n, type=.progress(...))
 
 		clFun <- function(i) {
-			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
+			#r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 			xy <- xyFromCell(y, cellFromRowCol(y, tr$row[i], 1) : cellFromRowCol(y, tr$row[i]+tr$nrows[i]-1, ncol(y)) ) 
 			.xyValues(x, xy, method=method)
 		}
@@ -121,7 +121,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		
 		if (inMemory) {
 			for (i in 1:tr$n) {
-				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
+				#r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 				xy <- xyFromCell(y, cellFromRowCol(y, tr$row[i], 1) : cellFromRowCol(y, tr$row[i]+tr$nrows[i]-1, ncol(y)) ) 
 				vals <- .xyValues(x, xy, method=method)
 
@@ -134,7 +134,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 			y <- setValues(y, v)
 		} else {
 			for (i in 1:tr$n) {
-				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
+				#r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 				xy <- xyFromCell(y, cellFromRowCol(y, tr$row[i], 1) : cellFromRowCol(y, tr$row[i]+tr$nrows[i]-1, ncol(y)) ) 
 				vals <- .xyValues(x, xy, method=method)
 	

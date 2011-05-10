@@ -119,6 +119,11 @@ setMethod('raster', signature(x='RasterStack'),
 			projection(r) <- projection(x)
 		}
 		extent(r) <- extent(x) # perhaps it was changed by user and different on disk
+		if (x@layers[[1]]@rotated) {
+			r@rotated <- TRUE
+			r@rotation <- x@layers[[1]]@rotation
+		}
+		
 		return(r)
 	}
 )
@@ -188,6 +193,12 @@ setMethod('raster', signature(x='RasterBrick'),
 		} else {
 			r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
 		}
+
+		if (x@rotated) {
+			r@rotated <- TRUE
+			r@rotation <- x@rotation
+		}
+	
 		return(r)
 	}
 )
