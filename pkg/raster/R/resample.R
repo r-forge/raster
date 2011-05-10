@@ -48,7 +48,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 	
 	if (is.null(filename)){ filename <- "" }
 	
-	if (!canProcessInMemory(y, 2*nl) && filename == '') {
+	if (!canProcessInMemory(y, 3*nl) && filename == '') {
 		filename <- rasterTmpFile()	
 	}
 	
