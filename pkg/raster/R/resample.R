@@ -79,10 +79,9 @@ function(x, y, method="bilinear", filename="", ...)  {
 			.xyValues(x, xy, method=method)
 		}
 		
-        for (i in 1:nodes) {
-			sendCall(cl[[i]], clFun, i, tag=i)
+        for (ni in 1:nodes) {
+			sendCall(cl[[ni]], clFun, ni, tag=ni)
 		}
-		ni <- i
 
 		if (inMemory) {
 			for (i in 1:tr$n) {
