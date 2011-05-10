@@ -1,7 +1,7 @@
 --- 9-May-2011, version 1.8-20
-New function 'rectify' to unrotate rasters
-Very limited initial support for rotated rasters (typically sat images). Many of the existing functions will work with these images, but results can be wrong. Should work OK for simple raster algebra etc. but probably not when joining data spatially.  Although baisc extract with coordinates shold work OK now. 
 A warning is given when a rotated image is used (suggested by Agustin Lobo)
+New function 'rectify' to unrotate rasters
+Very limited initial support for rotated rasters (typically sat images). Many of the existing functions will work with these images, but results can be wrong. Should work OK for simple raster algebra etc. but probably not when joining data spatially.  Although basic extract with coordinates should work OK now. 
 
 --- 5-May-2011, version 1.8-18
 Changes to calc and overlay to allow for more complex functions
