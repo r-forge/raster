@@ -7,17 +7,16 @@
 rectify <- function(x, ext, res, method='ngb', filename='', ...) {
 	stopifnot(x@rotated)
 	r <- x@rotation
-	if (!missing(ext)) {
-		ext <- extent(ext)
+	if ( missing(ext)) {
+		ext <- extent(x)
 	} else {
-		ext <- rbind(r@upperleft, r@lowerleft, r@upperright, r@lowerright) 
-		ext <- extent(as.vector(apply(ext, 2, range)))
+		ext <- extent(ext)
 	}
 	out <- raster(ext)
-	if (! missing(res)) {
-		res(out) <- res
+	if ( missing(res)) {
+		res(out) <- res(x)
 	} else {
-		res(out) <- r@geotrans[c(3,5)]
+		res(out) <- res
 	}
 	resample(x, out, method=method, filename=filename, ...)
 }

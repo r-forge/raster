@@ -92,10 +92,10 @@
 		rot <- new(".Rotation")
 		rot@geotrans <- as.vector(geoTrans)
 		rot@transfun <- gt
-		rot@upperleft <- crd[1,]
-		rot@lowerleft <- crd[2,]
-		rot@upperright <- crd[3,]
-		rot@lowerright <- crd[4,]
+		#rot@upperleft <- crd[1,]
+		#rot@lowerleft <- crd[2,]
+		#rot@upperright <- crd[3,]
+		#rot@lowerright <- crd[4,]
 		rotated <- TRUE
 
 		xn  <- min(crd[,1])
