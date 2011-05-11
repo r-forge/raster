@@ -68,7 +68,7 @@
 		if (attr(geoTrans, "CE_Failure")) {
 			stop("Rotated values in file, but GeoTransform values not available")
 		}
-		warning('\n\n This file has a rotation\n support such files is limited and results of data processing might be wrong.\n Proceed with caution & consider using "rotate"\n')
+		warning('\n\n This file has a rotation\n Support such files is limited and results of data processing might be wrong.\n Proceed with caution & consider using the "rectify" function\n')
 
 		rotMat <- matrix(geoTrans[c(2, 3, 5, 6)], 2)
 		invMat <- solve(rotMat)
