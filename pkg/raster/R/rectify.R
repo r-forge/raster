@@ -6,7 +6,6 @@
 
 rectify <- function(x, ext, res, method='ngb', filename='', ...) {
 	stopifnot(x@rotated)
-	r <- x@rotation
 	if ( missing(ext)) {
 		ext <- extent(x)
 	} else {
@@ -14,7 +13,7 @@ rectify <- function(x, ext, res, method='ngb', filename='', ...) {
 	}
 	out <- raster(ext)
 	if ( missing(res)) {
-		res(out) <- res(x)
+		res(out) <- raster::res(x)
 	} else {
 		res(out) <- res
 	}
