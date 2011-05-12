@@ -6,7 +6,7 @@
 
 
 'res<-' <- function(x, value) {
-	if (x@rotated) {
+	if (rotated(x)) {
 		stop('cannot set the resolution of a rotated raster')
 	}
 

@@ -9,7 +9,7 @@ sampleRegular <- function( x, size, extent=NULL, cells=FALSE, asRaster=FALSE, co
 	size <- round(size)
 	if (size < 1) { stop('size < 1') }
 	
-	rotated <- x@rotated
+	rotated <- rotated(x)
 	
 	if (is.null(extent)) {
 		if (size >= ncell(x)) {

@@ -21,7 +21,7 @@ if (!isGeneric("res")) {
 
 setMethod('xres', signature(x='BasicRaster'), 
 function(x) {
-	if (x@rotated) {
+	if (rotated(x)) {
 		return(x@rotation@geotrans[3])
 	} else {
 		e <- x@extent
@@ -31,7 +31,7 @@ function(x) {
 
 setMethod('yres', signature(x='BasicRaster'), 
 function(x) {
-	if (x@rotated) {
+	if (rotated(x)) {
 		return(x@rotation@geotrans[5])
 	} else {
 		e <- x@extent
@@ -41,7 +41,7 @@ function(x) {
 
 setMethod('res', signature(x='BasicRaster'), 
 function(x) {
-	if (x@rotated) {
+	if (rotated(x)) {
 		return(x@rotation@geotrans[c(3,5)])
 	} else {
 		e <- x@extent

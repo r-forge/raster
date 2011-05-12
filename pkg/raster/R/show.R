@@ -53,7 +53,7 @@ setMethod ('show' , 'BasicRaster',
 setMethod ('show' , 'RasterLayer', 
 	function(object) {
 		cat('class       :' , class(object), '\n')
-		if (object@rotated) {
+		if (rotated(object)) {
 			cat('rotated     : TRUE\n')
 		}
 		if (nbands(object) > 1) { cat('band        :' , band(object), '\n')	}	
@@ -90,7 +90,7 @@ setMethod ('show' , 'RasterLayer',
 setMethod ('show' , 'RasterBrick',
 	function ( object ) {
 		cat ('class       :' , class ( object ) , '\n')
-		if (object@rotated) {
+		if (rotated(object)) {
 			cat('rotated     : TRUE\n')
 		}
 		
@@ -135,7 +135,7 @@ setMethod ('show' , 'RasterBrick',
 setMethod ('show' , 'RasterStack',
 	function ( object ) {
 		cat ('class       :' , class ( object ) , '\n')
-		if (object@rotated) {
+		if (rotated(object)) {
 			cat('rotated     : TRUE\n')
 		}
 		
