@@ -77,9 +77,6 @@ sampleRegular <- function( x, size, extent=NULL, cells=FALSE, asRaster=FALSE, co
 		}
 	}
 	
-	m <- .cellValues(x, cell)
-
-
 	if (asRaster) {
 		if (rotated) {
 			if (is.null(extent)) {
