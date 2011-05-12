@@ -4,11 +4,7 @@
 # Licence GPL v3
 
 rotated <- function(x) {
-	r <- try(x@rotated, silent=TRUE)
-	if (class(r) == "try-error") {
-		r <- FALSE
-	}
-	r
+	isTRUE(try(x@rotated, silent=TRUE))
 }
 
 
