@@ -43,7 +43,7 @@ Below are additional arguments that can be used, depending on the type of object
 take a single numeric vector as argument and return a single values (e.g. mean, min or max), and accept a \code{na.rm} argument.
 Thus, standard R functions not including an na.rm argument must be wrapped as in this example: fun=function(x,...)length(x)
 
-If \code{y} represents points supplying a \code{fun} argument is only useful when non-zero buffers are used. 
+If \code{y} represents points supplying a \code{fun} argument is only useful when a buffer is used (see below). 
 
 2) \code{na.rm}. Only useful when \code{fun} is supplied. If \code{na.rm=TRUE} (the default value), NA values are removed before fun is applied. This argument may be ignored if the function used has a \code{...} argument and ignres an additional \code{na.rm} argument. 
 
@@ -85,7 +85,7 @@ If no \code{fun} argument is supplied:
  of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. 
  This option can be useful if the polygons are small relative to the cells size of the RasterLayer
 
-2) \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE} and \code{weights=TRUE}, cellnumbers will also be returned. 
+2) \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE}, cell-numbers will also be returned. 
 
 
 
@@ -96,6 +96,7 @@ If \code{y} is missing, you can supply two arguments to get 'focal' values (i.e.
 1) \code{row}. row number (this is a required argument). 
 
 2) \code{ngb}. The neighborhood to consider. Either a single integer or a vector of two integers. Default is 3. See \code{\link{focal}} 
+
 
 
 \bold{= all multi-layer objects =}
@@ -184,10 +185,14 @@ v
 # mean for each polygon
 unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=TRUE) else NA ))
 
+# v <- extract(r, polys, cellnumbers=TRUE)
+
+# weighted mean
+# v <- extract(r, polys, weights=TRUE, fun=mean)
+# equivalent to:
 # v <- extract(r, polys, weights=TRUE)
-# v
-## weighted mean for each polygon
-# unlist(lapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  ))
+# sapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  )
+
 
 
 ###############################
