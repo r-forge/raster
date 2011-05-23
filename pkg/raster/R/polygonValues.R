@@ -96,7 +96,7 @@ polygonValues <- function(p, x, ...) {
 			if (ni <= npol) {
 				sendCall(cl[[d$node]], clFun, ni, tag=ni)
 			}
-			pbStep(pb)
+			pbStep(pb, i)
 		}
 		
 	} else {

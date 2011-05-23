@@ -74,8 +74,8 @@ If no \code{fun} argument is supplied:
 
 If \code{y} represents polygons, the \code{extract} method returns the values of the cells of a Raster* object that is covered by a polygon.
 A cell is covered if its center is inside the polygon (but see the \code{weights} option for considering partly covered cells).
-Relatively small polygons (e.g. those smaller than a single cell of the RasterLayer), or polygons with an odd shape, may not return any values 
-if they do not cover any RasterLayer cell centers. In some cases, you could use the centroids of such polygons, for example using
+Relatively small polygons (e.g. those smaller than a single cell of the Raster* object), or polygons with an odd shape, may not return any values 
+if they do not cover any Raster* object's cell centers. In some cases, you could use the centroids of such polygons, for example using
 \code{extract(x, coordinates(y))} or \code{extract(x, coordinates(y), method='bilinear')}. Additional arguments that can be suplied to this function 
 if \code{y} represents polygons are:
 
@@ -83,7 +83,7 @@ If no \code{fun} argument is supplied:
 
 1) \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction
  of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. 
- This option can be useful if the polygons are small relative to the cells size of the RasterLayer
+ This option can be useful if the polygons are small relative to the cells size of the Raster* object.
 
 2) \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE}, cell-numbers will also be returned. 
 
