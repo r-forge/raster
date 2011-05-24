@@ -1,3 +1,8 @@
+--- 25-May-2011, version 1.8-25
+(More) safer handling of the new 'rotated' slot in BasicRaster such that older raster objects do not fail. 
+extract with polygons now can also return a value for very small polygons ("small=TRUE") 
+Somewhat faster rasterToPolygons
+
 --- 17-May-2011, version 1.8-23
 multi-core (cluster) versions of extract with polygons and extract with lines
 
