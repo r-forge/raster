@@ -62,7 +62,7 @@ polygonValues <- function(p, x, ...) {
 					xy <- rasterToPoints(rc)[,-3,drop=FALSE]
 				}
 			
-				if (length(xy) > 0)  {  # catch holes or very small polygons
+				if (length(xy) > 0)  { # catch very small polygons
 					r <- .xyValues(x, xy, layer=layer, nl=nl)
 					if (weights) {
 						if (cellnumbers) {
@@ -76,7 +76,24 @@ polygonValues <- function(p, x, ...) {
 						r <- cbind(cell, r)						
 					} 
 				} else {
-					r <- NULL
+					ppp <- pp@polygons[[1]]@Polygons
+					ishole <- sapply(ppp, function(z)z@hole)
+					xy <- lapply(ppp, function(z)z@coords)
+					xy <- xy[!ishole]
+					if (length(xy) > 0) {
+						cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
+						value <- .cellValues(x, cell, layer=layer, nl=nl)
+						if (weights) {
+							weight=0
+							r <- cbind(cell, value, weight)
+						} else if (cellnumbers) {
+							r <- cbind(cell, value)					
+						} else {
+							r <- value
+						}
+					} else {
+						r <- NULL
+					}
 				}
 			}
 			r
@@ -136,7 +153,22 @@ polygonValues <- function(p, x, ...) {
 						res[[i]] <- .xyValues(x, xy, layer=layer, nl=nl)
 					}
 				} else {
-				# do nothing; res[[i]] <- NULL
+					ppp <- pp@polygons[[1]]@Polygons
+					ishole <- sapply(ppp, function(z)z@hole)
+					xy <- lapply(ppp, function(z)z@coords)
+					xy <- xy[!ishole]
+					if (length(xy) > 0) {
+						cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
+						value <- .cellValues(x, cell, layer=layer, nl=nl)
+						if (weights) {
+							weight=0
+							res[[i]] <- cbind(cell, value, weight)
+						} else if (cellnumbers) {
+							res[[i]] <- cbind(cell, value)					
+						} else {
+							res[[i]] <- value
+						}
+					} # else do nothing; res[[i]] <- NULL
 				}
 			}
 			pbStep(pb)
@@ -153,8 +185,8 @@ polygonValues <- function(p, x, ...) {
 			}
 			if (nlayers(x) > 1) {
 				nc <- ncol(res[[1]])
-				res <- lapply(res, function(x) if (!is.null(x)) {x[,1:(nc-1)] * x[,nc]  / sum(x[,nc], na.rm=TRUE)}  else NULL  )
-				res <- sapply(res, function(x) if (!is.null(x)) { apply(x, 2, sum)}  else NA  )		
+				res <- lapply(res, function(x) if (!is.null(x)) { x[,1:(nc-1)] * x[,nc]  / sum(x[,nc], na.rm=TRUE)} else NULL  )
+				res <- sapply(res, function(x) if (!is.null(x)) { apply(x, 2, sum)}  else NA )		
 				res <- t(res)
 			} else {
 				res <- sapply(res, function(x) if (!is.null(x)){ sum(apply(x, 1, prod)) / sum(x[,2])} else NA  )
@@ -176,6 +208,5 @@ polygonValues <- function(p, x, ...) {
 	}
 	res
 }
-
 
 
