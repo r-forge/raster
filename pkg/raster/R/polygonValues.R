@@ -9,7 +9,7 @@ polygonValues <- function(p, x, ...) {
 }
 
 
-.polygonValues <- function(x, p, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, layer, nl, ...) {
+.polygonValues <- function(x, p, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, layer, nl, ...) {
 	spbb <- bbox(p)
 	rsbb <- bbox(x)
 	addres <- max(res(x))
@@ -61,8 +61,8 @@ polygonValues <- function(p, x, ...) {
 					rc <- .polygonsToRaster(pp, rc, silent=TRUE)
 					xy <- rasterToPoints(rc)[,-3,drop=FALSE]
 				}
-			
-				if (length(xy) > 0)  { # catch very small polygons
+				
+				if (length(xy) > 0) { # catch very small polygons
 					r <- .xyValues(x, xy, layer=layer, nl=nl)
 					if (weights) {
 						if (cellnumbers) {
@@ -76,20 +76,24 @@ polygonValues <- function(p, x, ...) {
 						r <- cbind(cell, r)						
 					} 
 				} else {
-					ppp <- pp@polygons[[1]]@Polygons
-					ishole <- sapply(ppp, function(z)z@hole)
-					xy <- lapply(ppp, function(z)z@coords)
-					xy <- xy[!ishole]
-					if (length(xy) > 0) {
-						cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
-						value <- .cellValues(x, cell, layer=layer, nl=nl)
-						if (weights) {
-							weight=0
-							r <- cbind(cell, value, weight)
-						} else if (cellnumbers) {
-							r <- cbind(cell, value)					
+					if (small) {
+						ppp <- pp@polygons[[1]]@Polygons
+						ishole <- sapply(ppp, function(z)z@hole)
+						xy <- lapply(ppp, function(z)z@coords)
+						xy <- xy[!ishole]
+						if (length(xy) > 0) {
+							cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
+							value <- .cellValues(x, cell, layer=layer, nl=nl)
+							if (weights) {
+								weight=0
+								r <- cbind(cell, value, weight)
+							} else if (cellnumbers) {
+								r <- cbind(cell, value)					
+							} else {
+								r <- value
+							}
 						} else {
-							r <- value
+							r <- NULL
 						}
 					} else {
 						r <- NULL
@@ -152,7 +156,7 @@ polygonValues <- function(p, x, ...) {
 					} else {
 						res[[i]] <- .xyValues(x, xy, layer=layer, nl=nl)
 					}
-				} else {
+				} else if (small) {
 					ppp <- pp@polygons[[1]]@Polygons
 					ishole <- sapply(ppp, function(z)z@hole)
 					xy <- lapply(ppp, function(z)z@coords)
@@ -169,7 +173,7 @@ polygonValues <- function(p, x, ...) {
 							res[[i]] <- value
 						}
 					} # else do nothing; res[[i]] <- NULL
-				}
+				} 
 			}
 			pbStep(pb)
 		}
