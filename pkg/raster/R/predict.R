@@ -60,9 +60,6 @@ setMethod('predict', signature(object='Raster'),
 			}
 		}	
 		
-		
-
-		
 		filename <- trim(filename)
 		if (!canProcessInMemory(predrast) && filename == '') {
 			filename <- rasterTmpFile()
@@ -123,7 +120,7 @@ setMethod('predict', signature(object='Raster'),
 
 			if (se.fit) {
 			
-				predv <- fun(model, blockvals, se.fit=TRUE)
+				predv <- fun(model, blockvals, se.fit=TRUE, ...)
 				predv <- cbind(as.vector(predv$fit), as.vector(predv$se.fit))
 			
 			}  else {
@@ -137,7 +134,7 @@ setMethod('predict', signature(object='Raster'),
 					predv <- napred
 
 				} else {
-					predv <- fun(model, blockvals)
+					predv <- fun(model, blockvals, ...)
 					if (class(predv)[1] == 'list') {
 						predv = unlist(predv)
 						if (length(predv) != nrow(blockvals)) {
@@ -180,13 +177,17 @@ setMethod('predict', signature(object='Raster'),
 			pbStep(pb, i) 
 		}
 		pbClose(pb)
+
+		if (length(index) > 1) {
+			try(layerNames(predrast) <- colnames(predv), silent=TRUE)
+		}
+
 		
 		if (filename == '') {
 			predrast <- setValues(predrast, v)  # or as.vector
 		} else {
 			predrast <- writeStop(predrast)
 		}
-		
 		return(predrast)
 	}
 )
