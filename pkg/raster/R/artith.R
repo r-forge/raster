@@ -13,7 +13,6 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 		nl2 <- nlayers(e2)
 		nl <- max(nl1, nl2)
 
-		#if ( nl %% min(nl1, nl2) > 0) { stop('number of layers does not match') } 
 		
 		if (nl > 1) {
 			r <- brick(e1, values=FALSE)
@@ -27,7 +26,7 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 				if (is.null(ie)) {
 					stop('Layers have non-overlapping extents')
 				}
-				warning('RasterLayer objects have different extents. Result for their intersection is returned')
+				warning('Raster objects have different extents. Result for their intersection is returned')
 				e1 <- crop(e1, ie)
 				e2 <- crop(e2, ie)
 			} else {
