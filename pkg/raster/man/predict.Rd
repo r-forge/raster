@@ -57,7 +57,7 @@ Use \code{\link[raster]{interpolate}} if your model has 'x' and 'y' as implicit 
 }
 
 \value{
-RasterLayer
+RasterLayer or RasterBrick
 }
 
 \author{ Robert J. Hijmans}
@@ -117,12 +117,12 @@ require(randomForest)
 model <- randomForest(pa ~., data=v)
 
 ## note the additional argument "type='response'" that is passed to predict.randomForest
-r3 <- predict(logo, type='response', model, progress='window')
+r3 <- predict(logo, model, type='response', progress='window')
 
 ## get a RasterBrick with class membership probabilities
 v$pa <- as.factor(v$pa)
 model <- randomForest(pa ~., data=v)
-r4 <- predict(logo, type='prob', index=1:2, model)
+r4 <- predict(logo, model, type='prob', index=1:2)
 plot(r4)
 }
 
