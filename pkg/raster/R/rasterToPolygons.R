@@ -42,23 +42,21 @@ rasterToPolygons <- function(x, fun=NULL, digits=12) {
 
 	xr <- xres(x)/2
 	yr <- yres(x)/2
-	xyv[,1:2] <- round(xyv[,1:2], digits=digits)
 
 	cr <- matrix(ncol=10, nrow=nrow(xyv))
-	cr[,1] <- xyv[,1] - xr
-	cr[,2] <- xyv[,1] + xr
-	cr[,3] <- xyv[,1] + xr
-	cr[,4] <- xyv[,1] - xr
-	cr[,6] <- xyv[,2] + yr
-	cr[,7] <- xyv[,2] + yr
-	cr[,8] <- xyv[,2] - yr
-	cr[,9] <- xyv[,2] - yr
-	cr[,5] <- cr[,1]
-	cr[,10] <- cr[,6]
+	cr[,c(1,4:5)] <- xyv[,1] - xr
+	cr[,2:3] <- xyv[,1] + xr
+	cr[,c(6:7,10)] <- xyv[,2] + yr
+	cr[,8:9] <- xyv[,2] - yr
+	cr <- round(cr, digits=digits)
 	
-	polys <- lapply(1:nrow(cr), function(i) Polygons(list(Polygon( matrix( cr[i,], ncol=2 ) )), i))
-	sp <- SpatialPolygons(polys, proj4string=projection(x, FALSE))
-	sp <- SpatialPolygonsDataFrame(sp, data.frame(value=xyv[,3]), FALSE)
+	sp <- lapply(1:nrow(cr), function(i) Polygons(list(Polygon( matrix( cr[i,], ncol=2 ) )), i))
+	sp <- SpatialPolygons(sp, proj4string=projection(x, FALSE))
+	if (ncol(xyv)==3) {
+		sp <- SpatialPolygonsDataFrame(sp, data.frame(value=xyv[,3]), match.ID=FALSE)
+	} else {
+		sp <- SpatialPolygonsDataFrame(sp, data.frame(xyv[,3:ncol(xyv)]), match.ID=FALSE)	
+	}
+	sp
 }
-
 
