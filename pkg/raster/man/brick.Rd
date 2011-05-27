@@ -65,7 +65,7 @@ To read netCDF files, the \code{ncdf} package needs to be available.
 
 \bold{2) Create a RasterBrick from scratch}
 
-\code{brick(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs="+proj=longlat +datum=WGS84")}
+\code{brick(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs="+proj=longlat +datum=WGS84", nl=1)}
 
 \tabular{rll}{
  \tab \code{nrows} \tab number of rows \cr
@@ -82,7 +82,7 @@ To read netCDF files, the \code{ncdf} package needs to be available.
  
 \bold{3) Create a RasterBrick from an Extent object}
   
-\code{brick(x, nrows=10, ncols=10, crs=NA)}
+\code{brick(x, nrows=10, ncols=10, crs=NA, nl=1)}
 
 \tabular{rll}{
  \tab \code{x} \tab \link{Extent} object \cr
@@ -95,7 +95,7 @@ To read netCDF files, the \code{ncdf} package needs to be available.
 
 \bold{4) Create a RasterBrick from a RasterStack}
 
-\code{brick(x, values=TRUE)}
+\code{brick(x, values=TRUE, nl)}
 
 \tabular{rll}{
  \tab \code{x} \tab a RasterStack object \cr
@@ -106,7 +106,7 @@ To read netCDF files, the \code{ncdf} package needs to be available.
 
 \bold{5) Create a RasterBrick from a RasterLayer or RasterBrick} 
 
-\code{brick(x)}
+\code{brick(x, nl=1)}
 
 This copies the parameters of a RasterStack object to a new RasterBrick. The values of the RasterStack are transferred to the RasterBrick, unless \code{values=FALSE}.  
 
