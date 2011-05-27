@@ -4,15 +4,14 @@
 # Licence GPL v3
 
 
-sampleRegular <- function( x, size, extent=NULL, cells=FALSE, asRaster=FALSE) {
+sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 	
 	size <- round(size)
 	stopifnot(size > 0)
-	
+	nl <- nlayers(x) 
 	rotated <- rotated(x)
-	driver <- try(raster:::.driver(x), silent=TRUE)
 	
-	if (is.null(extent)) {
+	if (is.null(ext)) {
 		if (size >= ncell(x)) {
 			if (asRaster) { 
 				if (!rotated) {
@@ -30,10 +29,10 @@ sampleRegular <- function( x, size, extent=NULL, cells=FALSE, asRaster=FALSE) {
 		
 	} else {
 	
-		extent <- alignExtent(extent, x)
-		rcut <- crop(raster(x), extent)
+		ext <- alignExtent(ext, x)
+		rcut <- crop(raster(x), ext)
 		if (size >= ncell(rcut)) {
-			x <- crop(x, extent)
+			x <- crop(x, ext)
 			if (asRaster) { 
 				return(x) 
 			} else { 
@@ -64,19 +63,39 @@ sampleRegular <- function( x, size, extent=NULL, cells=FALSE, asRaster=FALSE) {
 	nc <- length(cols)
 	
 
-#	driver <- try(raster:::.driver(x), silent=TRUE)
-#	if (driver=='gdal' & !rotated) {
-#		v <- readGDAL(filename(x), offset=c(firstrow-1,firstcol-1), region.dim=c(nrow(rcut), ncol(rcut)), output.dim=c(nr, nc), silent=TRUE) 
-#		if (asRaster) {
-#			if (nlayers(x) > 1) {
-#				return(brick(v))
-#			} else {
-#				return(raster(v))
-#			}
-#		} else {
-#			return(v@data)
-#		}
-#	}
+	driver <- .driver(x, FALSE)
+	if (driver=='gdal' & !rotated) {
+	
+		offs <- c(firstrow,firstcol)-1
+		reg <- c(nrow(rcut), ncol(rcut))-1
+		if (nl == 1) {
+			band <- band(x)
+		} else {
+			band <- NULL
+		}
+		con <- GDAL.open(x@file@name, silent=TRUE)
+		v <-  getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
+		closeDataset(con)
+	
+		if (asRaster) {
+			if (is.null(ext))  {
+				outras <- raster(x)
+			} else {
+				outras <- raster(ext) 
+			}
+			nrow(outras) <- nr
+			ncol(outras) <- nc
+			if (nl > 1) {
+				outras <- brick(outras, nl=nl)
+				return( setValues(outras, v))
+			} else {
+				return( setValues(outras, as.vector(v)))
+			}
+		} else {
+		
+			return(v@data)
+		}
+	}
 
 	cell <- cellFromRowCol(x, rep(rows, each=nc), rep(cols, times=nr))
 	
@@ -88,10 +107,10 @@ sampleRegular <- function( x, size, extent=NULL, cells=FALSE, asRaster=FALSE) {
 	
 	if (asRaster) {
 		if (rotated) {
-			if (is.null(extent)) {
-				outras <- raster(raster::extent(x))
+			if (is.null(ext)) {
+				outras <- raster(extent(x))
 			} else {
-				outras <- raster(extent)
+				outras <- raster(ext)
 			}
 			ncol(outras) <- nc
 			nrow(outras) <- nr
@@ -101,17 +120,17 @@ sampleRegular <- function( x, size, extent=NULL, cells=FALSE, asRaster=FALSE) {
 		} else {
 			m <- .cellValues(x, cell)
 
-			if (is.null(extent))  {
+			if (is.null(ext))  {
 				outras <- raster(x)
 			} else {
-				outras <- raster(extent) 
+				outras <- raster(ext) 
 			}
 			nrow(outras) <- nr
 			ncol(outras) <- nc
 			
 		}
-		if (nlayers(x) > 1) {
-			outras <- brick(outras, nl=nlayers(x))
+		if (nl > 1) {
+			outras <- brick(outras, nl=nl)
 		}
 		outras <- setValues(outras, m)
 		layerNames(outras) <- layerNames(x)
