@@ -1,3 +1,6 @@
+--- 27-May-2011, version 1.8-28
+Further improvements to predict
+
 --- 25-May-2011, version 1.8-27
 Arith functions now work with logical arguments (including NA). Problem reported by Agustin Lobo 
 
