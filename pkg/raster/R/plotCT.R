@@ -22,7 +22,7 @@
 	}
 
 	coltab <- x@legend@colortable
-	x <- sampleRegular(x, maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
+	x <- sampleRegular(x, maxpixels, extent=extent, asRaster=TRUE)
 	z <- getValues(x)
 	
 	if (NCOL(coltab) == 2) {

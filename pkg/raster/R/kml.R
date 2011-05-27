@@ -9,7 +9,7 @@ KML <- function (raster, filename, col=rainbow(255), maxpixels=100000, zip='') {
     if (! .couldBeLonLat(raster)) { 
         stop("raster must be in geographical coordinates")
 	}
-	raster <- sampleRegular(raster, size=maxpixels, asRaster = TRUE, corners=TRUE)
+	raster <- sampleRegular(raster, size=maxpixels, asRaster = TRUE)
 
 	imagefile <- filename
 	ext(imagefile) <- '.png'

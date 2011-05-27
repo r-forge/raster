@@ -23,7 +23,7 @@
 		col <- paste(substr(col, 1, 7), alpha, sep="")
 	}
 
-	x <- sampleRegular(x, maxpixels, extent=extent, asRaster=TRUE, corners=TRUE)
+	x <- sampleRegular(x, maxpixels, extent=extent, asRaster=TRUE)
 	bb <- as.vector(t(bbox(x)))
 	dm <- dim(x)[1:2]
 	x <- as.matrix(x)
