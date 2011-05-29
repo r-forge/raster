@@ -206,7 +206,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	# http://diva-gis.org/data/msk_alt/MEX_msk_alt.zip
 	if (!file.exists(filename)) {
 		zipfilename <- filename
-		ext(zipfilename) <- '.zip'
+		extension(zipfilename) <- '.zip'
 		if (!file.exists(zipfilename)) {
 			if (download) {
 				theurl <- paste("http://diva-gis.org/data/", mskpath, name, "/", country, mskname, name, ".zip", sep="")

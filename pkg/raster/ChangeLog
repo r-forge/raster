@@ -1,5 +1,6 @@
 --- 27-May-2011, version 1.8-28
 Plot and other functions now use the argument "ext" in stead of "extent" to avoid confusion with extent()
+renamed the 'ext' function to 'extension'
 sampleRegular of gdal files now uses rgdal for quicker sub-sampling (leading to faster plotting)
 Further improvements to predict.
 

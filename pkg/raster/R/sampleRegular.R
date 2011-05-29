@@ -69,7 +69,7 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 		offs <- c(firstrow,firstcol)-1
 		reg <- c(nrow(rcut), ncol(rcut))-1
 		if (nl == 1) {
-			band <- band(x)
+			band <- bandnr(x)
 		} else {
 			band <- NULL
 		}

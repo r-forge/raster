@@ -29,7 +29,7 @@
 
 
 	
-#	fileext <- toupper(ext(fn)) 
+#	fileext <- toupper(extension(fn)) 
 #	if ( fileext == ".GRD" | fileext == ".GRI" ) {
 #		return('raster')
 #	} else {
