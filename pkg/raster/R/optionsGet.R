@@ -64,7 +64,7 @@
 
 
 .maxmemory <- function() {
-	default <- 100000000
+	default <- 10000000
 	d <- getOption('rasterMaxMemory')
 	if (is.null(d)) {
 		return( default )
@@ -244,6 +244,7 @@
 		}
 	}
 }
+
 
 .usecluster <- function(...) {
 	usecluster <- list(...)$usecluster
