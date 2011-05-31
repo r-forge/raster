@@ -128,9 +128,9 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	if (!file.exists(filename)) {
 		if (download) {
 			if (old) {
-				theurl <- paste("http://biogeo.ucdavis.edu/data/world/countries_old.RData", sep="")
+				theurl <- paste("http://diva-gis.org/data/misc/countries_old.RData", sep="")
 			} else {
-				theurl <- paste("http://biogeo.ucdavis.edu/data/world/countries.RData", sep="")			
+				theurl <- paste("http://diva-gis.org/data/misc/countries.RData", sep="")			
 			}
 			.download(theurl, filename)
 			if (!file.exists(filename))
