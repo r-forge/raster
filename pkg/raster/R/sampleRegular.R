@@ -76,6 +76,10 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 		con <- GDAL.open(x@file@name, silent=TRUE)
 		v <- getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
 		closeDataset(con)
+		if (x@data@gain != 1 | x@data@offset != 0) {
+			v <- v * x@data@gain + x@data@offset
+		}
+	
 	
 		if (asRaster) {
 			if (is.null(ext))  {
