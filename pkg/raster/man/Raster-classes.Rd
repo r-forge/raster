@@ -64,7 +64,7 @@ Slots for Raster* objects
     \item{\code{data}:}{Object of class \code{".SingleLayerData"} or \code{".MulitpleLayerData"}. Not in \code{RasterStack} objects}
     \item{\code{history}:}{To record processing history, not yet in use }
     \item{\code{legend}:}{Object of class \code{.RasterLegend}, Default legend. Should store preferences for plotting. Not yet implemented except that it stores the color table of images, if available}
-    \item{\code{extent}:}{Object of class \code{\link{"Extent"}} }
+    \item{\code{extent}:}{Object of \code{\link{Extent-class}} }
     \item{\code{ncols}:}{Integer} 
     \item{\code{nrows}:}{Integer} 
     \item{\code{crs}:}{Object of class \code{"CRS"}, i.e. the coordinate reference system. In Spatial* objects this slot is called 'proj4string' }
