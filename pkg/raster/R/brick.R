@@ -229,6 +229,16 @@ setMethod('brick', signature(x='kasc'),
 
 
 
+
+setMethod('brick', signature(x='grf'), 
+	function(x) {
+		as(x, 'RasterBrick')
+	}
+)
+
+
+
+
 setMethod('brick', signature(x='list'), 
 	function(x) {
 		x <- stack(x)

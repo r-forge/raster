@@ -331,3 +331,18 @@ setMethod('raster', signature(x='kde'),
 	}
 )
 
+
+
+
+setMethod('raster', signature(x='grf'), 
+	function(x, i=1) {
+		i <- i[1]
+		if (i != 1) {
+			if (NCOL(x$data) > 1) {
+				x$data <- x$data[,i]
+			}
+		}
+		as(x, 'RasterLayer')
+	}
+)
+
