@@ -17,6 +17,7 @@
 \alias{raster,asc-method}
 \alias{raster,kasc-method}
 \alias{raster,kde-method}
+\alias{raster,grf-method}
 
 \title{Create a RasterLayer object}
 
