@@ -9,6 +9,11 @@
 \alias{RasterBrick-class}
 \alias{RasterStackBrick-class}
 
+\alias{RasterLayerTime-class}
+\alias{RasterStackTime-class}
+\alias{RasterBrickTime-class}
+\alias{RasterStackBrickTime-class}
+
 \alias{print,Raster-method}
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
