@@ -64,7 +64,7 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 	
 
 	driver <- .driver(x, FALSE)
-	if (driver=='gdal' & !rotated) {
+	if (driver=='gdal' & !rotated & !cells) {
 	
 		offs <- c(firstrow,firstcol)-1
 		reg <- c(nrow(rcut), ncol(rcut))-1
@@ -96,8 +96,7 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 				return( setValues(outras, as.vector(v)))
 			}
 		} else {
-		
-			return(v@data)
+			return(v)
 		}
 	}
 
