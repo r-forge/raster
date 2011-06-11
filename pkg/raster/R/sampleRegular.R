@@ -79,7 +79,11 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 		if (x@data@gain != 1 | x@data@offset != 0) {
 			v <- v * x@data@gain + x@data@offset
 		}
-	
+		if (x@file@nodatavalue < 0) {
+			v[v <= x@file@nodatavalue] <- NA
+		} else {
+			v[v == x@file@nodatavalue] <- NA
+		}
 	
 		if (asRaster) {
 			if (is.null(ext))  {
