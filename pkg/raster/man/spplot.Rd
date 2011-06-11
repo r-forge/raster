@@ -29,8 +29,8 @@ gplot(x, ...)
 \section{Methods}{
 \describe{
 
-\code{spplot(obj, maxpixels=100000, ...)}
-\code{gplot(x, maxpixels=100000, ...)}
+\code{spplot(obj, maxpixels=50000, ...)}
+\code{gplot(x, maxpixels=50000, ...)}
 
 \tabular{rll}{
 \tab \code{obj}  \tab  A Raster* object  \cr
