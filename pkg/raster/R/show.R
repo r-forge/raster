@@ -195,7 +195,7 @@ setMethod ('show' , 'RasterStack',
 				cat(name, paste(z, collapse=', '), '\n')
 			} else {
 				z <- summary(z)
-				cat(name, paste(z, collapse=', '), ' (summary)\n')
+				cat(name, paste(z, collapse=' ... '), '(summary)\n')
 			}
 		}
 		

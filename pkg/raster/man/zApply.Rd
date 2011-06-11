@@ -9,14 +9,15 @@ Experimental function to apply a function over a (time) series of layers of a Ra
 }
 
 \usage{
-zApply(x, by, fun=mean, name='')
+zApply(x, by, fun=mean, name='', ...)
 }
 
 \arguments{
   \item{x}{Raster* object}
-  \item{by}{ aggregation indices or function }
-  \item{fun}{ function to compute aggregated values }
-  \item{name}{ Character label of the new time series }  
+  \item{by}{aggregation indices or function }
+  \item{fun}{function to compute aggregated values }
+  \item{name}{character label of the new time series }  
+  \item{...}{additional arguments}  
 }
 
 

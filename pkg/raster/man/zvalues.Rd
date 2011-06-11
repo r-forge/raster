@@ -31,7 +31,7 @@ getZ: vector
 
 \examples{
 r <- raster(ncol=10, nrow=10)
-s <- stack(r,r,r)
+s <- stack(lapply(1:3, function(x) setValues(r, runif(ncell(r)))))
 s <- setZ(s, as.Date('2000-1-1') + 0:2)
 s
 getZ(s)
