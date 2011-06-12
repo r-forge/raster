@@ -115,8 +115,10 @@ setMethod('predict', signature(object='Raster'),
 			if (nrow(blockvals) == 0 ) {
 				predv <- napred
 			} else {
+	
 				predv <- fun(model, blockvals, ...)
-				
+
+		
 				if (class(predv)[1] == 'list') {
 					predv = unlist(predv)
 					if (length(predv) != nrow(blockvals)) {
@@ -128,9 +130,9 @@ setMethod('predict', signature(object='Raster'),
 				
 				if (isTRUE(dim(predv)[2] > 1)) {
 					predv <- predv[,index, drop=FALSE]
-					for (i in 1:ncol(predv)) {
-						if (is.factor(predv[,i])) {
-							predv[,i] <- as.integer(as.character(predv[,i]))
+					for (fi in 1:ncol(predv)) {
+						if (is.factor(predv[,fi])) {
+							predv[,fi] <- as.integer(as.character(predv[,fi]))
 						}
 					}
 					# if data.frame
@@ -155,7 +157,7 @@ setMethod('predict', signature(object='Raster'),
 
 		
 			if (filename == '') {
-				cells = cellFromRowCol(predrast, tr$row[i], 1):cellFromRowCol(predrast, tr$row[i]+tr$nrows[i]-1, ncol(predrast))
+				cells <- cellFromRowCol(predrast, tr$row[i], 1):cellFromRowCol(predrast, tr$row[i]+tr$nrows[i]-1, ncol(predrast))
 				v[cells, ] <- predv 
 			} else {
 				predrast <- writeValues(predrast, predv, tr$row[i])

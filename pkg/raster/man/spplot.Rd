@@ -10,11 +10,11 @@
 \title{Use spplot or ggplot to plot a Raster* object}
 
 \description{
-These are simple wrapper functions to around spplot (sp package) and ggplot (ggplot2 package). These functions allow for attractive mapping of Raster objects. For example, with spplot it is easy to map several layers with a single legend for all maps. ggplot allows for very refined graphics.
+These are simple wrapper functions to around \link[sp]{spplot} (sp package) and \link[ggplot2]{ggplot} (ggplot2 package), allowing for attractive mapping of Raster objects. For example, with spplot it is easy to map several layers with a single legend for all maps. 
 
 Note that the function in the raster package is called gplot with a single 'g'.
 
-One of the advantages of these wrapper function is the additioal \code{maxpixels} argument to sample large Raster objects for faster drawing.
+One of the advantages of these wrapper functions is the additioal \code{maxpixels} argument to sample large Raster objects for faster drawing.
 }
 
 \usage{
@@ -49,7 +49,7 @@ Raster objects with a color-table (e.g. a graphics file) will be plotted accordi
   \code{ \link[raster]{plot}, \link[raster]{plot3D}, \link[raster]{plotRGB}, , \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}  
 }
 
-\author{ Robert J. Hijmans }
+\author{ Robert J. Hijmans; gplot based on an example by Paul Hiemstra }
 
 \examples{ 
 r <- raster(system.file("external/test.grd", package="raster"))
@@ -59,7 +59,6 @@ layerNames(s) <- c('meuse', 'meuse x 2')
 spplot(s)
 
 if (require(ggplot2)) {
-# example by Paul Hiemstra
 	theme_set(theme_bw())
 	gplot(s) + geom_tile(aes(fill = value)) + facet_wrap(~ variable) +
             scale_fill_gradient(low = 'white', high = 'blue') + coord_equal()

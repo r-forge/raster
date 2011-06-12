@@ -123,7 +123,8 @@ r3 <- predict(logo, rfmod, type='response', progress='window')
 v$pa <- as.factor(v$pa)
 rfmod2 <- randomForest(pa ~., data=v)
 r4 <- predict(logo, rfmod2, type='prob', index=1:2)
-plot(r4)
+spplot(r4)
+
 }
 
 }
