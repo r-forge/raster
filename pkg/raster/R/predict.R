@@ -75,7 +75,7 @@ setMethod('predict', signature(object='Raster'),
 		
 		tr <- blockSize(predrast, n=nlayers(object)+3)
 
-		napred <- rep(NA, ncol(predrast)*tr$size )
+		napred <- matrix(rep(NA, ncol(predrast) * tr$size * nlayers(predrast)), ncol=nlayers(predrast))
 		factres	<- FALSE
 		pb <- pbCreate(tr$n,  type=progress )			
 
@@ -83,7 +83,7 @@ setMethod('predict', signature(object='Raster'),
 		
 			if (i==tr$n) {
 				ablock <- 1:(ncol(object) * tr$nrows[i])
-				napred <- rep(NA, ncol(predrast) * tr$nrows[i])
+				napred <- matrix(rep(NA, ncol(predrast) * tr$nrows[i] * nlayers(predrast)), ncol=nlayers(predrast))
 			}
 
 			rr <- firstrow + tr$row[i] - 1
@@ -127,13 +127,15 @@ setMethod('predict', signature(object='Raster'),
 				}
 				
 				if (isTRUE(dim(predv)[2] > 1)) {
-					predv = predv[ , index]
-					#predv = predv[,index, drop=FALSE]
-					#for (i in 1:ncol(predv)) {
-					#	if (is.factor(predv[,i])) {
-					#		predv[,i] <- as.integer(as.character(predv[,i]))
-					#	}
-					#}
+					predv <- predv[,index, drop=FALSE]
+					for (i in 1:ncol(predv)) {
+						if (is.factor(predv[,i])) {
+							predv[,i] <- as.integer(as.character(predv[,i]))
+						}
+					}
+					# if data.frame
+					predv <- as.matrix(predv)
+					
 				} else if (is.factor(predv)) {
 					# should keep track of this to return a factor type RasterLayer
 					factres <- TRUE
@@ -144,7 +146,7 @@ setMethod('predict', signature(object='Raster'),
 					naind <- as.vector(attr(blockvals, "na.action"))
 					if (!is.null(naind)) {
 						p <- napred
-						p[-naind] <- predv
+						p[-naind,] <- predv
 						predv <- p
 						rm(p)
 					}
@@ -166,7 +168,6 @@ setMethod('predict', signature(object='Raster'),
 			try(layerNames(predrast) <- colnames(predv), silent=TRUE)
 		}
 
-		
 		if (filename == '') {
 			predrast <- setValues(predrast, v)  # or as.vector
 		} else {
