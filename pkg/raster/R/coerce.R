@@ -33,7 +33,10 @@
 				sp <- SpatialGridDataFrame(grd, proj4string=crs, data=data.frame(getValues(object)))
 			} else {
 				sp <- SpatialGridDataFrame(grd, proj4string=crs, data=data.frame(values=getValues(object)))
-				colnames(sp@data) <- layerNames(sp)
+				ln <- trim(layerNames(object))
+				if (ln != '') {
+					colnames(sp@data) <- ln
+				}
 			}
 		} else { 
 			sp  <- SpatialGrid(grd, proj4string=crs)
