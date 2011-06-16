@@ -11,22 +11,30 @@
 		stop('\n Cannot coerce because object is rotated.\n Either coerce to SpatialPoints* object\n or first use the "rectify" function')
 	}	
 	crs <- projection(object, FALSE)
+	
 	if (type=='pixel') {
 		v <- rasterToPoints(object, fun=NULL, spatial=FALSE)
 		pts <- SpatialPoints(v[,1:2])
 		if (dataframe) {
-			sp <- SpatialPixelsDataFrame(points=pts, data=data.frame(values=v[,3]), proj4string=crs) 	
+			sp <- SpatialPixelsDataFrame(points=pts, data=data.frame(v[,3:ncol(v), drop=FALSE]), proj4string=crs)
 		} else {
 			sp <- SpatialPixels(points=pts, proj4string=crs)
 		}
+		
 	} else {
+	
 		bb <- bbox(object)
 		cs <- res(object)
 		cc <- bb[,1] + (cs/2)
 		cd <- cbind(ncol(object), nrow(object))
 		grd <- GridTopology(cellcentre.offset=cc, cellsize=cs, cells.dim=cd)
 		if (dataframe) {
-			sp <- SpatialGridDataFrame(grd, proj4string=crs, data=data.frame(values=getValues(object)))
+			if (nlayers(object) > 1) {
+				sp <- SpatialGridDataFrame(grd, proj4string=crs, data=data.frame(getValues(object)))
+			} else {
+				sp <- SpatialGridDataFrame(grd, proj4string=crs, data=data.frame(values=getValues(object)))
+				colnames(sp@data) <- layerNames(sp)
+			}
 		} else { 
 			sp  <- SpatialGrid(grd, proj4string=crs)
 		}	
