@@ -12,9 +12,6 @@ if (!isGeneric("spplot")) {
 
 setMethod("spplot", signature(obj='Raster'), 
 	function(obj, maxpixels=50000, ...)  {
-		if (missing(names.attr)) {
-			names.attr <- layerNames(obj)
-		}
 		obj <- sampleRegular(obj, maxpixels, asRaster=T)
 		obj <- as(obj, 'SpatialGridDataFrame')
 		#obj@data <- obj@data[, ncol(obj@data):1]
