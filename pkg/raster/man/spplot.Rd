@@ -10,7 +10,7 @@
 \title{Use spplot or ggplot to plot a Raster* object}
 
 \description{
-These are simple wrapper functions to around \link[sp]{spplot} (sp package) and \link[ggplot2]{ggplot} (ggplot2 package), allowing for attractive mapping of Raster objects. For example, with spplot it is easy to map several layers with a single legend for all maps. ssplot is a wrapper around the \link[lattice]{levelplot} function in the lattice package, and see the help for that function for additional options.
+These are simple wrapper functions to around \link[sp]{spplot} (sp package) and \link[ggplot2]{ggplot} (ggplot2 package), allowing for attractive mapping of Raster objects. For example, with spplot it is easy to map several layers with a single legend for all maps. ssplot is a wrapper around the \link[lattice]{levelplot} function in the lattice package, and see the help for these functions for additional options.
 
 Note that the function in the raster package is called gplot with a single 'g'.
 
