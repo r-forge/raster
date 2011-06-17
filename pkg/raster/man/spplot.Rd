@@ -34,8 +34,7 @@ gplot(x, ...)
 
 \tabular{rll}{
 \tab \code{obj} \tab  A Raster* object  \cr
-\tab \code{...} \tab  Any argument that can be passed to \code{\link[sp]{spplot}} and link[lattice]{levelplot} or to \code{\link[ggplot2]{ggplot}}  \tab \code{maxpixels} \tab Integer. Number of pixels to sample from each layer of large Raster objects \cr
-\cr
+\tab \code{...} \tab  Any argument that can be passed to \code{\link[sp]{spplot}} and link[lattice]{levelplot} or to \code{\link[ggplot2]{ggplot}}\cr  \tab \code{maxpixels} \tab Integer. Number of pixels to sample from each layer of large Raster objects \cr
 }
 }}
 
