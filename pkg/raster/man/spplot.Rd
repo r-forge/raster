@@ -29,13 +29,13 @@ gplot(x, ...)
 \section{Methods}{
 \describe{
 
-\code{spplot(obj, maxpixels=50000, ...)}
+\code{spplot(obj, ..., maxpixels=50000, as.table=TRUE)}
 \code{gplot(x, maxpixels=50000, ...)}
 
 \tabular{rll}{
-\tab \code{obj}  \tab  A Raster* object  \cr
-\tab \code{maxpixels} \tab Integer. Number of pixels to sample from each layer of large Raster objects \cr
-\tab \code{...}  \tab  Any argument that can be passed to \code{\link[sp]{spplot}} and link[lattice]{levelplot} or to \code{\link[ggplot2]{ggplot}}  \cr
+\tab \code{obj} \tab  A Raster* object  \cr
+\tab \code{...} \tab  Any argument that can be passed to \code{\link[sp]{spplot}} and link[lattice]{levelplot} or to \code{\link[ggplot2]{ggplot}}  \tab \code{maxpixels} \tab Integer. Number of pixels to sample from each layer of large Raster objects \cr
+\cr
 }
 }}
 
@@ -46,7 +46,7 @@ Raster objects with a color-table (e.g. a graphics file) will be plotted accordi
 }
 
 \seealso{
-  \code{ \link[raster]{plot}, \link[raster]{plot3D}, \link[raster]{plotRGB}, , \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}  
+\code{ \link[raster]{plot}, \link[raster]{plot3D}, \link[raster]{plotRGB}, , \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}  
 }
 
 \author{ Robert J. Hijmans; gplot based on an example by Paul Hiemstra }
@@ -59,8 +59,8 @@ layerNames(s) <- c('meuse', 'meuse x 2')
 spplot(s)
 
 if (require(ggplot2)) {
-	theme_set(theme_bw())
-	gplot(s) + geom_tile(aes(fill = value)) + facet_wrap(~ variable) +
+  theme_set(theme_bw())
+  gplot(s) + geom_tile(aes(fill = value)) + facet_wrap(~ variable) +
             scale_fill_gradient(low = 'white', high = 'blue') + coord_equal()
 }
 
