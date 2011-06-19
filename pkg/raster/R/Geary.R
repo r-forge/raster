@@ -8,7 +8,7 @@
 .getFilter <- function(w) {
 	if (!is.matrix(w)) {
 		w <- .checkngb(w)
-		w <- matrix(1, nrows=w[1], ncols=(w[2]))
+		w <- matrix(1, nrow=w[1], ncol=(w[2]))
 		w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] <- 0
 	} else {
 		if (w[ceiling(dim(w)[1]/2), ceiling(dim(w)[2]/2)] != 0) {
