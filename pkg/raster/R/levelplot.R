@@ -4,9 +4,10 @@
 # Licence GPL v3
 
 
+# this type of function is / should be in rasterVis
 
-.levelplotraster <- function(object, maxpixels=100000, xlab='', ylab='', ext=NULL, ticks=c(6,6), ...) {
-	if (! require(lattice) ) { stop('cannot find the lattice package') }
+...levelplotraster <- function(object, maxpixels=100000, xlab='', ylab='', ext=NULL, ticks=c(6,6), ...) {
+#	if (! require(lattice) ) { stop('cannot find the lattice package') }
 	if ( ! inMemory(object) ) { 
 		if (  !  fromDisk(object) ) {
 			stop('no values associated with this RasterLayer')

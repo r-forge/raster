@@ -57,7 +57,7 @@ setMethod('cover', signature(x='RasterStackBrick', y='Raster'),
 			v2 <- v
 			for (j in 2:length(rasters)) {
 				v2[] <- getValues(rasters[[j]], row=tr$row[i], nrows=tr$nrows[i])
-				v[is.na(v), ] <- v2[is.na(v), ] 
+				v[is.na(v)] <- v2[is.na(v)]
 			}	
 			outRaster <- writeValues(outRaster, v, tr$row[i])
 			pbStep(pb, i) 
