@@ -38,5 +38,5 @@
 	
 	z <- getValues(object, format='matrix')
 	z <- t(z[nrow(z):1,])
-	levelplot(z, xlab=xlab, ylab=ylab, scales=list(x=x, y=y), ...)
+#	levelplot(z, xlab=xlab, ylab=ylab, scales=list(x=x, y=y), ...)
 }
