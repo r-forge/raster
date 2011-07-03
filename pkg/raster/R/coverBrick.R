@@ -50,7 +50,7 @@ setMethod('cover', signature(x='RasterStackBrick', y='Raster'),
 		if (filename == '') { filename <- rasterTmpFile() }
 		outRaster <- writeStart(outRaster, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress )
 		
-		tr <- blockSize(outRaster, length(rasters))
+		tr <- blockSize(outRaster, sum(nl))
 		pb <- pbCreate(tr$n, type=.progress())
 		for (i in 1:tr$n) {
 			v <- getValues( rasters[[1]], row=tr$row[i], nrows=tr$nrows[i] )
