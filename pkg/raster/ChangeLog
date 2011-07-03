@@ -1,5 +1,6 @@
 --- 3-July-2011, version 1.8-38
 Bug fix, cover failed with RasterBricks (reported by Steven Mosher)
+Quicker subset with RasterBricks (suggested by Christian Kamenik)
 
 --- 16-June-2011, version 1.8-37
 Bug fix in gridDistance. Function crashed with large files and many rows with NA (reported by Corné Vreugdenhil)
