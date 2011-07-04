@@ -9,6 +9,11 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='') {
     if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude / latitude")
 	}
+	
+	if (nlayers(x) > 1) {
+		x <- x[[1]]
+	}
+	
 	x <- sampleRegular(x, size=maxpixels, asRaster = TRUE)
 
 	imagefile <- filename
