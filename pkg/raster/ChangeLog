@@ -1,3 +1,6 @@
+--- 5-July-2011, version 1.8-40
+removed gplot and plot3D functions. These are now in the rasterVis package
+
 --- 3-July-2011, version 1.8-39
 Bug fix, cover failed with RasterBricks (reported by Steven Mosher)
 Quicker subset with RasterBricks (suggested by Christian Kamenik)

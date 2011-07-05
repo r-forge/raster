@@ -98,7 +98,9 @@ Raster objects with a color-table (e.g. a graphics file) will be plotted accordi
 }
 
 \seealso{
-  \code{ \link[raster]{spplot}, \link[raster]{gplot}, \link[raster]{plotRGB}, \link[raster]{plot3D}, \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}  
+\code{ \link[raster]{spplot}, \link[raster]{plotRGB}, \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}  
+
+The rasterVis package has more advanced plotting methods for Raster* objects. 
 }
 
 \author{ Robert J. Hijmans }

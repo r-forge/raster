@@ -184,15 +184,14 @@ Maps
   \tabular{ll}{
     \code{\link{plot}} \tab Plot a Raster* object. The main method to create a map \cr
     \code{\link{plotRGB}} \tab Combine three layers (red, green, blue channels) into a single 'real color' image \cr
-    \code{\link{plot3D}} \tab 3-dimensional plot of a RasterLayer \cr
     \code{\link{spplot}} \tab Plot a Raster* with the spplot function (sp package) \cr
-    \code{\link{gplot}} \tab Plot a Raster* with the ggplot function (ggplot2 package) \cr
     \code{\link{image}} \tab Plot a Raster* with the image function \cr
     \code{\link{persp}} \tab Perspective plot of a RasterLayer \cr
     \code{\link{contour}} \tab Contour plot of a RasterLayer \cr
     \code{\link{filledContour}} \tab Filled contour plot of a RasterLayer \cr
     \code{\link{text}} \tab Plot the values of a RasterLayer on top of a map \cr
  }
+The rasterVis packages has additional plotting methods for Raster objects using methods from the lattice package and from other packages.
 
 Interacting with a map (plot of a RasterLayer)
   \tabular{ll}{
