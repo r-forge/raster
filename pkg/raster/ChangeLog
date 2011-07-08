@@ -1,5 +1,7 @@
---- 5-July-2011, version 1.8-40
+--- 8-July-2011, version 1.8-41
 removed gplot and plot3D functions. These are now in the rasterVis package
+added linear and histogram stretch options to plotRGB; based on Josh Gray' code in http://spatiallyexplicit.wordpress.com/2011/06/07/crop-circles/
+added a scalebar function, partly based on a function by Josh Gray
 
 --- 3-July-2011, version 1.8-39
 Bug fix, cover failed with RasterBricks (reported by Steven Mosher)

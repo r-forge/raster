@@ -20,7 +20,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	} else if (name=='countries') {
 		.countries(download=download, path=path, ...)
 	} else {
-		stop(name, 'not recognized as a valid name')
+		stop(name, ' not recognized as a valid name.')
 	}
 }
 

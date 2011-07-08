@@ -12,7 +12,7 @@ if (!isGeneric("plotRGB")) {
 
 
 setMethod("plotRGB", signature(x='RasterStackBrick'), 
-function(x, r=1, g=2, b=3, scale, maxpixels=500000, ext=NULL, interpolate=FALSE, axes=TRUE, xlab='', ylab='', asp, alpha, ...) { 
+function(x, r=1, g=2, b=3, scale,  maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, axes=TRUE, xlab='', ylab='', asp, alpha, ...) { 
 	
 	if (!axes) par(plt=c(0,1,0,1))
 
@@ -38,6 +38,22 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, ext=NULL, interpolate=FALSE,
 	r <- sampleRegular(raster(x,r), maxpixels, ext=ext, asRaster=TRUE)
 	g <- sampleRegular(raster(x,g), maxpixels, ext=ext, asRaster=TRUE)
 	b <- sampleRegular(raster(x,b), maxpixels, ext=ext, asRaster=TRUE)
+	
+	if (!is.null(stretch)) {
+		stretch = tolower(stretch)
+		if (stretch == 'lin') {
+			r <- .linStretch(r)
+			g <- .linStretch(g)
+			b <- .linStretch(b)
+		} else if (stretch == 'hist') {
+			r <- .eqStretch(r)
+			g <- .eqStretch(g)
+			b <- .eqStretch(b)
+		} else if (stretch != '') {
+			warning('invalid stretch value')
+		}
+	}
+	
 	scale = as.vector(scale)[1]
 	
 	RGB <- na.omit(cbind(getValues(r), getValues(g), getValues(b)))
