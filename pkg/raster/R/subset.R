@@ -50,7 +50,7 @@ function(x, subset, drop=TRUE, ...) {
 		}
 	} else {
 		if (hasValues(x)) {
-			x@data@values <- x@data@values[,subset]
+			x@data@values <- x@data@values[, subset, drop=FALSE]
 			x@layernames <- x@layernames[subset]
 		} 
 		x@data@nlayers <- as.integer(length(subset))
