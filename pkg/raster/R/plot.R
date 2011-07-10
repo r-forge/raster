@@ -86,9 +86,15 @@ function(x, col=rev(terrain.colors(255)), maxpixels=500000, newstyle=FALSE, alph
 )	
 
 
+setMethod("plot", signature(x='RasterStackBrick', y='RasterStackBrick'), 
+	function(x, y, maxpixels=100000, cex=0.1, ...)  {
+		plot(x[[1]], y[[1]], maxpixels=maxpixels, cex=cex, ...)
+	}
+)
+
 setMethod("plot", signature(x='RasterLayer', y='RasterLayer'), 
 	function(x, y, maxpixels=100000, cex=0.1, ...)  {
-		comp <- compare(c(x, y), extent=TRUE, rowcol=TRUE, prj=FALSE, stopiffalse=TRUE) 
+		compare(c(x, y), extent=TRUE, rowcol=TRUE, prj=FALSE, stopiffalse=TRUE) 
 		nc <- ncell(x)
 		x <- sampleRegular(x, size=maxpixels)
 		y <- sampleRegular(y, size=maxpixels)

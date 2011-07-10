@@ -61,7 +61,7 @@ function(x, y, by=1, which=2, subsWithNA=TRUE, filename='', ...) {
 			pb <- pbCreate(tr$n, type=.progress(...))
 			r <- writeStart(r, filename=filename, ...)
 			for (i in 1:tr$n) {
-				v <- getValues(x, row=tr$row[i], nrows=tr$size)
+				v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 				r <- writeValues(r, localmerge(v, y, subsWithNA), tr$row[i])
 				pbStep(pb) 
 			}

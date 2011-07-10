@@ -35,7 +35,7 @@ function(x, progress='') {
 		pb <- pbCreate(tr$n, type=progress)	
 
 		for (i in 1:tr$n) {
-			u1 <- unique( c(u1, getValuesBlock(x, row=tr$row[i], nrows=tr$size)) )
+			u1 <- unique( c(u1, getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i])) )
 			if (length(u1) > 10000 ) {
 				u2 <- unique(c(u1, u2))
 				u1 <- vector()
@@ -85,7 +85,7 @@ function(x, progress='') {
 		pb <- pbCreate(tr$n, type=progress)	
 
 		for (i in 1:tr$n) {
-			v <- getValues(x, row=tr$row[i], nrows=tr$size)
+			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 			v <- apply(v, 2, unique)
 			if (!is.list(v)) {
 				vv <- list()
