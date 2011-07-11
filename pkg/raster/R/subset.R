@@ -39,6 +39,15 @@ function(x, subset, drop=TRUE, ...) {
 		stop('not a valid subset')
 	}
 	subset <- as.integer(subset)
+	nl <- nlayers(x)
+	if (nl==1) {
+		if (subset == 1) {
+			return(x)
+		} else {
+			return(brick(x, values=FALSE))
+		}
+	}
+	
 	varname <- attr(x@data, "zvar")
 	if (is.null(varname)) { varname <- "" }
 	
@@ -52,6 +61,8 @@ function(x, subset, drop=TRUE, ...) {
 		if (hasValues(x)) {
 			x@data@values <- x@data@values[, subset, drop=FALSE]
 			x@layernames <- x@layernames[subset]
+			x@data@min <- x@data@min[subset]
+			x@data@max <- x@data@max[subset]
 		} 
 		x@data@nlayers <- as.integer(length(subset))
 		return(x)
