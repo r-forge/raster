@@ -8,7 +8,7 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 	
 	size <- round(size)
 	stopifnot(size > 0)
-	nl <- nlayers(x) 
+	nl <- nlayers(x)
 	rotated <- rotated(x)
 	
 	if (is.null(ext)) {
@@ -43,6 +43,11 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 		lastrow <- rowFromY(x, ymin(rcut)+0.5 *yres(rcut))
 		firstcol <- colFromX(x, xmin(rcut))
 		lastcol <- colFromX(x, xmax(rcut)-0.5 *xres(rcut))
+		# NA happened in one case because of decimal number imprecision
+		if (is.na(firstrow)) firstrow <- 1
+		if (is.na(firstcol)) firstcol <- 1
+		if (is.na(lastrow)) lastrow <- nrow(x)
+		if (is.na(lastcol)) lastcol <- ncol(x)
 	}
 	
 
