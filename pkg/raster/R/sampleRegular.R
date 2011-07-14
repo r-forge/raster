@@ -68,51 +68,53 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 	nc <- length(cols)
 	
 
-	driver <- .driver(x, FALSE)
-	if (driver=='gdal' & !rotated & !cells) {
+	if (fromDisk(x)) {
+		driver <- .driver(x, FALSE)
+		if (driver=='gdal' & !rotated & !cells) {
 	
-		offs <- c(firstrow,firstcol)-1
-		reg <- c(nrow(rcut), ncol(rcut))-1
-		if (nl == 1) {
-			band <- bandnr(x)
-		} else {
-			band <- NULL
-		}
-		con <- GDAL.open(x@file@name, silent=TRUE)
-		v <- getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
-		closeDataset(con)
-		if (x@data@gain != 1 | x@data@offset != 0) {
-			v <- v * x@data@gain + x@data@offset
-		}
-		if (x@file@nodatavalue < 0) {
-			v[v <= x@file@nodatavalue] <- NA
-		} else {
-			v[v == x@file@nodatavalue] <- NA
-		}
+			offs <- c(firstrow,firstcol)-1
+			reg <- c(nrow(rcut), ncol(rcut))-1
+			if (nl == 1) {
+				band <- bandnr(x)
+			} else {
+				band <- NULL
+			}
+			con <- GDAL.open(x@file@name, silent=TRUE)
+			v <- getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
+			closeDataset(con)
+			if (x@data@gain != 1 | x@data@offset != 0) {
+				v <- v * x@data@gain + x@data@offset
+			}
+			if (x@file@nodatavalue < 0) {
+				v[v <= x@file@nodatavalue] <- NA
+			} else {
+				v[v == x@file@nodatavalue] <- NA
+			}
 	
-		if (asRaster) {
-			if (is.null(ext))  {
-				outras <- raster(x)
+			if (asRaster) {
+				if (is.null(ext))  {
+					outras <- raster(x)
+				} else {
+					outras <- raster(ext) 
+				}
+				nrow(outras) <- nr
+				ncol(outras) <- nc
+				if (nl > 1) {
+					outras <- brick(outras, nl=nl)
+					return( setValues(outras, v))
+				} else {
+					return( setValues(outras, as.vector(v)))
+				}
 			} else {
-				outras <- raster(ext) 
+				return(v)
 			}
-			nrow(outras) <- nr
-			ncol(outras) <- nc
-			if (nl > 1) {
-				outras <- brick(outras, nl=nl)
-				return( setValues(outras, v))
-			} else {
-				return( setValues(outras, as.vector(v)))
-			}
-		} else {
-			return(v)
 		}
 	}
-
+	
 	cell <- cellFromRowCol(x, rep(rows, each=nc), rep(cols, times=nr))
 	
 	if ( ! inMemory(x) ) { 
-		if (canProcessInMemory(x, 4)) {
+		if (canProcessInMemory(x, 5)) {
 			x <- readAll(x)
 		}
 	}
