@@ -129,16 +129,6 @@ s <- stack(r, r2, r/r)
 plot(s, 2)
 plot(s)
 
-
-# two objects, different range, one scale:
-r[] <- runif(ncell(r))
-r2 <- r/2
-brks <- seq(0, 1, by=0.1) 
-nb <- length(brks)-1 
-par(mfrow=c(1,2))
-plot(r, breaks=brks, col=rev(terrain.colors(nb)), lab.breaks=brks, zlim=c(0,1)) 
-plot(r2, breaks=brks, col=rev(terrain.colors(nb)), lab.breaks=brks, zlim=c(0,1)) 
-
 }
 
 \keyword{methods}
