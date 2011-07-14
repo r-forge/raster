@@ -29,22 +29,22 @@
 	maxpixels <- max(1, maxpixels)
 
 	if (is.null(ext)) {
-		ext <- extent(object)
+		e <- extent(object)
 	} else  { 
-		ext <- intersectExtent(extent(object), ext) 
+		e <- ext <- intersectExtent(extent(object), ext) 
 	}
 	
 	
 	if (! missing(xlim) | ! missing(ylim )) {
 		if (!missing(xlim)) { 
 			if (xlim[1] >= xlim[2]) stop('invalid xlim')
-			if (xlim[1] < ext@xmax) ext@xmin <- xlim[1]
-			if (xlim[2] > ext@xmin) ext@xmax <- xlim[2]
+			if (xlim[1] < e@xmax) e@xmin <- xlim[1]
+			if (xlim[2] > e@xmin) e@xmax <- xlim[2]
 		}
 		if (!missing(ylim)) { 
 			if (ylim[1] >= ylim[2]) stop('invalid ylim')
-			if (ylim[1] < ext@ymax) ext@ymin <- ylim[1]
-			if (ylim[2] > ext@ymin) ext@ymax <- ylim[2]
+			if (ylim[1] < e@ymax) e@ymin <- ylim[1]
+			if (ylim[2] > e@ymin) e@ymax <- ylim[2]
 		}
 	}
 	

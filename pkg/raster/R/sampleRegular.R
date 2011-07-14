@@ -29,8 +29,8 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 		
 	} else {
 	
-		ext <- alignExtent(ext, x)
 		rcut <- crop(raster(x), ext)
+		ext <- extent(rcut)
 		if (size >= ncell(rcut)) {
 			x <- crop(x, ext)
 			if (asRaster) { 
@@ -39,15 +39,12 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 				return(getValues(x)) 
 			}
 		}
-		firstrow <- rowFromY(x, ymax(rcut))
-		lastrow <- rowFromY(x, ymin(rcut)+0.5 *yres(rcut))
-		firstcol <- colFromX(x, xmin(rcut))
-		lastcol <- colFromX(x, xmax(rcut)-0.5 *xres(rcut))
-		# NA happened in one case because of decimal number imprecision
-		if (is.na(firstrow)) firstrow <- 1
-		if (is.na(firstcol)) firstcol <- 1
-		if (is.na(lastrow)) lastrow <- nrow(x)
-		if (is.na(lastcol)) lastcol <- ncol(x)
+		yr <- yres(rcut)
+		xr <- xres(rcut)
+		firstrow <- rowFromY(x, ext@ymax-0.5 *yr)
+		lastrow <- rowFromY(x, ext@ymin+0.5*yr)
+		firstcol <- colFromX(x, ext@xmin+0.5*xr)
+		lastcol <- colFromX(x, ext@xmax-0.5*xr)
 	}
 	
 
