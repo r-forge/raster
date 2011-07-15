@@ -48,6 +48,7 @@ function(x, progress='') {
 }
 )
 
+
 setMethod('unique', signature(x='RasterStackBrick', incomparables='missing'), 
 function(x, progress='') {
 	
