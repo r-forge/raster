@@ -86,6 +86,7 @@ setMethod('extent', signature(x='numeric'),
 )
 
 
+# contributed by Etienne Racine
 setMethod('extent', signature(x='list'),
 	function(x, ...) {
 		stopifnot(c("x", "y") %in% names(x))
