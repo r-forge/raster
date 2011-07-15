@@ -6,10 +6,8 @@
 
 
 .plotraster <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, axes=TRUE, xlab='', ylab='', ext=NULL, asp, xlim, ylim, ...) {
-#TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 
- 
- 	if (missing(asp)) {
+  	if (missing(asp)) {
 		if (.couldBeLonLat(object, warnings=FALSE)) {
 #			ym <- mean(object@extent@ymax + object@extent@ymin)
 #			asp <- min(5, 1/cos((ym * pi)/180))

@@ -13,7 +13,10 @@
 		stop('"breaks" argument currently not supported')
 	}
 	
-	asRaster <- function(x, col) {
+	asRaster <- function(x, col, breaks) {
+		if (!is.null(breaks)) {
+			x[] <- as.numeric(cut(x, breaks))
+		}
 		r <- range(x, na.rm=TRUE)
 		x <- (x - r[1])/ (r[2] - r[1])
 		x <- round(x * (length(col)-1) + 1)
@@ -24,7 +27,7 @@
 	e <- as.vector(t(bbox(extent(x))))
 	x <- as.matrix(x)
 	zrange <- range(x, na.rm=TRUE)
-	x <- asRaster(x, col)
+	x <- asRaster(x, col, breaks)
 	
 	
     old.par <- par(no.readonly = TRUE)
