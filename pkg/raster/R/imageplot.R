@@ -37,7 +37,7 @@
         if (!add) {
             par(plt = bigplot)
         }
-		image(x, y, z, add = add, col = col, userRaster=TRUE, ...)
+		image(x, y, z, add = add, col = col, useRaster=TRUE, ...)
         big.par <- par(no.readonly = TRUE)
     }
 	

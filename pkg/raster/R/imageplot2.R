@@ -10,7 +10,7 @@
     lab.breaks = NULL, axis.args = NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, ...) {
 
 	if (!is.null(breaks)) {
-		stop('"breaks" argument currently not supported')
+#		stop('"breaks" argument currently not supported')
 	}
 	
 	asRaster <- function(x, col, breaks) {
