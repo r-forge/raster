@@ -92,7 +92,7 @@
             par(plt = bigplot)
         }
         if (!info$poly.grid) {
-            image(..., add=add, col=col)
+            image(..., add=add, col=col, useRaster=TRUE)
         }
         else {
             .polyimage(..., add = add, col = col, midpoint = midpoint)

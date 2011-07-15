@@ -5,7 +5,7 @@
 
 
 
-.plotrasterOLD <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, axes=TRUE, xlab='', ylab='', ext=NULL, asp, xlim, ylim, ...) {
+.plotraster <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, axes=TRUE, xlab='', ylab='', ext=NULL, asp, xlim, ylim, ...) {
 #TODO if xlim and/or ylim are used, only read (and sample) for those areas.
 
  

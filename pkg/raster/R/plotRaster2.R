@@ -5,7 +5,7 @@
 
 
 
-.plotraster <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, axes=TRUE, xlab='', ylab='', ext=NULL, asp, xlim, ylim, ...) {
+.plotraster2 <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, axes=TRUE, xlab='', ylab='', ext=NULL, asp, xlim, ylim, ...) {
  
  	if (missing(asp)) {
 		if (.couldBeLonLat(object, warnings=FALSE)) {
