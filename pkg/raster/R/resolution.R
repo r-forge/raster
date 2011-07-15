@@ -19,20 +19,20 @@
 	}
 	
 	bb <- extent(x)
-	#nc <- max(1, round( (bb@xmax - bb@xmin) / xr ))
-	#nr <- max(1, round( (bb@ymax - bb@ymin) / yr ))
-	#if (nr != x@nrows | nc != x@ncols) {
-	#	if (extends(class(x), "Raster")) {
-	#		x <- clearValues(x)
-	#	}
-	#}
-	#bb@xmax <- bb@xmin + nc * xr
-	#bb@ymin <- bb@ymax - nr * yr
+	nc <- max(1, round( (bb@xmax - bb@xmin) / xr ))
+	nr <- max(1, round( (bb@ymax - bb@ymin) / yr ))
+	if (nr != x@nrows | nc != x@ncols) {
+		if (extends(class(x), "Raster")) {
+			x <- clearValues(x)
+		}
+	}
+	bb@xmax <- bb@xmin + nc * xr
+	bb@ymin <- bb@ymax - nr * yr
 
 	bb@xmax <- bb@xmin + ncol(x) * xr
 	bb@ymin <- bb@ymax - nrow(x) * yr
 	extent(x) <- bb
-	#dim(x) <- c(nr, nc)
+	dim(x) <- c(nr, nc)
 	return(x)
 }
 
