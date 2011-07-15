@@ -4,18 +4,17 @@
 # Licence GPL v3
 
 
-
 'res<-' <- function(x, value) {
 	if (rotated(x)) {
 		stop('cannot set the resolution of a rotated raster')
 	}
 
 	if (length(value) == 1) {
-		xr <- value
-		yr <- value
+		xr=value
+		yr=value
 	} else {
-		xr <- value[1]
-		yr <- value[2]
+		xr=value[1]
+		yr=value[2]
 	}
 	
 	bb <- extent(x)
@@ -28,9 +27,6 @@
 	}
 	bb@xmax <- bb@xmin + nc * xr
 	bb@ymin <- bb@ymax - nr * yr
-
-	bb@xmax <- bb@xmin + ncol(x) * xr
-	bb@ymin <- bb@ymax - nrow(x) * yr
 	extent(x) <- bb
 	dim(x) <- c(nr, nc)
 	return(x)
