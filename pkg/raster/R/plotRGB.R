@@ -129,7 +129,7 @@ function(x, r=1, g=2, b=3, scale,  maxpixels=500000, stretch=NULL, ext=NULL, int
 	if (xres(r) %% 1 == 0) xticks = round(xticks)
 	if (yres(r) %% 1 == 0) yticks = round(yticks)
 	
-	image(x=x, y=y, z=z,  col=col, axes=FALSE, xlab=xlab, ylab=ylab, asp=asp, ...)
+	image(x=x, y=y, z=z,  col=col, axes=FALSE, xlab=xlab, ylab=ylab, asp=asp, useRaster=TRUE, ...)
 	axis(1, at=xticks)
 	axis(2, at=yticks, las = 1)
 	axis(3, at=xticks, labels=FALSE, lwd.ticks=0)

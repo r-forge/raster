@@ -90,7 +90,7 @@
 
 #				image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col)
 			} else {
-				image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks)
+				image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
 			}
 		} else {
 			if (is.null(breaks)) {
@@ -103,7 +103,7 @@
 				#image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col)
 				
 			} else {
-				image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
+				image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
 			}
 		}
 		do.call("axis", axis.args)

@@ -64,7 +64,7 @@ function(x, progress='') {
 
 	if ( inMemory(x) ) {
 	
-		x <- apply(getValues(x), 2, unique)
+		x <- unique(getValues(x))
 		if (is.list(x)) {
 			for (i in 1:length(x)) {
 				x[[i]] <- sort(x[[i]])
@@ -84,23 +84,11 @@ function(x, progress='') {
 		tr <- blockSize(x, n=2)
 		pb <- pbCreate(tr$n, type=progress)	
 
+		un <- NULL
 		for (i in 1:tr$n) {
-			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
-			v <- apply(v, 2, unique)
-			if (!is.list(v)) {
-				vv <- list()
-				for (i in 1:ncol(v)) {
-					vv[[i]] <- v[,i]
-				}
-				v <- vv
-			}
-			for (i in 1:length(v)) {
-				un[[i]] <- unique(c(un[[i]], v[[i]]))
-			}
+			v <- unique( getValues(x, row=tr$row[i], nrows=tr$nrows[i]) )
+			un <- unique(rbind(v, un))
 			pbStep(pb, i)			
-		}
-		for (i in 1:length(un)) {
-			un[[i]] <- sort(un[[i]])
 		}
 		pbClose(pb)
 		return(un)	

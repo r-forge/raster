@@ -23,7 +23,7 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='') {
 
 	png(filename = imagefile, width=max(480, ncol(x)), height=max(480, nrow(x)), bg="transparent")
 	par(mar=c(0,0,0,0))
-	image(x, col=col, axes=FALSE)
+	image(x, col=col, axes=FALSE, useRaster=TRUE)
 	dev.off()
 
 	name <- layerNames(x)[1]
