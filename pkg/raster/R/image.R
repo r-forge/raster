@@ -17,9 +17,17 @@ setMethod("image", signature(x='RasterLayer'),
 		x <- xFromCol(x,1:ncol(x))
 		
 		if (! is.null(coltab) & is.null(list(...)$col)) {
-			image(x=x, y=y, z=value, col=coltab, useRaster=useRaster, ...)
+			if (R.Version()$minor >= 13) {
+				image(x=x, y=y, z=value, col=coltab, useRaster=useRaster, ...)
+			} else {
+				image(x=x, y=y, z=value, col=coltab, ...)			
+			}
 		} else {
-			image(x=x, y=y, z=value, useRaster=useRaster, ...)
+			if (R.Version()$minor >= 13) {
+				image(x=x, y=y, z=value, useRaster=useRaster, ...)
+			} else {
+				image(x=x, y=y, z=value, ...)			
+			}
 		}
 	}
 )

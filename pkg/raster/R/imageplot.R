@@ -37,10 +37,16 @@
         if (!add) {
             par(plt = bigplot)
         }
-		image(x, y, z, add = add, col = col, useRaster=TRUE, ...)
+		if (R.Version()$minor >= 13) {
+			image(x, y, z, add = add, col = col, useRaster=TRUE, ...)
+		} else {
+			image(x, y, z, add = add, col = col, ...)
+		}
         big.par <- par(no.readonly = TRUE)
-    }
-	
+    } else {
+		box <- FALSE
+	}
+
 	
 	if (legend) {
 		if ((smallplot[2] < smallplot[1]) | (smallplot[4] < smallplot[3])) {
@@ -64,15 +70,31 @@
 		}
 		if (!horizontal) {
 			if (is.null(breaks)) {
-				image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, useRaster=TRUE)
+				if (R.Version()$minor >= 13) {
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, useRaster=TRUE)
+				} else {
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col)				
+				}
 			} else {
-				image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
+				if (R.Version()$minor >= 13) {
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
+				} else {
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks)				
+				}
 			}
 		} else {
 			if (is.null(breaks)) {
-				image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, useRaster=TRUE)
+				if (R.Version()$minor >= 13) {
+					image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, useRaster=TRUE)
+				} else {
+					image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col)				
+				}
 			} else {
-				image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
+				if (R.Version()$minor >= 13) {
+					image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
+				} else {
+					image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
+				}
 			}
 		}
 		do.call("axis", axis.args)
