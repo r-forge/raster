@@ -78,7 +78,8 @@ function(x, col=rev(terrain.colors(255)), maxpixels=500000, newstyle=FALSE, alph
 		if (length(x@legend@colortable) > 0) {
 			.plotCT(x, maxpixels=maxpixels, ...)
 		} else if (newstyle) {
-			.plot2(x, col=col, maxpixels=maxpixels, ...)
+			.plotraster2(x, col=col, maxpixels=maxpixels, ...) 
+			#.plot2(x, col=col, maxpixels=maxpixels, ...)
 		} else {
 			.plotraster(x, col=col, maxpixels=maxpixels, ...) 
 		}

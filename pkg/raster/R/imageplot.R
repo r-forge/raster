@@ -62,7 +62,10 @@
 		iz <- matrix(iy, nrow = 1, ncol = length(iy))
 		breaks <- list(...)$breaks
 		par(new=TRUE, pty = "m", plt=smallplot, err = -1)
-		if (!is.null(breaks) & !is.null(lab.breaks)) {
+		if (!is.null(breaks)) {
+			if (is.null(lab.breaks)) {
+				lab.breaks <- as.character(breaks)
+			}
 			axis.args <- c(list(side = ifelse(horizontal, 1, 4), mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2), 
 				at = breaks, labels = lab.breaks), axis.args)
 		} else {
@@ -71,15 +74,15 @@
 		if (!horizontal) {
 			if (is.null(breaks)) {
 				if (R.Version()$minor >= 13) {
-					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, useRaster=TRUE)
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab="", ylab="", col=col, useRaster=TRUE)
 				} else {
-					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col)				
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab="", ylab="", col=col)				
 				}
 			} else {
 				if (R.Version()$minor >= 13) {
-					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col=col, breaks=breaks, useRaster=TRUE)
 				} else {
-					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col = col, breaks = breaks)				
+					image(ix, iy, iz, xaxt="n", yaxt="n", xlab = "", ylab = "", col=col, breaks=breaks)				
 				}
 			}
 		} else {
