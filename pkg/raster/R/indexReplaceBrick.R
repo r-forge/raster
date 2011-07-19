@@ -70,20 +70,23 @@ setReplaceMethod("[", c("RasterStackBrick","missing","missing"),
 	
 		nl <- nlayers(x)
 		if (inherits(x, 'RasterStack')) {
-			x <- brick(x, values=TRUE)
+			x <- brick(x, values=FALSE)
 		}
 		
 		if (is.matrix(value)) {
-			if (all(dim(value)) == c(ncell(x)*nl, nl)) {
+			if (all(dim(value)) == c(ncell(x), nl)) {
 				x <- try( setValues(x, value))
 			} else {
 				stop('dimensions of the matrix do not match the Raster* object')
 			}
+			
 		} else if (length(value) == ncell(x)) {
 			value <- matrix(rep(value, nl), nc=nl)
 			x <- try( setValues(x, value))
+			
 		} else if (length(value) == 1) {
-			x <- try( setValues(x, matrix(value, nrow=ncell(x)*nl, ncol=nl)) )
+			x <- try( setValues(x, matrix(value, nrow=ncell(x), ncol=nl)) )
+			
 		} else {
 			v <- try( matrix(nrow=ncell(x)*nl, ncol=nl) )
 			if (class(x) != 'try-error') {
