@@ -25,20 +25,6 @@
 	}
 	
 
-	exitfun <-function() {
-		mfg.save <- par()$mfg
-		if (graphics.reset | add) {
-			par(old.par)
-			par(mfg = mfg.save, new = FALSE)
-		} else {
-			par(big.par)
-			par(plt = big.par$plt, xpd = FALSE)
-			par(mfg = mfg.save, new = FALSE)
-		}
-		if (!add & box ) box()
-		invisible()
-	}
-
 
 	e <- as.vector(t(bbox(extent(x))))
 	x <- as.matrix(x)
@@ -63,8 +49,7 @@
     smallplot <- temp$smallplot
     bigplot <- temp$bigplot
 
-	on.exit(exitfun())
-	
+
     if (legend.only) {
 		box <- FALSE
 	} else {
@@ -135,6 +120,19 @@
 			do.call(mtext, legend.args)
 		}
 	}
+	
+	mfg.save <- par()$mfg
+	if (graphics.reset | add) {
+		par(old.par)
+		par(mfg = mfg.save, new = FALSE)
+	} else {
+		par(big.par)
+		par(plt = big.par$plt, xpd = FALSE)
+		par(mfg = mfg.save, new = FALSE)
+	}
+	if (!add & box ) box()
+	invisible()
+	
 }
 
 
