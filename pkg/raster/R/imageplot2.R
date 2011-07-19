@@ -2,6 +2,9 @@
 # Copyright 2004-2007, Institute for Mathematics Applied Geosciences
 # University Corporation for Atmospheric Research
 # Licensed under the GPL -- www.gpl.org/licenses/gpl.html
+#
+# Adjustments by Robert Hijmans
+# July 2011
 
 
 .rasterImagePlot <- function(x, add=FALSE, legend=TRUE, nlevel = 64, horizontal = FALSE, 
@@ -21,6 +24,22 @@
 		as.raster(x)
 	}
 	
+
+	exitfun <-function() {
+		mfg.save <- par()$mfg
+		if (graphics.reset | add) {
+			par(old.par)
+			par(mfg = mfg.save, new = FALSE)
+		} else {
+			par(big.par)
+			par(plt = big.par$plt, xpd = FALSE)
+			par(mfg = mfg.save, new = FALSE)
+		}
+		if (!add & box ) box()
+		invisible()
+	}
+
+
 	e <- as.vector(t(bbox(extent(x))))
 	x <- as.matrix(x)
 	zrange <- range(x, na.rm=TRUE)
@@ -43,6 +62,8 @@
 		
     smallplot <- temp$smallplot
     bigplot <- temp$bigplot
+
+	on.exit(exitfun())
 	
     if (legend.only) {
 		box <- FALSE
@@ -50,14 +71,9 @@
         if (!add) {
             par(plt = bigplot)
         }
-		plot(e[1:2], e[3:4], type = "n", ...)
-#		plot(e[1:2], e[3:4], type = "n")
-#		yd <- (e[4] - e[3]) * 0.04
-#		xd <- (e[2] - e[1]) * 0.04
-#		rasterImage(x, e[1]-xd, e[3]-yd, e[2]+xd, e[4]+yd, interpolate=interpolate)
+		plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', ...)
 
 		rasterImage(x, e[1], e[3], e[2], e[4], interpolate=interpolate)
-		
         big.par <- par(no.readonly = TRUE)
     } 
 	
@@ -73,10 +89,8 @@
 		par(new=TRUE, pty = "m", plt=smallplot, err = -1)
 		
 		if (!is.null(breaks)) {
-			binwidth <- (maxz - minz)/nlevel
-			midpoints <- seq(minz + binwidth/2, maxz - binwidth/2, by = binwidth)
-			iy <- midpoints
-			iz <- matrix(iy, nrow = 1, ncol = length(iy))
+			binwidth <- (maxz - minz)/100
+			midpoints <- seq(minz, maxz, by = binwidth)
 		}
 
 		if (!is.null(breaks)) {
@@ -90,35 +104,28 @@
 		}
 		
 		if (!horizontal) {
-			plot(c(0, 1), c(minz, maxz), type = "n", xlab="", ylab="", axes=FALSE)
-			xx <- asRaster(length(col):1, col) 
-
+			plot(NA, NA, xlim=c(0, 1), ylim=c(minz, maxz), type="n", xlab="", ylab="", xaxs ='i', yaxs = 'i', axes=FALSE)
+			
 			if (is.null(breaks)) {
 				xx <- asRaster(length(col):1, col) 
 			} else {
-				xx <- asRaster(midpoints, col, breaks=breaks) 
+				xx <- rev(asRaster(midpoints, col, breaks=breaks))
 			}
 
 			rasterImage(xx, 0, minz, 1, maxz, interpolate=FALSE)
 			do.call("axis", axis.args)
-			polygon(c(0, 0, 1, 1, 0), c(minz, maxz, maxz, minz, minz))
-#			box()
+			box()
 		} else {
+			plot(NA, NA, ylim=c(0, 1), xlim=c(minz, maxz), type="n", xlab="", ylab="", xaxs ='i', yaxs = 'i', axes=FALSE)
+			
 			if (is.null(breaks)) {
-				plot(c(minz, maxz), c(0, 1), type = "n", xlab="", ylab="", axes=FALSE)
-				xx <- t( asRaster(length(col):1, col) )
-				rasterImage(xx, minz, 0, maxz, 1, interpolate=FALSE)
-				
+				xx <- t(rev(asRaster(1:length(col), col) ))
 			} else {
-				if (R.Version()$minor >= 13) {
-					image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks, useRaster=TRUE)
-				} else {
-					image(iy, ix, t(iz), xaxt = "n", yaxt = "n", xlab = "", ylab = "", col = col, breaks = breaks)
-				}
+				xx <- t(asRaster(midpoints, col, breaks=breaks))
 			}
+			rasterImage(xx, minz, 0, maxz, 1, interpolate=FALSE)
 			do.call("axis", axis.args)
-			polygon(c(minz, maxz, maxz, minz, minz), c(0, 0, 1, 1, 0))
-#			box()
+			box()
 		}
 	
 		if (!is.null(legend.lab)) {
@@ -128,19 +135,6 @@
 			do.call(mtext, legend.args)
 		}
 	}
-	
-	mfg.save <- par()$mfg
-    if (graphics.reset | add) {
-        par(old.par)
-        par(mfg = mfg.save, new = FALSE)
-    } else {
-        par(big.par)
-        par(plt = big.par$plt, xpd = FALSE)
-        par(mfg = mfg.save, new = FALSE)
-    }
-	
-	if (!add & box ) box()
-	invisible()
 }
 
 

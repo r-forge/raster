@@ -4,7 +4,6 @@
 # Licence GPL v3
 
 
-
 .plotraster2 <- function(object, col=rev(terrain.colors(25)), maxpixels=100000, axes=TRUE, xlab='', ylab='', ext=NULL, asp, xlim, ylim, ...) {
  
  	if (missing(asp)) {
@@ -26,29 +25,25 @@
 	maxpixels <- max(1, maxpixels)
 
 	if (is.null(ext)) {
-		e <- extent(object)
+		ext <- extent(object)
 	} else  { 
-		e <- ext <- intersectExtent(extent(object), ext) 
+		ext <- intersectExtent(extent(object), ext) 
 	}
 	
-	
-	if (! missing(xlim) | ! missing(ylim )) {
-		if (!missing(xlim)) { 
-			if (xlim[1] >= xlim[2]) stop('invalid xlim')
-			if (xlim[1] < e@xmax) e@xmin <- xlim[1]
-			if (xlim[2] > e@xmin) e@xmax <- xlim[2]
-		}
-		if (!missing(ylim)) { 
-			if (ylim[1] >= ylim[2]) stop('invalid ylim')
-			if (ylim[1] < e@ymax) e@ymin <- ylim[1]
-			if (ylim[2] > e@ymin) e@ymax <- ylim[2]
-		}
-	}
+	if (!missing(xlim)) { 
+		if (xlim[1] >= xlim[2]) stop('invalid xlim')
+		if (xlim[1] < ext@xmax) ext@xmin <- xlim[1]
+		if (xlim[2] > ext@xmin) ext@xmax <- xlim[2]
+	} 
+	if (!missing(ylim)) { 
+		if (ylim[1] >= ylim[2]) stop('invalid ylim')
+		if (ylim[1] < ext@ymax) ext@ymin <- ylim[1]
+		if (ylim[2] > ext@ymin) ext@ymax <- ylim[2]
+	} 
 	
 #	leg <- object@legend
 	object <- sampleRegular(object, size=maxpixels, ext=ext, asRaster=TRUE)
 	.rasterImagePlot(object, col=col, axes=axes, xlab=xlab, ylab=ylab, asp=asp, ...)	
-	
 }
 
 
