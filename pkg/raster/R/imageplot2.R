@@ -25,7 +25,6 @@
 	}
 	
 
-
 	e <- as.vector(t(bbox(extent(x))))
 	x <- as.matrix(x)
 	zrange <- range(x, na.rm=TRUE)
