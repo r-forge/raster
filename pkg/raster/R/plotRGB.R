@@ -70,7 +70,8 @@ function(x, r=1, g=2, b=3, scale,  maxpixels=500000, stretch=NULL, ext=NULL, int
 
 	require(grDevices)
 	bb <- as.vector(t(bbox(r)))
-	plot(c(bb[1], bb[2]), c(bb[3], bb[4]), type = "n", xlab=xlab, ylab=ylab, asp=asp, axes=FALSE, ...)
+
+	plot(NA, NA, xlim=c(bb[1], bb[2]), ylim=c(bb[3], bb[4]), type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE, ...)
 	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate, ...)
 	
 	if (axes) {
