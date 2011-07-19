@@ -1,4 +1,5 @@
---- 18-July-2011, version 1.9-1
+--- 19-July-2011, version 1.9-1
+MAJOR bug fix in arith.  If x is a Raster* object, a-x returned x-a, and a/x returned x/a. Reported by Steven Mosher. 
 plot now uses rasterImage instead of image
 
 --- 10-July-2011, version 1.8-42
