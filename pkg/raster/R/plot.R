@@ -35,7 +35,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			y = na.omit(y)
 		}
 		if (length(y) == 1) {
-			.plotraster(raster(x, y), col=col, maxpixels=maxpixels, main=layerNames(x)[y], ...) 
+			.plotraster2(raster(x, y), col=col, maxpixels=maxpixels, main=layerNames(x)[y], ...) 
 		} else {
 
 			nl <- length(y)
@@ -57,7 +57,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				}
 				if (rown==nr) xa='s'
 				if (coln==1) ya='s' else ya='n'
-				.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=layerNames(x)[y[i]], ...) 
+				.plotraster2(raster(x, y[i]), col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=layerNames(x)[y[i]], ...) 
 			}		
 		}
 	}

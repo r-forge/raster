@@ -57,7 +57,7 @@
     if (is.null(legend.mar)) {
         legend.mar <- ifelse(horizontal, 3.1, 5.1)
     }
-    temp <- raster:::.imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
+    temp <- .imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
 									horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
 		
     smallplot <- temp$smallplot
