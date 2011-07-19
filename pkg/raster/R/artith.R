@@ -122,7 +122,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			if (length(e1) > ncell(r)) {
 				e1 <- e1[1:ncell(r)]
 			}
-			return ( setValues(r,  callGeneric(as.numeric(e1, getValues(e2))) ) )
+			return ( setValues(r,  callGeneric(e1, getValues(e2)) ) )
 			
 		} else {
 			tr <- blockSize(e2)
@@ -138,7 +138,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 				}
 			} else {
 				for (i in 1:tr$n) {
-					v <- callGeneric( e1, getValues(e2, row=tr$row[i], nrows=tr$nrows[i]))
+					v <- callGeneric(e1, getValues(e2, row=tr$row[i], nrows=tr$nrows[i]))
 					r <- writeValues(r, v, tr$row[i])
 					pbStep(pb, i)
 				}
