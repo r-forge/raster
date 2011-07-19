@@ -111,9 +111,42 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 	}
 )
 
+
+
 setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
     function(e1, e2){ 
-		callGeneric(e2, e1) 
+		stopifnot(hasValues(e2))
+
+		r <- raster(e2)
+		if (canProcessInMemory(e2, 4)) {
+			if (length(e1) > ncell(r)) {
+				e1 <- e1[1:ncell(r)]
+			}
+			return ( setValues(r,  callGeneric(as.numeric(getValues(e2)), e1) ) )
+			
+		} else {
+			tr <- blockSize(e2)
+			pb <- pbCreate(tr$n, type=.progress())			
+			r <- writeStart(r, filename=rasterTmpFile(), format=.filetype(), overwrite=TRUE )
+
+			if (length(e1) > 0) {
+				for (i in 1:tr$n) {
+					e <- .getAdjustedE(r, tr, i, e1)
+					v <- callGeneric(getValues(e2, row=tr$row[i], nrows=tr$nrows[i]), e)
+					r <- writeValues(r, v, tr$row[i])
+					pbStep(pb, i) 	
+				}
+			} else {
+				for (i in 1:tr$n) {
+					v <- callGeneric( getValues(e2, row=tr$row[i], nrows=tr$nrows[i]), e1 )
+					r <- writeValues(r, v, tr$row[i])
+					pbStep(pb, i)
+				}
+			}
+			r <- writeStop(r)
+			pbClose(pb)
+			return(r)
+		}		
 	}
 )
 
