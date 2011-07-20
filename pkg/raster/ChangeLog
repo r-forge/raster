@@ -1,6 +1,7 @@
 --- 19-July-2011, version 1.9-1
 MAJOR bug fix in arith.  If x is a Raster* object, a-x returned x-a, and a/x returned x/a. Reported by Steven Mosher. 
 plot now uses rasterImage instead of image
+Replacement functions implemented for RasterStack/Brick objects (e.g., x[x<1] <- NA )
 
 --- 10-July-2011, version 1.8-42
 removed '$size' from list returned by 'blockSize' function (because size can be different for last block). Use $nrows[i] instead.
