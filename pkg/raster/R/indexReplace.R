@@ -46,7 +46,7 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 )
 
 
-.replace <- function(x, i, value) {
+.replace <- function(x, i, value, allLayers=TRUE) {
 
 	if (inherits(x, 'RasterStack')) {
 		x <- brick(x, values=TRUE)
@@ -61,7 +61,15 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 		i[is.na(i)] <- FALSE
 	} else {
 		i <- na.omit(i)
-		i <- subset(i, i >= 1 & i <= (ncell(x)*nlayers(x)) )
+	}
+
+	if (allLayers) {
+		i <- subset(i, i >= 1 & i <= ncell(x) )
+		nl <- nlayers(x)
+		if (nl > 1) {
+			add <- ncell(x) * 0:(nl-1)
+			i <- as.vector(t((matrix(rep(i, nl), nr=nl, byrow=TRUE)) + add))
+		}
 	}
 	
 	if (! inMemory(x) ) {
@@ -78,7 +86,7 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 		
 	x@data@values[i] <- value
 	x <- setMinMax(x)
-	x <- raster:::.clearFile(x)
+	x <- .clearFile(x)
 	return(x)
 }
 
