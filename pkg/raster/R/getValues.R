@@ -13,6 +13,9 @@ function(x, format='') {
 	
 	xx <- c(x@ncols, x@nrows)
 	f <- is.factor(x)
+	if (f) {
+		labs <- labels(x)
+	}
 	
 	if ( inMemory(x) ) {
 		x <- x@data@values
@@ -26,6 +29,7 @@ function(x, format='') {
 		x <- matrix(x, ncol=xx[1], nrow=xx[2], byrow=TRUE) 
 	} else if (f) {
 		x <- factor(x)
+		# set labels?
 	}	
 
 	return( x ) 
