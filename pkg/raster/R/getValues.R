@@ -22,13 +22,12 @@ function(x, format='') {
 		x <- rep(NA, ncell(x))
 	}
 
-	if (f) {
-		x <- factor(x)
-	}	
 	if (format=='matrix') { 
 		x <- matrix(x, ncol=xx[1], nrow=xx[2], byrow=TRUE) 
-	} 
-	
+	} else if (f) {
+		x <- factor(x)
+	}	
+
 	return( x ) 
 }
 )

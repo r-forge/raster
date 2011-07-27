@@ -16,7 +16,7 @@ If there is insufficient memory to load all values, you can use \code{\link{getV
 }
 
 \usage{
-as.data.frame(x, ...)
+as.data.frame(x, row.names=NULL, optional=FALSE, ...)
 }
 
 \arguments{
