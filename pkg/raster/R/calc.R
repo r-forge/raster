@@ -99,7 +99,9 @@ function(x, fun, filename='', na.rm, ...) {
 
 	if (canProcessInMemory(x, max(nlayers(x), nlayers(out)) * 2)) {
 		x <- getValues(x)
-		if (makemat) { x <- matrix(x, ncol=1) }
+		if (makemat) { 
+			x <- matrix(x, ncol=1) 
+		}
 		if (missing(na.rm)) {
 			if (! doapply ) { 
 				x <- fun(x ) 
@@ -112,9 +114,9 @@ function(x, fun, filename='', na.rm, ...) {
 			} else {
 				x <- apply(x, 1, fun, na.rm=na.rm)
 			}
-			if (trans) {
-				x <- t(x)
-			}
+		}
+		if (trans) {
+			x <- t(x)
 		}
 		x <- setValues(out, x)
 		if (filename != '') {
