@@ -53,13 +53,12 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 	}
 
 
-	if (! is.numeric(value) & !is.logical(value)) { 
-		value <- as.numeric(value) 
-	}
-		
 	if ( is.logical(i) ) {
-		i[is.na(i)] <- FALSE
+		i <- which(i)
 	} else {
+		if (! is.numeric(value)) { 
+			value <- as.numeric(value) 
+		}
 		i <- na.omit(i)
 	}
 

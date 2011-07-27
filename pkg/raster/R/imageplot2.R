@@ -27,6 +27,7 @@
 
 	e <- as.vector(t(bbox(extent(x))))
 	x <- as.matrix(x)
+	x[is.infinite(x)] <- NA
 	zrange <- range(x, na.rm=TRUE)
 	x <- asRaster(x, col, breaks)
 	
