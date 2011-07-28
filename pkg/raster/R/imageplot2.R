@@ -57,9 +57,8 @@
 	} else {
         if (!add) {
             par(plt = bigplot)
+			plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', ...)
         }
-		plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', ...)
-
 		rasterImage(x, e[1], e[3], e[2], e[4], interpolate=interpolate)
         big.par <- par(no.readonly = TRUE)
     } 

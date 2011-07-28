@@ -146,9 +146,6 @@ brk <- c(0, 0.25, 0.75, 1)
 arg <- list(at=c(0.12,0.5,0.87), labels=c("Low","Med.","High"))
 plot(x, col=terrain.colors(3), breaks=brk)
 plot(x, col=terrain.colors(3), breaks=brk, axis.args=arg)
-
-
-
 }
 
 \keyword{methods}
