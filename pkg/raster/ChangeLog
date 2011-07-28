@@ -1,3 +1,7 @@
+--- 27-July-2011, version 1.9-3
+Patches by Pierre Roudier to improve coercion from Raster* to Spatial* objects.
+new function as.data.frame for Raster* objects
+
 --- 23-July-2011, version 1.9-2
 Removed generic function 'Median'
 Added generic index/replace function for Raster* and matrix.

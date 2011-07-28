@@ -1,3 +1,8 @@
+# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Date : July 2011
+# Version 1.0
+# Licence GPL v3
+
 
 
 if (!isGeneric("as.data.frame")) {
