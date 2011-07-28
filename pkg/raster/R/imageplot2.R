@@ -10,7 +10,7 @@
 .rasterImagePlot <- function(x, add=FALSE, legend=TRUE, nlevel = 64, horizontal = FALSE, 
     legend.shrink = 0.5, legend.width = 0.6, legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = heat.colors(nlevel), 
-    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, ...) {
+    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, ...) {
 
 	
 	asRaster <- function(x, col, breaks=NULL) {
@@ -28,9 +28,11 @@
 	e <- as.vector(t(bbox(extent(x))))
 	x <- as.matrix(x)
 	x[is.infinite(x)] <- NA
+	if (!is.null(zlim)) {
+		x[x<zlim[1] & x>zlim[2]] <- NA
+	}
 	zrange <- range(x, na.rm=TRUE)
 	x <- asRaster(x, col, breaks)
-	
 	
     old.par <- par(no.readonly = TRUE)
     if (add) {
@@ -43,7 +45,7 @@
     if (is.null(legend.mar)) {
         legend.mar <- ifelse(horizontal, 3.1, 5.1)
     }
-    temp <- .imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
+    temp <- raster:::.imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
 									horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
 		
     smallplot <- temp$smallplot
@@ -79,11 +81,18 @@
 		}
 
 		if (!is.null(breaks)) {
-			if (is.null(lab.breaks) ) {
-				lab.breaks=as.character(breaks)
+			axis.args <- c(list(side=ifelse(horizontal,1,4), mgp=c(3,1,0), las=ifelse(horizontal,0,2)), axis.args)
+			if (is.null(axis.args$at)) {
+				axis.args$at <- breaks
 			}
-			axis.args <- c(list(side = ifelse(horizontal, 1, 4), mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2), 
-								at = breaks, labels = lab.breaks), axis.args)
+			if (is.null(axis.args$labels) ) {
+				if (is.null(lab.breaks)) {
+					axis.args$labels=as.character(breaks)
+				} else {
+					axis.args$labels=lab.breaks
+				}
+			}
+							
 		} else {
 			axis.args <- c(list(side = ifelse(horizontal, 1, 4), mgp = c(3, 1, 0), las = ifelse(horizontal, 0, 2)), axis.args)
 		}
