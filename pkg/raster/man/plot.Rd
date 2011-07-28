@@ -137,6 +137,18 @@ nb <- length(brks)-1
 par(mfrow=c(1,2))
 plot(r, breaks=brks, col=rev(terrain.colors(nb)), lab.breaks=brks, zlim=c(0,1)) 
 plot(r2, breaks=brks, col=rev(terrain.colors(nb)), lab.breaks=brks, zlim=c(0,1)) 
+
+
+# breaks and labels
+x <- raster(nc=10, nr=10)
+x[] <- runif(ncell(x))
+brk <- c(0, 0.25, 0.75, 1)
+arg <- list(at=c(0.12,0.5,0.87), labels=c("Low","Med.","High"))
+plot(x, col=terrain.colors(3), breaks=brk)
+plot(x, col=terrain.colors(3), breaks=brk, axis.args=arg)
+
+
+
 }
 
 \keyword{methods}

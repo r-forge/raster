@@ -45,7 +45,7 @@
     if (is.null(legend.mar)) {
         legend.mar <- ifelse(horizontal, 3.1, 5.1)
     }
-    temp <- raster:::.imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
+    temp <- .imageplotplt(add = add, legend.shrink = legend.shrink, legend.width = legend.width, legend.mar = legend.mar, 
 									horizontal = horizontal, bigplot = bigplot, smallplot = smallplot)
 		
     smallplot <- temp$smallplot
@@ -86,11 +86,7 @@
 				axis.args$at <- breaks
 			}
 			if (is.null(axis.args$labels) ) {
-				if (is.null(lab.breaks)) {
-					axis.args$labels=as.character(breaks)
-				} else {
-					axis.args$labels=lab.breaks
-				}
+				axis.args$labels=lab.breaks
 			}
 							
 		} else {
