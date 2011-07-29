@@ -32,9 +32,7 @@ function(x, i, j, ... ,drop=TRUE) {
 		callNextMethod(x, i=i, ..., drop=drop)
 	
 	} else if (compare(x, i, stopiffalse=FALSE, showwarning=FALSE)) {
-		i <- as.logical( getValues(i) )
-		i[is.na(i)] <- FALSE
-		i <- (1:ncell(x))[i]
+		i <- which( as.logical( getValues(i) ) )
 		.doExtract(x, i, drop=drop)
 
 	} else {
@@ -109,9 +107,7 @@ function(x, i, j, ... , drop=TRUE) {
 	if (narg > 0) {
 		stop('logical indices are only accepted if only the first index is used')
 	}
-
-	i[is.na(i)] <- FALSE
-	i <- (1:ncell(x))[i]
+	i <- which(i)
 	.doExtract(x, i, drop=drop)
 })
 
