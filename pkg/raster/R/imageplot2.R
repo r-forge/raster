@@ -29,7 +29,7 @@
 	x <- as.matrix(x)
 	x[is.infinite(x)] <- NA
 	if (!is.null(zlim)) {
-		x[x<zlim[1] & x>zlim[2]] <- NA
+		x[x<zlim[1] | x>zlim[2]] <- NA
 	}
 	zrange <- range(x, na.rm=TRUE)
 	x <- asRaster(x, col, breaks)
@@ -66,7 +66,7 @@
 	if (legend) {
 		if ((smallplot[2] < smallplot[1]) | (smallplot[4] < smallplot[3])) {
 			par(old.par)
-			stop("plot region too small to add legend\n")
+			stop("plot region is too small. Cannot add a legend\n")
 		}
 		ix <- 1
 		minz <- zrange[1]
@@ -138,5 +138,3 @@
 	invisible()
 	
 }
-
-
