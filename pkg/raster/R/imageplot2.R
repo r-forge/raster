@@ -18,6 +18,10 @@
 			x[] <- as.numeric(cut(x, breaks))
 		}
 		r <- range(x, na.rm=TRUE)
+		if (r[1] == r[2]) {
+			r[1] <- r[1] - 0.001
+			r[2] <- r[2] + 0.001
+		}
 		x <- (x - r[1])/ (r[2] - r[1])
 		x <- round(x * (length(col)-1) + 1)
 		x[] <- col[x]
@@ -71,6 +75,11 @@
 		ix <- 1
 		minz <- zrange[1]
 		maxz <- zrange[2]
+		if (minz == maxz) {
+			minz <- minz - 0.001
+			maxz <- maxz + 0.001
+		}
+
 
 		par(new=TRUE, pty = "m", plt=smallplot, err = -1)
 		
