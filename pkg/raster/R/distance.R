@@ -13,7 +13,7 @@ setMethod('distance', signature(x='RasterLayer'),
 
 function(x, filename='', ...) {
 
-	r = edge(x, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
+	r <- edge(x, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
 	
 	pts <- try(  rasterToPoints(r, fun=function(z){ z>0 } )[,1:2, drop=FALSE] )
 	
@@ -34,12 +34,10 @@ function(x, filename='', ...) {
 	}
 	                                                                        
 	filename <- trim(filename)
-	if (!canProcessInMemory(out, 2) && filename == '') {
+	if (!canProcessInMemory(out) && filename == '') {
 		filename <- rasterTmpFile()
 								
 	}
-	xy <- xFromCol(out, 1:ncol(out))
-	xy <- cbind(xy, NA)
 	
 	if (filename == '') {
 		v <- matrix(ncol=nrow(out), nrow=ncol(out))
@@ -48,6 +46,9 @@ function(x, filename='', ...) {
 	}
 	
 	pb <- pbCreate(nrow(out), type=.progress(...))
+
+	xy <- xFromCol(out, 1:ncol(out))
+	xy <- cbind(xy, NA)
 	
 	if (.doCluster() ) {
 		cl <- getCluster()
@@ -60,7 +61,7 @@ function(x, filename='', ...) {
 		
 		clFun <- function(r) {
 			vals <- getValues(x, r)
-			i = which(is.na(vals))
+			i <- which(is.na(vals))
 			vals[] <- 0
 			if (length(i) > 0) {
 				xy[,2] <- yFromRow(out, r)
@@ -107,7 +108,7 @@ function(x, filename='', ...) {
 		if (filename=="") {
 			for (r in 1:nrow(out)) {	
 				vals <- getValues(x, r)
-				i = which(is.na(vals))
+				i <- which(is.na(vals))
 				vals[] <- 0
 				if (length(i) > 0) {
 					xy[,2] <- yFromRow(out, r)
@@ -124,7 +125,7 @@ function(x, filename='', ...) {
 		} else {
 			for (r in 1:nrow(out)) {	
 				vals <- getValues(x, r)
-				i = which(is.na(vals))
+				i <- which(is.na(vals))
 				vals[] <- 0
 				if (length(i) > 0) {
 					xy[,2] <- yFromRow(out, r)

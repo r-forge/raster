@@ -6,7 +6,7 @@
 \title{Distance}
 
 \description{
-The function calculates the distance for all cells that are \code{NA}, to the nearest cell that is not \code{NA}.
+Calculate the distance, for all cells that are \code{NA}, to the nearest cell that is not \code{NA}.
  
 The distance unit is in meters if the RasterLayer is not projected (\code{+proj=longlat}) and in map units (typically also meters) when it is projected.
 }
