@@ -11,11 +11,14 @@ if (!isGeneric("distance")) {
 
 setMethod('distance', signature(x='RasterLayer'), 
 
-function(x, filename='', ...) {
+function(x, filename='', doEdge=FALSE, ...) {
 
-	r <- edge(x, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
-	
-	pts <- try(  rasterToPoints(r, fun=function(z){ z>0 } )[,1:2, drop=FALSE] )
+	if (doEdge) {
+		r <- edge(x, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
+		pts <- try(  rasterToPoints(r, fun=function(z){ z>0 } )[,1:2, drop=FALSE] )
+	} else {
+		pts <- try(  rasterToPoints(x, fun=function(z){ z>0 } )[,1:2, drop=FALSE] )
+	}
 	
 	if (class(pts) == "try-error") {
 		return( .distanceRows(x, filename=filename, ...) )
