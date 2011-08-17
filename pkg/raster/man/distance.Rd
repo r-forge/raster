@@ -40,9 +40,7 @@ The following additional arguments can be passed, to replace default values for 
 \seealso{
 \code{\link[raster]{distanceFromPoints}},  \code{\link[raster]{gridDistance}},  \code{\link[raster]{pointDistance}}  
 
-For more advanced distances see the \code{gdistance} package (on R-Forge).
-
-For great-circle distances (and more) between points in longitude/latitude coordinates, see the \code{geosphere} package.
+See the \code{gdistance} package for more advanced distances, and the \code{geosphere} package for great-circle distances (and more) between points in longitude/latitude coordinates.
 }
 
 
