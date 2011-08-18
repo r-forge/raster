@@ -10,6 +10,13 @@ if (!isGeneric("mask")) {
 }	
 
 
+setMethod('mask', signature(x='Raster', mask='SpatialPolygons'), 
+function(x, mask, filename="", ...){ 
+	rasterize(mask, x, filename=fileanme, mask=TRUE, ...)
+} )
+
+
+
 setMethod('mask', signature(x='RasterLayer', mask='RasterLayer'), 
 function(x, mask, filename="", ...){ 
 

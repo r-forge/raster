@@ -7,6 +7,7 @@
 \alias{mask,RasterStackBrick,RasterLayer-method}
 \alias{mask,RasterLayer,RasterStackBrick-method}
 \alias{mask,RasterStackBrick,RasterStackBrick-method}
+\alias{mask,Raster,SpatialPolygons-method}
 
 \title{Mask values in a Raster object}
 
@@ -20,9 +21,9 @@ mask(x, mask, ...)
 
 
 \arguments{
-  \item{x}{A Raster* object}
-  \item{mask}{A Raster* object}
-  \item{...}{Additional arguments. See below, under Methods}  
+\item{x}{Raster* object}
+\item{mask}{Raster* object or a SpatialPolygons* object}
+\item{...}{Additional arguments. See below, under Methods}  
 }
 
 \section{Methods}{
@@ -37,7 +38,6 @@ The following additional arguments can be passed, to replace default values for 
 }
 }
 }
-
 
 
 \value{
