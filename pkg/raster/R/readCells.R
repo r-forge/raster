@@ -130,13 +130,6 @@
 	nl <- length(layers)
 	res <- vector(length=length(cells)*nl)
 	res[] <- NA
-	dsize <- dataSize(x@file@datanotation)
-	if (.shortDataType(x@file@datanotation) == "FLT") { 
-		dtype <- "numeric"
-	} else { 
-		dtype <- "integer"
-	}
-	signed <- dataSigned(x@file@datanotation)
 	
 	if (! x@file@toptobottom) {
 		rows <- rowFromCell(x, cells)
@@ -151,7 +144,7 @@
 			if (.bandOrder(x) == 'BIL') {
 				cells <- cells + (rowFromCell(x, cells)-1) * x@ncols * (nbands(x)-1) + (bandnr(x)-1) * x@ncols
 			} else if (.bandOrder(x) == 'BIP') {
-				cells <- (cells - 1) * nbands(x) + bandnr(x) - 1
+				cells <- (cells - 1) * nbands(x) + bandnr(x)
 			} else if (.bandOrder(x) == 'BSQ') {	
 				cells <- cells + (bandnr(x)-1) * ncell(x)
 			}
@@ -159,17 +152,27 @@
 			if (.bandOrder(x) == 'BIL') {
 				cells <- rep(cells + (rowFromCell(x, cells)-1) * x@ncols * (nbands(x)-1) , each=nl) + (layers-1) * x@ncols
 			} else if (.bandOrder(x) == 'BIP') {
-				cells <- rep((cells - 1) * nbands(x), each=nl) + layers - 1
+				cells <- rep((cells - 1) * nbands(x), each=nl) + layers
 			} else if (.bandOrder(x) == 'BSQ') {	
 				cells <- rep(cells, each=nl) + (layers-1) * ncell(x)
 			}
 		}
 	}
 	
+	byteord <- x@file@byteorder
+	dsize <- dataSize(x@file@datanotation)
+	if (.shortDataType(x@file@datanotation) == "FLT") { 
+		dtype <- "numeric"
+	} else { 
+		dtype <- "integer"
+	}
+	cells <- (cells-1) * dsize
+	signed <- dataSigned(x@file@datanotation)
+
 	x <- openConnection(x)
 	for (i in seq(along=cells)) {
-		seek(x@file@con, (cells[i]-1) * dsize)
-		res[i] <- readBin(x@file@con, what=dtype, n=1, size=dsize, endian=x@file@byteorder, signed=signed) 
+		seek(x@file@con, cells[i])
+		res[i] <- readBin(x@file@con, what=dtype, n=1, size=dsize, endian=byteord, signed=signed) 
 	}
 	x <- closeConnection(x)
 	
@@ -184,11 +187,7 @@
 		res[res == x@file@nodatavalue] <- NA
 	}
 	if (nl > 1) {
-		if (.bandOrder(x) == 'BSQ') {
-			res <- matrix(res, ncol=nl)
-		} else {
-			res <- t(matrix(res, nrow=nl))
-		}
+		res <- t(matrix(res, nrow=nl))
 		colnames(res) <- layerNames(x)[layers]
 	}
 	return(res)
