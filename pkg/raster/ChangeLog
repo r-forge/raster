@@ -1,3 +1,6 @@
+--- 18-August, version 1.9-7
+cluster support for raster::predict function (run beginCluster() before using predict)
+
 --- 11-August, version 1.9-6
 Bug fix with subset of a RasterBrick from disk. Reported by Stefan Schlaffer. 
 https://r-forge.r-project.org/tracker/?func=detail&atid=1189&aid=1520&group_id=294

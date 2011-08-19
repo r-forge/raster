@@ -75,7 +75,17 @@ setMethod('predict', signature(object='Raster'),
 		}
 		
 		tr <- blockSize(predrast, n=nlayers(object)+3)
+		doCluster <- .doCluster()
+		if (doCluster) {
+			cl <- getCluster()
+			on.exit( returnCluster() )
+			clusterExport(cl, "model")
+			clfun <- function(x, ...) fun(model, x, ...)
+			cat( 'Using cluster with', length(cl), 'nodes\n' )
+			flush.console()		
+		}
 
+		
 		napred <- matrix(rep(NA, ncol(predrast) * tr$nrows[1] * nlayers(predrast)), ncol=nlayers(predrast))
 		factres	<- FALSE
 		pb <- pbCreate(tr$n,  type=progress )			
@@ -89,8 +99,9 @@ setMethod('predict', signature(object='Raster'),
 
 			rr <- firstrow + tr$row[i] - 1
 
-			blockvals <- as.data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
-			colnames(blockvals) <- lyrnames
+			blockvals <- data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
+			# colnames(blockvals) <- lyrnames
+			
 			if (haveFactor) {
 				for (j in 1:length(f)) {
 					fl <- NULL
@@ -118,8 +129,11 @@ setMethod('predict', signature(object='Raster'),
 				predv <- napred
 			} else {
 	
-				predv <- fun(model, blockvals, ...)
-
+				if (doCluster) {
+					predv <- unlist( clusterApply(cl, splitRows(blockvals, length(cl)), clfun))
+				} else {
+					predv <- fun(model, blockvals, ...)
+				}
 		
 				if (class(predv)[1] == 'list') {
 					predv = unlist(predv)
@@ -174,7 +188,7 @@ setMethod('predict', signature(object='Raster'),
 					}
 				}
 			}
-
+			
 		
 			if (filename == '') {
 				cells <- cellFromRowCol(predrast, tr$row[i], 1):cellFromRowCol(predrast, tr$row[i]+tr$nrows[i]-1, ncol(predrast))

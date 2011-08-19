@@ -37,18 +37,15 @@
 
 
 .chunksize <- function(){
+	default <- 1e+07
 	d <- getOption('rasterChunkSize')
 	if (is.null(d)) {
-		return( 1000000 )
+		return( default )
 	} 
 	d <- round(as.numeric(d[1]))
-	if (is.na(d)) {
-		d <- 1000000
+	if (is.na(d) | d < 10000) {
+		d <- default
 	} 
-	if (d < 1) {
-		d <- 1000000
-	} 
-	d <- max(d, 10000)
 	return(d)
 }	
 
@@ -64,19 +61,15 @@
 
 
 .maxmemory <- function() {
-	default <- 10000000
+	default <- 1e+09
 	d <- getOption('rasterMaxMemory')
 	if (is.null(d)) {
 		return( default )
 	} 
 	d <- round(as.numeric(d[1]))
-	if (is.na(d)) {
+	if (is.na(d) | d < 10000) {
 		d <- default
 	} 
-	if (d < 1) {
-		d <- default
-	} 
-	d <- max(d, 10000, na.rm=TRUE)
 	return(d)
 }
 
