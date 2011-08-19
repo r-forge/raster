@@ -24,11 +24,17 @@
 		} else if ( fromDisk(x) ) {
 			if (length(uniquecells) > 100 & canProcessInMemory(x, 2)) {
 				vals <- getValues(x)
-				vals <- vals[uniquecells, ]
+				if (length(layers) > 1) {
+					vals <- vals[uniquecells, layers]
+				} else {
+					vals <- vals[uniquecells]				
+				}
 			} else if (x@file@driver == 'gdal') {
 				vals <- .readCellsGDAL(x, uniquecells, layers)
 			} else if (x@file@driver == 'raster') {
 				vals <- .readCellsRaster(x, uniquecells, layers)
+			} else if (x@file@driver == 'netcdf') {
+				vals <- .readRasterCellsNetCDF(x, uniquecells) 
 			} else if (x@file@driver == 'ascii') {
 				# can only have one layer
 				vals <- .readCellsAscii(x, uniquecells)
@@ -101,6 +107,7 @@
 				offs <- c(rows[i]-1, 0)
 				v <- getRasterData(con, offset=offs, region.dim=c(1, nc))
 				v <- do.call(cbind, lapply(1:nl, function(i) v[,,i]))
+			
 			# if  NAvalue() has been used.....
 				if (x@file@nodatavalue < 0) {
 					v[v <= x@file@nodatavalue] <- NA 			

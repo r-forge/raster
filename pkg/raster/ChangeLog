@@ -1,8 +1,8 @@
 --- 18-August, version 1.9-7
 cluster support for raster::predict function (run beginCluster() before using predict). 
-Much improved speed for extract function for Raster objects with many layers. Slow speed was a problem reported by Jan Verbesselt 
+Much improved speed of the extract function for Raster objects with many layers. Low speed was a problem reported by Jan Verbesselt 
 http://r-sig-geo.2731867.n2.nabble.com/extracting-time-series-data-from-a-raster-brick-of-AVHRR-satellite-data-td6622055.html#a6629299
-and Nathan Amboy.
+and by Nathan Amboy.
 
 --- 11-August, version 1.9-6
 Bug fix with subset of a RasterBrick from disk. Reported by Stefan Schlaffer. 
