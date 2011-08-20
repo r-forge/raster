@@ -21,14 +21,12 @@
 	y <- gsub(' ', '', y)
 	x <- unlist( strsplit(x, '+', fixed=TRUE) )[-1]
 	y <- unlist( strsplit(y, '+', fixed=TRUE) )[-1]
-	a <- strsplit(x, '=')
-	a <- do.call(rbind, a)
-	b <- strsplit(y, '=')
-	b <- do.call(rbind, b)
+	a <- do.call(rbind, strsplit(x, '='))
+	b <- do.call(rbind, strsplit(y, '='))
 	i <- which(a[,1] %in% b[,1])
 	j <- which(b[,1] %in% a[,1])
-	a <- a[i,]
-	b <- b[j,]
+	a <- a[i, ]
+	b <- b[j, ]
 	a <- a[order(a[,1]),]
 	b <- b[order(b[,1]),]
 	if (! all(a[,2] == b[,2])) {
