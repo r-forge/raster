@@ -17,6 +17,8 @@ canProcessInMemory <- function(raster, n=4) {
 
 	if ((cells * n) > .maxmemory()) {
 		return(FALSE) 
+	} else {
+		return(TRUE)
 	}
 	
 	

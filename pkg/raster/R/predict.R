@@ -38,6 +38,11 @@ setMethod('predict', signature(object='Raster'),
 			firstcol <- 1
 		}
 		ncols <- ncol(predrast)
+		if (ncol(predrast) < ncol(object)) {
+			gvb <- TRUE
+		} else {
+			gvb <- FALSE
+		}
 			
 		lyrnames <- layerNames(object)
 		
@@ -79,8 +84,6 @@ setMethod('predict', signature(object='Raster'),
 		if (doCluster) {
 			cl <- getCluster()
 			on.exit( returnCluster() )
-			clusterExport(cl, "model")
-			clfun <- function(x, ...) fun(model, x, ...)
 			cat( 'Using cluster with', length(cl), 'nodes\n' )
 			flush.console()		
 		}
@@ -99,7 +102,11 @@ setMethod('predict', signature(object='Raster'),
 
 			rr <- firstrow + tr$row[i] - 1
 
-			blockvals <- data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
+			if (gvb) {
+				blockvals <- data.frame(getValuesBlock(object, row=rr, nrows=tr$nrows[i], firstcol, ncols))
+			} else {
+				blockvals <- data.frame(getValues(object, row=rr, nrows=tr$nrows[i]))	# faster
+			}
 			# colnames(blockvals) <- lyrnames
 			
 			if (haveFactor) {
@@ -130,7 +137,7 @@ setMethod('predict', signature(object='Raster'),
 			} else {
 	
 				if (doCluster) {
-					predv <- unlist( clusterApply(cl, splitRows(blockvals, length(cl)), clfun))
+					predv <- unlist( clusterApply(cl, splitRows(blockvals, length(cl)), fun, object=model))
 				} else {
 					predv <- fun(model, blockvals, ...)
 				}
