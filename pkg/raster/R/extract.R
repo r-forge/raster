@@ -14,6 +14,13 @@ setMethod('extract', signature(x='Raster', y='missing'),
 function(x, y, ...){ 
 
 	dots <- list(...)
+
+	# focal values
+	if ( ! is.null(dots$row) ) {
+		return( .focalValues(x, ...) )
+	}
+
+
 	# backwards in-compatability
 	if (! is.null(dots$cells)) {
 		stop("the 'cells' argument is depracated")
@@ -28,10 +35,6 @@ function(x, y, ...){
 		stop("the 'lns' argument is depracated")
 	}
 	
-	# focal values
-	if ( ! is.null(dots$row) ) {
-		return( .focalValues(x, ...) )
-	}
 	stop('I do not understand what you want me to do')
 	
 	# return(getValues(x, ...)) ???
