@@ -1,5 +1,6 @@
---- 18-August, version 1.9-7
-cluster support for raster::predict function (run beginCluster() before using predict). 
+--- 28-August, version 1.9-8
+Improved handling of multifile ncdf files & varname argument, suggested by Matt Fischer. 
+cluster support for raster::predict function (run beginCluster() before using predict); but so far this seems to slow things down! 
 Much improved speed of the extract function for Raster objects with many layers. Low speed was a problem reported by Jan Verbesselt 
 http://r-sig-geo.2731867.n2.nabble.com/extracting-time-series-data-from-a-raster-brick-of-AVHRR-satellite-data-td6622055.html#a6629299
 and by Nathan Amboy.
