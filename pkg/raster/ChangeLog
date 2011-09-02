@@ -1,3 +1,6 @@
+--- 2-September, version 1.9-9
+layerNames are now preserved when writing to (.grd) files. Bug reported by Steven Mosher.
+
 --- 28-August, version 1.9-8
 Improved handling of multifile ncdf files & varname argument, suggested by Matt Fischer. 
 cluster support for raster::predict function (run beginCluster() before using predict); but so far this seems to slow things down! 
