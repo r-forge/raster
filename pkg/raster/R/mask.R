@@ -12,7 +12,7 @@ if (!isGeneric("mask")) {
 
 setMethod('mask', signature(x='Raster', mask='SpatialPolygons'), 
 function(x, mask, filename="", ...){ 
-	rasterize(mask, x, filename=fileanme, mask=TRUE, ...)
+	rasterize(mask, x, filename=filename, mask=TRUE, ...)
 } )
 
 
