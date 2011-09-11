@@ -141,7 +141,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 				plot(x[,i], y[,i], cex=cex, xlab=ln1[i], ylab=ln2[i], ...)			
 			}		
 		} else  {
-			plot(x, y, cex=cex, xlab=ln1[i], ylab=ln2[i], ...)			
+			plot(x, y, cex=cex, xlab=ln1[1], ylab=ln2[1], ...)			
 		}		
 	}
 )
