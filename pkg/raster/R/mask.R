@@ -11,14 +11,20 @@ if (!isGeneric("mask")) {
 
 
 setMethod('mask', signature(x='Raster', mask='SpatialPolygons'), 
-function(x, mask, filename="", ...){ 
-	rasterize(mask, x, filename=filename, mask=TRUE, ...)
+function(x, mask, filename="", inverse=FALSE, ...){ 
+	if (inverse) {
+		mask <- rasterize(mask, x, -1)
+		mask(x, mask, filename=filename, ...)
+	
+	} else {
+		rasterize(mask, x, filename=filename, mask=TRUE, ...)
+	}
 } )
 
 
 
 setMethod('mask', signature(x='RasterLayer', mask='RasterLayer'), 
-function(x, mask, filename="", ...){ 
+function(x, mask, filename="", inverse=FALSE, ...){ 
 
 	compare(x, mask)
 
@@ -33,7 +39,11 @@ function(x, mask, filename="", ...){
 		if (! inMemory(x) ) { x <- readAll(x) }
 		if (! inMemory(mask) ) { mask <- readAll(mask) }
 		
-		x[is.na(mask)] <- NA
+		if (inverse) {
+			x[!is.na(mask)] <- NA
+		} else {
+			x[is.na(mask)] <- NA
+		}
 		if (filename != '') {
 			x <- writeRaster(x, filename, ...)
 		}
@@ -46,15 +56,25 @@ function(x, mask, filename="", ...){
 
 		out <- writeStart(out, filename=filename, ...)
 		tr <- blockSize(out)
-
 		pb <- pbCreate(tr$n, type=.progress(...))
-		for (i in 1:tr$n) {
-			v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-			v[is.na(m)] <- NA
-			out <- writeValues(out, v, tr$row[i])
-			pbStep(pb, i)
-		} 
+
+		if (inverse) {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[!is.na(m)] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 		
+		} else {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[is.na(m)] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 
+		}
 		pbClose(pb)
 
 		out <- writeStop(out)
@@ -65,7 +85,7 @@ function(x, mask, filename="", ...){
 
 
 setMethod('mask', signature(x='RasterStackBrick', mask='RasterLayer'), 
-function(x, mask, filename="", ...){ 
+function(x, mask, filename="", inverse=FALSE, ...){ 
 
 	compare(x, mask)
 	
@@ -74,7 +94,11 @@ function(x, mask, filename="", ...){
 	if (canProcessInMemory(x, nlayers(x)+4)) {
 
 		x <- getValues(x)
-		x[is.na(getValues(mask)), ] <- NA
+		if (inverse) {
+			x[!is.na(getValues(mask)), ] <- NA
+		} else {
+			x[is.na(getValues(mask)), ] <- NA
+		}
 		out <- setValues(out, x)
 		if (filename != '') {
 			out <- writeRaster(out, filename, ...)
@@ -91,13 +115,24 @@ function(x, mask, filename="", ...){
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, type=.progress(...))
 
-		for (i in 1:tr$n) {
-			v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-			v[is.na(m), ] <- NA
-			out <- writeValues(out, v, tr$row[i])
-			pbStep(pb, i)
-		} 
+		if (inverse) {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[!is.na(m), ] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 
+		} else {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[is.na(m), ] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 
+		}
+
 		pbClose(pb)
 
 		out <- writeStop(out)
