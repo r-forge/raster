@@ -6,7 +6,7 @@
  
 
 setMethod('pairs', signature(x='RasterStackBrick'), 
-	function(x, hist=TRUE, cor=TRUE, maxpixels=100000, cex=0.5, main='') {
+	function(x, hist=TRUE, cor=TRUE, maxpixels=100000, cex=0.5, main='', use="pairwise.complete.obs") {
 	
 		panelhist <- function(x,...)	{
 			usr <- par("usr"); on.exit(par(usr))
@@ -23,7 +23,7 @@ setMethod('pairs', signature(x='RasterStackBrick'),
 			usr <- par("usr")
 			on.exit(par(usr))
 			par(usr = c(0, 1, 0, 1))
-			r <- abs(cor(x, y, use = "pairwise.complete.obs"))
+			r <- abs(cor(x, y, use=use))
 			txt <- format(c(r, 0.123456789), digits=2)[1]
 			text(0.5, 0.5, txt, cex = max(0.5, r * 2))
 		}
