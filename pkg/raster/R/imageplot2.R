@@ -10,12 +10,16 @@
 .rasterImagePlot <- function(x, add=FALSE, legend=TRUE, nlevel = 64, horizontal = FALSE, 
     legend.shrink = 0.5, legend.width = 0.6, legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = heat.colors(nlevel), 
-    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, ...) {
+    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, 
+	fun=NULL, ...) {
 
 	
 	asRaster <- function(x, col, breaks=NULL) {
 		if (!is.null(breaks)) {
 			x[] <- as.numeric(cut(x, breaks))
+		}
+		if (is.function(fun)) {
+			x[] <- fun(x)
 		}
 		r <- range(x, na.rm=TRUE)
 		if (r[1] == r[2]) {
