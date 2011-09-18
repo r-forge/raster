@@ -200,12 +200,12 @@ pointsToRaster <- function(raster, xy, values=1, fun, ...) {
 		}
 		
 		if (mask) {
-			oldvals <- getValues(oldraster, r)
+			oldvals <- getValues(oldraster)
 			ind <- which(is.na(vv))
 			oldvals[ind] <- NA
 			vv <- oldvals
 		} else if (update) {
-			oldvals <- getValues(oldraster, r)
+			oldvals <- getValues(oldraster)
 			if (updateValue == "all") {
 				ind <- which(!is.na(vv))
 			} else if (updateValue == "zero") {
@@ -215,15 +215,15 @@ pointsToRaster <- function(raster, xy, values=1, fun, ...) {
 			} else {
 				ind <- which(!is.na(oldvals) & !is.na(vv))
 			}
-			oldvals[ind] <- d[ind]
-			d <- oldvals
+			oldvals[ind] <- vv[ind]
+			vv <- oldvals
 		}
 	
 		rs <- setValues(rs, vv)
 		if (ncols > 1) {
 			cn <- colnames(field)
 			if (! is.null(cn)) {
-				rs@layernames = cn
+				rs@layernames <- cn
 			}	
 		}
 

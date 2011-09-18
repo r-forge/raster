@@ -22,14 +22,17 @@
 }
 
 
-adjacency <- function(raster, fromCells, toCells, directions) {
 
-	outerMeridianConnect <- .isGlobalLonLat(raster)
 
-	if (directions=="Bishop") { return(.adjBishop(raster, fromCells, toCells, outerMeridianConnect)) }
+adjacency <- function(x, fromCells, toCells, directions) {
+	x <- raster(x)
 
-	nCols <- ncol(raster)
-	nCells <- ncell(raster)
+	outerMeridianConnect <- .isGlobalLonLat(x)
+	if (directions=="Bishop") { return(.adjBishop(x, fromCells, toCells, outerMeridianConnect)) }
+
+	
+	nCols <- ncol(x)
+	nCells <- ncell(x)
 	
 	left <- seq(nCols+1,(nCells-2*nCols+1),by=nCols) 
 	right <- seq(2*nCols,nCells-nCols,by=nCols)
