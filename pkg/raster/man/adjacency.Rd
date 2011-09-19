@@ -5,7 +5,7 @@
 \title{Pairs of adjacent cells}
 
 \description{
-Identify pairs of cells that are adjacent. See \code{\link{adjacency}} if you nly want a vector of adjacent cells. 
+Identify pairs of cells that are adjacent.  
 }
 
 \usage{
@@ -15,7 +15,7 @@ adjacency(x, fromCells, toCells, directions)
 \arguments{
   \item{x}{Raster* object}
   \item{fromCells}{a vector of cell numbers for which adjacent cells should be calculated}
-  \item{toCells}{a vector of cell numbers from which adjacent cells are selected}
+  \item{toCells}{a vector of cell numbers from which adjacent cells are selected. You can use the \code{\link{adjacent}} function if you want all cells to be considered }
   \item{directions}{in how many direction cells should be connected: 4, 8 or 16; or "bishop"}
 }
 

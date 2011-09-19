@@ -5,7 +5,7 @@
 \title{Adjacent cells}
 
 \description{
-Identify cells that are adjacent to a set of cells on a raster. See \code{\link{adjacency}} for an alternative implementation
+Identify cells that are adjacent to a set of cells on a raster. See \code{\link{adjacency}} for an alternative implementation.
 }
 
 \usage{
@@ -17,7 +17,7 @@ adjacent(x, cells, directions=4, pairs=FALSE, to)
   \item{cells}{vector of cell numbers for which adjacent cells should be found}
   \item{directions}{the number of directions in which cells should be connected: 4 (rook's case), 8 (queen's case), 16, or 'bishop'}
   \item{pairs}{Boolean}
-  \item{to}{Vector of cell numbers. Only all other adjacent cells are ignored. Can be missing}
+  \item{to}{OPtional. Vector of cell numbers that should be considered. All other adjacent cells are ignored}
 }
 
 \details{

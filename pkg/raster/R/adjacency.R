@@ -30,17 +30,6 @@ adjacency <- function(x, fromCells, toCells, directions) {
 
 	x <- raster(x)
 
-	if (missing(toCells)) {
-		if (directions %in% c(1,4)) {
-			toCells <- adjacent(x, fromCells, directions)
-		} else {
-			try( toCells <- 1:ncell(x) )
-			if (class(toCells) == 'try-error') {
-				stop('toCells argument missing, and raster to large to evaluate all cells')
-			}
-		}
-	}
-
 	outerMeridianConnect <- .isGlobalLonLat(x)
 	
 	if (directions=="bishop") { 

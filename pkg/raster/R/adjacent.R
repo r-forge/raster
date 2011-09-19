@@ -39,7 +39,7 @@ adjacent <- function(x, cells, directions=4, pairs=FALSE, to) {
 	
 	d <- matrix(d, ncol=2)
 	
-	if (.couldBeLonLat(x)) {
+	if (.isGlobalLonLat(x)) {
 		# normalize longitude to -180..180
 		d[,1] <- (d[,1] + 180) %% 360 - 180
 	}
