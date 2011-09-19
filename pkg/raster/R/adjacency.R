@@ -1,5 +1,4 @@
 # Author: Jacob van Etten jacobvanetten@yahoo.com
-# International Rice Research Institute
 # Date :  January 2009
 # Version 0.9
 # Licence GPL v3
@@ -25,10 +24,28 @@
 
 
 adjacency <- function(x, fromCells, toCells, directions) {
+
+	if (is.character(directions)) { directions <- tolower(directions) }
+	stopifnot(directions %in% c(4,8,16) | directions=='bishop')
+
 	x <- raster(x)
 
+	if (missing(toCells)) {
+		if (directions %in% c(1,4)) {
+			toCells <- adjacent(x, fromCells, directions)
+		} else {
+			try( toCells <- 1:ncell(x) )
+			if (class(toCells) == 'try-error') {
+				stop('toCells argument missing, and raster to large to evaluate all cells')
+			}
+		}
+	}
+
 	outerMeridianConnect <- .isGlobalLonLat(x)
-	if (directions=="Bishop") { return(.adjBishop(x, fromCells, toCells, outerMeridianConnect)) }
+	
+	if (directions=="bishop") { 
+		return(.adjBishop(x, fromCells, toCells, outerMeridianConnect)) 
+	}
 
 	
 	nCols <- ncol(x)
@@ -66,8 +83,7 @@ adjacency <- function(x, fromCells, toCells, directions) {
 	lowerrightFromToRook <- .cs(fromCellLowerright,rook[c(2,4)])
 	fromto1 <- rbind(coreFromToRook,upperFromToRook,lowerFromToRook,leftFromToRook,rightFromToRook,upperleftFromToRook,upperrightFromToRook,lowerleftFromToRook,lowerrightFromToRook)
 	
-	if (outerMeridianConnect) 
-	{
+	if (outerMeridianConnect) {
 		meridianFromLeft <- rbind(
 			cbind(fromCellsLeft,as.integer(fromCellsLeft+nCols-1)),
 			cbind(fromCellUpperleft,as.integer(fromCellUpperleft+nCols-1)),
@@ -80,11 +96,10 @@ adjacency <- function(x, fromCells, toCells, directions) {
 			)
 		fromto1 <- rbind(fromto1,meridianFromLeft,meridianFromRight)
 	}
-	else{}
+
 	fromto <- subset(fromto1,fromto1[,2] %in% toCells)
 
-	if(directions > 4)
-	{
+	if (directions > 4)	{
 		bishop <- as.integer(c(-nCols-1, -nCols+1, nCols-1,+nCols+1))
 		
 		coreFromToBishop <- .cs(fromCellsCore,bishop)
@@ -99,8 +114,7 @@ adjacency <- function(x, fromCells, toCells, directions) {
 
 		fromto2 <- rbind(coreFromToBishop,upperFromToBishop,lowerFromToBishop,leftFromToBishop,rightFromToBishop,upperleftFromToBishop,upperrightFromToBishop,lowerleftFromToBishop,lowerrightFromToBishop)
 		
-		if (outerMeridianConnect) 
-		{
+		if (outerMeridianConnect) {
 			meridianFromLeft <- rbind(
 				.cs(fromCellsLeft,c(2*nCols-1,-1)),
 				cbind(fromCellUpperleft,as.integer(fromCellUpperleft+2*nCols-1)),
@@ -113,13 +127,12 @@ adjacency <- function(x, fromCells, toCells, directions) {
 				)
 			fromto2 <- rbind(fromto2,meridianFromLeft,meridianFromRight)
 		}
-		else{}
+
 		fromto2 <- subset(fromto2,fromto2[,2] %in% toCells)
 		fromto <- rbind(fromto,fromto2)
 	}
-	else{}
-	if(directions > 8)
-	{
+
+	if (directions > 8) {
 
 		leftOuter <- seq(2*nCols+1,nCells-3*nCols+1,by=nCols) 
 		rightOuter <- seq(3*nCols,nCells-2*nCols,by=nCols)
@@ -207,8 +220,7 @@ adjacency <- function(x, fromCells, toCells, directions) {
 		fromto3 <- rbind(coreInnerFromToKnight, upperInnerFromToKnight, lowerInnerFromToKnight, leftInnerFromToKnight, rightInnerFromToKnight, upperleftInnerFromToKnight, upperrightInnerFromToKnight, lowerleftInnerFromToKnight, lowerrightInnerFromToKnight, leftOuterFromToKnight, rightOuterFromToKnight, upperOuterFromToKnight,	lowerOuterFromToKnight, upperleftUnderFromToKnight, upperrightLeftFromToKnight,	lowerleftUpFromToKnight, lowerrightUpFromToKnight, upperleftRightFromToKnight, upperrightUnderFromToKnight, lowerleftRightFromToKnight, lowerrightLeftFromToKnight, upperleftFromToKnight, upperrightFromToKnight, lowerleftFromToKnight, lowerrightFromToKnight)
 		fromto3 <- subset(fromto3,fromto3[,2] %in% toCells)
 		
-		if (outerMeridianConnect) 
-		{
+		if (outerMeridianConnect) {
 			knightLeft <- c(-nCols-1, -2, +2*nCols-2, 3*nCols-1)
 			knightRight <- c(-3*nCols+1, -2*nCols+2, +2, nCols+1)
 
@@ -239,15 +251,16 @@ adjacency <- function(x, fromCells, toCells, directions) {
 			
 			fromto3 <- rbind(fromto3, leftInnerFromToKnight, rightInnerFromToKnight, upperleftInnerFromToKnight, upperrightInnerFromToKnight, lowerleftInnerFromToKnight, lowerrightInnerFromToKnight, leftOuterFromToKnight, rightOuterFromToKnight, upperleftUnderFromToKnight, upperrightLeftFromToKnight, lowerleftUpFromToKnight, lowerrightUpFromToKnight, upperleftRightFromToKnight, upperrightUnderFromToKnight, lowerleftRightFromToKnight, lowerrightLeftFromToKnight, upperleftFromToKnight, upperrightFromToKnight, lowerleftFromToKnight, lowerrightFromToKnight)
 		}
-		else{}
 		
 		fromto3 <- subset(fromto3,fromto3[,2] %in% toCells)	
 		fromto <- rbind(fromto,fromto3)
 	}
-	else{}
+
 	colnames(fromto) <- c("from","to")
 	return(fromto)
 }
+
+
 
 .adjBishop <- function(raster, fromCells, toCells, outerMeridianConnect)  {
 	nCols <- ncol(raster)
@@ -286,8 +299,7 @@ adjacency <- function(x, fromCells, toCells, directions) {
 
 	fromto <- rbind(coreFromToBishop,upperFromToBishop,lowerFromToBishop,leftFromToBishop,rightFromToBishop,upperleftFromToBishop,upperrightFromToBishop,lowerleftFromToBishop,lowerrightFromToBishop)
 	
-	if (outerMeridianConnect) 
-	{
+	if (outerMeridianConnect) {
 		meridianFromLeft <- rbind(
 			.cs(fromCellsLeft,c(2*nCols-1,-1)),
 			cbind(fromCellUpperleft,as.integer(fromCellUpperleft+2*nCols-1)),
@@ -300,7 +312,7 @@ adjacency <- function(x, fromCells, toCells, directions) {
 			)
 		fromto <- rbind(fromto,meridianFromLeft,meridianFromRight)
 	}
-	else{}
 	fromto <- subset(fromto,fromto[,2] %in% toCells)
 	return(fromto)
 }
+

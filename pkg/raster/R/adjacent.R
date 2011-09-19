@@ -1,7 +1,12 @@
+# Author: Robert J. Hijmans
+# Date :  September 2011
+# Version 1.0
+# Licence GPL v3
+
 
 adjacent <- function(x, cells, directions=4) {
 	stopifnot(directions %in% c(4,8))
-	outerMeridianConnect <- raster:::.isGlobalLonLat(x)
+	outerMeridianConnect <- .isGlobalLonLat(x)
 	r <- res(x)
 	xy <- xyFromCell(x, cells)
 
