@@ -5,8 +5,7 @@
 
 
 pointsToRaster <- function(raster, xy, values=1, fun, ...) {
-	.warnRasterize()
-	.pointsToRaster(xy=xy, raster=raster, field=values, fun=fun, ...)
+	stop('this function has been replaced by "extract"')
 }
 
 

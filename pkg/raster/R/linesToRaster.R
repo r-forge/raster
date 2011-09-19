@@ -106,8 +106,7 @@
 
 
 linesToRaster <- function(lns, raster, field=0, overlap='last', ...) {
-	.warnRasterize()
-	.linesToRaster(lns=lns, raster=raster, field=field, fun=overlap, ...)
+	stop('this function has been replaced by "extract"')
 }
 
 
