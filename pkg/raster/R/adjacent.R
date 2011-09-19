@@ -6,7 +6,6 @@
 
 adjacent <- function(x, cells, directions=4) {
 	stopifnot(directions %in% c(4,8))
-	outerMeridianConnect <- .isGlobalLonLat(x)
 	r <- res(x)
 	xy <- xyFromCell(x, cells)
 
@@ -16,7 +15,7 @@ adjacent <- function(x, cells, directions=4) {
 		d <- t(apply(xy, 1, function(x)c(rep(x[1]-r[1], 3), rep(x[1]+r[1],3), x[1], x[1], rep(c(x[2]+r[2], x[2], x[2]-r[2]), 2),  x[2]+r[2], x[2]-r[2])))
 	} 
 	d <- matrix(as.vector(d), ncol=2)
-	if (outerMeridianConnect) { 
+	if (.couldBeLonLat(x)) {
 		# normalize longitude to -180..180
 		d[,1] <- (d[,1] + 180) %% 360 - 180
 	}
