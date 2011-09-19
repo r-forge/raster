@@ -4,19 +4,40 @@
 # Licence GPL v3
 
 
-adjacent <- function(x, cells, directions=4) {
-	pairs=FALSE
-	stopifnot(directions %in% c(4,8))
+adjacent <- function(x, cells, directions=4, pairs=FALSE, to) {
+
+	if (is.character(directions)) { directions <- tolower(directions) }
+
+	x <- raster(x)
 	r <- res(x)
 	xy <- xyFromCell(x, cells)
 
 	if (directions==4) {
-		fun <- function(x)c(x[1]-r[1], x[1]+r[1], x[1], x[1], x[2], x[2], x[2]+r[2], x[2]-r[2])
-	} else { #if (directions==8) {
-		fun <- function(x)c(rep(x[1]-r[1], 3), rep(x[1]+r[1],3), x[1], x[1], rep(c(x[2]+r[2], x[2], x[2]-r[2]), 2),  x[2]+r[2], x[2]-r[2])
-	}	
-	d <- t(apply(xy, 1, fun))
-	d <- matrix(as.vector(d), ncol=2)
+		d <- c(xy[,1]-r[1], xy[,1]+r[1], xy[,1], xy[,1], xy[,2], xy[,2], xy[,2]+r[2], xy[,2]-r[2])
+		
+	} else if (directions==8) {
+		d <- c(rep(xy[,1]-r[1], 3), rep(xy[,1]+r[1],3), xy[,1], xy[,1], 
+			rep(c(xy[,2]+r[2], xy[,2], xy[,2]-r[2]), 2),  xy[,2]+r[2], xy[,2]-r[2])
+
+	} else if (directions==16) {
+		d <- c(rep(xy[,1]-2*r[1], 2), rep(xy[,1]+2*r[1], 2),
+			rep(xy[,1]-r[1], 5), rep(xy[,1]+r[1], 5),
+			xy[,1], xy[,1], 
+							
+			rep(c(xy[,2]+r[2], xy[,2]-r[2]), 2),
+			rep(c(xy[,2]+2*r[2], xy[,2]+r[2], xy[,2], xy[,2]-r[2], xy[,2]-2*r[2]), 2),
+			xy[,2]+r[2], xy[,2]-r[2])
+							
+							
+	} else if (directions=='bishop') {
+		d <- c(rep(xy[,1]-r[1], 2), rep(xy[,1]+r[1],2), rep(c(xy[,2]+r[2], xy[,2]-r[2]), 2))
+		directions <- 4 # to make pairs
+		
+	} else {
+		stop('directions should be one of: 4, 8, 16, or bishop')
+	}
+	
+	d <- matrix(d, ncol=2)
 	
 	if (.couldBeLonLat(x)) {
 		# normalize longitude to -180..180
@@ -25,11 +46,18 @@ adjacent <- function(x, cells, directions=4) {
 	
 	if (pairs) {
 		cells <- rep(cells, directions)
-		cells <- na.omit(cbind(cells, cellFromXY(x, d)))
-		colnames(cells) <- c('from', 'to')
-		cells[order(cells[,1], cells[,2]),]
+		d <- na.omit(cbind(cells, cellFromXY(x, d)))
+		colnames(d) <- c('from', 'to')
+		if (!missing(to)) {
+			d <- d[d[,2] %in% to, ]
+		}
+		d <- d[order(d[,1], d[,2]),]
 	} else {
-		as.vector(unique(na.omit(cellFromXY(x, d))))
+		d <- as.vector(unique(na.omit(cellFromXY(x, d))))
+		if (!missing(to)) {
+			d <- d[d %in% to]
+		}
 	}
+	d
 }
 
