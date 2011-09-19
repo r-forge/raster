@@ -60,7 +60,7 @@
 
 
 polygonsToRaster <- function(p, raster, field=0, overlap='last', ...) {
-	stop('this function has been replaced by "extract"')
+	stop('this function has been replaced by "rasterize"')
 }
 
 
