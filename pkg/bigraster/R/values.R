@@ -1,38 +1,4 @@
 
-
-setClass ('BigRasterLayer',
-	contains = 'RasterLayer',
-	representation (
-		bigtrix = "big.matrix"
-		),
-	prototype (
-		)
-	)
-	
-
-bigRaster <- function(x, ...) {
-	b <- as(x, 'BigRasterLayer')
-	b@bigtrix <- big.matrix(nrow(b), ncol(b))
-	if (hasValues(x)) {
-		if (canProcessInMemory(x)) {
-			b@bigtrix[] <- as.matrix(x)
-		} else {
-			tr <- blockSize(x)
-			pb <- pbCreate(tr$n, type=raster:::.progress())
-			for (i in 1:tr$n) {
-				row1 <- tr$row[i]
-				row2 <- row1 + tr$nrows[i] -1
-				b@bigtrix[row1:row2, ] <- getValues(x, row=row1, nrows=tr$nrows[i], format='matrix')
-				pbStep(pb, i)
-			}
-			pbClose(pb)
-		}
-	}
-	b
-}
-	
-	
-
 setMethod("getValues", signature(x='BigRasterLayer', row='missing', nrows='missing'), 
 function(x, format='') {
 	if (format=='matrix') {
@@ -94,40 +60,4 @@ setMethod('getValuesBlock', signature(x='BigRasterLayer', row='numeric'),
 	}
 )
 
-
-
-	
-setMethod('setValues', signature(x='BigRasterLayer'), 
-function(x, values) {
-
-	if (length(values) == 1) {	
-		values <- matrix(rep(values, ncell(x)), ncol=ncol(x))
-	}
-	if (is.matrix(values)) { 
-		if (ncol(values) == x@ncols & nrow(values) == x@nrows) {
-			x@bigtrix[]  <- values
-		} else if (ncol(values)==1 | nrow(values)==1) {
-			x@bigtrix[]  <- matrix(values, ncol=ncol(x), byrow=TRUE)
-		} else {
-			stop('cannot use a matrix with these dimensions')
-		}
-	}
-	
-	if (length(values) == ncell(x)) { 
-		x@data@inmemory <- TRUE
-		x@data@fromdisk <- FALSE
-		x@file@name <- ""
-		x@file@driver <- ""
-		x@bigtrix[] <- values
-		x@data@min <- min(values, na.rm=TRUE)
-		x@data@max <- max(values, na.rm=TRUE)
-		x@data@haveminmax <- TRUE
-		return(x)
-		
-	} else {
-		stop("length(values) is not equal to ncell(x), or to 1") 
-	}
- }
-)
-	
 
