@@ -12,3 +12,14 @@ setClass ('BigRasterLayer',
 	
 
 	
+setClass ('BigRasterBrick',
+	contains = 'RasterBrick',
+	representation (
+		bigtrix = "big.matrix"
+		),
+	prototype (
+		)
+	)
+	
+	
+	

@@ -1,4 +1,4 @@
-Package: rasterBig
+Package: bigraster
 Type: Package
 Title: raster and bigmemory
 Version: 0.0-0
