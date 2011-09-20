@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-adjacent <- function(x, cells, directions=4, pairs=FALSE, to) {
+adjacent <- function(x, cells, directions=4, pairs=TRUE, target) {
 
 	if (is.character(directions)) { directions <- tolower(directions) }
 
@@ -20,12 +20,13 @@ adjacent <- function(x, cells, directions=4, pairs=FALSE, to) {
 			rep(c(xy[,2]+r[2], xy[,2], xy[,2]-r[2]), 2),  xy[,2]+r[2], xy[,2]-r[2])
 
 	} else if (directions==16) {
-		d <- c(rep(xy[,1]-2*r[1], 2), rep(xy[,1]+2*r[1], 2),
+		r2 <- r * 2
+		d <- c(rep(xy[,1]-r2[1], 2), rep(xy[,1]+r2[1], 2),
 			rep(xy[,1]-r[1], 5), rep(xy[,1]+r[1], 5),
 			xy[,1], xy[,1], 
 							
 			rep(c(xy[,2]+r[2], xy[,2]-r[2]), 2),
-			rep(c(xy[,2]+2*r[2], xy[,2]+r[2], xy[,2], xy[,2]-r[2], xy[,2]-2*r[2]), 2),
+			rep(c(xy[,2]+r2[2], xy[,2]+r[2], xy[,2], xy[,2]-r[2], xy[,2]-r2[2]), 2),
 			xy[,2]+r[2], xy[,2]-r[2])
 							
 							
@@ -48,14 +49,14 @@ adjacent <- function(x, cells, directions=4, pairs=FALSE, to) {
 		cells <- rep(cells, directions)
 		d <- na.omit(cbind(cells, cellFromXY(x, d)))
 		colnames(d) <- c('from', 'to')
-		if (!missing(to)) {
-			d <- d[d[,2] %in% to, ]
+		if (!missing(target)) {
+			d <- d[d[,2] %in% target, ]
 		}
 		d <- d[order(d[,1], d[,2]),]
 	} else {
 		d <- as.vector(unique(na.omit(cellFromXY(x, d))))
-		if (!missing(to)) {
-			d <- d[d %in% to]
+		if (!missing(target)) {
+			d <- d[d %in% target]
 		}
 	}
 	d

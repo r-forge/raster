@@ -16,8 +16,7 @@
 
 .cs <- function(a,b) {
 	aRep <- rep(a,times=length(b))
-	out <- cbind(aRep,as.integer(aRep+rep(b,each=length(a))),deparse.level=0)
-	return(out)
+	cbind(aRep,as.integer(aRep+rep(b,each=length(a))),deparse.level=0)
 }
 
 
