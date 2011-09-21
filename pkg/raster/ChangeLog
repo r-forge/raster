@@ -1,3 +1,7 @@
+--- 21-September-2011, version 1.9-17
+Big speed gain (~100 times) for 'calc' with a RasterLayer. calc used apply(x, 1, fun), which is more natural for RasterStackBrick objects, where it simply should use fun(x).
+this can now be tested using (currently undocumented) arguments forcefun=TRUE or forceapply=TRUE
+
 --- 15-September-2011, version 1.9-13
 Removed backwards compatibility issue (x <- normalizePath(x)  instead of x <- normalizePath(x, winslash = "/", FALSE), when creating raster from file). Reported by Julian Zeidler.
 
