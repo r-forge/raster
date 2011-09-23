@@ -105,8 +105,10 @@ if (!isGeneric("calc")) {
 		}
 
 	} else {
+	
 		if (forcefun) {
 			doapply <- FALSE
+			test  <- fun(tstdat)
 		} else {
 			doapply <- TRUE
 			if (! missing(na.rm)) {
