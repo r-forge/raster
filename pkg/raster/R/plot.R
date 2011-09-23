@@ -70,7 +70,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), maxpixels=500000, useRaster=TRUE, alpha=1, ...)  {
+	function(x, col=rev(terrain.colors(255)), maxpixels=500000, useRaster=TRUE, alpha=1, add=FALSE, addfun, ...)  {
 
 		if (alpha < 1) {
 			alpha <- max(alpha, 0) * 255 + 1
@@ -82,11 +82,19 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 		if (length(x@legend@colortable) > 0) {
 			.plotCT(x, maxpixels=maxpixels, ...)
 		} else if (! useRaster) {
-			.plotraster(x, col=col, maxpixels=maxpixels, ...) 
+			.plotraster(x, col=col, maxpixels=maxpixels, add=add, ...) 
 		} else {
-			.plotraster2(x, col=col, maxpixels=maxpixels, ...) 
+			.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ...) 
 			#.plot2(x, col=col, maxpixels=maxpixels, ...)
 		}
+		
+		if (!missing(addfun)) {
+			if (is.function(addfun)) {
+				addfun()
+			}
+		}
+		
+		
 	}
 )	
 

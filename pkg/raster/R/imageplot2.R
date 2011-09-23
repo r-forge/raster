@@ -11,10 +11,20 @@
     legend.shrink = 0.5, legend.width = 0.6, legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = heat.colors(nlevel), 
     lab.breaks = NULL, axis.args = NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, 
-	fun=NULL, ...) {
+	fun=NULL, asp, ...) {
 
+
+ 	if (missing(asp)) {
+		if (.couldBeLonLat(x, warnings=FALSE)) {
+#			ym <- mean(object@extent@ymax + object@extent@ymin)
+#			asp <- min(5, 1/cos((ym * pi)/180))
+			asp = NA
+		} else {
+			asp = 1
+		}		
+	}
 	
-	asRaster <- function(x, col, breaks=NULL) {
+	asRaster <- function(x, col, breaks=NULL, fun=NULL) {
 		if (!is.null(breaks)) {
 			x[] <- as.numeric(cut(x, breaks, include.lowest=TRUE))
 		}
@@ -40,7 +50,7 @@
 		x[x<zlim[1] | x>zlim[2]] <- NA
 	}
 	zrange <- range(x, na.rm=TRUE)
-	x <- asRaster(x, col, breaks)
+	x <- asRaster(x, col, breaks, fun)
 	
     old.par <- par(no.readonly = TRUE)
     if (add) {
