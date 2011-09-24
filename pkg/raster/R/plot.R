@@ -135,7 +135,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 		x <- sampleRegular(x, size=maxpixels)
 		y <- sampleRegular(y, size=maxpixels)
 		if (length(x) < cells) {
-			warning(paste('plot used a sample of ', round(100*length(x)/nc), "% of the cells", sep=""))
+			warning(paste('plot used a sample of ', round(100*length(x)/cells), "% of the cells", sep=""))
 		}
 		
 		

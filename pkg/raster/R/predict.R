@@ -137,7 +137,11 @@ setMethod('predict', signature(object='Raster'),
 			} else {
 	
 				if (doCluster) {
-					predv <- unlist( clusterApply(cl, splitRows(blockvals, length(cl)), fun, object=model))
+					if (length(index) == 1) {
+						predv <- unlist( clusterApply(cl, splitRows(blockvals, length(cl)), fun, object=model, ...))
+					} else {
+						predv <- do.call(rbind, clusterApply(cl, splitRows(blockvals, length(cl)), fun, object=model, ...))
+					}
 				} else {
 					predv <- fun(model, blockvals, ...)
 				}
