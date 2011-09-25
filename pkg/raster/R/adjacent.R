@@ -56,7 +56,7 @@ adjacent <- function(x, cells, directions=4, pairs=TRUE, target) {
 	} else {
 		d <- as.vector(unique(na.omit(cellFromXY(x, d))))
 		if (!missing(target)) {
-			d <- d[d %in% target]
+			d <- intersect(d, target)
 		}
 	}
 	d

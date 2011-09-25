@@ -11,28 +11,20 @@ Obsolete functions. Use \code{\link[raster]{extract}} instead.
 }
 
 \usage{
-polygonValues(p, x, ...)
-lineValues(lns, x, ...)
-xyValues(object, xy, ...)
+polygonValues(...)
+lineValues(...)
+xyValues(...)
 }
 
 \arguments{
-\item{p}{SpatialPolygons* object}
-\item{lns}{SpatialLines* object}
-\item{x}{Raster* object}
- \item{object}{Raster* object}
- \item{xy}{Coordinates (e.g. a matrix of two columns or a SpatialPoints* object)}
-\item{...}{additional arguments}
+\item{...}{arguments}
 }
 
 \value{
-A list
+An error message
 }
 
 \seealso{ \code{\link[raster]{extract} } }
 
-\author{Robert J. Hijmans }
-
 
 \keyword{methods}
-\keyword{spatial}
