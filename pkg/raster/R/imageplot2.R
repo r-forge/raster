@@ -7,11 +7,11 @@
 # July 2011
 
 
-.rasterImagePlot <- function(x, add=FALSE, legend=TRUE, nlevel = 64, horizontal = FALSE, 
+.rasterImagePlot <- function(x, col, add=FALSE, legend=TRUE, horizontal = FALSE, 
     legend.shrink = 0.5, legend.width = 0.6, legend.mar = ifelse(horizontal, 3.1, 5.1), legend.lab = NULL, graphics.reset = FALSE, 
-    bigplot = NULL, smallplot = NULL, legend.only = FALSE, col = heat.colors(nlevel), 
-    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, 
-	fun=NULL, asp, ...) {
+    bigplot = NULL, smallplot = NULL, legend.only = FALSE, 
+    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
+	interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, fun=NULL, asp, ...) {
 
 
  	if (missing(asp)) {
@@ -49,8 +49,15 @@
 	if (!is.null(zlim)) {
 		x[x<zlim[1] | x>zlim[2]] <- NA
 	}
+	w <- getOption('warn')
+	options('warn'=-1) 
 	zrange <- range(x, na.rm=TRUE)
-	x <- asRaster(x, col, breaks, fun)
+	options('warn'=w) 
+	if (! is.finite(zrange[1])) {
+		legend <- FALSE 
+	} else {
+		x <- asRaster(x, col, breaks, fun)
+	}
 	
     old.par <- par(no.readonly = TRUE)
     if (add) {
