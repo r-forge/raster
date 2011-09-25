@@ -13,3 +13,20 @@ lineValues <- function(...) {
 polygonValues <- function(...) {	
 	stop('function no longer available. Please use "extract"')
 }
+
+
+linesToRaster <- function(...) {
+	stop('function no longer available. Please use "rasterize"')
+}
+
+
+
+polygonsToRaster <- function(...) {
+	stop('function no longer available. Please use "rasterize"')
+}
+
+
+pointsToRaster <- function(...) {
+	stop('function no longer available. Please use "rasterize"')
+}
+
