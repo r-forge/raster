@@ -32,7 +32,7 @@
 }
 
 
-adjacent <- function(x, cells, directions=4, pairs=TRUE, target=NULL) {
+adjacent <- function(x, cells, directions=4, pairs=FALSE, target=NULL, sorted=FALSE) {
 
 	if (is.character(directions)) { directions <- tolower(directions) }
 
@@ -94,13 +94,17 @@ adjacent <- function(x, cells, directions=4, pairs=TRUE, target=NULL) {
 		if (! is.null(target)) {
 			d <- d[d[,2] %in% target, ]
 		}
-		d <- d[order(d[,1], d[,2]),]
+		if (sorted) {
+			d <- d[order(d[,1], d[,2]),]
+		}
 	} else {
 		d <- as.vector(unique(na.omit(cellFromXY(x, d))))
 		if (! is.null(target)) {
 			d <- intersect(d, target)
 		}
-		d <- sort(d)
+		if (sorted) {
+			d <- sort(d)
+		}
 	}
 	d
 }
