@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-adjacent <- function(x, cells, directions=4, pairs=TRUE, target) {
+adjacent <- function(x, cells, directions=4, pairs=TRUE, target=NULL) {
 
 	if (is.character(directions)) { directions <- tolower(directions) }
 
@@ -12,6 +12,9 @@ adjacent <- function(x, cells, directions=4, pairs=TRUE, target) {
 	r <- res(x)
 	xy <- xyFromCell(x, cells)
 
+	if (is.matrix(directions)) {
+		.adjacentUD(x, cells, directions, pairs=pairs, target=traget)
+	}
 	if (directions==4) {
 		d <- c(xy[,1]-r[1], xy[,1]+r[1], xy[,1], xy[,1], xy[,2], xy[,2], xy[,2]+r[2], xy[,2]-r[2])
 		
@@ -49,13 +52,13 @@ adjacent <- function(x, cells, directions=4, pairs=TRUE, target) {
 		cells <- rep(cells, directions)
 		d <- na.omit(cbind(cells, cellFromXY(x, d)))
 		colnames(d) <- c('from', 'to')
-		if (!missing(target)) {
+		if (! is.null(target)) {
 			d <- d[d[,2] %in% target, ]
 		}
 		d <- d[order(d[,1], d[,2]),]
 	} else {
 		d <- as.vector(unique(na.omit(cellFromXY(x, d))))
-		if (!missing(target)) {
+		if (! is.null(target)) {
 			d <- intersect(d, target)
 		}
 	}

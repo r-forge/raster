@@ -1,6 +1,6 @@
 
 
-adjacentUD <- function(x, cells, ngb, pairs=F, target) {
+.adjacentUD <- function(x, cells, ngb, pairs, target=NULL) {
 
 	# ngb should be a matrix with 
 	# one and only one cell with value 0 (the focal cell), 
@@ -46,14 +46,14 @@ adjacentUD <- function(x, cells, ngb, pairs=F, target) {
 	#	cells <- rep(cells, directions)
 	#	d <- na.omit(cbind(cells, cellFromXY(x, d)))
 	#	colnames(d) <- c('from', 'to')
-	#	if (!missing(target)) {
+	#	if (! is.null(target)) {
 	#		d <- d[d[,2] %in% target, ]
 	#	}
 	#	d <- d[order(d[,1], d[,2]),]
-		stop('pairs not yet implemented')
+		warning('pairs not yet implemented')
 	} else {
 		d <- as.vector(unique(na.omit(cellFromXY(x, d))))
-		if (!missing(target)) {
+		if (! is.null(target)) {
 			d <- intersect(d, target)
 		}
 	}
