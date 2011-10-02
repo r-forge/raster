@@ -14,7 +14,7 @@ SEXP focal3c(SEXP d, SEXP w, SEXP dim) {
 	R_len_t i;
 	SEXP val;
 	int nrow, ncol, n;
-	double x, *xd, *xval, *xw;
+	double *xd, *xval, *xw;
 
 	PROTECT(d = coerceVector(d, REALSXP));
 	PROTECT(w = coerceVector(w, REALSXP));
@@ -30,17 +30,8 @@ SEXP focal3c(SEXP d, SEXP w, SEXP dim) {
 	xw = REAL(w);
 
 	for (i = ncol+1; i < ncol * (nrow-1); i++) {
-		x = 0;
-		x += xd[i-1-ncol] * xw[0];
-		x += xd[i-1] * xw[1];
-		x += xd[i-1+ncol] * xw[2];
-		x += xd[i-ncol] * xw[3];
-		x += xd[i] * xw[4];
-		x += xd[i+ncol] * xw[5];
-		x += xd[i+1-ncol] * xw[6];
-		x += xd[i+1] * xw[7];
-		x += xd[i+1+ncol] * xw[8];
-		xval[i] = x;		
+		xval[i] = xd[i-1-ncol] * xw[0] + xd[i-1] * xw[1] + xd[i-1+ncol] * xw[2] + xd[i-ncol] * xw[3] + xd[i] * xw[4] 
+                      + xd[i+ncol] * xw[5] + xd[i+1-ncol] * xw[6] + xd[i+1] * xw[7] + xd[i+1+ncol] * xw[8];		
 	}
 	
 
