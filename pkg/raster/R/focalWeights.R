@@ -1,3 +1,9 @@
+# Author: Robert J. Hijmans
+# Date : September 2011
+# Version 1.0
+# Licence GPL v3
+
+
 
 .focalWeights <- function(x, w=rep(1,9)/9, filename='', ...) {
 
