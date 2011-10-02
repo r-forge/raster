@@ -16,9 +16,8 @@
 
  	if (missing(asp)) {
 		if (.couldBeLonLat(x, warnings=FALSE)) {
-#			ym <- mean(object@extent@ymax + object@extent@ymin)
-#			asp <- min(5, 1/cos((ym * pi)/180))
-			asp = NA
+			ym <- mean(x@extent@ymax, x@extent@ymin)
+			asp <- min(5, 1/cos((ym * pi)/180))
 		} else {
 			asp = 1
 		}		
@@ -82,7 +81,7 @@
 	} else {
         if (!add) {
             par(plt = bigplot)
-			plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', ...)
+			plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', asp=asp, ...)
         }
 		rasterImage(x, e[1], e[3], e[2], e[4], interpolate=interpolate)
         big.par <- par(no.readonly = TRUE)

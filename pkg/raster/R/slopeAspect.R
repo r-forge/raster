@@ -29,7 +29,7 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 	dx <- res[1]
 	dy <- res[2]
 	if (neighbors == 8) {
-		fX <- c(-1,-2,-1,0,0,0,1,2,1), nrow=3) / -8
+		fX <- c(-1,-2,-1,0,0,0,1,2,1) / -8
 		fY <- c(-1,0,1,-2,0,2,-1,0,1) / 8
 	} else { # neighbors == 4
 		fX <- c(0,-1,0,0,0,0,0,1,0) / -2
