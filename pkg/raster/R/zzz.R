@@ -8,6 +8,9 @@
 #	} else {
 		options( rasterCluster=FALSE )
 #	}
+
+	library.dynam("raster", pkg)	
+
 	return(invisible(0))
 }
 

@@ -153,5 +153,4 @@ function(x, y,..., tolerance=0.05, filename="", format, overwrite, progress, tes
 }
 )
 
-sm <- merge(s1, r1)
 
