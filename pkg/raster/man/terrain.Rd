@@ -28,13 +28,16 @@ TRI (Terrain Ruggedness Index) is the mean of the absolute differences between t
 
 TPI (Topographic Position Index) is the difference between the value of a cell and the mean value of its 8 surrounding cells (Wilson et al. 2007).
 
-Roughness is the the the difference between the maximum and the minimum value of a cell and its 8 surrounding cells (Wilson et al, 2007).
+Roughness is the difference between the maximum and the minimum value of a cell and its 8 surrounding cells (Wilson et al, 2007).
 
 These measures can also be computed with the \code{\link{focalFilter}} function:
 
 f <- matrix(1, nrow=3, ncol=3)
+
 TRI <- focalFilter(x, f, fun=function(x, ...) sum(abs(x[-5]-x[5]))/8 )
+
 TPI <- focalFilter(x, f, fun=function(x, ...) x[5] - mean(x[-5]))
+
 rough <- focalFilter(x, f, fun=function(x, ...) max(x) - min(x))
 
 
@@ -57,7 +60,7 @@ Jones, K.H., 1998. A comparison of algorithms used to compute hill slope as a pr
 
 Ritter, P., 1987. A vector-based slope and aspect generation algorithm. Photogrammetric Engineering and Remote Sensing 53 (8):1109-1111
 
-Wilson, M.F.J., O’Connell, B., Brown, C., Guinan, J.C., Grehan, A.J., 2007. Multiscale terrain analysis of multibeam bathymetry data for habitat mapping on the continental slope. Marine Geodesy, 30: 3-35.
+Wilson, M.F.J., O'Connell, B., Brown, C., Guinan, J.C., Grehan, A.J., 2007. Multiscale terrain analysis of multibeam bathymetry data for habitat mapping on the continental slope. Marine Geodesy, 30: 3-35.
 }
 
 \author{Robert J. Hijmans}
