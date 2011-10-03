@@ -6,8 +6,6 @@
 
 slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radians', neighbors=8, flatAspect, ...) {
 	
-	doC <- list(...)$doC
-
 	stopifnot(neighbors %in% c(4, 8))
 	stopifnot(projection(dem) != "NA")
 	unit <- trim(tolower(unit))
@@ -51,9 +49,10 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 	
 		fX <- fX / dx
 		fY <- fY / dy
-
 		zx <- .focalWeights(dem, fX)
 		zy <- .focalWeights(dem, fY)
+		#zx <- focalFilter(dem, matrix(fX, nrow=3))
+		#zy <- focalFilter(dem, matrix(fY, nrow=3))
 	}
 
 	if (type == 'slope') {

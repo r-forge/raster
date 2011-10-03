@@ -18,7 +18,11 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 					return(x) 
 				}
 			} else { 
-				return(getValues(x)) 
+				if (cells) {
+					return(cbind(1:ncell(x), values(x)))
+				} else {
+					return(values(x)) 
+				}
 			}
 		}
 		rcut <- raster(x)
@@ -79,6 +83,7 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 			con <- GDAL.open(x@file@name, silent=TRUE)
 			v <- getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
 			closeDataset(con)
+			v <- as.vector(v)
 			if (x@data@gain != 1 | x@data@offset != 0) {
 				v <- v * x@data@gain + x@data@offset
 			}

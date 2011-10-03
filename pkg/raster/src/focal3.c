@@ -2,14 +2,12 @@
 
 #include <R.h>
 #include <Rinternals.h>
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<math.h>
-#include	<Rmath.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "Rdefines.h"
 #include "R_ext/Rdynload.h"
 
-SEXP focal3c(SEXP d, SEXP w, SEXP dim) {
+SEXP focal3_sum(SEXP d, SEXP w, SEXP dim) {
 
 	R_len_t i;
 	SEXP val;
@@ -34,18 +32,20 @@ SEXP focal3c(SEXP d, SEXP w, SEXP dim) {
                       + xd[i+ncol] * xw[5] + xd[i+1-ncol] * xw[6] + xd[i+1] * xw[7] + xd[i+1+ncol] * xw[8];		
 	}
 	
-
+// Set edges to NA	
+// first row	
 	for (i = 0; i < ncol; i++) {  
 		xval[i] = R_NaReal;
 	}
+// last row	
 	for (i = ncol * (nrow-1); i < n; i++) {  
 		xval[i] = R_NaReal;
 	}
+// first and last columns
 	for (i = 1; i < nrow; i++) {  
 		xval[i * ncol] = R_NaReal;
 		xval[i * ncol - 1] = R_NaReal;
 	}
-
 	
 	UNPROTECT(3);
 	return(val);

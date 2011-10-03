@@ -132,13 +132,14 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 		}
 
 		cells <- ncell(x)
-		x <- sampleRegular(x, size=maxpixels)
-		y <- sampleRegular(y, size=maxpixels)
+		# cells is true to assure that the same cells are used also if 
+		# only one has gdal as driver. 		
+		x <- sampleRegular(x, size=maxpixels, cells=TRUE)[,-1] 
+		y <- sampleRegular(y, size=maxpixels, cells=TRUE)[,-1]
 		if (length(x) < cells) {
 			warning(paste('plot used a sample of ', round(100*length(x)/cells), "% of the cells", sep=""))
 		}
-		
-		
+			
 		if (nl > 1) {
 			old.par <- par(no.readonly = TRUE) 
 			on.exit(par(old.par))
