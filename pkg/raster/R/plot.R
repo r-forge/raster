@@ -11,7 +11,7 @@ if (!isGeneric("plot")) {
 
 
 setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, main, ...)  {
+	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, main, useRaster=TRUE, ...)  {
 	
 		if (alpha < 1) {
 			alpha <- max(alpha, 0) * 255 + 1
@@ -40,7 +40,11 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 		}
 		
 		if (length(y) == 1) {
-			.plotraster2(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], ...) 
+			if (useRaster) {
+				.plotraster2(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], useRaster=TRUE, ...) 
+			} else {
+				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], useRaster=TRUE, ...) 			
+			}
 		} else {
 
 			nl <- length(y)
@@ -62,7 +66,11 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				}
 				if (rown==nr) xa='s'
 				if (coln==1) ya='s' else ya='n'
-				.plotraster2(raster(x, y[i]), col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=main[y[i]], ...) 
+				if (useRaster) {
+					.plotraster2(raster(x, y[i]), col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=main[y[i]], ...) 
+				} else {
+					.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=main[y[i]], ...) 				
+				}
 			}		
 		}
 	}
@@ -132,10 +140,18 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 		}
 
 		cells <- ncell(x)
-		# cells is true to assure that the same cells are used also if 
-		# only one has gdal as driver. 		
-		x <- sampleRegular(x, size=maxpixels, cells=TRUE)[,-1] 
-		y <- sampleRegular(y, size=maxpixels, cells=TRUE)[,-1]
+		
+		# gdal selects a slightly different set of cells than raster does for other formats.
+		# using gdal directly to subsample is faster.
+		dx <- .driver(x, warn=FALSE)
+		dy <- .driver(y, warn=FALSE)
+		if (( all(dx =='gdal') & all(dy == 'gdal')) | ( all(dx != 'gdal') & all(dy != 'gdal'))) {
+			x <- sampleRegular(x, size=maxpixels) 
+			y <- sampleRegular(y, size=maxpixels)
+		} else {
+			x <- sampleRegular(x, size=maxpixels, cells=TRUE)[,-1] 
+			y <- sampleRegular(y, size=maxpixels, cells=TRUE)[,-1]
+		}
 		if (length(x) < cells) {
 			warning(paste('plot used a sample of ', round(100*length(x)/cells), "% of the cells", sep=""))
 		}
