@@ -15,12 +15,12 @@ terrain <- function(x, filename='', out, unit='radians', neighbors=8, ...) {
 	
 	out <- trim(tolower(out))
 	stopifnot(out %in% c('slope', 'aspect', 'tri', 'tpi', 'roughness'))
+	
+	un <- as.integer(1)
 	if (out == 'slope' | out == 'aspect') {
 		stopifnot(unit %in% c('degrees', 'radians'))
 		if (unit=='degrees') {
 			un <- as.integer(0)
-		} else {
-			un <- as.integer(1)
 		}
 		stopifnot(neighbors %in% c(4, 8))
 	}

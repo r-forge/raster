@@ -1,3 +1,6 @@
+--- 3-October-2011, version 1.9-22
+New function under development 'terrain' to do slope, aspect and other elevation derived terrain characteristics. 
+
 --- 27-September-2011, version 1.9-21
 mask now works for the a RasterStack/Brick and Spatial* objects. Bug reported by Robert Buitenwerf
 
