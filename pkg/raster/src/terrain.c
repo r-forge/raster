@@ -1,4 +1,4 @@
-/* Robert Hijmans, June 2011 */
+/* Robert Hijmans, October 2011 */
 
 #include <R.h>
 #include <Rinternals.h>
@@ -7,7 +7,7 @@
 #include <math.h>
 #include "Rdefines.h"
 #include "R_ext/Rdynload.h"
-
+#include "Rmath.h"
 
 double mod(double x, double n) {
 	return(x - n * floor(x/n));
@@ -15,9 +15,6 @@ double mod(double x, double n) {
 
 
 SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
-	# define pi 3.14159265358979323846	
-	# define halfpi 1.57079632679489661923
-	# define twopi  6.283185301798647692	
 					
 	R_len_t i, j;
 	SEXP val;
@@ -85,7 +82,7 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 			xval[i] = atan( sqrt( pow(zy, 2) + pow(zx, 2) ) );
 		}
 		if (unit == 0) {
-			double adj = 180 / pi;
+			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
 				xval[i] = xval[i] * adj;
 			}
@@ -109,7 +106,7 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 			xval[i] = atan( sqrt( pow(zy, 2) + pow(zx, 2) ) );
 		}
 		if (unit == 0) {
-			double adj = 180 / pi;
+			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
 				xval[i] = xval[i] * adj;
 			}
@@ -129,10 +126,10 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 			zx = xd[i-1] * xw[0] + xd[i+1] * xw[1];
 			zy = xd[i-ncol] * yw[0] + xd[i+ncol] * yw[1];
 			zx = atan2(zy, zx);
-			xval[i] = mod( halfpi -zx, twopi);
+			xval[i] = mod( M_PI_2 -zx, M_2PI);
 		}
 		if (unit == 0) {
-			double adj = 180 / pi;
+			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
 				xval[i] = xval[i] * adj;
 			}
@@ -154,10 +151,10 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
   			zy = xd[i-1-ncol] * yw[0] + xd[i-1+ncol] * yw[1] + xd[i-ncol] * yw[2] 
 					+ xd[i+ncol] * yw[3] + xd[i+1-ncol] * yw[4] + xd[i+1+ncol] * yw[5];
 			zx = atan2(zy, zx);
-			xval[i] = mod( halfpi -zx, twopi);
+			xval[i] = mod( M_PI_2 -zx, M_2PI);
 		}
 		if (unit == 0) {
-			double adj = 180 / pi;
+			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
 				xval[i] = xval[i] * adj;
 			}
