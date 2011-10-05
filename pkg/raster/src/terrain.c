@@ -9,9 +9,7 @@
 #include "R_ext/Rdynload.h"
 #include "Rmath.h"
 
-double mod(double x, double n) {
-	return(x - n * floor(x/n));
-}
+#include "util.h"
 
 
 SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
