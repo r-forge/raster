@@ -125,9 +125,9 @@
 			plot(NA, NA, xlim=c(0, 1), ylim=c(minz, maxz), type="n", xlab="", ylab="", xaxs ='i', yaxs = 'i', axes=FALSE)
 			
 			if (is.null(breaks)) {
-				xx <- asRaster(length(col):1, col) 
+				xx <- asRaster(length(col):1, col, fun=fun) 
 			} else {
-				xx <- rev(asRaster(midpoints, col, breaks=breaks))
+				xx <- rev(asRaster(midpoints, col, breaks=breaks, fun=fun))
 			}
 
 			rasterImage(xx, 0, minz, 1, maxz, interpolate=FALSE)
@@ -137,9 +137,9 @@
 			plot(NA, NA, ylim=c(0, 1), xlim=c(minz, maxz), type="n", xlab="", ylab="", xaxs ='i', yaxs = 'i', axes=FALSE)
 			
 			if (is.null(breaks)) {
-				xx <- t(rev(asRaster(1:length(col), col) ))
+				xx <- t(rev(asRaster(1:length(col), col, fun=fun )))
 			} else {
-				xx <- t(asRaster(midpoints, col, breaks=breaks))
+				xx <- t(asRaster(midpoints, col, breaks=breaks, fun=fun))
 			}
 			rasterImage(xx, minz, 0, maxz, 1, interpolate=FALSE)
 			do.call("axis", axis.args)
