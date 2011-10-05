@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-terrain <- function(x, filename='', out, unit='radians', neighbors=8, ...) {
+terrain <- function(x, filename='', out='', unit='radians', neighbors=8, ...) {
 	
 	stopifnot(is.character(filename))
 	filename <- trim(filename)
