@@ -1,4 +1,5 @@
---- 3-October-2011, version 1.9-22
+--- 5-October-2011, version 1.9-23
+Fixed subset bug reported by Julian Zeidler. https://r-forge.r-project.org/tracker/?func=detail&atid=1189&aid=1610&group_id=294
 New function under development 'terrain' to do slope, aspect and other elevation derived terrain characteristics. 
 
 --- 27-September-2011, version 1.9-21

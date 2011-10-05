@@ -41,9 +41,9 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 		
 		if (length(y) == 1) {
 			if (useRaster) {
-				.plotraster2(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], useRaster=TRUE, ...) 
+				.plotraster2(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], ...) 
 			} else {
-				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], useRaster=TRUE, ...) 			
+				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], ...) 			
 			}
 		} else {
 
@@ -78,7 +78,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), maxpixels=500000, useRaster=TRUE, alpha=1, add=FALSE, addfun, ...)  {
+	function(x, col=rev(terrain.colors(255)), maxpixels=500000, useRaster=TRUE, alpha=1, add=FALSE, ...)  {
 
 		if (alpha < 1) {
 			alpha <- max(alpha, 0) * 255 + 1
@@ -95,14 +95,6 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 			.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ...) 
 			#.plot2(x, col=col, maxpixels=maxpixels, ...)
 		}
-		
-		if (!missing(addfun)) {
-			if (is.function(addfun)) {
-				addfun()
-			}
-		}
-		
-		
 	}
 )	
 
