@@ -63,32 +63,6 @@ double distVinSph(double lon1, double lat1, double lon2, double lat2, double r) 
 
 
 
-void distance(int *n, double *lon1, double *lat1, double *lon2, double *lat2, double *r, int *m, double *dist) {
-	int i;
-	if (*m == 1) {
-		for(i=0; i < *n; i++) {
-			dist[i] = distCos(lon1[i], lat1[i], lon2[i], lat2[i], r[i]);
-		}
-	} else if (*m == 2) {
-		for(i=0; i < *n; i++) {
-			dist[i] = distHav(lon1[i], lat1[i], lon2[i], lat2[i], r[i]);
-		}
-	} else if (*m == 3) {
-		for(i=0; i < *n; i++) {
-			dist[i] = distVinSph(lon1[i], lat1[i], lon2[i], lat2[i], r[i]);
-		}
-		
-	} else {
-		for(i=0; i < *n; i++) {
-			dist[i] = R_NaReal;
-		}
-	}
-}
-
-
-
-
-
 double distVinEll(double lon1, double lat1, double lon2, double lat2, double a, double b, double f) {
 /*  Vincenty Inverse Solution of Geodesics on the Ellipsoid (c) Chris Veness 2002-2009           
  Calculate geodesic distance (in m) between two points specified by latitude/longitude 

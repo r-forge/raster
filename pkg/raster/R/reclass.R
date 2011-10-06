@@ -13,7 +13,7 @@ if (!isGeneric("reclass")) {
 
 setMethod('reclass', signature(x='Raster', rcl='ANY'), 
 
-function(x, rcl, update=FALSE, filename='', ...)  {
+function(x, rcl, update=FALSE, filename='', doC=FALSE, ...)  {
 	
 	filename <- trim(filename)
 
@@ -44,15 +44,19 @@ function(x, rcl, update=FALSE, filename='', ...)  {
 			}
 			out <- ( setValues(out, x) )
 		} else {
-			res <- x
-			for (i in 1:nrow(rcl)) {
-				if (is.na(rcl[i,1]) | is.na(rcl[i,2])) {
-					res[ is.na(x) ] <- rcl[i, 3] 
-				} else { 
-					res[ (x >= rcl[i,1]) & ( x <= rcl[i,2]) ] <- rcl[i , 3] 
+			if (doC) {
+				out <- setValues(out, .Call('reclass', x, rcl, as.integer(0), as.integer(1), NAOK=TRUE, PACKAGE='raster'))
+			} else {
+				res <- x
+				for (i in 1:nrow(rcl)) {
+					if (is.na(rcl[i,1]) | is.na(rcl[i,2])) {
+						res[ is.na(x) ] <- rcl[i, 3] 
+					} else { 
+						res[ (x >= rcl[i,1]) & ( x <= rcl[i,2]) ] <- rcl[i , 3] 
+					}
 				}
+				out <- ( setValues(out, res) )
 			}
-			out <- ( setValues(out, res) )
 		}
 		if ( filename != "" ) { out <- writeRaster(out, filename=filename, ...) }
 		return(out)
