@@ -72,9 +72,9 @@ if (!isGeneric("extent")) {
 }	
 
 
-setMethod('extent', signature(x='.VectorLayer'), 
-	function(x, ...) {
-		extent(as.vector(range(x@data@xy)))
-	}
-)
+#setMethod('extent', signature(x='.VectorLayer'), 
+#	function(x, ...) {
+#		extent(as.vector(range(x@data@xy)))
+#	}
+#)
 

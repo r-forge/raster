@@ -6,6 +6,8 @@
 
 slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radians', neighbors=8, flatAspect, ...) {
 	
+	warning('this function is deprecated. Please use function "terrain" instead')
+	
 	stopifnot(neighbors %in% c(4, 8))
 	stopifnot(projection(dem) != "NA")
 	unit <- trim(tolower(unit))
@@ -42,7 +44,7 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 		zx <- .focalWeights(dem, fX)
 		
 		y <- yFromRow(dem, 1:nrow(dem))
-		dx <- .haversine(-dx, y, dx, y) / 3
+		dx <- .haversine(-dx, y, dx, y) / 2
 		zx <- t( t(zx) / dx)
 		
 	} else {
