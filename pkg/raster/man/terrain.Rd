@@ -5,6 +5,9 @@
 \title{Terrain characteristics}
 
 \description{
+
+Slope does not work yet for lon/lat rasters.
+
 Compute slope, aspect and other terrain characteristics from elevation data. Elevation data should be in map units (typically meter) for projected (planar) raster data. They should be in meters when the coordinate reference system (CRS) is longitude/latitude. 
 
 This function is under construction, as a replacement for \code{\link{slopeAspect}}
@@ -64,5 +67,14 @@ Wilson, M.F.J., O'Connell, B., Brown, C., Guinan, J.C., Grehan, A.J., 2007. Mult
 }
 
 \author{Robert J. Hijmans}
+
+\dontrun{
+elevation <- getData('alt', country='CHE')
+x <- terrain(elevation, out=c('slope', 'aspect'))
+hill <- hillShade(x[['slope']], slas[['aspect']], 40, 270)
+plot(hill, col=grey(0:100/100), legend=FALSE, main='Switzerland')
+plot(elevation, col=rainbow(25, alpha=0.35), add=TRUE)
+}
+
 
 \keyword{spatial}

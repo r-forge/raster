@@ -14,10 +14,14 @@ terrain <- function(x, filename='', out='', unit='radians', neighbors=8, ...) {
 	unit <- trim(tolower(unit))
 	
 	out <- trim(tolower(out))
-	stopifnot(out %in% c('slope', 'aspect', 'tri', 'tpi', 'roughness'))
+	i <- which(! out %in% c('tri', 'tpi', 'roughness','slope', 'aspect'))
+	if (length(i) > 0) {
+		stop('invalid value in "out"')
+	}
+	stopifnot(length(out) > 0 ) 
 	
 	un <- as.integer(1)
-	if (out == 'slope' | out == 'aspect') {
+	if ('slope' %in% out | 'aspect' %in% out) {
 		stopifnot(unit %in% c('degrees', 'radians'))
 		if (unit=='degrees') {
 			un <- as.integer(0)
@@ -26,30 +30,39 @@ terrain <- function(x, filename='', out='', unit='radians', neighbors=8, ...) {
 	}
 
 
-	if (out == 'tri') {
-		opt <- 1
-	} else if (out == 'tpi') {
-		opt <- 2
-	} else if (out == 'roughness') {
-		opt <- 3
-	} else if (out == 'slope') {
-		if (neighbors == 4) {
-			opt <- 4
-		} else {
-			opt <- 5
-		}
-	} else if (out == 'aspect') {
-		if (neighbors == 4) {
-			opt <- 6
-		} else {
-			opt <- 7
-		}
-	} else {
-		stop('"out" is not a valid output variable')
+	opt <- rep(0, 7)
+	if ('tri' %in% out) {
+		opt[1] <- 1
+	} 
+	if ('tpi' %in% out) {
+		opt[2] <- 1
+	} 
+	if ('roughness' %in% out) {
+		opt[3] <- 1
 	}
+	if ('slope' %in% out) {
+		if (neighbors == 4) {
+			opt[4] <- 1
+		} else {
+			opt[5] <- 1
+		}
+	}
+	if ('aspect' %in% out) {
+		if (neighbors == 4) {
+			opt[6] <- 1
+		} else {
+			opt[7] <- 1
+		}
+	} 
 	opt <- as.integer(opt)
-
-	out <- raster(x)
+	nl <- sum(opt)
+	
+	if (nl == 1) {
+		out <- raster(x)
+	} else {
+		out <- brick(x, values=FALSE, nl=nl)
+	}
+	layerNames(out) <- c('tri', 'tpi', 'roughness','slope', 'slope', 'aspect', 'aspect')[as.logical(opt)]
 	filename <- trim(filename)
 	rs <- as.double(res(out))
 	
@@ -61,9 +74,6 @@ terrain <- function(x, filename='', out='', unit='radians', neighbors=8, ...) {
 		}
 	} else {
 
-		if (filename == '') {
-			filename <- rasterTmpFile()
-		}
 		out <- writeStart(out, filename, ...)
 		tr <- blockSize(out, minblocks=3, minrows=3)
 		nc <- ncol(out)
@@ -84,6 +94,7 @@ terrain <- function(x, filename='', out='', unit='radians', neighbors=8, ...) {
 
 		out <- writeStop(out)
 	}
+	
 	return(out)
 }
 

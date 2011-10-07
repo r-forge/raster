@@ -16,38 +16,51 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 					
 	R_len_t i, j;
 	SEXP val;
-	int nrow, ncol, n, unit, option;
+	int nrow, ncol, n, unit, *option;
 	double *xd, *xval, dx, dy;
 
 	PROTECT(d = coerceVector(d, REALSXP));
-
+	PROTECT(opt = coerceVector(opt, INTSXP));
+	
 	nrow = INTEGER(dim)[0];
 	ncol = INTEGER(dim)[1];
 	n = nrow * ncol;
 	
 	unit = INTEGER(un)[0];
-	option = INTEGER(opt)[0];
 	dx = REAL(res)[0];
 	dy = REAL(res)[1];
 	
-	PROTECT( val = allocVector(REALSXP, n) );
+
+	option = INTEGER(opt);
+	int nopt = 0;
+	for (i =0; i<7; i++) {
+		nopt += option[i];
+	}
+
+
+	PROTECT( val = allocVector(REALSXP, n*nopt) );
 
 	xd = REAL(d);
 	xval = REAL(val);
 	
-	if (option == 1) {  
+	int add=0;
+	if (option[0]) {  
 	// terrain ruggedness
 		for (i = ncol+1; i < ncol * (nrow-1); i++) {
 			xval[i] = (fabs(xd[i-1-ncol]-xd[i]) + fabs(xd[i-1]-xd[i]) + fabs(xd[i-1+ncol]-xd[i]) +  fabs(xd[i-ncol]-xd[i]) +
 				fabs(xd[i+ncol]-xd[i]) +  fabs(xd[i+1-ncol]-xd[i]) + fabs(xd[i+1]-xd[i]) +  fabs(xd[i+1+ncol]-xd[i])) / 8;
 		}
-	} else if (option == 2) {
+		add++;
+	} 
+	if (option[1]) {
 	// topograhic position
 		for (i = ncol+1; i < ncol * (nrow-1); i++) {
-			xval[i] = xd[i] - (xd[i-1-ncol] + xd[i-1] + xd[i-1+ncol] + xd[i-ncol]
+			xval[i+add*n] = xd[i] - (xd[i-1-ncol] + xd[i-1] + xd[i-1+ncol] + xd[i-ncol]
 								+ xd[i+ncol] + xd[i+1-ncol] + xd[i+1] + xd[i+1+ncol]) / 8;
 		}
-	} else if (option == 3) {
+		add++;
+	} 
+	if (option[2]) {
 	// roughness 
 		int a[9] = { -1-ncol, -1, -1+ncol, -ncol, 0, ncol, 1-ncol, 1, 1+ncol };
 		double min, max, v;
@@ -62,9 +75,11 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 					min = v;
 				}
 			}
-			xval[i] = max - min;
+			xval[i+add*n] = max - min;
 		}
-	} else if (option == 4) {
+		add++;
+	} 
+	if (option[3]) {
 	// slope 4 neighbors	
 
 		double zy, zx; 
@@ -77,16 +92,17 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 		for (i = ncol+1; i < ncol * (nrow-1); i++) {
 			zx = xd[i-1] * xw[0] + xd[i+1] * xw[1];
 			zy = xd[i-ncol] * yw[0] + xd[i+ncol] * yw[1];
-			xval[i] = atan( sqrt( pow(zy, 2) + pow(zx, 2) ) );
+			xval[i+add*n] = atan( sqrt( pow(zy, 2) + pow(zx, 2) ) );
 		}
 		if (unit == 0) {
 			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
-				xval[i] = xval[i] * adj;
+				xval[i+add*n] = xval[i] * adj;
 			}
 		}
-		
-	} else if (option == 5) {
+		add++;		
+	} 
+	if (option[4]) {
 	// slope 8 neighbors	
 	
 		double zy, zx; 
@@ -101,16 +117,18 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 					+ xd[i+1-ncol] * xw[3] + xd[i+1] * xw[4] + xd[i+1+ncol] * xw[5];
   			zy = xd[i-1-ncol] * yw[0] + xd[i-1+ncol] * yw[1] + xd[i-ncol] * yw[2] 
 					+ xd[i+ncol] * yw[3] + xd[i+1-ncol] * yw[4] + xd[i+1+ncol] * yw[5];
-			xval[i] = atan( sqrt( pow(zy, 2) + pow(zx, 2) ) );
+			xval[i+add*n] = atan( sqrt( pow(zy, 2) + pow(zx, 2) ) );
 		}
 		if (unit == 0) {
 			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
-				xval[i] = xval[i] * adj;
+				xval[i+add*n] = xval[i] * adj;
 			}
 		}
+		add++;
 		
-	} else if (option == 6) {
+	} 
+	if (option[5]) {
 	// aspect 4 neighbors	
 
 		double zy, zx; 
@@ -124,16 +142,18 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
 			zx = xd[i-1] * xw[0] + xd[i+1] * xw[1];
 			zy = xd[i-ncol] * yw[0] + xd[i+ncol] * yw[1];
 			zx = atan2(zy, zx);
-			xval[i] = mod( M_PI_2 -zx, M_2PI);
+			xval[i+add*n] = mod( M_PI_2 -zx, M_2PI);
 		}
 		if (unit == 0) {
 			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
-				xval[i] = xval[i] * adj;
+				xval[i+add*n] = xval[i+add*n] * adj;
 			}
 		}
+		add++;
 	
-	} else if (option == 7) {
+	} 
+	if (option[6]) {
 	// aspect 8 neighbors	
 	
 		double zy, zx; 
@@ -149,33 +169,35 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt) {
   			zy = xd[i-1-ncol] * yw[0] + xd[i-1+ncol] * yw[1] + xd[i-ncol] * yw[2] 
 					+ xd[i+ncol] * yw[3] + xd[i+1-ncol] * yw[4] + xd[i+1+ncol] * yw[5];
 			zx = atan2(zy, zx);
-			xval[i] = mod( M_PI_2 -zx, M_2PI);
+			xval[i+add*n] = mod( M_PI_2 -zx, M_2PI);
 		}
 		if (unit == 0) {
 			double adj = 180 / M_PI;
 			for (i = ncol+1; i < ncol * (nrow-1); i++) {
-				xval[i] = xval[i] * adj;
+				xval[i+add*n] = xval[i+add*n] * adj;
 			}
 		}
+		add++;
 		
 	}
 	
 // Set edges to NA	
 // first row	
-	for (i = 0; i < ncol; i++) {  
-		xval[i] = R_NaReal;
+	for (j=0; j<add; j++) {
+		for (i = 0; i < ncol; i++) {  
+			xval[i+j*n] = R_NaReal;
+		}
+	// last row	
+		for (i = ncol * (nrow-1); i < n; i++) {  
+			xval[i+j*n] = R_NaReal;
+		}
+	// first and last columns
+		for (i = 1; i < nrow; i++) {  
+			xval[i * ncol +j*n] = R_NaReal;
+			xval[i * ncol - 1 +j*n] = R_NaReal;
+		}
 	}
-// last row	
-	for (i = ncol * (nrow-1); i < n; i++) {  
-		xval[i] = R_NaReal;
-	}
-// first and last columns
-	for (i = 1; i < nrow; i++) {  
-		xval[i * ncol] = R_NaReal;
-		xval[i * ncol - 1] = R_NaReal;
-	}
-	
-	UNPROTECT(2);
+	UNPROTECT(3);
 	return(val);
 }
 
