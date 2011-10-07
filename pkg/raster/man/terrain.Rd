@@ -15,6 +15,7 @@ This function is the replacement for the depracated function \code{\link{slopeAs
 terrain(x, filename='', opt='', unit='radians', neighbors=8, ...)  
 }
 
+
 \arguments{
   \item{x}{RasterLayer object with elevation values. Values should have the same unit as the map units, or in meters when the crs is longitude/latitude}
   \item{filename}{Character. Filename. optional}
@@ -24,31 +25,28 @@ terrain(x, filename='', opt='', unit='radians', neighbors=8, ...)
   \item{...}{Standard additional arguments for writing Raster* objects to file}
 }
 
+
 \details{
-When \code{neighbors=4}, slope and aspect are computed according to Fleming and Hoffer (1979) and Ritter (1987). When \code{neigbors=8}, slope and aspect are computed according to Horn (1981). The Horn algorithm may be best for rough surfaces, and the Fleming and Hoffer algorithm may be better for smoother surfaces (Jones, 1997; Burrough and McDonnell, 1998). 
+When \code{neighbors=4}, slope and aspect are computed according to Fleming and Hoffer (1979) and Ritter (1987). When \code{neigbors=8}, slope and aspect are computed according to Horn (1981). The Horn algorithm may be best for rough surfaces, and the Fleming and Hoffer algorithm may be better for smoother surfaces (Jones, 1997; Burrough and McDonnell, 1998).
+If slope = 0, aspect is set to 0.5*pi radians (or 90 degrees if unit='degrees'). When computing slope or aspect, the CRS (\code{\link{projection}}) of the RasterLayer \code{x} must be known (may not be \code{NA}), to be able to safely differentiate between planar and latitude/longitude data.
 
-If slope = 0, aspect is set to 90 degrees (or 0.5*pi radians)
 
-The terrain indices are according to Wilson et al. (2007), as in \href{http://www.gdal.org/gdaldem.html}{gdaldem}
-
-TRI (Terrain Ruggedness Index) is the mean of the absolute differences between the value of a cell and the value of its 8 surrounding cells.
-
-TPI (Topographic Position Index) is the difference between the value of a cell and the mean value of its 8 surrounding cells.
-
-Roughness is the difference between the maximum and the minimum value of a cell and its 8 surrounding cells.
+The terrain indices are according to Wilson et al. (2007), as in \href{http://www.gdal.org/gdaldem.html}{gdaldem}. TRI (Terrain Ruggedness Index) is the mean of the absolute differences between the value of a cell and the value of its 8 surrounding cells. TPI (Topographic Position Index) is the difference between the value of a cell and the mean value of its 8 surrounding cells. Roughness is the difference between the maximum and the minimum value of a cell and its 8 surrounding cells.
 
 Such measures can also be computed with the \code{\link{focalFilter}} function:
 
-f <- matrix(1, nrow=3, ncol=3)
+\code{f <- matrix(1, nrow=3, ncol=3)}
 
-TRI <- focalFilter(x, f, fun=function(x, ...) sum(abs(x[-5]-x[5]))/8 )
+\code{TRI <- focalFilter(x, f, fun=function(x, ...) sum(abs(x[-5]-x[5]))/8 )}
 
-TPI <- focalFilter(x, f, fun=function(x, ...) x[5] - mean(x[-5]))
+\code{TPI <- focalFilter(x, f, fun=function(x, ...) x[5] - mean(x[-5]))}
 
-rough <- focalFilter(x, f, fun=function(x, ...) max(x) - min(x))
+\code{rough <- focalFilter(x, f, fun=function(x, ...) max(x) - min(x))}
 }
 
+
 \seealso{ \code{\link{hillShade}} }
+
 
 
 \references{
@@ -65,7 +63,10 @@ Ritter, P., 1987. A vector-based slope and aspect generation algorithm. Photogra
 Wilson, M.F.J., O'Connell, B., Brown, C., Guinan, J.C., Grehan, A.J., 2007. Multiscale terrain analysis of multibeam bathymetry data for habitat mapping on the continental slope. Marine Geodesy, 30: 3-35.
 }
 
+
 \author{Robert J. Hijmans}
+
+
 
 \examples{
 \dontrun{

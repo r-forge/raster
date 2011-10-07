@@ -6,11 +6,16 @@
 
 terrain <- function(x, filename='', opt='', unit='radians', neighbors=8, ...) {
 	
+	if (nlayers(x) > 1) {
+		warning('first layer of x is used')
+		x <- subset(x, 1)
+	}
+	stopifnot(hasValues(x))
+	
 	stopifnot(is.character(filename))
 	filename <- trim(filename)
 
-	unit <- trim(tolower(unit))
-	
+	stopifnot(is.character(opt))
 	opt <- trim(tolower(opt))
 	i <- which(! opt %in% c('tri', 'tpi', 'roughness','slope', 'aspect'))
 	if (length(i) > 0) {
@@ -53,19 +58,18 @@ terrain <- function(x, filename='', opt='', unit='radians', neighbors=8, ...) {
 	}
 	layerNames(out) <- c('tri', 'tpi', 'roughness','slope', 'aspect', 'slope', 'aspect')[as.logical(nopt)]
 
-	filename <- trim(filename)
 	rs <- as.double(res(out))
 	un <- as.integer(1)
 	y <- 0;
-	
 	lonlat <- FALSE
 	if ('slope' %in% opt | 'aspect' %in% opt) {
+		stopifnot(is.character(unit))
+		unit <- trim(tolower(unit))
 		stopifnot(unit %in% c('degrees', 'radians'))
 		if (unit=='degrees') {
 			un <- as.integer(0)
 		}
 		stopifnot(neighbors %in% c(4, 8))
-		
 		stopifnot(projection(x) != "NA")
 		lonlat <- isLonLat(out)
 		if (lonlat) {		
