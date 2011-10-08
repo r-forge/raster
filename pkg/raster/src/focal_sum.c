@@ -10,19 +10,18 @@
 #include "R_ext/Rdynload.h"
 
 
-SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP glob) {
+SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP rmNA) {
 
-	R_len_t i, j, k, q;
+	R_len_t i, j, k, q, p;
 	SEXP val;
-	int nrow, ncol, n, globll;
-	double *xd, *xval, *xw;
+	int nrow, ncol, n, narm;
+	double *xd, *xval, *xw, a;
 
 
 	SEXP wdim = getAttrib(w, R_DimSymbol);
 
 	if (isNull(wdim))
 		error("wdim is null");
-
 
 	int wrows = INTEGER(wdim)[0];
 	int wcols = INTEGER(wdim)[1];
@@ -31,7 +30,7 @@ SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP glob) {
 	if ((wrows % 2 == 0) | (wcols % 2 == 0))
 		error("weights matrix must have uneven sides");
 
-	globll = INTEGER(glob)[0];
+	narm = INTEGER(rmNA)[0];
 
 	nrow = INTEGER(dim)[0];
 	ncol = INTEGER(dim)[1];
@@ -46,29 +45,46 @@ SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP glob) {
 	xval = REAL(val);
 	xw = REAL(w);
 
-	for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
-		xval[i] = 0;
-		q = 0;
-		for (j = -wr; j <= wr; j++) {
-			for (k = -wc; k <= wc; k++) {
-				xval[i] += xd[j * ncol + k + i]  * xw[q];
-				q++;
+	if (narm) {
+		for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
+			xval[i] = 0;
+			q = 0;
+			p = 0;
+			for (j = -wr; j <= wr; j++) {
+				for (k = -wc; k <= wc; k++) {
+					a = xd[j * ncol + k + i];
+					if ( R_FINITE(a) ) {
+						xval[i] += a * xw[q];
+						p++;
+					}
+					q++;
+				}
+			}
+			if (p==0) {
+				xval[i] = R_NaReal;
+			}
+		}
+	} else {
+		for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
+			xval[i] = 0;
+			q = 0;
+			for (j = -wr; j <= wr; j++) {
+				for (k = -wc; k <= wc; k++) {
+					xval[i] += xd[j * ncol + k + i]  * xw[q];
+					q++;
+				}
 			}
 		}
 	}
 	
 // Set edges to NA	
 // first and last columns
-// do not do this for global lonlat data (wrap around is OK)
-// but currently these edge values are wrong (the wrong warp around is used)
-//	if (globll != 0) {
-		for (i = wr; i < nrow; i++) {  
-			for (j = 0; j < wc; j++) {
-				xval[i * ncol + j] = R_NaReal;
-				xval[i * ncol - j - 1] = R_NaReal;
-			}
+	for (i = wr; i < nrow; i++) {  
+		for (j = 0; j < wc; j++) {
+			xval[i * ncol + j] = R_NaReal;
+			xval[(i+1) * ncol - 1 - j] = R_NaReal;
 		}
-//	} 
+	}
 
 // first rows
 	for (i = 0; i < ncol*wr; i++) {  

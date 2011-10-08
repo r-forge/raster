@@ -9,11 +9,11 @@
 #include "Rdefines.h"
 #include "R_ext/Rdynload.h"
 
-SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP glob, SEXP fn, SEXP rho) {
+SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fn, SEXP rho) {
 
 	R_len_t i, j, k, q;
     SEXP R_fcall, ans, x;	
-	int nrow, ncol, n, wn, globll;
+	int nrow, ncol, n, wn;
 	double *xd, *xans, *xw, *xx;
 
     if(!isFunction(fn)) error("'fn' must be a function");
@@ -28,7 +28,6 @@ SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP glob, SEXP fn, SEXP rho) {
 	PROTECT(d = coerceVector(d, REALSXP));
 	PROTECT(w = coerceVector(w, REALSXP));
 	
-	globll = INTEGER(glob)[0];
 	nrow = INTEGER(dim)[0];
 	ncol = INTEGER(dim)[1];
 
@@ -60,17 +59,12 @@ SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP glob, SEXP fn, SEXP rho) {
 	
 
 // Set edges to NA	
-// first and last columns
-// do not do this for global lonlat data (wrap around is OK)
-// but currently these edge values are wrong (the wrong warp around is used)
-//	if (globll != 0) {
-		for (i = wr; i < nrow; i++) {  
-			for (j = 0; j < wc; j++) {
-				xans[i * ncol + j] = R_NaReal;
-				xans[i * ncol - j - 1] = R_NaReal;
-			}
+	for (i = wr; i < nrow; i++) {  
+		for (j = 0; j < wc; j++) {
+			xans[i * ncol + j] = R_NaReal;
+			xans[i * ncol - j - 1] = R_NaReal;
 		}
-//	} 
+	}
 
 // first rows
 	for (i = 0; i < ncol*wr; i++) {  
