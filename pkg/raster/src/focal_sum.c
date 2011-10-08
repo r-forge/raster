@@ -10,11 +10,11 @@
 #include "R_ext/Rdynload.h"
 
 
-SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP rmNA) {
+SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP rmNA, SEXP NAonly) {
 
 	R_len_t i, j, k, q, p;
 	SEXP val;
-	int nrow, ncol, n, narm;
+	int nrow, ncol, n;
 	double *xd, *xval, *xw, a;
 
 
@@ -30,7 +30,8 @@ SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP rmNA) {
 	if ((wrows % 2 == 0) | (wcols % 2 == 0))
 		error("weights matrix must have uneven sides");
 
-	narm = INTEGER(rmNA)[0];
+	int narm = INTEGER(rmNA)[0];
+	int naonly = INTEGER(NAonly)[0];
 
 	nrow = INTEGER(dim)[0];
 	ncol = INTEGER(dim)[1];
@@ -46,22 +47,46 @@ SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP rmNA) {
 	xw = REAL(w);
 
 	if (narm) {
-		for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
-			xval[i] = 0;
-			q = 0;
-			p = 0;
-			for (j = -wr; j <= wr; j++) {
-				for (k = -wc; k <= wc; k++) {
-					a = xd[j * ncol + k + i];
-					if ( R_FINITE(a) ) {
-						xval[i] += a * xw[q];
-						p++;
+		if (naonly) {
+			for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
+				if (R_FINITE(xd[i])) {
+					xval[i] = xd[i];
+				} else {
+					xval[i] = 0;
+					q = 0;
+					p = 0;
+					for (j = -wr; j <= wr; j++) {
+						for (k = -wc; k <= wc; k++) {
+							a = xd[j * ncol + k + i];
+							if ( R_FINITE(a) ) {
+								xval[i] += a * xw[q];
+								p++;
+							}
+							q++;
+						}
 					}
-					q++;
+					if (p==0) {
+						xval[i] = R_NaReal;
+					}
 				}
 			}
-			if (p==0) {
-				xval[i] = R_NaReal;
+		} else {
+			for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
+				q = 0;
+				p = 0;
+				for (j = -wr; j <= wr; j++) {
+					for (k = -wc; k <= wc; k++) {
+						a = xd[j * ncol + k + i];
+						if ( R_FINITE(a) ) {
+							xval[i] += a * xw[q];
+							p++;
+						}
+						q++;
+					}
+				}
+				if (p==0) {
+					xval[i] = R_NaReal;
+				}
 			}
 		}
 	} else {

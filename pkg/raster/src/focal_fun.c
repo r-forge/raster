@@ -9,7 +9,7 @@
 #include "Rdefines.h"
 #include "R_ext/Rdynload.h"
 
-SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP rho) {
+SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP NAonly, SEXP rho) {
 
 	R_len_t i, j, k, q;
     SEXP R_fcall, ans, x;	
@@ -31,6 +31,7 @@ SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP rho) {
 	
 	nrow = INTEGER(dim)[0];
 	ncol = INTEGER(dim)[1];
+	int naonly = INTEGER(NAonly)[0];
 
 	n = nrow * ncol;
 	PROTECT( ans = allocVector(REALSXP, n) );
@@ -46,16 +47,34 @@ SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP rho) {
 	xans = REAL(ans);
 	xw = REAL(w);
 
-	for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
-		q = 0;
-		for (j = -wr; j <= wr; j++) {
-			for (k = -wc; k <= wc; k++) {
-				xx[q] = xd[j * ncol + k + i];
-				q++;
+	if (naonly) {
+		for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
+			if (R_FINITE(xd[i])) {
+				xans[i] = xd[i];
 			}
+			q = 0;
+			for (j = -wr; j <= wr; j++) {
+				for (k = -wc; k <= wc; k++) {
+					xx[q] = xd[j * ncol + k + i];
+					q++;
+				}
+			}
+			SETCADR(R_fcall, x);
+			xans[i] = REAL(eval(R_fcall, rho))[0];
 		}
-		SETCADR(R_fcall, x);
-		xans[i] = REAL(eval(R_fcall, rho))[0];
+		
+	} else {
+		for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
+			q = 0;
+			for (j = -wr; j <= wr; j++) {
+				for (k = -wc; k <= wc; k++) {
+					xx[q] = xd[j * ncol + k + i];
+					q++;
+				}
+			}
+			SETCADR(R_fcall, x);
+			xans[i] = REAL(eval(R_fcall, rho))[0];
+		}
 	}
 	
 
