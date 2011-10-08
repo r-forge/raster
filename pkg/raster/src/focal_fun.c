@@ -9,22 +9,23 @@
 #include "Rdefines.h"
 #include "R_ext/Rdynload.h"
 
-SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fn, SEXP rho) {
+SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP rho) {
 
 	R_len_t i, j, k, q;
     SEXP R_fcall, ans, x;	
 	int nrow, ncol, n, wn;
 	double *xd, *xans, *xw, *xx;
 
-    if(!isFunction(fn)) error("'fn' must be a function");
+    if(!isFunction(fun)) error("'fun' must be a function");
     if(!isEnvironment(rho)) error("'rho' should be an environment");
-    PROTECT(R_fcall = lang2(fn, R_NilValue));
+    PROTECT(R_fcall = lang2(fun, R_NilValue));
 	
 	SEXP wdim = getAttrib(w, R_DimSymbol);
 	int wrows = INTEGER(wdim)[0];
 	int wcols = INTEGER(wdim)[1];
 	wn = wrows * wcols;
-	
+    if(wn==0) error("'w' has zero dimension(s)");
+ 	
 	PROTECT(d = coerceVector(d, REALSXP));
 	PROTECT(w = coerceVector(w, REALSXP));
 	
