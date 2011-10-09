@@ -74,6 +74,7 @@ SEXP focal_sum(SEXP d, SEXP w, SEXP dim, SEXP rmNA, SEXP NAonly) {
 			for (i = ncol*wr; i < ncol * (nrow-wr); i++) {
 				q = 0;
 				p = 0;
+				xval[i] = 0;
 				for (j = -wr; j <= wr; j++) {
 					for (k = -wc; k <= wc; k++) {
 						a = xd[j * ncol + k + i];

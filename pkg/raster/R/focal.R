@@ -47,8 +47,9 @@ focal <- function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, N
 	
 	
 	# to get the weights in the (by row) order for the C routine
-	w <- t(w)
-
+	# but keeping nrow and ncol as-is
+	w[] <- as.vector(t(w))
+		
 	out <- raster(x)
 	filename <- trim(filename)
 	
@@ -68,9 +69,11 @@ focal <- function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, N
 	} else {
 		dofun <- TRUE
 		e <- new.env()
+		oldfun <- fun
 		if (na.rm) {
-			oldfun <- fun
-			fun <- function(x) oldfun(x, na.rm=TRUE)
+			fun <- function(x) as.double( oldfun(x, na.rm=TRUE) )
+		} else {
+			fun <- function(x) as.double( oldfun(x) )
 		}
 	}
 	if (NAonly) {

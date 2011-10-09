@@ -53,8 +53,6 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 		fY <- fY / dy
 		zx <- focal(dem, w=fX)
 		zy <- focal(dem, w=fY)
-		#zx <- focalFilter(dem, matrix(fX, nrow=3))
-		#zy <- focalFilter(dem, matrix(fY, nrow=3))
 	}
 
 	if (type == 'slope') {

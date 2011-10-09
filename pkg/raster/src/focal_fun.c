@@ -55,7 +55,7 @@ SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP NAonly, SEXP rho) {
 			q = 0;
 			for (j = -wr; j <= wr; j++) {
 				for (k = -wc; k <= wc; k++) {
-					xx[q] = xd[j * ncol + k + i];
+					xx[q] = xd[j * ncol + k + i] * xw[q];
 					q++;
 				}
 			}
@@ -68,7 +68,7 @@ SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP NAonly, SEXP rho) {
 			q = 0;
 			for (j = -wr; j <= wr; j++) {
 				for (k = -wc; k <= wc; k++) {
-					xx[q] = xd[j * ncol + k + i];
+					xx[q] = xd[j * ncol + k + i] * xw[q];
 					q++;
 				}
 			}
@@ -82,7 +82,7 @@ SEXP focal_fun(SEXP d, SEXP w, SEXP dim, SEXP fun, SEXP NAonly, SEXP rho) {
 	for (i = wr; i < nrow; i++) {  
 		for (j = 0; j < wc; j++) {
 			xans[i * ncol + j] = R_NaReal;
-			xans[i * ncol - j - 1] = R_NaReal;
+			xans[(i+1) * ncol - 1 - j] = R_NaReal;
 		}
 	}
 
