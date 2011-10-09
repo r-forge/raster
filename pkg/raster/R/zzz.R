@@ -9,7 +9,7 @@
 		options( rasterCluster=FALSE )
 #	}
 
-	library.dynam("raster", pkg)	
+	library.dynam("raster", pkg, .libPaths())	
 
 	return(invisible(0))
 }
