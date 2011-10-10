@@ -10,6 +10,7 @@
 
 
 
+
 double distPlane(double x1, double y1, double x2, double y2) {
 	return( sqrt(pow((x2-x1),2) + pow((y2-y1), 2)) );
 }
@@ -144,5 +145,4 @@ void distanceEllipsoid(int *n, double *lon1, double *lat1, double *lon2, double 
 		}
 	}
 }
-
 

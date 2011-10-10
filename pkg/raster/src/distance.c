@@ -9,6 +9,8 @@
 #include "Rdefines.h"
 #include "R_ext/Rdynload.h"
 #include "dist_util.h"
+#include "util.h"
+
 
 
 SEXP distanceToNearestPoint(SEXP d, SEXP p, SEXP geo) {

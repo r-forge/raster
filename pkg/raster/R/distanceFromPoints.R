@@ -5,12 +5,12 @@
 
 distanceFromPoints <- function(object, xy, filename='', ...) {
 	
-	pts <- raster:::.pointsToMatrix(xy)
+	pts <- .pointsToMatrix(xy)
 	rm(xy)
 
 	filename <- trim(filename)
 	
-	if (raster:::.couldBeLonLat(object)) { 
+	if (.couldBeLonLat(object)) { 
 		longlat=TRUE 
 	} else { 
 		longlat=FALSE 
@@ -26,9 +26,6 @@ distanceFromPoints <- function(object, xy, filename='', ...) {
 		return(out)
 	} 
 	
-	if (filename == '') {
-		filename <- rasterTmpFile()			
-	}
 	out <- writeStart(out, filename=filename, ...)
 	tr <- blockSize(out)
 	pb <- pbCreate(tr$n, type=raster:::.progress(...))

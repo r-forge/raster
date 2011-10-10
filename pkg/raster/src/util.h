@@ -13,4 +13,3 @@ double normLonDeg(double lon);
 /* normatlize longitude between -pi .. p1 radians*/
 double normLonRad(double lon);
 
-

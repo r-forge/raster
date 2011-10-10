@@ -15,7 +15,7 @@ function(x, filename='', doEdge=FALSE, ...) {
 		r <- edge(x, classes=FALSE, type='inner', asNA=TRUE, progress=.progress(...)) 
 		pts <- try(  rasterToPoints(r, fun=function(z){ z>0 } )[,1:2, drop=FALSE] )
 	} else {
-		pts <- try(  rasterToPoints(x, fun=function(z){ z>0 } )[,1:2, drop=FALSE] )
+		pts <- try(  rasterToPoints(x)[,1:2, drop=FALSE] )
 	}
 	
 	if (class(pts) == "try-error") {
@@ -25,6 +25,51 @@ function(x, filename='', doEdge=FALSE, ...) {
 		stop('RasterLayer has no NA cells (for which to compute a distance)')
 	}
 	out <- raster(x)
-	distanceFromPoints(out, pts, filename=filename, ...)
+	filename <- trim(filename)
+	
+	if (raster:::.couldBeLonLat(x)) { 
+		longlat=TRUE 
+	} else { 
+		longlat=FALSE 
+	}
+	                                                                        
+	if (canProcessInMemory(out, 4)) {
+		x <- values(x)
+		i <- which(is.na(x))
+		if (length(i) < 1) {
+			stop('raster has no NA values to compute distance to')
+		}
+		x[] <- 0
+		xy <- xyFromCell(out, i)
+		x[i] <- .Call("distanceToNearestPoint", xy, pts, as.integer(longlat), PACKAGE='raster')
+		out <- setValues(out, x)
+		if (filename != '') {
+			out <- writeRaster(out, filename=filename, ...)
+		}
+		return(out)
+	} 
+	
+	out <- writeStart(out, filename=filename, ...)
+	tr <- blockSize(out)
+	pb <- pbCreate(tr$n, type=raster:::.progress(...))
+	xy <- cbind(rep(xFromCol(out, 1:ncol(out)), tr$nrows[1]), NA)
+	for (i in 1:tr$n) {
+		if (i == tr$n) {
+			xy <- xy[1:(ncol(out)*tr$nrows[i]), ]
+		}
+		xy[,2] <- rep(yFromRow(out, tr$row[i]:(tr$row[i]+tr$nrows[i]-1)), each=ncol(out))
+		vals <- getValues(x, tr$row[i], tr$nrows[i])
+		j <- which(is.na(vals))
+		vals[] <- 0
+		if (length(j) > 0) {
+			vals[j] <- .Call("distanceToNearestPoint", xy[j,,drop=FALSE], pts, as.integer(longlat), PACKAGE='raster')
+		}
+		out <- writeValues(out, vals, tr$row[i])
+		pbStep(pb) 	
+	}	
+	pbClose(pb)
+	out <- writeStop(out)
+	return(out)
 }
 )
+
