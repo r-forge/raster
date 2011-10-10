@@ -1,6 +1,7 @@
---- 5-October-2011, version 1.9-23
+--- 10-October-2011, version 1.9-25
+Functions re-implemented using C routines for better speed: focal (a combination of old functions focal, focalNA and focalFilter), distance, direction, and reclass and slopeAspect.
+slopeAspect is replaced by 'terrain' to do slope, aspect and other elevation derived terrain characteristics.
 Fixed subset bug reported by Julian Zeidler. https://r-forge.r-project.org/tracker/?func=detail&atid=1189&aid=1610&group_id=294
-New function under development 'terrain' to do slope, aspect and other elevation derived terrain characteristics. 
 
 --- 27-September-2011, version 1.9-21
 mask now works for the a RasterStack/Brick and Spatial* objects. Bug reported by Robert Buitenwerf
