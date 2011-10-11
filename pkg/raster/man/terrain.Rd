@@ -33,15 +33,15 @@ If slope = 0, aspect is set to 0.5*pi radians (or 90 degrees if unit='degrees').
 
 The terrain indices are according to Wilson et al. (2007), as in \href{http://www.gdal.org/gdaldem.html}{gdaldem}. TRI (Terrain Ruggedness Index) is the mean of the absolute differences between the value of a cell and the value of its 8 surrounding cells. TPI (Topographic Position Index) is the difference between the value of a cell and the mean value of its 8 surrounding cells. Roughness is the difference between the maximum and the minimum value of a cell and its 8 surrounding cells.
 
-Such measures can also be computed with the \code{\link{focalFilter}} function:
+Such measures can also be computed with the \code{\link{focal}} function:
 
 \code{f <- matrix(1, nrow=3, ncol=3)}
 
-\code{TRI <- focalFilter(x, f, fun=function(x, ...) sum(abs(x[-5]-x[5]))/8 )}
+\code{TRI <- focal(x, w=f, fun=function(x, ...) sum(abs(x[-5]-x[5]))/8 )}
 
-\code{TPI <- focalFilter(x, f, fun=function(x, ...) x[5] - mean(x[-5]))}
+\code{TPI <- focal(x, w=f, fun=function(x, ...) x[5] - mean(x[-5]))}
 
-\code{rough <- focalFilter(x, f, fun=function(x, ...) max(x) - min(x))}
+\code{rough <- focal(x, w=f, fun=function(x, ...) max(x) - min(x))}
 }
 
 
