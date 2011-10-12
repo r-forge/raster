@@ -115,11 +115,6 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE) {
 	
 	cell <- cellFromRowCol(x, rep(rows, each=nc), rep(cols, times=nr))
 	
-	if ( ! inMemory(x) ) { 
-		if (canProcessInMemory(x, 5)) {
-			x <- readAll(x)
-		}
-	}
 	
 	if (asRaster) {
 		if (rotated) {
