@@ -58,7 +58,7 @@ focal <- function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, N
 		padrows <- TRUE
 	}
 
-	gll <- as.integer(raster:::.isGlobalLonLat(out))
+	gll <- as.integer(.isGlobalLonLat(out))
 	if (gll) {
 		pad <- TRUE
 	}

@@ -35,9 +35,9 @@ function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
 		if (is.na(rcl[i,1]) | is.na(rcl[i,2])) {
 			if (!hasNA) {
 				valNA <- rcl[i,3]
+				hasNA <- TRUE
 			}
 			rcl <- rcl[-i, ,drop=FALSE]
-			hasNA <- TRUE
 		}
 	}
 	if (hasNA) {

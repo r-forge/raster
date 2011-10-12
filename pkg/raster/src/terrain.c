@@ -100,7 +100,7 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP ge
 		if (geo) {
 			int k, q;
 			double xwi[2] = {-1,1};
-			double xw[2] = {};
+			double xw[2] = {0,0};
 			double yw[2] = {-1,1};
 
 			
@@ -155,7 +155,7 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP ge
 		if (geo) {
 			int k, q;
 			double xwi[2] = {-1,1};
-			double xw[2] = {};
+			double xw[2] = {0,0};
 			double yw[2] = {-1,1};
 
 			
@@ -214,7 +214,7 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP ge
 		if (geo) {
 			int k, q;
 			double xwi[6] = {-1,-2,-1,1,2,1};
-			double xw[6] = {};
+			double xw[6] = {0,0,0,0,0,0};
 			double yw[6] = {-1,1,-2,2,-1,1};
 			
 			for (i=0; i<6; i++) {
@@ -276,7 +276,7 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP ge
 		if (geo) {
 			int k, q;
 			double xwi[6] = {-1,-2,-1,1,2,1};
-			double xw[6] = {};
+			double xw[6] = {0,0,0,0,0,0};
 			double yw[6] = {-1,1,-2,2,-1,1};
 			
 			for (i=0; i<6; i++) {
