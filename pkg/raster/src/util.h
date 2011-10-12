@@ -8,8 +8,8 @@ double toRad(double deg) ;
 double toDeg(double rad) ; 
 
 /* normatlize longitude between -180 .. 180 degrees*/
-double normLonDeg(double lon);
+double normalizeLonDeg(double lon);
 
 /* normatlize longitude between -pi .. p1 radians*/
-double normLonRad(double lon);
+double normalizeLonRad(double lon);
 
