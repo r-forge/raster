@@ -27,14 +27,15 @@ function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
 	colnames(rcl) <- c("From", "To", "Becomes")	
 	if (getOption('verbose')) { print(rcl)  }
 
-	stopifnot(all(rcl[,2] >= rcl[,1]))
 	
 	hasNA <- FALSE
 	onlyNA <- FALSE
-	valNA <- 0
+	valNA <- NA
 	for (i in 1:nrow(rcl)) {
 		if (is.na(rcl[i,1]) | is.na(rcl[i,2])) {
-			valNA <- rcl[i,3]
+			if (!hasNA) {
+				valNA <- rcl[i,3]
+			}
 			rcl <- rcl[-i, ,drop=FALSE]
 			hasNA <- TRUE
 		}
@@ -47,6 +48,7 @@ function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
 			stop('I do not understand this reclass matrix')
 		}
 	}
+	stopifnot(all(rcl[,2] >= rcl[,1]))
 
 	
 	if (nlayers(x) == 1) { 
@@ -57,12 +59,12 @@ function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
 
 	include.lowest <- as.integer(include.lowest)
 	right <- as.integer(right)
-	hasNA <- as.integer(hasNA)
+	#hasNA <- as.integer(hasNA)
 	onlyNA <- as.integer(onlyNA)
-	
+	valNA <- as.double(valNA)
 	
 	if (canProcessInMemory(out)) {
-		out <- setValues(out, .Call('reclass', values(x), rcl, include.lowest, right, hasNA, onlyNA, valNA, NAOK=TRUE, PACKAGE='raster'))
+		out <- setValues(out, .Call('reclass', values(x), rcl, include.lowest, right, onlyNA, valNA, NAOK=TRUE, PACKAGE='raster'))
 		if ( filename != "" ) { 
 			out <- writeRaster(out, filename=filename, ...) 
 		}
@@ -76,7 +78,7 @@ function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
 
 		for (i in 1:tr$n) {
 			vals <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			vals <- .Call('reclass', vals, rcl, include.lowest, right, hasNA, onlyNA, valNA, NAOK=TRUE, PACKAGE='raster')
+			vals <- .Call('reclass', vals, rcl, include.lowest, right, onlyNA, valNA, NAOK=TRUE, PACKAGE='raster')
 			out <- writeValues(out, vals, tr$row[i])
 			pbStep(pb, i)
 		}
