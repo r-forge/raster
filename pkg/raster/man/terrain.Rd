@@ -28,7 +28,7 @@ terrain(x, filename='', opt='', unit='radians', neighbors=8, ...)
 
 \details{
 When \code{neighbors=4}, slope and aspect are computed according to Fleming and Hoffer (1979) and Ritter (1987). When \code{neigbors=8}, slope and aspect are computed according to Horn (1981). The Horn algorithm may be best for rough surfaces, and the Fleming and Hoffer algorithm may be better for smoother surfaces (Jones, 1997; Burrough and McDonnell, 1998).
-If slope = 0, aspect is set to 0.5*pi radians (or 90 degrees if unit='degrees'). When computing slope or aspect, the CRS (\code{\link{projection}}) of the RasterLayer \code{x} must be known (may not be \code{NA}), to be able to safely differentiate between planar and latitude/longitude data.
+If slope = 0, aspect is set to 0.5*pi radians (or 90 degrees if unit='degrees'). When computing slope or aspect, the CRS (\code{\link{projection}}) of the RasterLayer \code{x} must be known (may not be \code{NA}), to be able to safely differentiate between planar and longitude/latitude data.
 
 
 The terrain indices are according to Wilson et al. (2007), as in \href{http://www.gdal.org/gdaldem.html}{gdaldem}. TRI (Terrain Ruggedness Index) is the mean of the absolute differences between the value of a cell and the value of its 8 surrounding cells. TPI (Topographic Position Index) is the difference between the value of a cell and the mean value of its 8 surrounding cells. Roughness is the difference between the maximum and the minimum value of a cell and its 8 surrounding cells.
