@@ -83,13 +83,13 @@ SEXP reclass(SEXP d, SEXP r, SEXP low, SEXP right, SEXP onlyNA, SEXP valNA) {
 					}
 				}
 				
-			} else {
+			} else { // !dolowest
 
 				for (i=0; i<n; i++) {
-					xval[i] = xd[i];
 					if (!R_FINITE(xd[i])) {
 						xval[i] = NAval;
 					} else {
+						xval[i] = xd[i];
 						for (j=0; j<a; j++) {
 							if ((xd[i] > rcl[j]) & (xd[i] <= rcl[j+a])) {
 								xval[i] = rcl[j+b];
@@ -130,13 +130,13 @@ SEXP reclass(SEXP d, SEXP r, SEXP low, SEXP right, SEXP onlyNA, SEXP valNA) {
 					}
 				}
 				
-			} else {
+			} else { //!dolowest
 			
 				for (i=0; i<n; i++) {
-					xval[i] = xd[i];
 					if (!R_FINITE(xd[i])) {
 						xval[i] = NAval;
 					} else {
+						xval[i] = xd[i];
 						for (j=0; j<a; j++) {	
 							if ((xd[i] >= rcl[j]) & (xd[i] < rcl[j+a])) {
 								xval[i] = rcl[j+b];
