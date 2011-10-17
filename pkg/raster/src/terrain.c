@@ -12,6 +12,8 @@
 #include "util.h"
 #include "dist_util.h"
 
+
+
 SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP geoy) {
 					
 	R_len_t i, j;
@@ -340,7 +342,7 @@ SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP ge
 		GetRNGstate();
 		for (i = ncol+1; i < ncol * (nrow-1); i++) {
 			if (!R_FINITE(xd[i])) {
-				xval[i] = NAval;
+				xval[i] = R_NaReal;
 			} else {
 				d[0] = (xd[i] - xd[i+1]) / dx;
 				d[1] = (xd[i] - xd[i+1+ncol]) / dxy;

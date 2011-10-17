@@ -19,7 +19,7 @@ terrain <- function(x, opt='slope', unit='radians', neighbors=8, filename='', ..
 	opt <- trim(tolower(opt))
 	i <- which(! opt %in% c('tri', 'tpi', 'roughness','slope', 'aspect', 'flowdir'))
 	if (length(i) > 0) {
-		stop('invalid value in "opt"')
+		stop('invalid value in "opt", choose from:\n "tri", "tpi", "roughness", "slope", "aspect", "flowdir"')
 	}
 	stopifnot(length(opt) > 0 ) 
 	
