@@ -137,12 +137,12 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 		# using gdal directly to subsample is faster.
 		dx <- .driver(x, warn=FALSE)
 		dy <- .driver(y, warn=FALSE)
-		if (( all(dx =='gdal') & all(dy == 'gdal')) | ( all(dx != 'gdal') & all(dy != 'gdal'))) {
-			x <- sampleRegular(x, size=maxpixels) 
-			y <- sampleRegular(y, size=maxpixels)
+		if ( all(dx =='gdal') & all(dy == 'gdal')) {
+			x <- sampleRegular(x, size=maxpixels, useGDAL=TRUE) 
+			y <- sampleRegular(y, size=maxpixels, useGDAL=TRUE)
 		} else {
-			x <- sampleRegular(x, size=maxpixels, cells=TRUE)[,-1] 
-			y <- sampleRegular(y, size=maxpixels, cells=TRUE)[,-1]
+			x <- sampleRegular(x, size=maxpixels)
+			y <- sampleRegular(y, size=maxpixels)
 		}
 		if (length(x) < cells) {
 			warning(paste('plot used a sample of ', round(100*length(x)/cells), "% of the cells", sep=""))

@@ -14,7 +14,7 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='') {
 		x <- x[[1]]
 	}
 	
-	x <- sampleRegular(x, size=maxpixels, asRaster = TRUE)
+	x <- sampleRegular(x, size=maxpixels, asRaster = TRUE, useGDAL=TRUE)
 
 	imagefile <- filename
 	extension(imagefile) <- '.png'
