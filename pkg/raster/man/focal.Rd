@@ -25,7 +25,7 @@ focal(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FALSE,
  
 \item{na.rm}{logical. If \code{TRUE}, \code{NA} will be removed from focal computations. The result will only be \code{NA} if all focal cells are \code{NA}. Except for some special cases (weights of 1, functions like min, max, mean), using \code{na.rm=TRUE} is generally not a good idea in this function because it will unbalance the effect of the weights }
  
-\item{pad}{logical. If \code{TRUE}, additional 'virtual' rows and columns are padded to \code{x} such that there are no edge effects. This can be useful when a function needs to have access to the central cell of the filter }
+\item{pad}{logical. If \code{TRUE}, additional 'virtual' rows and columns are padded to \code{x} such that there are no edge effects. This can be useful when a function needs to have access to the central cell of the filter}
   
 \item{padValue}{logical. The value of the cells of the padded rows and columns}
  
@@ -68,7 +68,7 @@ RasterLayer
 \author{Robert J. Hijmans}
 
 \examples{
-r <- raster(ncols=36, nrows=18)
+r <- raster(ncols=36, nrows=18, xmn=0)
 r[] <- runif(ncell(r)) 
 
 # 3x3 mean filter
@@ -85,6 +85,11 @@ rg <- focal(r, w=gf)
 f = matrix(c(0,0,0,0,1,1,0,1,1), nrow=3)
 f
 rm <- focal(r, w=f, fun=max)
+
+# global lon/lat data: no 'edge effect' for the columns
+xmin(r) <- -180
+r3g <- focal(r, w=matrix(1/9,nrow=3,ncol=3)) 
+
 }
 
 
