@@ -143,25 +143,13 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		stop('projections of "from" and "to" are the same')
 	}	
 
-	if ( ! hasValues(from) ) {
-		return(to)
-	}
+#	pbb <- projectExtent(to, projection(from))
+#	bb <- intersectExtent(pbb, from)
+#	validObject(bb)
 
-	pbb <- projectExtent(to, projection(from))
-	bb <- intersectExtent(pbb, from)
-	validObject(bb)
-
-	bb <- extent(projectExtent(from, projection(to)))
-	startrow <- max(rowFromY(to, bb@ymax) - 10, 1, na.rm=TRUE)
-	endrow <- min(rowFromY(to, bb@ymin) + 10, to@nrows, na.rm=TRUE)
-	startcol <- max(colFromX(to, bb@xmin) - 10, 1, na.rm=TRUE)
-	endcol <- min(colFromX(to, bb@xmax) + 10, to@ncols, na.rm=TRUE)
-		
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }
 	if (method=='ngb') { method <- 'simple' } # for extract (.xyValues)
 
-	filename <- trim(filename)
-	
 	nl <- nlayers(from)
 	if ( nl == 1) {
 		to <- raster(to)
@@ -169,18 +157,17 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		to <- brick(to, values=FALSE, nl=nl)
 	}
 	layerNames(to) <- layerNames(from)
-
-	if (!canProcessInMemory(to, n=nl*2) && filename == "") {
-		filename <- rasterTmpFile()
-	}
-
-	inMemory <- filename == ""
-	if (inMemory) {
-		v <- matrix(NA, nrow=ncell(to), nlayers(from))
-	} else {
-		to <- writeStart(to, filename=filename, ...)
+	if ( ! hasValues(from) ) {
+		warning("'from' has no cell values")
+		return(to)
 	}
 	
+	if (canProcessInMemory(to, n=nl*2)) {
+		inMemory <- TRUE
+	} else {
+		inMemory <- FALSE
+	}
+
 	
 	if (.doCluster()) {
 		
@@ -194,25 +181,15 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		
 		tr <- blockSize(to, minblocks=nodes)
 		pb <- pbCreate(tr$n, type=.progress(...))
+		to <- writeStart(to, filename=filename, ...)
 
 		clFun <- function(i) {
-			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-
-			if (max(r) < startrow | min(r) > endrow) {
-				vals <- rep(NA, times=tr$nrows[i] * to@ncols)
-			} else {
-				srow <- max(startrow, tr$row[i])
-				erow <- min(endrow, (tr$row[i]+tr$nrows[i]-1))
-				nrows <- erow-srow+1
-				cells <- cellFromRowColCombine(to, srow:erow, startcol:endcol)
-				xy <- xyFromCell(to, cells ) 
-				xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
-				xy <- cbind(xy[[1]], xy[[2]])
-				cells <- cells - (tr$row[i] - 1) * to@ncols
-				vals <- matrix(NA, nrow=tr$nrows[i] * to@ncols, ncol=nl)
-				vals[cells,] <- .xyValues(from, xy, method=method)
-			}
-			return(vals)
+			start <- cellFromRowCol(to, tr$row[i], 1)
+			end <- start + (tr$nrows[i]-1) * ncol(to)
+			xy <- xyFromCell(to, start:end ) 
+			xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+			xy <- cbind(xy[[1]], xy[[2]])
+			return ( .xyValues(from, xy, method=method) )
 		}
 		
 		# for debugging
@@ -222,6 +199,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		}
 		        
 		if (inMemory) {
+			v <- matrix(NA, nrow=ncell(to), nlayers(from))
+
 			for (i in 1:tr$n) {
 				pbStep(pb, i)
 				d <- recvOneData(cl)
@@ -253,41 +232,33 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	} else {
 		# this seems to need smaller chunks
 		#cz <- max(5, 0.1 * .chunksize() / nlayers(to))
-		tr <- blockSize(to)
 		
-		pb <- pbCreate(tr$n, type=.progress(...))
-		for (i in 1:tr$n) {
-			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-			if (max(r) < startrow | min(r) > endrow) {
-				vals <- rep(NA, times=tr$nrows[i] * to@ncols)
-			} else {
-				srow <- max(startrow, tr$row[i])
-				erow <- min(endrow, (tr$row[i]+tr$nrows[i]-1))
-				cells <- cellFromRowColCombine(to, srow:erow, startcol:endcol)
-				xy <- xyFromCell(to, cells ) 
+		
+		if (inMemory) {
+			
+			xy <- coordinates(to) 
+			xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+			xy <- cbind(xy[[1]], xy[[2]])
+			to <- setValues(to, .xyValues(from, xy, method=method))
+			return(to)
+			
+		} else {
+			tr <- blockSize(to)
+			pb <- pbCreate(tr$n, type=.progress(...))	
+			to <- writeStart(to, filename=filename, ...)
+			for (i in 1:tr$n) {
+				xy <- cellFromRowCol(to, tr$row[i], 1):cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to))
+				xy <- xyFromCell(to, xy ) 
 				xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 				xy <- cbind(xy[[1]], xy[[2]])
-				cells <- cells - (tr$row[i] - 1) * to@ncols
-				vals <- matrix(NA, nrow=tr$nrows[i] * to@ncols, ncol=nl)
-				vals[cells,] <- .xyValues(from, xy, method=method)
+				xy <- .xyValues(from, xy, method=method)
+				to <- writeValues(to, xy, tr$row[i])
+				pbStep(pb)
 			}
-			if (inMemory) {
-				start <- cellFromRowCol(to, tr$row[i], 1)
-				end <- cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, to@ncols)
-				v[start:end, ] <- vals
-			} else {
-				to <- writeValues(to, vals, tr$row[i])
-			}
-			pbStep(pb)
+			pbClose(pb)
+			to <- writeStop(to)	
+			return(to)
 		}
 	}
-	pbClose(pb)
-	
-	if (inMemory) {
-		to <- setValues(to, v)
-	} else {
-		to <- writeStop(to)	
-	}
-	return(to)
 }
 
