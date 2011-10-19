@@ -1,9 +1,11 @@
---- 18-October-2011, version 1.9-28
+--- 18-October-2011, version 1.9-29
 Fixed bug with reading multi-level (4 dimensions) ncdf files, reported by John Gross
 sampleRegular has new argument, useGDAL=FALSE. If FALSE GDAL is not used to assure that the cells extracted are always the same, irrespective of the data source (gdal driver or not). Problem reported by Ned Hornig
+reclass now has option 'right=NA' (apart from right=TRUE or right=FALSE) to allow intervals to be closed at the left and right side. It is now also possible to provide a two column relassification matrix ("is-becomes") (suggestions by Agustin Lobo). 
 
 --- 12-October-2011, version 1.9-27
 Functions re-implemented using C routines for better speed: focal (a combination of old functions focal, focalNA and focalFilter), distance, direction, and reclass and slopeAspect.
+reclass has changed a bit. Intervals are more rigorously defined (see arguments 'right' and 'include.lowest'), as in 'cut'
 slopeAspect is replaced by 'terrain' to do slope, aspect and other elevation derived terrain characteristics.
 Fixed subset bug reported by Julian Zeidler. https://r-forge.r-project.org/tracker/?func=detail&atid=1189&aid=1610&group_id=294
 New function "log" defined seperately from the Math generics to allow for additional argument "base=x". Suggested by Oscar Perpiñan Lamigueiro.
