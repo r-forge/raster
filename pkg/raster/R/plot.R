@@ -80,6 +80,8 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
 	function(x, col=rev(terrain.colors(255)), maxpixels=500000, useRaster=TRUE, alpha=1, add=FALSE, ...)  {
 
+		# maxpixels = min( prod(par()$din * 72), maxpixels)
+	
 		if (alpha < 1) {
 			alpha <- max(alpha, 0) * 255 + 1
 			a <- c(0:9, LETTERS[1:6])
