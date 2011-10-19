@@ -22,7 +22,12 @@ function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
 		rcl <- matrix(rcl, ncol=3, byrow=TRUE) 
 	}
 	if ( dim(rcl)[2] != 3 ) { 
-		stop('rcl must have 3 columns') 
+		if (ncol(rcl) == 2) {
+			rcl <- cbind(rcl[,1], rcl)
+			right <- NA
+		} else {
+			stop('rcl must have 2 or 3 columns') 
+		}
 	}
 	colnames(rcl) <- c("From", "To", "Becomes")	
 	if (getOption('verbose')) { print(rcl)  }

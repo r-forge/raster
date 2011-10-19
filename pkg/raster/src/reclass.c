@@ -29,8 +29,11 @@ SEXP reclass(SEXP d, SEXP r, SEXP low, SEXP right, SEXP onlyNA, SEXP valNA) {
 	rcl = REAL(r);
 	xd = REAL(d);
 
-
 	int doright = INTEGER(right)[0];
+	int doleftright = 0;
+	if (doright == R_NaInt) {
+		doleftright = 1;
+	}
 	int dolowest  = INTEGER(low)[0];
 	int NAonly = INTEGER(onlyNA)[0];
 	double NAval = REAL(valNA)[0];
@@ -52,8 +55,54 @@ SEXP reclass(SEXP d, SEXP r, SEXP low, SEXP right, SEXP onlyNA, SEXP valNA) {
 		}
 		
 	} else { // hasNA and other values
-	
-		if (doright) {
+		if (doleftright) {
+		
+			if (dolowest) {
+			
+				rightval = rcl[0];
+				rightidx = b;
+				for (j=1; j<a; j++) {
+					if (rcl[j] < rightval) {
+						rightval = rcl[j];
+						rightidx = b+j;
+					}
+				}
+				rightidx = rcl[rightidx];
+				
+				for (i=0; i<n; i++) {
+					if (!R_FINITE(xd[i])) {
+						xval[i] = NAval;
+					} else if (xd[i] == rightval) {
+						xval[i] = rightidx;
+					} else {
+						xval[i] = xd[i];
+						for (j=0; j<a; j++) {
+							if ((xd[i] >= rcl[j]) & (xd[i] <= rcl[j+a])) {
+								xval[i] = rcl[j+b];
+								break;
+							}
+						}
+					}
+				}
+				
+			} else { // !dolowest
+
+				for (i=0; i<n; i++) {
+					if (!R_FINITE(xd[i])) {
+						xval[i] = NAval;
+					} else {
+						xval[i] = xd[i];
+						for (j=0; j<a; j++) {
+							if ((xd[i] >= rcl[j]) & (xd[i] <= rcl[j+a])) {
+								xval[i] = rcl[j+b];
+								break;
+							}
+						}
+					}
+				}			
+			}
+			
+		} else if (doright) {
 
 			if (dolowest) {
 			
