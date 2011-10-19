@@ -30,7 +30,7 @@
 	if (dodays) {
 		# cal = nc$var[[zvar]]$dim[[dim3]]$calendar ?
 		cal = att.get.ncdf(nc, "time", "calendar")$value
-		if (cal =='gregorian' | cal=='standard') {
+		if (cal =='gregorian' | cal =='proleptic_gregorian' | cal=='standard') {
 			greg = TRUE
 		} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
 			greg = FALSE
@@ -125,7 +125,8 @@
 	if (dims== 1) { 
 		stop(zvar, ' only has a single dimension; I cannot make a RasterLayer from this')
 	} else if (dims == 4) { 
-	
+		level <- round(level)
+		oldlevel <- level
 		if (lvar == 4) { 
 			dim3 <- 3 
 			level <- max(1, min(round(level), nc$var[[zvar]]$dim[[4]]$len))
@@ -133,6 +134,9 @@
 		} else { 
 			dim3 <- 4 
 			level <- max(1, min(round(level), nc$var[[zvar]]$dim[[3]]$len))
+		}
+		if (oldlevel != level) {
+			warning('level set to: ', level)
 		}
 		
 	} else if (dims > 4) { 

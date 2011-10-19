@@ -1,3 +1,7 @@
+--- 18-October-2011, version 1.9-28
+Fixed bug with reading multi-level (4 dimensions) ncdf files, reported by John Gross
+sampleRegular has new argument, useGDAL=FALSE. If FALSE GDAL is not used to assure that the cells extracted are always the same, irrespective of the data source (gdal driver or not). Problem reported by Ned Hornig
+
 --- 12-October-2011, version 1.9-27
 Functions re-implemented using C routines for better speed: focal (a combination of old functions focal, focalNA and focalFilter), distance, direction, and reclass and slopeAspect.
 slopeAspect is replaced by 'terrain' to do slope, aspect and other elevation derived terrain characteristics.
