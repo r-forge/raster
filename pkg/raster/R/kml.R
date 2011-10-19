@@ -5,7 +5,7 @@
 # Version 0.9
 # Licence GPL v3
 
-KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='') {
+KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
     if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude / latitude")
 	}
@@ -25,9 +25,9 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='') {
 	png(filename = imagefile, width=max(480, ncol(x)), height=max(480, nrow(x)), bg="transparent")
 	par(mar=c(0,0,0,0))
 	if (R.Version()$minor >= 13) {
-		image(x, col=col, axes=FALSE, useRaster=TRUE)
+		image(x, col=col, axes=FALSE, useRaster=TRUE, ...)
 	} else {
-		image(x, col=col, axes=FALSE)	
+		image(x, col=col, axes=FALSE, ...)	
 	}
 	dev.off()
 

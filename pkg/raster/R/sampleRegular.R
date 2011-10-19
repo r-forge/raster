@@ -5,6 +5,8 @@
 
 
 sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE, useGDAL=FALSE) {
+
+	stopifnot(hasValues(x))
 	
 	size <- round(size)
 	stopifnot(size > 0)

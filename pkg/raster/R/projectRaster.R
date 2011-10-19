@@ -22,27 +22,36 @@ projectExtent <- function(object, crs) {
 #	xy <- matrix(c(xmn, ymx, xha, ymx, xmx, ymx, xmn, yha, xha, yha, xmx, yha, xmn, ymn, xha, ymn, xmx, ymn), ncol=2, byrow=T)
 	
 	
-	xy1 <- xyFromCell(object, cellFromCol(object, 1))
+	rows <- unique(c(seq(1,nrow(object), by=round(ncol(object)/50)), nrow(object)))
+	cols <- unique(c(seq(1,ncol(object), by=round(ncol(object)/50)), ncol(object)))
+	
+	xy1 <- xyFromCell(object, cellFromRowCol(object, rows, 1))
 	xy1[,1] <- xy1[,1] - 0.5 * xres(object)
 	xy1[1,2] <- xy1[1,2] + 0.5 * yres(object)
-	xy1[nrow(object),2] <- xy1[nrow(object),2] + 0.5 * yres(object)
+	xy1[nrow(xy1),2] <- xy1[nrow(xy1),2] + 0.5 * yres(object)
 	
-	xy2 <- xyFromCell(object, cellFromCol(object, ncol(object)))
+	xy2 <- xyFromCell(object, cellFromRowCol(object, rows, ncol(object)))
 	xy2[,1] <- xy2[,1] + 0.5 * xres(object)
 	xy2[1,2] <- xy2[1,2] + 0.5 * yres(object)
-	xy2[nrow(object),2] <- xy2[nrow(object),2] + 0.5 * yres(object)
+	xy2[nrow(xy2),2] <- xy2[nrow(xy2),2] + 0.5 * yres(object)
 
-	xy3 <- xyFromCell(object, cellFromRow(object, 1))
+	xy3 <- xyFromCell(object, cellFromRowCol(object, 1, cols))
 	xy3[,2] <- xy3[,2] + 0.5 * yres(object)
 	xy3[1,1] <- xy3[1,1] - 0.5 * xres(object)
-	xy3[ncol(object),1] <- xy3[ncol(object),1] + 0.5 * xres(object)
+	xy3[ncol(xy3),1] <- xy3[ncol(xy3),1] + 0.5 * xres(object)
 	
-	xy4 <- xyFromCell(object, cellFromRow(object, nrow(object)))
+	xy4 <- xyFromCell(object, cellFromRowCol(object, nrow(object), cols))
 	xy4[,2] <- xy4[,2] + 0.5 * yres(object)
 	xy4[1,1] <- xy4[1,1] - 0.5 * xres(object)
-	xy4[ncol(object),1] <- xy4[ncol(object),1] + 0.5 * xres(object)
+	xy4[ncol(xy4),1] <- xy4[ncol(xy4),1] + 0.5 * xres(object)
 	
-	xy <- rbind(xy1, xy2, xy3, xy4)
+	# added for circumpolar data:
+	rows <- c(seq(min(ncol(object), 25),nrow(object), by=50))
+	cols <- c(seq(min(ncol(object), 25),ncol(object), by=50))
+	xy5 <- xyFromCell(object, cellFromRowColCombine(object, rows, cols))
+
+	xy <- rbind(xy1, xy2, xy3, xy4, xy5)
+
 	
 	res <- .Call("transform", projfrom, projto, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 	
