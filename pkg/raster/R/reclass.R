@@ -1,6 +1,6 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  June 2008
-# Version 0.9
+# Version 1.0
 # Licence GPL v3
 
 
@@ -86,9 +86,9 @@ function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
 				
 	} else {
 		
-		out <- writeStart(out, filename=filename, ...)
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, type=.progress(...))
+		out <- writeStart(out, filename=filename, ...)
 
 		for (i in 1:tr$n) {
 			vals <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
