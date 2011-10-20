@@ -17,7 +17,7 @@ function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
 	stopifnot(hasValues(x))
 	showname <- FALSE
 	if (missing(filename)) { 
-		filename <- ext(basename(rasterTmpFile()), '.kml')
+		filename <- extension(basename(rasterTmpFile()), '.kml')
 		showname <- TRUE
 	}
 	
@@ -74,7 +74,7 @@ function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
 	if (zip!= "") {
 		wd <- getwd()
 		on.exit( setwd(wd) )
-		setwd(dirname(kmzfile))
+		setwd(dirname(kmlfile))
 		kmlfile <- basename(kmlfile)
 		kmzfile <- extension(kmlfile, '.kmz')
 		imagefile <- basename(imagefile)

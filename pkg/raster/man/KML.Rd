@@ -42,4 +42,15 @@ None. Used for the side-effect files written to disk.
 This function was adapted for the raster package by Robert J. Hijmans, based on functions in the maptools package by Duncan Golicher, David Forrest and Roger Bivand 
 }
 
+
+\examples{
+\dontrun{
+# Meuse data
+meuse <- raster(system.file("external/test.grd", package="raster"))
+# first transform to longitude/latitude
+lonlat <- projectRaster(meuse, res=1/1200, crs="+proj=longlat +datum=WGS84")
+KML(lonlat, file='meuse.kml')
+}
+}
+
 \keyword{spatial}
