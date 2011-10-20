@@ -1,7 +1,10 @@
---- 18-October-2011, version 1.9-29
+--- 20-October-2011, version 1.9-30
+Expanded function KML to create time-series from multi-layer objects (suggested by Tony Fischbach)
+
+--- 19-October-2011, version 1.9-29
 Bug fix in projectRaster with circumpolar datasets. Reported by Anthony Fischbach
 Fixed bug with reading multi-level (4 dimensions) ncdf files, reported by John Gross
-sampleRegular has new argument, useGDAL=FALSE. If FALSE GDAL is not used to assure that the cells extracted are always the same, irrespective of the data source (gdal driver or not). Problem reported by Ned Hornig
+sampleRegular has new argument, useGDAL=FALSE. If FALSE, GDAL is not used to assure that the cells extracted are always the same, irrespective of the data source (gdal driver or not). Problem reported by Ned Hornig
 reclass now has option 'right=NA' (apart from right=TRUE or right=FALSE) to allow intervals to be closed at the left and right side. It is now also possible to provide a two column relassification matrix ("is-becomes") (suggestions by Agustin Lobo). 
 
 --- 12-October-2011, version 1.9-27

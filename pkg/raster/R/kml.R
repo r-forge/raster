@@ -5,8 +5,18 @@
 # Version 0.9
 # Licence GPL v3
 
-KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
-    if (! .couldBeLonLat(x)) { 
+
+if (!isGeneric("KML")) {
+	setGeneric("KML", function(x, ...)
+		standardGeneric("KML"))
+}	
+
+
+setMethod('KML', signature(x='RasterLayer'), 
+
+function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
+
+    if (! raster:::.couldBeLonLat(x)) { 
         stop("CRS of x must be longitude / latitude")
 	}
 	
@@ -14,7 +24,13 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
 		x <- x[[1]]
 	}
 	stopifnot(hasValues(x))
-	
+
+	showname <- FALSE
+	if (missing(filename)) { 
+		filename <- ext(basename(rasterTmpFile()), '.kml')
+		showname <- TRUE
+	}
+		
 	x <- sampleRegular(x, size=maxpixels, asRaster = TRUE, useGDAL=TRUE)
 
 	imagefile <- filename
@@ -33,27 +49,19 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
 
 	name <- layerNames(x)[1]
 	if (name == "") { name <- 'x' }
-    bb <- extent(x)
-    W <- xmin(bb)
-    E <- xmax(bb)
-    S <- ymin(bb)
-    N <- ymax(bb)
-	
-    kmlheader <- c("<?xml version='1.0' encoding='UTF-8'?>", "<kml xmlns='http://earth.google.com/kml/2.0'>", "<GroundOverlay>")
+    kml <- c("<?xml version='1.0' encoding='UTF-8'?>", "<kml xmlns='http://earth.google.com/kml/2.0'>", "<GroundOverlay>")
     kmname <- paste("<name>", name, "</name>", sep = "")
-	
     icon <- paste("<Icon><href>", basename(imagefile), "</href><viewBoundScale>0.75</viewBoundScale></Icon>", sep = "")
-    latlonbox <- paste("<LatLonBox><north>", N, "</north><south>",  S, "</south><east>", E, "</east><west>", W, "</west></LatLonBox>", sep = "")
+    e <- extent(x)
+    latlonbox <- c("\t<LatLonBox>", paste("\t\t<north>", e@ymax, "</north><south>",  e@ymin, "</south><east>", e@xmax, "</east><west>", e@xmin, "</west>", sep = ""), "\t</LatLonBox>")
     footer <- "</GroundOverlay></kml>"
-    x <- (kmlheader)
-    x <- append(x, kmname)
-    x <- append(x, icon)
-    x <- append(x, latlonbox)
-    x <- append(x, footer)
-    cat(paste(x, sep = "", collapse = "\n"), file = kmlfile, sep = "")
 	
-	kmzfile <- kmlfile
-	extension(kmzfile) <- '.kmz'
+    kml <- c(kml, kmname, icon, latlonbox, footer)
+    cat(paste(kml, sep = "", collapse = "\n"), file = kmlfile, sep = "")
+	
+	if (showname) {
+		cat('kml file created: ', kmlfile)
+	}	
 	if (zip == "") {
 		zip <- Sys.getenv('R_ZIPCMD', 'zip')
 	}
@@ -62,9 +70,9 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
 		wd <- getwd()
 		on.exit( setwd(wd) )
 		setwd(dirname(kmzfile))
-		kmzfile <- basename(kmzfile)
-		kmlfile <- basename(kmlfile)
 		imagefile <- basename(imagefile)
+		kmlfile <- basename(kmlfile)
+		kmzfile <- extension(kmlfile, '.kmz')
 		if (zip=='7z') {
 			kmzzip <- extension(kmzfile, '.zip')
 			cmd <- paste(zip, 'a',  kmzzip, kmlfile, imagefile, collapse=" ")
@@ -78,5 +86,7 @@ KML <- function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
 		}
 	} 
 }
+)
+
 
 
