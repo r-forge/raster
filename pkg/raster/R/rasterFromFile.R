@@ -14,7 +14,7 @@
 }
 
 
-.rasterObjectFromFile <- function(x, band=1, objecttype='RasterLayer', native=FALSE, silent=TRUE, ...) {
+.rasterObjectFromFile <- function(x, band=1, objecttype='RasterLayer', native=FALSE, silent=TRUE, offset=NULL, ...) {
 	x <- trim(x)
 	if (x=='' | x=='.') { # etc? 
 		stop('provide a valid filename')
@@ -57,12 +57,15 @@
 		}
 	}
 
+	if (!is.null(offset)) {
+		return ( .rasterFromASCIIFile(x, offset) )
+	}
 	if(!native) {
 		if (! .requireRgdal() )  { native <- TRUE }  
 	}
 	if (native) {
 		if ( fileext == ".ASC" ) {
-			return ( .rasterFromASCIIFile(x) )
+			return ( .rasterFromASCIIFile(x, ...) )
 		}
 		if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
 			return ( .rasterFromGenericFile(x, type=objecttype, ...) )

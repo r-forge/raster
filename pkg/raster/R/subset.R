@@ -68,6 +68,14 @@ function(x, subset, drop=TRUE, ...) {
 			return( stack(filename(x), bands=subset, varname=varname) )
 		}
 	} else {
+		if (nl > 1 & length(subset)==1) {
+			if (hasValues(x)) {
+				return(raster(x, subset))
+			} else {
+				return(raster(x))			
+			}
+		}
+	
 		if (hasValues(x)) {
 			x@data@values <- x@data@values[, subset, drop=FALSE]
 			x@layernames <- x@layernames[subset]

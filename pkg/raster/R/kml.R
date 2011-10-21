@@ -14,7 +14,7 @@ if (!isGeneric("KML")) {
 
 setMethod('KML', signature(x='RasterLayer'), 
 
-function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
+function (x, filename, col=rev(terrain.colors(255)), maxpixels=100000, zip='', ...) {
 
     if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude / latitude")
@@ -60,7 +60,7 @@ function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
     cat(paste(kml, sep = "", collapse = "\n"), file = kmlfile, sep = "")
 	
 	if (showname) {
-		cat('kml file created: ', kmlfile)
+		cat('kml file created: ', kmlfile, '\n')
 	}	
 	if (zip == "") {
 		zip <- Sys.getenv('R_ZIPCMD', 'zip')

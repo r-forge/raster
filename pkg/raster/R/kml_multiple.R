@@ -9,7 +9,7 @@
 
 setMethod('KML', signature(x='RasterStackBrick'), 
 
-function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
+function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000, zip='', ...) {
 
     if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude/latitude")
@@ -22,10 +22,13 @@ function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
 	}
 	
 	nl <- nlayers(x)
-	if (missing(time)) { 
-		time <- 1:(nl+1) 
-	} else if (length(time) != nl+1) {
-		stop('length(time) should equaly nlayers(x)+1')
+	if (is.null(time)) { 
+		dotime <- FALSE
+	} else {
+		dotime <- TRUE
+		if (length(time) != nl+1) {
+			stop('length(time) should equaly nlayers(x)+1')
+		}
 	}
 
 	x <- sampleRegular(x, size=maxpixels, asRaster = TRUE, useGDAL=TRUE)
@@ -39,24 +42,26 @@ function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
     kml <- c('<?xml version="1.0" encoding="UTF-8"?>', '<kml xmlns="http://www.opengis.net/kml/2.2">')
     kml <- c(kml, c("<Folder>", paste("<name>", extension(basename(filename), ''), "</name>", sep='')))
     e <- extent(x)
-    latlonbox <- c("\t<LatLonBox>", paste("\t\t<north>", e@ymax, "</north><south>",  e@ymin, "</south><east>", e@xmax, "</east><west>", e@xmin, "</west>", sep = ""),
-			"\t</LatLonBox>", "</GroundOverlay>")
+    latlonbox <- c("\t<LatLonBox>", paste("\t\t<north>", e@ymax, "</north><south>",  e@ymin, "</south><east>", 
+						e@xmax, "</east><west>", e@xmin, "</west>", sep = ""), "\t</LatLonBox>", "</GroundOverlay>")
 
 	imagefile <- paste(extension(filename, ''), "_", 1:nl, ".png", sep="")
 	for (i in 1:nl) {
 		png(filename = imagefile[i], width=max(480, ncol(x)), height=max(480, nrow(x)), bg="transparent")
 		par(mar=c(0,0,0,0))
 		if (R.Version()$minor >= 13) {
-			image(x[[i]], col=col, axes=FALSE, useRaster=TRUE, ...)
+			image(x[[i]], col=col, axes=FALSE, useRaster=TRUE)
 		} else {
-			image(x[[i]], col=col, axes=FALSE, ...)
+			image(x[[i]], col=col, axes=FALSE)
 		}
 		dev.off()
-		a <- c("<GroundOverlay>", paste("\t<name>", name[i], "</name>", sep=''), "\t<TimeSpan>", 
-				paste("\t\t<begin>", begin[i], "</begin>", sep=''), 
-				paste("\t\t<end>", end[i], "</end>", sep=''), "\t</TimeSpan>", 
-				paste("\t<Icon><href>", basename(imagefile[i]), "</href></Icon>", sep=''))
-		kml <- c(kml, a, latlonbox)
+		a <- c("<GroundOverlay>", paste("\t<name>", name[i], "</name>", sep=''))
+		if (dotime) {
+			time <- c(a, "\t<TimeSpan>", 
+					paste("\t\t<begin>", begin[i], "</begin>", sep=''), 
+					paste("\t\t<end>", end[i], "</end>", sep=''), "\t</TimeSpan>")
+		}
+		kml <- c(kml, a, time, paste("\t<Icon><href>", basename(imagefile[i]), "</href></Icon>", sep=''), latlonbox)
 	}
 	
     kml <- c(kml, "</Folder>", "</kml>")
@@ -64,7 +69,7 @@ function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
     cat(paste(kml, sep = "", collapse = "\n"), file = kmlfile, sep = "")
 	
 	if (showname) {
-		cat('kml file created: ', kmlfile)
+		cat('kml file created: ', kmlfile, '\n')
 	}
 
 	if (zip == "") {

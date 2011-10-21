@@ -165,13 +165,13 @@
 			if (nl == 1) {
 				vals <- matrix(vals, ncol=1)
 			}
-			vals[!is.na(rvv), ] <- NA
+			vals[!is.na(rrv), ] <- NA
 		} else if (update) {
 			vals <- getValues(oldx, tr$row[i], tr$nrows[i])
 			if (nl == 1) {
 				vals <- matrix(vals, ncol=1)
 			}
-			vals[!is.na(rvv), ] <- putvals[!is.na(rvv), ]
+			vals[!is.na(rrv), ] <- putvals[!is.na(rrv), ]
 		} else {
 			vals <- putvals[rrv, ]
 		}
@@ -193,8 +193,7 @@
 	return(x)
 }
 
-
- e = .p2r(p, r)
+#e = .p2r(p, r)
 
  
  

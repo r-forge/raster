@@ -45,11 +45,16 @@ This function was adapted for the raster package by Robert J. Hijmans, based on 
 
 \examples{
 \dontrun{
-# Meuse data
-meuse <- raster(system.file("external/test.grd", package="raster"))
-# first transform to longitude/latitude
-lonlat <- projectRaster(meuse, res=1/1200, crs="+proj=longlat +datum=WGS84")
-KML(lonlat, file='meuse.kml')
+# Meuse data from the sp package
+data(meuse.grid)
+b <- rasterFromXYZ(meuse.grid)
+projection(b) <- "+init=epsg:28992 +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812
+                  +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000
+				  +y_0=463000 +ellps=bessel +units=m +no_defs"
+				  
+# transform to longitude/latitude
+p <- projectRaster(b, crs="+proj=longlat +datum=WGS84", method='ngb')
+KML(p, file='meuse.kml')
 }
 }
 
