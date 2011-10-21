@@ -39,11 +39,16 @@
 		} else if (ini[i,1] == "NODATA_VALUE") { try (nodataval <- as.numeric(ini[i,2]), silent=TRUE)
 		}
     }  
+	if (offset != 6) {
+		offwarn <- '.\nAre you using a wrong offset? Proceed with caution!'
+	} else {
+		offwarn <- ''
+	}
 	if (is.na(nr)) stop('"NROWS" tag not detected') 
 	if (is.na(nc)) stop('"NCOLS" tag not detected')
-	if (is.na(xn)) { warning('"XLLCORNER" tag not detected. Setting it to 0'); xn <- 0 }
-	if (is.na(yn)) { warning('"YLLCORNER" tag not detected. Setting it to 0'); yn <- 0 }
-	if (is.na(d)) { warning('"CELLSIZE" tag not detected. Setting it to 1'); d <- 1 }
+	if (is.na(xn)) { warning('"XLLCORNER" tag not detected. Setting it to 0', offwarn); xn <- 0 }
+	if (is.na(yn)) { warning('"YLLCORNER" tag not detected. Setting it to 0', offwarn); yn <- 0 }
+	if (is.na(d)) { warning('"CELLSIZE" tag not detected. Setting it to 1', offwarn); d <- 1 }
 	
 	xx <- xn + nc * d
 	yx <- yn + nr * d
