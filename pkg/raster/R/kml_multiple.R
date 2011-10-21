@@ -11,7 +11,7 @@ setMethod('KML', signature(x='RasterStackBrick'),
 
 function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
 
-    if (! raster:::.couldBeLonLat(x)) { 
+    if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude/latitude")
 	}
 	stopifnot(hasValues(x))
@@ -47,9 +47,9 @@ function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
 		png(filename = imagefile[i], width=max(480, ncol(x)), height=max(480, nrow(x)), bg="transparent")
 		par(mar=c(0,0,0,0))
 		if (R.Version()$minor >= 13) {
-			image(x[[i]], col=col, axes=FALSE, useRaster=TRUE)
+			image(x[[i]], col=col, axes=FALSE, useRaster=TRUE, ...)
 		} else {
-			image(x[[i]], col=col, axes=FALSE)	
+			image(x[[i]], col=col, axes=FALSE, ...)
 		}
 		dev.off()
 		a <- c("<GroundOverlay>", paste("\t<name>", name[i], "</name>", sep=''), "\t<TimeSpan>", 
@@ -95,6 +95,3 @@ function (x, filename, time, col=rainbow(255), maxpixels=100000, zip='', ...) {
 }
 )
 
-
-
-#KMLmult(s, 'abc.kml', 2000:2003, col=rainbow(255))

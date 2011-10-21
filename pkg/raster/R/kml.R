@@ -16,7 +16,7 @@ setMethod('KML', signature(x='RasterLayer'),
 
 function (x, filename, col=rainbow(255), maxpixels=100000, zip='', ...) {
 
-    if (! raster:::.couldBeLonLat(x)) { 
+    if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude / latitude")
 	}
 	
