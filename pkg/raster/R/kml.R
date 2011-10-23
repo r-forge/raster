@@ -25,10 +25,8 @@ function (x, filename, col=rev(terrain.colors(255)), maxpixels=100000, zip='', .
 	}
 	stopifnot(hasValues(x))
 
-	showname <- FALSE
 	if (missing(filename)) { 
-		filename <- extension(basename(rasterTmpFile()), '.kml')
-		showname <- TRUE
+		filename <- extension(basename(rasterTmpFile('G_')), '.kml')
 	}
 		
 	x <- sampleRegular(x, size=maxpixels, asRaster = TRUE, useGDAL=TRUE)
@@ -57,34 +55,10 @@ function (x, filename, col=rev(terrain.colors(255)), maxpixels=100000, zip='', .
     footer <- "</GroundOverlay></kml>"
 	
     kml <- c(kml, kmname, icon, latlonbox, footer)
-    cat(paste(kml, sep = "", collapse = "\n"), file = kmlfile, sep = "")
 	
-	if (showname) {
-		cat('kml file created: ', kmlfile, '\n')
-	}	
-	if (zip == "") {
-		zip <- Sys.getenv('R_ZIPCMD', 'zip')
-	}
+    cat(paste(kml, sep="", collapse="\n"), file=kmlfile, sep="")
 	
-	if (zip!= "") {
-		wd <- getwd()
-		on.exit( setwd(wd) )
-		setwd(dirname(kmlfile))
-		imagefile <- basename(imagefile)
-		kmlfile <- basename(kmlfile)
-		kmzfile <- extension(kmlfile, '.kmz')
-		if (zip=='7z') {
-			kmzzip <- extension(kmzfile, '.zip')
-			cmd <- paste(zip, 'a',  kmzzip, kmlfile, imagefile, collapse=" ")
-			file.rename(kmzzip, kmzfile)
-		} else {
-			cmd <- paste(zip, kmzfile, kmlfile, imagefile, collapse=" ")
-		}
-		sss <- try( system(cmd, intern=TRUE) , silent = TRUE )
-		if (file.exists(kmzfile)) {
-			x <- file.remove(kmlfile, imagefile)
-		}
-	} 
+	.zipKML(kmlfile, imagefile, zip)
 }
 )
 

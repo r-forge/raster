@@ -6,6 +6,39 @@
 # Licence GPL v3
 
 
+.zipKML <- function(kml, image, zip) {
+	if (zip == "") {
+		zip <- Sys.getenv('R_ZIPCMD', 'zip')
+	}
+	if (zip !=  "") {
+		wd <- getwd()
+		on.exit( setwd(wd) )
+		setwd(dirname(kml))
+		kml <- basename(kml)
+		kmz <- extension(kml, '.kmz')
+		image <- basename(image)
+		if (file.exists(kmz)) {
+			x <- file.remove(kmz)
+		}
+		if (zip=='7z') {
+			kmzzip <- extension(kmz, '.zip')
+			cmd <- paste(zip, 'a', kmzzip, kml, image, collapse=" ")
+			file.rename(kmzzip, kmz)
+		} else {
+			cmd <- paste(c(zip, kmz, kml, image), collapse=" ")
+		}
+		sss <- try( system(cmd, intern=TRUE), silent=TRUE )
+		if (file.exists(kmz)) {
+			x <- file.remove(kml, image)
+			return(invisible(kmz))
+		} else {
+			return(invisible(kml))
+		}
+	} else {
+		return(invisible(kml))
+	}
+}
+
 
 setMethod('KML', signature(x='RasterStackBrick'), 
 
@@ -15,10 +48,8 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000
         stop("CRS of x must be longitude/latitude")
 	}
 	stopifnot(hasValues(x))
-	showname <- FALSE
 	if (missing(filename)) { 
-		filename <- extension(basename(rasterTmpFile()), '.kml')
-		showname <- TRUE
+		filename <- extension(basename(rasterTmpFile('G_')), '.kml')
 	}
 	
 	nl <- nlayers(x)
@@ -63,40 +94,10 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000
 		}
 		kml <- c(kml, a, time, paste("\t<Icon><href>", basename(imagefile[i]), "</href></Icon>", sep=''), latlonbox)
 	}
-	
+
     kml <- c(kml, "</Folder>", "</kml>")
-	
-    cat(paste(kml, sep = "", collapse = "\n"), file = kmlfile, sep = "")
-	
-	if (showname) {
-		cat('kml file created: ', kmlfile, '\n')
-	}
-
-	if (zip == "") {
-		zip <- Sys.getenv('R_ZIPCMD', 'zip')
-	}
-	
-	if (zip!= "") {
-		wd <- getwd()
-		on.exit( setwd(wd) )
-		setwd(dirname(kmlfile))
-		kmlfile <- basename(kmlfile)
-		kmzfile <- extension(kmlfile, '.kmz')
-		imagefile <- basename(imagefile)
-		if (zip=='7z') {
-			kmzzip <- extension(kmzfile, '.zip')
-			cmd <- paste(zip, 'a',  kmzzip, kmlfile, imagefile, collapse=" ")
-			file.rename(kmzzip, kmzfile)
-		} else {
-			cmd <- paste(c(zip, kmzfile, kmlfile, imagefile), collapse=" ")
-		}
-		sss <- try( system(cmd, intern=TRUE) , silent = TRUE )
-		if (file.exists(kmzfile)) {
-			x <- file.remove(kmlfile, imagefile)
-		}
-	} 
-
-	
+    cat(paste(kml, sep="", collapse="\n"), file=kmlfile, sep = "")
+	.zipkml(kmlfile, imagefile, zip)
 }
 )
 
