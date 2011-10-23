@@ -26,7 +26,7 @@
 }
 
 
-.p2r <- function(p, x, field=0, background=NA, mask=FALSE, update=FALSE, filename="", ...) {
+.p3r <- function(p, x, field=0, background=NA, mask=FALSE, update=FALSE, filename="", ...) {
 
 	filename <- trim(filename)
 	if (mask) {
@@ -34,7 +34,7 @@
 	}
 	x <- raster(x)
 	projp <- projection(p)
-	if (! .compareCRS(projp, x)) {
+	if (! raster:::.compareCRS(projp, x)) {
 	#	warning('crs or raster and polygons do not match')
 	}
 	if (projp != "NA") {
@@ -46,15 +46,19 @@
 	if (spbb[1,1] >= rsbb[1,2] | spbb[1,2] <= rsbb[1,1] | spbb[2,1] >= rsbb[2,2] | spbb[2,2] <= rsbb[2,1]) {
 		stop('polygon and raster have no overlapping areas')
 	}
-	
+	npol <- length(p@polygons)
 	
 	if (! is.numeric(field) ) {
-		putvals <- .checkFields( p@data[, field] )
+		putvals <- .checkFields( p@data[, field, drop=FALSE] )
 	} else if (length(field) > 1) { 
 		if (length(field) == npol) {
 			putvals <- field
 		} else {
-			putvals <- .checkFields( p@data[, field] )
+			if (inherits(p, 'SpatialPolygonsDataFrame')) {
+				putvals <- .checkFields( p@data[, field, drop=FALSE] )
+			} else {
+				stop('incorrect value for "field"')
+			}
 		}
 	} else if (mask) {
 		putvals <- rep(1, length=npol)	
@@ -63,7 +67,7 @@
 	} else if (field == 0) {
 		putvals <- as.integer(1:npol)
 	} else {
-		putvals <- .checkFields(p@data[, field])
+		putvals <- .checkFields(p@data[, field, drop=FALSE])
 	}
 	if (is.vector(putvals)) {
 		putvals <- matrix(putvals, ncol=1)
@@ -77,9 +81,9 @@
 	}
 	
 	npol <- length(p@polygons)
-	polinfo <- matrix(NA, nrow=npol * 2, ncol=6)
-	addpol <- matrix(NA, nrow=500, ncol=6)
-	pollist <- list()
+	polinfo <- matrix(NA, nrow=npol * 3, ncol=7)
+	addpol <- matrix(NA, nrow=500, ncol=7)
+	polx <- poly <- vector(length=npol * 3, mode='list')
 	cnt <- 0
 	
 	for (i in 1:npol) {
@@ -90,17 +94,25 @@
 				polinfo <- rbind(polinfo, addpol)  
 			}
 			polinfo[cnt, 1] <- cnt
-			rg <- range(p@polygons[[i]]@Polygons[[j]]@coords[,2])
+			rg <- range(p@polygons[[i]]@Polygons[[j]]@coords[,1])
 			polinfo[cnt, 2] <- rg[1]
 			polinfo[cnt, 3] <- rg[2]
-			polinfo[cnt, 4] <- -99
-			polinfo[cnt, 5] <- p@polygons[[i]]@Polygons[[j]]@hole 
-			polinfo[cnt, 6] <- i
-			pollist[cnt] <- p@polygons[[i]]@Polygons[[j]]
+			rg <- range(p@polygons[[i]]@Polygons[[j]]@coords[,2])
+			polinfo[cnt, 4] <- rg[1]
+			polinfo[cnt, 5] <- rg[2]
+			polinfo[cnt, 6] <- p@polygons[[i]]@Polygons[[j]]@hole 
+			polinfo[cnt, 7] <- i
+			
+			polx[[cnt]] <- p@polygons[[i]]@Polygons[[j]]@coords[,1]
+			poly[[cnt]] <- p@polygons[[i]]@Polygons[[j]]@coords[,2]
 		}
 	}
-	rm(p)
+	#rm(p)
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
+	
+	polx <- polx[1:cnt]
+	poly <- poly[1:cnt]
+	
 	cat('Found', npol, 'region(s) and', cnt, 'polygon(s)\n') 
 		
 	if (!canProcessInMemory(x)) {
@@ -114,72 +126,57 @@
 		x <- writeStart(x, filename=filename, ...)
 	}
 
-	pb <- pbCreate(nrow(x), type=.progress(...))
-	tr <- blockSize(x)
+	tr <- blockSize(x, n=2*nlayers(x))
+	pb <- pbCreate(tr$n, type=raster:::.progress(...))
+
+	rx <- c(xmin(x), xmax(x))
+	
 	for (i in 1:tr$n) {
 		
 		cells <- cellFromRowCol(x, tr$row[i], 1) : cellFromRowCol(x, tr$row[i]+(tr$nrows[i]-1), ncol(x))
 		xy <- xyFromCell(x, cells)
-
-		rrv <- rv <- rep(NA, ncol(xy))
-		holes1 <- holes <- rep(FALSE, ncol(xy))
 		ry <- range(xy[,2])
-		subpol <- subset(polinfo, !(polinfo[,2] > ry[2] | polinfo[,3] < ry[1]), drop=FALSE)
-		
-		if (nrow(subpol) > 0) { 		
-			updateHoles <- FALSE
-			lastpolnr <- subpol[1,6]
-			for (j in 1:length(subpol[,1])) {
-				if (j == nrow(subpol)) { 
-					updateHoles <- TRUE 
-				} else if (subpol[j+1,6] > lastpolnr) { # new polygon
-					updateHoles <- TRUE 
-					lastpolnr <- subpol[j+1,6]
-				}
-				
-				poly <- pollist[[subpol[j,1]]]@coords
-				
-				res <- .Call("R_point_in_polygon_sp", xy[,1], xy[,2], poly[,1], poly[,2], PACKAGE = "sp")
-				res <- as.logical(res)
-				if ( subpol[j, 5] == 1 ) {
-					holes[res] <- TRUE
-				} else {
-					rv[res] <- subpol[j,6]
-				}
-				
-				if (updateHoles) {
-					rv[holes] <- NA
-					rrv[!is.na(rv)] <- rv[!is.na(rv)]
-					holes <- holes1
-					updateHoles = FALSE	
-				}		
-			}
-		}
-		
-		if (!is.na(background)) { 
-			rrv[is.na(rrv)] <- background
-		}
-		
-		if (mask) {
-			vals <- getValues(oldx, tr$row[i], tr$nrows[i])
-			if (nl == 1) {
-				vals <- matrix(vals, ncol=1)
-			}
-			vals[!is.na(rrv), ] <- NA
-		} else if (update) {
-			vals <- getValues(oldx, tr$row[i], tr$nrows[i])
-			if (nl == 1) {
-				vals <- matrix(vals, ncol=1)
-			}
-			vals[!is.na(rrv), ] <- putvals[!is.na(rrv), ]
-		} else {
-			vals <- putvals[rrv, ]
-		}
+		subpol <- subset(polinfo, !(polinfo[,2] > rx[2] | polinfo[,3] < rx[1] | polinfo[,4] > ry[2] | polinfo[,5] < ry[1] ), drop=FALSE)
 
-		if (filename == "") {
-			v[cells,] <- vals
+		if (nrow(subpol) > 0) { 		
+			rrv <- rep(NA, nrow(xy))
+				
+			px <- polx[subpol[,1]]
+			py <- poly[subpol[,1]]
+			p <- xy[,1] >= min(subpol[,2]) &  xy[,1] <= max(subpol[,3]) &  xy[,2] >= min(subpol[,4]) & xy[,2] <= max(subpol[,5])
+
+			rrv[p] <- .Call('point_in_polygon2', xy[p,1], xy[p,2], px, py, as.integer(subpol[,7]), as.integer(subpol[,6]))
+		
+			if (!is.na(background)) { 
+				rrv[is.na(rrv)] <- background
+			}
+		
+			if (mask) {
+				vals <- getValues(oldx, tr$row[i], tr$nrows[i])
+				if (nl == 1) {
+					vals <- matrix(vals, ncol=1)
+				}
+				vals[!is.na(rrv), ] <- NA
+			} else if (update) {
+				vals <- getValues(oldx, tr$row[i], tr$nrows[i])
+				if (nl == 1) {
+					vals <- matrix(vals, ncol=1)
+				}
+				vals[!is.na(rrv), ] <- putvals[!is.na(rrv), ]
+			} else {
+				vals <- putvals[rrv, ]
+			}
+			
+			if (filename == "") {
+				v[cells,] <- vals
+			} else {
+				x <- writeValues(x, vals, tr$row[i])
+			}
 		} else {
-			x <- writeValues(x, vals, i)
+			if (filename != "") {
+				vals <- matrix(NA, nrow=length(cells), ncol=nl)
+				x <- writeValues(x, vals, tr$row[i])
+			}
 		}
 		pbStep(pb, i)
 	}
@@ -193,7 +190,7 @@
 	return(x)
 }
 
-#e = .p2r(p, r)
+#e = .p3r(p, r)
 
  
  
