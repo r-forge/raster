@@ -34,13 +34,15 @@
 			return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
 		} 
 	}
-	if (! file.exists(x)) {
-		grifile <- .setFileExtensionValues(x, 'raster')
-		grdfile <- .setFileExtensionHeader(x, 'raster')
-		if ( file.exists( grdfile) & file.exists( grifile)) {
-			return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
-		} else {
-			# stop('file: ', x, ' does not exist')
+	if (! file.exists(x) ) {
+		if (extension(x) == '') {
+			grifile <- .setFileExtensionValues(x, 'raster')
+			grdfile <- .setFileExtensionHeader(x, 'raster')
+			if ( file.exists( grdfile) & file.exists( grifile)) {
+				return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
+			} else {
+				# stop('file: ', x, ' does not exist')
+			}
 		}
 	}
 

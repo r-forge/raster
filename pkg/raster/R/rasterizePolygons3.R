@@ -145,7 +145,7 @@
 			py <- poly[subpol[,1]]
 			p <- xy[,1] >= min(subpol[,2]) &  xy[,1] <= max(subpol[,3]) &  xy[,2] >= min(subpol[,4]) & xy[,2] <= max(subpol[,5])
 
-			rrv[p] <- .Call('point_in_polygon2', xy[p,1], xy[p,2], px, py, as.integer(subpol[,7]), as.integer(subpol[,6]))
+			rrv[p] <- .Call('point_in_polygon2', xy[p,1], xy[p,2], px, py, as.integer(subpol[,7]), as.integer(subpol[,6]), PACKAGE='raster')
 		
 			if (!is.na(background)) { 
 				rrv[is.na(rrv)] <- background
