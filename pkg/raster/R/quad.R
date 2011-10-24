@@ -7,7 +7,7 @@ if (!isGeneric(".quad")) {
 
 
 setMethod('.quad', signature(x='missing'), 
-	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, nl=1, crs) {
+	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, levels=1, steps=1, crs) {
 		e <- extent(xmn, xmx, ymn, ymx)
 		if (missing(crs)) {
 			if (e@xmin > -400 & e@xmax < 400 & e@ymin > -90.1 & e@ymax < 90.1) { 
@@ -16,14 +16,14 @@ setMethod('.quad', signature(x='missing'),
 				crs=NA
 			}
 		}
-		b <- quad(e, nrows=nrows, ncols=ncols, crs=crs, nl=nl)
+		b <- quad(e, nrows=nrows, ncols=ncols, crs=crs, levels=levels, steps=steps)
 		return(b)
 	}
 )
 
 
 setMethod('.quad', signature(x='Extent'), 
-	function(x, nrows=10, ncols=10, crs=NA, nl=1) {
+	function(x, nrows=10, ncols=10, levels=1, steps=1, crs=NA) {
 		bb <- extent(x)
 		nr = as.integer(round(nrows))
 		nc = as.integer(round(ncols))
@@ -31,7 +31,11 @@ setMethod('.quad', signature(x='Extent'),
 		if (nr < 1) { stop("nrows should be > 0") }
 		b <- new("RasterQuadBrick", extent=bb, ncols=nc, nrows=nr)
 		projection(b) <- crs
-		nl <- max(round(nl), 0)
+		levels <- as.integer(max(round(levels), 0))
+		steps <- as.integer(max(round(steps), 0))
+		nl <- levels * steps
+		b@nlevels <- levels
+		b@nsteps <- steps
 		b@data@nlayers <- as.integer(nl)
 		return(b) 
 	}
