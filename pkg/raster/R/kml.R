@@ -47,7 +47,7 @@ function (x, filename, col=rev(terrain.colors(255)), maxpixels=100000, zip='', .
 
 	name <- layerNames(x)[1]
 	if (name == "") { name <- 'x' }
-    kml <- c("<?xml version='1.0' encoding='UTF-8'?>", "<kml xmlns='http://earth.google.com/kml/2.0'>", "<GroundOverlay>")
+    kml <- c('<?xml version="1.0" encoding="UTF-8"?>', '<kml xmlns="http://www.opengis.net/kml/2.2">', "<GroundOverlay>")
     kmname <- paste("<name>", name, "</name>", sep = "")
     icon <- paste("<Icon><href>", basename(imagefile), "</href><viewBoundScale>0.75</viewBoundScale></Icon>", sep = "")
     e <- extent(x)

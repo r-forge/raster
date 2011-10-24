@@ -88,8 +88,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000
 		dev.off()
 		a <- c("<GroundOverlay>", paste("\t<name>", name[i], "</name>", sep=''))
 		if (dotime) {
-			time <- c(a, "\t<TimeSpan>", 
-					paste("\t\t<begin>", begin[i], "</begin>", sep=''), 
+			time <- c("\t<TimeSpan>", paste("\t\t<begin>", begin[i], "</begin>", sep=''), 
 					paste("\t\t<end>", end[i], "</end>", sep=''), "\t</TimeSpan>")
 		}
 		kml <- c(kml, a, time, paste("\t<Icon><href>", basename(imagefile[i]), "</href></Icon>", sep=''), latlonbox)
@@ -97,7 +96,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000
 
     kml <- c(kml, "</Folder>", "</kml>")
     cat(paste(kml, sep="", collapse="\n"), file=kmlfile, sep = "")
-	.zipkml(kmlfile, imagefile, zip)
+	.zipKML(kmlfile, imagefile, zip)
 }
 )
 
