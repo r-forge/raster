@@ -8,8 +8,6 @@
 \alias{RasterStack-class}
 \alias{RasterBrick-class}
 \alias{RasterStackBrick-class}
-\alias{RasterQuadStack-class}
-\alias{RasterQuadBrick-class}
 
 
 \alias{print,Raster-method}

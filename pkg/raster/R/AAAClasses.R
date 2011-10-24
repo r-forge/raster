@@ -334,7 +334,7 @@ setClass ('.RasterList',
 
 
 
-setClass ('RasterQuadBrick',
+setClass ('.RasterQuadBrick',
 	contains = 'RasterBrick',
 	representation (
 		nlevels = 'integer',
@@ -346,7 +346,7 @@ setClass ('RasterQuadBrick',
 	)
 )
 
-setClass ('RasterQuadStack',
+setClass ('.RasterQuadStack',
 	contains = 'RasterStack',
 	representation (
 		nlevels = 'integer',

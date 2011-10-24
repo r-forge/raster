@@ -29,26 +29,56 @@
 	ini[,1] = toupper(ini[,1]) 
 	
 	nodataval <- -Inf
-	xn <- yn <- d <- nr <- nc <- NA
-	for (i in 1:length(ini[,1])) {
-		if (ini[i,1] == "NCOLS") {nc <- as.integer(ini[i,2])
-		} else if (ini[i,1] == "NROWS") {nr <- as.integer(ini[i,2])
-		} else if (ini[i,1] == "XLLCORNER") {xn <- as.numeric(ini[i,2])
-		} else if (ini[i,1] == "YLLCORNER") {yn <- as.numeric(ini[i,2])
-		} else if (ini[i,1] == "CELLSIZE") {d <- as.numeric(ini[i,2])
+	xn <- yn <- d <- nr <- nc <- xc <- yc <- NA
+	for (i in 1:nrow(ini)) {
+		if (ini[i,1] == "NCOLS") { nc <- as.integer(ini[i,2])
+		} else if (ini[i,1] == "NROWS") { nr <- as.integer(ini[i,2])
+		} else if (ini[i,1] == "XLLCORNER") { xn <- as.numeric(ini[i,2])
+		} else if (ini[i,1] == "XLLCENTER") { xc <- as.numeric(ini[i,2])
+		} else if (ini[i,1] == "YLLCORNER") { yn <- as.numeric(ini[i,2])
+		} else if (ini[i,1] == "YLLCENTER") { yc <- as.numeric(ini[i,2])
+		} else if (ini[i,1] == "CELLSIZE") { d <- as.numeric(ini[i,2])
 		} else if (ini[i,1] == "NODATA_VALUE") { try (nodataval <- as.numeric(ini[i,2]), silent=TRUE)
 		}
     }  
-	if (offset != 6) {
-		offwarn <- '.\nAre you using a wrong offset? Proceed with caution!'
-	} else {
-		offwarn <- ''
+	if (is.na(nr)) stop('"NROWS" not detected') 
+	if (is.na(nc)) stop('"NCOLS" not detected')
+
+	offwarn <- FALSE
+	if (is.na(d)) { 
+		warning('"CELLSIZE" not detected. Setting it to 1.');
+		offwarn = TRUE
+		d <- 1 
+	} else if (d==0) {
+		warning('"CELLSIZE" is reported as zero. Setting it to 1.');
+		d <- 1 
 	}
-	if (is.na(nr)) stop('"NROWS" tag not detected') 
-	if (is.na(nc)) stop('"NCOLS" tag not detected')
-	if (is.na(xn)) { warning('"XLLCORNER" tag not detected. Setting it to 0', offwarn); xn <- 0 }
-	if (is.na(yn)) { warning('"YLLCORNER" tag not detected. Setting it to 0', offwarn); yn <- 0 }
-	if (is.na(d)) { warning('"CELLSIZE" tag not detected. Setting it to 1', offwarn); d <- 1 }
+	d <- abs(d)
+
+	if (is.na(xn)) { 
+		if (is.na(xc)) { 
+			warning('"XLLCORNER" tag not detected. Setting it to 0.')
+			offwarn = TRUE
+			xn <- 0 
+		} else {
+			xn <- xn - 0.5 * d
+		}
+	}
+	
+	if (is.na(yn)) { 
+		if (is.na(yc)) { 
+			warning('"YLLCORNER" tag not detected. Setting it to 0.');
+			offwarn = TRUE
+			yn <- 0
+		} else {
+			yn <- yc - 0.5 * d
+		} 	
+	}
+	if (offset != 6 & offwarn) {
+		warning('The georeference of this object is probably wrong\nAre you using a wrong offset? Proceed with caution!\n')
+	} else {
+		warning('The georeference of this object is probably wrong\n')
+	}
 	
 	xx <- xn + nc * d
 	yx <- yn + nr * d

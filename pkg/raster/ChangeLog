@@ -1,6 +1,7 @@
---- 20-October-2011, version 1.9-31
+--- 22-October-2011, version 1.9-31
 Expanded function KML to create time-series from multi-layer objects (suggested by Tony Fischbach)
 Bug fixed in sampleRegular for files with gain/offset (that were applied twice). Reported by Ned Hornig.
+'offset' argument for raster(x, offset=6) when 'x' is an ascii file that has more header lines than the standard 6 lines.
 
 --- 19-October-2011, version 1.9-29
 Bug fix in projectRaster with circumpolar datasets. Reported by Anthony Fischbach
@@ -19,8 +20,7 @@ mask now works for the a RasterStack/Brick and Spatial* objects. Bug reported by
 --- 23-September-2011, version 1.9-19
 option "useRaster" to plot. To use 'image' rather than 'rasterImage', because rasterImage not working on some platforms (windows server); in R versions above 2.13.0. The default is FALSE because 'image' is not working well in R 2.13.1 (it draws white lines over the image); but this was fixed in 2.13.1-patched and above.
 Bug fix: new plot argument 'addfun' interfered with old argument 'add' such that 'add=T' did not work (reported by Achilleas Psomas)
-Big speed gain (~50 times) for 'calc' with a RasterLayer. calc used apply(x, 1, fun), which is more natural for RasterStackBrick objects, where it simply should use fun(x).
-This can now be tested using (currently undocumented) arguments forcefun=TRUE or forceapply=TRUE
+Big speed gain (~50 times) for 'calc' with a RasterLayer. calc used apply(x, 1, fun) (which is more natural for RasterStackBrick objects), where it simply could use fun(x). This can now be tested using (currently undocumented) arguments forcefun=TRUE or forceapply=TRUE
 
 --- 15-September-2011, version 1.9-13
 Removed backwards compatibility issue (x <- normalizePath(x)  instead of x <- normalizePath(x, winslash = "/", FALSE), when creating raster from file). Reported by Julian Zeidler.
