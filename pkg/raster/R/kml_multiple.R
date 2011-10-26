@@ -60,7 +60,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000
 		dotime <- TRUE
 		if (length(time) == nl) {
 			when <- TRUE
-		if (length(time) == nl+1) {
+		} else if (length(time) == nl+1) {
 			when <- FALSE
 		} else {
 			stop('length(time) should equall nlayers(x) for "when", or (nlayers(x)+1) for "begin-end"')
