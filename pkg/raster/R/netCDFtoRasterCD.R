@@ -116,9 +116,9 @@
 	conv <- att.get.ncdf(nc, 0, "Conventions")
 	# assuming "CF-1.0"
 	
-	zvar <- .varName(nc, varname, warn=warn)
+	zvar <- raster:::.varName(nc, varname, warn=warn)
 	
-	datatype <- .getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
+	datatype <- raster:::.getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
 	
 	dim3 <- 3
 	dims <- nc$var[[zvar]]$ndims
@@ -126,7 +126,7 @@
 		stop(zvar, ' only has a single dimension; I cannot make a RasterLayer from this')
 	} else if (dims == 4) { 
 		if (type != 'RasterQuadBrick') {
-			nlevs <- nc$var[[zvar]]$dim[[4]]$len
+			nlevs <- nc$var[[zvar]]$dim[[lvar]]$len
 			if (level <=0 ) {
 				level <- 1
 				if (nlevs > 1) {
@@ -259,7 +259,7 @@
 	if (type == 'RasterLayer') {
 		if (is.na(band) | is.null(band)) {
 			if (dims > 2) { 
-				stop(zvar, 'has mutliple layers, provide a "band" value between 1 and ', dims[dim3])
+				stop(zvar, ' has mutliple layers, provide a "band" value between 1 and ', dims[dim3])
 			} 
 		} else {
 			if (length(band) > 1) {
