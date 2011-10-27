@@ -163,6 +163,7 @@
 	resx <- (xrange[2] - xrange[1]) / (ncols-1)
 	rm(xx)
 
+	
 	yy <- nc$var[[zvar]]$dim[[2]]$vals
 	rs <- yy[-length(yy)] - yy[-1]
 	if (! isTRUE ( all.equal( min(rs), max(rs), tolerance=0.025, scale= min(rs)) ) ) {
@@ -189,23 +190,32 @@
 	if (a$hasatt) { unit <- a$value }
 	a <- att.get.ncdf(nc, zvar, "grid_mapping")
 	if ( a$hasatt ) { projection  <- a$value }
-
-	prj = list()
+	prj <- list()
 	if (!is.na(projection)) {
 		att <- nc$var[[projection]]
 		prj <- as.list(unlist(att))
 		# now parse .....
 		# projection(r) <- ...
 	}
+
+	
+	if (((tolower(substr(nc$var[['ppt']]$dim[[1]]$name, 1, 3)) == 'lon')  &
+		(tolower(substr(nc$var[['ppt']]$dim[[2]]$name, 1, 3)) == 'lat')) | 
+		(xrange[1] < -181 | xrange[2] > 181 | yrange[1] < -91 | yrange[2] > 91)) {
+			crs <- 'NA'
+	} else {
+		crs <- '+proj=longlat +datum=WGS84'
+	}
+
 		
 	if (type == 'RasterLayer') {
-		r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
+		r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows, crs=crs)
 		r <- .enforceGoodLayerNames(r, long_name)
 	} else if (type == 'RasterBrick') {
-		r <- brick(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
+		r <- brick(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows, crs=crs)
 		r@title <- long_name
 	} else if (type == 'RasterQuadBrick') {
-		r <- .quad(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows)
+		r <- .quad(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows, crs=crs)
 		r@title <- long_name	
 		if (lvar == 4) { 
 			dim3 <- 3 
@@ -218,9 +228,6 @@
 		r@steps  <- nc$var[[zvar]]$dim[[step3]]$len
 	}
 	
-	if (xrange[1] < -181 | xrange[2] > 181 | yrange[1] < -91 | yrange[2] > 91) {
-		projection(r) <- NA
-	}
 	r@file@name <- filename
 	r@file@toptobottom <- toptobottom
 	r@unit <- unit
