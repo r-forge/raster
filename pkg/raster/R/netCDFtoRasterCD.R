@@ -199,8 +199,8 @@
 	}
 
 	
-	if (((tolower(substr(nc$var[['ppt']]$dim[[1]]$name, 1, 3)) == 'lon')  &
-		(tolower(substr(nc$var[['ppt']]$dim[[2]]$name, 1, 3)) == 'lat')) | 
+	if (((tolower(substr(nc$var[[zvar]]$dim[[1]]$name, 1, 3)) == 'lon')  &
+		(tolower(substr(nc$var[[zvar]]$dim[[2]]$name, 1, 3)) == 'lat')) | 
 		(xrange[1] < -181 | xrange[2] > 181 | yrange[1] < -91 | yrange[2] > 91)) {
 			crs <- 'NA'
 	} else {
