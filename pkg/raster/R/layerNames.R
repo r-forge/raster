@@ -5,7 +5,7 @@
 
 
 .enforceGoodLayerNames <- function(x, prefix='layer', returnNames=FALSE) {
-	ln <- trim(x@layernames[1:nlayers(x)])
+	ln <- trim(layerNames(x))
 	ln[ln==''] <- prefix
 	ln <- make.names(ln, unique=TRUE)
 	if (returnNames) {
