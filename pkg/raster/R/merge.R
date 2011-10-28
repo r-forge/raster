@@ -13,9 +13,36 @@ if (!isGeneric("merge")) {
 }	
 
 
+.getCommonDataType <- function(dtype) {
+	utype <- unique(dtype)
+	if (length(utype==1)) {
+		datatype <- utype
+	} else {
+		dtype <- .shortDataType(dtype)
+		dsize <- dataSize(dtype)
+		if (any(dtype == 'FLT')) {
+			dsize <- max(dsize[dtype=='FLT'])
+			datatype <- paste('FLT', dsize, 'S', sep='')
+		} else {
+			signed <- dataSigned(dtype)
+			dsize <- max(dsize)
+			if (all(signed)) {
+				datatype <- paste('INT', dsize, 'S', sep='')
+			} else if (all(!signed)) {
+				datatype <- paste('INT', dsize, 'U', sep='')
+			} else {
+				dsize <- ifelse(dsize == 1, 2, ifelse(dsize == 2, 4, 8))
+				datatype <- paste('INT', dsize, 'S', sep='')
+			}
+		}
+	}
+	datatype
+}
+
+
+
 setMethod('merge', signature(x='Raster', y='Raster'), 
 function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, progress) { 
-	
 	x <- c(x, y, list(...))
 	x <- x[ sapply(x, function(x) inherits(x, 'Raster')) ]
 	if (length(x) < 2) {
@@ -25,18 +52,9 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
 	if (missing(progress)) { progress <- .progress() }
-
-	if (missing(datatype)) {
-		dtype <- sapply(x, function(y) raster:::.shortDataType(dataType(y)))
-		if (any(dtype == 'FLT')) {
-				datatype <- 'FLT4S'
-		} else {
-			datatype <- 'INT4S'
-		}
-	} 
+	if (missing(datatype)) { datatype <- .getCommonDataType(sapply(x, dataType)) } 
 	
 	merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress, test=FALSE)
-
 } )
 
 
@@ -58,14 +76,7 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
 	if (missing(progress)) { progress <- .progress() }
-	if (missing(datatype)) {
-		dtype <- sapply(x, function(y) raster:::.shortDataType(dataType(y)))
-		if (any(dtype == 'FLT')) {
-				datatype <- 'FLT4S'
-		} else {
-			datatype <- 'INT4S'
-		}
-	} 
+	if (missing(datatype)) { datatye <- .getCommonDataType(sapply(x, dataType)) } 
 
 	bb <- unionExtent(x)
 	if (nl > 1) {
@@ -111,11 +122,11 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	rowcol <- matrix(0, ncol=5, nrow=length(x))
 	for (i in 1:length(x)) {
 		xy1 <- xyFromCell(x[[i]], 1) 					# first row/col on old raster[[i]]
-		xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) )     	#last row/col on old raster[[i]]
-		rowcol[i,1] <- rowFromY(out, xy1[2])       		#start row on new raster
-		rowcol[i,2] <- rowFromY(out, xy2[2])    	   	#end row
-		rowcol[i,3] <- colFromX(out, xy1[1])	       	#start col
-		rowcol[i,4] <- rowcol[i,3] + ncol(x[[i]]) - 1  	#end col
+		xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) )     	# last row/col on old raster[[i]]
+		rowcol[i,1] <- rowFromY(out, xy1[2])       		# start row on new raster
+		rowcol[i,2] <- rowFromY(out, xy2[2])    	   	# end row
+		rowcol[i,3] <- colFromX(out, xy1[1])	       	# start col
+		rowcol[i,4] <- rowcol[i,3] + ncol(x[[i]]) - 1  	# end col
 		rowcol[i,5] <- i 								# layer
 	}
 
@@ -136,10 +147,12 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 		for (i in 1:tr$n) {
 			vv <- v <- matrix(NA, nrow=tr$nrow[i], ncol=ncol(out))
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
-			for (j in nrow(rc):1) {  #reverse order so that the first raster covers the second etc.
-				vv[] <- NA
-				vv[, rc[j,3]:rc[j,4]] <- matrix(getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i]), nrow=tr$nrow[i], byrow=TRUE)	
-				v[!is.na(vv)] <- vv[!is.na(vv)]	
+			if (nrow(rc) > 0) {
+				for (j in nrow(rc):1) {  #reverse order so that the first raster covers the second etc.
+					vv[] <- NA
+					vv[, rc[j,3]:rc[j,4]] <- matrix(getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i]), nrow=tr$nrow[i], byrow=TRUE)	
+					v[!is.na(vv)] <- vv[!is.na(vv)]	
+				}
 			}
 			out <- writeValues(out, as.vector(t(v)), tr$row[i])
 			pbStep(pb, i)
@@ -148,11 +161,13 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 		for (i in 1:tr$n) {
 			vv <- v <- matrix(NA, nrow=tr$nrow[i]*ncol(out), ncol=nl)
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
-			for (j in nrow(rc):1) { 
-				vv[] <- NA
-				cells <- cellFromRowColCombine(out, 1:tr$nrow[i], rc[j,3]:rc[j,4])
-				vv[cells, ] <- getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i])
-				v[!is.na(vv)] <- vv[!is.na(vv)]	
+			if (nrow(rc) > 0) {
+				for (j in nrow(rc):1) { 
+					vv[] <- NA
+					cells <- cellFromRowColCombine(out, 1:tr$nrow[i], rc[j,3]:rc[j,4])
+					vv[cells, ] <- getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i])
+					v[!is.na(vv)] <- vv[!is.na(vv)]	
+				}
 			}
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
