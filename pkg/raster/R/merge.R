@@ -4,6 +4,11 @@
 # Version 0.9
 # Licence GPL v3
 
+if (!isGeneric("merge")) {
+	setGeneric("merge", function(x, y, ...)
+		standardGeneric("merge"))
+}	
+
 
 setMethod('merge', signature(x='Raster', y='Raster'), 
 function(x, y, ..., tolerance=0.05, filename="", format, overwrite, progress) { 
@@ -12,9 +17,8 @@ function(x, y, ..., tolerance=0.05, filename="", format, overwrite, progress) {
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
 	if (missing(progress)) { progress <- .progress() }
-	
 	merge(x, tolerance=tolerance, filename=filename, format=format, overwrite=overwrite, progress=progress, test=FALSE)
-	
+
 } )
 
 
@@ -48,11 +52,11 @@ function(x, y,..., tolerance=0.05, filename="", format, overwrite, progress, tes
 	bb <- unionExtent(x)
 	
 	if (nl > 1) {
-		outRaster <- brick(x[[1]], values=FALSE)
+		out <- brick(x[[1]], values=FALSE)
 	} else {
-		outRaster <- raster(x[[1]])
+		out <- raster(x[[1]])
 	}
-	outRaster <- setExtent(outRaster, bb, keepres=TRUE, snap=FALSE)
+	out <- setExtent(out, bb, keepres=TRUE, snap=FALSE)
 
 	datatype <- 'INT4S'
 	for (i in 1:length(x)) {
@@ -62,11 +66,11 @@ function(x, y,..., tolerance=0.05, filename="", format, overwrite, progress, tes
 		}	
 	}
 
-	if ( canProcessInMemory(outRaster, 3) ) {
+	if ( canProcessInMemory(out, 3) ) {
 		if (nl > 1) {
-			v = matrix(NA, nrow=ncell(outRaster), ncol=nl)
+			v = matrix(NA, nrow=ncell(out), ncol=nl)
 			for (i in 1:length(x)) {
-				cells <- cellsFromExtent( outRaster, extent(x[[i]]) )
+				cells <- cellsFromExtent( out, extent(x[[i]]) )
 				vv <- v[cells, ]
 				na <- as.logical( apply(vv, 1, FUN=function(x) sum(is.na(x))==nl) )
 				dat <- getValues(x[[i]])
@@ -77,79 +81,77 @@ function(x, y,..., tolerance=0.05, filename="", format, overwrite, progress, tes
 				v[cells, ] <- vv
 			}
 		} else {
-			v = rep(NA, ncell(outRaster))
+			v = rep(NA, ncell(out))
 			for (i in 1:length(x)) {
-				cells = cellsFromExtent( outRaster, extent(x[[i]]) )
+				cells = cellsFromExtent( out, extent(x[[i]]) )
 				vv = v[cells]
 				vv[is.na(vv)] = getValues(x[[i]])[is.na(vv)]
 				v[cells] = vv
 			}
 		}
 		rm(vv)
-		outRaster <- setValues(outRaster, v)
+		out <- setValues(out, v)
 		if (filename != '') {
-			outRaster <- writeRaster(outRaster, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
+			out <- writeRaster(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 		}
-		return(outRaster)
+		return(out)
 	}
 	
 	
-	rowcol <- matrix(0, ncol=3, nrow=length(x))
+	rowcol <- matrix(0, ncol=4, nrow=length(x))
 	for (i in 1:length(x)) {
 		xy1 <- xyFromCell(x[[i]], 1) # first row/col on old raster[[i]]
-		xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) ) #last row/col on old raster[[i]]
-		rowcol[i,1] <- rowFromY(outRaster, xy1[2]) #start row on new raster
-		rowcol[i,2] <- rowFromY(outRaster, xy2[2]) #end row
-		rowcol[i,3] <- colFromX(outRaster, xy1[1]) #start col
+		xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) )     #last row/col on old raster[[i]]
+		rowcol[i,1] <- rowFromY(out, xy1[2])       #start row on new raster
+		rowcol[i,2] <- rowFromY(out, xy2[2])       #end row
+		rowcol[i,3] <- colFromX(out, xy1[1])       #start col
+		rowcol[i,4] <- rowcol[i,3] + ncol(x[[i]]) - 1  #end col
 	}
 
 	if (filename == "") {
 		filename <- rasterTmpFile()
 	} 
 
-	outRaster <- writeStart(outRaster, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
-	pb <- pbCreate(nrow(outRaster), type=progress)
-	
+	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
+
+	tr <- blockSize(out, minblocks=2)
+	tr$row = sort(unique(c(tr$row, rowcol[,1:2])))
+	tr$nrows = c(tr$row[-1], nrow(out)+1) - c(tr$row)
+	tr$n = length(tr$row)
+	pb <- pbCreate(tr$n, type=progress)
 
 	if (nl == 1) {
-		rd <- rep(NA, outRaster@ncols) 
-		for (r in 1:nrow(outRaster)) {
-			rd[] <- NA
-			for (i in length(x):1) {  #reverse order so that the first raster covers the second etc.
-				if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
-					d <- getValues(x[[i]], r + 1 - rowcol[i,1]) 
-					id2 <- seq(1:ncol(x[[i]])) + rowcol[i,3] - 1
-					d <- cbind(id2, d)
-					d <- na.omit(d)
-					rd[d[,1]] <- d[,2]
-				}		
+		for (i in 1:tr$n) {
+			vv <- v <- matrix(NA, nrow=tr$nrow[i], ncol=ncol(out))
+			for (j in length(x):1) {  #reverse order so that the first raster covers the second etc.
+				if (tr$row[i] >= rowcol[j,1] &  tr$row[i] <= rowcol[j,2]) {
+					row1 <- tr$row[i] - rowcol[j,1] + 1
+					vv[] <- NA
+					vv[, rowcol[j,3]:rowcol[j,4]] <- matrix(getValues(x[[j]], row1, tr$nrow[i]), nrow=tr$nrow[i], byrow=TRUE)	
+					v[!is.na(vv)] <- vv[!is.na(vv)]	
+				}
 			}
-			outRaster <- writeValues(outRaster, rd, r)
-			pbStep(pb, r)
+			out <- writeValues(out, as.vector(t(v)), tr$row[i])
+			pbStep(pb, i)
 		}
-		pbClose(pb)
-		outRaster <- writeStop(outRaster)
 	} else {
-		rd <- matrix(nrow=ncol(outRaster), ncol=nl) 
-		for (r in 1:nrow(outRaster)) {
-			rd[] <- NA
-			for (i in length(x):1) {  #reverse order so that the first raster covers the second etc.
-				if (r >= rowcol[i,1] & r <= rowcol[i,2]) { 
-					d <- getValues(x[[i]], r + 1 - rowcol[i,1]) 
-					id2 <- seq(1:ncol(x[[i]])) + rowcol[i,3] - 1
-					d <- cbind(id2, d)
-					d <- na.omit(d)
-					rd[d[,1], ] <- d[ , -1]
-				}		
+		for (i in 1:tr$n) {
+			vv <- v <- matrix(NA, nrow=tr$nrow[i]*ncol(out), ncol=nl)
+			for (j in length(x):1) {  #reverse order so that the first raster covers the second etc.
+				if (tr$row[i] >= rowcol[j,1] &  tr$row[i] <= rowcol[j,2]) {
+					row1 <- tr$row[i] - rowcol[j,1] + 1
+					vv[] <- NA
+					cells <- cellFromRowColCombine(out, 1:tr$nrow[i], rowcol[j,3]:rowcol[j,4])
+					vv[cells, ] <- getValues(x[[j]], row1, tr$nrow[i])
+					v[!is.na(vv)] <- vv[!is.na(vv)]	
+				}
 			}
-			outRaster <- writeValues(outRaster, rd, r)
-			pbStep(pb, r)
+			out <- writeValues(out, v, tr$row[i])
+			pbStep(pb, i)
 		}
-		pbClose(pb)
-		outRaster <- writeStop(outRaster)
 	}
-	layerNames(outRaster) <- paste(layerNames(x[[1]]), '(merged)')
-	return(outRaster)
+	pbClose(pb)
+	writeStop(out)
 }
 )
 
