@@ -5,6 +5,13 @@
 # Licence GPL v3
 
 
+
+if (!isGeneric(".merge")) {
+	setGeneric(".merge", function(x, y, ...)
+		standardGeneric(".merge"))
+}	
+
+
 setMethod('.merge', signature(x='Raster', y='Raster'), 
 function(x, y, ..., tolerance=0.05, filename="", format, overwrite, progress) { 
 	
