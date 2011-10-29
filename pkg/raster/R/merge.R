@@ -13,34 +13,6 @@ if (!isGeneric("merge")) {
 }	
 
 
-.getCommonDataType <- function(dtype) {
-	dtype <- as.vector(dtype)
-	utype <- unique(dtype)
-	if (length(utype==1)) {
-		datatype <- utype
-	} else {
-		dtype <- .shortDataType(dtype)
-		dsize <- dataSize(dtype)
-		if (any(dtype == 'FLT')) {
-			dsize <- max(dsize[dtype=='FLT'])
-			datatype <- paste('FLT', dsize, 'S', sep='')
-		} else {
-			signed <- dataSigned(dtype)
-			dsize <- max(dsize)
-			if (all(signed)) {
-				datatype <- paste('INT', dsize, 'S', sep='')
-			} else if (all(!signed)) {
-				datatype <- paste('INT', dsize, 'U', sep='')
-			} else {
-				dsize <- ifelse(dsize == 1, 2, ifelse(dsize == 2, 4, 8))
-				datatype <- paste('INT', dsize, 'S', sep='')
-			}
-		}
-	}
-	datatype
-}
-
-
 
 setMethod('merge', signature(x='Raster', y='Raster'), 
 function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, progress) { 
@@ -49,35 +21,35 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	if (length(x) < 2) {
 		stop('merge needs at least 2 Raster* objects')
 	}
-	
+	filename <- trim(filename)
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
 	if (missing(progress)) { progress <- .progress() }
-	if (missing(datatype)) { datatype <- .getCommonDataType(sapply(x, dataType)) } 
-	
-	merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress)
+	if (missing(datatype)) { datatype <- .commonDataType(sapply(x, dataType)) } 
+	merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress, check=FALSE)
 } )
 
 
 
 setMethod('merge', signature(x='list', y='missing'), 
-function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, progress){ 
+function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, progress, check=TRUE){ 
 
-	nl <- unique(sapply(x, nlayers))
-	if (length(nl) != 1) {
-		if (length(nl) == 2 & min(nl) == 1) {
-			nl <- max(nl)
-		} else {
-			stop( 'different number of layers among objects' )
+	if (check) {
+		x <- x[ sapply(x, function(x) inherits(x, 'Raster')) ]
+		if (length(x) < 2) {
+			stop('merge needs at least 2 Raster* objects')
 		}
+		filename <- trim(filename)
+		if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
+		if (missing(overwrite)) { overwrite <- .overwrite()	}
+		if (missing(progress)) { progress <- .progress() }
+		if (missing(datatype)) { datatype <- .commonDataType(sapply(x, dataType)) } 
 	}
+
+	nl <- max(unique(sapply(x, nlayers)))
+
 	compare(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
 	
-	filename <- trim(filename)
-	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
-	if (missing(overwrite)) { overwrite <- .overwrite()	}
-	if (missing(progress)) { progress <- .progress() }
-	if (missing(datatype)) { datatye <- .getCommonDataType(sapply(x, dataType)) } 
 
 	bb <- unionExtent(x)
 	if (nl > 1) {
@@ -89,28 +61,24 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	
 	if ( canProcessInMemory(out, 3) ) {
 		if (nl > 1) {
-			v <- matrix(NA, nrow=ncell(out), ncol=nl)
+			v <- matrix(NA, nrow=ncell(out)*nl, ncol=length(x))
 			for (i in 1:length(x)) {
 				cells <- cellsFromExtent( out, extent(x[[i]]) )
-				vv <- v[cells, ]
-				na <- as.logical( apply(vv, 1, FUN=function(x) sum(is.na(x))==nl) )
-				dat <- getValues(x[[i]])
-				if (!is.matrix(dat)) {
-					dat <- matrix(dat, ncol=1)
-				}
-				vv[na, ] <- dat[na, ]
-				v[cells, ] <- vv
+				cells <- cells + rep(0:(nl-1)*ncell(out), each=length(cells))
+				v[cells, i] <- as.vector(getValues(x[[i]]))
 			}
+			v <- apply(v, 1, function(x) na.omit(x)[1])
+			v <- matrix(v, ncol=nl)
+			
 		} else {
-			v <- rep(NA, ncell(out))
-			for (i in 1:length(x)) {
+		
+			v <- matrix(NA, nrow=ncell(out), ncol=length(x))
+			for (i in length(x):1) {
 				cells <- cellsFromExtent( out, extent(x[[i]]) )
-				vv <- v[cells]
-				vv[is.na(vv)] <- getValues(x[[i]])[is.na(vv)]
-				v[cells] <- vv
+				v[cells,i] <- getValues(x[[i]])
 			}
+			v <- apply(v, 1, function(x) na.omit(x)[1])
 		}
-		rm(vv)
 		out <- setValues(out, v)
 		if (filename != '') {
 			out <- writeRaster(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
@@ -138,32 +106,42 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 
 	pb <- pbCreate(tr$n, type=progress)
 	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
+
+
 	if (nl == 1) {
 		for (i in 1:tr$n) {
-			vv <- v <- matrix(NA, nrow=tr$nrow[i], ncol=ncol(out))
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
 			if (nrow(rc) > 0) {
-				for (j in nrow(rc):1) {  #reverse order so that the first raster covers the second etc.
-					vv[] <- NA
-					vv[, rc[j,3]:rc[j,4]] <- matrix(getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i]), nrow=tr$nrow[i], byrow=TRUE)	
-					v[!is.na(vv)] <- vv[!is.na(vv)]	
+				v <- matrix(NA, nrow=tr$nrow[i] * ncol(out), ncol=nrow(rc))
+				startcell <- cellFromRowCol(out, tr$row[i], 1) - 1
+				for (j in 1:nrow(rc)) {
+					cells <- cellFromRowColCombine(out, tr$row[i]:(tr$row[i]+tr$nrows[i]-1), rc[j,3]:rc[j,4]) - startcell
+					v[cells, j] <- getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i])
 				}
+				v <- apply(v, 1, function(x) na.omit(x)[1])
+			} else {
+				v <- rep(NA, tr$nrow[i] * ncol(out))
 			}
-			out <- writeValues(out, as.vector(t(v)), tr$row[i])
+			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
 		}
 	} else {
 		for (i in 1:tr$n) {
-			vv <- v <- matrix(NA, nrow=tr$nrow[i]*ncol(out), ncol=nl)
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
 			if (nrow(rc) > 0) {
-				for (j in nrow(rc):1) { 
-					vv[] <- NA
-					cells <- cellFromRowColCombine(out, 1:tr$nrow[i], rc[j,3]:rc[j,4])
-					vv[cells, ] <- getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i])
-					v[!is.na(vv)] <- vv[!is.na(vv)]	
+				v <- matrix(NA, nrow=tr$nrow[i]*ncol(out) * nl, ncol=nrow(rc))
+				startcell <- cellFromRowCol(out, tr$row[i], 1) - 1
+				for (j in 1:nrow(rc)) { 
+					cells <- cellFromRowColCombine(out, tr$row[i]:(tr$row[i]+tr$nrows[i]-1), rc[j,3]:rc[j,4]) - startcell
+					cells <- cells + rep(0:(nl-1)* tr$nrow[i]*ncol(out), each=length(cells))
+					v[cells, j] <- as.vector( getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i]) )
 				}
+				v <- apply(v, 1, function(x) na.omit(x)[1])
+				v <- matrix(v, ncol=nl)
+			} else {
+				v <- matrix(NA, nrow=tr$nrow[i] * ncol(out), ncol=nl)
 			}
+			
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
 		}

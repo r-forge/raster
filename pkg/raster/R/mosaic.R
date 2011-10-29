@@ -21,35 +21,33 @@ function(x, y, ..., fun, tolerance=0.05, filename="", format, datatype, overwrit
 	if (length(x) < 2) {
 		stop('mosaic needs at least 2 Raster* objects')
 	}
-	
+	filename <- trim(filename)
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
 	if (missing(progress)) { progress <- .progress() }
-	if (missing(datatype)) { datatype <- .getCommonDataType(sapply(x, dataType)) } 
-	
-	mosaic(x, fun=fun, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress)
+	if (missing(datatype)) { datatype <- .commonDataType(sapply(x, dataType)) } 
+	mosaic(x, fun=fun, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress, check=FALSE)
 } )
 
 
 
 setMethod('mosaic', signature(x='list', y='missing'), 
-function(x, y,..., fun, tolerance=0.05, filename="", format, datatype, overwrite, progress){ 
+function(x, y,..., fun, tolerance=0.05, filename="", format, datatype, overwrite, progress, check=TRUE){ 
 
-	nl <- unique(sapply(x, nlayers))
-	if (length(nl) != 1) {
-		if (length(nl) == 2 & min(nl) == 1) {
-			nl <- max(nl)
-		} else {
-			stop( 'different number of layers among objects' )
+	if (check) {
+		x <- x[ sapply(x, function(x) inherits(x, 'Raster')) ]
+		if (length(x) < 2) {
+			stop('merge needs at least 2 Raster* objects')
 		}
+		filename <- trim(filename)
+		if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
+		if (missing(overwrite)) { overwrite <- .overwrite()	}
+		if (missing(progress)) { progress <- .progress() }
+		if (missing(datatype)) { datatype <- .commonDataType(sapply(x, dataType)) } 
 	}
+
+	nl <- max(unique(sapply(x, nlayers)))
 	compare(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
-	
-	filename <- trim(filename)
-	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
-	if (missing(overwrite)) { overwrite <- .overwrite()	}
-	if (missing(progress)) { progress <- .progress() }
-	if (missing(datatype)) { datatye <- .getCommonDataType(sapply(x, dataType)) } 
 
 	bb <- unionExtent(x)
 	if (nl > 1) {
@@ -60,10 +58,10 @@ function(x, y,..., fun, tolerance=0.05, filename="", format, datatype, overwrite
 	
 	out <- setExtent(out, bb, keepres=TRUE, snap=FALSE)
 
-	fun <- raster:::.makeTextFun(fun)
+	fun <- .makeTextFun(fun)
 	if (class(fun) == 'character') { 
 		rowcalc <- TRUE 
-		fun <- raster:::.getRowFun(fun)
+		fun <- .getRowFun(fun)
 	} else { 
 		rowcalc <- FALSE 
 	}
@@ -127,9 +125,9 @@ function(x, y,..., fun, tolerance=0.05, filename="", format, datatype, overwrite
 	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 	if (nl == 1) {
 		for (i in 1:tr$n) {
-			v <- matrix(NA, nrow=tr$nrow[i] * ncol(out), ncol=nrow(rowcol))
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
 			if (nrow(rc) > 0) {
+				v <- matrix(NA, nrow=tr$nrow[i] * ncol(out), ncol=nrow(rc))
 				startcell <- cellFromRowCol(out, tr$row[i], 1) - 1
 				for (j in 1:nrow(rc)) {
 					cells <- cellFromRowColCombine(out, tr$row[i]:(tr$row[i]+tr$nrows[i]-1), rc[j,3]:rc[j,4]) - startcell
@@ -140,15 +138,17 @@ function(x, y,..., fun, tolerance=0.05, filename="", format, datatype, overwrite
 				} else {
 					v <- apply(v, 1, fun, na.rm=TRUE)
 				}				
+			} else {
+				v <- rep(NA, tr$nrow[i] * ncol(out))
 			}
-			out <- writeValues(out, as.vector(t(v)), tr$row[i])
+			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
 		}
 	} else {
 		for (i in 1:tr$n) {
-			v <- matrix(NA, nrow=tr$nrow[i]*ncol(out) * nl, ncol=nrow(rowcol))
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
 			if (nrow(rc) > 0) {
+				v <- matrix(NA, nrow=tr$nrow[i]*ncol(out) * nl, ncol=nrow(rc))
 				startcell <- cellFromRowCol(out, tr$row[i], 1) - 1
 				for (j in 1:nrow(rc)) { 
 					cells <- cellFromRowColCombine(out, tr$row[i]:(tr$row[i]+tr$nrows[i]-1), rc[j,3]:rc[j,4]) - startcell
@@ -161,7 +161,10 @@ function(x, y,..., fun, tolerance=0.05, filename="", format, datatype, overwrite
 					v <- apply(v, 1, fun, na.rm=TRUE)
 				}
 				v <- matrix(v, ncol=nl)
+			} else {
+				v <- matrix(NA, nrow=tr$nrow[i] * ncol(out), ncol=nl)
 			}
+			
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
 		}

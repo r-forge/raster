@@ -11,7 +11,7 @@ Merge Raster* objects, using a function to compute cell value for overlapping ar
 }
 
 \description{
-Mosaic Raster* objects to form a new object with a larger spatial extent. A functions is used to compute cell values in areas where layers overlap (in contrast to the \code{\link[raster]{merge}} function  which uses the values of the 'upper' layer). All objects must have the same number of layers, origin, and CRS.
+Mosaic Raster* objects to form a new object with a larger spatial extent. A functions is used to compute cell values in areas where layers overlap (in contrast to the \code{\link[raster]{merge}} function  which uses the values of the 'upper' layer). All objects must have the same origin, resolution, and coordinate reference system.
 }
 
 \usage{
@@ -36,7 +36,7 @@ A full call to mosaic is:
   \item{\code{...}}{Additional Raster* objects}
   \item{\code{fun}}{Function. E.g. mean, min, or max. Must be a function that accepts a 'na.rm' argument}
   \item{\code{na.rm}}{Logical. Only return \code{NA} when all values are \code{NA}}
-  \item{\code{tolerance}}{Numeric. Difference permissable (relative to the cell resolution) for objects to be 'equal'. See ?all.equal}
+  \item{\code{tolerance}}{Numeric. Permissable difference in origin (relative to the cell resolution). See \link[base]{all.equal}}
   \item{\code{filename}}{Character. output filename}
   \item{\code{overwrite}}{Logical. If \code{TRUE}, "filename" will be overwritten if it exists}
   \item{\code{format}}{Character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}}}
