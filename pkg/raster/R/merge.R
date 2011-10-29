@@ -53,7 +53,7 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 
 	bb <- unionExtent(x)
 	if (nl > 1) {
-		out <- brick(x[[1]], values=FALSE)
+		out <- brick(x[[1]], values=FALSE, nl=nl)
 	} else {
 		out <- raster(x[[1]])
 	}
