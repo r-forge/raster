@@ -61,31 +61,34 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	
 	if ( canProcessInMemory(out, 3) ) {
 		if (nl > 1) {
-			v <- matrix(NA, nrow=ncell(out)*nl, ncol=length(x))
+			v <- matrix(NA, nrow=ncell(out), ncol=nl)
 			for (i in 1:length(x)) {
 				cells <- cellsFromExtent( out, extent(x[[i]]) )
-				cells <- cells + rep(0:(nl-1)*ncell(out), each=length(cells))
-				v[cells, i] <- as.vector(getValues(x[[i]]))
+				vv <- v[cells, ]
+				na <- as.logical( apply(vv, 1, FUN=function(x) sum(is.na(x))==nl) )
+				dat <- getValues(x[[i]])
+				if (!is.matrix(dat)) {
+					dat <- matrix(dat, ncol=1)
+				}
+				vv[na, ] <- dat[na, ]
+				v[cells, ] <- vv
 			}
-			v <- apply(v, 1, function(x) na.omit(x)[1])
-			v <- matrix(v, ncol=nl)
-			
 		} else {
-		
-			v <- matrix(NA, nrow=ncell(out), ncol=length(x))
-			for (i in length(x):1) {
+			v <- rep(NA, ncell(out))
+			for (i in 1:length(x)) {
 				cells <- cellsFromExtent( out, extent(x[[i]]) )
-				v[cells,i] <- getValues(x[[i]])
+				vv <- v[cells]
+				vv[is.na(vv)] <- getValues(x[[i]])[is.na(vv)]
+				v[cells] <- vv
 			}
-			v <- apply(v, 1, function(x) na.omit(x)[1])
 		}
+		rm(vv)
 		out <- setValues(out, v)
 		if (filename != '') {
 			out <- writeRaster(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 		}
 		return(out)
 	}
-	
 	
 	rowcol <- matrix(NA, ncol=5, nrow=length(x))
 	for (i in 1:length(x)) {
@@ -106,46 +109,40 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 
 	pb <- pbCreate(tr$n, type=progress)
 	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
-
-
+	
 	if (nl == 1) {
 		for (i in 1:tr$n) {
+			v <- matrix(NA, nrow=tr$nrow[i], ncol=ncol(out))
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
 			if (nrow(rc) > 0) {
-				v <- matrix(NA, nrow=tr$nrow[i] * ncol(out), ncol=nrow(rc))
-				startcell <- cellFromRowCol(out, tr$row[i], 1) - 1
-				for (j in 1:nrow(rc)) {
-					cells <- cellFromRowColCombine(out, tr$row[i]:(tr$row[i]+tr$nrows[i]-1), rc[j,3]:rc[j,4]) - startcell
-					v[cells, j] <- getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i])
+				vv <- v
+				for (j in nrow(rc):1) {  #reverse order so that the first raster covers the second etc.
+					vv[] <- NA
+					vv[, rc[j,3]:rc[j,4]] <- matrix(getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i]), nrow=tr$nrow[i], byrow=TRUE)	
+					v[!is.na(vv)] <- vv[!is.na(vv)]	
 				}
-				v <- apply(v, 1, function(x) na.omit(x)[1])
-			} else {
-				v <- rep(NA, tr$nrow[i] * ncol(out))
 			}
-			out <- writeValues(out, v, tr$row[i])
+			out <- writeValues(out, as.vector(t(v)), tr$row[i])
 			pbStep(pb, i)
 		}
 	} else {
 		for (i in 1:tr$n) {
+			v <- matrix(NA, nrow=tr$nrow[i]*ncol(out), ncol=nl)
 			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
 			if (nrow(rc) > 0) {
-				v <- matrix(NA, nrow=tr$nrow[i]*ncol(out) * nl, ncol=nrow(rc))
-				startcell <- cellFromRowCol(out, tr$row[i], 1) - 1
-				for (j in 1:nrow(rc)) { 
-					cells <- cellFromRowColCombine(out, tr$row[i]:(tr$row[i]+tr$nrows[i]-1), rc[j,3]:rc[j,4]) - startcell
-					cells <- cells + rep(0:(nl-1)* tr$nrow[i]*ncol(out), each=length(cells))
-					v[cells, j] <- as.vector( getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i]) )
+				vv <- v
+				for (j in nrow(rc):1) { 
+					vv[] <- NA
+					cells <- cellFromRowColCombine(out, 1:tr$nrow[i], rc[j,3]:rc[j,4])
+					vv[cells, ] <- getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i])
+					v[!is.na(vv)] <- vv[!is.na(vv)]	
 				}
-				v <- apply(v, 1, function(x) na.omit(x)[1])
-				v <- matrix(v, ncol=nl)
-			} else {
-				v <- matrix(NA, nrow=tr$nrow[i] * ncol(out), ncol=nl)
 			}
-			
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
 		}
 	}
+
 	pbClose(pb)
 	writeStop(out)
 }
