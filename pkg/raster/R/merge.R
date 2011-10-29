@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans 
+# Author: Robert J. Hijmans
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
@@ -14,6 +14,7 @@ if (!isGeneric("merge")) {
 
 
 .getCommonDataType <- function(dtype) {
+	dtype <- as.vector(dtype)
 	utype <- unique(dtype)
 	if (length(utype==1)) {
 		datatype <- utype
@@ -54,13 +55,13 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	if (missing(progress)) { progress <- .progress() }
 	if (missing(datatype)) { datatype <- .getCommonDataType(sapply(x, dataType)) } 
 	
-	merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress, test=FALSE)
+	merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress)
 } )
 
 
 
 setMethod('merge', signature(x='list', y='missing'), 
-function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, progress, test=TRUE){ 
+function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, progress){ 
 
 	nl <- unique(sapply(x, nlayers))
 	if (length(nl) != 1) {
@@ -85,7 +86,6 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 		out <- raster(x[[1]])
 	}
 	out <- setExtent(out, bb, keepres=TRUE, snap=FALSE)
-
 	
 	if ( canProcessInMemory(out, 3) ) {
 		if (nl > 1) {
@@ -119,30 +119,25 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	}
 	
 	
-	rowcol <- matrix(0, ncol=5, nrow=length(x))
+	rowcol <- matrix(NA, ncol=5, nrow=length(x))
 	for (i in 1:length(x)) {
-		xy1 <- xyFromCell(x[[i]], 1) 					# first row/col on old raster[[i]]
-		xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) )     	# last row/col on old raster[[i]]
-		rowcol[i,1] <- rowFromY(out, xy1[2])       		# start row on new raster
-		rowcol[i,2] <- rowFromY(out, xy2[2])    	   	# end row
-		rowcol[i,3] <- colFromX(out, xy1[1])	       	# start col
-		rowcol[i,4] <- rowcol[i,3] + ncol(x[[i]]) - 1  	# end col
-		rowcol[i,5] <- i 								# layer
+		xy1 <- xyFromCell(x[[i]], 1) 				# first row/col on old raster[[i]]
+		xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) )   # last row/col on old raster[[i]]
+		rowcol[i,1] <- rowFromY(out, xy1[2])       	# start row on new raster
+		rowcol[i,2] <- rowFromY(out, xy2[2])    	# end row
+		rowcol[i,3] <- colFromX(out, xy1[1])	    # start col
+		rowcol[i,4] <- colFromX(out, xy2[1])		# end col
+		rowcol[i,5] <- i							# layer
 	}
-
-	if (filename == "") {
-		filename <- rasterTmpFile()
-	} 
-
-	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 
 	tr <- blockSize(out, minblocks=2)
 	tr$row <- sort(unique(c(tr$row, rowcol[,1], rowcol[,2]+1)))
 	tr$row <- subset(tr$row, tr$row <= nrow(out)) 
 	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
 	tr$n <- length(tr$row)
-	pb <- pbCreate(tr$n, type=progress)
 
+	pb <- pbCreate(tr$n, type=progress)
+	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 	if (nl == 1) {
 		for (i in 1:tr$n) {
 			vv <- v <- matrix(NA, nrow=tr$nrow[i], ncol=ncol(out))

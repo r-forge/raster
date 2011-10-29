@@ -1,5 +1,5 @@
 --- 28-October-2011, version 1.9-34
-re-implemented merge for higher speed.
+re-implemented merge and mosaic for higher speed (by block rather than by row).
 blockSize now tries to respect the gdal reported block size for (hopefully) faster reading.
 fixed bug with reclass right=TRUE and include.lowest=TRUE (latter argument was sometimes ignored)
 rasterToPolygons now has a 'dissolve' argument (requiring rgeos)
