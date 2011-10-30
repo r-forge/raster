@@ -90,7 +90,7 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 		return(out)
 	}
 	
-	rowcol <- matrix(NA, ncol=5, nrow=length(x))
+	rowcol <- matrix(NA, ncol=6, nrow=length(x))
 	for (i in 1:length(x)) {
 		xy1 <- xyFromCell(x[[i]], 1) 				# first row/col on old raster[[i]]
 		xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) )   # last row/col on old raster[[i]]
@@ -99,13 +99,14 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 		rowcol[i,3] <- colFromX(out, xy1[1])	    # start col
 		rowcol[i,4] <- colFromX(out, xy2[1])		# end col
 		rowcol[i,5] <- i							# layer
+		rowcol[i,6] <- nrow(x[[i]])
 	}
 
 	tr <- blockSize(out, minblocks=2)
-	tr$row <- sort(unique(c(tr$row, rowcol[,1], rowcol[,2]+1)))
-	tr$row <- subset(tr$row, tr$row <= nrow(out)) 
-	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
-	tr$n <- length(tr$row)
+#	tr$row <- sort(unique(c(tr$row, rowcol[,1], rowcol[,2]+1)))
+#	tr$row <- subset(tr$row, tr$row <= nrow(out)) 
+#	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
+#	tr$n <- length(tr$row)
 
 	pb <- pbCreate(tr$n, type=progress)
 	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
@@ -113,12 +114,21 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	if (nl == 1) {
 		for (i in 1:tr$n) {
 			v <- matrix(NA, nrow=tr$nrow[i], ncol=ncol(out))
-			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
+			rc <- subset(rowcol, (tr$row[i]+tr$nrow[i]-1) > rowcol[,1] &  tr$row[i] < rowcol[,2])
 			if (nrow(rc) > 0) {
 				vv <- v
 				for (j in nrow(rc):1) {  #reverse order so that the first raster covers the second etc.
 					vv[] <- NA
-					vv[, rc[j,3]:rc[j,4]] <- matrix(getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i]), nrow=tr$nrow[i], byrow=TRUE)	
+					
+					r1 <- tr$row[i]-rc[j,1]+1 
+					r2 <- r1 + tr$nrow[i]-1
+					z1 <- abs(min(1,r1)-1)+1
+					r1 <- max(1, r1)
+					r2 <- min(rc[j,6], r2)
+					nr <- r2 - r1 + 1
+					z2 <- z1 + nr - 1
+					
+					vv[z1:z2, rc[j,3]:rc[j,4]] <- matrix(getValues(x[[ rc[j,5] ]], r1, nr), nrow=nr, byrow=TRUE)	
 					v[!is.na(vv)] <- vv[!is.na(vv)]	
 				}
 			}
@@ -128,13 +138,22 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	} else {
 		for (i in 1:tr$n) {
 			v <- matrix(NA, nrow=tr$nrow[i]*ncol(out), ncol=nl)
-			rc <- subset(rowcol, tr$row[i] >= rowcol[,1] &  tr$row[i] <= rowcol[,2])			
+			rc <- subset(rowcol, (tr$row[i]+tr$nrow[i]-1) > rowcol[,1] &  tr$row[i] < rowcol[,2])
 			if (nrow(rc) > 0) {
 				vv <- v
 				for (j in nrow(rc):1) { 
 					vv[] <- NA
-					cells <- cellFromRowColCombine(out, 1:tr$nrow[i], rc[j,3]:rc[j,4])
-					vv[cells, ] <- getValues(x[[ rc[j,5] ]], tr$row[i]-rc[j,1]+1, tr$nrow[i])
+
+					r1 <- tr$row[i]-rc[j,1]+1 
+					r2 <- r1 + tr$nrow[i]-1
+					z1 <- abs(min(1,r1)-1)+1
+					r1 <- max(1, r1)
+					r2 <- min(rc[j,6], r2)
+					nr <- r2 - r1 + 1
+					z2 <- z1 + nr - 1
+
+					cells <- cellFromRowColCombine(out, z1:z2, rc[j,3]:rc[j,4])
+					vv[cells, ] <- getValues(x[[ rc[j,5] ]], r1, nr)					   
 					v[!is.na(vv)] <- vv[!is.na(vv)]	
 				}
 			}
