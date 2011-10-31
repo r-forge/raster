@@ -42,7 +42,7 @@ Raster* obeject
 r <- raster(nrow=10, ncol=10)
 r[] <- 1:100
 m <- match(r, c(5:10, 50:55))
-n <- c(5:10, 50:55) %in% r
+n <- r \%in\% c(5:10, 50:55)
 }
 
 \keyword{spatial}
