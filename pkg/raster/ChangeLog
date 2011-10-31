@@ -1,5 +1,7 @@
---- 28-October-2011, version 1.9-34
+--- 30-October-2011, version 1.9-35
+added generic functions %in% and match for Raster objects (suggested by Paul Galpern)
 re-implemented merge and mosaic for higher speed (by block rather than by row).
+re-implemented mean, min and max for higher speed
 blockSize now tries to respect the gdal reported block size for (hopefully) faster reading.
 fixed bug with reclass right=TRUE and include.lowest=TRUE (latter argument was sometimes ignored)
 rasterToPolygons now has a 'dissolve' argument (requiring rgeos)

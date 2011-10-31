@@ -102,7 +102,7 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 		rowcol[i,6] <- nrow(x[[i]])
 	}
 
-	tr <- blockSize(out, minblocks=2)
+	tr <- blockSize(out)
 #	tr$row <- sort(unique(c(tr$row, rowcol[,1], rowcol[,2]+1)))
 #	tr$row <- subset(tr$row, tr$row <= nrow(out)) 
 #	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
