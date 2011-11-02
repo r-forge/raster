@@ -172,7 +172,8 @@
 	}
 	cells <- (cells-1) * dsize
 	signed <- dataSigned(x@file@datanotation)
-
+	if (dsize > 2) { signed <- TRUE }
+	
 	x <- openConnection(x)
 	for (i in seq(along=cells)) {
 		seek(x@file@con, cells[i])

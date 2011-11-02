@@ -120,6 +120,7 @@
 		}
 		dsize <- dataSize(object@file@datanotation)
 		dsign <- dataSigned(object@file@datanotation)
+		if (dsize > 2) { dsign <- TRUE }
 		
 		object <- openConnection(object)
 		if (object@data@nlayers > 1) {
