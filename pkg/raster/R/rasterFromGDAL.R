@@ -154,13 +154,17 @@
 			#Bmn[i] <- statsi[3]
 			#Bsd[i] <- statsi[4]
 		}
-		RATi <- .Call("RGDAL_GetRAT", rstband, PACKAGE = "rgdal")
-		if (!is.null(RATi)) {
-			RATlist[[i]] <- RATi
-		}
-		CATi <- .Call("RGDAL_GetCategoryNames", rstband, PACKAGE = "rgdal")
-		if (!is.null(CATi)) {
-			CATlist[[i]] <- CATi
+		if (RAT) {
+			RATi <- .Call("RGDAL_GetRAT", rstband, PACKAGE = "rgdal")
+			if (!is.null(RATi)) {
+				RATlist[[i]] <- RATi
+			}
+
+			CATi <- .Call("RGDAL_GetCategoryNames", rstband, PACKAGE = "rgdal")
+			if (!is.null(CATi)) {
+				CATlist[[i]] <- CATi
+			}
+			
 		}
 		NDV <- .Call("RGDAL_GetBandNoDataValue", rstband, PACKAGE = "rgdal")
 		if (is.null(NDV)) {
@@ -211,7 +215,7 @@
 	r@data@min <- minv
 	r@data@max <- maxv
 
-	if (! is.null(RATlist)) {
+	if (! is.null(RATlist[[1]])) {
 		att <- vector(length=nlayers(r), mode='list')
 		for (i in 1:length(RATlist)) {
 			if (! is.null(RATlist[[i]])) {
