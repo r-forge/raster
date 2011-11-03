@@ -7,23 +7,23 @@
 \title{Use a multi-core cluster}
 
 \description{
-\code{beginCluster} creates, and \code{endCluster} deletes a 'snow' cluster object. This object can be used for multi-core computing with a few 'raster' functions that support it. 
+\code{beginCluster} creates, and \code{endCluster} deletes a 'snow' cluster object. This object can be used for multi-core computing with those 'raster' functions that support it. 
 
 \code{beginCluster} determines the number of nodes (cores) that are available and uses all of them (unless the argument \code{n} is used). 
 
-NOTE: beginCluster may fail when the package 'nws' is installed. You can fix that by removing the 'nws' package, or by setting the cluster type manually, e.g. beginCluster(type="SOCK")
+NOTE: beginCluster may fail when the package 'nws' is installed. You can fix that by removing the 'nws' package, or by setting the cluster type manually, e.g. \code{beginCluster(type="SOCK")}
 
 endCluster closes the cluster and removes the object.
 
-The use of the cluster by functions is automatic, but has only been implemented in a few functions (see Details).  
+The use of the cluster is automatic in a few functions (see Details).  
 
-\code{clusterR} is a flexible interface for writing your own clusterized functions. This function only works with functions from the raster package that return Raster* objects with the same number of cells as the input raster object(s).
+\code{clusterR} is a flexible interface for using cluster with other functions. This function only works with functions from the raster package that return Raster* objects with the same number of cells as the input raster object(s).
 }
 
 \usage{
 beginCluster(n, type, nice)
 endCluster()
-clusterR(x, FUN, args=NULL, filename='', cl=NULL, m=2...)
+clusterR(x, fun, args=NULL, filename='', cl=NULL, m=2, ...)
 }
 
 \arguments{
@@ -31,7 +31,7 @@ clusterR(x, FUN, args=NULL, filename='', cl=NULL, m=2...)
 \item{type}{Character. The cluster type to be used (optional). E.g. "SOCK", see the snow package for details }
 \item{nice}{Integer. To set the prioirty for the workers, between -20 and 20 (UNIX like platforms only)}
 \item{x}{Raster* object}
-\item{FUN}{function}
+\item{fun}{function}
 \item{args}{arguments for the function (excluding x, which should always be the first argument}
 \item{filename}{character. Output filename (optional)}
 \item{cl}{cluster object (do not use it if beginCluster() has been called}
@@ -57,17 +57,19 @@ None. The side effect is to create or delete a cluster object.
 beginCluster(type="SOCK")
 
 r <- raster()
-r[] = 1:ncell(r)
+r[] <- 1:ncell(r)
 
-fun= function(x) x + 100
-x = clusterR(r, fun, verbose=T)
+x <- clusterR(r, sqrt, verbose=T)
 
-fun2= function(x) calc(x, sqrt)
-y = clusterR(r, fun2)
+f1 <- function(x) calc(x, sqrt)
+y <- clusterR(r, f1)
 
-fun3= function(x) calc(x, range)
-s = stack(r, r*2, r*3)
-z = clusterR(s, fun3)
+s <- stack(r, r*2, r*3)
+f2 <- function(x) calc(x, range)
+z <- clusterR(s, f2)
+
+pts <- matrix(c(0,0, 45,45), ncol=2, byrow=T)
+d <- clusterR(r, distanceFromPoints, args=list(xy=pts))
 
 endCluster()
 }
