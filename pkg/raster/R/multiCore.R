@@ -86,39 +86,3 @@ returnCluster <- function() {
 	return(cl)
 }
 
-
-.detectCores <- function(all.tests = FALSE) {
-
-	multicoreDetectCores <- function(all.tests = FALSE) {
-	# taken from pkg multicore:
-	# detect the number of [virtual] CPUs (cores)
-	
-	# feel free to add tests - those are the only ones I could test [SU]
-		systems <- list(darwin  = "/usr/sbin/sysctl -n hw.ncpu 2>/dev/null",
-					linux   = "grep processor /proc/cpuinfo 2>/dev/null|wc -l",
-					irix    = c("hinv |grep Processors|sed 's: .*::'", "hinv|grep '^Processor '|wc -l"),
-					solaris = "/usr/sbin/psrinfo -v|grep 'Status of.*processor'|wc -l")
-					
-		for (i in seq(systems)) {
-			if(all.tests || length(grep(paste("^", names(systems)[i], sep=''), R.version$os))) {
-				for (cmd in systems[i]) {
-					a <- gsub("^ +", "", system(cmd, TRUE)[1])
-					if (length(grep("^[1-9]", a))) {
-						return(as.integer(a))
-					}
-				}
-			}	
-		}		
-		return(1)
-	}
-	
-
-	if (.Platform$OS.type == 'windows') {
-		if (!exists('readRegistry')) { readRegistry <- function(...)(1) } 
-		# This is a hack to stop the check NOTE: .detectCores: no visible global function definition for 'readRegistry'
-		nn <- length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1))
-	} else {
-		nn <- multicoreDetectCores(all.tests)
-	}
-	return(nn)
-}
