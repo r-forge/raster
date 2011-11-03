@@ -64,7 +64,7 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 	
 	out <- writeStart(out, filename=filename, ...)
 	tr <- blockSize(out, n=nl+nlout)
-	pb <- pbCreate(tr$n, type=.progress(...))
+	pb <- pbCreate(tr$n, ...)
 
 	v <- matrix(nrow=tr$nrows[1] * out@ncols, ncol=nlout)
 	for (i in 1:tr$n) {

@@ -113,7 +113,7 @@ function(x, y,..., fun, tolerance=0.05, filename="", format, datatype, overwrite
 	}
 
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, type=progress)
+	pb <- pbCreate(tr$n, progress=progress)
 	out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 
 	if (nl == 1) {

@@ -130,7 +130,7 @@ focal <- function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, N
 
 		out <- writeStart(out, filename,...)
 		tr <- blockSize(out, minblocks=3, minrows=3)
-		pb <- pbCreate(tr$n, type=.progress(...))
+		pb <- pbCreate(tr$n, ...)
 
 		addr <- floor(nrow(w) / 2)
 		addc <- floor(ncol(w) / 2)

@@ -24,7 +24,7 @@ function(x, value, digits=0, progress, ...) {
 		return(x)
 	} else {
 		tr <- blockSize(x, n=2)
-		pb <- pbCreate(tr$n, type=.progress())
+		pb <- pbCreate(tr$n)
 		r <- 0
 		for (i in 1:tr$n) {
 			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
@@ -56,7 +56,7 @@ setMethod('count', signature(x='RasterStackBrick', value='ANY'),
 		}
 	} else {
 		tr <- blockSize(x, n=2)
-		pb <- pbCreate(tr$n, type=.progress())
+		pb <- pbCreate(tr$n)
 		x <- 0
 		for (i in 1:tr$n) {
 			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])

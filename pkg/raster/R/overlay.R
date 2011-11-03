@@ -142,7 +142,7 @@ function(x, y, ..., fun, filename="", datatype, format, overwrite, progress, uns
 		out <- writeStart(out, filename=filename, ...)
 		
 		tr <- blockSize(out, n=length(x))
-		pb <- pbCreate(tr$n, type=.progress(...))
+		pb <- pbCreate(tr$n, ...)
 		
 		if (doapply) { 
 			valmat = matrix(nrow=tr$nrows[1]*ncol(out)*maxnl, ncol=length(x)) 

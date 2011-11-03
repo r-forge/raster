@@ -71,7 +71,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		flush.console()
 		
 		tr <- blockSize(y, minblocks=nodes)
-		pb <- pbCreate(tr$n, type=.progress(...))
+		pb <- pbCreate(tr$n, ...)
 
 		clFun <- function(i) {
 			#r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
@@ -117,7 +117,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		
 	} else {
 		tr <- blockSize(y)
-		pb <- pbCreate(tr$n, type=.progress(...))
+		pb <- pbCreate(tr$n, ...)
 		
 		if (inMemory) {
 			for (i in 1:tr$n) {

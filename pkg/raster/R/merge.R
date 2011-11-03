@@ -179,7 +179,7 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	#	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
 	#	tr$n <- length(tr$row)
 
-		pb <- pbCreate(tr$n, type=progress)
+		pb <- pbCreate(tr$n, progress=progress)
 		out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 		
 		if (nl == 1) {
@@ -273,7 +273,7 @@ function(x, y,..., tolerance=0.05, filename="", format, datatype, overwrite, pro
 	#	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
 	#	tr$n <- length(tr$row)
 
-		pb <- pbCreate(tr$n, type=progress)
+		pb <- pbCreate(tr$n, progress=progress)
 		out <- writeStart(out, filename=filename, format=format, datatype=datatype, overwrite=overwrite)
 		
 		if (nl == 1) {

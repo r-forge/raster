@@ -41,7 +41,7 @@ function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean,
 	} 
 	
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, type=.progress(...))
+	pb <- pbCreate(tr$n, ...)
 	out <- writeStart(out, filename=filename, ...)
 	
 	if (ylr==0) {

@@ -84,7 +84,7 @@ function(x, fact, filename='', ...) {
 		}
 		cols <- rep(rep(1:ncol(x), each=xfact), times=yfact)
 
-		pb <- pbCreate(nrow(x), type=.progress(...))
+		pb <- pbCreate(nrow(x), ...)
 		outRaster <- writeStart(outRaster, filename=filename, datatype=dataType(x), ...)
 		if (inherits(x, 'RasterLayer')) {
 			for (r in 1:nrow(x)) {

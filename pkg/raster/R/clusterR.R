@@ -22,7 +22,7 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 	}
 	
 	tr$row2 <- tr$row + tr$nrows - 1
-	pb <- pbCreate(tr$n, type=raster:::.progress(...))
+	pb <- pbCreate(tr$n, ...)
 
 	
 	if (!is.null(args)) {

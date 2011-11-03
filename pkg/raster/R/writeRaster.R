@@ -31,7 +31,7 @@ function(x, filename, format, ...) {
 		}
 		r <- raster(x)
 		tr <- blockSize(r)
-		pb <- pbCreate(tr$n, type=.progress(...))			
+		pb <- pbCreate(tr$n, ...)			
 		r <- writeStart(r, filename=filename, format=filetype, ...)
 		for (i in 1:tr$n) {
 			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
@@ -100,7 +100,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 			out <- writeValues(out, getValues(x), 1)
 		} else {
 			tr <- blockSize(x)
-			pb <- pbCreate(tr$n, type=.progress(...))
+			pb <- pbCreate(tr$n, ...)
 			for (i in 1:tr$n) {
 				out <- writeValues(out, getValues(x, tr$row[i], tr$nrows[i]), tr$row[i])
 				pbStep(pb, i)
@@ -144,7 +144,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 		}
 
 		tr <- blockSize(b)
-		pb <- pbCreate(tr$n, type=.progress(...))
+		pb <- pbCreate(tr$n, ...)
 		b <- writeStart(b, filename=filename, bandorder=bandorder, format=filetype, ...)
 		for (i in 1:tr$n) {
 			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])

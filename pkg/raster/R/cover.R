@@ -56,7 +56,7 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 		if (filename == '') { filename <- rasterTmpFile() }
 		outRaster <- writeStart(outRaster, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress )
 		tr <- blockSize(outRaster, length(rasters))
-		pb <- pbCreate(tr$n, type=.progress())
+		pb <- pbCreate(tr$n)
 		for (i in 1:tr$n) {
 			v <- getValues( rasters[[1]], row=tr$row[i], nrows=tr$nrows[i] )
 			if (! is.matrix(v) ) {	v <- matrix(v, ncol=1) }		

@@ -91,7 +91,7 @@ setMethod('predict', signature(object='Raster'),
 		
 		napred <- matrix(rep(NA, ncol(predrast) * tr$nrows[1] * nlayers(predrast)), ncol=nlayers(predrast))
 		factres	<- FALSE
-		pb <- pbCreate(tr$n,  type=progress )			
+		pb <- pbCreate(tr$n,  progress=progress )			
 
 		for (i in 1:tr$n) {
 		

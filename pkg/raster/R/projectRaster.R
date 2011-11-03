@@ -189,7 +189,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		flush.console()
 		
 		tr <- blockSize(to, minblocks=nodes)
-		pb <- pbCreate(tr$n, type=.progress(...))
+		pb <- pbCreate(tr$n, ...)
 		to <- writeStart(to, filename=filename, ...)
 
 		clFun <- function(i) {
@@ -254,7 +254,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			
 		} else {
 			tr <- blockSize(to)
-			pb <- pbCreate(tr$n, type=.progress(...))	
+			pb <- pbCreate(tr$n, ...)	
 			to <- writeStart(to, filename=filename, ...)
 			for (i in 1:tr$n) {
 				xy <- cellFromRowCol(to, tr$row[i], 1):cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to))

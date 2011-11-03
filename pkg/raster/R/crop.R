@@ -67,7 +67,7 @@ function(x, y, filename='', datatype, ...) {
 		}
 	} else { 
 		tr <- blockSize(out)
-		pb <- pbCreate(tr$n, type=.progress(...))
+		pb <- pbCreate(tr$n, ...)
 		out <- writeStart(out, filename=filename, datatype=datatype, ... )
 		for (i in 1:tr$n) {
 			vv <- getValuesBlock(x, row=tr$row[i]+row1-1, nrows=tr$nrows[i], col1, nc)
