@@ -190,11 +190,10 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		
 		tr <- blockSize(to, minblocks=nodes)
 		pb <- pbCreate(tr$n, ...)
-		to <- writeStart(to, filename=filename, ...)
 
 		clFun <- function(i) {
 			start <- cellFromRowCol(to, tr$row[i], 1)
-			end <- start + (tr$nrows[i]-1) * ncol(to)
+			end <- start + tr$nrows[i] * ncol(to) - 1
 			xy <- xyFromCell(to, start:end ) 
 			xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 			xy <- cbind(xy[[1]], xy[[2]])
@@ -208,7 +207,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		}
 		        
 		if (inMemory) {
-			v <- matrix(NA, nrow=ncell(to), nlayers(from))
+			v <- matrix(nrow=ncell(to), ncol=nlayers(from))
 
 			for (i in 1:tr$n) {
 				pbStep(pb, i)
@@ -217,7 +216,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 					stop('cluster error')
 				}
 				start <- cellFromRowCol(to, tr$row[d$value$tag], 1)
-				end <- cellFromRowCol(to, tr$row[d$value$tag] + tr$nrows[d$value$tag]-1, to@ncols)
+				end <- start + tr$nrows[d$value$tag] * ncol(to) - 1
 				v[start:end, ] <- d$value$value
 				ni <- nodes+i
 				if (ni <= tr$n) {
@@ -225,8 +224,15 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 				}
 			}
 			
+			to <- setValues(to, v)
+			if (filename != '') {
+				to <- writeRaster(to, filename, ...)
+			}
+			return(to)
+			
 		} else {
-		
+			to <- writeStart(to, filename=filename, ...)
+
 			for (i in 1:tr$n) {
 				pbStep(pb, i)
 				d <- recvOneData(cl)
@@ -237,6 +243,9 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 					sendCall(cl[[d$node]], clFun, ni, tag=ni)
 				}
 			}
+			pbClose(pb)
+			to <- writeStop(to)	
+			return(to)
 		}	
 		
 	} else {

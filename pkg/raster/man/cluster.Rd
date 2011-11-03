@@ -15,9 +15,9 @@ NOTE: beginCluster may fail when the package 'nws' is installed. You can fix tha
 
 endCluster closes the cluster and removes the object.
 
-The use of the cluster is automatic in a few functions (see Details).  
+The use of the cluster is automatic in these functions" \code{ \link{predict}, \link{projectRaster}, \link{resample}} and in \code{\link{extract}} when using polygons.
 
-\code{clusterR} is a flexible interface for using cluster with other functions. This function only works with functions from the raster package that return Raster* objects with the same number of cells as the input raster object(s).
+\code{clusterR} is a flexible interface for using cluster with other functions. This function only works with functions from the raster package that return Raster* objects that operate on a cell by cell basis and return an object with the same number of cells as the input raster object(s). Among other functions, it does _not_ work with mrege, crop, mosaic, (dis)aggregate, resample, projectRaster, focal, distance, direction.
 }
 
 \usage{
@@ -39,9 +39,7 @@ clusterR(x, fun, args=NULL, filename='', cl=NULL, m=2, ...)
 \item{...}{additional arguments for writing Raster objects to disk}
 }
 
-\details{
-Functions that are 'cluster-enabled' include: \code{ \link{predict}, \link{projectRaster}, \link{resample}, \link{extract} (when using polygons)}.
-
+\note{
 If you want to write your own cluster-enabled functions see \code{\link{getCluster}, \link{returnCluster}}, and the vignette about writing functions
 }
 
