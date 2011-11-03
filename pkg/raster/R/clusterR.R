@@ -6,7 +6,6 @@
 
 clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 
-	n <- max(1, round(n))
 	if (is.null(cl)) {
 		cl <- getCluster()
 		on.exit( returnCluster() )
@@ -15,6 +14,8 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 	nodes <- length(cl)
 	
 	out <- raster(x)
+
+	m <- max(1, round(m))
 	tr <- blockSize(x, minblocks=nodes*m )
 	if (tr$n < nodes) {
 		nodes <- tr$n
