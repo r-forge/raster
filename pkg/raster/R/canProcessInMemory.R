@@ -10,13 +10,22 @@ canProcessInMemory <- function(raster, n=4) {
 #	setOptions(format='GTiff')
 #	return(FALSE)
 	
-	if (.toDisk()) { return(FALSE) } 
+	if (.toDisk()) { 
+		return(FALSE) 
+	} 
+	if (cells > .maxmemory()) {
+		return(FALSE) 
+	} else {
+		return(TRUE)
+	}
 
+# the below is currently never reached.	
 	n <- n + (nlayers(raster) - 1)
 	cells <- round(1.1 * ncell(raster)) * n
 
 	if (cells > .maxmemory()) {
 		return(FALSE) 
+		
 	} else if ( cells < 1000000 ) {
 		return(TRUE)
 	} else {
