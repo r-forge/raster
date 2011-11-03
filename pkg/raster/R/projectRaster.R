@@ -232,8 +232,9 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 				d <- recvOneData(cl)
 				if (! d$value$success ) { stop('cluster error') }
 				to <- writeValues(to, d$value$value, tr$row[d$value$tag])
-				if ((nodes + i) <= tr$n) {
-					sendCall(cl[[d$node]], clFun, nodes+i, tag=i)
+				ni <- nodes+i
+				if (ni <= tr$n) {
+					sendCall(cl[[d$node]], clFun, ni, tag=ni)
 				}
 			}
 		}	
