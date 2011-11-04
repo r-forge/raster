@@ -106,7 +106,7 @@ bf <- writeRaster(b, filename="multi.grd", bandorder='BIL', overwrite=TRUE)
 # write to a new geotiff file (depends on rgdal)
 if (require(rgdal)) {
   rf <- writeRaster(r, filename="test.tif", format="GTiff", overwrite=TRUE)
-  bf <- writeRaster(b, filename="mutli.tif", options="INTERLEAVE=BAND", overwrite=TRUE)
+  bf <- writeRaster(b, filename="multi.tif", options="INTERLEAVE=BAND", overwrite=TRUE)
 }
  
 # write to netcdf 

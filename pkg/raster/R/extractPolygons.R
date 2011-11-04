@@ -6,7 +6,7 @@
 
 
 setMethod('extract', signature(x='Raster', y='SpatialPolygons'), 
-function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, matrix=FALSE, layer, nl, ...){ 
+function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, df=FALSE, layer, nl, ...){ 
 
 	px <- projection(x, asText=FALSE)
 	comp <- .compareCRS(px, projection(y), unknown=TRUE)
@@ -26,9 +26,11 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	if (!missing(fun)) {
 		cellnumbers <- FALSE
 	} else if (weights) {
-		test <- try(slot(fun, 'generic') == 'mean', silent=TRUE)
-		if (!isTRUE(test)) {
-			warning('"fun" was changed to "mean"; other functions cannot be used when "weights=TRUE"' )
+		if (!missing(fun)) {
+			test <- try(slot(fun, 'generic') == 'mean', silent=TRUE)
+			if (!isTRUE(test)) {
+				warning('"fun" was changed to "mean"; other functions cannot be used when "weights=TRUE"' )
+			}
 		}
 	}
 	
@@ -45,7 +47,7 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	
 	
 	if (spbb[1,1] >= rsbb[1,2] | spbb[1,2] <= rsbb[1,1] | spbb[2,1] >= rsbb[2,2] | spbb[2,2] <= rsbb[2,1]) {
-		if (matrix) {
+		if (df) {
 			res <- matrix(ncol=1, nrow=0)
 			colnames(res) <- 'ID'
 			return(res)
@@ -243,8 +245,8 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 		}
 	}
 	
-	if (matrix) {
-		res <- do.call(rbind, sapply(1:length(v), function(x) if (!is.null(v[[x]])) cbind(x, v[[x]])))
+	if (df) {
+		res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
 		colnames(res) <- c('ID', layerNames(x))
 	}
 	

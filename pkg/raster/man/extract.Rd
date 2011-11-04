@@ -89,7 +89,9 @@ Additional arguments that can be suplied to this function, if no \code{fun} argu
 
 3) \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE}, cell-numbers will also be returned. 
 
-4) \code{matrix}. Logical. If \code{matrix=TRUE}, results will be returned as a matrix, rather than as a list. 
+4) \code{df}. Logical. If \code{df=TRUE}, results will be returned as a data.frame, rather than as a list. 
+
+
 
 \bold{= focal values =}
 

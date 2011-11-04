@@ -193,8 +193,16 @@
 		ymax(r) <- ymax(r) + 0.5 * rs[2]
 	}
 	
-	shortname <- gsub(" ", "_", extension(basename(filename), ""))
-	r <- raster:::.enforceGoodLayerNames(r, shortname)
+	if (type == 'RasterBrick') {
+		layerNames(r) <- rep(gsub(" ", "_", extension(basename(filename), "")), nbands)
+	} else {
+		lnames <- gsub(" ", "_", extension(basename(filename), ""))
+		if (nbands > 1) {
+			lnames <- paste(lnames, '_', band, sep='')
+		}
+		layerNames(r) <- lnames
+		
+	}
 	r@file@name <- filename
 	r@file@driver <- 'gdal' 
  
