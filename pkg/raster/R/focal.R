@@ -3,7 +3,7 @@
 # Version 1.0
 # Licence GPL v3
 
-focal <- function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FALSE, ...) {
+focal <- function(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FALSE, ...) {
 
 	stopifnot(nlayers(x)==1)
 	stopifnot(hasValues(x))

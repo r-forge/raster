@@ -11,7 +11,7 @@ This function replaces \code{\link{focal_old}}, \code{\link{focalNA}} and \code{
 }
 
 \usage{
-focal(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FALSE, ...) 
+focal(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FALSE, ...) 
 }
 
 \arguments{

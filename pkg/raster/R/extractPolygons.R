@@ -210,9 +210,9 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 						x <- x * w
 						w <- matrix(rep(w, nl), ncol=nl)
 						w[is.na(x)] <- NA
-						w <- apply(w, 2, sum, na.rm=TRUE)
+						w <- colSums(w, na.rm=TRUE)
 						x <- apply(x, 1, function(x) x / w )
-						return( apply(x, 1, sum, na.rm=na.rm) )
+						return( rowSums(x, na.rm=na.rm) )
 					} else {
 						return( NULL )
 					}	
