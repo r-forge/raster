@@ -89,7 +89,7 @@ Additional arguments that can be suplied to this function, if no \code{fun} argu
 
 3) \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE}, cell-numbers will also be returned. 
 
-
+4) \code{matrix}. Logical. If \code{matrix=TRUE}, results will be returned as a matrix, rather than as a list. 
 
 \bold{= focal values =}
 
@@ -154,7 +154,7 @@ extract(r, xy[1:3,], buffer=1000000, fun=mean)
  s <- raster(r)
  for (i in 1:length(z)) { s[z[[i]]] <- i }
 ## compare with raster that is not longitude/latitude
- projection(r) <- "+proj=UTM +zone=17" 
+ projection(r) <- "+proj=utm +zone=17" 
  xy[,1] <- 50
  z <- extract(r, xy, buffer=8)
  for (i in 1:length(z)) { s[z[[i]]] <- i }

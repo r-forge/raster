@@ -5,9 +5,8 @@
 
 
 
-
 setMethod('extract', signature(x='Raster', y='SpatialPolygons'), 
-function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, layer, nl, ...){ 
+function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, matrix=FALSE, layer, nl, ...){ 
 
 	px <- projection(x, asText=FALSE)
 	comp <- .compareCRS(px, projection(y), unknown=TRUE)
@@ -46,6 +45,11 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	
 	
 	if (spbb[1,1] >= rsbb[1,2] | spbb[1,2] <= rsbb[1,1] | spbb[2,1] >= rsbb[2,2] | spbb[2,2] <= rsbb[2,1]) {
+		if (matrix) {
+			res <- matrix(ncol=1, nrow=0)
+			colnames(res) <- 'ID'
+			return(res)
+		}
 		return(res[1:npol])
 	}
 	
@@ -212,7 +216,7 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 						w[is.na(x)] <- NA
 						w <- colSums(w, na.rm=TRUE)
 						x <- apply(x, 1, function(x) x / w )
-						return( rowSums(x, na.rm=na.rm) )
+						res <- rowSums(x, na.rm=na.rm) 
 					} else {
 						return( NULL )
 					}	
@@ -238,6 +242,12 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 			res <- j
 		}
 	}
+	
+	if (matrix) {
+		res <- do.call(rbind, sapply(1:length(v), function(x) if (!is.null(v[[x]])) cbind(x, v[[x]])))
+		colnames(res) <- c('ID', layerNames(x))
+	}
+	
 	res
 }
 )
