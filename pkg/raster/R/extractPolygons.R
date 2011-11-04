@@ -246,8 +246,17 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	}
 	
 	if (df) {
-		res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
-		colnames(res) <- c('ID', layerNames(x))
+		if (!is.list(res)) {
+			res <- cbind(1:NROW(res), res)
+		} else {
+			res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
+		}
+
+		if (ncol(res) == 2) {
+			colnames(res) <- c('ID', 'value')
+		} else {
+			colnames(res)[1] <- 'ID'
+		}
 	}
 	
 	res
