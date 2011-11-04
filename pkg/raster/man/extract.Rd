@@ -65,7 +65,9 @@ of points.  If the data are not projected (latitude/longitude), the unit should 
 
 \bold{= lines =}
 
-If no \code{fun} argument is supplied:
+\code{df}. Logical. If \code{df=TRUE}, results will be returned as a data.frame, rather than as a list. 
+
+And, if no \code{fun} argument is supplied:
 
 \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE} is used, cell-numbers will also be returned. 
 
@@ -81,15 +83,16 @@ if \code{y} represents polygons are:
 or polygons with an odd shape, for which otherwise no values are returned because they do not cover any Raster* object's cell centers. In some cases, you could use alternatively 
 use the centroids of such polygons, for example using \code{extract(x, coordinates(y))} or \code{extract(x, coordinates(y), method='bilinear')}. 
 
+2) \code{df}. Logical. If \code{df=TRUE}, results will be returned as a data.frame, rather than as a list. 
+
+
 Additional arguments that can be suplied to this function, if no \code{fun} argument is supplied:
 
-2) \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction
+3) \code{weights}. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction
  of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. 
  This option can be useful if the polygons are small relative to the cells size of the Raster* object.
 
-3) \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE}, cell-numbers will also be returned. 
-
-4) \code{df}. Logical. If \code{df=TRUE}, results will be returned as a data.frame, rather than as a list. 
+4) \code{cellnumbers}. Logical. If \code{cellnumbers=TRUE}, cell-numbers will also be returned. 
 
 
 
