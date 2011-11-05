@@ -21,8 +21,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 	if (nl == 1) {
 		y <- raster(y)
 	} else {
-		y <- brick(y, values=FALSE)
-		y@data@nlayers <- nl
+		y <- brick(y, values=FALSE, nl=nl)
 	}
 	
 	if (!hasValues(x)) {
@@ -37,23 +36,17 @@ function(x, y, method="bilinear", filename="", ...)  {
 	}
 	if (method == 'ngb') method <- 'simple'
 	
-	filename <- trim(filename)
 
 	resdif <- max(res(y) / res(x))
 	if (resdif > 3) {
 		warning('you are resampling y a raster with a much larger cell size, perhaps you should use "aggregate" first')
 	}
 	
-	e = intersectExtent(x, y, validate=TRUE)
+	e <- intersectExtent(x, y, validate=TRUE)
 	
-	if (is.null(filename)){ filename <- "" }
-	
-	if (!canProcessInMemory(y, 3*nl) && filename == '') {
-		filename <- rasterTmpFile()	
-	}
-	
-	inMemory <- filename == ""
-	if (inMemory) {
+	filename <- trim(filename)
+	if (canProcessInMemory(y, 3*nl)) {
+		inMemory <- TRUE
 		v <- matrix(NA, nrow=ncell(y), ncol=nlayers(x))
 	} else {
 		y <- writeStart(y, filename=filename, ... )
@@ -116,6 +109,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		}	
 		
 	} else {
+	
 		tr <- blockSize(y)
 		pb <- pbCreate(tr$n, ...)
 		

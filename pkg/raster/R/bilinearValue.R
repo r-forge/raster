@@ -6,7 +6,9 @@
 
 .bilinearValue <- function(raster, xyCoords, na.rm=FALSE, layer, n) {
 
+
 	fourCellsFromXY <- function(raster, xy) {
+	# should have a variant for global lon/lat data
 		cells <- cellFromXY(raster, xy)
 		row <- rowFromCell(raster, cells)
 		col <- colFromCell(raster, cells)
@@ -31,7 +33,7 @@
 		return(four)
 	}
 	
-	bilinear <- function(x,y, x1,x2,y1,y2, v) {
+	bilinear <- function(x, y, x1, x2, y1, y2, v) {
 		v = v / ((x2-x1)*(y2-y1))
 		return( v[,1]*(x2-x)*(y2-y) + v[,3]*(x-x1)*(y2-y) + v[,2]*(x2-x)*(y-y1) + v[,4]*(x-x1)*(y-y1) )
 		#div <- (x2-x1)*(y2-y1)
@@ -47,8 +49,11 @@
 	
 	nls <- nlayers(raster)
 	if (nls == 1) {
+	
 		v <- matrix( .cellValues(raster, cells), ncol=4)
+		#v[is.na(v)] <- mean(v, na.rm=TRUE) # only of the focal cell is NA
 		bilinear(xyCoords[,1], xyCoords[,2], x[1,], x[2,], y[1,], y[2,], v)
+
 	} else {
 	
 		if (missing(layer)) { layer <- 1 }
@@ -58,6 +63,7 @@
 		cv <- .cellValues(raster, cells, layer=layer, nl=n)
 		for (i in 1:ncol(cv)) {
 			v <- matrix(cv[, i], ncol=4)
+			#v[is.na(v)] <- mean(v, na.rm=TRUE) 
 			res[,i] <- bilinear(xyCoords[,1], xyCoords[,2], x[1,], x[2,], y[1,], y[2,], v)
 		}
 		colnames(res) <- layerNames(raster)[lyrs]

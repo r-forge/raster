@@ -63,6 +63,9 @@ focal <- function(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA,
 		pad <- TRUE
 	}
 
+	if (NAonly) {
+		na.rm <- TRUE
+	}
 	
 	if (missing(fun)) {
 		dofun <- FALSE
@@ -75,9 +78,6 @@ focal <- function(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA,
 		} else {
 			fun <- function(x) as.double( oldfun(x) )
 		}
-	}
-	if (NAonly) {
-		na.rm <- TRUE
 	}
 	NAonly <- as.integer(NAonly)
 	narm <- as.integer(na.rm)
