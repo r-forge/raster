@@ -33,10 +33,10 @@ focal <- function(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA,
 	if (length(w) == 1) {
 		w <- round(w)
 		stopifnot(w > 1)
-		w=matrix(1, nc=w, nr=w)
+		w=matrix(1, ncol=w, nrow=w)
 	} else if (length(w) == 2) {
 		w <- round(w)
-		w=matrix(1, nc=w[1], nr=w[2])
+		w=matrix(1, ncol=w[1], nrow=w[2])
 	} 
 	if (! is.matrix(w) ) {
 		stop('w should be a single number, two numbers, or a matrix')
