@@ -34,7 +34,7 @@
 
 
 
-focalNA <- function(x, ngb=3, fun=mean, recursive=FALSE, maxrec=0, filename="", ...) {
+.focalNA <- function(x, ngb=3, fun=mean, recursive=FALSE, maxrec=0, filename="", ...) {
 
 	warning('this function is depracated. Please use "focal"')
 

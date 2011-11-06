@@ -1,7 +1,8 @@
---- 3-November-2011, version 1.9-37
+--- 6-November-2011, version 1.9-38
+improved speed of disaggregate
 simplified pbCreate
 new function for using clusters with raster functions: clusterR
-new .detectCores function (taken from the new parallel package)
+new .detectCores function (taken from the new (R 2.14.0) parallel package)
 new function approxNA to approximate NA values by cell, across layers (emerged from discussions with Jan Verbesselt). 
 
 --- 30-October-2011, version 1.9-35

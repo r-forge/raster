@@ -6,8 +6,6 @@
 
 \description{
 Calculate "moving window" values for the neighborhood of focal cells using a matrix of weights, perhaps in combination with a function.
-
-This function replaces \code{\link{focal_old}}, \code{\link{focalNA}} and \code{\link{focalFilter}}
 }
 
 \usage{
@@ -62,6 +60,11 @@ The following additional arguments can be passed, to replace default values for 
 
 \value{
 RasterLayer
+}
+
+
+\note{
+This function replaces \code{\link{focal_old}}, \code{focalNA} and \code{\link{focalFilter}}
 }
 
 
