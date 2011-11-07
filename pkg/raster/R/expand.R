@@ -36,6 +36,7 @@ function(x, y, filename='', value=NA, datatype, ...) {
 # only expanding here, not cropping
 	y <- unionExtent(y, extent(x))
 
+	
 	if (nlayers(x) <= 1) {
 		out <- raster(x)
 		leg <- x@legend
@@ -43,10 +44,14 @@ function(x, y, filename='', value=NA, datatype, ...) {
 		out <- brick(x, values=FALSE)	
 		leg <- new('.RasterLegend')
 	}
-	
 	out@layernames <- layerNames(x)
 	out <- setExtent(out, y, keepres=TRUE)
 	
+	if (nrow(x) == nrow(out) & ncol(x) == ncol(out)) {
+		# nothing to do.
+		return(x)
+	}
+
 	if (! hasValues(x) ) {
 		return(out)
 	}
@@ -80,11 +85,9 @@ function(x, y, filename='', value=NA, datatype, ...) {
 		tr$row <- sort(unique(c(tr$row, startrow, endrow)))
 		tr$nrows <- c(tr$row[-1], nrow(out)+1) - tr$row
 		tr$n <- length(tr$row)
-		
-
+			
 		pb <- pbCreate(tr$n, ...)
 		out <- writeStart(out, filename=filename, datatype=datatype, ... )
-
 		for (i in 1:tr$n) {
 			d <- matrix(value, tr$nrows[i] * ncol(out))
 			if (tr$row[i] <= endrow & (tr$row[i]+tr$nrows[i]-1) >= startrow) {
