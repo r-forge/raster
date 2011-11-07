@@ -24,22 +24,12 @@ setMethod('cover', signature(x='RasterLayer', y='RasterLayer'),
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
 	if (missing(progress)) { progress <- .progress() }
-	if (missing(datatype)) {
-# check for boolean data?
-		isInt <- TRUE
-		for (i in 1:length(rasters)) {
-			dtype <- .shortDataType(rasters[[i]]@file@datanotation)
-			if (dtype != 'INT') {
-				isInt <- FALSE
-			}
-		}
-		if (isInt) { 
-			datatype  <- 'INT4S'
-		} else { 
-			datatype <- 'FLT8S'
+	if (missing(datatype)) { 
+		datatype <- unique(dataType(x))
+		if (length(datatype) > 1) {
+			datatype <- .commonDataType(datatype)
 		}
 	}
-	
 	if (canProcessInMemory(x, length(rasters) + 2)) {
 	
 		v <- getValues( rasters[[1]] )

@@ -1,5 +1,5 @@
 --- 6-November-2011, version 1.9-38
-improved speed of disaggregate
+improved speed of disaggregate and expand for large files (processing by block of rows rather than by row)
 simplified pbCreate
 new function for using clusters with raster functions: clusterR
 new .detectCores function (taken from the new (R 2.14.0) parallel package)

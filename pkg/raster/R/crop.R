@@ -23,8 +23,8 @@ function(x, y, filename='', datatype, ...) {
 	validObject(y)
 	
 	if (missing(datatype)) { 
-		datatype <- dataType(x)
-		if (length(unique(datatype)) > 1) {
+		datatype <- unique(dataType(x))
+		if (length(datatype) > 1) {
 			datatype <- .commonDataType(datatype)
 		}
 	}
@@ -33,13 +33,15 @@ function(x, y, filename='', datatype, ...) {
 	e <- intersectExtent(x, y)
 	e <- alignExtent(e, x)
 	
-	if (inherits(x, 'RasterLayer')) {
+
+	if (nlayers(x) <= 1) {
 		out <- raster(x)
 		leg <- x@legend
 	} else {
 		out <- brick(x, values=FALSE)	
 		leg <- new('.RasterLegend')
 	}
+
 	out <- setExtent(out, e, keepres=TRUE)
 	layerNames(out) <- layerNames(x)
 	

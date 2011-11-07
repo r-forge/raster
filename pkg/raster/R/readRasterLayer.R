@@ -100,7 +100,8 @@
 		}
 
 		if (object@file@datanotation == 'INT4U') {
-			result[result < 0] <- 2147483647 - result[result < 0] 
+			i <- !is.na(result) & result < 0
+			result[i] <- 2147483647 - result[i] 
 		}
 		if (dtype == 'numeric') {
 			result[result <= (0.999999 * object@file@nodatavalue)] <- NA 	
