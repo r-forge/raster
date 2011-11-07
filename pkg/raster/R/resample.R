@@ -49,6 +49,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		inMemory <- TRUE
 		v <- matrix(NA, nrow=ncell(y), ncol=nlayers(x))
 	} else {
+		inMemory <- FALSE
 		y <- writeStart(y, filename=filename, ... )
 	}
 

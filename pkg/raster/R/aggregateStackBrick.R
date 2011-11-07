@@ -79,7 +79,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 		on.exit(options('warn' = w))
 		options('warn'=-1) 
 		
-		pb <- pbCreate(rsteps, type=.progress(...))
+		pb <- pbCreate(rsteps, ...)
 		for (r in 1:rsteps) {
 			startrow <- 1 + (r - 1) * yfact
 			if ( r==rsteps) {

@@ -94,7 +94,7 @@ function(x, y, ..., fun, filename="", datatype, format, overwrite, progress, uns
 	}
 	
 	if ( canProcessInMemory(out, sum(nl)) ) {
-		pb <- pbCreate(3, type=.progress(...))			
+		pb <- pbCreate(3, ...)			
 		pbStep(pb, 1)
 		if (doapply) {
 			valmat <- matrix(nrow=ncell(out)*maxnl, ncol=length(x)) 

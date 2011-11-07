@@ -109,7 +109,7 @@
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 			datacols <- 5:ncol(xyarc)
 		}
-		pb <- pbCreate(nrow(rs), type=.progress(...))
+		pb <- pbCreate(nrow(rs), ...)
 		rs <- writeStart(rs, filename=filename, ...)
 		for (r in 1:rs@nrows) {
 			d <- dna

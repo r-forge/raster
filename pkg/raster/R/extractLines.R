@@ -47,7 +47,7 @@ function(x, y, fun, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, ...){
 	rr <- raster(x)
 	cn <- layerNames(x)
 	
-	pb <- pbCreate(nlns, type=.progress(...))
+	pb <- pbCreate(nlns, ...)
 	
 	
 	if (.doCluster()) {

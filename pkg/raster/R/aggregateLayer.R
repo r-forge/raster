@@ -68,7 +68,7 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, .
 		outRaster <- writeStart(outRaster, filename=filename, ...)
 	}
 		
-  	pb <- pbCreate(rsteps, type=.progress(...))
+  	pb <- pbCreate(rsteps, ...)
 		
 		#vv <- matrix(ncol= csteps * yfact, nrow=rsteps * xfact)
 	vv <- matrix(nrow= yfact * xfact, ncol=csteps)

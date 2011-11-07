@@ -57,7 +57,7 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	
 	rr <- raster(x)
 	
-	pb <- pbCreate(npol, type=.progress(...))
+	pb <- pbCreate(npol, ...)
 	
 	if (.doCluster()) {
 		cl <- getCluster()

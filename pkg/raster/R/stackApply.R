@@ -37,7 +37,7 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 		a <- getValues(x)
 		if (makemat) { a < - matrix(a, ncol=1) }
 
-		pb <- pbCreate(length(uin), type=.progress(...))
+		pb <- pbCreate(length(uin), ...)
 
 		if (rowcalc) {
 			for (j in uin) {

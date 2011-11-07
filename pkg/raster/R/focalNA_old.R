@@ -105,7 +105,7 @@
 
 	keepGoing <- FALSE
 	
-	pb <- pbCreate(nrow(ngbgrid), type=.progress(...))
+	pb <- pbCreate(nrow(ngbgrid), ...)
 	if (filename != '') {
 		ngbgrid <- writeStart(ngbgrid, filename=filename, ...)			
 	}
