@@ -24,7 +24,7 @@ The following additional arguments can be passed:
 \tabular{rll}{
   \tab \code{classes}  \tab Logical. If \code{TRUE} all different values are (after rounding) distinguished, as well as \code{NA}. If \code{FALSE}, the only comparison is between values and \code{NA} \cr
   \tab \code{type}  \tab Character. 'both' (default), 'inner', or 'outer' to distinguish cells with values versus cells with \code{NA}.  \cr
-  \tab \code{asNA}  \tab Logical. Should non-edge cells by \code{NA} rather than \code{FALSE} (zero)?\cr
+  \tab \code{asNA}  \tab Logical. Should non-edge cells be \code{NA} rather than \code{FALSE} (=zero)?\cr
   \tab \code{asZero}  \tab Logical. If \code{asNA=TRUE}, should cells that are not an edge, and not \code{NA} on the input RasterLayer be returned as zero?\cr
   \tab \code{filename}  \tab Character. Filename for the output RasterLayer \cr
   \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
