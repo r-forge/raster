@@ -18,7 +18,7 @@ Detect edges. Edges are cells that have more than one class in the 4 or 8 cells 
 \item{filename}{Character. Filename for the output RasterLayer (optional)}
 \item{type}{Character. 'inner', or 'outer' }
 \item{classes}{Character. Logical. If \code{TRUE} all different values are (after rounding) distinguished, as well as \code{NA}. If \code{FALSE} (the default) only edges between \code{NA} and non-\code{NA} cells are considered }
-\item{directions}{Integer. How many surrounding cells should be considered? 4 (rook) or 8 (queen)? }
+\item{directions}{Integer. Which cells are considered adjacent? Should be 8 (Queen's case) or 4 (Rook's case) }
 \item{...}{Additional arguments as for \code{\link{writeRaster}}}  
 }
 
