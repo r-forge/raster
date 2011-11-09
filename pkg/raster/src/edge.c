@@ -97,8 +97,6 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP fval) {
 		Rprintf ("%s \n", "4");
 		
 	}
-
-	
 	
 	UNPROTECT(2);
 	return(val);
