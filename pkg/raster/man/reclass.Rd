@@ -14,7 +14,7 @@ Reclassification is done with matrix "rcl". For simple cases, the functions \cod
 }
 
 \usage{
-\S4method{edge}{Raster}(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...)
+\S4method{reclass}{Raster}(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...)
 }
 
 \arguments{
