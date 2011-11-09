@@ -9,7 +9,7 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", fun=predict, ext=NULL, const=NULL, index=1, na.rm=TRUE, progress='', format, datatype, overwrite=FALSE, ...) {
+	function(object, model, filename="", fun=predict, ext=NULL, const=NULL, index=1, na.rm=TRUE, format, datatype, overwrite=FALSE, progress='', ...) {
 	
 		filename <- trim(filename)
 		if (missing(format)) { format <- .filetype(filename=filename) } 

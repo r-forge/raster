@@ -10,13 +10,13 @@ if (!isGeneric('writeRaster')) {
 
 
 setMethod('writeRaster', signature(x='RasterLayer', filename='character'), 
-function(x, filename, format, ...) {
+function(x, filename, ...) {
 
 	stopifnot(hasValues(x))
 	filename <- trim(filename)
 	if (filename == '') {	stop('provide a filename')	}
 	filename <- .fullFilename(filename)
-	filetype <- .filetype(format=format, filename=filename)
+	filetype <- .filetype(..., filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
 	if (filetype == 'KML') {
@@ -44,7 +44,7 @@ function(x, filename, format, ...) {
 	}
 
 	if (.isNativeDriver(filetype)) {
-		x <- .writeRasterAll(x, filename=filename, format=filetype, ...)
+		x <- .writeRasterAll(x, filename=filename, filetype=filetype, ...)
 		
 	} else if (filetype=='ascii') {
 		x <- .writeAscii(x, filename=filename,...)
@@ -55,7 +55,7 @@ function(x, filename, format, ...) {
 		return( .stopWriteCDF(x) )
 		
 	} else { 
-		x <- .writeGDALall(x, filename=filename, format=filetype, ...)
+		x <- .writeGDALall(x, filename=filename, ...)
 		
 	}
 	return(x)
@@ -66,13 +66,13 @@ function(x, filename, format, ...) {
 
 
 setMethod('writeRaster', signature(x='RasterStackBrick', filename='character'), 
-function(x, filename, bandorder='BIL', format, ...) {
+function(x, filename, ...) {
 
 	stopifnot(hasValues(x))
 	filename <- trim(filename)
 	if (filename == '') {	stop('provide a filename')	}
 	filename <- .fullFilename(filename)
-	filetype <- .filetype(format=format, filename=filename)
+	filetype <- .filetype(..., filename=filename)
 	filename <- .getExtension(filename, filetype)
 
 	if (filetype == 'KML') {
@@ -83,18 +83,12 @@ function(x, filename, bandorder='BIL', format, ...) {
 	
 	if (.isNativeDriver(filetype)) {
 		if (! filetype %in% c("raster", "BIL", "BSQ", "BIP") ) {
-			stop('file format not supported for multi-band files')
+			stop('this file format is not supported for multi-band files')
 		}
-		if ( filetype %in% c("BIL", "BSQ", "BIP") ) { 
-			bandorder <- filetype
-		}
-		if (!bandorder %in% c('BIL', 'BSQ', 'BIP')) { 
-			stop("invalid bandorder, should be 'BIL', 'BSQ' or 'BIP'") 
-		}
-
+	
 		out <- brick(x, values=FALSE)
 		layerNames(out) <- layerNames(x)
-		out <- writeStart(out, filename, bandorder=bandorder, ...)
+		out <- writeStart(out, filename, ...)
 	
 		if (inMemory(x)) {
 			out <- writeValues(out, getValues(x), 1)
@@ -124,7 +118,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 			x <- .writeValuesBrickCDF(b, values(x) )	
 			x <- .stopWriteCDF(x) 
 		} else {
-			x <- .writeGDALall(x, filename=filename, format=filetype, ...) 
+			x <- .writeGDALall(x, filename=filename, ...) 
 		}
 		
 		return(x)
@@ -145,7 +139,7 @@ function(x, filename, bandorder='BIL', format, ...) {
 
 		tr <- blockSize(b)
 		pb <- pbCreate(tr$n, ...)
-		b <- writeStart(b, filename=filename, bandorder=bandorder, format=filetype, ...)
+		b <- writeStart(b, filename=filename, format=filetype, ...)
 		for (i in 1:tr$n) {
 			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 			b <- writeValues(b, v, tr$row[i])

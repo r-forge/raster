@@ -154,7 +154,7 @@
 }
 
 
-.filetype <- function(..., format, filename='') {
+.filetype <- function(format, filename='', ...) {
 	if (missing(format)) { 
 		format <- .getFormat(filename)
 		if (format != '') {

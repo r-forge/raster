@@ -11,25 +11,12 @@ focal <- function(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA,
 	# mistakes because of differences with old focal and old focalFilter
 	dots <- list(...)
 	if (!is.null(dots$filter)) {
-		if (missing(w)) {
-			w <- dots$filter
-			warning('argument "filter" is wrong; use "w" instead')
-		} else {
-			warning('argument "filter" is ignored!')
-		}
+		warning('argument "filter" is ignored!')
 	}
 	if (!is.null(dots$ngb)) {
-		if (missing(w)) {
-			w <- dots$ngb
-			warning('argument "ngb" is wrong; use "w" instead')
-		} else {
-			warning('argument "ngb" is ignored!')		
-		}
+		warning('argument "ngb" is ignored!')		
 	}
 	
-	if (missing(w)) {
-		stop('argument "w" is missing')
-	}
 	if (length(w) == 1) {
 		w <- round(w)
 		stopifnot(w > 1)

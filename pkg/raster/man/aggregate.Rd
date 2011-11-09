@@ -16,6 +16,7 @@ The value for the resulting cells is computed with a user-specified function (de
 
 \usage{
 \S4method{aggregate}{RasterLayer}(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename='', ...)
+
 \S4method{aggregate}{RasterStackBrick}(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename='', ...)
 }
 

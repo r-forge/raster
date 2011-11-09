@@ -3,9 +3,8 @@
 # Version 0.9
 # Licence GPL v3
 
-.writeRasterAll <- function(raster, filename, NAflag, ... ) {
+.writeRasterAll <- function(raster, filename, NAflag, filetype, ... ) {
 
-	filetype <- .filetype(...)
 	raster@file@driver <- filetype
  	filename <- trim(filename)
 	fnamevals <- .setFileExtensionValues(filename, filetype)
