@@ -28,9 +28,6 @@ function(x, y, method="bilinear", filename="", ...)  {
 		return(y)
 	}	
 
-	if (missing(method)) {
-		stop("provide a method: 'bilinear' or 'ngb'")
-	}
 	if (!method %in% c('bilinear', 'ngb')) {
 		stop('invalid method') 
 	}

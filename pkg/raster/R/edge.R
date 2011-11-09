@@ -9,7 +9,7 @@ if (!isGeneric("edge")) {
 }	
 
 setMethod('edge', signature(x='RasterLayer'), 
-function(x, filename="", type='inner', classes=FALSE, ...) {
+function(x, filename="", type='inner', classes=FALSE, directions=8, ...) {
 
 	dots <- list(...)
 	if (!is.null(dots$asZero)) {
@@ -37,6 +37,9 @@ function(x, filename="", type='inner', classes=FALSE, ...) {
 		type <- as.integer(1) 
 	}
 	classes <- as.integer(as.logical(classes))
+	directions <- as.integer(directions)
+	stopifnot(directions %in% c(4,8))
+	
 	
 #	if (asNA) {	fval <- as.integer(NA) } else { fval <- as.integer(0) }
 #	asZero <- as.integer(as.logical(asZero))
@@ -56,7 +59,7 @@ function(x, filename="", type='inner', classes=FALSE, ...) {
 		}
 		x <- rbind(x[1,], x, x[nrow(x),])
 		paddim <- as.integer(dim(x))
-		x <- .Call('edge', as.integer(t(x)), paddim, classes, type, NAOK=TRUE, PACKAGE='raster')
+		x <- .Call('edge', as.integer(t(x)), paddim, classes, type, directions, NAOK=TRUE, PACKAGE='raster')
 		x <- matrix(x, nrow=paddim[1], ncol=paddim[2], byrow=TRUE)
 		x <- x[2:(nrow(x)-1), 2:(ncol(x)-1)]
 		x <- setValues(out, as.vector(t(x)))
@@ -81,7 +84,7 @@ function(x, filename="", type='inner', classes=FALSE, ...) {
 		}
 		v <- as.integer(cbind(v[,1], v))
 		
-		v <- .Call('edge', v, as.integer(c(tr$nrows[1]+2, nc)),  classes, type, NAOK=TRUE, PACKAGE='raster')
+		v <- .Call('edge', v, as.integer(c(tr$nrows[1]+2, nc)),  classes, type, directions, NAOK=TRUE, PACKAGE='raster')
 		v <- matrix(v, ncol=nc, byrow=TRUE)
 		v <- as.integer(t(v[-1, 2:(ncol(v)-1)]))
 		out <- writeValues(out, v, 1)
@@ -94,7 +97,7 @@ function(x, filename="", type='inner', classes=FALSE, ...) {
 			} else {
 				v <- rbind(v[1,], v, v[nrow(v),])
 			}
-			v <- .Call('edge', as.integer(v), as.integer(c(tr$nrows[i]+2, nc)), classes, type, NAOK=TRUE, PACKAGE='raster')
+			v <- .Call('edge', as.integer(v), as.integer(c(tr$nrows[i]+2, nc)), classes, type, directions, NAOK=TRUE, PACKAGE='raster')
 			v <- matrix(v, ncol=nc, byrow=TRUE)
 			v <- as.integer(t(v[2:(nrow(v)-1), 2:(ncol(v)-1)]))
 			out <- writeValues(out, v, tr$row[i])
@@ -109,7 +112,7 @@ function(x, filename="", type='inner', classes=FALSE, ...) {
 			v <- rbind(v[1,], v, v[nrow(v),])
 		}
 		v <- as.integer(cbind(v, v[,ncol(v)]))
-		v <- .Call('edge', v, as.integer(c(tr$nrows[i]+1, nc)), classes, type, NAOK=TRUE, PACKAGE='raster')
+		v <- .Call('edge', v, as.integer(c(tr$nrows[i]+1, nc)), classes, type, directions, NAOK=TRUE, PACKAGE='raster')
 		v <- matrix(v, ncol=nc, byrow=TRUE)
 		v <- as.integer(t(v[2:(nrow(v)-1), 2:(ncol(v)-1)]))
 		out <- writeValues(out, v, tr$row[i])

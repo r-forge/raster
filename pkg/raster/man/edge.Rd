@@ -6,11 +6,11 @@
 \title{Edge detection}
 
 \description{
-Detect edges. Edges are cells that have more than one class in the 9 cells surrounding it, or, if \code{classes=FALSE}, cells with values and cells with \code{NA}. 
+Detect edges. Edges are cells that have more than one class in the 4 or 8 cells surrounding it, or, if \code{classes=FALSE}, cells with values and cells with \code{NA}. 
 }
 
 \usage{
-\S4method{edge}{RasterLayer}(x, filename="", type='inner', classes=FALSE, ...)
+\S4method{edge}{RasterLayer}(x, filename="", type='inner', classes=FALSE, directions=8, ...)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ Detect edges. Edges are cells that have more than one class in the 9 cells surro
 \item{filename}{Character. Filename for the output RasterLayer (optional)}
 \item{type}{Character. 'inner', or 'outer' }
 \item{classes}{Character. Logical. If \code{TRUE} all different values are (after rounding) distinguished, as well as \code{NA}. If \code{FALSE} (the default) only edges between \code{NA} and non-\code{NA} cells are considered }
+\item{directions}{Integer. How many surrounding cells should be considered? 4 (rook) or 8 (queen)? }
 \item{...}{Additional arguments as for \code{\link{writeRaster}}}  
 }
 
@@ -25,7 +26,7 @@ Detect edges. Edges are cells that have more than one class in the 9 cells surro
 RasterLayer. Cell values are either 1 (and edge) or 0 (not an edge), or \code{NA}
 }
 
-\seealso{ \code{\link[raster]{focal}}, \code{\link[raster]{clump}} }
+\seealso{ \code{\link{focal}}, \code{\link{clump}} }
 
 
 \author{Robert J. Hijmans}
