@@ -50,7 +50,7 @@ In all cases you can also use these arguments:
 \tabular{rll}{
 \tab \code{filename} \tab  filename for the output raster. A valid filename must be provided when the data of the input rasters are on disk \cr
 \tab \code{overwrite}\tab logical. If \code{TRUE}, existing files will be overwritten \cr
-\tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
+\tab \code{format} \tab Character. Output file type. See \link[raster]{writeRaster} \cr
 \tab \code{progress} \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
 }
 

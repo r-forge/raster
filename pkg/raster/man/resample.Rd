@@ -28,9 +28,9 @@ The following additional arguments can be passed, to replace default values for 
 \tabular{rll}{
   \tab \code{method} \tab method used to compute values for the new RasterLayer, should be "bilinear" for bilinear interpolation, or "ngb" for nearest neighbor \cr
   \tab \code{filename} \tab character. output filename \cr
-  \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
-  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{format} \tab Character. Output file type. See \link[raster]{writeRaster} \cr
+  \tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
   \tab \code{progress} \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
  }
 }

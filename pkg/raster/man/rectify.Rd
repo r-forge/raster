@@ -27,9 +27,9 @@ rectify(x, ext, res, method='ngb', filename='', ...)
 \details{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
-  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
+  \tab \code{format} \tab Character. Output file type. See \link[raster]{writeRaster} \cr
+  \tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
   \tab \code{progress} \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
  }
 }

@@ -38,8 +38,8 @@ writeStop(x)
 Additional arguments for writeStart:
 \tabular{rll}{
 \tab \code{format} \tab Character. Output file type. When writing a file to disk, the file format is determined by the 'format=' argument if supplied, or else by the file extension (if the extension is known). If other cases the default format is used. The 'factory-fresh' default format is 'raster', but this can be changed using \code{\link[raster]{setOptions}}. Also see \code{\link[raster]{writeFormats}} \cr
-\tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
-\tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
+\tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
+\tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
 \tab \code{update} \tab Logical. If \code{TRUE}, you can write (resume writing) to an existing file (careful!). In this case, \code{overwrite} must also be \code{TRUE}  \cr
 }
 }

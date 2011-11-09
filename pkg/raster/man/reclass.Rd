@@ -36,9 +36,9 @@ The following additional arguments can be passed, to replace default values for 
 You can also use these additional arguments to save the result to a file
 \tabular{rll}{
   \tab \code{filename} \tab Output filename (can be absent for RasterLayers that can be stored in memory) \cr
-  \tab \code{format}  \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype}  \tab Character. Output data type; can be 'INT', 'FLT', or a complete datatype description, see \code{\link[raster]{dataType}} \cr
-  \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
+  \tab \code{format}  \tab Character. Output file type. See \link[raster]{writeRaster} \cr
+  \tab \code{datatype}  \tab Character. Output data type; can be 'INT', 'FLT', or a complete datatype description, See \link[raster]{dataType} \cr
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
   \tab \code{progress}  \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
  }
 }

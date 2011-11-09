@@ -38,9 +38,9 @@ A full call to mosaic is:
   \item{\code{na.rm}}{Logical. Only return \code{NA} when all values are \code{NA}}
   \item{\code{tolerance}}{Numeric. Permissable difference in origin (relative to the cell resolution). See \link[base]{all.equal}}
   \item{\code{filename}}{Character. output filename}
-  \item{\code{overwrite}}{Logical. If \code{TRUE}, "filename" will be overwritten if it exists}
+  \item{\code{overwrite}}{Logical. If TRUE, "filename" will be overwritten if it exists}
   \item{\code{format}}{Character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}}}
-  \item{\code{datatype}}{Character. Output data type. See \code{\link[raster]{dataType}}}
+  \item{\code{datatype}}{Character. Output data type. See \link[raster]{dataType}}
   \item{\code{progress}}{Character. "text", "window", or "" (the default, no progress bar)}
 }  
 } 

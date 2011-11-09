@@ -4,9 +4,9 @@
 # Licence GPL v3
 
 setMethod('aggregate', signature(x='RasterLayer'), 
-function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", old=FALSE, ...)  {
+function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 
-	if (old) return(aggregate(stack(x), fact=fact, fun=fun, expand=expand, na.rm=TRUE, filename=filename, ...))
+#	if (old) return(aggregate(stack(x), fact=fact, fun=fun, expand=expand, na.rm=TRUE, filename=filename, ...))
 
 	if (length(fact)==1) {
 		fact <- as.integer(round(fact))

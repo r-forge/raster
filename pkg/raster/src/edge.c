@@ -10,7 +10,7 @@
 #include "R_ext/Rdynload.h"
 
 
-SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP fval) {
+SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type) {
 
 	R_len_t i, j;
 	SEXP val;
@@ -19,8 +19,11 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP fval) {
 
 	int class = INTEGER(classes)[0];
 	int edgetype = INTEGER(type)[0];
-	int falseval = INTEGER(fval)[0];
+//	int falseval = INTEGER(fval)[0];
+//	int aszero = INTEGER(asz)[0];
 
+	int falseval = 0;
+	
 	nrow = INTEGER(dim)[0];
 	ncol = INTEGER(dim)[1];
 	n = nrow * ncol;
@@ -34,7 +37,7 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP fval) {
 	int c[9] = { -1,0,1,-1,0,1,-1,0,1 };
 	
 	if (class == 0) {
-		if (edgetype == 0) {
+		if (edgetype == 0) { // inner
 			for (i = ncol; i < ncol * (nrow-1); i++) {
 				xval[i] = R_NaInt;
 				if ( xd[i] != R_NaInt ) {
@@ -47,9 +50,8 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP fval) {
 					}
 				}
 			}
-			Rprintf ("%s \n", "1");
-			
-		} else if (edgetype == 1) {
+		
+		} else if (edgetype == 1) { //outer
 
 			for (i = ncol; i < ncol * (nrow-1); i++) {
 				xval[i] = falseval;
@@ -63,44 +65,30 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP fval) {
 					}
 				}
 			}
-			Rprintf ("%s \n", "2");
-			
-		} else {
-			Rprintf ("%s \n", "3");
-
-			// edgetype = 2
-		}
-		
+		} 
 		
 	} else { // by class
-	
+
 		int test;
-		int k;
 		for (i = ncol; i < ncol * (nrow-1); i++) {
-			xval[i] = R_NaInt;
-			test = R_NaInt;
-			if ( xd[i] != R_NaInt) {
-				xval[i] = 0;
-				for (j=0; j<9; j++) {
-					k = r[j]*ncol+c[j]+i;
-					if ( xd[k] != R_NaInt )  {
-						if ( test == R_NaInt) {
-							test = xd[k]; 
-						} else if (test != xd[k]) {
-							xval[i] = 1;
-							break;
-						}
-					}
+			test = xd[ r[0]*ncol+c[0]+i ];
+			if (test == R_NaInt) {
+				xval[i] = R_NaInt;			
+			} else {
+				xval[i] = falseval;
+			}
+			for (j=1; j<9; j++) {
+				if (test != xd[ r[j]*ncol +c[j] +i ]) {
+					xval[i] = 1;
+					break;
 				}
 			}
 		}
-		Rprintf ("%s \n", "4");
-		
+
 	}
 	
 	UNPROTECT(2);
 	return(val);
 }
-
 
 

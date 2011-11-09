@@ -34,9 +34,9 @@ The following additional arguments can be passed, to replace default values for 
   \tab \code{na.rm}  \tab Remove \code{NA} values, if supported by 'fun' (only relevant when summarizing a
   multilayer Raster object into a RasterLayer) \cr
   \tab \code{filename}  \tab Output filename (optional) \cr
-  \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeRaster}} \cr
-  \tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
-  \tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
+  \tab \code{format} \tab Character. Output file type. See \link[raster]{writeRaster} \cr
+  \tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
+  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
   \tab \code{progress} \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
 }
 }

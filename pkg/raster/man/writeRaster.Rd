@@ -50,8 +50,8 @@ writeRaster(x, filename, ...)
 \tabular{rll}{
 \tab \code{options} \tab Character. File format specific GDAL options. E.g., when writing a geotiff file: \code{options=c("COMPRESS=NONE", "TFW=YES")}\cr
 \tab \code{format} \tab Character. Output file type. See \code{\link[raster]{writeFormats}} \cr
-\tab \code{datatype} \tab Character. Output data type. See \code{\link[raster]{dataType}} \cr
-\tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
+\tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
+\tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
 \tab \code{NAflag} \tab Numeric. To overwrite the default value used to represent \code{NA} in a file \cr
 }
 
