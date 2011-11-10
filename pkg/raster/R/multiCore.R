@@ -3,7 +3,7 @@
 # Version 1.0
 # Licence GPL v3
 
-beginCluster <- function(n, type, nice, exclue=NULL) {
+beginCluster <- function(n, type, nice, exclude=NULL) {
 	if (! require(snow) ) {
 		stop('you need to install the "snow" package')
 	}

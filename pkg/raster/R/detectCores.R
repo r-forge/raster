@@ -16,13 +16,15 @@
 
 ## In part based on code in package multicore 0.1-6 by Simon Urbanek
 
+
 .detectCores <-
     if(.Platform$OS.type == "windows") {
-        function(all.tests = FALSE, logical = TRUE) {
-            ## result is # cores, logical processors.
-            res <- .Call("C_ncpus", FALSE, PACKAGE = "raster")
-            ifelse(logical, res[2L], res[1L]);
-        }
+		function(all.tests = FALSE, logical = TRUE) {
+			# This is a hack to stop the check NOTE: .detectCores: no visible global function definition for 'readRegistry'
+			if (!exists('readRegistry')) { readRegistry <- function(...)(1) } 
+		
+			length(readRegistry("HARDWARE\\DESCRIPTION\\System\\CentralProcessor", maxdepth=1))
+		}
     } else {
         function(all.tests = FALSE, logical = FALSE) {
             systems <-
