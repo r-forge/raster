@@ -35,11 +35,11 @@ A full call to merge is:
   \item{\code{x}}{Raster* object}
   \item{\code{y}}{Raster* object}
   \item{\code{...}}{Additional RasterLayer objects}
-  \item{\code{tolerance}}{Numeric. Permissable difference in origin (relative to the cell resolution). See \link[base]{all.equal}}
+  \item{\code{tolerance}}{Numeric. Permissable difference in origin (relative to the cell resolution). See \code{\link[base]{all.equal}}}
   \item{\code{filename}}{Character. output filename}
   \item{\code{overwrite}}{Logical. If TRUE, "filename" will be overwritten if it exists}
   \item{\code{format}}{Character. output file type. Either 'raster', 'ascii' or a supported GDAL 'driver' name see \code{\link[raster]{writeFormats}}}
-  \item{\code{datatype}}{Character. Output data type. See \link[raster]{dataType}}
+  \item{\code{datatype}}{Character. Output data type. See \code{\link[raster]{dataType}}}
   \item{\code{progress}}{Character. "text", "window", or "" (the default, no progress bar)}
 }  
 } 

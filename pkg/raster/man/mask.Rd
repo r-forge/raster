@@ -30,7 +30,7 @@ mask(x, mask, ...)
 \describe{
 The following additional arguments can be passed, to replace default values for this function
 \tabular{rll}{
-  \tab \code{reverse} \tab Boolean. If \code{TRUE}, areas on \code{mask} that are _not_ NA are masked.  \cr
+  \tab \code{reverse} \tab Boolean. If TRUE, areas on mask that are _not_ NA are masked.  \cr
   \tab \code{filename} \tab Character. output filename \cr
   \tab \code{format} \tab Character. Output file type. See \link[raster]{writeRaster} \cr
   \tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
