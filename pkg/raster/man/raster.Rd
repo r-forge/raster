@@ -55,8 +55,8 @@ raster(x, ...)
 
 Additional arguments:
 \tabular{rll}{
-\tab \code{native} \tab Logical.  Default is FALSE except when package rgdal is missing. If TRUE, reading and writing of IDRISI, BIL, BSQ, BIP, SAGA, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal. 'raster' and netcdf format files are always read with native drivers. 
-\tab \code{offset} \tab Integer. To indicated the number of header rows on non-standard ascii files (rarely useful; use with caution)
+\tab \code{native} \tab Logical.  Default is FALSE except when package rgdal is missing. If TRUE, reading and writing of IDRISI, BIL, BSQ, BIP, SAGA, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal. 'raster' and netcdf format files are always read with native drivers. \cr
+\tab \code{offset} \tab Integer. To indicated the number of header rows on non-standard ascii files (rarely useful; use with caution) \cr
 }
 
 For netCDF files (CF convention):
