@@ -3,7 +3,7 @@
 # Version 1.0
 # Licence GPL v3
 
-beginCluster <- function(n, type, nice) {
+beginCluster <- function(n, type, nice, exclue=NULL) {
 	if (! require(snow) ) {
 		stop('you need to install the "snow" package')
 	}
@@ -24,10 +24,12 @@ beginCluster <- function(n, type, nice) {
 	
 
 	cl <- makeCluster(n, type) 
-	cl <- .addPackages(cl)
+	cl <- .addPackages(cl, exclude=exclude)
 	options(rasterClusterObject = cl)
 	options(rasterClusterCores = length(cl))
 	options(rasterCluster = TRUE)
+	options(rasterClusterExclude = exclude)
+	
 	
 	if (!missing(nice)){
 		if (.Platform$OS.type == 'unix') {
@@ -62,7 +64,7 @@ endCluster <- function() {
 getCluster <- function() {
 	cl <- getOption('rasterClusterObject')
 	if (is.null(cl)) { stop('no cluster available, first use "beginCluster"') }
-	cl <- .addPackages(cl, exclude=c('raster', 'sp'))
+	cl <- .addPackages(cl, exclude=c('raster', 'sp', getOption('rasterClusterExclude')))
 	options( rasterClusterObject = cl )
 	options( rasterCluster = FALSE )
 	return(cl)

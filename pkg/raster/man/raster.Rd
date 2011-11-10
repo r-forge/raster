@@ -82,7 +82,7 @@ If \code{x} is a character value, it should be a filename of a file that the ras
  \tab \code{ymn} \tab minimum y coordinate (bottom border) \cr
  \tab \code{ymx} \tab maximum y coordinate (top border) \cr
  \tab \code{crs} \tab Character or object of class CRS. PROJ4 type description of a Coordinate Reference System (map projection). If this argument is missing, and the x coordinates are withing -360 .. 360 and the y coordinates are within -90 .. 90, "+proj=longlat +datum=WGS84" is used. \cr
- \tab \code{ext} \tab \link[raster]{Extent-class} object. If present, the arguments xmn, xmx, ymn and ynx are ignored\cr
+ \tab \code{ext} \tab object of class Extent. If present, the arguments xmn, xmx, ymn and ynx are ignored \cr
 }
 (item \code{x} is 'missing' in this case)
 
@@ -117,7 +117,7 @@ but does not copy the filename nor the cell values associated with the original 
 
 \tabular{rll}{
  \tab \code{x} \tab a RasterStack, SpatialPixels* or SpatialGrid* object \cr
- \tab \code{layer} \tab Integer. The layer from which to copy values to the new RasterLayer, if \code{layer > 0}.  \cr
+ \tab \code{layer} \tab Integer. The layer from which to copy values to the new RasterLayer, if layer>0.  \cr
 }
 
 
@@ -127,7 +127,7 @@ but does not copy the filename nor the cell values associated with the original 
 
 \tabular{rll}{
  \tab \code{x} \tab RasterStack, RasterBrick, SpatialPixels* or SpatialGrid* object \cr
- \tab \code{layer} \tab Integer. the layer from which to copy values to the new RasterLayer, if \code{layer > 0}\cr
+ \tab \code{layer} \tab Integer. the layer from which to copy values to the new RasterLayer, if layer>0\cr
 }
 
 

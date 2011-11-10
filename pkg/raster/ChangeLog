@@ -1,3 +1,6 @@
+--- 9-November-2011, version 1.9-41
+beginCluster now has 'exclude' option (suggested by Julian Zeidler)
+
 --- 8-November-2011, version 1.9-40
 Bug fix, as(x, 'SpatialPixels') returned SpatialPoints. reported by Clément Calange.
 redesigned function edge for better speed. Arguments have changed. and to deal with a bug reported by Paul Galpern
