@@ -34,7 +34,7 @@
 				adjust <- FALSE
 			} else if (x@file@driver == 'gdal') {
 				vals <- .readCellsGDAL(x, uniquecells, layers)
-			} else if (x@file@driver == 'raster') {
+			} else if ( .isNativeDriver( x@file@driver) ) {  # raster, BIL, ..
 				vals <- .readCellsRaster(x, uniquecells, layers)
 			} else if (x@file@driver == 'netcdf') {
 				vals <- .readRasterCellsNetCDF(x, uniquecells) 
