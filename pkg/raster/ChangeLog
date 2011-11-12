@@ -1,3 +1,6 @@
+--- 12-November-2011, version 1.9-42
+fixed bug with cell values reading with BIL driver (reported by sonal singhal)
+
 --- 9-November-2011, version 1.9-41
 beginCluster now has 'exclude' option (suggested by Julian Zeidler)
 Bug fix, as(x, 'SpatialPixels') returned SpatialPoints. reported by Clément Calange.
