@@ -23,7 +23,7 @@ click <- function(object, n=1, id=FALSE, xy=FALSE, cell=FALSE, type="n", ...) {
 		rownames(res) <- 1:n
 		return(res)
 	} else if (!inherits(object, 'Raster')) {
-		warning('object is not an object of a supported class')
+		warning('object is not of a supported class')
 		return(xyCoords)
 	}
 	
