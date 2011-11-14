@@ -2,6 +2,8 @@
 
 \alias{crop}
 \alias{crop,Raster-method}
+\alias{crop,SpatialPolygons-method}
+\alias{crop,SpatialLines-method}
 
 \title{Crop}
 
