@@ -12,7 +12,7 @@ function(x, v=NULL, ...) {
 		return(x)
 	
 	} else {
-		if (is.null(v)) {
+		if (is.null(v) | is.na(v)) {
 			if (version_GEOS0() < "3.3.0") {
 				x <- gUnionCascaded(x)
 			} else {
