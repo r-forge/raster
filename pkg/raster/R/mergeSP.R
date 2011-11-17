@@ -31,7 +31,7 @@ function(x, y, by=intersect(names(x), names(y)), by.x=by, by.y=by, all.x=TRUE, s
 setMethod('merge', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y, ...) {
 
-	stop('work in progress, not working yet')
+	require(rgeos)
 	
 	dat <- NULL
 	xdata <- ydata <- FALSE
@@ -73,8 +73,7 @@ function(x, y, ...) {
 		if (xdata) {
 			ids <- sapply(dif1@polygons, function(y) slot(y, 'ID'))
 			ids <- as.numeric(sapply(ids, function(x) strsplit(x, ' ')[[1]][1]))
-		# which rownames not correct
-			ids <- which(rownames(x@data)==ids)
+			ids <- match(ids, rownames(x@data))
 			dat[1:length(ids),colnames(x@data)] <- x@data[ids,]
 		}
 	}
@@ -84,8 +83,7 @@ function(x, y, ...) {
 		if (ydata) {
 			ids <- sapply(dif2@polygons, function(y) slot(y, 'ID'))
 			ids <- sapply(ids, function(x) strsplit(x, ' ')[[1]][1])
-		# which rownames not correct
-			ids <- which(rownames(y@data)==ids)
+			ids <- match(ids, rownames(y@data))
 			dat[(nrow(dat)+1):(nrow(dat)+length(ids)),colnames(y@data)] <- y@data[ids,]
 		}
 	}
@@ -94,24 +92,24 @@ function(x, y, ...) {
 		res <- c(res, int@polygons)
 		ids <- sapply(int@polygons, function(y) slot(y, 'ID'))
 		ids <- sapply(ids, function(x) strsplit(x, ' ')[[1]])
-		rows <- (nrow(dat)+1):(nrow(dat)+length(ids))
+		rows <- (nrow(dat)+1):(nrow(dat)+length(ids[1,]))
 		if (xdata) {
-			# which rownames does not do it
-			idsx <- which(rownames(x@data)==ids[1,])
+			idsx <- match(ids[1,], rownames(x@data))
 			dat[rows, colnames(x@data)] <- x@data[idsx,]
-		} else if (ydata) {
-			idsy <- which(rownames(y@data)==ids[2,])
+		} 
+		if (ydata) {
+			idsy <- match(ids[2,], rownames(y@data))
 			dat[rows, colnames(y@data)] <- y@data[idsy,]
 		}
 	}
 	
 	res <- SpatialPolygons(lapply(1:length(res), function(y) Polygons(res[[y]]@Polygons, y)))
 	if (!is.null(dat)) {
+		rownames(dat) <- 1:nrow(dat)
 		res <- SpatialPolygonsDataFrame(res, dat)
 	}
+	res@proj4string <- x@proj4string
 	res
 }
 )
-
-
 
