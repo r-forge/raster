@@ -114,6 +114,7 @@ function(x, y, ...) {
 	}
 	res@proj4string <- x@proj4string
 	#aggregate(res, v=colnames(res@data))
+	res
 }
 )
 
