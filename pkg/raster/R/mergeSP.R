@@ -71,27 +71,31 @@ function(x, y, ...) {
 	if (!is.null(dif1)) {
 		res <- dif1@polygons
 		if (xdata) {
-			ids <- sapply(dif1@polygons, function(y) slot(y, 'ID'))
-			ids <- as.numeric(sapply(ids, function(x) strsplit(x, ' ')[[1]][1]))
+			ids <- as.numeric(sapply(row.names(dif1), function(x) strsplit(x, ' ')[[1]][1]))
 			ids <- match(ids, rownames(x@data))
 			dat[1:length(ids),colnames(x@data)] <- x@data[ids,]
+		} else if (ydata) {
+			dat[1:length(dif1@polygons),] <- NA
 		}
 	}
+
 	dif2 <- gDifference(y, x, byid=TRUE)
 	if (!is.null(dif2)) {
 		res <- c(res, dif2@polygons)
 		if (ydata) {
-			ids <- sapply(dif2@polygons, function(y) slot(y, 'ID'))
-			ids <- sapply(ids, function(x) strsplit(x, ' ')[[1]][1])
+			ids <- sapply(row.names(dif2), function(x) strsplit(x, ' ')[[1]][1])
 			ids <- match(ids, rownames(y@data))
 			dat[(nrow(dat)+1):(nrow(dat)+length(ids)),colnames(y@data)] <- y@data[ids,]
+		} else if (xdata) {
+			dat[(nrow(dat)+1):(nrow(dat)+length(dif2@polygons)), ] <- NA
 		}
 	}
-	int  <- gIntersection(x, y, byid=TRUE)
-	if (!is.null(int)) {
+
+	subs <- as.vector(gIntersects(x, y, byid=TRUE))
+	if (sum(subs) > 0 ) {
+		int  <- gIntersection(x[subs,], y, byid=TRUE)
 		res <- c(res, int@polygons)
-		ids <- sapply(int@polygons, function(y) slot(y, 'ID'))
-		ids <- sapply(ids, function(x) strsplit(x, ' ')[[1]])
+		ids <- sapply(row.names(int), function(x) strsplit(x, ' ')[[1]])
 		rows <- (nrow(dat)+1):(nrow(dat)+length(ids[1,]))
 		if (xdata) {
 			idsx <- match(ids[1,], rownames(x@data))
@@ -109,7 +113,7 @@ function(x, y, ...) {
 		res <- SpatialPolygonsDataFrame(res, dat)
 	}
 	res@proj4string <- x@proj4string
-	res
+	#aggregate(res, v=colnames(res@data))
 }
 )
 
