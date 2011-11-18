@@ -28,14 +28,18 @@ setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 		}
 
 		int <- gIntersects(e1, e2, byid=TRUE)
-		int1 <- apply(int, 1, any)
-		int2 <- apply(int, 2, any)
-		
-		
-		part1 <- e1[!int,]
-		part2 <- gDifference(e1[int,], e2, byid=TRUE)
+		int1 <- apply(int, 2, any)
+		int2 <- apply(int, 1, any)
+				
+		if (all(int1)) {
+			part1 <- NULL
+		} else {
+			part1 <- e1[!int1,]
+		}
+		part2 <- gDifference(e1[int1,], e2[int2,], byid=TRUE)
 		ids <- sapply(row.names(part2), function(x) strsplit(x, ' ')[[1]][1])
 		part2 <- spChFIDs(part2, ids)
+	
 		part2 <- SpatialPolygonsDataFrame(part2, e1@data[match(ids, rownames(e1@data)),])
 		part1 <- rbind(part1, part2)
 		part1 <- aggregate(part1, v=colnames(part1@data))
