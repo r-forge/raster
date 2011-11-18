@@ -33,37 +33,28 @@ function(x, y, ...) {
 
 	require(rgeos)
 	
-	dat <- NULL
+	dat <- daty <- datx <- NULL
 	xdata <- ydata <- FALSE
 	if (.hasSlot(x, 'data')) {
 		xdata <- TRUE
-		dat <- x@data[1, ,drop=FALSE]
-		rownames(dat) <- NULL
+		dat <- x@data[NULL, ,drop=FALSE]
 	} 
 	if (.hasSlot(y, 'data')) {
 		ydata <- TRUE
-		ydat <- y@data[1, ,drop=FALSE]
-		rownames(ydat) <- NULL
+		ydat <- y@data[NULL, ,drop=FALSE]
 		if (is.null(dat)) {
 			dat <- ydat
 		} else {
-			cx <- colnames(dat)
-			xy <- colnames(ydat)
-			for (i in ncol(ydat):1) {
-				if (xy[i] %in% cx) {
-					# should also check for datatype
-					xy <- xy[-i]
-				}
+			ynotx <- which(! colnames(ydat) %in% colnames(dat))
+			if (length(ynotx) > 0) {
+				daty <- ydat[, ynotx]
+				dat <- cbind(dat, ydat)
 			}
-			if (length(xy) > 0) {
-				nc <- ncol(dat)
-				dat <- cbind(dat, ydat[,xy])
-				colnames(dat)[(nc+1):(nc+length(xy))] <- xy
+			xnoty <- which(! colnames(x@data) %in% colnames(y@data))
+			if (length(xnoty) > 0) {
+				datx <- dat[, xnoty]
 			}
 		}
-	}
-	if (!is.null(dat)) {
-		dat <- dat[-1,]
 	}
 
 	res <- NULL
@@ -73,7 +64,15 @@ function(x, y, ...) {
 		if (xdata) {
 			ids <- as.numeric(sapply(row.names(dif1), function(x) strsplit(x, ' ')[[1]][1]))
 			ids <- match(ids, rownames(x@data))
-			dat[1:length(ids),colnames(x@data)] <- x@data[ids,]
+			d <- x@data[ids,]
+			rownames(d) <- NULL
+			if (ydata) {
+				dd <- daty
+				dd[1:length(ids),] <- NA
+				dat <- cbind(d, dd)
+			} else {
+				dat <- d
+			}
 		} else if (ydata) {
 			dat[1:length(dif1@polygons),] <- NA
 		}
@@ -85,28 +84,53 @@ function(x, y, ...) {
 		if (ydata) {
 			ids <- sapply(row.names(dif2), function(x) strsplit(x, ' ')[[1]][1])
 			ids <- match(ids, rownames(y@data))
-			dat[(nrow(dat)+1):(nrow(dat)+length(ids)),colnames(y@data)] <- y@data[ids,]
+			d <- y@data[ids,]
+			rownames(d) <- NULL
+			if (xdata) {
+				dd <- datx
+				dd[1:length(ids),] <- NA
+				dd <- cbind(d, dd)
+				dat <- rbind(dat, dd)
+			} else {
+				dat <- d
+			}
 		} else if (xdata) {
-			dat[(nrow(dat)+1):(nrow(dat)+length(dif2@polygons)), ] <- NA
+			dat[(nrow(dat)+1):(nrow(dat)+length(ids)),] <- NA
 		}
 	}
 
-	subs <- as.vector(gIntersects(x, y, byid=TRUE))
-	if (sum(subs) > 0 ) {
-		int  <- gIntersection(x[subs,], y, byid=TRUE)
-		res <- c(res, int@polygons)
-		ids <- sapply(row.names(int), function(x) strsplit(x, ' ')[[1]])
-		rows <- (nrow(dat)+1):(nrow(dat)+length(ids[1,]))
-		if (xdata) {
-			idsx <- match(ids[1,], rownames(x@data))
-			dat[rows, colnames(x@data)] <- x@data[idsx,]
-		} 
-		if (ydata) {
-			idsy <- match(ids[2,], rownames(y@data))
-			dat[rows, colnames(y@data)] <- y@data[idsy,]
+	subs <- gIntersects(x, y, byid=TRUE)
+	subsx <- apply(subs, 2, any)
+	subsy <- apply(subs, 1, any)
+	
+	if (sum(subsx) > 0 ) {
+		int  <- gIntersection(x[subsx,], y[subsy,], byid=TRUE)
+		if (inherits(int, 'SpatialPolygons')) {
+			res <- c(res, int@polygons)
+			ids <- sapply(row.names(int), function(x) strsplit(x, ' ')[[1]])
+			rows <- (nrow(dat)+1):(nrow(dat)+length(ids[1,]))
+			if (xdata) {
+				idsx <- match(ids[1,], rownames(x@data))
+				d <- x@data[idsx,]
+				if (ydata) {
+					dd <- daty
+					dd[1:length(ids),] <- NA
+					d <- cbind(d, dd)
+				} 			
+				dat <- rbind(dat, d)
+			} 
+			if (ydata) {
+				idsy <- match(ids[2,], rownames(y@data))
+				d <- y@data[idsy,]
+				if (xdata) {
+					dd <- datx
+					dd[1:length(ids),] <- NA
+					d <- cbind(d, dd)
+				} 			
+				dat <- rbind(dat, d)
+			}
 		}
 	}
-	
 	res <- SpatialPolygons(lapply(1:length(res), function(y) Polygons(res[[y]]@Polygons, y)))
 	if (!is.null(dat)) {
 		rownames(dat) <- 1:nrow(dat)
