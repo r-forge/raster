@@ -33,8 +33,10 @@ setMethod('c', signature(x='SpatialPolygons'),
 		cln <- lapply(x, function(x) {	if (.hasSlot(x, 'data')) { colnames(x@data) } else { NULL } })
 		clu <- unique(unlist(cln))
 		dat <- NULL
+		dataFound <- FALSE
 		for (i in 1:length(x)) {
 			if (.hasSlot(x[[i]], 'data')) {
+				dataFound <- TRUE
 				if (is.null(dat)) {
 					dat <- x[[i]]@data
 				} else {
@@ -53,13 +55,23 @@ setMethod('c', signature(x='SpatialPolygons'),
 					}
 					dat <- rbind(dat, d)
 				}
+			} else {
+				if ( is.null(dat)) {
+					dat <- data.frame()
+					dat[1:length(x[[i]]@polygons),] <- NA
+				} else {
+					dd <- dat[NULL, ]
+					dd[1:length(x[[i]]@polygons),] <- NA
+					dat <- rbind(dat, dd)
+				}	
 			}
 		}
-		if (is.null(dat)) {
+		if (! dataFound ) {
 			return( do.call(rbind, x) )
 		}
 		x <- sapply(x, function(x) as(x, 'SpatialPolygons'))
 		x <- do.call(rbind, x)
+		rownames(dat) <- row.names(x)
 		SpatialPolygonsDataFrame(x, dat)
 	}
 )
