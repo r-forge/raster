@@ -41,17 +41,17 @@ function(x, v=colnames(x@data), ...) {
 				warning('not all variables were unique or valid')
 			}
 			
-			dat <- dat[,v]
+			dat <- dat[,v, drop=FALSE]
 			crs <- x@proj4string
 			dc <- apply(dat, 1, function(y) paste(as.character(y), collapse='_'))
 			dc <- data.frame(oid=1:length(dc), v=dc)
 			dc[,2] <- as.integer(dc[,2])
 			ud <- data.frame(v=unique(dc[,2]))
 			md <- merge(dc, ud, by='v')
-			md <- md[order(md$oid), ]
-			id <- md[!duplicated(md[,1]),]
+			md <- md[order(md$oid), ,drop=FALSE]
+			id <- md[!duplicated(md[,1]), ,drop=FALSE]
 			id <- id[order(id$v), ]
-			dat <- dat[id[,2], ]
+			dat <- dat[id[,2], ,drop=FALSE]
 			
 			if (version_GEOS0() < "3.3.0") {
 				x <- lapply(1:nrow(ud), function(y) gUnionCascaded(x[md[md$v==y,2],]))
@@ -60,7 +60,11 @@ function(x, v=colnames(x@data), ...) {
 			}	
 			
 			x <- sapply(1:length(x), function(y) x[[y]]@polygons[[1]]@Polygons)
-			x <- SpatialPolygons(lapply(1:length(x), function(y) Polygons(x[[y]], y)))
+			if (length(x) == 1) {
+				x <- SpatialPolygons(Polygons(x[1], 1))
+			} else {
+				x <- SpatialPolygons(lapply(1:length(x), function(y) Polygons(x[[y]], y)))
+			}
 			x@proj4string <- crs
 			
 			rownames(dat) <- 1:nrow(dat)

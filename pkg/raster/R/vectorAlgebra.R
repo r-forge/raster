@@ -17,7 +17,9 @@ setMethod("*", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 
 setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
     function(e1, e2){ 
+	
 		require(rgeos)
+
 		if (!.hasSlot(e1, 'data')) {
 			d <- data.frame(ID=1:length(e1@polygons))
 			rownames(d) <- row.names(e1)
@@ -38,15 +40,18 @@ setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 		}
 		part2 <- gDifference(e1[int1,], e2[int2,], byid=TRUE)
 		ids <- sapply(row.names(part2), function(x) strsplit(x, ' ')[[1]][1])
-		part2 <- spChFIDs(part2, ids)
-	
-		part2 <- SpatialPolygonsDataFrame(part2, e1@data[match(ids, rownames(e1@data)),])
-		part1 <- rbind(part1, part2)
-		part1 <- aggregate(part1, v=colnames(part1@data))
+		row.names(part2) <- make.unique(ids)
+
+		part2 <- SpatialPolygonsDataFrame(part2, e1@data[match(ids, rownames(e1@data)), ,drop=FALSE])
+		if (!is.null(part1)) {
+			part2 <- rbind(part1, part2)
+		}
+			
+		part2 <- aggregate(part2, v=colnames(part2@data))
 		if (dropframe) {
-			as(part1, 'SpatialPolygons')
+			as(part2, 'SpatialPolygons')
 		} else {
-			part1
+			part2	
 		}
 	}
 )
