@@ -1,9 +1,9 @@
 --- 17-November-2011, version 1.9-44
 fixed bug with cell values reading with BIL driver (reported by sonal singhal)
-fixed serious bug with a stack from different bands from the same file. cellValaues returned values for the first band only (introduced in 1.9-41?). Reported by Matteo Mattiuzzi
+fixed serious bug with a stack from different bands from the same file. .cellValues returned values for the first band only (introduced in 1.9-41?). Reported by Matteo Mattiuzzi
 addition: crop (intersect) method for Spatial objects
 addition: aggregate (dissolve) method for SpatialPolygons
-addition: merge (join) method for Spatial + data.frame
+addition: merge (join) method for Spatial*DataFrane & data.frame; and for SpatialPolygons & SpatialPolygons
 addition: raster algebra for SpatialPolygons: + (merge), - (crop), * (intersect)
 
 --- 9-November-2011, version 1.9-41

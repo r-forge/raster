@@ -31,6 +31,11 @@ function(x, y, ...) {
 				return(NULL)
 			}
 			y <- gIntersection(x[i,], y, byid=TRUE)
+			if (inherits(y, "SpatialCollections")) {
+				y <- y@polyobj
+			}
+			if (is.null(y)) { return(y) }
+			
 			ids <- sapply(y@polygons, function(x) strsplit(slot(x, 'ID'), ' '))
 			ids <- as.numeric(do.call(rbind, ids)[,1])
 			for (i in 1:length(y@polygons)) {
@@ -41,7 +46,11 @@ function(x, y, ...) {
 			
 			return( SpatialPolygonsDataFrame(y, data) )
 		} else {
-			return( gIntersection(x, y) )
+			y <- gIntersection(x, y)
+			if (inherits(y, "SpatialCollections")) {
+				y <- y@polyobj
+			}
+			return(y)
 		}
 		
 	} else if (inherits(x, 'SpatialLines')) {
@@ -65,6 +74,9 @@ function(x, y, ...) {
 				return(NULL)
 			}
 			y <- gIntersection(x[i,], y, byid=TRUE)
+			if (inherits(y, "SpatialCollections")) {
+				y <- y@polyobj
+			}
 			ids <- sapply(y@lines, function(x) strsplit(slot(x, 'ID'), ' '))
 			ids <- as.numeric(do.call(rbind, ids)[,1])
 			for (i in 1:length(y@lines)) {
@@ -74,7 +86,12 @@ function(x, y, ...) {
 			rownames(data) <- ids
 			SpatialLinesDataFrame(y, data)
 		} else {
-			gIntersection(x, y)
+			y <- gIntersection(x, y)
+			if (inherits(y, "SpatialCollections")) {
+				y <- y@polyobj
+			}
+			return(y)
+			
 		}
 		
 	} else if (inherits(x, 'SpatialGrid')) {
@@ -117,3 +134,5 @@ function(x, y, ...) {
 	}
 }
 )
+
+

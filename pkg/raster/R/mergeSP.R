@@ -33,6 +33,11 @@ function(x, y, ...) {
 
 	require(rgeos)
 	
+	subs <- gIntersects(x, y, byid=TRUE)
+	if (sum(subs) == 0) {
+		# adjust IDs and use rbind
+	}
+	
 	dat <- daty <- datx <- NULL
 	xdata <- ydata <- FALSE
 	if (.hasSlot(x, 'data')) {
@@ -66,7 +71,7 @@ function(x, y, ...) {
 			ids <- match(ids, rownames(x@data))
 			d <- x@data[ids,]
 			rownames(d) <- NULL
-			if (ydata) {
+			if (ydata & !is.null(daty)) {
 				dd <- daty
 				dd[1:length(ids),] <- NA
 				dat <- cbind(d, dd)
@@ -86,33 +91,36 @@ function(x, y, ...) {
 			ids <- match(ids, rownames(y@data))
 			d <- y@data[ids,]
 			rownames(d) <- NULL
-			if (xdata) {
+			if (xdata & !is.null(datx)) {
 				dd <- datx
 				dd[1:length(ids),] <- NA
 				dd <- cbind(d, dd)
 				dat <- rbind(dat, dd)
 			} else {
-				dat <- d
+				dat <- rbind(dat, d)
 			}
 		} else if (xdata) {
 			dat[(nrow(dat)+1):(nrow(dat)+length(ids)),] <- NA
 		}
 	}
 
-	subs <- gIntersects(x, y, byid=TRUE)
+
 	subsx <- apply(subs, 2, any)
 	subsy <- apply(subs, 1, any)
 	
 	if (sum(subsx) > 0 ) {
 		int  <- gIntersection(x[subsx,], y[subsy,], byid=TRUE)
+		if (inherits(int, "SpatialCollections")) {
+			int <- int@polyobj
+		}
 		if (inherits(int, 'SpatialPolygons')) {
-			res <- c(res, int@polygons)
+			res <- c(res, int[as.vector(subs),]@polygons)
 			ids <- sapply(row.names(int), function(x) strsplit(x, ' ')[[1]])
 			rows <- (nrow(dat)+1):(nrow(dat)+length(ids[1,]))
 			if (xdata) {
 				idsx <- match(ids[1,], rownames(x@data))
 				d <- x@data[idsx,]
-				if (ydata) {
+				if (ydata  & !is.null(daty)) {
 					dd <- daty
 					dd[1:length(ids),] <- NA
 					d <- cbind(d, dd)
@@ -122,7 +130,7 @@ function(x, y, ...) {
 			if (ydata) {
 				idsy <- match(ids[2,], rownames(y@data))
 				d <- y@data[idsy,]
-				if (xdata) {
+				if (xdata & !is.null(datx)) {
 					dd <- datx
 					dd[1:length(ids),] <- NA
 					d <- cbind(d, dd)
