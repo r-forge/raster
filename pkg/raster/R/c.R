@@ -20,8 +20,7 @@ setMethod('c', signature(x='SpatialPolygons'),
 		x <- list(x, ...)
 		rwn <- lapply(x, row.names)
 		ln <- sapply(rwn, length)
-		rn <- unlist(rwn)
-		rnu <- raster:::.uniqueNames(rn)
+		rnu <- raster:::.uniqueNames(unlist(rwn))
 		end <- cumsum(ln)
 		start <- c(0, end[-length(end)]) + 1
 		for (i in 1:length(x)) {
@@ -30,8 +29,6 @@ setMethod('c', signature(x='SpatialPolygons'),
 			}
 		}
 		
-		cln <- lapply(x, function(x) {	if (.hasSlot(x, 'data')) { colnames(x@data) } else { NULL } })
-		clu <- unique(unlist(cln))
 		dat <- NULL
 		dataFound <- FALSE
 		for (i in 1:length(x)) {
