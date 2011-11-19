@@ -4,7 +4,6 @@
 # Licence GPL v3
 
 
-
 #setMethod('c', signature(x='Raster'), 
 #	function (x, ..., recursive=FALSE)  {
 #		if (recursive) { warning('argument "recursive=TRUE" is ignored') }
@@ -13,9 +12,57 @@
 #)
 
 
+
+# friendly rbind
+.frbind <- function(x, ...) {
+
+	if (! inherits(x, 'data.frame') ) {
+		x <- data.frame(x)
+	}
+
+	d <- list(...)
+	if (length(d) == 0) { return(x) }
+	
+	for (i in 1:length(d)) {
+		
+		dd <- d[[i]]
+		if (! inherits(dd, 'data.frame')) {
+			dd <- data.frame(dd)
+		}
+		
+		cnx <- colnames(x)
+		cnd <- colnames(dd)
+		
+		e <- cnx[(cnx %in% cnd)]	
+		for (j in e) {
+			if (class(x[,j]) != class(dd[,j])) {
+				x[,j] <- as.character(x[,j])
+				dd[,j] <- as.character(dd[,j])
+			}
+		}
+		
+		a <- which(!cnd %in% cnx)
+		if (length(a) > 0) {
+			zz <- dd[NULL, a, drop=FALSE]
+			zz[1:nrow(x),] <- NA
+			x <- cbind(x, zz)
+		}
+
+		b <- which(!cnx %in% cnd)
+		if (length(b) > 0) {
+			zz <- x[NULL, b, drop=FALSE]
+			zz[1:nrow(dd),] <- NA
+			dd <- cbind(dd, zz)
+		}
+		x <- rbind(x, dd)		
+	}
+	x
+}
+
+
+
 setMethod('c', signature(x='SpatialPolygons'), 
 	function (x, ..., recursive=FALSE)  {
-		if (recursive) { warning('argument "recursive=TRUE" is ignored') }
 		
 		x <- list(x, ...)
 		rwn <- lapply(x, row.names)
@@ -24,9 +71,13 @@ setMethod('c', signature(x='SpatialPolygons'),
 		end <- cumsum(ln)
 		start <- c(0, end[-length(end)]) + 1
 		for (i in 1:length(x)) {
-			if (! all(rnu[start[i]:end[i]] == rwn[[i]]) ) {
-				row.names(x[[i]]) <- rnu[start[i]:end[i]]
-			}
+			if (recursive) {
+				if (! all(rnu[start[i]:end[i]] == rwn[[i]]) ) {
+					row.names(x[[i]]) <- rnu[start[i]:end[i]]
+				}
+			} else {
+				row.names(x[[i]]) <- as.character(start[i]:end[i])
+			}	
 		}
 		
 		dat <- NULL
@@ -38,27 +89,41 @@ setMethod('c', signature(x='SpatialPolygons'),
 					dat <- x[[i]]@data
 				} else {
 					d <- x[[i]]@data
-					z <- which(!colnames(dat) %in% colnames(d))
+					cndat <- colnames(dat)
+					cnd <- colnames(d)
+					p <- cndat[cndat %in% cnd]
+					z <- which(!cndat %in% cnd)
 					if (length(z) > 1) {
 						dd <- dat[NULL, z]
 						dd[1:nrow(d),] <- NA
 						d <- cbind(d, dd)
 					}
-					z <- which(!colnames(d) %in% colnames(dat))
+					z <- which(!cnd %in% cndat)
 					if (length(z) > 1) {
 						dd <- d[NULL, z]
 						dd[1:nrow(dat),] <- NA
 						dat <- cbind(dat, dd)
 					}
+					
+					for (j in p) {
+						if (class(dat[,j]) != class(d[,j])) {
+							dat[,j] <- as.character(dat[,j])
+							d[,j] <- as.character(d[,j])
+						}
+					}
+
+					
 					dat <- rbind(dat, d)
 				}
 			} else {
 				if ( is.null(dat)) {
 					dat <- data.frame()
 					dat[1:length(x[[i]]@polygons),] <- NA
+					rownames(dat) <- row.names(x[[i]])
 				} else {
 					dd <- dat[NULL, ]
 					dd[1:length(x[[i]]@polygons),] <- NA
+					rownames(dd) <- row.names(x[[i]])
 					dat <- rbind(dat, dd)
 				}	
 			}
@@ -68,7 +133,7 @@ setMethod('c', signature(x='SpatialPolygons'),
 		}
 		x <- sapply(x, function(x) as(x, 'SpatialPolygons'))
 		x <- do.call(rbind, x)
-		rownames(dat) <- row.names(x)
+		#rownames(dat) <- row.names(x)
 		SpatialPolygonsDataFrame(x, dat)
 	}
 )
