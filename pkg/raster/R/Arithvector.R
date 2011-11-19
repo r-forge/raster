@@ -7,6 +7,7 @@ setMethod("+", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 )
 
 
+
 setMethod("*", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
     function(e1, e2){ 
 		require(rgeos)
@@ -57,3 +58,9 @@ setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 )
 
 
+
+setMethod("^", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
+    function(e1, e2){ 
+		stop('not yet implemented')
+	}
+)

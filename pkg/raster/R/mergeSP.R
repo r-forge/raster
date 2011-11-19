@@ -24,18 +24,18 @@ function(x, y, by=intersect(names(x), names(y)), by.x=by, by.y=by, all.x=TRUE, s
 		x@data <- x@data[ , -which(colnames(x@data)=='donotusethisvariablename679')]
 	}
 	x
-} )
-
+} 
+)
 
 
 setMethod('merge', signature(x='SpatialPolygons', y='SpatialPolygons'), 
-function(x, y, ...) {
+function(x, y, ..., intersect=TRUE) {
 
 	require(rgeos)
-	
+
 	subs <- gIntersects(x, y, byid=TRUE)
-	if (sum(subs) == 0) {
-		# adjust IDs and use rbind
+	if (!intersect | sum(subs) == 0) {
+		return(	c(x, y, ...) )
 	}
 	
 	dat <- daty <- datx <- NULL

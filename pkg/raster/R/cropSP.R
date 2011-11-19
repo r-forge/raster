@@ -22,6 +22,12 @@ function(x, y, ...) {
 			}
 			y@proj4string <- x@proj4string		
 		}
+		if (version_GEOS0() < "3.3.0") {
+			y <- gUnionCascaded(y)
+		} else {
+			y <- gUnaryUnion(y)
+		}	
+
 		
 		if (.hasSlot(x, 'data')) {
 		
