@@ -47,7 +47,7 @@ function(x, v=colnames(x@data), ...) {
 			dc <- data.frame(oid=1:length(dc), v=dc)
 			dc[,2] <- as.integer(dc[,2])
 			ud <- data.frame(v=unique(dc[,2]))
-			md <- merge(dc, ud, by='v')
+			md <- merge(dc, ud, by='v')  # could use match instead.
 			md <- md[order(md$oid), ,drop=FALSE]
 			id <- md[!duplicated(md[,1]), ,drop=FALSE]
 			id <- id[order(id$v), ]

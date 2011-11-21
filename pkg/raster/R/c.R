@@ -4,14 +4,6 @@
 # Licence GPL v3
 
 
-#setMethod('c', signature(x='Raster'), 
-#	function (x, ..., recursive=FALSE)  {
-#		if (recursive) { warning('argument "recursive=TRUE" is ignored') }
-#		merge(x, ...)
-#	}
-#)
-
-
 
 # friendly rbind
 .frbind <- function(x, ...) {
@@ -54,6 +46,7 @@
 			zz[1:nrow(dd),] <- NA
 			dd <- cbind(dd, zz)
 		}
+		
 		x <- rbind(x, dd)		
 	}
 	x
@@ -61,17 +54,19 @@
 
 
 
-setMethod('c', signature(x='SpatialPolygons'), 
-	function (x, ..., recursive=FALSE)  {
+#setMethod('c', signature(x='SpatialPolygons'), 
+
+.appendPolygons <- function (x, ..., keepnames=FALSE) {
 		
 		x <- list(x, ...)
+		
 		rwn <- lapply(x, row.names)
 		ln <- sapply(rwn, length)
 		rnu <- raster:::.uniqueNames(unlist(rwn))
 		end <- cumsum(ln)
 		start <- c(0, end[-length(end)]) + 1
 		for (i in 1:length(x)) {
-			if (recursive) {
+			if (keepnames) {
 				if (! all(rnu[start[i]:end[i]] == rwn[[i]]) ) {
 					row.names(x[[i]]) <- rnu[start[i]:end[i]]
 				}
@@ -79,12 +74,27 @@ setMethod('c', signature(x='SpatialPolygons'),
 				row.names(x[[i]]) <- as.character(start[i]:end[i])
 			}	
 		}
+
+		cls <- sapply(x, class)
+		if (all(cls == 'SpatialPolygons')) {
+			return( do.call( rbind, x))
+		}
+
+		if (all(cls == 'SpatialPolygonsDataFrame')) {
+			dat <- lapply( x, function(x) { slot(x, 'data') } )
+			dat <- do.call(.frbind, dat)
+			x <- sapply(x, function(y) as(y, 'SpatialPolygons'))
+			x <- do.call( rbind, x)
+			rownames(dat) <- row.names(x)
+			return( SpatialPolygonsDataFrame(x, dat) )
+		}
+
 		
 		dat <- NULL
-		dataFound <- FALSE
+#		dataFound <- FALSE
 		for (i in 1:length(x)) {
 			if (.hasSlot(x[[i]], 'data')) {
-				dataFound <- TRUE
+#				dataFound <- TRUE
 				if (is.null(dat)) {
 					dat <- x[[i]]@data
 				} else {
@@ -128,13 +138,11 @@ setMethod('c', signature(x='SpatialPolygons'),
 				}	
 			}
 		}
-		if (! dataFound ) {
-			return( do.call(rbind, x) )
-		}
+#		if (! dataFound ) { return( do.call(rbind, x) ) }
 		x <- sapply(x, function(x) as(x, 'SpatialPolygons'))
 		x <- do.call(rbind, x)
-		#rownames(dat) <- row.names(x)
 		SpatialPolygonsDataFrame(x, dat)
-	}
-)
+}
+
+
 

@@ -14,7 +14,9 @@ Merge
 }
 
 \description{
-Merge Raster* objects to form a new Raster object with a larger spatial extent. 'c' is shorthand for merge. If used with SpatialPolygons, polygons are appended, not intersected as with merge.
+Merge Raster* objects to form a new Raster object with a larger spatial extent. 
+
+Or merge (append and intersect) SpatialPolygon* objects. Overlapping polygons are (by default) intersected, and attributes are joined.
 }
 
 \usage{
@@ -45,12 +47,12 @@ Full calls to merge:
   \item{\code{progress}}{Character. "text", "window", or "" (the default, no progress bar)}
   
 
-\code{merge(x, y, ... ) }
+\code{merge(x, y, ..., intersect=TRUE ) }
 
   \item{\code{x}}{SpatialPolygons* object}
   \item{\code{y}}{SpatialPolygons* object}
-  \item{\code{...}}{Currently ignored}
-  
+  \item{\code{...}}{Additional SpatialPolygons* objects}
+  \item{\code{intersect}}{Logical. If \code{FALSE}, objects are appended, without intersecting}
 } } 
 
 \details{
