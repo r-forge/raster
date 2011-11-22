@@ -1,6 +1,7 @@
 \name{vectorAlgebra}
 
 \alias{+,SpatialPolygons,SpatialPolygons-method}
+\alias{+,SpatialPolygonsDataFrame,data.frame-method}
 \alias{-,SpatialPolygons,SpatialPolygons-method}
 \alias{*,SpatialPolygons,SpatialPolygons-method}
 \alias{^,SpatialPolygons,SpatialPolygons-method}
@@ -39,7 +40,7 @@ Comparison of terminology for polygon overlay methods used in ArcGIS and raster
  
 To do: identity /update 
 
-For spatialjoin and other spatial queries, see sp functions over and overlay
+For spatialjoin and other spatial queries, see sp functions 'over' and 'overlay' (or raster function extract when using Raster objects)
  
 }
 

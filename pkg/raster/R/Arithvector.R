@@ -11,6 +11,12 @@ setMethod("+", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 	}
 )
 
+setMethod("+", signature(e1='SpatialPolygonsDataFrame', e2='data.frame'),
+    function(e1, e2){ 
+		merge(e1, e2)
+	}
+)
+
 
 setMethod("*", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
     function(e1, e2){ 
