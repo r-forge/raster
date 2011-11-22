@@ -36,17 +36,29 @@ function(x, y, ..., intersect=TRUE) {
 
 	require(rgeos)
 
-	subs <- gIntersects(x, y, byid=TRUE)
-	if (!intersect | sum(subs) == 0) {
+	if (!intersect) {
 		return( .appendPolygons(x, y, ...) )
 	}
 	
 	row.names(x) <- as.character(1:length(row.names(x)))
 		
 	yy <- c(y, list(...))
+	
 	yy <- lapply(1:length(yy), spChFIDs(yy[[x]], as.character(1:length(row.names(yy[[x]])))))
 	
 	for (y in yy) {
+
+		subs <- gIntersects(x, y, byid=TRUE)
+		if (sum(subs)==0) {
+			x <- .appendPolygons(x, y)
+			next
+		}
+
+	
+		if (! identical(x@proj4string, y@proj4string) ) {
+			warning('non identical CRS')
+			y@proj4string <- x@proj4string
+		}	
 	
 		dat <- daty <- datx <- NULL
 		xdata <- ydata <- FALSE
