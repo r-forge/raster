@@ -22,11 +22,46 @@ setMethod("*", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 )
 
 
+.gDif <- function(x, y) {
+	xln <- length(x@polygons)
+	yln <- length(y@polygons)
+	if (xln==0 | yln==0) {
+		return(x)
+	}
+	rn <- row.names(x)
+	for (i in xln:1) {
+		z <- x[i,]
+		for (j in 1:yln) {
+			z <- gDifference(z, y[j,])
+			if (is.null(z)) {
+				break
+			}
+		}
+		if (is.null(z)) {
+			x <- x[-i,]
+			rn <- rn[-i]
+		} else {
+			x@polygons[i] <- z@polygons
+		}
+	}
+	if (length(rn) > 0) {
+		row.names(x) <- rn
+	}
+	x
+}
+
+
 setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
     function(e1, e2){ 
 	
 		require(rgeos)
 
+		if (! identical(e1@proj4string, e2@proj4string) ) {
+			warning('non identical CRS')
+			e2@proj4string <- e1@proj4string
+		}
+		
+		
 		if (!.hasSlot(e1, 'data')) {
 			d <- data.frame(ID=1:length(e1@polygons))
 			rownames(d) <- row.names(e1)
@@ -45,16 +80,16 @@ setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 		} else {
 			part1 <- e1[!int1,]
 		}
-		part2 <- gDifference(e1[int1,], e2[int2,], byid=TRUE)
-		ids <- sapply(row.names(part2), function(x) strsplit(x, ' ')[[1]][1])
-		row.names(part2) <- make.unique(ids)
+		part2 <- .gDif(e1[int1,], e2[int2,])
 
-		part2 <- SpatialPolygonsDataFrame(part2, e1@data[match(ids, rownames(e1@data)), ,drop=FALSE])
+		part2 <- SpatialPolygonsDataFrame(part2, e1@data[match(row.names(part2), rownames(e1@data)), ,drop=FALSE])
 		if (!is.null(part1)) {
 			part2 <- rbind(part1, part2)
 		}
 			
-		part2 <- aggregate(part2, v=colnames(part2@data))
+		if (length(part2@polygons) > 1) {	
+			part2 <- aggregate(part2, v=colnames(part2@data))
+		}
 		if (dropframe) {
 			as(part2, 'SpatialPolygons')
 		} else {
