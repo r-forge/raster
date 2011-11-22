@@ -15,6 +15,7 @@ function(x, y, ...) {
 		if (! inherits(y, 'SpatialPolygons')) {
 			if (inherits(y, 'Extent')) {
 				y <- as(y, 'SpatialPolygons')
+				y@proj4string <- x@proj4string
 			} else { 
 				y <- extent(y)
 				validObject(y)
@@ -27,11 +28,20 @@ function(x, y, ...) {
 		} else {
 			y <- gUnaryUnion(y)
 		}	
-
+		row.names(y) <- '1'
+		rnx <- row.names(x)
+		row.names(x) <- as.character(1:length(rnx))
+		
+		if (! identical(x@proj4string, y@proj4string) ) {
+			warning('non identical CRS')
+			y@proj4string <- x@proj4string
+		}
+		
 		
 		if (.hasSlot(x, 'data')) {
-		
-			# in future versions of rgeos, this intermediate step should not be necessary
+			
+			# to keep the correct IDs
+			# in future versions of rgeos, this intermediate step won't be necessary
 			i <- as.vector( gIntersects(x, y, byid=TRUE) )
 			if (sum(i) == 0) {
 				return(NULL)
@@ -42,13 +52,11 @@ function(x, y, ...) {
 			}
 			if (is.null(y)) { return(y) }
 			
-			ids <- sapply(y@polygons, function(x) strsplit(slot(x, 'ID'), ' '))
+			ids <- strsplit(row.names(y), ' ') 
 			ids <- as.numeric(do.call(rbind, ids)[,1])
-			for (i in 1:length(y@polygons)) {
-				y@polygons[[i]]@ID <- as.character(ids[i])
-			}
+			row.names(y) <- as.character(rnx[ids])
 			data <- x@data[ids, ,drop=FALSE]
-			rownames(data) <- ids
+			rownames(data) <- rnx[ids]
 			
 			return( SpatialPolygonsDataFrame(y, data) )
 		} else {
@@ -81,20 +89,20 @@ function(x, y, ...) {
 			}
 			y <- gIntersection(x[i,], y, byid=TRUE)
 			if (inherits(y, "SpatialCollections")) {
-				y <- y@polyobj
+				y <- y@lineobj
 			}
-			ids <- sapply(y@lines, function(x) strsplit(slot(x, 'ID'), ' '))
+			
+			ids <- strsplit(row.names(y), ' ') 
 			ids <- as.numeric(do.call(rbind, ids)[,1])
-			for (i in 1:length(y@lines)) {
-				y@lines[[i]]@ID <- as.character(ids[i])
-			}
+			row.names(y) <- as.character(rnx[ids])
 			data <- x@data[ids, ,drop=FALSE]
-			rownames(data) <- ids
+			rownames(data) <- rnx[ids]
+			
 			SpatialLinesDataFrame(y, data)
 		} else {
 			y <- gIntersection(x, y)
 			if (inherits(y, "SpatialCollections")) {
-				y <- y@polyobj
+				y <- y@lineyobj
 			}
 			return(y)
 			

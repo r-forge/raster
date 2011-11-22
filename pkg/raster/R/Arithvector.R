@@ -4,14 +4,12 @@
 # Licence GPL v3
 
 
-
 setMethod("+", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
     function(e1, e2){ 
 		require(rgeos)
 		merge(e1, e2)
 	}
 )
-
 
 
 setMethod("*", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
