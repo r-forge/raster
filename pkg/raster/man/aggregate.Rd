@@ -7,12 +7,13 @@
 \alias{aggregate,RasterStackBrick-method}
 \alias{aggregate,SpatialPolygons-method}
 
-\title{Aggregate cells}
+\title{Aggregate cells or polygons}
 
 \description{
 Aggregate a Raster* object to create a new RasterLayer or RasterBrick with a lower resolution (larger cells). 
-Aggregation groups rectangular areas to create larger cells. 
-The value for the resulting cells is computed with a user-specified function (default value = \code{mean}). 
+Aggregation groups rectangular areas to create larger cells. The value for the resulting cells is computed with a user-specified function (default value = \code{mean}). 
+
+There is also an aggregate ('dissolve') method for SpatialPolygons.
 }
 
 \usage{
@@ -20,7 +21,7 @@ The value for the resulting cells is computed with a user-specified function (de
 
 \S4method{aggregate}{RasterStackBrick}(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename='', ...)
 
-\S4method{aggregate}{SpatialPolygons}(x, v, ...)
+\S4method{aggregate}{SpatialPolygons}(x, vars=colnames(x@data), sum, ...)
 }
 
 \arguments{
@@ -32,7 +33,9 @@ The value for the resulting cells is computed with a user-specified function (de
   \item{na.rm}{logical. If \code{TRUE}, NA cells are removed from calculations }
   \item{filename}{Character. Output filename}  
   \item{...}{Additional arguments as for \code{\link{writeRaster}}}  
-  \item{v}{Character or integer. The fields (column names or numbers) on which to aggregate (dissolve) the SpatialPolygons. If not provided, all polygons are aggregated together} 
+  \item{vars}{Character or integer. The variables (column names or numbers) that should be used to aggregate (dissolve) the SpatialPolygons by only maintaining unique combinations of these variables. The default setting is to use all variables. If vars is \code{NULL} or \code{NA} all polygons are aggregated} 
+  \item{sum}{List with function(s) and variable(s) to summarize. This should be a list of lists in which each element of the main lists has two items. The first item is function (e.g. mean), the second element is a vector of column names (or indices) that need to summarize with that function. Be careful with character and factor variables (you can use, e.g. 'first' \code{function(x)x[1]} or 'last' \code{function(x)x[length(x)] or \code{modal} for these variables}} 
+  
 }
 
 \details{

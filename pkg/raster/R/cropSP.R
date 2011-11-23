@@ -31,8 +31,8 @@ function(x, y, ...) {
 		row.names(y) <- '1'
 		rnx <- row.names(x)
 		row.names(x) <- as.character(1:length(rnx))
-		
-		if (! identical(x@proj4string, y@proj4string) ) {
+
+		if (! identical(projection(x), projection(y)) ) {
 			warning('non identical CRS')
 			y@proj4string <- x@proj4string
 		}

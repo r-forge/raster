@@ -44,21 +44,22 @@ function(x, y, ..., intersect=TRUE) {
 		
 	yy <- c(y, list(...))
 	
-	yy <- lapply(1:length(yy), spChFIDs(yy[[x]], as.character(1:length(row.names(yy[[x]])))))
 	
 	for (y in yy) {
 
+		if (! identical(projection(x), projection(y)) ) {
+			warning('non identical CRS')
+			y@proj4string <- x@proj4string
+		}	
+	
 		subs <- gIntersects(x, y, byid=TRUE)
 		if (sum(subs)==0) {
 			x <- .appendPolygons(x, y)
 			next
 		}
+		y <- spChFIDs(y, as.character(1:length(row.names(y))))
 
 	
-		if (! identical(x@proj4string, y@proj4string) ) {
-			warning('non identical CRS')
-			y@proj4string <- x@proj4string
-		}	
 	
 		dat <- daty <- datx <- NULL
 		xdata <- ydata <- FALSE
