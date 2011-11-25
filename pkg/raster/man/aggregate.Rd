@@ -10,7 +10,7 @@
 
 \description{
 Aggregate a Raster* object to create a new RasterLayer or RasterBrick with a lower resolution (larger cells). 
-Aggregation groups rectangular areas to create larger cells. The value for the resulting cells is computed with a user-specified function (default value = \code{mean}). 
+Aggregation groups rectangular areas to create larger cells. The value for the resulting cells is computed with a user-specified function. 
 
 There is also an aggregate ('dissolve') method for SpatialPolygons that merges polygons if the values of selected variables are the same.
 }

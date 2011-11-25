@@ -42,8 +42,12 @@ function(x, y, ..., intersect=TRUE) {
 	
 	row.names(x) <- as.character(1:length(row.names(x)))
 		
-	yy <- c(y, list(...))
-	
+	yy <- list(...)
+	if (length(yy) > 0) {
+		keep <- sapply(yy, function(x) inherits(a, 'SpatialPolygons'))
+		yy <- yy[keep]
+	}
+	yy <- c(y, yy)
 	
 	for (y in yy) {
 

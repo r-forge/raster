@@ -75,10 +75,16 @@ setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 			dropframe <- FALSE
 		}
 
+		e2 <- aggregate(e2)
+		
 		int <- gIntersects(e1, e2, byid=TRUE)
 		int1 <- apply(int, 2, any)
 		int2 <- apply(int, 1, any)
 				
+		if (sum(int1) == 0) { # no intersections
+			return(e1)
+		}
+		
 		if (all(int1)) {
 			part1 <- NULL
 		} else {
@@ -106,6 +112,7 @@ setMethod("-", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
 
 setMethod("^", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
     function(e1, e2){ 
-		stop('not yet implemented')
+		
+		stop('not yet implemented (symetric difference)')
 	}
 )

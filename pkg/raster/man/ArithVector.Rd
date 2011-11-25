@@ -1,4 +1,4 @@
-\name{vectorAlgebra}
+\name{vector algebra}
 
 \alias{+,SpatialPolygons,SpatialPolygons-method}
 \alias{+,SpatialPolygonsDataFrame,data.frame-method}
@@ -13,13 +13,13 @@ These funcitons are experimental. Under development!
 
 Given SpatialPolygons* object \code{x} and \code{y}
 
-\code{x + y}  --  same as \code{\link{merge}}
+\code{x+y} This is the same as \code{\link{merge}(x, y)}
 
-\code{x * y}  --  same as \code{\link{crop}}
+\code{x*y} This is the same as \code{\link{crop}(x, y)}
 
-\code{x - y}  
+\code{x-y} Erase the area covered by \code{y} from \code{x}
 
-Using functions from rgeos, with some added functionality to keep attributes.
+These functions are based on functions from rgeos, with some added functionality to, among other things, avoid polygon duplication and to keep the attributes.
 
 See \link[raster]{Arith-methods} for similar arithmetic with Raster objects
 }
@@ -27,11 +27,11 @@ See \link[raster]{Arith-methods} for similar arithmetic with Raster objects
 
 \details{
 
-Comparison of terminology for polygon overlay methods used in ArcGIS and raster 
+Comparison of terminology for polygon overlay methods used in ArcGIS and in this package (raster)
 \tabular{rll}{
-  \tab ArcGIS    \tab  raster  \cr
+  \tab ArcGIS    \tab  raster \cr
   \tab dissolve  \tab  aggregate  \cr
-  \tab append    \tab  "c" \cr
+  \tab append    \tab  merge(x, y, ..., intersect=FALSE) \cr
   \tab union     \tab  merge or "+" \cr
   \tab intersect \tab  crop or "*" \cr
   \tab erase     \tab  "-" \cr
@@ -41,7 +41,6 @@ Comparison of terminology for polygon overlay methods used in ArcGIS and raster
 To do: identity /update 
 
 For spatialjoin and other spatial queries, see sp functions 'over' and 'overlay' (or raster function extract when using Raster objects)
- 
 }
 
 
