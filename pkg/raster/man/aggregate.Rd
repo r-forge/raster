@@ -3,8 +3,7 @@
 \docType{methods}
 
 \alias{aggregate}
-\alias{aggregate,RasterLayer-method}
-\alias{aggregate,RasterStackBrick-method}
+\alias{aggregate,Raster-method}
 \alias{aggregate,SpatialPolygons-method}
 
 \title{Aggregate cells or polygons}
@@ -13,30 +12,29 @@
 Aggregate a Raster* object to create a new RasterLayer or RasterBrick with a lower resolution (larger cells). 
 Aggregation groups rectangular areas to create larger cells. The value for the resulting cells is computed with a user-specified function (default value = \code{mean}). 
 
-There is also an aggregate ('dissolve') method for SpatialPolygons.
+There is also an aggregate ('dissolve') method for SpatialPolygons that merges polygons if the values of selected variables are the same.
 }
 
 \usage{
-\S4method{aggregate}{RasterLayer}(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename='', ...)
+\S4method{aggregate}{Raster}(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename='', ...)
 
-\S4method{aggregate}{RasterStackBrick}(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename='', ...)
-
-\S4method{aggregate}{SpatialPolygons}(x, vars=colnames(x@data), sum, ...)
+\S4method{aggregate}{SpatialPolygons}(x, vars=NULL, sums, ...)
 }
 
 \arguments{
-  \item{x}{A Raster* object}
+  \item{x}{Raster* object or SpatialPolygons object}
   \item{fact}{Integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details}  
   \item{fun}{Function used to aggregate values }  
-  \item{expand}{logical. If \code{TRUE} the output RasterLayer will be larger then the input RasterLayer if a division
- of the number of columns or rows with \code{factor} is not an integer}
+  \item{expand}{logical. If \code{TRUE} the output Raster* object will be larger then the input Raster* object if a division of the number of columns or rows with \code{factor} is not an integer}
   \item{na.rm}{logical. If \code{TRUE}, NA cells are removed from calculations }
-  \item{filename}{Character. Output filename}  
-  \item{...}{Additional arguments as for \code{\link{writeRaster}}}  
-  \item{vars}{Character or integer. The variables (column names or numbers) that should be used to aggregate (dissolve) the SpatialPolygons by only maintaining unique combinations of these variables. The default setting is to use all variables. If vars is \code{NULL} or \code{NA} all polygons are aggregated} 
-  \item{sum}{List with function(s) and variable(s) to summarize. This should be a list of lists in which each element of the main lists has two items. The first item is function (e.g. mean), the second element is a vector of column names (or indices) that need to summarize with that function. Be careful with character and factor variables (you can use, e.g. 'first' \code{function(x)x[1]} or 'last' \code{function(x)x[length(x)] or \code{modal} for these variables}} 
-  
+  \item{filename}{Character. Output filename}
+  \item{...}{Additional arguments as for \code{\link{writeRaster}}}
+
+  \item{vars}{Character or integer. The variables (column names or numbers) that should be used to aggregate (dissolve) the SpatialPolygons by only maintaining unique combinations of these variables. The default setting is to use no variables and aggregate all polygons. You can also supply a vector with a length of length(row.names(x)) }
+
+  \item{sums}{List with function(s) and variable(s) to summarize. This should be a list of lists in which each element of the main lists has two items. The first item is function (e.g. mean), the second element is a vector of column names (or indices) that need to summarize with that function. Be careful with character and factor variables (you can use, e.g. 'first' \code{function(x)x[1]} or 'last' \code{function(x)x[length(x)]} or \code{modal} for these variables}
 }
+
 
 \details{
 Aggregation will result in a Raster* object with \code{fact*fact} fewer cells; if necessary this number is adjusted according to the value of \code{expand}.

@@ -59,24 +59,23 @@ function(x, y, ..., intersect=TRUE) {
 		}
 		y <- spChFIDs(y, as.character(1:length(row.names(y))))
 
-	
-	
+		
 		dat <- daty <- datx <- NULL
 		xdata <- ydata <- FALSE
 		if (.hasSlot(x, 'data')) {
 			xdata <- TRUE
-			dat <- x@data[NULL, ,drop=FALSE]
+			datx <- dat <- x@data[NULL, ,drop=FALSE]
 		} 
 		if (.hasSlot(y, 'data')) {
 			ydata <- TRUE
-			ydat <- y@data[NULL, ,drop=FALSE]
+			daty <- y@data[NULL, ,drop=FALSE]
 			if (is.null(dat)) {
-				dat <- ydat
+				dat <- daty
 			} else {
-				ynotx <- which(! colnames(ydat) %in% colnames(dat))
+				ynotx <- which(! colnames(daty) %in% colnames(dat))
 				if (length(ynotx) > 0) {
-					daty <- ydat[, ynotx]
-					dat <- cbind(dat, ydat)
+					daty <- daty[, ynotx, drop=FALSE]
+					dat <- cbind(dat, daty)
 				}
 				xnoty <- which(! colnames(x@data) %in% colnames(y@data))
 				if (length(xnoty) > 0) {
@@ -86,7 +85,8 @@ function(x, y, ..., intersect=TRUE) {
 		}
 
 		res <- NULL
-		dif1 <- gDifference(x, y, byid=TRUE)
+		yd <- aggregate(y)
+		dif1 <- gDifference(x, yd, byid=TRUE)
 		if (!is.null(dif1)) {
 			res <- dif1@polygons
 			if (xdata) {
@@ -106,15 +106,16 @@ function(x, y, ..., intersect=TRUE) {
 			}
 		}
 
-		dif2 <- gDifference(y, x, byid=TRUE)
+		xd <- aggregate(x)
+		dif2 <- gDifference(y, xd, byid=TRUE)
 		if (!is.null(dif2)) {
 			res <- c(res, dif2@polygons)
+			ids <- sapply(row.names(dif2), function(x) strsplit(x, ' ')[[1]][1])
 			if (ydata) {
-				ids <- sapply(row.names(dif2), function(x) strsplit(x, ' ')[[1]][1])
 				#ids <- match(ids, rownames(y@data))
-				d <- y@data[ids,]
+				d <- y@data[ids, ,drop=FALSE]
 				rownames(d) <- NULL
-				if (xdata & !is.null(datx)) {
+				if (xdata) {
 					dd <- datx
 					dd[1:length(ids),] <- NA
 					dd <- cbind(d, dd)
@@ -127,7 +128,6 @@ function(x, y, ..., intersect=TRUE) {
 			}
 		}
 
-
 		subsx <- apply(subs, 2, any)
 		subsy <- apply(subs, 1, any)
 		
@@ -137,29 +137,23 @@ function(x, y, ..., intersect=TRUE) {
 				int <- int@polyobj
 			}
 			if (inherits(int, 'SpatialPolygons')) {
-				res <- c(res, int[as.vector(subs),]@polygons)
-				ids <- sapply(row.names(int), function(x) strsplit(x, ' ')[[1]])
-				rows <- (nrow(dat)+1):(nrow(dat)+length(ids[1,]))
+				res <- c(res, int@polygons)
+				ids <- do.call(rbind, strsplit(row.names(int), ' '))
+
+				d <- NULL
+				rows <- (nrow(dat)+1):(nrow(dat)+length(ids[,1]))
 				if (xdata) {
-					idsx <- match(ids[1,], rownames(x@data))
-					d <- x@data[idsx,]
-					if (ydata  & !is.null(daty)) {
-						dd <- daty
-						dd[1:length(ids),] <- NA
-						d <- cbind(d, dd)
-					} 			
-					dat <- rbind(dat, d)
-				} 
-				if (ydata) {
-					idsy <- match(ids[2,], rownames(y@data))
-					d <- y@data[idsy,]
-					if (xdata & !is.null(datx)) {
-						dd <- datx
-						dd[1:length(ids),] <- NA
-						d <- cbind(d, dd)
-					} 			
-					dat <- rbind(dat, d)
+					idsx <- match(ids[,1], rownames(x@data))
+					d <- x@data[idsx, ,drop=FALSE]
+					if (ydata) {
+						idsy <- match(ids[,2], rownames(y@data))
+						d <- cbind(d, y@data[idsy, ,drop=FALSE])
+					}
+				} else if (ydata) {
+					idsy <- match(ids[,2], rownames(y@data))
+					d <- y@data[idsy, ,drop=FALSE]
 				}
+				dat <- rbind(dat, d)
 			}
 		}
 		res <- SpatialPolygons(lapply(1:length(res), function(y) Polygons(res[[y]]@Polygons, y)))

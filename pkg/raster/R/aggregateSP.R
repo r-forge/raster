@@ -1,23 +1,29 @@
 
 setMethod('aggregate', signature(x='SpatialPolygons'), 
-function(x, var=colnames(x@data), sum=NULL, ...) {
+function(x, vars=NULL, sums=NULL, ...) {
 	require(rgeos)
 	
 	if (! .hasSlot(x, 'data') ) {
-		if (version_GEOS0() < "3.3.0") {
-			x <- gUnionCascaded(x)
-		} else {
-			x <- gUnaryUnion(x)
-		}	
-		return(x)
+		hd <- FALSE
+		if (!is.null(vars)) {
+			if (length(vars) == length(x@polygons)) {
+				x <- SpatialPolygonsDataFrame(x, data=data.frame(ID=vars))
+				vars = 1
+			}
+		}
+	} else {
+		hd <- TRUE
+	}
 	
-	} else if (isTRUE(is.null(var)) | isTRUE(is.na(var))) {
+	if (isTRUE(is.null(vars))) {
 		if (version_GEOS0() < "3.3.0") {
 			x <- gUnionCascaded(x)
 		} else {
 			x <- gUnaryUnion(x)
 		}	
-		x <- SpatialPolygonsDataFrame(x, data=data.frame(id=1))
+		if (hd) {
+			x <- SpatialPolygonsDataFrame(x, data=data.frame(ID=1))
+		}
 		return(x)
 		
 	} else {
@@ -43,7 +49,7 @@ function(x, var=colnames(x@data), sum=NULL, ...) {
 		cn <- colnames(dat)
 		
 		
-		v <- getVars(var, cn)
+		v <- getVars(vars, cn)
 		
 		dat <- dat[,v, drop=FALSE]
 		crs <- x@proj4string
@@ -53,13 +59,13 @@ function(x, var=colnames(x@data), sum=NULL, ...) {
 		id <- id[order(id$v), ]
 
 		dat <- dat[id[,1], ,drop=FALSE]
-		if (!is.null(sum)) {
+		if (!is.null(sums)) {
 			out <- list()
-			for (i in 1:length(sum)) {
-				if (length(sum[[i]]) != 2) {
+			for (i in 1:length(sums)) {
+				if (length(sums[[i]]) != 2) {
 					stop('argument "s" most of be list in which each element is a list of two (fun + varnames)')
 				}
-				fun = sum[[i]][[1]]
+				fun = sums[[i]][[1]]
 				if (!is.function(fun)) {
 					if (is.character(fun)) {
 						if (tolower(fun[1]) == 'first') {
@@ -69,7 +75,7 @@ function(x, var=colnames(x@data), sum=NULL, ...) {
 						} 
 					}
 				}
-				v <- getVars(sum[[i]][[2]], cn)
+				v <- getVars(sums[[i]][[2]], cn)
 				ag <- aggregate(x@data[,v,drop=FALSE], by=list(dc$v), FUN=fun) 
 				out[[i]] <- ag[,-1,drop=FALSE]
 			}
