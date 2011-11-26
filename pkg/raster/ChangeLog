@@ -1,9 +1,10 @@
 --- 25-November-2011, version 1.9-46
-improvements to new polygon manipulation functions
+Improvements to new polygon manipulation functions. 
+Bug fix with reclass(include.lowest=TRUE) if the reclass value was a Real (like NA) it was coerced to an integer. Reported by Steve Mosher.
 
 --- 17-November-2011, version 1.9-44
 fixed bug with cell values reading with BIL driver (reported by sonal singhal)
-fixed serious bug with a stack from different bands from the same file. .cellValues returned values for the first band only (introduced in 1.9-41?). Reported by Matteo Mattiuzzi
+fixed serious bug with a stack from different bands from the same file. .cellValues returned values for the first band only (introduced in 1.9-41?). Reported by Matteo Mattiuzzi & Benjamin Mack
 addition: crop method for Spatial objects
 addition: aggregate (dissolve) method for SpatialPolygons
 addition: merge (join) method for Spatial*DataFrane & data.frame; and for SpatialPolygons & SpatialPolygons
