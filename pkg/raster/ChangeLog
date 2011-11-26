@@ -1,6 +1,6 @@
---- 25-November-2011, version 1.9-46
+--- 25-November-2011, version 1.9-47
 Improvements to new polygon manipulation functions. 
-Bug fix with reclass(include.lowest=TRUE) if the reclass value was a Real (like NA) it was coerced to an integer. Reported by Steve Mosher.
+Bug fixes with reclass(include.lowest=TRUE) if the reclass value was a Real (like NA) it was coerced to an integer, and with 'edge', reported by Steve Mosher.
 
 --- 17-November-2011, version 1.9-44
 fixed bug with cell values reading with BIL driver (reported by sonal singhal)
