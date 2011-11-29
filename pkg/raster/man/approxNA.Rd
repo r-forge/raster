@@ -8,7 +8,8 @@
 \title{Estimate values for cells that are NA}
 
 \description{
-approxNA uses the \code{stats} function \code{\link{approx}} to estimate values for cells that are \code{NA} by interpolation across layers. 
+approxNA uses the \code{stats} function \code{\link{approx}} to estimate values for cells that are \code{NA} by interpolation across layers. Layers are considered equidistant, unless \code{\link{getZ}} returns values, in which case these values are used to determine distance between layers.
+
 For estimation based on neighboring cells see \code{\link{focal}}
 }
 
