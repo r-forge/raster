@@ -20,7 +20,7 @@ setMethod("Math", signature(x='Raster'),
 		}
 
 		if (substr(funname, 1, 3) == 'cum' ) { 
-			} else if (nl == 1)
+			if (nl == 1) {
 				if (canProcessInMemory(r, 3)) {
 					r <- setValues(r, do.call(funname, list(values(x))))
 				} else {
@@ -44,6 +44,7 @@ setMethod("Math", signature(x='Raster'),
 				}
 				return(r)
 			}
+			
 			if (canProcessInMemory(r, 3)) {
 				r <- setValues(r, t( apply(getValues(x), 1, funname)) )
 			} else {
