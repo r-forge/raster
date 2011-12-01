@@ -125,10 +125,14 @@ function(x, y, method="bilinear", filename="", ...)  {
 
 				pbStep(pb, i)
 			}
-			y <- setValues(y, v)
+			v <- setValues(y, v)
 			if (filename != '') {
-				writeRaster(y, filename, ...)
+				writeRaster(v, filename, ...)
+				
 			}
+			pbClose(pb)
+			layerNames(v) <- ln
+			return(v)
 			
 		} else {
 			for (i in 1:tr$n) {
