@@ -9,12 +9,13 @@ Align an Extent object with the cells of a Raster* object
 }
 
 \usage{
-alignExtent(extent, object)
+alignExtent(extent, object, snap='near')
 }
 
 \arguments{
-  \item{extent}{An object of class Extent}  
-  \item{object}{A Raster* object}
+  \item{extent}{object of class Extent}  
+  \item{object}{Raster* object}
+  \item{snap}{Character. One of 'near', 'in', or 'out'}  
 }
  
 \value{
