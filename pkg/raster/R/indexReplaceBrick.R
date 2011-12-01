@@ -63,7 +63,7 @@ setReplaceMethod("[", c("Raster", "Extent", "missing"),
 		nl <- nlayers(x)
 		if (nl > 1) {
 			add <- ncell(x) * 0:(nl-1)
-			i <- as.vector(t((matrix(rep(i, nl), nr=nl, byrow=TRUE)) + add))
+			i <- as.vector(t((matrix(rep(i, nl), nrow=nl, byrow=TRUE)) + add))
 		}
 		.replace(x, i, value=value)
 	}
