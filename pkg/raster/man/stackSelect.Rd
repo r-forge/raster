@@ -13,7 +13,7 @@ See \code{\link{extract}} for extraction of values by cell, point, or otherwise.
 }
 
 \usage{
-\S4method{stackSelect}{RasterStackBrick}(x, y, recycle=FALSE, type='index', filename='', na.rm=FALSE, ...)
+\S4method{stackSelect}{RasterStackBrick,Raster}(x, y, recycle=FALSE, type='index', filename='', ...)
 }
 
 \arguments{
