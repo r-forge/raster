@@ -5,7 +5,7 @@
 \title{Align an extent (object of class Extent)}
 
 \description{
-Align an Extent object with the cells of a Raster* object
+Align an Extent object with the (boundaries of the) cells of a Raster* object
 }
 
 \usage{
@@ -13,13 +13,13 @@ alignExtent(extent, object, snap='near')
 }
 
 \arguments{
-  \item{extent}{object of class Extent}  
+  \item{extent}{Extent object}  
   \item{object}{Raster* object}
-  \item{snap}{Character. One of 'near', 'in', or 'out', to determine in which direction the extent should be aligned}  
+  \item{snap}{Character. One of 'near', 'in', or 'out', to determine in which direction the extent should be aligned. To the nearest border, inwards or outwards}  
 }
  
 \value{
-a object of class Extent
+Extent object
 }
  
 \details{
