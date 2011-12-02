@@ -1,3 +1,8 @@
+--- 1-December-2011, version 1.9-50
+new argument 'snap' in alignExtent and crop (suggested by Matteo Mattiuzzi)
+approxNA can now interpolated over non-equal distance (suggested by Tobias Schmidt)
+bug fix for 'edge', reported by Steve Mosher.
+
 --- 25-November-2011, version 1.9-47
 Improvements to new polygon manipulation functions. 
 Bug fixes with reclass(include.lowest=TRUE) if the reclass value was a Real (like NA) it was coerced to an integer, and with 'edge', reported by Steve Mosher.

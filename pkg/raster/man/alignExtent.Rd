@@ -15,7 +15,7 @@ alignExtent(extent, object, snap='near')
 \arguments{
   \item{extent}{object of class Extent}  
   \item{object}{Raster* object}
-  \item{snap}{Character. One of 'near', 'in', or 'out'}  
+  \item{snap}{Character. One of 'near', 'in', or 'out', to determine in which direction the extent should be aligned}  
 }
  
 \value{
@@ -33,7 +33,7 @@ Aligning an Extent object to another object assures that it gets the same origin
 
 \examples{
 r <- raster()
-e <- extent(-10.1, 10.1, -20.1, 20.1)
+e <- extent(-10.1, 9.9, -20.1, 19.9)
 ea <- alignExtent(e, r)
 e
 extent(r)
