@@ -1,4 +1,5 @@
 --- 1-December-2011, version 1.9-50
+writeValues methods now only available with a vector (RasterLayer) or matrix (RasterStack) argument. To avoid perhaps unexpected coercion (column-wise coercion to vector); problem pointed out by Kristina Helle.
 new argument 'snap' in alignExtent and crop (suggested by Matteo Mattiuzzi)
 approxNA can now interpolated over non-equal distance (suggested by Tobias Schmidt)
 bug fix for 'edge', reported by Steve Mosher.
