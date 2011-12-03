@@ -7,15 +7,28 @@ if (!isGeneric("approxNA")) {
 
 
 setMethod('approxNA', signature(x='RasterStackBrick'), 
-function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean,...) { 
+function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean, z=NULL, ...) { 
 
 	filename <- trim(filename)
 	out <- brick(x, values=FALSE)
 	nl <- nlayers(out)
+	if (nl < 2) {
+		warning('cannot interpolate with a single layer')
+		return(x)
+	}
 	
-	xout <- getZ(x)
-	if (is.null(xout)) {
-		xout <- 1:nl
+	if (is.null(z)) {
+		xout <- getZ(x)
+		if (is.null(xout)) {
+			xout <- 1:nl
+		} else if (length(xout)!= nl) {
+			stop('length of values returned by getZ(x) does not match the number of layers of x')
+		}
+	} else {
+		if (length(z)!= nl) {
+			stop('length of z does not match the number of layers of x')
+		}
+		xout <- z		
 	}
 	
 	ifelse((missing(yleft) & missing(yright)), ylr <- 0L, ifelse(missing(yleft), ylr <- 1L, ifelse(missing(yright), ylr <- 2L, ylr <- 3L)))
