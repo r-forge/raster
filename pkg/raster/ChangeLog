@@ -1,3 +1,6 @@
+--- 6-December-2011, version 1.9-53
+improvements to merge (Raster,Raster) function and merge docs.
+
 --- 2-December-2011, version 1.9-52
 writeValues methods now only available with a vector (RasterLayer) or matrix (RasterStack) argument. To avoid perhaps unexpected coercion (column-wise coercion to vector); problem pointed out by Kristina Helle.
 new argument 'snap' in alignExtent and crop (suggested by Matteo Mattiuzzi)

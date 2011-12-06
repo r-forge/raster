@@ -21,6 +21,9 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	if (length(x) < 2) {
 		stop('merge needs at least 2 Raster* objects')
 	}
+
+	compare(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
+
 	filename <- trim(filename)
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
@@ -28,9 +31,6 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	if (missing(datatype)) { datatype <- .commonDataType(sapply(x, dataType)) } 
 
 	nl <- max(unique(sapply(x, nlayers)))
-
-	compare(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
-
 	bb <- unionExtent(x)
 	if (nl > 1) {
 		out <- brick(x[[1]], values=FALSE, nl=nl)
