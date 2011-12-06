@@ -4,7 +4,6 @@
 
 \alias{merge}
 \alias{merge,Raster,Raster-method}
-\alias{merge,list,missing-method}
 
 \title{ 
 Merge
