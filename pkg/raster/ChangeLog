@@ -1,5 +1,6 @@
---- 6-December-2011, version 1.9-53
+--- 8-December-2011, version 1.9-54
 improvements to merge (Raster,Raster) function and merge docs.
+bug with progressbar fixed in terrain (reported by Pascal Fust)
 
 --- 2-December-2011, version 1.9-52
 writeValues methods now only available with a vector (RasterLayer) or matrix (RasterStack) argument. To avoid perhaps unexpected coercion (column-wise coercion to vector); problem pointed out by Kristina Helle.
