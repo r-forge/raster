@@ -6,7 +6,7 @@
 \alias{*,SpatialPolygons,SpatialPolygons-method}
 \alias{^,SpatialPolygons,SpatialPolygons-method}
 
-\title{Algebra (notation) for overlaying SpatialPolygons* }
+\title{Algebra (notation) for manipulating SpatialPolygons* }
 
 \description{
 These funcitons are experimental. Under development!
@@ -40,7 +40,7 @@ Comparison of terminology for polygon overlay methods used in ArcGIS and in this
  
 To do: identity/update 
 
-For spatialjoin and other spatial queries, see sp functions 'over' and 'overlay' (or raster function extract when using Raster objects)
+For spatial-join and other spatial queries, see sp functions 'over' and 'overlay' (or raster function extract when using Raster objects)
 }
 
 
