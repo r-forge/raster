@@ -39,7 +39,6 @@ The \code{\link{merge,SpatialPolygons,SpatialPolygons-method}} for appending and
 
 The \code{\link{merge,Raster,Raster-method}} for merging Raster objects
 
-And \code{\link{+,SpatialPolygons,SpatialPolygons-method}} for an algebraic notation
 }
 
 
