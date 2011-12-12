@@ -1,3 +1,6 @@
+--- 13-December-2011, version 1.9-56
+functions min, max, mean (with a RasterStackBrick object) ignored the na.rm argument. Bug reported by Maximilian Reinwand
+ 
 --- 12-December-2011, version 1.9-55
 bug fix aggregate with multi-layer objects, reported by Colin Rundel.
 improvements to merge (Raster,Raster) function and merge docs.
