@@ -76,10 +76,10 @@ function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean,
 		
 	} else {
 	
-		for (i in 1:tr$n) {
-			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
+		for (j in 1:tr$n) {
+			v <- getValues(x, row=tr$row[j], nrows=tr$nrows[j])
 			i <- rowSums(is.na(v))
-			i <- i < nl & i > 1 # need at least two
+			i <- (i < nl) & (i > 1) # need at least two
 			if (length(i) > 0 ) {
 				if (ylr==1) {
 					v[i,] <- t( apply(v[i,], 1, function(x) approx(x=xout, y=x, xout=xout, method=method, yright=yright, rule=rule, f=f, ties=ties)$y ) )
@@ -89,7 +89,7 @@ function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean,
 					v[i,] <- t( apply(v[i,], 1, function(x) approx(x=xout, y=x, xout=xout, method=method, yright=yright, yleft=yleft, rule=rule, f=f, ties=ties)$y ) )
 				}
 			}
-			out <- writeValues(out, v, tr$row[i])
+			out <- writeValues(out, v, tr$row[j])
 			pbStep(pb)
 		}
 	}
