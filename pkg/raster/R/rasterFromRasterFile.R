@@ -5,12 +5,12 @@
 
 
 .rasterFromRasterFile <- function(filename, band=1, type='RasterLayer') {
-	valuesfile <- .setFileExtensionValues(filename, "raster")
+	valuesfile <- raster:::.setFileExtensionValues(filename, "raster")
 	if (!file.exists( valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
 	}	
 	
-	filename <- .setFileExtensionHeader(filename, "raster")
+	filename <- raster:::.setFileExtensionHeader(filename, "raster")
 	
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
@@ -103,7 +103,10 @@
 			lnames <- rep( gsub(" ", "_", extension(basename(filename), "")), nbands)
 		}
 	} else {
-		lnames <- paste( gsub(" ", "_", extension(basename(filename), "")), 1:nbands, sep='_')
+		lnames <- gsub(" ", "_", extension(basename(filename), ""))
+		if (nbands < 0) {
+			lnames <- paste(lnames , 1:nbands, sep='_')
+		}
 	}
 	if (type == 'RasterBrick') {
 		layerNames(x) <- lnames
