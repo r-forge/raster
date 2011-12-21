@@ -1,3 +1,10 @@
+--- 21-December-2011, version 1.9-57
+new method 'select' to visually select parts of SpatialPolygons, SpatialPixels, SpatialGrid objects.
+new methods for 'click' to visually do a spatial query with SpatialPolygons, SpatialPixels, SpatialGrid objects.
+new method 'disaggregate' for SpatialPolygons and SpatialLines objects
+approxNA failed for large objects, reported and fixes suggested by Stefan Schlaffer
+Bug fixes in extract with RasterBrick (thanks to reports by Colin Rundel and Laurent Fernandez Soldevila)
+
 --- 13-December-2011, version 1.9-56
 functions min, max, mean (with a RasterStackBrick object) ignored the na.rm argument. Bug reported by Maximilian Reinwand
 bug occurred when creating a RasterStack from a named list of Raster objects. Reported by Laurent Fernandez  
