@@ -42,14 +42,16 @@
 				
 			}  else {
 				result <-  .readCells(x, cells, lyrs) 
-				if (is.null(dim(result))) # single layer of brick returns vector
-										# perhaps should be fixed in readCells
+				if (is.null(dim(result))) { 
+						# single layer of brick returns vector
+						# perhaps should be fixed in readCells
 					result <- as.matrix(result, ncol=1)
 					colnames(result) <- layerNames(x)[lyrs]
 				}
 				return(result)
- 			}
+			}
 		}
-	}	
-}
+	}
+}	
+
 
