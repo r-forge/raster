@@ -67,7 +67,7 @@ function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean,
 		i <- (i < nl) & (i > 1) # need at least two
 		if (length(i) > 0 ) {
 			if (ylr==0) {
-				v[i,] <- t( apply(v[i,], 1, function(x) approx(x=xout, y=x, method=method, rule=rule, f=f, ties=ties)$y ) )
+				v[i,] <- t( apply(v[i,], 1, function(x) approx(x=xout, y=x, xout=xout, method=method, rule=rule, f=f, ties=ties)$y ) )
 			} else if (ylr==1) {
 				v[i,] <- t( apply(v[i,], 1, function(x) approx(x=xout, y=x, xout=xout, method=method, yright=yright, rule=rule, f=f, ties=ties)$y ) )
 			} else if (ylr==2) {
