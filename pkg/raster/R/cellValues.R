@@ -36,15 +36,20 @@
 					return(cells)
 				}
 				return( x@data@values[cells, lyrs] )
-			} 
-		
-			if (x@file@driver == 'netcdf') {
+				
+			} else if (x@file@driver == 'netcdf') {
 				return( .readBrickCellsNetCDF(x, cells, layer, nl) )
-			} 
-
-			return( .readCells(x, cells, lyrs) )
+				
+			}  else {
+				result <-  .readCells(x, cells, lyrs) 
+				if (is.null(dim(result))) # single layer of brick returns vector
+										# perhaps should be fixed in readCells
+					result <- as.matrix(result, ncol=1)
+					colnames(result) <- layerNames(x)[lyrs]
+				}
+				return(result)
+ 			}
 		}
-		
 	}	
 }
 
