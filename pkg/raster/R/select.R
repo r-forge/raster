@@ -26,7 +26,7 @@ setMethod('select', signature(x='SpatialPolygons'),
 		if (any(int)) {
 			x <- x[int, ]
 			if (draw) {
-				plot(x, add=TRUE, border=col, lwd=size)
+				sp::plot(x, add=TRUE, border=col, lwd=size)
 			}
 		} else {
 			x <- NULL
@@ -53,7 +53,7 @@ setMethod('select', signature(x='SpatialLines'),
 		if (any(int)) {
 			x <- x[int, ]
 			if (draw) {
-				plot(x, add=TRUE, col=col, lwd=size)
+				sp::plot(x, add=TRUE, col=col, lwd=size)
 			}
 		} else {
 			x <- NULL

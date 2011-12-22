@@ -48,6 +48,10 @@ A full call is:
 }
 
 
+\value{
+Spatial* object (invisibly)
+}
+
 \author{
 Robert J. Hijmans
 }
