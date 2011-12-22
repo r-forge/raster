@@ -25,7 +25,7 @@ zoom(x, ...)
 \item{maxpixels}{Maximum number of pixels used for the map}
 \item{layer}{Positive integer to select the layer to be used if x is a mutilayer Raster object}
 \item{new}{Logical. If \code{TRUE}, the zoomed in map will appear on a new device (window)}
-\item{useRaster}{Logical. If \code{TRUE},  if TRUE a bitmap raster is used to plot the image instead of polygons}
+\item{useRaster}{Logical. If \code{TRUE}, a bitmap raster is used to plot the image instead of polygons}
 \item{...}{additional paramters for \code{\link[graphics]{plot}}}
 }
 
@@ -37,5 +37,5 @@ Extent object (invisibly)
 
 \seealso{ \code{\link[raster]{drawExtent}}, \code{\link[raster]{plot}}}
 
-\keyword{ spatial }
+\keyword{spatial}
 
