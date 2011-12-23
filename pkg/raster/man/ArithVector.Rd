@@ -31,31 +31,26 @@ Comparison of terminology for polygon overlay methods used in ArcGIS and in this
 
 \tabular{rll}{
   \tab \bold{ArcGIS}    \tab  \bold{raster} \cr
-  \tab append    \tab  merge(x, y, ..., intersect=FALSE) \cr
-  \tab union     \tab  merge or "+" \cr
-  \tab intersect \tab  crop or "*" \cr
-  \tab erase     \tab  "-" \cr
-  \tab symdif    \tab  "^" (to be done) \cr
-  \tab identity/update  \tab  to be done \cr
+  \tab Erase     \tab  "-" \cr
+  \tab Identity  \tab  update(x, y, ..., instersect=TRUE) \cr
+  \tab Intersect (join attributes) \tab  intersect \cr
+  \tab Spatial Join \tab  "^" (to be done) \cr  
+  \tab Symmetrical Difference \tab  "^" (to be done) \cr
+  \tab Union     \tab  merge or "+" \cr
+  \tab Update    \tab  update \cr
 }
 
 
 For spatial-join and other spatial queries, see sp functions 'over' and 'overlay' (or raster function extract when using Raster objects)
 
-
-Aggregating and disaggregating polygons
+Other functions for manipulating vector type data
 
 \tabular{rll}{
   \tab \bold{ArcGIS}    \tab  \bold{raster} \cr
+  \tab append    \tab  merge(x, y, ..., intersect=FALSE) \cr
   \tab dissolve  \tab  aggregate  \cr
   \tab explode   \tab  disaggregate  \cr
-}
-
-
-Querying and subsetting data by clicking on a map
-
-\tabular{rll}{
-  \tab \bold{ArcGIS}    \tab  \bold{raster} \cr
+  \tab clip      \tab  crop or "*" \cr
   \tab select    \tab  select \cr
   \tab "i"       \tab  click \cr
 }

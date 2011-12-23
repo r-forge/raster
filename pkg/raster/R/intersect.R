@@ -73,7 +73,7 @@ function(x, y) {
 		}
 
 		rownames(dat) <- 1:nrow(dat)
-		int <- SpatialPolygonsDataFrame(int, d)
+		int <- SpatialPolygonsDataFrame(int, dat)
 		
 	}
 		#aggregate(res, v=colnames(res@data))
