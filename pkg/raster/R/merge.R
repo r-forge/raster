@@ -14,6 +14,12 @@ if (!isGeneric("merge")) {
 }	
 
 
+setMethod('merge', signature(x='Extent', y='Extent'), 
+function(x, y, ...) { 
+	unionExtent(x, y, ...)
+} )
+
+
 setMethod('merge', signature(x='Raster', y='Raster'), 
 function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, progress, overlap=TRUE, ext=NULL) { 
 	x <- c(x, y, list(...))

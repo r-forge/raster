@@ -31,9 +31,8 @@ function(x, y, by=intersect(names(x), names(y)), by.x=by, by.y=by, all.x=TRUE, s
 )
 
 
-
 setMethod('merge', signature(x='SpatialPolygons', y='SpatialPolygons'), 
-function(x, y, ..., intersect=TRUE, crop=FALSE) {
+function(x, y, ..., intersect=TRUE) {
 
 	require(rgeos)
 
@@ -65,83 +64,31 @@ function(x, y, ..., intersect=TRUE, crop=FALSE) {
 		y <- spChFIDs(y, as.character(1:length(row.names(y))))
 
 		
-		dat <- daty <- datx <- NULL
+		dat <- NULL
 		xdata <- .hasSlot(x, 'data')
 		ydata <- .hasSlot(y, 'data')
-		if (xdata & ydata) {
-			xdata <- ydata <- TRUE
-			nms <- .goodNames(c(colnames(x@data), colnames(y@data)))
-			colnames(x@data) <- nms[1:ncol(x@data)]
-			colnames(y@data) <- nms[(ncol(x@data)+1):length(nms)]
-			dat <- cbind(x@data[NULL, ,drop=FALSE], y@data[NULL, ,drop=FALSE])
-		} else if (xdata) {
-			dat <- x@data[NULL, ,drop=FALSE]
-		} else if (ydata) {
-			dat <- y@data[NULL, ,drop=FALSE]
-		}
 
 		res <- NULL
 		yd <- aggregate(y)
 		dif1 <- gDifference(x, yd, byid=TRUE)
-		if (!is.null(dif1)) {
-			res <- dif1@polygons
-			if (xdata) {
-				ids <- as.numeric(sapply(row.names(dif1), function(x) strsplit(x, ' ')[[1]][1]))
-				dat[1:length(ids), colnames(x@data)] <- x@data[ids,]
-			} else if (ydata) {
-				dat[1:length(dif1@polygons),] <- NA
-			}
+		if (!is.null(dif1) & xdata) {
+			ids <- as.numeric(sapply(row.names(dif1), function(x) strsplit(x, ' ')[[1]][1]))
+			dif1 <- SpatialPolygonsDataFrame(dif1, x@data[ids,])
 		}
 
 		xd <- aggregate(x)
 		dif2 <- gDifference(y, xd, byid=TRUE)
-		if (!is.null(dif2)) {
-			res <- c(res, dif2@polygons)
+		if (!is.null(dif2) & ydata) {
 			ids <- sapply(row.names(dif2), function(x) strsplit(x, ' ')[[1]][1])
-			if (ydata) {
-				#ids <- match(ids, rownames(y@data))
-				dat[(nrow(dat)+1):(nrow(dat)+length(ids)), colnames(y@data)] <- y@data[ids, ]
-			} else if (xdata) {
-				dat[(nrow(dat)+1):(nrow(dat)+length(ids)),] <- NA
-			}
+			dif2 <- SpatialPolygonsDataFrame(dif2, y@data[ids,])
 		}
 
-		subsx <- apply(subs, 2, any)
-		subsy <- apply(subs, 1, any)
-		
-		if (sum(subsx) > 0 ) {
-			int  <- gIntersection(x[subsx,], y[subsy,], byid=TRUE)
-			if (inherits(int, "SpatialCollections")) {
-				int <- int@polyobj
-			}
-			if (inherits(int, 'SpatialPolygons')) {
-				res <- c(res, int@polygons)
-				ids <- do.call(rbind, strsplit(row.names(int), ' '))
-
-				d <- NULL
-				rows <- (nrow(dat)+1):(nrow(dat)+length(ids[,1]))
-				if (xdata) {
-					idsx <- match(ids[,1], rownames(x@data))
-					d <- x@data[idsx, ,drop=FALSE]
-					if (ydata) {
-						idsy <- match(ids[,2], rownames(y@data))
-						d <- cbind(d, y@data[idsy, ,drop=FALSE])
-					}
-				} else if (ydata) {
-					idsy <- match(ids[,2], rownames(y@data))
-					d <- y@data[idsy, ,drop=FALSE]
-				}
-				dat <- rbind(dat, d)
-			}
+		int <- intersect(x[subsx,], y[subsy,])
+		if (!is.null(dif1) | !is.null(dif2)) {
+			x <- .appendPolygons(dif1, int, dif2, ...) 
+		} else {
+			x <- int
 		}
-		res <- SpatialPolygons(lapply(1:length(res), function(y) Polygons(res[[y]]@Polygons, y)))
-		if (!is.null(dat)) {
-			rownames(dat) <- 1:nrow(dat)
-			res <- SpatialPolygonsDataFrame(res, dat)
-		}
-		res@proj4string <- x@proj4string
-		#aggregate(res, v=colnames(res@data))
-		x <- res
 	}
 	x	
 }

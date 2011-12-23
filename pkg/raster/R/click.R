@@ -15,8 +15,9 @@ setMethod('click', signature(x='missing'),
 		cbind(x=loc$x, y=loc$y)
 	}
 )
+
 	
-setMethod('click', signature(x='SpatialPolygons'), 
+setMethod('click', signature(x='Spatial'), # Polygons and Lines
 	function(x, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 		loc <- locator(n, type, ...)
 		xyCoords <- cbind(x=loc$x, y=loc$y)
@@ -35,6 +36,20 @@ setMethod('click', signature(x='SpatialPolygons'),
 	}
 )
 
+
+setMethod('click', signature(x='SpatialPoints'), 
+	function(x, ...) {
+		e <- as(drawExtent(), 'SpatialPolygons')
+		e@proj4string <- x@proj4string
+		i <- which(!is.na(over(x, e)))
+		if (length(i) > 0) {
+			x <- x@data[i,]
+		} else {
+			x <- NULL
+		}
+		x
+	}
+)
 
 
 setMethod('click', signature(x='SpatialGrid'), 

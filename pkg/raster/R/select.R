@@ -65,7 +65,6 @@ setMethod('select', signature(x='SpatialLines'),
 
 setMethod('select', signature(x='SpatialPoints'), 
 	function(x, use='rec', draw=TRUE, col='cyan', size=2, ...) {
-		require(rgeos)
 		use <- substr(tolower(use),1, 3)
 		stopifnot(use %in% c('rec', 'pol'))
 		if (use == 'rec') {
