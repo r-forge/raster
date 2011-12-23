@@ -1,6 +1,5 @@
-# R function for the raster package
 # Author: Robert J. Hijmans
-# Date : January 2009
+# Date : January 2009 - December 2011
 # Version 1.0
 # Licence GPL v3
 
@@ -25,7 +24,7 @@ setMethod('click', signature(x='SpatialPolygons'),
 			text(xyCoords, labels=1:n)
 		}
 	
-		res <- overlay(object, SpatialPoints(xyCoords))
+		res <- overlay(x, SpatialPoints(xyCoords))
 		if (xy) {
 			res <- cbind(xyCoords, res)
 		}
@@ -62,18 +61,18 @@ setMethod('click', signature(x='Raster'),
 		text(xyCoords, labels=1:n)
 	}
 	
-	cells <- cellFromXY(object, xyCoords)
+	cells <- cellFromXY(x, xyCoords)
 	cells <- unique(na.omit(cells))
 	if (length(cells) == 0 ) { stop('no valid cells selected') }
-	xyCoords <- xyFromCell(object, cells)
+	xyCoords <- xyFromCell(x, cells)
 	colnames(xyCoords) <- c('x', 'y')
 	n <- nrow(xyCoords)
 
-	value <- .cellValues(object, cells)
+	value <- .cellValues(x, cells)
 
-	if (nlayers(object) == 1)  {
+	if (nlayers(x) == 1)  {
 		value <- matrix(value)
-		colnames(value) <- layerNames(object)
+		colnames(value) <- layerNames(x)
 	}
 	
 	if (cell) {
