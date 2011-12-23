@@ -31,8 +31,9 @@ function(x, y, by=intersect(names(x), names(y)), by.x=by, by.y=by, all.x=TRUE, s
 )
 
 
+
 setMethod('merge', signature(x='SpatialPolygons', y='SpatialPolygons'), 
-function(x, y, ..., intersect=TRUE) {
+function(x, y, ..., intersect=TRUE, crop=FALSE) {
 
 	require(rgeos)
 
@@ -65,27 +66,18 @@ function(x, y, ..., intersect=TRUE) {
 
 		
 		dat <- daty <- datx <- NULL
-		xdata <- ydata <- FALSE
-		if (.hasSlot(x, 'data')) {
-			xdata <- TRUE
-			datx <- dat <- x@data[NULL, ,drop=FALSE]
-		} 
-		if (.hasSlot(y, 'data')) {
-			ydata <- TRUE
-			daty <- y@data[NULL, ,drop=FALSE]
-			if (is.null(dat)) {
-				dat <- daty
-			} else {
-				ynotx <- which(! colnames(daty) %in% colnames(dat))
-				if (length(ynotx) > 0) {
-					daty <- daty[, ynotx, drop=FALSE]
-					dat <- cbind(dat, daty)
-				}
-				xnoty <- which(! colnames(x@data) %in% colnames(y@data))
-				if (length(xnoty) > 0) {
-					datx <- dat[, xnoty]
-				}
-			}
+		xdata <- .hasSlot(x, 'data')
+		ydata <- .hasSlot(y, 'data')
+		if (xdata & ydata) {
+			xdata <- ydata <- TRUE
+			nms <- .goodNames(c(colnames(x@data), colnames(y@data)))
+			colnames(x@data) <- nms[1:ncol(x@data)]
+			colnames(y@data) <- nms[(ncol(x@data)+1):length(nms)]
+			dat <- cbind(x@data[NULL, ,drop=FALSE], y@data[NULL, ,drop=FALSE])
+		} else if (xdata) {
+			dat <- x@data[NULL, ,drop=FALSE]
+		} else if (ydata) {
+			dat <- y@data[NULL, ,drop=FALSE]
 		}
 
 		res <- NULL
@@ -95,8 +87,7 @@ function(x, y, ..., intersect=TRUE) {
 			res <- dif1@polygons
 			if (xdata) {
 				ids <- as.numeric(sapply(row.names(dif1), function(x) strsplit(x, ' ')[[1]][1]))
-				#ids <- match(ids, rownames(x@data))
-				dat[1:length(ids), colnames(datx)] <- x@data[ids,]
+				dat[1:length(ids), colnames(x@data)] <- x@data[ids,]
 			} else if (ydata) {
 				dat[1:length(dif1@polygons),] <- NA
 			}
@@ -109,7 +100,7 @@ function(x, y, ..., intersect=TRUE) {
 			ids <- sapply(row.names(dif2), function(x) strsplit(x, ' ')[[1]][1])
 			if (ydata) {
 				#ids <- match(ids, rownames(y@data))
-				dat <- rbind(dat, y@data[ids, ,drop=FALSE])
+				dat[(nrow(dat)+1):(nrow(dat)+length(ids)), colnames(y@data)] <- y@data[ids, ]
 			} else if (xdata) {
 				dat[(nrow(dat)+1):(nrow(dat)+length(ids)),] <- NA
 			}

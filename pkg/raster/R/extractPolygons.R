@@ -48,7 +48,7 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	
 	if (spbb[1,1] >= rsbb[1,2] | spbb[1,2] <= rsbb[1,1] | spbb[2,1] >= rsbb[2,2] | spbb[2,2] <= rsbb[2,1]) {
 		if (df) {
-			res <- matrix(ncol=1, nrow=0)
+			res <- data.frame(matrix(ncol=1, nrow=0))
 			colnames(res) <- 'ID'
 			return(res)
 		}
@@ -247,7 +247,7 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	
 	if (df) {
 		if (!is.list(res)) {
-			res <- cbind(ID=1:NROW(res), res)
+			res <- data.frame(cbind(ID=1:NROW(res), res))
 		} else {
 			res <- data.frame( do.call(rbind, lapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(ID=x, res[[x]]))) )
 		}
