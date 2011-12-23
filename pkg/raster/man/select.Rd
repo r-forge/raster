@@ -44,7 +44,7 @@ A full call is:
 }
 
 \seealso{
-\code{\link{crop}}
+\code{\link{click}, \link{crop}}
 }
 
 
