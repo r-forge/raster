@@ -2,8 +2,6 @@
 \alias{click}
 
 \alias{click,Raster-method}
-\alias{click,Spatial-method}
-\alias{click,SpatialPoints-method}
 \alias{click,SpatialGrid-method}
 \alias{click,SpatialPixels-method}
 \alias{click,missing-method}
@@ -12,16 +10,13 @@
 \title{ Click on a map}
 
 \description{
-Click on a map (plot) to get values of a Raster* or Spatial* object at that location; and optionally the coordinates and cell number of the location. 
-For SpatialPoints* objects, you need to click twice (draw a rectangle).
+Click on a map (plot) to get values of a Raster* or SpatialGrid or SpatialPixels object at that location; and optionally the coordinates and cell number of the location. 
 }
 
 \usage{
 \S4method{click}{Raster}(x, n=1, id=FALSE, xy=FALSE, cell=FALSE, type = "n", ...)
 
-\S4method{click}{Spatial}(x, n=1, id=FALSE, xy=FALSE, type = "n", ...)
-
-\S4method{click}{SpatialPoints}(x, ...)
+\S4method{click}{SpatialGrid}(x, n=1, id=FALSE, xy=FALSE, type = "n", ...)
 }
 
 
@@ -40,13 +35,9 @@ The value(s) of \code{object} at the point(s) clicked on; and the coordinates of
 } 
 
 \note{
-  The plot only provides the coordinates (xy pair), the values are read from the Raster* object that is passed as an argument.
-  Thus you can extract values for a Raster* object that is not plotted, as long as it shares the coordinate system (CRS) 
-  with the layer that is plotted.
+The plot only provides the coordinates (xy pair), the values are read from the Raster* object that is passed as an argument. Thus you can extract values for a Raster* object that is not plotted, as long as it shares the coordinate system (CRS) with the layer that is plotted.
   
-  Unless the process is terminated prematurely values at at most \code{n} positions are determined. 
-  The identification process can be terminated by clicking the second mouse button and selecting 'Stop' from the menu,
-  or from the 'Stop' menu on the graphics window. 
+Unless the process is terminated prematurely values at at most \code{n} positions are determined. The identification process can be terminated by clicking the second mouse button and selecting 'Stop' from the menu, or from the 'Stop' menu on the graphics window. 
 }
 
 

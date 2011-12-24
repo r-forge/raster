@@ -12,17 +12,10 @@ Merge
 
 \description{
 Merge Raster* objects to form a new Raster object with a larger spatial extent. If objects overlap, the values get priority in the same order as the arguments, but \code{NA} values are ignored (except when \code{overlap=FALSE})
-
-You can also merge two Extent objects, but not a Raster object with an Extent object (see \code{\link{crop}} and \code{\link{expand}} for that.
-
-See the \code{\link{merge,Spatial,data.frame-method}} for merging a data.frame with attributes of Spatial objects and the \code{\link{merge,SpatialPolygons,SpatialPolygons-method}} for appending and perhaps spatially intersecting polygons.
 }
 
 \usage{
 \S4method{merge}{Raster,Raster}(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, progress, overlap=TRUE, ext=NULL)
-
-\S4method{merge}{Extent,Extent}(x, y, ...)
-
 }
 
 \arguments{
@@ -49,11 +42,6 @@ RasterLayer or RasterBrick
 
 \author{Robert J. Hijmans}
 
-\seealso{
-The \code{\link{merge,Spatial,data.frame-method}} for merging a data.frame with attributes of Spatial objects
-
-The \code{\link{merge,SpatialPolygons,SpatialPolygons-method}} for appending and perhaps spatially intersecting polygons
-}
 
 \examples{
 r1 <- raster(xmx=-150, ymn=60, ncols=30, nrows=30)

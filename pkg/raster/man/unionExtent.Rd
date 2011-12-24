@@ -26,10 +26,9 @@ a Extent object
 \seealso{  \code{\link[raster]{intersectExtent}}, \code{\link[raster]{extent}},  \code{\link[raster]{setExtent}}} 
 
 \examples{
-r <- raster()
-b1 <- extent(-10, 10, -20, 20)
-b2 <- extent(0, 20, -40, 5)
-u <- unionExtent(b1, b2)
+e1 <- extent(-10, 10, -20, 20)
+e2 <- extent(0, 20, -40, 5)
+unionExtent(e1, e2)
 }
 
 \keyword{spatial}

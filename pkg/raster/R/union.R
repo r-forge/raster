@@ -9,7 +9,7 @@ if (!isGeneric("union")) {
 }	
 
 setMethod('union', signature(x='Extent', y='Extent'), 
-function(x, y, ...) { 
-	unionExtent(x, y, ...)
+function(x, y) { 
+	unionExtent(x, y)
 } )
 

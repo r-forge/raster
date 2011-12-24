@@ -9,7 +9,10 @@ Intersect Extent
 }
 
 \description{
-Intersect two Extent objects. O
+Intersect two Extent objects. Returns the intersection, i.e. the area of overlap of two Extent objects.
+
+
+Use \code{\link{crop}} if you want to intersect a Spatial* object with an Extent object.
 }
 
 \usage{
@@ -21,10 +24,6 @@ Intersect two Extent objects. O
   \item{y}{Extent}
 } 
 
-\note{
-use \code{\link{crop}} if you want to intersect a Spatial* object with an Extent object.
-}
-
 \value{
 Extent
 }
@@ -32,7 +31,13 @@ Extent
 \author{Robert J. Hijmans}
 
 \seealso{
-\code{\link{unionExtent}, \link{intersectExtent}}}
+\code{\link{unionExtent}, \link{intersectExtent}, \link[raster]{extent}}
+}
+
+\examples{
+e1 <- extent(-10, 10, -20, 20)
+e2 <- extent(0, 20, -40, 5)
+intersect(e1, e2)
 }
 
 

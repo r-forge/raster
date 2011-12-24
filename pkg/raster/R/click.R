@@ -17,41 +17,6 @@ setMethod('click', signature(x='missing'),
 )
 
 	
-setMethod('click', signature(x='Spatial'), # Polygons and Lines
-	function(x, n=1, id=FALSE, xy=FALSE, type="n", ...) {
-		loc <- locator(n, type, ...)
-		xyCoords <- cbind(x=loc$x, y=loc$y)
-		if (id) {
-			text(xyCoords, labels=1:n)
-		}
-	
-		res <- overlay(x, SpatialPoints(xyCoords))
-		if (xy) {
-			res <- cbind(xyCoords, res)
-		}
-		if (is.matrix(res)) {
-			rownames(res) <- 1:n
-		}
-		return(res)
-	}
-)
-
-
-setMethod('click', signature(x='SpatialPoints'), 
-	function(x, ...) {
-		e <- as(drawExtent(), 'SpatialPolygons')
-		e@proj4string <- x@proj4string
-		i <- which(!is.na(over(x, e)))
-		if (length(i) > 0) {
-			x <- x@data[i,]
-		} else {
-			x <- NULL
-		}
-		x
-	}
-)
-
-
 setMethod('click', signature(x='SpatialGrid'), 
 	function(x, n=1, id=FALSE, xy=FALSE, type="n", ...) {
 		x <- brick(x)
