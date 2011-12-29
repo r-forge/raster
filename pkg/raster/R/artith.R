@@ -13,8 +13,14 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 		nl2 <- nlayers(e2)
 		nl <- max(nl1, nl2)
 
+		proj1 <- projection(e1)
+		proj2 <- projection(e2)
+		if (!.compareCRS(proj1, proj2)) {
+			warning('objects have different CRS')
+		}
+	
 		if ( ! compare(e1, e2, stopiffalse=FALSE) ) {
-			if ( compare(e1, e2, extent=FALSE, rowcol=FALSE, prj=TRUE, res=TRUE, orig=TRUE, stopiffalse=TRUE) ) {
+			if ( compare(e1, e2, extent=FALSE, rowcol=FALSE, prj=FALSE, res=TRUE, orig=TRUE, stopiffalse=TRUE) ) {
 				ie <- intersectExtent(extent(e1), extent(e2), validate=FALSE)
 				if (is.null(ie)) {
 					stop('Layers have non-overlapping extents')
