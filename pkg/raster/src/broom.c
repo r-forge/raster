@@ -14,15 +14,13 @@ This is an implementation of J. Ronald Eastman's pushbroom algorithm
 #define min( a, b ) ( ((a) < (b)) ? (a) : (b) )
 
 
-SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
+SEXP broom(SEXP d, SEXP f, SEXP dm, SEXP dist, SEXP dw) {
 
-	R_len_t i, r;
+	R_len_t i, j, r;
     SEXP dis;
 	int n, nr, nc, down;
-	double *xd, *xdis;
+	double *xd, *xdis, *xf;
 	double dx, dy, dxy;
-	
-	PROTECT(d = coerceVector(d, REALSXP));
 	
 	dx = REAL(dist)[0];
 	dy = REAL(dist)[1];
@@ -33,7 +31,11 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 	n = nr * nc;
 //	Rprintf ("n = %i \n", n);
 
+	PROTECT(d = coerceVector(d, REALSXP));
+	PROTECT(f = coerceVector(f, REALSXP));
+
 	xd = REAL(d);
+	xf = REAL(f);
 
 	PROTECT( dis = allocVector(REALSXP, n) );
 	xdis = REAL(dis);
@@ -44,14 +46,18 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 
 	if (down) {	
 		//left to right
-		//r = 0; first row, no row above it
+		//r = 0; first row, no row above it, use 'f'
+		
 		//i = 0; first cell, no cell left of it
-		if ( R_FINITE(xd[0])) {
+		if ( !R_FINITE(xd[0])) {
+			xdis[0] = xf[0] + dy;
+		} else {
 			xdis[0] = 0;
 		}
+		// other cells
 		for (i=1; i<nc; i++) {
 			if (! R_FINITE(xd[i])) {
-				xdis[i] = xdis[i-1] + dx;
+				xdis[i] = min(min(xf[i] + dy, xf[i-1] + dxy), xdis[i-1] + dx);
 			} else {
 				xdis[i] = 0;
 			}
@@ -59,10 +65,12 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 		//other rows	
 		for (r=1; r<nr; r++) {
 			i=r*nc;
-			if (R_FINITE(xd[i])) {
+			if (!R_FINITE(xd[i])) {
+				xdis[i] = xdis[i-nc] + dy;
+			} else {
 				xdis[i] = 0;
 			}
-			for (i=(r*nc+1); i<((r+1)*nc); i++) {
+			for (i=r*nc+1; i<((r+1)*nc); i++) {
 				if (! R_FINITE(xd[i])) {
 					xdis[i] = min(min(xdis[i-1] + dx, xdis[i-nc] + dy), xdis[i-nc-1] + dxy);
 				} else {
@@ -71,14 +79,18 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 			}
 		}
 
-		//right to left
+	//right to left
 		//first row
-		if ( R_FINITE(xd[nc-1]) ) {
+			//first cell
+		if ( !R_FINITE(xd[nc-1])) {
+			xdis[nc-1] = xf[nc-1] + dy;
+		} else {
 			xdis[nc-1] = 0;
 		}
+			// other cells
 		for (i=(nc-2); i >= 0; i--) {
 			if (! R_FINITE(xd[i])) {
-				xdis[i] = xdis[i+1] + dx;
+				xdis[i] = min(min(xf[i] + dy, xf[i+1] + dxy), xdis[i+1] + dx);
 			} else {
 				xdis[i] = 0;
 			}
@@ -99,18 +111,20 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 	} else { 
 	// bottom to top
 		// left to right
-
 		// first (last) row
 		r = nr-1;
 		// first cell
 		i = r*nc;
-		if ( R_FINITE(xd[i])) {
+		if (! R_FINITE(xd[i])) {
+			xdis[i] = xf[0] + dy;		
+		} else {
 			xdis[i] = 0;
 		}
 		// other cells
 		for (i=(r*nc+1); i<n; i++) {
 			if (! R_FINITE(xd[i])) {
-				xdis[i] = xdis[i-1] + dx;
+				j = i - r*nc;
+				xdis[i] = min(min(xf[j] + dy, xf[j-1] + dxy),  xdis[i-1] + dx);
 			} else {
 				xdis[i] = 0;
 			}
@@ -118,7 +132,9 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 		// other rows
 		for (r=nr-2; r >= 0; r--) {
 			i=r*nc;
-			if (R_FINITE(xd[i])) {
+			if (!R_FINITE(xd[i])) {
+				xdis[i] = xdis[i+nc] + dy;
+			}  else {
 				xdis[i] = 0;
 			}
 			for (i=(r*nc+1); i<((r+1)*nc); i++) {
@@ -133,14 +149,17 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 		// right to left
 		// first row
 		// first cell
-		if ( R_FINITE(xd[n-1])) {
+		if (! R_FINITE(xd[n-1])) {
+			xdis[n-1] = xf[nc-1] + dy;
+		} else {
 			xdis[n-1] = 0;
 		}
 		// other cells
 		r = nr-1;
 		for (i=n-2; i > r*nc; i--) {
 			if (! R_FINITE(xd[i])) {
-				xdis[i] = xdis[i-1] + dx;
+				j = i - r*nc;
+				xdis[i] = min(min(xf[j] + dx, xf[j+1] + dxy), xdis[i+1] + dx);
 			} else {
 				xdis[i] = 0;
 			}
@@ -158,7 +177,7 @@ SEXP broom(SEXP d, SEXP dm, SEXP dist, SEXP dw) {
 			}
 		}
 	}
-	UNPROTECT(2);
+	UNPROTECT(3);
 	return(dis);
 }
 
