@@ -153,7 +153,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	}	
 
 #	pbb <- projectExtent(to, projection(from))
-#	bb <- intersectExtent(pbb, from)
+#	bb <- intersect(extent(pbb), extent(from))
 #	validObject(bb)
 
 	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }

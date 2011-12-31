@@ -1,3 +1,8 @@
+--- 30-December-2011, version 1.9-59
+All the recent new functions that operate on vectors (polygons mostly) have been removed and placed in the new 'geovec' package.
+expand method implemented for Extent objects. Code provided by Etienne B. Racine
+Also implemented generic functions 'intersect' and 'union' for Extent objects (to replace intersectExtent and unionExtent)
+
 --- 21-December-2011, version 1.9-58
 new 'select' method to visually select parts of SpatialPolygons, SpatialPixels, SpatialGrid objects.
 new 'disaggregate' methods for SpatialPolygons and SpatialLines objects

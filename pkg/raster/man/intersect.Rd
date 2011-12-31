@@ -2,36 +2,38 @@
 
 \docType{methods}
 
-\alias{intersect,Extent,Extent-method}
+\alias{intersect,Extent-method}
+\alias{intersect,Raster-method}
 
 \title{ 
 Intersect Extent
 }
 
 \description{
-Intersect two Extent objects. Returns the intersection, i.e. the area of overlap of two Extent objects.
+Intersect two Extent objects. Returns the intersection, i.e. the area of overlap of two Extent objects. The second argument can also be any argument from which an Extent object can be extracted. 
 
-
-Use \code{\link{crop}} if you want to intersect a Spatial* object with an Extent object.
+If the first object is a Raster* object, this function is equivalent to \code{\link{crop}}. 
 }
 
 \usage{
-\S4method{intersect}{Extent,Extent}(x, y)
+\S4method{intersect}{Extent}(x, y)
+
+\S4method{intersect}{Raster}(x, y)
 }
 
 \arguments{
-  \item{x}{Extent}
-  \item{y}{Extent}
+  \item{x}{Extent or Raster* object}
+  \item{y}{Extent object, or any object from which an Extent can be extracted}
 } 
 
 \value{
-Extent
+Extent or Raster* object
 }
 
 \author{Robert J. Hijmans}
 
 \seealso{
-\code{\link{unionExtent}, \link{intersectExtent}, \link[raster]{extent}}
+\code{\link{union}, \link[raster]{extent}, \link{crop}}
 }
 
 \examples{

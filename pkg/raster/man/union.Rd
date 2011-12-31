@@ -10,7 +10,7 @@ Union Extent
 }
 
 \description{
-Union two Extent objects. See \code{\link{crop}} and \code{\link{expand}} to union a Raster object with an Extent object .
+Union of two Extent objects. See \code{\link{crop}} and \code{\link{expand}} to union a Raster object with an Extent object.
 
 }
 
@@ -30,7 +30,7 @@ Extent
 \author{Robert J. Hijmans}
 
 \seealso{
-\code{\link{unionExtent}, \link{intersectExtent}, \link[raster]{extent}, \link[raster]{setExtent}}
+\code{\link[raster]{intersect}, \link[raster]{extent}, \link[raster]{setExtent}}
 } 
 
 \examples{

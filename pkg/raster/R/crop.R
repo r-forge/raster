@@ -30,7 +30,7 @@ function(x, y, filename='', snap='near', ...) {
 	}
 
 # we could also allow the raster to expand but for now let's not and first make a separate expand function
-	e <- intersectExtent(x, y)
+	e <- intersect(extent(x), extent(y))
 	e <- alignExtent(e, x, snap=snap)
 	
 

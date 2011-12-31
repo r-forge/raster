@@ -16,25 +16,15 @@ setMethod("Math2", signature(x='Extent'),
 )
 
 
-roundExtent <- function(object, digits=0) {
-	digits <- max(0, digits)
-	b <- round(extent(object), digits)
-	if (class(object) == 'Extent') {
-		return(b)
-	}
-	extent(object) <- b
-	return(object)
-}
-
-nudgeExtent <- function(object){
-	b <- extent(object)
+nudgeExtent <- function(x){
+	b <- extent(x)
 	b@xmin <- floor(b@xmin)
 	b@ymin <- floor(b@ymin)
 	b@xmax <- ceiling(b@xmax)
 	b@ymax <- ceiling(b@ymax)
-	if (class(object) == 'Extent') {
+	if (class(x) == 'Extent') {
 		return(b)
 	}
-	extent(object) <- b
-	return(object)
+	extent(x) <- b
+	return(x)
 }

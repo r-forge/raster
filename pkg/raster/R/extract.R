@@ -90,7 +90,7 @@ function(x, y, ...){
 setMethod('extract', signature(x='Raster', y='Extent'), 
  	function(x, y, fun, na.rm=FALSE, lyrs, ...) {
 
-		e <- intersectExtent(x, y)
+		e <- intersect(extent(x), y)
 		e <- alignExtent(e, x)
 		
 		r <- res(x)
