@@ -11,7 +11,7 @@ function(x, y, fun, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, 
 	px <- projection(x, asText=FALSE)
 	comp <- .compareCRS(px, projection(y), unknown=TRUE)
 	if (!comp) {
-		if (! .requireRgdal() ) { stop('rgdal not available') }
+		.requireRgdal()
 		warning('Transforming SpatialPolygons to the CRS of the Raster')
 		y <- spTransform(y, px)
 	}
