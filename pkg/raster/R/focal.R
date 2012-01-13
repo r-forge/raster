@@ -39,13 +39,6 @@ if (!isGeneric("focal")) {
 setMethod('focal', signature(x='RasterLayer'), 
 function(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FALSE, ...) {
 
-
-
-x=b; w = 25; fun = mean; na.rm = TRUE; NAonly=F;  pad = TRUE; filename=''; padValue = NA
-
-
-
-
 	stopifnot(hasValues(x))
 	
 	# mistakes because of differences with old focal and old focalFilter
