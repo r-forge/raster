@@ -37,7 +37,7 @@ function(x, y, filename='', snap='near', ...) {
 	if (nlayers(x) <= 1) {
 		out <- raster(x)
 		leg <- x@legend
-	} else {
+	} else { 
 		out <- brick(x, values=FALSE)	
 		leg <- new('.RasterLegend')
 	}
@@ -62,6 +62,7 @@ function(x, y, filename='', snap='near', ...) {
 	
 	
 	if (canProcessInMemory(out, 3)) {
+		dataType(out) <- datatype
 		x <- getValuesBlock(x, row1, nrows=nr, col=col1, ncols=nc)
 		out <- setValues(out, x)
 		if (filename != "") { 
