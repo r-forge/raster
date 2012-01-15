@@ -11,7 +11,6 @@
 %\VignetteIndexEntry{Introduction to the raster package}
 
 \newcommand{\R}{{\normalfont\textsf{R }}{}}
-\newcommand{\R2}{{\normalfont\textsf{R}}{}}
 \newcommand{\NA}{{\normalfont\textsf{NA }}{}}
 
 \DeclareGraphicsExtensions{.png,.pdf,.jpg}
@@ -41,7 +40,7 @@ The \verb@raster@ package has functions for creating, reading, manipulating, and
 
 A notable feature of the \verb@raster@ package is that it can work with raster datasets that are stored on disk and are too large to be loaded into memory (RAM). The package can work with large files because the objects it creates from these files only contain information about the structure of the data, such as the number of rows and columns, the spatial extent, and the filename, but it does not attempt to read all the cell values in memory. In computations with these objects, data is processed in chunks. If no output filename is specified to a function, and the output raster is too large to keep in memory, the results are written to a temporary file. 
 
-To understand what is covered in this vignette, you must understand the basics of the \R language. There is a multitude of on-line and other resources that can help you to get acquainted with \R2. The \verb@raster@ package does not operate in isolation. For example, for vector type data it uses classes defined in the \verb@sp@ package. See the vignette and help pages of that package or Bivand {\it et al}. (2008). Bivand {\it et al}., provide an introduction to handling spatial data in \R2, and to statistically oriented spatial data analysis (such as inference from spatial data, point pattern analysis, and geostatistics). 
+To understand what is covered in this vignette, you must understand the basics of the \R language. There is a multitude of on-line and other resources that can help you to get acquainted with it. The \verb@raster@ package does not operate in isolation. For example, for vector type data it uses classes defined in the \verb@sp@ package. See the vignette and help pages of that package or Bivand {\it et al}. (2008). Bivand {\it et al}., provide an introduction to the use of \R for handling spatial data, and to statistically oriented spatial data analysis (such as inference from spatial data, point pattern analysis, and geostatistics). 
 
 In the next section, some general aspects of the design of the '\verb@raster@' package are discussed, notably the structure of the main classes, and what they represent. The use of the package is illustrated in subsequent sections. \verb@raster@ has a large number of functions, not all of them are discussed here, and those that are discussed are mentioned only briefly. See the help files of the package for more information on individual functions and {\bf help("raster-package")} for an index of functions by topic.
 
