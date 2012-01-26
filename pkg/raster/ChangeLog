@@ -1,5 +1,6 @@
---- 19-January-2012, version 1.9-65
+--- 25-January-2012, version 1.9-66
 Bug fix in terrain('slope') for lon/lat rasters that were processed on disk. Latitude of the first chunk of rows was used for all rows. Reported by Bart Kranstauber
+Bug fixed that occured when using getData and a root working like "c:\". Reported by Uwe Ligges. 
 
 --- 17-January-2012, version 1.9-64
 Bug fix in projectRaster for small rasters (< 50 rows or columns). Rported by Klaus Jacobi
