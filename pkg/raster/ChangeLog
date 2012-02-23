@@ -1,4 +1,5 @@
---- 11-February-2012, version 1.9-68
+--- 23-February-2012, version 1.9-69
+removed bug in calc (some functions produced an error) reported by Alfredo Alessandrini
 sampleRandom did not always return the randomly selected numbers in random order. Reported by Etienne Racine.
 cover did not check if input rasters were overlapping. This could lead to wrong results. Reported by Thiago Veloso
 
