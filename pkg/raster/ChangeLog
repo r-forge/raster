@@ -1,4 +1,7 @@
---- 23-February-2012, version 1.9-69
+--- 24-February-2012, version 1.9-69
+Removed function 'polygonFromExtent' (in favor of as(x, 'SpatialPolygons') )
+In 'compare', the name of argument 'prj' was changed to 'crs'
+Fixed bug in srtm download limits. Reported by Stefan Schlaffer
 Fixed bug that made init fail for large rasters. Reported by Oscar Perpiñan Lamigueiro.
 removed bug in calc (some functions produced an error) reported by Alfredo Alessandrini
 sampleRandom did not always return the randomly selected numbers in random order. Reported by Etienne Racine.
