@@ -78,7 +78,7 @@ r3 <- focal(r, w=matrix(1/9,nrow=3,ncol=3))
 # 5x5 mean filter
 r5 <- focal(r, w=matrix(1/25,nrow=5,ncol=5)) 
 
-# Gaussian filter
+# Gaussian filter for square cells
 fgauss <- function(sigma, n=5) {
 	m <- matrix(nc=n, nr=n)
 	col <- rep(1:n, n)
