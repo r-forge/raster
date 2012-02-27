@@ -5,13 +5,11 @@
 
 init <- function(x, fun, v, filename="", ...) {
 	if (missing(fun) & missing(v)) {
-		stop('provide either a function "fun" or an option "id"')
+		stop('provide either a function "fun" or an option "v"')
 	}
 	if (missing(fun)) {
 		v = tolower(v[1])
-		if (! v %in% c('x', 'y', 'row', 'col', 'cell')) {
-			stop('provide either a function "fun" or an option "id"')
-		}
+		stopifnot (v %in% c('x', 'y', 'row', 'col', 'cell'))
 	}
 
 	out <- raster(x)
@@ -21,8 +19,7 @@ init <- function(x, fun, v, filename="", ...) {
 	if (!canProcessInMemory(out, 2)) {
 		inmem=FALSE
 		if (filename == '') {
-			filename <- rasterTmpFile()
-									
+			filename <- rasterTmpFile()									
 		}
 	}
 	
@@ -45,19 +42,19 @@ init <- function(x, fun, v, filename="", ...) {
 			pb <- pbCreate(tr$n, ...)
 			for (i in 1:tr$n) {
 				if (v == 'cell') { 
-					out <- writeValues(out, cellFromRowCol(tr$row[i],1):cellFromRowCol((tr$row[i]+tr$nrows[i]-1),ncol(out)))
+					out <- writeValues(out, cellFromRowCol(out, tr$row[i],1):cellFromRowCol(out, tr$row[i]+tr$nrows[i]-1, ncol(out)), tr$row[i])
 				} else if (v == 'row') {
 					r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-					out <-  writeValues(out, rep(r, each=ncol(out)))
-				} else if (v == 'y') { 
-					r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)		
-					out <- writeValues(out, rep(yFromRow(out, r), each=ncol(out)))
+					out <-  writeValues(out, rep(r, each=ncol(out)), tr$row[i])
 				} else if (v == 'col') { 
-					out <- writeValues(out, rep(1:ncol(out), tr$nrows[i]))
+					out <- writeValues(out, rep(1:ncol(out), tr$nrows[i]), tr$row[i])
 				} else if (v == 'x') { 
-					out <- writeValues(out, rep(xFromCol(1:ncol(out)), tr$nrows[i]))
+					out <- writeValues(out, rep(xFromCol(out, 1:ncol(out)), tr$nrows[i]), tr$row[i])
+				} else if (v == 'y') { 
+					r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)	
+					out <- writeValues(out, rep(yFromRow(out, r), each=ncol(out)), tr$row[i])
 				}
-				pbStep(pb, r)
+				pbStep(pb, i)
 			}
 			pbClose(pb)
 			out <- writeStop(out)
@@ -68,10 +65,11 @@ init <- function(x, fun, v, filename="", ...) {
 			out <- setValues(out, fun(n)) 
 		} else {
 			out <- writeStart(out, filename=filename, ...)
+			tr <- blockSize(out)
 			pb <- pbCreate(tr$n, ...)
 			for (i in 1:tr$n) {
 				n <- ncol(out) * tr$nrows[i]
-				out <- writeValues(out, fun(n)) 
+				out <- writeValues(out, fun(n), tr$row[i])
 				pbStep(pb, r)
 			}
 			pbClose(pb)

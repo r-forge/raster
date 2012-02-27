@@ -1,4 +1,4 @@
---- 24-February-2012, version 1.9-69
+--- 27-February-2012, version 1.9-70
 Removed function 'polygonFromExtent' (in favor of as(x, 'SpatialPolygons') )
 In 'compare', the name of argument 'prj' was changed to 'crs'
 Fixed bug in srtm download limits. Reported by Stefan Schlaffer

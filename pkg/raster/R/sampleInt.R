@@ -38,11 +38,11 @@ sampleInt <- function(n, size, replace=FALSE) {
 		}
 		if (switched) { 
 			if (!is.null(samp)) {
-				samp <- (1:n)[-samp] 
-				ls <- length(samp)
-				samp <- samp[.Internal(sample(ls, ls, FALSE, NULL))]
+				samp <- (1:n)[-samp]
+				lsp <- length(samp)
+				samp <- samp[sample.int(lsp)]
 			} else {
-				samp <- .Internal(sample(n, n, FALSE, NULL))
+				samp <- sample.int(n)
 			}
 		}
 		
