@@ -220,6 +220,28 @@
 	}
 }	
 	
+.standardnames <- function(..., standardnames) {
+	if (missing(standardnames)) { 
+		standardnames <- getOption('rasterStandardNames')
+		if (is.null(standardnames)) {
+			return(TRUE)  # the default
+		} else {
+			try (todisk <- as.logical(standardnames))
+			if (is.logical(standardnames)) {
+				return(standardnames)
+			} else {
+				return(TRUE)
+			}
+		}
+	} else { 
+		if (is.logical(todisk)) {
+			return(todisk)
+		} else {
+			return(TRUE)
+		}
+	}
+}
+	
 
 .toDisk <- function(..., todisk) {
 	if (missing(todisk)) { 
