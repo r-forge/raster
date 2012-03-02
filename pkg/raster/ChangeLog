@@ -1,4 +1,4 @@
-Fixed bug in predict / randomForest with more than one factor variable, reported by Shawn Grant
+Fixed bug in predict / randomForest with more than one factor variable, reported by Xiong Xiong
 Fixed bug when writing to EHdr files, reported by Elena
 Improved support for accessing subdatasets (in gdal provided raster data). Non standard names like "subdatset:filename" should now work (previously some were normalized to (invalid) path names). There is also an argument "sub" in raster().
 
