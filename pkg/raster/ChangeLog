@@ -1,5 +1,6 @@
---- 28-February-2012, version 1.9-71
-Improved support for accessing subdatasets (in gdal provided raster data). Non standard names like "subdatset:filename" should now work (previously some were normalized to (invalid) path names). There is also an argument "sub" in raster(). Suggested by Agustin Lobo.
+Fixed bug in predict / randomForest with more than one factor variable, reported by Shawn Grant
+Fixed bug when writing to EHdr files, reported by Elena
+Improved support for accessing subdatasets (in gdal provided raster data). Non standard names like "subdatset:filename" should now work (previously some were normalized to (invalid) path names). There is also an argument "sub" in raster().
 
 --- 27-February-2012, version 1.9-70
 Removed function 'polygonFromExtent' (in favor of as(x, 'SpatialPolygons') )
