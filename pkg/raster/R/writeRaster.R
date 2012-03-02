@@ -55,8 +55,7 @@ function(x, filename, format, ...) {
 		return( .stopWriteCDF(x) )
 		
 	} else { 
-		x <- .writeGDALall(x, filename=filename, ...)
-		
+		x <- .writeGDALall(x, filename=filename, format=filetype, ...)
 	}
 	return(x)
 }	
@@ -118,7 +117,7 @@ function(x, filename, format, ...) {
 			x <- .writeValuesBrickCDF(b, values(x) )	
 			x <- .stopWriteCDF(x) 
 		} else {
-			x <- .writeGDALall(x, filename=filename, ...) 
+			x <- .writeGDALall(x, filename=filename, format=filetype, ...) 
 		}
 		
 		return(x)
@@ -130,7 +129,6 @@ function(x, filename, format, ...) {
 		}
 		
 		b <- brick(x, values=FALSE)
-		
 		if (filetype=='CDF') {
 			b@zvalue <- x@zvalue
 			b@zname  <- x@zname
@@ -147,8 +145,7 @@ function(x, filename, format, ...) {
 		}
 		b <- writeStop(b)
 		pbClose(pb)
-		return(b)
-			
+		return(b)	
 	} 
 }
 )
