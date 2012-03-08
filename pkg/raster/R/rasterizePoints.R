@@ -56,10 +56,10 @@
 		}
 	}
 	
-
-	field <- .getPutVals(xy, field, npol, mask)
-	xy <- .pointsToMatrix(xy)
-
+	points <- .pointsToMatrix(xy)
+	field <- .getPutVals(xy, field, nrow(points), mask)
+	xy <- points
+	
 	nres <- max(length(fun(1)), length(fun(1:5)))
 	ncols <- 1
 	

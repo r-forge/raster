@@ -34,7 +34,7 @@
 		
 	} else {
 		if (length(field) > 1) { 
-			if (NCOL(field) == n) {  # multiple fields at once?
+			if (NROW(field) == n) {  # multiple fields at once?
 #			if (length(field) == n) {
 				putvals <- field
 			} else {
