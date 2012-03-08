@@ -103,7 +103,8 @@ setMethod('raster', signature(x='RasterLayer'),
 			r@rotated <- TRUE
 			r@rotation <- x@rotation
 		}
-		if (.hasSlot(x@file, 'blockrows')) {  # old objects may not have this slot
+		
+		if isTRUE(try( .hasSlot(x@file, 'blockrows'))) {  # old objects may not have this slot
 			r@file@blockrows <- x@file@blockrows
 			r@file@blockcols <- x@file@blockcols
 		}
@@ -169,7 +170,7 @@ setMethod('raster', signature(x='RasterBrick'),
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
 				r@file <- x@file
 
-				if (.hasSlot(x@file, 'blockrows')) {  # old objects may not have this slot
+				if (isTRUE(try(.hasSlot(x@file, 'blockrows')))) {  # old objects may not have this slot
 					r@file@blockrows <- x@file@blockrows
 					r@file@blockcols <- x@file@blockcols
 				}
