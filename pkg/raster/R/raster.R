@@ -1,10 +1,10 @@
-# R raster package
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : September 2008
 # Version 1.0
 # Licence GPL v3
 
 .rasterHasSlot <- function(object, slot) {
+# for older versions of the methods package that does not have the .hasSlot function
 	isTRUE(try(.hasSlot(object, slot), silent=TRUE))
 }
 
