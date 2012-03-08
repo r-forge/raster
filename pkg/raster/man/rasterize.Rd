@@ -33,7 +33,7 @@ rasterize(x, y, ...)
 
 \bold{= all cases =}
 
-\item{\code{field}}{If \code{x} is a Spatial*DataFrame, the index (integer), or column name (character) of the variable to be transfered. If \code{field < 0}, all features get the attribute value 1, and if \code{field == 0}, the attribute index is used (i.e. numbers from 1 to the number of features). If the Spatial object has a data.frame, all values >= 1 will use the attribute index. In all cases you can also provide a vector with the same length as the number of spatial features, or a matrix where the number of rows matches the number of spatial features}
+\item{\code{field}}{ The value(s) to be transferred. This can be a single number, or a vector of numbers that has the same length as the number o spatial features (points, lines, polygons. If \code{x} is a Spatial*DataFrame, this can be the column name (character) of the variable to be transfered. If missing, the attribute index is used (i.e. numbers from 1 to the number of features). You can also provide a vector with the same length as the number of spatial features, or a matrix where the number of rows matches the number of spatial features}
 
 \item{\code{fun}}{Determine what values to assign to cells that are covered by multiple spatial features. You can use functions such as \code{min, max}, or \code{mean}, or one of the following character values: \code{'first', 'last', 'sum', 'min'}, or \code{'max'}. The default value is \code{'last'}}
 

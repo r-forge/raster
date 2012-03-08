@@ -5,7 +5,7 @@
 
 
 
-.pointsToRaster <- function(xy, raster, field=1, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...) {
+.pointsToRaster <- function(xy, raster, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...) {
 
 	rs <- raster(raster)
 	
@@ -56,16 +56,11 @@
 		}
 	}
 	
-	nres <- max(length(fun(1)), length(fun(1:5)))
 
-	if (is.character(field)) {
-		if (inherits(xy, 'SpatialPointsDataFrame')) {
-			field <- xy@data[,field]
-		}
-	}
-
+	field <- .getPutVals(xy, field, npol, mask)
 	xy <- .pointsToMatrix(xy)
 
+	nres <- max(length(fun(1)), length(fun(1:5)))
 	ncols <- 1
 	
 	if (NCOL(field) > 1) {
