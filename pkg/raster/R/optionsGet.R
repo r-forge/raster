@@ -21,7 +21,7 @@
 .tmpdir <- function(create=TRUE) {
 	d <- getOption('rasterTmpDir')
 	if (is.null(d)) {
-		d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
+		d <- .tmppath()
 	}
 	lastchar <- substr(d, nchar(d), nchar(d))
 	if (lastchar == '/' | lastchar == '\\') {
@@ -29,7 +29,7 @@
 	}
 	if (!file.exists(dd)) {
 		if (create) {
-			d <- paste(dirname(tempdir()), '/R_raster_tmp/', sep="")
+			d <- .tmppath()
 			dir.create( d, recursive=TRUE, showWarnings=FALSE )
 		} else {
 			return(NA)
