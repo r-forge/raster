@@ -47,7 +47,7 @@
 			x <- subdsmdata[i[1]]
 			filename <- unlist(strsplit(x, '='))[2]
 		} else {
-			warning(paste('subdataset "sub=', sub, '" not available', sep=''))
+			stop(paste('subdataset "sub=', sub, '" not available', sep=''))
 		}
 	}
 
