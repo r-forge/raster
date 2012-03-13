@@ -119,7 +119,8 @@
 		} 
 	} 
 	if (! datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT1U', 'INT2U', 'INT4U', 'FLT4S', 'FLT8S')) {
-		warning(datatype, ' is an invalid datatype, changed to FLT8S')
+		warning(datatype, ' is an invalid datatype, changed to "FLT8S"')
+		datatype <- 'FLT8S'
 	}
 	return(datatype)
 }
