@@ -1,3 +1,4 @@
+Bug fix: it was not possible to make a RasterStack from a single-layer RasterBrick (reported by Julian Zeidler).
 Added .tmpdir function, provided by Shaun Walbridge, to make the name of the folder used to store temporary files user-specific to avoid collisions on multi-user platforms such as cluster computers. 
 Fixed bug in predict / randomForest with more than one factor variable, reported by Xiong Xiong
 Fixed bug when writing to EHdr files, reported by Elena
