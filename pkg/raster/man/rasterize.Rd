@@ -13,7 +13,7 @@
 \title{Rasterize points, lines, or polygons}
 
 \description{
-Transfer values associated with 'vector' type spatial data (points, lines, polygons) to the spatially overlapping raster cells. 
+Transfer values associated with 'vector' type spatial data (points, lines, polygons) to spatially overlapping raster cells. 
 
 For polygons, 'spatially overlapping' means that the polygon must cover the center of a raster cell. All cells that are touched by a line are considered to be overlapping. Points that fall on a border between cells are placed in the cell to the right and/or in the cell below.
 }
@@ -57,7 +57,7 @@ rasterize(x, y, ...)
 
 The value of a grid cell is determined by the values associated with the points and function \code{fun}.
 
-If \code{x} represents points, each point is assinged to a grid cell. The default result is that cells with one or more points get value 1 and the other cells get the background value (default is \code{NA}).
+If \code{x} represents points, each point is assinged to a grid cell. 
 
 If you want to know the number of points in each grid cell, use \code{fun=function(x,...){length(x)}}. I.e., for each cell it computes the length of the vector of points. You can also use \code{fun=sum}, because the default 'field' value of a point is 1. For the number of unique values use \code{fun=function(x, ...){ length(unique(na.rm(x)))}}
 
@@ -65,7 +65,7 @@ There is one additional argument:
 
 \item{\code{na.rm}}{If \code{TRUE}, \code{NA} values are removed if \code{fun} honors the \code{na.rm} argument}
 
-Because of this argument, all functions \code{fun} must accept an \code{na.rm} argument, either explicitly or through 'dots'. This means that \code{fun=length} fails, but \code{fun=function(x,...)length(x)} works, although it ignores the \code{na.rm} argument. To use the \code{na.rm} argument you can use a function like this \code{fun=function(x,na.rm){if (na.rm) length(na.omit(x)) else (length(x)}}, or use a function that removes NA values in all cases, like this function to compute the number of unique values "richness": \code{fun=function(x, ...){length(unique(na.omit(x)))}}. 
+Because of this argument, all functions \code{fun} must accept an \code{na.rm} argument, either explicitly or through 'dots'. This means that \code{fun=length} fails, but \code{fun=function(x,...)length(x)} works, although it ignores the \code{na.rm} argument. To use the \code{na.rm} argument you can use a function like this \code{fun=function(x, na.rm){if (na.rm) length(na.omit(x)) else (length(x)}}, or use a function that removes NA values in all cases, like this function to compute the number of unique values "richness": \code{fun=function(x, ...){length(unique(na.omit(x)))}}. 
 
 You can also pass multiple functions using a statement like \code{fun=function(x)c(lenght(x),mean(x))}, in which case the returned object is a RasterBrick (multiple layers).
 
