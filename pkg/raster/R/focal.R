@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.checkngb <- function(ngb) {
+.checkngb <- function(ngb, mustBeUneven=FALSE) {
 	ngb <- as.integer(round(ngb))
 	if (length(ngb) == 1) {
 		ngb <- c(ngb, ngb)
@@ -12,6 +12,11 @@
 		stop('ngb should be a single value or two values')
 	}
 	if (min(ngb) < 1) { stop("ngb should be larger than 1") } 
+	if (mustBeUneven) {
+		if (any(ngb %% 2 == 0)) {
+			stop('neighborhood must have uneven sides')
+		}
+	}
 	return(ngb)
 }
 
