@@ -2,9 +2,12 @@
 \name{getValuesFocal}
 
 \alias{getValuesFocal}
-\alias{getValuesFocal,RasterLayer}
+\alias{getValuesFocal,RasterLayer-method}
 \alias{getValuesFocal,RasterLayer,missing,missing,numeric-method}
 \alias{getValuesFocal,RasterLayer,numeric,numeric,numeric-method}
+\alias{getValuesFocal,RasterStackBrick-method}
+\alias{getValuesFocal,RasterStackBrick,missing,missing,numeric-method}
+\alias{getValuesFocal,RasterStackBrick,numeric,numeric,numeric-method}
   
 \title{Get focal raster cell values}
 
@@ -15,6 +18,7 @@ Function \code{values} is a shorthand version of getValues.
 
 \usage{
 \S4method{getValuesFocal}{RasterLayer}(x, row, nrows, ngb, ...)
+\S4method{getValuesFocal}{RasterStackBrick}(x, row, nrows, ngb, ...)
 }
 
 \arguments{
@@ -27,16 +31,18 @@ Function \code{values} is a shorthand version of getValues.
 
 
 \value{
-matrix with one row for each focal cell, and one column for each neighborhood cell around it.
+If \code{x} is a \code{RasterLayer}, a matrix with one row for each focal cell, and one column for each neighborhood cell around it.
+If \code{x} is a \code{RasterStack} or \code{RasterLayer}, a list of such matrices (one list element / matrix for each layer)
 }
 
-\seealso{ \code{\link{getValuesFocal}} }
+\seealso{ \code{\link{getValues}, \link{focal}} }
 
 \author{Robert J. Hijmans}
 \examples{
 r <- raster(nr=5, nc=5, crs='+proj=utm +zone=12')
 r[] <- 1:25
-getValuesFocal(r, row=1, nrows=3, ngb=3)
+as.matrix(r)
+getValuesFocal(r, row=1, nrows=3, ngb=3, names=TRUE)
 }
 
 \keyword{spatial}

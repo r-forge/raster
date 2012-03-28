@@ -17,9 +17,9 @@ function(x, y, ...){
 
 	# focal values
 	if ( ! is.null(dots$row) ) {
+		warning("the 'row' argument is extract is depracated; use getValuesFocal instead")
 		return( .focalValues(x, ...) )
 	}
-
 
 	# backwards in-compatability
 	if (! is.null(dots$cells)) {
