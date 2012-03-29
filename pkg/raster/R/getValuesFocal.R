@@ -47,7 +47,7 @@ function(x, row, nrows, ngb, names=FALSE, outside=NA, ...) {
 	endrow <- row+nrows-1+ngbr
 	
 	sr <- max(1, startrow)  # startrow
-	er <- min(endrow, nrow(xx) - sr + 1)
+	er <- min(endrow, nrow(xx))
 
 	if (nl==1) {
 		vv <- matrix(getValues(x, sr, (er-sr+1)), ncol=1)
