@@ -16,6 +16,10 @@ function(x, filename, format, ...) {
 	filename <- trim(filename)
 	if (filename == '') {	stop('provide a filename')	}
 	filename <- .fullFilename(filename)
+	if (!file.exists(dirname(filename))) {
+		stop("Attempting to write a file to a path that does not exist:\n  ", dirname(filename))
+	}
+	
 	filetype <- .filetype(format , filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
