@@ -15,7 +15,8 @@ function(x, filename, format, ...) {
 	stopifnot(hasValues(x))
 	filename <- trim(filename)
 	if (filename == '') {	stop('provide a filename')	}
-	filename <- .fullFilename(filename)
+	filename <- .fullFilename(filename, expand=TRUE)
+		
 	if (!file.exists(dirname(filename))) {
 		stop("Attempting to write a file to a path that does not exist:\n  ", dirname(filename))
 	}

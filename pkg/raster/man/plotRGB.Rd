@@ -25,6 +25,8 @@ Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStac
 \tab \code{maxpixels}  \tab  Maximum number of pixels to use  \cr
 \tab \code{stretch}  \tab Option to stretch the values to increase the contrast of the image: "lin" or "hist"\cr
 \tab \code{ext}  \tab  An extent object to zoom in a region \cr
+\tab \code{bgcol}  \tab  Background (NA) color. Default is 'white' \cr
+\tab \code{bgalpha}  \tab  Background transparancy. Integer between 0 (transparant) and 255 (opaque) \cr
 \tab \code{...} \tab graphical parameters as in \code{\link{rasterImage}} \cr
 }
 }}

@@ -25,7 +25,7 @@ function(x, filename, options=NULL, format, ...) {
 	if (trim(filename) == '') { 
 		filename <- rasterTmpFile() 
 	}
-	filename <- .fullFilename(filename)
+	filename <- .fullFilename(filename, expand=TRUE)
 	if (!file.exists(dirname(filename))) {
 		stop("Attempting to write a file to a path that does not exist:\n  ", dirname(filename))
 	}

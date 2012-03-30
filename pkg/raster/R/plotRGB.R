@@ -12,7 +12,8 @@ if (!isGeneric("plotRGB")) {
 
 
 setMethod("plotRGB", signature(x='RasterStackBrick'), 
-function(x, r=1, g=2, b=3, scale,  maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, axes=TRUE, xlab='', ylab='', asp, alpha, add=FALSE, addfun=NULL, ...) { 
+function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, axes=TRUE, xlab='', ylab='', asp, bgcol='white', alpha, bgalpha, add=FALSE, addfun=NULL, ...) { 
+	
 	
 	if (!axes) par(plt=c(0,1,0,1))
 
@@ -60,7 +61,9 @@ function(x, r=1, g=2, b=3, scale,  maxpixels=500000, stretch=NULL, ext=NULL, int
 	
 	naind <- as.vector( attr(RGB, "na.action") )
 	if (!is.null(naind)) {
-		z <- rep( "#000000", times=ncell(r))
+		bg <- col2rgb(bgcol)
+		bg <- rgb(bg[1], bg[2], bg[3], alpha=bgalpha, max=255)
+		z <- rep( bg, times=ncell(r))
 		z[-naind] <- rgb(RGB[,1], RGB[,2], RGB[,3], alpha=alpha, max=scale)
 	} else {
 		z <- rgb(RGB[,1], RGB[,2], RGB[,3], alpha=alpha, max=scale)
@@ -72,7 +75,7 @@ function(x, r=1, g=2, b=3, scale,  maxpixels=500000, stretch=NULL, ext=NULL, int
 	bb <- as.vector(t(bbox(r)))
 
 	if (!add) {
-		plot(NA, NA, xlim=c(bb[1], bb[2]), ylim=c(bb[3], bb[4]), type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE, ...)
+		plot(NA, NA, xlim=c(bb[1], bb[2]), ylim=c(bb[3], bb[4]), type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE)
 		if (axes) {
 			xticks <- axTicks(1, c(xmin(r), xmax(r), 4))
 			yticks <- axTicks(2, c(ymin(r), ymax(r), 4))
@@ -84,7 +87,7 @@ function(x, r=1, g=2, b=3, scale,  maxpixels=500000, stretch=NULL, ext=NULL, int
 			#axis(4, at=yticks, labels=FALSE, lwd.ticks=0)
 		}
 	}
-	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate, ...)
+	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate)
 	
 	
 	if (!is.null(addfun)) {

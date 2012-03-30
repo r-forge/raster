@@ -5,14 +5,14 @@
 
 
 
-if (!isGeneric("focalApply")) {
-	setGeneric("focalApply", function(x, ngb, ...)
-		standardGeneric("focalApply"))
-}	
+#if (!isGeneric("focalApply")) {
+#	setGeneric("focalApply", function(x, ngb, ...)
+#		standardGeneric("focalApply"))
+#}	
 
 
-setMethod("focalApply", signature(x='RasterLayer', ngb='numeric'), 
-function(x, ngb, fun, outside=NA, filename='', ...) {
+#setMethod("focalApply", signature(x='RasterLayer', ngb='numeric'), 
+.focalApply <- function(x, ngb, fun, outside=NA, filename='', ...) {
 
 	nl <- nlayers(x)
 	ngb <- raster:::.checkngb(ngb, mustBeOdd=TRUE)
@@ -110,6 +110,7 @@ function(x, ngb, fun, outside=NA, filename='', ...) {
 		
 	out <- writeStop(out)
 	return(out)
-} )
+} 
+#)
 
 	
