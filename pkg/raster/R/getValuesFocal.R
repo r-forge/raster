@@ -37,7 +37,7 @@ function(x, row, nrows, ngb, names=FALSE, outside=NA, ...) {
 	}
 	stopifnot(is.atomic(outside))
 	geo <- raster:::.couldBeLonLat(xx)
-	ngb <- raster:::.checkngb(ngb, mustBeUneven=TRUE)
+	ngb <- raster:::.checkngb(ngb, mustBeOdd=TRUE)
 	
 	ngbr <- floor(ngb[1]/2)
 	ngbc <- floor(ngb[2]/2)

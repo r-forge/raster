@@ -15,7 +15,7 @@ setMethod("focalApply", signature(x='RasterLayer', ngb='numeric'),
 function(x, ngb, fun, outside=NA, filename='', ...) {
 
 	nl <- nlayers(x)
-	ngb <- raster:::.checkngb(ngb, mustBeUneven=TRUE)
+	ngb <- raster:::.checkngb(ngb, mustBeOdd=TRUE)
 	out <- raster(x)
 	dots <- list(...)
 	na.rm <- dots$na.rm
