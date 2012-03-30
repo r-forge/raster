@@ -3,7 +3,7 @@
 # Version 0.9
 # Licence GPL v3
 
-# based on functions in the pixmap package by Friedrich Leisch
+# partly based on functions in the pixmap package by Friedrich Leisch
 
 if (!isGeneric("plotRGB")) {
 	setGeneric("plotRGB", function(x, ...)
@@ -12,10 +12,7 @@ if (!isGeneric("plotRGB")) {
 
 
 setMethod("plotRGB", signature(x='RasterStackBrick'), 
-function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, axes=TRUE, xlab='', ylab='', asp, bgcol='white', alpha, bgalpha, add=FALSE, addfun=NULL, ...) { 
-	
-	
-	if (!axes) par(plt=c(0,1,0,1))
+function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, bgcol='white', alpha, bgalpha, ...) { 
 
 	if (missing(scale)) {
 		scale <- 255
@@ -26,16 +23,6 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 		}
 	}
 	
- 	if (missing(asp)) {
-		if (.couldBeLonLat(x)) {
-			ym <- mean(x@extent@ymax + x@extent@ymin)
-			asp <- min(5, 1/cos((ym * pi)/180))
-			asp = NA
-		} else {
-			asp = 1
-		}
-	}
-
 	r <- sampleRegular(raster(x,r), maxpixels, ext=ext, asRaster=TRUE, useGDAL=TRUE)
 	g <- sampleRegular(raster(x,g), maxpixels, ext=ext, asRaster=TRUE, useGDAL=TRUE)
 	b <- sampleRegular(raster(x,b), maxpixels, ext=ext, asRaster=TRUE, useGDAL=TRUE)
@@ -74,7 +61,27 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 	require(grDevices)
 	bb <- as.vector(t(bbox(r)))
 
+	dots <- list(...)
+	add <- ifelse(is.null(dots$add), FALSE, dots$add)
+	
 	if (!add) {
+		xlab <- ifelse(is.null(dots$xlab), '', dots$xlab)
+		ylab <- ifelse(is.null(dots$ylab), '', dots$ylab)
+		axes <- ifelse(is.null(dots$axes), FALSE, dots$axes)
+		
+		if (!axes) par(plt=c(0,1,0,1))
+
+		asp <- dots$asp
+		if (is.null(asp)) {
+			if (.couldBeLonLat(x)) {
+				ym <- mean(x@extent@ymax + x@extent@ymin)
+				asp <- min(5, 1/cos((ym * pi)/180))
+				asp <- NA
+			} else {
+				asp <- 1
+			}
+		}
+		
 		plot(NA, NA, xlim=c(bb[1], bb[2]), ylim=c(bb[3], bb[4]), type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE)
 		if (axes) {
 			xticks <- axTicks(1, c(xmin(r), xmax(r), 4))
@@ -89,11 +96,9 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 	}
 	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate)
 	
-	
-	if (!is.null(addfun)) {
-		if (is.function(addfun)) {
-			addfun()
-		}
+	addfun <- dots$addfun
+	if (is.function(addfun)) {
+		addfun()
 	}
 }
 )

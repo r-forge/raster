@@ -72,7 +72,7 @@
 				if (rotate) {			
 					x <- t(x)
 				}
-				out <- writeValues(out, x, tr$row[i], tr$nrows[i])
+				out <- writeValues(out, x, tr$row[i])
 				pbStep(pb, i)
 			}
 			pbClose(pb)			
@@ -101,7 +101,7 @@
 				if (rotate) {			
 					x <- t(x)
 				}
-				out <- writeValues(out, x, tr$row[i], tr$nrows[i])
+				out <- writeValues(out, x, tr$row[i])
 				pbStep(pb, i)
 			}
 			pbClose(pb)			
