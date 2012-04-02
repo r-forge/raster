@@ -51,7 +51,7 @@ function(x, filename, options=NULL, format, ...) {
 	if (trim(filename) == '') { 
 		filename <- rasterTmpFile() 
 	}
-	filename <- .fullFilename(filename)
+	filename <- .fullFilename(filename, expand=TRUE)
 	filetype <- .filetype(format=format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 	
