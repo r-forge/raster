@@ -1,3 +1,4 @@
+--- 31-March-2012, version 1.9-79
 New function 'getValuesFocal' to get focal values (a cell and its neighborhood)
 Added .tmpdir function, provided by Shaun Walbridge, to make the name of the folder used to store temporary files user-specific to avoid collisions on multi-user platforms such as cluster computers. 
 Improved support for accessing subdatasets (in gdal provided raster data). Non-standard names like "subdatset:filename" should now work (previously some were normalized to (invalid) path names). There is also an argument "sub" in raster().
