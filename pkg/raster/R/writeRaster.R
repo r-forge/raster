@@ -75,7 +75,7 @@ function(x, filename, format, ...) {
 	stopifnot(hasValues(x))
 	filename <- trim(filename)
 	if (filename == '') {	stop('provide a filename')	}
-	filename <- .fullFilename(filename)
+	filename <- .fullFilename(filename, expand=TRUE)
 	filetype <- .filetype(format, filename=filename)
 	filename <- .getExtension(filename, filetype)
 
