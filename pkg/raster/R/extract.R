@@ -88,7 +88,7 @@ function(x, y, ...){
 
 
 setMethod('extract', signature(x='Raster', y='Extent'), 
- 	function(x, y, fun, na.rm=FALSE, lyrs, ...) {
+ 	function(x, y, fun, na.rm=FALSE, layer, nl, ...) {
 
 		e <- intersect(extent(x), y)
 		e <- alignExtent(e, x)
@@ -108,12 +108,19 @@ setMethod('extract', signature(x='Raster', y='Extent'),
 		
 		v <- getValuesBlock(x, row, nrows, col, ncols)  
 		
-		if (! missing(lyrs) ) {
-			nl <- nlayers(x)
-			lyrs <- lyrs[lyrs %in% 1:nl]
-			if (length(lyrs) > 1) {
-				v <- v[ , lyrs, drop=FALSE] 
+		if (nlayers(x) > 1) {
+			if (missing(layer)) {
+				layer <- 1
+			} else {
+				layer <- max(min(nlayers(x), layer), 1)
 			}
+			if (missing(nl)) {
+				nl <- nlayers(x) - layer + 1
+			} else {
+				nl <- max(min(nlayers(x)-layer+1, nl), 1)
+			}
+			lyrs <- layer:(layer+nl-1)
+			v <- v[ , lyrs, drop=FALSE] 
 		}
 		
 		if (! missing(fun)) {
