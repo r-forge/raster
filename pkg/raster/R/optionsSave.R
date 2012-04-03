@@ -30,7 +30,7 @@ showOptions <- function() {
 	
 #	cat('usecluster:', .usecluster(), '\n')
 	if (.toDisk()) {
-		cat('toDisk    : TRUE\n')
+	   cat('toDisk       : TRUE\n')
 	}
 }
 

@@ -94,8 +94,8 @@ showTmpFiles <- function() {
 				cat('--- none ---\n')
 			} else {
 				extension(f) <- ''
-				f <- unique(f)
-				cat(f, "\n")
+				f <- paste(unique(f), '\n')
+				cat(f)
 			}
 		} else {
 			cat('--- none ---\n')
