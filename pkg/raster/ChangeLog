@@ -1,8 +1,8 @@
---- 31-March-2012, version 1.9-79
 New function 'getValuesFocal' to get focal values (a cell and its neighborhood)
 Added .tmpdir function, provided by Shaun Walbridge, to make the name of the folder used to store temporary files user-specific to avoid collisions on multi-user platforms such as cluster computers. 
 Improved support for accessing subdatasets (in gdal provided raster data). Non-standard names like "subdatset:filename" should now work (previously some were normalized to (invalid) path names). There is also an argument "sub" in raster().
 Bug fixes: 
+disaggregate sometimes failed for large files, patched by Jim Regetz. 
 It was not possible to make a RasterStack from a single-layer RasterBrick (reported by Julian Zeidler).
 The 'slope' returned by 'terrain' was not correct when used together with 'tri', 'tpi', or 'roughness', and when you use unit = 'degrees' (reported by Forrest Stevens)
 predict / randomForest failed with more than one factor variable, reported by Xiong Xiong
