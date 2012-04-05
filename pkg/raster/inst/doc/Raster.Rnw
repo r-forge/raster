@@ -517,7 +517,7 @@ news <- stack(sgdf)
 
 It is straightforward to build on the Raster* objects using the S4 inheritance mechanism. Say you need objects that behave like a \verb@RasterLayer@, but have some additional properties that you need to use in your own functions (S4 methods). See Chambers (2009) and the help pages of the Methods package for more info. Below is an example:
 
-<<raster-32, fig=TRUE>>=
+<<raster-132>>=
 setClass ('myRaster',
 	contains = 'RasterLayer',
 	representation (
@@ -538,7 +538,7 @@ m@essential <- 'my own slot'
 m[] <- 1:ncell(m)
 @
 
-<<raster-33>>=
+<<raster-133>>=
 setMethod ('show' , 'myRaster', 
 	function(object) {
 		callNextMethod(object) # call show(RasterLayer)
