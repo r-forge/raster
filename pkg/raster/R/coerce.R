@@ -212,6 +212,16 @@ setAs('RasterLayer', 'matrix',
 )
 
 
+
+
+# "image" 
+.rasterToImage <- function(r) {
+   x <- xFromCol(r,1:ncol(r))
+   y <- yFromRow(r, nrow(r):1)
+   z <- t(as.matrix(r)[nrow(r):1,]) 
+   list(x=x, y=y, z=z)
+}
+
 	
 
 # spatstat
