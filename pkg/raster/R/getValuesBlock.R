@@ -85,16 +85,10 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 			}
 			
 		} else if ( fromDisk(x) ) {
-			if (x@file@driver == 'netcdf') {
-				return( .readRowsBrickNetCDF(x, row, nrows, col, ncols, lyrs=lyrs) )
-			} else {
-				res <- matrix(ncol=nlyrs, nrow=nrows*ncols)
-				for (i in 1:nlyrs) {
-				# to do: need something more efficient 
-					res[,i] <- .readRasterLayerValues(raster(x, lyrs[i]), row, nrows, col, ncols)
-				}
+			res <- .readRasterBrickValues(x, row, nrows, col, ncols)
+			if (ncol(res) > nlyrs) {
+				res <- res[, lyrs]
 			}
-			
 		} else {
 			res <- ( matrix(rep(NA, nrows * ncols * nlyrs), ncol=nlyrs) )
 		}
