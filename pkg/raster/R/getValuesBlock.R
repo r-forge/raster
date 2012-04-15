@@ -43,10 +43,12 @@ setMethod('getValuesBlock', signature(x='RasterStack', row='numeric'),
 
 setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'), 
 	function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1), lyrs) {
+		row <- max(1, round(row))
+		col <- max(1, round(col))
 		stopifnot(row <= x@nrows)
 		stopifnot(col <= x@ncols)
-		nrows <- min(round(nrows), x@nrows-row+1)
-		ncols <- min((x@ncols-col+1), ncols)
+		nrows <- min(round(nrows), x@nrows-row+1)		
+		ncols <- min((x@ncols-col+1), round(ncols))
 		stopifnot(nrows > 0)
 		stopifnot(ncols > 0)
 
@@ -64,37 +66,30 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 		
 		
 		if ( inMemory(x) ){
-			row <- max(1, as.integer(round(row)))
-			nrows <- round(nrows)
-			nrows <- min(nrows, x@nrows-row+1)
 			lastrow <- row + nrows - 1
-			col <- as.integer(round(col))
-			ncols <- as.integer(round(ncols))
-			lastcol <- col + ncols - 1
-			if (col==1 & ncols==ncol(x)) {
-				if (row==1 & nrows==nrow(x)) {
-					res <- x@data@values[,lyrs]
-				} else {
-					start = cellFromRowCol(x, row, 1)
-					end =  cellFromRowCol(x, lastrow, ncol(x))
-					res <- x@data@values[start:end, lyrs]
-				}
+			if (col==1 & ncols==x@ncols) {
+				start <- cellFromRowCol(x, row, 1)
+				end <-  cellFromRowCol(x, lastrow, ncol(x))
+				res <- x@data@values[start:end, ]
 			} else {
-				cells <- cellFromRowColCombine(x, row:lastrow, col:lastcol)
-				res <- x@data@values[cells, lyrs]
+				lastcol <- col + ncols - 1
+				res <- x@data@values[cellFromRowColCombine(x, row:lastrow, col:lastcol), ]
 			}
+			if (ncol(res) > nlyrs) {
+				res <- res[, lyrs, drop=FALSE]
+			}
+			
 			
 		} else if ( fromDisk(x) ) {
 			res <- .readRasterBrickValues(x, row, nrows, col, ncols)
 			if (ncol(res) > nlyrs) {
-				res <- res[, lyrs]
+				res <- res[, lyrs, drop=FALSE]
 			}
 		} else {
 			res <- ( matrix(rep(NA, nrows * ncols * nlyrs), ncol=nlyrs) )
+			colnames(res) <- layerNames(x)[lyrs]
 		}
-		
-	colnames(res) <- layerNames(x)[lyrs]
-	return(res)
+		return(res)
 	}
 )
 
