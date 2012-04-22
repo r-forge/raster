@@ -31,7 +31,7 @@ stackSave <- function(x, filename) {
 	}
 	
 	info <- t( sapply(x@layers, function(i) c(i@file@name, i@file@nbands, i@data@band)) )
-	if (any(info[,1] != '')) {
+	if (any(info[,1] == '')) {
 		stop("cannot save a RasterStack that has layers that only exist in memory. Use writeRaster first/instead.")
 	}
 	if (any(info[,2] != '1')) {

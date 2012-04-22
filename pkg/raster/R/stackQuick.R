@@ -4,8 +4,8 @@
 # Licence GPL v3
 
 
-.quickStack <- function(files, nbands=1, band=1) {
-	r <- raster(files[1])
+.quickStack <- function(files, nbands=1, band=1, native=FALSE) {
+	r <- raster(files[1], native=native)
 	if (length(nbands) == 1) {
 		nbands <- rep(nbands, length(files))
 	} else {
