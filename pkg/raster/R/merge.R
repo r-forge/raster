@@ -25,8 +25,8 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	} else {
 		.merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress, overlap=overlap, ext=ext)
 	}
-
-} )
+}
+)
 
 
 
@@ -42,7 +42,7 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 })
 
 
-.merge(x, tolerance=0.05, filename="", format, datatype, overwrite, progress, overlap=TRUE, ext=NULL) { 
+.merge <- function(x, tolerance=0.05, filename="", format, datatype, overwrite, progress, overlap=TRUE, ext=NULL) {
 	filename <- trim(filename)
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
@@ -414,6 +414,6 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	pbClose(pb)
 	writeStop(out)
 }
-)
+
 
 

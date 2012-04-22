@@ -6,13 +6,13 @@
 
 .quickStack <- function(files, nbands=1, band=1) {
 	r <- raster(files[1])
-	if (length(nbands)) == 1) {
+	if (length(nbands) == 1) {
 		nbands <- rep(nbands, length(files))
 	} else {
 		stopifnot(length(files == length(nbands)))
 	}
 	
-	if (length(band)) == 1) {
+	if (length(band) == 1) {
 		band <- rep(band, length(files))
 	} else {
 		stopifnot(length(files == length(band)))
