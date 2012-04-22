@@ -5,16 +5,27 @@
 
 
 
-stackOpen <- function(stackfile, quick=FALSE) {
+stackOpen <- function(stackfile) {
+	f <- read.table(stackfile, as.is=FALSE, strip.white=TRUE)
+	if (dim(f)[2] > 1) {
+		s <- stack(as.vector(f[,1]), bands=as.vector(f[,2]))
+	} else {
+		s <- stack(as.vector(f[,1]))
+	}
+	s@filename <- stackfile
+	return(s)
+}
+
+..stackOpen <- function(stackfile, quick=FALSE) {
 	f <- read.table(stackfile, as.is=FALSE, strip.white=TRUE)
 	if (quick) {
-		if (dim(st)[2] > 1) {
+		if (dim(f)[2] > 1) {
 			s <- .quickStack(f[,1], f[,2], f[,3])	
 		} else {
 			s <- .quickStack(f[,1])
 		}
 	} else {
-		if (dim(st)[2] > 1) {
+		if (dim(f)[2] > 1) {
 			s <- stack(as.vector(f[,1]), bands=as.vector(f[,2]))
 		} else {
 			s <- stack(as.vector(f[,1]))
