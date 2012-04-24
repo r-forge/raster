@@ -1,4 +1,5 @@
 The 'buffer' argument in extract (with points) was lost in the previous version. It has been restored. 
+In extract with polygons failed with "getCover=TRUE". fixed.  Reported by Ariel Ortiz-Bobea
 Implemented crosstab for multi-layer objects, suggested by Neil Best
 Significatn improvement of speed of getValuesBlock for RasterBrick using suggestion by Stefan Schlaffer
 
