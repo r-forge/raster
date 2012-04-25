@@ -12,7 +12,7 @@ Compute summary statistics for multi-layer Raster objects. Like \code{cellStats}
 
 
 \usage{
-layerStats(x, stat, w, ...)
+layerStats(x, stat, w, na.rm=TRUE, ...)
 }
 
 
@@ -22,6 +22,8 @@ layerStats(x, stat, w, ...)
   \item{stat}{Character. The statistic to compute: either 'cov', or 'weighted.cov'}
 
   \item{w}{RasterLayer with the weights (should have the same extent, resolution and number of layers as \code{x}) to compute the weighted covariance}
+
+  \item{na.rm}{Logial. Should missing values be removed?}
   
   \item{...}{Additional arguments (none implemetned)} 
 }
