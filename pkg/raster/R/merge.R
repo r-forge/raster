@@ -14,22 +14,6 @@ if (!isGeneric("merge")) {
 }	
 
 
-setMethod('merge', signature(x='list', y='ANY'), 
-function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, progress, overlap=TRUE, ext=NULL) { 
-	x <- c(x, y, list(...))	
-	x <- x[ sapply(x, function(x) inherits(x, 'Raster')) ]
-	if (length(x) < 1) {
-		do.call(merge, x)
-	} else if (length(x) < 2) {
-		stop('merge needs at least 2 Raster* objects')
-	} else {
-		.merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress, overlap=overlap, ext=ext)
-	}
-}
-)
-
-
-
 setMethod('merge', signature(x='Raster', y='Raster'), 
 function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, progress, overlap=TRUE, ext=NULL) { 
 	x <- c(x, y, list(...))	
@@ -38,11 +22,7 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 		stop('merge needs at least 2 Raster* objects')
 	}
 	compare(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
-	.merge(x, tolerance=tolerance, filename=filename, format=format, datatype=datatype, overwrite=overwrite, progress=progress, overlap=overlap, ext=ext)
-})
-
-
-.merge <- function(x, tolerance=0.05, filename="", format, datatype, overwrite, progress, overlap=TRUE, ext=NULL) {
+	
 	filename <- trim(filename)
 	if (missing(format)) { format <- .filetype(format=format, filename=filename) } 
 	if (missing(overwrite)) { overwrite <- .overwrite()	}
@@ -414,6 +394,6 @@ function(x, y, ..., tolerance=0.05, filename="", format, datatype, overwrite, pr
 	pbClose(pb)
 	writeStop(out)
 }
-
+)
 
 

@@ -1,30 +1,32 @@
 \name{cellStats}
 
 \alias{cellStats}
+\alias{cellStats,Raster-method}
 
 \title{Cell statistics}
 
+
 \description{
-Compute statistics for the cells of each layer of a Raster object. In the \code{raster} package, functions such as max, min, and mean,
-when used with Raster objects as argument, return a new Raster object (with a value computed for each cell). In contrast, cellStats returns a single value, computed from the all the values of a layer.
+Compute statistics for the cells of each layer of a Raster object. In the \code{raster} package, functions such as max, min, and mean, when used with Raster objects as argument, return a new Raster object (with a value computed for each cell). In contrast, cellStats returns a single value, computed from the all the values of a layer.
 }
 
 \usage{
-cellStats(x, stat='mean', ...)
+\S4method{cellStats}{Raster}(x, stat='mean', na.rm=TRUE, ...)
 }
 
 \arguments{
- \item{x}{A Raster* object}
+ \item{x}{Raster* object}
  \item{stat}{The function to be applied}
+ \item{na.rm}{Logical. Should \code{NA} values be removed?}
  \item{...}{Additional arguments }  
 }
 
 \value{
-Numeric.
+Numeric
 }
 
 \details{
-\code{cellStats} will fail (gracefully) for very large Raster objects except for a number of known functions: sum, mean, min, max, sd, 'countNA'. 'countNA' must be supplied as a character value (with quotes), the other known functions may be supplied with or without quotes. For other functions you could perhaps use a sample of the RasterLayer that can be held in memory (see \code{\link[raster]{sampleRandom}} and \code{\link[raster]{sampleRegular}} )
+\code{cellStats} will fail (gracefully) for very large Raster* objects except for a number of known functions: sum, mean, min, max, sd, 'countNA'. 'countNA' must be supplied as a character value (with quotes), the other known functions may be supplied with or without quotes. For other functions you could perhaps use a sample of the RasterLayer that can be held in memory (see \code{\link[raster]{sampleRandom}} and \code{\link[raster]{sampleRegular}} )
 
 }
 

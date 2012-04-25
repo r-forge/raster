@@ -18,7 +18,7 @@ If \code{x} is a Raster* object, the Extent is aligned to \code{x}. Areas includ
 }
 
 \arguments{
-  \item{x}{Raster* object or SpatialPolygons* or SpatialLines* object}
+  \item{x}{Raster* object}
   \item{y}{Extent object, or any object from which an Extent object can be extracted (see Details)}
   \item{filename}{Character, output filename. Optional}
   \item{snap}{Character. One of 'near', 'in', or 'out', for use with \code{\link{alignExtent}}}  
