@@ -21,13 +21,16 @@
 #' @export
 
 
-layerStats <- function(x, stat, w, na.rm=TRUE, ...) {
+layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
 	
 	stat <- tolower(stat)
-	stopifnot(stat %in% c('cov', 'weighted.cov'))
+	stopifnot(stat %in% c('cov', 'weighted.cov', 'pearson'))
+	stopifnot(is.logical(asSample) & !is.na(asSample))
 
 	nl <- nlayers(x)
 	n <- ncell(x)
+	mat <- matrix(NA, nrow=nl, ncol=nl)
+	colnames(mat) <- rownames(mat) <- layerNames(x)
 	
 	if (stat == 'weighted.cov') {
 		if (missing(w))	{
@@ -45,22 +48,21 @@ layerStats <- function(x, stat, w, na.rm=TRUE, ...) {
 			w <- mask(w, nas)
 		}
 
-		sumw <- cellStats(w, stat='sum', na.rm=na.rm)
+		sumw <- cellStats(w, stat='sum', na.rm=na.rm) - asSample
 		means <- cellStats(x, stat='mean', na.rm=na.rm) / sumw
 		x <- (x - means) * sqrt(w)
 		
-		# We should do this more efficiently but...
-		covmat=matrix(NA, nrow=nl,ncol=nl)
 		for(i in 1:nl) {
 			for(j in i:nl) {
 				r <- raster(x, layer=i) * raster(x,layer=j)
 				v <- cellStats(r, stat='sum', na.rm=na.rm) / sumw
-				covmat[j,i] <- covmat[i,j] <- v
+				mat[j,i] <- covmat[i,j] <- v
 				
 			}
 		}
-		cov.w <- list(covmat,means)
-		names(cov.w) <- c("weigthed covariance", "weighted means")
+		cov.w <- list(mat, means)
+		names(cov.w) <- c("weigthed covariance", "weighted mean")
+		return(cov.w)		
 		
 	} else if (stat == 'cov') {
 
@@ -68,24 +70,46 @@ layerStats <- function(x, stat, w, na.rm=TRUE, ...) {
 		notnas <- ncell(x) - cellStats(x, 'countNA')
 		x <- (x - means)
 		
-		covmat=matrix(NA, nrow=nl,ncol=nl)
 		for(i in 1:nl) {
 			for(j in i:nl) {
 				r <- raster(x, layer=i) * raster(x, layer=j)
 				if (na.rm) {
-					v <- cellStats(r, stat='sum', na.rm=na.rm) / (n - cellStats(r, stat='countNA'))
+					v <- cellStats(r, stat='sum', na.rm=na.rm) / (n - cellStats(r, stat='countNA') - asSample)
 				} else {
-					v <- cellStats(r, stat='sum', na.rm=na.rm) / n
+					v <- cellStats(r, stat='sum', na.rm=na.rm) / (n - asSample)
 				}
-				covmat[j,i] <- covmat[i,j] <- v
+				mat[j,i] <- covmat[i,j] <- v
 			}
 		}
-		covar <- list(covmat,means)
-		names(covar) <- c("covariance", "means")
-	}
+		covar <- list(mat, means)
+		names(covar) <- c("covariance", "mean")
+		return(covar)		
+		
+	} else if (stat == 'pearson') {
 
-	return(covar)
-	
+		means <- cellStats(x, stat='mean', na.rm=na.rm) 
+		sds <- cellStats(x, stat='sd', na.rm=na.rm) 
+		notnas <- ncell(x) - cellStats(x, 'countNA')
+		x <- (x - means)
+		
+		for(i in 1:nl) {
+			for(j in i:nl) {
+				r <- raster(x, layer=i) * 	raster(x, layer=j)
+				if (na.rm) {
+					v <- cellStats(r, stat='sum', na.rm=na.rm) / ((n - cellStats(r, stat='countNA') - asSample) * sds[i] * sds[j])
+				} else {
+					v <- cellStats(r, stat='sum', na.rm=na.rm) / ((n - asSample) * sds[i] * sds[j])
+				}
+				mat[j,i] <- covmat[i,j] <- v
+			}
+		}
+		covar <- list(mat, means)
+		names(covar) <- c("pearson correlation coefficient", "mean")
+		return(covar)		
+		
+		return(covmat)		
+
+	}
 }
 
 

@@ -3,26 +3,28 @@
 \alias{layerStats}
 
 
-\title{Weighted Covariance Matrices and Means for Rasters}
+\title{(Weighted) covariance for raster layers}
 
 
 \description{
-Compute summary statistics for multi-layer Raster objects. Like \code{cellStats} this function returns a single value, or a matrix of values, and not a Raster* object (see \code{\link{Summary-methods}} for that). 
+Compute correlation and (weighted) covariance for multi-layer Raster objects. Like \code{\link{cellStats}} this function returns a few values, not a Raster* object (see \code{\link{Summary-methods}} for that). 
 }
 
 
 \usage{
-layerStats(x, stat, w, na.rm=TRUE, ...)
+layerStats(x, stat, w, asSample=TRUE, na.rm=TRUE, ...)
 }
 
 
 \arguments{
   \item{x}{RasterStack or RasterBrick for which to compute a statistic}
 
-  \item{stat}{Character. The statistic to compute: either 'cov', or 'weighted.cov'}
+  \item{stat}{Character. The statistic to compute: either 'cov' (covariance), 'weighted.cov' (weighted covariance), or 'pearson' (correlation coefficient)}
 
   \item{w}{RasterLayer with the weights (should have the same extent, resolution and number of layers as \code{x}) to compute the weighted covariance}
 
+  \item{asSample}{Logical. If \code{TRUE}, the statistic for a sample (denominator is \code{n-1}) is computed, rather than for the population (denominator is \code{n})}
+    
   \item{na.rm}{Logial. Should missing values be removed?}
   
   \item{...}{Additional arguments (none implemetned)} 
@@ -35,7 +37,8 @@ List containing the (weighted) covariance matrix and the (weighted, per layer) m
 
 
 \author{
-Mort Canty (original code) and Jonathan A. Greenberg (R port).
+Jonathan A. Greenberg & Robert Hijmans. 
+Weighted covariance based on code by Mort Canty 
 }
 
 
