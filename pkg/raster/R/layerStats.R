@@ -21,54 +21,71 @@
 #' @export
 
 
-layerStats <- function(x, stat, w, ...) {
+layerStats <- function(x, stat, w, na.rm=TRUE, ...) {
 	
 	stat <- tolower(stat)
 	stopifnot(stat %in% c('cov', 'weighted.cov'))
+
+	nl <- nlayers(x)
+	n <- ncell(x)
 	
 	if (stat == 'weighted.cov') {
-		if(missing(w))	{
+		if (missing(w))	{
 			stop('to compute weighted covariance a weights layer should be provided')
 		}
 
-		nl <- nlayers(x)
-		n <- ncell(w)
-		sumw <- cellStats(w,stat='sum', na.rm=TRUE)
-		means <- cellStats(x, stat='mean', na.rm=TRUE) / sumw
-				
-		x <- (x - means)*sqrt(w)
+		if (nl != 1 & nlayers(w) != nl) {
+			stop('nlayers(w) should be 1 or equal to nlayers(s)')
+		}
+
+		if (na.rm) {
+		# a cell is set to NA if it is NA in any layer. That is not ideal, but easier and quicker
+			nas <- calc(x, function(i) sum(i)) * w
+			x <- mask(x, nas)
+			w <- mask(w, nas)
+		}
+
+		sumw <- cellStats(w, stat='sum', na.rm=na.rm)
+		means <- cellStats(x, stat='mean', na.rm=na.rm) / sumw
+		x <- (x - means) * sqrt(w)
 		
 		# We should do this more efficiently but...
 		covmat=matrix(NA, nrow=nl,ncol=nl)
 		for(i in 1:nl) {
-			for(j in (i+1):nl) {
+			for(j in i:nl) {
 				r <- raster(x, layer=i) * raster(x,layer=j)
-				covmat[i,j] <- cellStats(r,stat='sum',na.rm=TRUE)/sumw	
+				v <- cellStats(r, stat='sum', na.rm=na.rm) / sumw
+				covmat[j,i] <- covmat[i,j] <- v
+				
 			}
 		}
 		cov.w <- list(covmat,means)
 		names(cov.w) <- c("weigthed covariance", "weighted means")
-		return(cov.w) 
 		
 	} else if (stat == 'cov') {
 
-		nl <- nlayers(x)
-		means <- cellStats(x, stat='mean', na.rm=TRUE) / sumw
-	
+		means <- cellStats(x, stat='mean', na.rm=na.rm) 
+		notnas <- ncell(x) - cellStats(x, 'countNA')
 		x <- (x - means)
 		
 		covmat=matrix(NA, nrow=nl,ncol=nl)
 		for(i in 1:nl) {
-			for(j in (i+1):nl) {
-				r <- raster(x, layer=i) * raster(x,layer=j)
-				covmat[i,j] <- cellStats(r,stat='sum',na.rm=TRUE)/sumw	
+			for(j in i:nl) {
+				r <- raster(x, layer=i) * raster(x, layer=j)
+				if (na.rm) {
+					v <- cellStats(r, stat='sum', na.rm=na.rm) / (n - cellStats(r, stat='countNA'))
+				} else {
+					v <- cellStats(r, stat='sum', na.rm=na.rm) / n
+				}
+				covmat[j,i] <- covmat[i,j] <- v
 			}
 		}
 		covar <- list(covmat,means)
 		names(covar) <- c("covariance", "means")
-		return(covar)
 	}
-}
 
+	return(covar)
+	
+}
 
 

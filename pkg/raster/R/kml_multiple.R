@@ -81,7 +81,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000
 
 	imagefile <- paste(extension(filename, ''), "_", 1:nl, ".png", sep="")
 	for (i in 1:nl) {
-		png(filename = imagefile[i], width=max(480, ncol(x)), height=max(480, nrow(x)), bg="transparent")
+		png(filename = imagefile[i], width=ncol(x), height=nrow(x), bg="transparent")
 		par(mar=c(0,0,0,0))
 		if (R.Version()$minor >= 13) {
 			image(x[[i]], col=col, axes=FALSE, useRaster=TRUE, ...)

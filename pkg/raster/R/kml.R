@@ -36,7 +36,7 @@ function (x, filename, col=rev(terrain.colors(255)), maxpixels=100000, zip='', .
 	kmlfile <- filename
 	extension(kmlfile) <- '.kml'
 
-	png(filename = imagefile, width=max(480, ncol(x)), height=max(480, nrow(x)), bg="transparent")
+	png(filename = imagefile, width=ncol(x), height=nrow(x), bg="transparent")
 	par(mar=c(0,0,0,0))
 	if (R.Version()$minor >= 13) {
 		image(x, col=col, axes=FALSE, useRaster=TRUE, ...)
