@@ -1,3 +1,8 @@
+# Author: Robert J. Hijmans
+# Date : April 2012
+# Version 1.0
+# Licence GPL v3
+
 
 
 	
@@ -28,8 +33,10 @@ setMethod('weighted.mean', signature(x='RasterStackBrick', w='RasterStackBrick')
 		if (canProcessInMemory(x, nlx*2)) {
 			w <- getValues(w)
 			x <- getValues(x)
-			w[is.na(x)] <- NA
-			x[is.na(w)] <- NA
+			if (na.rm) {
+				w[is.na(x)] <- NA
+				x[is.na(w)] <- NA
+			}
 			
 			sumw <- apply(w, 1, sum, na.rm=na.rm)
 			w <- apply(w * x, 1, sum, na.rm=na.rm) / sumw
@@ -48,8 +55,10 @@ setMethod('weighted.mean', signature(x='RasterStackBrick', w='RasterStackBrick')
 			for (i in 1:tr$n) {
 				ww <- getValues(w, row=tr$row[i], nrows=tr$nrows[i])
 				xx <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
-				ww[is.na(xx)] <- NA
-				xx[is.na(ww)] <- NA
+				if (na.rm) {
+					ww[is.na(xx)] <- NA
+					xx[is.na(ww)] <- NA
+				}
 				
 				wx <- apply(ww * xx, 1, sum, na.rm=na.rm) / apply(ww, 1, sum, na.rm=na.rm)
 				out <- writeValues(out, wx, tr$row[i])
