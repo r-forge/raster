@@ -7,7 +7,7 @@
 # based on code by Mort Canty
 
 
-layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
+layerStats <- function(x, stat, w, asSample=TRUE, na.rm=FALSE, ...) {
 	
 	stat <- tolower(stat)
 	stopifnot(stat %in% c('cov', 'weighted.cov', 'pearson'))
@@ -52,7 +52,6 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
 	} else if (stat == 'cov') {
 
 		means <- cellStats(x, stat='mean', na.rm=na.rm) 
-		notnas <- ncell(x) - cellStats(x, 'countNA')
 		x <- (x - means)
 		
 		for(i in 1:nl) {
@@ -74,7 +73,6 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
 
 		means <- cellStats(x, stat='mean', na.rm=na.rm) 
 		sds <- cellStats(x, stat='sd', na.rm=na.rm) 
-		notnas <- ncell(x) - cellStats(x, 'countNA')
 		x <- (x - means)
 		
 		for(i in 1:nl) {

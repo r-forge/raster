@@ -12,7 +12,7 @@ Compute correlation and (weighted) covariance for multi-layer Raster objects. Li
 
 
 \usage{
-layerStats(x, stat, w, asSample=TRUE, na.rm=TRUE, ...)
+layerStats(x, stat, w, asSample=TRUE, na.rm=FALSE, ...)
 }
 
 
@@ -43,9 +43,10 @@ Weighted covariance based on code by Mort Canty
 
 
 \references{
+For the weighted covariance:
 \itemize{
-\item {Canty, M.J. and A.A. Nielsen. 2008. Automatic radiometric normalization of multitemporal satellite imagery with the iteratively re-weighted MAD transformation. Remote Sensing of Environment 112:1025-1036.}
-\item {Nielsen, A.A. 2007. The regularized iteratively reweighted MAD method for change detection in multi- and hyperspectral data. IEEE Transactions on Image Processing 16(2):463-478.} 
+\item {Canty, M.J. and A.A. Nielsen, 2008. Automatic radiometric normalization of multitemporal satellite imagery with the iteratively re-weighted MAD transformation. Remote Sensing of Environment 112:1025-1036.}
+\item {Nielsen, A.A., 2007. The regularized iteratively reweighted MAD method for change detection in multi- and hyperspectral data. IEEE Transactions on Image Processing 16(2):463-478.} 
 }
 }
 

@@ -63,6 +63,3 @@ w <- stack(w1, w2, w2)
 wm2 <- weighted.mean(b, w=w)
 }
 
-
-}
-
