@@ -32,7 +32,7 @@ layerStats(x, stat, w, asSample=TRUE, na.rm=TRUE, ...)
 
 
 \value{
-List containing the (weighted) covariance matrix and the (weighted, per layer) means.
+List with two items: the correlation or (weighted) covariance matrix, and the (weighted) means.
 }
 
 
@@ -51,5 +51,17 @@ Weighted covariance based on code by Mort Canty
 
 \seealso{
  \code{\link{cellStats}}, \code{\link{cov.wt}}, \code{\link[raster]{weighted.mean}}
+}
+
+\examples{
+library(raster)
+b <- brick(system.file("external/rlogo.grd", package="raster"))
+layerStats(b, 'pearson')
+
+layerStats(b, 'cov')
+
+# weigh by column number
+w <- init(b, v='col')
+layerStats(b, 'weighted.cov', w=w)
 }
 

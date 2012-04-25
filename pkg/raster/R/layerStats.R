@@ -36,10 +36,7 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
 		if (missing(w))	{
 			stop('to compute weighted covariance a weights layer should be provided')
 		}
-
-		if (nl != 1 & nlayers(w) != nl) {
-			stop('nlayers(w) should be 1 or equal to nlayers(s)')
-		}
+		stopifnot( nlayers(w) == 1 )
 
 		if (na.rm) {
 		# a cell is set to NA if it is NA in any layer. That is not ideal, but easier and quicker
@@ -49,14 +46,14 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
 		}
 
 		sumw <- cellStats(w, stat='sum', na.rm=na.rm) - asSample
-		means <- cellStats(x, stat='mean', na.rm=na.rm) / sumw
+		means <- cellStats(x * w, stat='sum', na.rm=na.rm) / sumw
 		x <- (x - means) * sqrt(w)
 		
 		for(i in 1:nl) {
 			for(j in i:nl) {
 				r <- raster(x, layer=i) * raster(x,layer=j)
 				v <- cellStats(r, stat='sum', na.rm=na.rm) / sumw
-				mat[j,i] <- covmat[i,j] <- v
+				mat[j,i] <- mat[i,j] <- v
 				
 			}
 		}
@@ -78,7 +75,7 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
 				} else {
 					v <- cellStats(r, stat='sum', na.rm=na.rm) / (n - asSample)
 				}
-				mat[j,i] <- covmat[i,j] <- v
+				mat[j,i] <- mat[i,j] <- v
 			}
 		}
 		covar <- list(mat, means)
@@ -100,15 +97,13 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=TRUE, ...) {
 				} else {
 					v <- cellStats(r, stat='sum', na.rm=na.rm) / ((n - asSample) * sds[i] * sds[j])
 				}
-				mat[j,i] <- covmat[i,j] <- v
+				mat[j,i] <- mat[i,j] <- v
 			}
 		}
 		covar <- list(mat, means)
 		names(covar) <- c("pearson correlation coefficient", "mean")
-		return(covar)		
+		return(covar)
 		
-		return(covmat)		
-
 	}
 }
 
