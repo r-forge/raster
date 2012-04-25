@@ -54,7 +54,6 @@ Weighted covariance based on code by Mort Canty
 }
 
 \examples{
-library(raster)
 b <- brick(system.file("external/rlogo.grd", package="raster"))
 layerStats(b, 'pearson')
 
