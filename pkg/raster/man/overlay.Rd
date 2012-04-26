@@ -27,7 +27,7 @@ If a single mutli-layer object is provided, its layers are treated as individual
 \arguments{
   \item{x}{Raster* object}
   \item{y}{Raster* object, or missing (only useful if \code{x} has multiple layers)}
-  \item{...}{Additional Raster objects, and the additional arguments writing files as in \code{\link{writeRaster}}}    
+  \item{...}{Additional Raster objects (and/or arguments for writing files as in \code{\link{writeRaster})}}    
   \item{fun}{Function to be applied. When using RasterLayer objects, the number of arguments of the function should match the number of Raster objects, or it should take any number of arguments. When using mult-layer objects the function should match the number of layers of the RasterStack/Brick object (unless unstack=FALSE) }
   \item{filename}{Character. Output filename (optional) }
   \item{recycle}{Logical. Should layers from Raster objects with fewer layers be recycled?}  
