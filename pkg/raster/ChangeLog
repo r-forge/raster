@@ -1,9 +1,13 @@
+New features, improvements:
 New function weighted.mean 
 New function layerStats to compute the covariance and weighted covariance matrix across layers (by Jonathan Greenberg)
+crosstab can now also process multi-layer objects, suggested by Neil Best
+Improved of speed of getValuesBlock for RasterBrick using suggestion by Stefan Schlaffer
+bug fixes:
+'overlay' ignored the writeRaster arguments (reported by Oliver Soong)
 The 'buffer' argument in extract (with points) was lost in the previous version. It has been restored. 
-In extract with polygons failed with "getCover=TRUE". fixed.  Reported by Ariel Ortiz-Bobea
-Implemented crosstab for multi-layer objects, suggested by Neil Best
-Significant improvement of speed of getValuesBlock for RasterBrick using suggestion by Stefan Schlaffer
+In extract with polygons failed with "getCover=TRUE". Reported by Ariel Ortiz-Bobea
+'predict' now also works when using a single predictor raster layer (reported by Ben Weinstein)
 
 --- 5-April-2012, version 1.9-82
 New function 'getValuesFocal' to get focal values (a cell and its neighborhood)

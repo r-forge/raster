@@ -3,7 +3,7 @@
 \alias{layerStats}
 
 
-\title{(Weighted) covariance for raster layers}
+\title{Correlation and (weighted) covariance}
 
 
 \description{
