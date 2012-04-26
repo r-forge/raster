@@ -116,7 +116,8 @@ setMethod('predict', signature(object='Raster'),
 			} else {
 				blockvals <- data.frame(getValues(object, row=rr, nrows=tr$nrows[i]))	# faster
 			}
-			# colnames(blockvals) <- lyrnames
+			# need to do this if using a single variable
+			colnames(blockvals) <- lyrnames
 			
 			if (haveFactor) {
 				for (j in 1:length(f)) {
