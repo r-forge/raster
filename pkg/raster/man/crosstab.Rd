@@ -23,7 +23,7 @@ Cross-tabulate two RasterLayer objects, or mulitiple layers in a RasterStack or 
   \item{digits}{Integer. The number of digits for rounding the values before cross-tabulation}
   \item{long}{Logical. If \code{TRUE} the results are returned in 'long' format data.frame instead of a table}
   \item{progress}{Character. "text", "window", or "" (the default, no progress bar), only for large files that cannot be processed in one step}
-  \item{...}{Additional arguments that can be passed on to \code{\link[base]{table}}, such as \code{useNA="always"} to include \code{NA} values in the tabulation}
+  \item{...}{Additional arguments that can be passed on to \code{\link[base]{table}}, such as \code{useNA="always"} to include \code{NA} values in the tabulation (the dnn argument is ignored and using it may lead to an error)}
 }
 
 
