@@ -1,23 +1,27 @@
 \name{cellStats}
 
 \alias{cellStats}
-\alias{cellStats,Raster-method}
+\alias{cellStats,RasterLayer-method}
+\alias{cellStats,RasterStackBrick-method}
 
 \title{Cell statistics}
 
 
 \description{
-Compute statistics for the cells of each layer of a Raster object. In the \code{raster} package, functions such as max, min, and mean, when used with Raster objects as argument, return a new Raster object (with a value computed for each cell). In contrast, cellStats returns a single value, computed from the all the values of a layer.
+Compute statistics for the cells of each layer of a Raster* object. In the \code{raster} package, functions such as max, min, and mean, when used with Raster* objects as argument, return a new Raster* object (with a value computed for each cell). In contrast, cellStats returns a single value, computed from the all the values of a layer. Also see \code{\link{layerStats}}
 }
 
 \usage{
-\S4method{cellStats}{Raster}(x, stat='mean', na.rm=TRUE, ...)
+\S4method{cellStats}{RasterLayer}(x, stat='mean', na.rm=TRUE, asSample=TRUE, ...)
+
+\S4method{cellStats}{RasterStackBrick}(x, stat='mean', na.rm=TRUE, asSample=TRUE, ...)
 }
 
 \arguments{
  \item{x}{Raster* object}
- \item{stat}{The function to be applied}
+ \item{stat}{The function to be applied. See Details}
  \item{na.rm}{Logical. Should \code{NA} values be removed?}
+ \item{asSample}{Logical. Only relevant for \code{stat=sd} in which case, if \code{TRUE}, the standard deviation for a sample (denominator is \code{n-1}) is computed, rather than for the population (denominator is \code{n})}
  \item{...}{Additional arguments }  
 }
 
