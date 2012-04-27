@@ -8,7 +8,7 @@
 
 
 .getGridTop <- function(x) {
-	rs <- rev(res(x))
+	rs <- res(x)
 	orig <- bbox(x)[,1] + 0.5 * rs
 	GridTopology(orig, rs, dim(x)[2:1] )
 }
@@ -55,12 +55,9 @@ setAs('Raster', 'SpatialGrid',
 		if (rotated(from)) {
 			stop('\n Cannot coerce because the object is rotated.\n Either coerce to SpatialPoints* from\n or first use the "rectify" function')
 		}	
-		
 		r <- raster(from)
 		crs <- projection(r, FALSE)
-
 		grd <- .getGridTop(r)
-
 		SpatialGrid(grd, proj4string=crs)
 	}
 )
@@ -142,6 +139,7 @@ setAs('SpatialGrid', 'RasterLayer',
 setAs('SpatialPixels', 'RasterLayer', 
 	function(from){ return(raster (from)) }
 )
+
 
 
 setAs('SpatialGrid', 'BasicRaster', 
