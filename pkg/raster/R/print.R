@@ -1,6 +1,6 @@
 # Author: Robert J. Hijmans, r.hijmans@gmail.com
-# Date :  June 2008
-# Version 0.9
+# Date :  April 2012
+# Version 1.0
 # Licence GPL v3
 
 
@@ -46,16 +46,22 @@ setMethod ('print' , 'Spatial',
 			hasData <- TRUE
 		}
 		
-		if (inherits(x, 'SpatialPixels') | inherits(x, 'SpatialGrid')) {
+		if (inherits(x, 'SpatialPixels')) {
 			isRaster <- TRUE
 			cr <- x@grid@cells.dim
+			nl <- ifelse(hasData, ncol(x@data), 0)
+			cat ('dimensions  : ', cr[2], ', ', cr[1], ', ', nrow(x@coords), ', ', nl, '  (nrow, ncol, npixels, nlayers)\n', sep="" ) 
+			cs <- x@grid@cellsize
+			cat ('resolution  : ', cs[1], ', ', cs[2], '  (x, y)\n', sep="")		
 
-			object <- brick(x)
+		} else if (inherits(x, 'SpatialGrid')) {
+			isRaster <- TRUE
+			cr <- x@grid@cells.dim
 			nl <- ifelse(hasData, ncol(x@data), 0)
 			cat ('dimensions  : ', cr[2], ', ', cr[1], ', ', prod(cr), ', ', nl, '  (nrow, ncol, ncell, nlayers)\n', sep="" ) 
-			#cat ('ncell       :' , ncell(object), '\n')
 			cs <- x@grid@cellsize
-			cat ('resolution  : ' , cs[1], ', ', cs[2], '  (x, y)\n', sep="")		
+			cat ('resolution  : ', cs[1], ', ', cs[2], '  (x, y)\n', sep="")		
+			
 		} else {		
 			cat('nfeatures   :' , length(row.names(x)), '\n')
 		}
