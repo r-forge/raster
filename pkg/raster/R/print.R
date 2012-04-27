@@ -30,6 +30,13 @@ setMethod ('print', 'Raster',
 
 
 
+setMethod ('show' , 'Spatial', 
+	function(object) {
+		print (object)
+	}
+)
+
+
 setMethod ('print' , 'Spatial', 
 	function(x, ...) {
 	
@@ -60,18 +67,27 @@ setMethod ('print' , 'Spatial',
 			if (!isRaster) {
 				cat('data dims   : ', nrow(x), ', ', ncol(x), '  (nrow, ncol)\n', sep="" ) 
 			}
-
-# this is problematic with factors			
-#			r <- apply(x@data, 2, range, na.rm=TRUE)
-#			minv <- as.vector(r[1,])
-#			maxv <- as.vector(r[2,])
-#			if (length(minv) > 10) {
-#				minv <- c(minv[1:10], '...')
-#				maxv <- c(maxv[1:10], '...')
-#			}
-#			cat('min values  :', paste(minv, collapse=' '), '\n')
-#			cat('max values  :', paste(maxv, collapse=' '), '\n')
-
+			
+			nfact <- sapply(1:ncol(x@data), function(i) is.numeric(x@data[,i]))
+			lf <- length(nfact)
+			if (lf > 15) {
+				nfact <- nfact[1:15]
+			}
+			if (sum(nfact) > 1) {
+				r <- apply(x@data[,which(nfact)], 2, range, na.rm=TRUE)
+				fc <- as.character(nfact)
+				fc[! nfact] <- '(f)'
+				maxv <- minv <- fc
+				minv[nfact] <- as.vector(r[1, ])
+				maxv[nfact] <- as.vector(r[2,])
+				if (lf > 15) {
+					minv <- c(minv, '...')
+					maxv <- c(maxv, '...')
+				}
+				cat('min values  :', paste(minv, collapse=', '), '\n')
+				cat('max values  :', paste(maxv, collapse=', '), '\n')
+			} 
+				
 			coln <- colnames(x@data)
 			if (length(coln) > 10) {
 				coln <- c(coln[1:10], '...')
