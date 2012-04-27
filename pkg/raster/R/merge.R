@@ -112,7 +112,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 				out <- setValues(out, v)
 				if (filename != '') {
 					dotargs$x <- out
-					do.call(writeRaster, dotargs)
+					out <- do.call(writeRaster, dotargs)
 				}
 				return(out)
 				
@@ -130,7 +130,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 				out <- setValues(out, v)
 				if (filename != '') {
 					dotargs$x <- out
-					do.call(writeRaster, dotargs)
+					out <- do.call(writeRaster, dotargs)
 				}
 				return(out)
 			
@@ -166,7 +166,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 				out <- setValues(out, v)
 				if (filename != '') {
 					dotargs$x <- out
-					do.call(writeRaster, dotargs)
+					out <- do.call(writeRaster, dotargs)
 				}
 				return(out)
 				
@@ -180,7 +180,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 				out <- setValues(out, v)
 				if (filename != '') {
 					dotargs$x <- out
-					do.call(writeRaster, dotargs)
+					out <- do.call(writeRaster, dotargs)
 				}
 				return(out)
 			}
@@ -209,7 +209,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 
 		pb <- pbCreate(tr$n, dotargs)
 		dotargs$x <- out
-		do.call(writeStart, dotargs)
+		out <- do.call(writeStart, dotargs)
 		
 		if (overlap) {
 		
@@ -333,7 +333,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 
 		pb <- pbCreate(tr$n, dotargs)
 		dotargs$x <- out
-		do.call(writeStart, dotargs)
+		out <- do.call(writeStart, dotargs)
 
 		if (overlap) {
 		

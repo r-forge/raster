@@ -81,7 +81,7 @@ function(x, y, ..., fun, tolerance=0.05, filename="") {
 		out <- setValues(out, v)
 		if (filename != '') {
 			dotargs$x <- out
-			do.call(writeRaster, dotargs)
+			out <- do.call(writeRaster, dotargs)
 		}
 		return(out)
 	}
@@ -102,7 +102,7 @@ function(x, y, ..., fun, tolerance=0.05, filename="") {
 	pb <- pbCreate(tr$n, progress=progress)
 
 	dotargs$x <- out
-	do.call(writeStart, dotargs)
+	out <- do.call(writeStart, dotargs)
 
 	if (nl == 1) {
 		for (i in 1:tr$n) {
