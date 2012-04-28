@@ -29,8 +29,6 @@ zonal <- function(x, zones, stat='mean', digits=0, na.rm=TRUE, progress='') {
 			
 	} else {
 		
-		stat <- .makeTextFun <- function(stat)
-		
 		if (class(stat) != 'character') {
 			stop("RasterLayers cannot be processed in memory.\n You can use stat='sum', 'mean', 'min', or 'max', but not a function")
 		}
