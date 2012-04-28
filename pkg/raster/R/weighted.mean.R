@@ -3,8 +3,6 @@
 # Version 1.0
 # Licence GPL v3
 
-
-
 	
 if (!isGeneric("weighted.mean")) {
 	setGeneric("weighted.mean", function(x, w, ...)
@@ -49,7 +47,7 @@ setMethod('weighted.mean', signature(x='RasterStackBrick', w='RasterStackBrick')
 			
 		} else {
 			
-			tr <- blockSize(x, n=nls*2)
+			tr <- blockSize(x, n=nlx*2)
 			pb <- pbCreate(tr$n, ...)
 			out <- writeStart(out, filename=filename, ...)
 			for (i in 1:tr$n) {

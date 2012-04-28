@@ -133,7 +133,7 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 				d <- matrix(d, ncol=1)
 			}
 			if (counts) {
-				nas <- colSums( is.na(x) )
+				nas <- colSums( is.na(d) )
 				if (stat != 'countNA') {
 					if (min(nas) == nrow(d)) { 
 						next 

@@ -14,6 +14,7 @@ if (!isGeneric("crosstab")) {
 setMethod('crosstab', signature(x='RasterLayer', y='RasterLayer'), 
 	function(x, y, digits=0, long=FALSE, progress, ...) {
 		x <- stack(x,y)
+		if (missing(progress)) { progress <- .progress() }
 		return (  crosstab(x, digits=digits, long=long, progress=progress, ...)  )
 	}
 )

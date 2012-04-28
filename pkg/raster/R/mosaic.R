@@ -99,7 +99,7 @@ function(x, y, ..., fun, tolerance=0.05, filename="") {
 	}
 
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, progress=progress)
+	pb <- do.call(pbCreate, dotargs)
 
 	dotargs$x <- out
 	out <- do.call(writeStart, dotargs)
