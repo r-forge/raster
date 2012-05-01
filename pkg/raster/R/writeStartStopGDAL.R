@@ -37,8 +37,11 @@
 		try ( .Call("RGDAL_SetStatistics", b, as.double(statistics[i,]), PACKAGE = "rgdal"), silent=TRUE )
 	}
 		
-	opts <- ifelse(x@file@options[1] == "", NULL, x@file@options)
-	saveDataset(x@file@transient, x@file@name, options=opts)
+	if(x@file@options[1] != "") {
+		saveDataset(x@file@transient, x@file@name, options=x@file@options)
+	} else {
+		saveDataset(x@file@transient, x@file@name)	
+	}
 	
 	GDAL.close(x@file@transient) 
 	
