@@ -1,3 +1,4 @@
+--- 1-May-2012, version 1.9-82
 New features, improvements:
 New function weighted.mean 
 New function layerStats to compute the correlation, covariance and weighted covariance matrix across layers (by Jonathan Greenberg)
