@@ -19,14 +19,14 @@ Plots a textual (rather than color) representation of values of the cells on top
   \item{x}{RasterLayer}
   \item{digits}{Integer. how many digits should be used?}
   \item{fun}{Function to subset the values plotted (as in \code{\link{rasterToPoints}}}
-  \item{...}{Additional arguments that are passed to base function \code{\link[base]{text}} }
+  \item{...}{Additional arguments to pass to graphics function \code{\link[graphics]{text}} }
 }
 
 \seealso{
-\code{ \link[raster]{plot}}
+\code{\link[raster]{plot}}
 }
 
-\author{ Robert J. Hijmans }
+\author{Robert J. Hijmans}
 
 \examples{ 
 r <- raster(nrows=4, ncols=4)
