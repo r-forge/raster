@@ -12,9 +12,9 @@ if (!isGeneric("text")) {
 
 
 setMethod('text', signature(x='RasterLayer'), 
-	function(x, digits=0, ...) {
-		x = rasterToPoints(x, ..., spatial=FALSE)
-		text(x[,1], x[,2], as.character(round(x[,3], digits=digits) ))
+	function(x, digits=0, fun=NULL, ...) {
+		x <- rasterToPoints(x, fun=fun, spatial=FALSE)
+		text(x[,1], x[,2], as.character(round(x[,3], digits=digits) ), ...)
 	}
 )
 
