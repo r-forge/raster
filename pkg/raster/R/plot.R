@@ -10,9 +10,8 @@ if (!isGeneric("plot")) {
 }	
 
 
-
 setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, main, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, ...)  {
+	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, maxnl=16, main, ...)  {
 	
 		if (alpha < 1) {
 			alpha <- max(alpha, 0) * 255 + 1
@@ -20,13 +19,11 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			alpha <- paste(rep(a, each=16), rep(a, times=16), sep='')[alpha]
 			col <- paste(substr(col, 1, 7), alpha, sep="")
 		}
-
 	
 		if (missing(y)) {
 			y <- 1:nlayers(x)
-			if (length(y) > 16) {
-				warning('only first 16 layers are plotted')
-				y <- 1:16
+			if (length(y) > maxnl) {
+				y <- 1:maxnl
 			}
 		} else {
 			if (is.character(y)) {
@@ -117,24 +114,31 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 
 
 setMethod("plot", signature(x='Raster', y='Raster'), 
-	function(x, y, maxpixels=100000, cex=0.2, xlab, ylab, ...)  {
+	function(x, y, maxpixels=100000, cex=0.2, xlab, ylab, maxnl=16, ...)  {
 		compare(c(x, y), extent=TRUE, rowcol=TRUE, crs=FALSE, stopiffalse=TRUE) 
-		nl <- nlayers(x)
-		nl2 <- nlayers(y)
-		if (nl != nl2) {
-			warning('number of layers does not match')
+		nlx <- nlayers(x)
+		nly <- nlayers(y)
+
+		maxnl <- max(1, round(maxnl))
+		nl <- max(nlx, nly)
+		if (nl > maxnl) {
+			nl <- maxnl
+			if (nlx > maxnl) {
+				x <- x[[1:maxnl]]
+				nlx <- maxnl
+			}
+			if (nly > maxnl) {
+				y <- y[[1:maxnl]]
+				nly <- maxnl
+			}
 		}
-		nl <- min(nl, nl2)
-		if (nl > 16) {
-			warning('only first 16 layers are plotted')
-			nl <- 16
-		}
+		
 		if (missing(xlab)) {
 			ln1 <- layerNames(x)
 		} else {
 			ln1 <- xlab
 			if (length(ln1) == 1) {
-				ln1 <- rep(ln1, nl)
+				ln1 <- rep(ln1, nlx)
 			}
 		}
 		if (missing(ylab)) {
@@ -142,7 +146,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 		} else {
 			ln2 <- ylab
 			if (length(ln1) == 1) {
-				ln2 <- rep(ln2, nl)
+				ln2 <- rep(ln2, nly)
 			}
 		}
 
@@ -163,6 +167,18 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 			warning(paste('plot used a sample of ', round(100*length(x)/cells), "% of the cells", sep=""))
 		}
 			
+		if (nlx != nly) {	
+			# recycling
+			d <- cbind(as.vector(x), as.vector(y))
+			x <- matrix(d[,1], ncol=nl)
+			y <- matrix(d[,2], ncol=nl)
+			lab <- vector(length=nl)
+			lab[] <- ln1
+			ln1 <- lab
+			lab[] <- ln2
+			ln2 <- lab		
+		}
+		
 		if (nl > 1) {
 			old.par <- par(no.readonly = TRUE) 
 			on.exit(par(old.par))
