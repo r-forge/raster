@@ -63,7 +63,7 @@ setMethod ('print' , 'Spatial',
 			cat ('resolution  : ', cs[1], ', ', cs[2], '  (x, y)\n', sep="")		
 			
 		} else {		
-			cat('nfeatures   :' , length(row.names(x)), '\n')
+			cat('nfeatures   :' , length(x), '\n')
 		}
 		
 		e <- bbox(x)
