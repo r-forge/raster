@@ -28,11 +28,28 @@
 }
 
 
+setMethod('names', signature(x='Raster'), 
+	function(x) { 
+		ln <- x@layernames
+		ln <- ln[1:nlayers(x)]
+		.goodNames(as.vector(ln))
+	}
+)
+
 layerNames <- function(x) {
 	ln <- x@layernames
 	ln <- ln[1:nlayers(x)]
 	.goodNames(as.vector(ln))
 }
+
+
+
+
+setMethod('names<-', signature(x='Raster'), 
+	function(x, value)  {
+		'layerNames<-'(x, value)
+	}
+)
 
 
 'layerNames<-' <- function(x, value) {
@@ -50,4 +67,8 @@ layerNames <- function(x) {
 	}
 	return(x)
 }
+
+
+
+
 

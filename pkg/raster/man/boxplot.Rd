@@ -3,7 +3,8 @@
 \docType{methods}
 
 \alias{boxplot}
-\alias{boxplot,Raster-method}
+\alias{boxplot,RasterLayer-method}
+\alias{boxplot,RasterStackBrick-method}
 
 \title{
 Box plot of Raster objects
@@ -13,26 +14,16 @@ Box plot of Raster objects
 Box plot of layers in a Raster object
 }
 
-
 \usage{
-boxplot(x, ...)
+\S4method{boxplot}{RasterStackBrick}(x, maxpixels=100000, ...)
+\S4method{boxplot}{RasterLayer}(x, y=NULL, maxpixels=100000, ...)
 }
 
 \arguments{
 \item{x}{Raster* object}
-\item{...}{Additional arguments. See Methods}
-}
-
-
-\section{Methods}{
-\describe{
-	\code{boxplot(x, maxpixels=100000, ...)}
-
-\tabular{rll}{
-\tab \code{maxpixels} \tab Integer. Number of pixels to sample from each layer of large Raster objects \cr
-\tab \code{...} \tab Argument passed to \code{graphics::\link[graphics]{boxplot}} \cr
-}		
-}
+\item{y}{If \code{x} is a RasterLayer object, y can be an additional RasterLayer to group the values of \code{x} by 'zone'}
+\item{maxpixels}{Integer. Number of pixels to sample from each layer of large Raster objects}
+\item{...}{Arguments passed to \code{graphics::\link[graphics]{boxplot}}}
 }
 
 \seealso{

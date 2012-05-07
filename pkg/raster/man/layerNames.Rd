@@ -1,15 +1,28 @@
-\name{layerNames}
+\name{names}
 
 \alias{layerNames}
 \alias{layerNames<-}
+\alias{names}
+\alias{names<-}
+\alias{names,Raster-method}
+\alias{names<-,Raster-method}
+
   
-\title{layerNames}
+\title{names}
 
 \description{
-Get or set layer names of a Raster* object
+Get or set the names of the layers of a Raster* object
+
+Function \code{layerNames} is obsolete. Use \code{names} in stead. 
 }
 
 \usage{
+names(x)
+names(x) <- value
+
+\S4method{names}{Raster}(x)
+\S4method{names<-}{Raster}(x, value)
+
 layerNames(x)
 layerNames(x) <- value
 }
@@ -27,15 +40,17 @@ Character
 
 
 \author{Robert J. Hijmans }
+
+
 \examples{
-r <- raster(ncols=10, nrows=10)
+r <- raster(ncols=5, nrows=5)
 r[] <- 1:ncell(r)
 s <- stack(r, r, r)
 nlayers(s)
-layerNames(s)
-layerNames(s) <- c('a', 'b', 'c')
-layerNames(s)[2] <- 'hello world'
-layerNames(s)
+names(s)
+names(s) <- c('a', 'b', 'c')
+names(s)[2] <- 'hello world'
+names(s)
 s
 }
 
