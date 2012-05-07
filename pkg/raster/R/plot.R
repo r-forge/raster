@@ -100,7 +100,7 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 		}
 
 		if (length(x@legend@colortable) > 0) {
-			.plotCT(x, maxpixels=maxpixels, ext=ext,...)
+			.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, ...)
 		} else if (! useRaster) {
 			.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, ...) 
 		} else {
