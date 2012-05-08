@@ -8,19 +8,18 @@
 \alias{names<-,Raster-method}
 
   
-\title{names}
+\title{Names of raster layers}
 
 \description{
 Get or set the names of the layers of a Raster* object
 
-Function \code{layerNames} is obsolete. Use \code{names} in stead. 
+Function \code{layerNames} is deprecated. Use \code{names} in stead. 
 }
 
 \usage{
-
 \S4method{names}{Raster}(x)
-\S4method{names}{Raster}(x)<-value
 
+\S4method{names}{Raster}(x)<-value
 
 layerNames(x)
 layerNames(x) <- value
