@@ -17,11 +17,10 @@ Function \code{layerNames} is obsolete. Use \code{names} in stead.
 }
 
 \usage{
-names(x)
-names(x) <- value
 
 \S4method{names}{Raster}(x)
-\S4method{names<-}{Raster}(x, value)
+\S4method{names}{Raster}(x)<-value
+
 
 layerNames(x)
 layerNames(x) <- value
