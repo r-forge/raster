@@ -24,7 +24,7 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 		}
 	}
 
-	laynam <- layerNames(x)
+	laynam <- names(x)
 	
 	if (canProcessInMemory(x, 3)) {
 		
@@ -42,7 +42,7 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 		
 	} else {
 		xyv <- matrix(NA, ncol=2+nlayers(x), nrow=0)
-		colnames(xyv) <- c('x', 'y', layerNames(x))
+		colnames(xyv) <- c('x', 'y', names(x))
 		X <- xFromCol(x, 1:ncol(x))
 		Y <- yFromRow(x, 1:nrow(x))
 

@@ -71,7 +71,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), maxpixels=100000
 	kmlfile <- filename
 	extension(kmlfile) <- '.kml'
 	
-	name <- layerNames(x)
+	name <- names(x)
 
     kml <- c('<?xml version="1.0" encoding="UTF-8"?>', '<kml xmlns="http://www.opengis.net/kml/2.2">')
     kml <- c(kml, c("<Folder>", paste("<name>", extension(basename(filename), ''), "</name>", sep='')))

@@ -27,14 +27,14 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			}
 		} else {
 			if (is.character(y)) {
-				y = .nameToIndex(y, layerNames(x))
+				y = .nameToIndex(y, names(x))
 			}
 			y <- unique(as.integer(round(y)))
 			y <- na.omit(y)
 		}
 		
 		if (missing(main)) {
-			main <- layerNames(x)
+			main <- names(x)
 		}
 		
 		if (length(y) == 1) {
@@ -134,7 +134,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 		}
 		
 		if (missing(xlab)) {
-			ln1 <- layerNames(x)
+			ln1 <- names(x)
 		} else {
 			ln1 <- xlab
 			if (length(ln1) == 1) {
@@ -142,7 +142,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 			}
 		}
 		if (missing(ylab)) {
-			ln2 <- layerNames(y)
+			ln2 <- names(y)
 		} else {
 			ln2 <- ylab
 			if (length(ln1) == 1) {

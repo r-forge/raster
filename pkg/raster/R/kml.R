@@ -41,7 +41,7 @@ function (x, filename, col=rev(terrain.colors(255)), maxpixels=100000, blur=1, z
 	image(x, col=col, axes=FALSE, useRaster=TRUE, ...)
 	dev.off()
 
-	name <- layerNames(x)[1]
+	name <- names(x)[1]
 	if (name == "") { name <- 'x' }
     kml <- c('<?xml version="1.0" encoding="UTF-8"?>', '<kml xmlns="http://www.opengis.net/kml/2.2">', "<GroundOverlay>")
     kmname <- paste("<name>", name, "</name>", sep = "")

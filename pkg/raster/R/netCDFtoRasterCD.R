@@ -210,7 +210,7 @@
 		
 	if (type == 'RasterLayer') {
 		r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows, crs=crs)
-		layerNames(r) <- long_name
+		names(r) <- long_name
 	} else if (type == 'RasterBrick') {
 		r <- brick(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows, crs=crs)
 		r@title <- long_name
@@ -287,7 +287,7 @@
 		r@data@nlayers <- r@file@nbands
 		r@data@min <- rep(Inf, r@file@nbands)
 		r@data@max <- rep(-Inf, r@file@nbands)
-		try( layerNames(r) <- as.character(r@zvalue), silent=TRUE )
+		try( names(r) <- as.character(r@zvalue), silent=TRUE )
 	}
 	
 	return(r)

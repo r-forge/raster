@@ -77,7 +77,7 @@ setAs('Raster', 'SpatialGridDataFrame',
 			if (nlayers(from) > 1) {
 				sp <- SpatialGridDataFrame(grd, proj4string=crs, data=data.frame(values(from), check.names=TRUE))
 			} else {
-				ln <- layerNames(from)[1]
+				ln <- names(from)[1]
 				from <- matrix(values(from), ncol=1)
 				colnames(from) <- ln
 				from <- data.frame(from, check.names=TRUE)
@@ -296,7 +296,7 @@ setAs('kasc', 'RasterBrick',
 		}	
 		dim(m) <- dim(from)
 		b <- setValues(b, m)
-		layerNames(b) <- names
+		names(b) <- names
 		return(b)
 	}
 )
@@ -315,12 +315,12 @@ setAs('kasc', 'RasterStack',
 		e <- extent(xmn, xmx, ymn, ymx)
 		r <- raster(e, nrow=nrow, ncol=ncol)
 		r <- setValues(r, as.numeric(from[,1]))
-		layerNames(r) <- names[1]
+		names(r) <- names[1]
 		s <- stack(r)
 		if (ncol(from) > 1) {
 			for (i in 2:ncol(from)) {
 				r <- setValues(r, as.numeric(from[,i]))
-				layerNames(r) <- names[i]
+				names(r) <- names[i]
 				s <- addLayer(s, r)
 			}	
 		}

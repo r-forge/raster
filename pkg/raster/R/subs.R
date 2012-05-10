@@ -62,13 +62,13 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 			}
 		} else {
 			r <- brick(r, nl=nlx * length(which))
-			ln <- rep(layerNames(x), length(which))
+			ln <- rep(names(x), length(which))
 			if (length(which) > 1) {
 				ln2 <- rep(colnames(y)[which], each=nlx)
 				ln <- paste(ln, paste('_', ln2, sep=''), sep='')
 			}
 		} 
-		layerNames(r) <- ln
+		names(r) <- ln
 
 		filename <- trim(filename)
 		

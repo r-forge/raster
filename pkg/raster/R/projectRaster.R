@@ -196,7 +196,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	} else {
 		to <- brick(to, values=FALSE, nl=nl)
 	}
-	layerNames(to) <- layerNames(from)
+	names(to) <- names(from)
 	if ( ! hasValues(from) ) {
 		warning("'from' has no cell values")
 		return(to)

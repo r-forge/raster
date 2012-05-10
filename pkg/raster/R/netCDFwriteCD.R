@@ -202,7 +202,7 @@
 #library(raster)
 #r = raster(ncol=10, nrow=5)
 #r[] = c(1:49, NA)
-#layerNames(r) = 'hello world'
+#names(r) = 'hello world'
 #a = raster:::.rasterSaveAsNetCDF(r, 'test.nc', overwrite=TRUE)
 #plot(a)
 #print(a)

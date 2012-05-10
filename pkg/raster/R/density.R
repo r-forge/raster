@@ -27,7 +27,7 @@ setMethod('density', signature(x='RasterStackBrick'),
 		
 		if (missing(layer)) y = 1:nlayers(x)
 		else if (is.character(layer)) {
-			y = .nameToIndex(layer, layerNames(x))
+			y = .nameToIndex(layer, names(x))
 		} else { 
 			y = layer 
 		}
@@ -44,7 +44,7 @@ setMethod('density', signature(x='RasterStackBrick'),
 				nl <- 16
 				y <- y[1:16]
 			}
-			if (missing(main)) {	main=layerNames(x) }
+			if (missing(main)) {	main=names(x) }
 
 			nc <- ceiling(sqrt(nl))
 			nr <- ceiling(nl / nc)
@@ -63,7 +63,7 @@ setMethod('density', signature(x='RasterStackBrick'),
 				res[[i]] = density(r, maxpixels=maxpixels, main=m, plot=plot, ...)
 			}		
 		} else if (nl==1) {
-			if (missing(main)) main = layerNames(x)[y]
+			if (missing(main)) main = names(x)[y]
 			r <- raster(x, y)
 			res = density(r, maxpixels=maxpixels, main=main, plot=plot, ...)
 		}

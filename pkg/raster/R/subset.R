@@ -14,7 +14,7 @@ if (!isGeneric('subset')) {
 setMethod('subset', signature(x='RasterStack'), 
 function(x, subset, drop=TRUE, ...) {
 	if (is.character(subset)) {
-		i <- na.omit(.nameToIndex(subset, layerNames(x)))
+		i <- na.omit(.nameToIndex(subset, names(x)))
 		if (length(i)==0) {
 			stop('invalid layer names')
 		} else if (length(i) < length(subset)) {
@@ -49,7 +49,7 @@ setMethod('subset', signature(x='RasterBrick'),
 function(x, subset, drop=TRUE, ...) {
 
 	if (is.character(subset)) {
-		i <- na.omit(.nameToIndex(subset, layerNames(x)))
+		i <- na.omit(.nameToIndex(subset, names(x)))
 		if (length(i)==0) {
 			stop('invalid layer names')
 		} else if (length(i) < length(subset)) {

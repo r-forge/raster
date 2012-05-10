@@ -41,7 +41,7 @@
 		if (cellnumbers) {			
 			value <- cbind(cells, value)
 			if (ncol(value) == 2) {
-				colnames(value)[2] <- layerNames(object)[layer]
+				colnames(value)[2] <- names(object)[layer]
 			} 
 		}
 			

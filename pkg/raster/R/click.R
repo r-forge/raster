@@ -52,7 +52,7 @@ setMethod('click', signature(x='Raster'),
 
 	if (nlayers(x) == 1)  {
 		value <- matrix(value)
-		colnames(value) <- layerNames(x)
+		colnames(value) <- names(x)
 	}
 	
 	if (cell) {

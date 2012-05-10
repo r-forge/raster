@@ -91,7 +91,7 @@ function(x, filename, format, ...) {
 		}
 	
 		out <- brick(x, values=FALSE)
-		layerNames(out) <- layerNames(x)
+		names(out) <- names(x)
 		out <- writeStart(out, filename, format=filetype, ...)
 	
 		if (inMemory(x)) {

@@ -148,7 +148,7 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE, useGD
 			outras <- brick(outras, nl=nl)
 		}
 		outras <- setValues(outras, m)
-		layerNames(outras) <- layerNames(x)
+		names(outras) <- names(x)
 		return(outras)
 		
 	} else {
@@ -156,7 +156,7 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE, useGD
 		m <- .cellValues(x, cell)
 		if (cells) {
 			m <- cbind(cell, m)
-			colnames(m)[2:ncol(m)] <- layerNames(x)
+			colnames(m)[2:ncol(m)] <- names(x)
 		} 
 		return(m)
 	}	

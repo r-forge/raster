@@ -22,7 +22,7 @@
 		if (inherits(x, 'RasterStack')) {
 	
 			result <- matrix(ncol=nl, nrow=length(cells))
-			colnames(result) <- layerNames(x)[lyrs]
+			colnames(result) <- names(x)[lyrs]
 			for (i in 1:length(lyrs)) {
 				result[,i] <- .readCells( x@layers[[lyrs[i]]], cells, 1)
 			}
@@ -45,7 +45,7 @@
 				if (is.null(dim(result))) { 
 						# single layer of brick returns vector perhaps should be fixed in readCells
 						# only an issue with a single layer?
-					names(result) <- layerNames(x)[lyrs]
+					names(result) <- names(x)[lyrs]
 				}
 				return(result)
 			}

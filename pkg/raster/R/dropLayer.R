@@ -22,7 +22,7 @@
 setMethod('dropLayer', signature(x='RasterStack'), 
 function(x, i, ...) {
 	if (is.character(i)) {
-		i = .nameToIndex(i, layerNames(x))
+		i = .nameToIndex(i, names(x))
 	}
 	i <- sort(unique(round(i)))
 	i <- i[i > 0 & i <= nlayers(x)]
@@ -38,7 +38,7 @@ function(x, i, ...) {
 setMethod('dropLayer', signature(x='RasterBrick'), 
 function(x, i, ...) {
 	if (is.character(i)) {
-		i = .nameToIndex(i, layerNames(x))
+		i = .nameToIndex(i, names(x))
 	}
 	i <- sort(unique(round(i)))
 

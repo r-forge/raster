@@ -123,7 +123,7 @@ setMethod('raster', signature(x='RasterStack'),
 		newindex = -1
 		if (nlayers(x) > 0) {
 			if (!is.numeric(layer)) {
-				newindex <- which(layerNames(x) == layer)[1]
+				newindex <- which(names(x) == layer)[1]
 				if (is.na (newindex) ) { 
 					warning('variable', layer, 'does not exist')
 					newindex = -1
@@ -135,7 +135,7 @@ setMethod('raster', signature(x='RasterStack'),
 			dindex <- max(1, min(nlayers(x), layer))
 			if (dindex != layer) { warning(paste("layer was changed to", dindex))}
 			r <- x@layers[[dindex]]
-			layerNames(r) <- layerNames(x)[dindex]
+			names(r) <- names(x)[dindex]
 		} else {
 			r <- raster(extent(x))
 			dim(r) <- c(nrow(x), ncol(x))
@@ -157,7 +157,7 @@ setMethod('raster', signature(x='RasterBrick'),
 		newindex = -1
 		if (nlayers(x) > 0) {
 			if (!is.numeric(layer)) {
-				newindex <- which(layerNames(x) == layer)[1]
+				newindex <- which(names(x) == layer)[1]
 				if (is.na (newindex) ) { 
 					warning('variable', layer, 'does not exist')
 					newindex = -1
@@ -267,11 +267,11 @@ setMethod('raster', signature(x='SpatialGrid'),
 						if (dindex != layer) { warning(paste("layer was changed to", dindex))}
 						layer <- dindex
 					}
-					layerNames(r) <- colnames(x@data)[layer]
+					names(r) <- colnames(x@data)[layer]
 				} else if (!(layer %in% names(x))) {
 					stop(layer, 'does not exist')
 				} else {
-					layerNames(r) <- layer
+					names(r) <- layer
 				}
 
 				if (is.character( x@data[[layer]]) ) { 

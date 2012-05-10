@@ -20,7 +20,7 @@ function(x, row, nrows) {
 			res[,i] <- getValues(x@layers[[i]], row, nrows)
 		}
 	}
-	colnames(res) <- layerNames(x)
+	colnames(res) <- names(x)
 	res
 }
 )
@@ -87,7 +87,7 @@ function(x, row, nrows) {
 	if (readrow) {
 		res <- .readRasterBrickValues(x, row, nrows)
 	}
-	colnames(res) <- layerNames(x)
+	colnames(res) <- names(x)
 	return(res)
 }
 )

@@ -128,7 +128,7 @@
 		}
 	}
 	closeDataset(con)
-	colnames(colrow)[2+(1:laysel)] <- layerNames(x)[layers]
+	colnames(colrow)[2+(1:laysel)] <- names(x)[layers]
 	return(colrow[, 2+(1:laysel)]) 
 }	
 
@@ -199,7 +199,7 @@
 	}
 	if (nl > 1) {
 		res <- t(matrix(res, nrow=nl))
-		colnames(res) <- layerNames(x)[layers]
+		colnames(res) <- names(x)[layers]
 	}
 	return(res)
 }

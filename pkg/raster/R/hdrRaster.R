@@ -40,7 +40,7 @@
 	cat("color=",  paste(raster@legend@color, collapse=':'), "\n", file = thefile)
 
 	cat("[description]", "\n", file = thefile)
-	ln <- gsub(":", ".", layerNames(raster))
+	ln <- gsub(":", ".", names(raster))
 	cat("layername=", paste(ln, collapse=':'), "\n", file = thefile)
 	cat("history=",  raster@history, "\n", file = thefile)
 	close(thefile)

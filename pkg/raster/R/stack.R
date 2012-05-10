@@ -77,7 +77,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 				for (b in bands) {
 					r[j] <- raster(x[[i]], band=b, native=native, ...)
 					if (namesFromList) {
-						layerNames(r[[j]]) <- paste(lstnames[i], '_', b, sep='')
+						names(r[[j]]) <- paste(lstnames[i], '_', b, sep='')
 					}
 					j <- j + 1
 				}
@@ -87,9 +87,9 @@ function(x, bands=NULL, native=FALSE, ...) {
 
 				if (namesFromList) {
 					if (bds > 1) {
-						layerNames(r[[j]]) <- paste(lstnames[i], '_1', sep='')						
+						names(r[[j]]) <- paste(lstnames[i], '_1', sep='')						
 					} else {
-						layerNames(r[[j]]) <- lstnames[i]
+						names(r[[j]]) <- lstnames[i]
 					}
 				}
 				j <- j + 1
@@ -98,7 +98,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 						r[j] <- raster(x[[i]], band=b, native=native, ...)
 							
 						if (namesFromList) {
-							layerNames(r[[j]]) <- paste(lstnames[i], '_', b, sep='')
+							names(r[[j]]) <- paste(lstnames[i], '_', b, sep='')
 						}
 						j <- j + 1
 					}
@@ -121,7 +121,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 			} else {
 				r[j] <- x[[i]]
 				if (namesFromList) {
-					layerNames(r[[j]]) <- lstnames[i]
+					names(r[[j]]) <- lstnames[i]
 				}
 				j <- j + 1				
 			}

@@ -109,9 +109,9 @@
 		}
 	}
 	if (type == 'RasterBrick') {
-		layerNames(x) <- lnames
+		names(x) <- lnames
 	} else {
-		layerNames(x) <- lnames[band]
+		names(x) <- lnames[band]
 	}
 	
 	dataType(x) <- inidatatype

@@ -59,7 +59,7 @@ setMethod ('show' , 'RasterLayer',
 			cat('values      : none\n')			
 		}
 
-		cat('layer name  :', layerNames(object), '\n')
+		cat('layer name  :', names(object), '\n')
 		
 		z <- getZ(object)
 		if (length(z) > 0) {
@@ -126,7 +126,7 @@ setMethod ('show' , 'RasterBrick',
 		} else {
 			cat('values      : none\n')			
 		}
-		ln <- layerNames(object)
+		ln <- names(object)
 		if (nl > mnr) {
 			ln <- c(ln[1:mnr], '...')
 		}
@@ -196,7 +196,7 @@ setMethod ('show' , 'RasterStack',
 			cat('max values  :', paste(trim(maxv), collapse=', '), '\n')
 			
 		}
-		ln <- layerNames(object)
+		ln <- names(object)
 		if (nl > mnr) {
 			ln <- c(ln[1:mnr], '...')
 		}

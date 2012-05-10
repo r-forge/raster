@@ -32,7 +32,7 @@ setMethod('mask', signature(x='RasterLayer', mask='RasterLayer'),
 function(x, mask, filename="", inverse=FALSE, ...){ 
 
 	compare(x, mask)
-	ln <- layerNames(x)
+	ln <- names(x)
 	if ( inMemory(x) & inMemory(mask)=='all') {
 		x[is.na(mask)] <- NA
 		if (filename != '') {
@@ -51,13 +51,13 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		}
 		if (filename != '') {
 			x <- writeRaster(x, filename, ...)
-			layerNames(x) <- ln
+			names(x) <- ln
 		}
 		return(x)
 		
 	} else {
 		out <- raster(x)
-		layerNames(out) <- ln		
+		names(out) <- ln		
 
 		if (filename=='') { 	
 			filename <- rasterTmpFile() 
@@ -87,7 +87,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		pbClose(pb)
 
 		out <- writeStop(out)
-		layerNames(out) <- ln		
+		names(out) <- ln		
 		return(out)
 	}
 }
@@ -100,8 +100,8 @@ function(x, mask, filename="", inverse=FALSE, ...){
 	compare(x, mask)
 	
 	out <- brick(x, values=FALSE)
-	ln <- layerNames(x)
-	layerNames(out) <- ln
+	ln <- names(x)
+	names(out) <- ln
 	
 	if (canProcessInMemory(x, nlayers(x)+4)) {
 
@@ -115,7 +115,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		if (filename != '') {
 			out <- writeRaster(out, filename, ...)
 		} 
-		layerNames(out) <- ln
+		names(out) <- ln
 		return(out)
 		
 	} else {
@@ -151,7 +151,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		pbClose(pb)
 
 		out <- writeStop(out)
-		layerNames(out) <- ln
+		names(out) <- ln
 		return(out)
 	}
 }
@@ -222,8 +222,8 @@ function(x, mask, filename="", ...){
 	
 	compare(x, mask)
 	out <- brick(x, values=FALSE)
-	ln <- layerNames(x)
-	layerNames(out) <- ln
+	ln <- names(x)
+	names(out) <- ln
 	
 	if (canProcessInMemory(x, nlayers(x)+4)) {
 
@@ -232,7 +232,7 @@ function(x, mask, filename="", ...){
 		out <- setValues(out, x)
 		if (filename != '') {
 			out <- writeRaster(out, filename, ...)
-			layerNames(out) <- ln
+			names(out) <- ln
 			
 		} 
 		return(out)
@@ -256,7 +256,7 @@ function(x, mask, filename="", ...){
 		pbClose(pb)
 
 		out <- writeStop(out)
-		layerNames(out) <- ln
+		names(out) <- ln
 		return(out)
 	}
 }

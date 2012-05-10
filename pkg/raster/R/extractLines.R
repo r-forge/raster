@@ -45,7 +45,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, ..
 	}
 	
 	rr <- raster(x)
-	cn <- layerNames(x)
+	cn <- names(x)
 	
 	pb <- pbCreate(nlns, ...)
 	
@@ -130,7 +130,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, ..
 		if (nlayers(x) > 1) {
 			j <- matrix(ncol=nlayers(x), nrow=length(res))
 			j[!i] <- t(sapply(res[!i], function(x) apply(x, 2, fun, na.rm=na.rm)))
-			colnames(j) <- layerNames(x)
+			colnames(j) <- names(x)
 		} else {
 			j <- vector(length=length(i))
 			j[i] <- NA

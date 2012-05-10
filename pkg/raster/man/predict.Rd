@@ -8,7 +8,7 @@
 \title{Spatial model predictions}
 
 \description{
-Make a Raster* object with predictions based on a a fitted model object. The first argument is a Raster* object with the independent variables. The layerNames in the RasterStack should exactely match those expected by the model. This will be the case if the same Raster* object was used (via \code{extract}) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomForest) for which a predict method has been implemented (or can be implemented) can be used. 
+Make a Raster* object with predictions based on a a fitted model object. The first argument is a Raster* object with the independent variables. The \code{\link{names}} in the RasterStack should exactely match those expected by the model. This will be the case if the same Raster* object was used (via \code{extract}) to obtain the values to fit the model (see the example). Any type of model (e.g. glm. gam, randomForest) for which a predict method has been implemented (or can be implemented) can be used. 
 }
 
 \usage{
@@ -49,7 +49,7 @@ RasterLayer or RasterBrick
 
 # create a RasterStack or RasterBrick with with a set of predictor layers
 logo <- brick(system.file("external/rlogo.grd", package="raster"))
-layerNames(logo)
+names(logo)
 
 \dontrun{
 # the predictor variables

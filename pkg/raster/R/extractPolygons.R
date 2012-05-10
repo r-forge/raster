@@ -239,7 +239,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 			if (nl > 1) {
 				j <- matrix(ncol=nl, nrow=length(res))
 				j[!i] <- t(sapply(res[!i], function(x) apply(x, 2, FUN=fun, na.rm=na.rm)))
-				colnames(j) <- layerNames(x)[layer:(layer+nl-1)]
+				colnames(j) <- names(x)[layer:(layer+nl-1)]
 			} else {
 				j <- vector(length=length(i))
 				j[i] <- NA
@@ -257,7 +257,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 		}
 
 		if (ncol(res) == 2) {
-			colnames(res)[2] <- layerNames(x)[layer]
+			colnames(res)[2] <- names(x)[layer]
 		} 
 	}
 	

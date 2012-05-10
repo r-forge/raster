@@ -61,7 +61,7 @@ setMethod('extract', signature(x='Raster', y='Extent'),
 			value <- extract(x, cell, layer=layer, nl=nl)
 			value <- cbind(cell, value)
 			if (ncol(value)==2) {
-				colnames(value)[2] <- layerNames(x)[layer]
+				colnames(value)[2] <- names(x)[layer]
 			}
 			if (df) {
 				value <- data.frame(value)

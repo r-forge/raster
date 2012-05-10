@@ -52,7 +52,7 @@ df$v2 <- df$v * 10
 x3 <- subs(r, df, which=2:3)
 
 s <- stack(r, r*3)
-layerNames(s) <- c('first', 'second')
+names(s) <- c('first', 'second')
 x4 <- subs(s, df)
 x5 <- subs(s, df, which=2:3)
 }

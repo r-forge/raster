@@ -69,7 +69,7 @@ setMethod("Summary", signature(x='Raster'),
 			return(out)
 		}
 		
-		layerNames(out) <- fun
+		names(out) <- fun
 		if (fun[1] == 'range') {
 			out <- brick(out, nl=2)
 		}

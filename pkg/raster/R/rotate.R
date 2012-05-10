@@ -22,9 +22,9 @@ setMethod('rotate', signature(x='Raster'),
 		r2 <- crop(x, extent(hx, e@xmax, e@ymin, e@ymax))
 		r2@extent@xmin <- r2@extent@xmin - xrange
 		r2@extent@xmax <- r2@extent@xmax - xrange
-		ln <- layerNames(x)
+		ln <- names(x)
 		x <- merge(r1, r2, overlap=FALSE, ...)
-		layerNames(x) <- ln
+		names(x) <- ln
 		return(x)
 	}
 )

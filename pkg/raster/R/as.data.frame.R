@@ -13,7 +13,7 @@ if (!isGeneric("as.data.frame")) {
 
 setMethod('as.data.frame', signature(x='RasterLayer'), 
 	function(x, row.names = NULL, optional = FALSE, ...) {
-		vname <- layerNames(x)
+		vname <- names(x)
 		x <- matrix(values(x), ncol=1)
 		colnames(x) <- vname
 		as.data.frame(x, row.names=row.names, optional=optional, ...)

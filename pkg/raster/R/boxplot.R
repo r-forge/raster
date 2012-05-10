@@ -12,7 +12,7 @@ if (!isGeneric("boxplot")) {
 setMethod('boxplot', signature(x='RasterStackBrick'), 
 	function(x, maxpixels=100000, ...) {
 		nl <- nlayers(x)
-		cn <- layerNames(x)
+		cn <- names(x)
 		if ( canProcessInMemory(x)) {
 			x <- getValues(x)
 		} else {
@@ -28,7 +28,7 @@ setMethod('boxplot', signature(x='RasterStackBrick'),
 setMethod('boxplot', signature(x='RasterLayer'), 
 	function(x, y=NULL, maxpixels=100000, ...) {
 		if (is.null(y)) {
-			cn <- layerNames(x)
+			cn <- names(x)
 			if ( canProcessInMemory(x)) {
 				x <- getValues(x)
 			} else {

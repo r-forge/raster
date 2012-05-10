@@ -41,7 +41,7 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, sp=FALSE, asR
 	stopifnot(size <= ncell(x))
 	
 	r <- raster(x)
-	layn <- layerNames(x)
+	layn <- names(x)
 
 	
 	if (sp | rowcol) {

@@ -100,7 +100,7 @@
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
 			rs@data@nlayers <- nres
-			if (ncols > 1) { layerNames(rs) <- colnames(field) }
+			if (ncols > 1) { names(rs) <- colnames(field) }
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 			datacols <- 5:ncol(xyarc)
 		}
@@ -211,7 +211,7 @@
 		if (ncols > 1) {
 			cn <- colnames(field)
 			if (! is.null(cn)) {
-				layerNames(rs) <- cn
+				names(rs) <- cn
 			}	
 		}
 

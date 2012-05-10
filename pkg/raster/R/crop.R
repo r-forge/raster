@@ -42,7 +42,7 @@ function(x, y, filename='', snap='near', datatype=NULL, ...) {
 	}
 
 	out <- setExtent(out, e, keepres=TRUE)
-	layerNames(out) <- layerNames(x)
+	names(out) <- names(x)
 	
 	if (! hasValues(x)) {
 		return(out)
