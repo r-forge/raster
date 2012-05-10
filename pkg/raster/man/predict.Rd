@@ -75,7 +75,7 @@ colnames(v)[1] <- 'pa'
 model <- glm(formula=pa~., data=v)
 
 #predict to a raster
-r1 <- predict(logo, model, progress='window')
+r1 <- predict(logo, model, progress='text')
 
 plot(r1)
 points(p, bg='blue', pch=21)
