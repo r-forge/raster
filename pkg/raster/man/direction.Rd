@@ -10,37 +10,26 @@ The direction (azimuth) to or from the nearest cell that is not \code{NA}. The d
 }
 
 \usage{
-direction(x, ...) 
+\S4method{direction}{RasterLayer}(x, filename='', degrees=FALSE, from=FALSE, doEdge=FALSE, ...) 
 }
 
 \arguments{
-\item{x}{a RasterLayer object}
-\item{...}{additional arguments. See Details.}  
-}
-
-
-\details{
-The following additional arguments can be passed, to replace default values for this function
-\tabular{rll}{
-  \tab \code{filename}  \tab Filename for the output RasterLayer \cr
-  \tab \code{from} \tab Logical. Default is \code{FALSE}. If \code{TRUE}, the direction from (instead of to)  the nearest cell that is not \code{NA} is returned \cr
-  \tab \code{degrees}  \tab Logical. If \code{FALSE} (the default) the unit of direction is radians. \cr
-
-  \tab \code{format} \tab Character. Output file type. See \link[raster]{writeRaster} \cr
-  \tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
-  \tab \code{overwrite} \tab Logical. If TRUE, "filename" will be overwritten if it exists \cr
-  \tab \code{progress} \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
- }
+\item{x}{RasterLayer object}
+\item{filename}{Character. Output filename (optional)}
+\item{from}{Logical. Default is \code{FALSE}. If \code{TRUE}, the direction from (instead of to)  the nearest cell that is not \code{NA} is returned}
+\item{degrees}{Logical. If \code{FALSE} (the default) the unit of direction is radians.}
+\item{...}{Additional arguments as for \code{\link{writeRaster}}}
 }
 
 \author{Robert J. Hijmans }
 
-\value{A RasterLayer object}
+\value{RasterLayer}
+
 
 \seealso{
 \code{\link[raster]{distance}},  \code{\link[raster]{gridDistance}}
 
-For the direction between points, see the \code{azimuth} function in the \code{geosphere} package 
+For the direction between (longitude/latitude) points, see the \code{azimuth} function in the \code{geosphere} package 
 }
 
 

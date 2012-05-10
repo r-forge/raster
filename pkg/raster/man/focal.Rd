@@ -31,7 +31,7 @@ Calculate focal ("moving window") values for the neighborhood of focal cells usi
  
 \item{NAonly}{logical. If \code{TRUE}, only cell values that are \code{NA} are replaced with the computed focal values}
  
-\item{...}{additional arguments. See Details.}  
+\item{...}{Additional arguments as for \code{\link{writeRaster}}}
 }
 
 \details{
@@ -46,14 +46,6 @@ There is, however, a difference if \code{NA} values are considered. One can use 
 Laplacian filter: \code{filter=matrix(c(0,1,0,1,-4,1,0,1,0), nrow=3)}
 
 Sobel filter: \code{filter=matrix(c(1,2,1,0,0,0,-1,-2,-1) / 4, nrow=3)}
-
-The following additional arguments can be passed, to replace default values for this function
-\tabular{rll}{
-\tab \code{overwrite} \tab Logical. If \code{TRUE}, "filename" will be overwritten if it exists \cr
-\tab \code{format} \tab Character. Output file type. See \link[raster]{writeRaster} \cr
-\tab \code{datatype} \tab Character. Output data type. See \link[raster]{dataType} \cr
-\tab \code{progress} \tab Character. "text", "window", or "" (the default, no progress bar)  \cr
-}
 }
 
 \value{
