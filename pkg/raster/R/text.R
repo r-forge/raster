@@ -16,6 +16,25 @@ setMethod('text', signature(x='RasterLayer'),
 	}
 )
 
+setMethod('text', signature(x='RasterStackBrick'), 
+	function(x, labels, digits=0, fun=NULL, ...) {
+		if (missing(labels)) {
+			labels <- 1
+		}
+		labels <- labels[1]
+		if (is.character(lables)) {
+			i <- which(labels == names(x))
+			if (i == 0) {
+				i <- 1
+			} 
+			x <- x[[i]]
+		}
+		x <- rasterToPoints(x, fun=fun, spatial=FALSE)
+		text(x[,1], x[,2], as.character(round(x[,3], digits=digits) ), ...)
+	}
+)
+
+
 setMethod('text', signature(x='SpatialPolygons'), 
 	function(x, labels, ...) {
 		if (missing(labels)) {

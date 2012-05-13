@@ -4,6 +4,7 @@
 
 \alias{text}
 \alias{text,RasterLayer-method}
+\alias{text,RasterStackBrick-method}
 \alias{text,SpatialPoints-method}
 \alias{text,SpatialPolygons-method}
 
@@ -16,17 +17,19 @@ Plots labels, that is a textual (rather than color) representation of values, on
 \usage{
 \S4method{text}{RasterLayer}(x, digits=0, fun=NULL, ...)
 
+\S4method{text}{RasterStackBrick}(x, labels, digits=0, fun=NULL, ...)
+
 \S4method{text}{SpatialPolygons}(x, labels, ...)
 
 \S4method{text}{SpatialPoints}(x, labels, ...)
 }
 
 \arguments{
-  \item{x}{RasterLayer, SpatialPoints* or SpatialPolygons*}
+  \item{x}{Raster*, SpatialPoints* or SpatialPolygons* object}
+  \item{labels}{Character. Vector of labels with \code{length(x)} or a variable name from \code{names(x)}}
   \item{digits}{Integer. how many digits should be used?}
   \item{fun}{Function to subset the values plotted (as in \code{\link{rasterToPoints}}}
   \item{...}{Additional arguments to pass to graphics function \code{\link[graphics]{text}} }
-  \item{labels}{Character. Vector of labels with \code{length(x)} or a variable name from \code{names(x)}}
 }
 
 \seealso{
