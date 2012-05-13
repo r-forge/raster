@@ -10,9 +10,12 @@ if (!isGeneric("text")) {
 }	
 
 setMethod('text', signature(x='RasterLayer'), 
-	function(x, digits=0, fun=NULL, ...) {
+	function(x, labels, digits=0, fun=NULL, ...) {
+		if (missing(labels)) {
+			labels <- as.character(round(x[,3], digits=digits) )
+		}
 		x <- rasterToPoints(x, fun=fun, spatial=FALSE)
-		text(x[,1], x[,2], as.character(round(x[,3], digits=digits) ), ...)
+		text(x[,1], x[,2], labels, ...)
 	}
 )
 
@@ -21,13 +24,15 @@ setMethod('text', signature(x='RasterStackBrick'),
 		if (missing(labels)) {
 			labels <- 1
 		}
-		labels <- labels[1]
-		if (is.character(lables)) {
-			i <- which(labels == names(x))
-			if (i == 0) {
-				i <- 1
-			} 
-			x <- x[[i]]
+		if (length(labels) != ncell(x)) {
+			labels <- labels[1]
+			if (is.character(lables)) {
+				i <- which(labels == names(x))
+				if (i == 0) {
+					i <- 1
+				} 
+				x <- x[[i]]
+			}
 		}
 		x <- rasterToPoints(x, fun=fun, spatial=FALSE)
 		text(x[,1], x[,2], as.character(round(x[,3], digits=digits) ), ...)
