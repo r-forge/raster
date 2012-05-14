@@ -31,7 +31,7 @@ setMethod("mean", signature(x='Raster'),
 			out <- writeStart(out, filename="")
 			for (i in 1:tr$n) {
 				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-				v <- .rowMeans(v, tr$nrows[i], d[3], na.rm=na.rm)
+				v <- .rowMeans(v, tr$nrows[i]*d[2], d[3], na.rm=na.rm)
 				out <- writeValues(out, v, tr$row[i])
 				pbStep(pb, i)
 			}
@@ -56,7 +56,7 @@ setMethod("mean", signature(x='Raster'),
 			for (i in 1:tr$n) {
 				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
 				v <- t(apply(v, 1, function(i) c(i, add)))
-				v <- .rowMeans(v, tr$nrows[i], d3, na.rm=na.rm)
+				v <- .rowMeans(v, tr$nrows[i]*d[2], d3, na.rm=na.rm)
 				out <- writeValues(out, v, tr$row[i])
 				pbStep(pb, i)
 			}
@@ -84,7 +84,7 @@ setMethod("mean", signature(x='Raster'),
 		out <- writeStart(out, filename="")
 		for (i in 1:tr$n) {
 			v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			v <- .rowSums(v, tr$nrows[i], d[3], na.rm=na.rm)
+			v <- .rowSums(v, tr$nrows[i]*d[2], d[3], na.rm=na.rm)
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
 		}
@@ -107,7 +107,7 @@ setMethod("mean", signature(x='Raster'),
 		out <- writeStart(out, filename="")
 		for (i in 1:tr$n) {
 			v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			v <- .rowSums(cbind(v, add), tr$nrows[i], d3, na.rm=na.rm)
+			v <- .rowSums(cbind(v, add), tr$nrows[i]*d[2], d3, na.rm=na.rm)
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb, i)
 		}
