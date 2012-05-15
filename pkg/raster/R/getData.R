@@ -227,7 +227,8 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 
-.raster <- function(country, name, mask=TRUE, path, download, ...) {
+
+.raster <- function(country, name, mask=TRUE, path, download, keepzip=FALSE, ...) {
 
 	country <- raster:::.getCountry(country)
 	path <- raster:::.getDataPath(path)
@@ -256,21 +257,26 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 				cat("\nFile not available locally. Use 'download = TRUE'\n")
 			}
 		}
-		unzip(zipfilename, exdir=dirname(zipfilename))
-		file.remove(zipfilename)
+		ff <- unzip(zipfilename, exdir=dirname(zipfilename))
+		if (!keepzip) {
+			file.remove(zipfilename)
+		}
 	}	
 	if (file.exists(filename)) { 
 		rs <- raster(filename)
 	} else {
-		patrn <- paste(country, '.', mskname, name, ".grd", sep="")
-		f <- list.files(path, pattern=patrn)
+		#patrn <- paste(country, '.', mskname, name, ".grd", sep="")
+		#f <- list.files(path, pattern=patrn)
+		f <- ff[substr(ff, nchar(ff)-3, nchar(ff)) == '.grd']
 		if (length(f)==0) {
 			warning('something went wrong')
 			return(NULL)
 		} else if (length(f)==1) {
 			rs <- raster(f)
 		} else {
-			rs <- brick(f)		
+			rs <- sapply(f, raster)
+			cat('returning a list of RasterLayer objects\n')
+			return(rs)
 		}
 	}
 	projection(rs) <- "+proj=longlat +datum=WGS84"

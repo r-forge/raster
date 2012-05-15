@@ -16,6 +16,7 @@ Box plot of layers in a Raster object
 
 \usage{
 \S4method{boxplot}{RasterStackBrick}(x, maxpixels=100000, ...)
+
 \S4method{boxplot}{RasterLayer}(x, y=NULL, maxpixels=100000, ...)
 }
 

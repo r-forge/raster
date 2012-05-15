@@ -44,7 +44,7 @@ setMethod('boxplot', signature(x='RasterLayer'),
 				s <- getValues(s)
 			} else {
 				warning('taking a sample of ', maxpixels, ' cells')
-				s = sampleRegular(s, maxpixels, useGDAL=TRUE)
+				s <- sampleRegular(s, maxpixels, useGDAL=TRUE)
 			}	
 			cn <- colnames(s)
 			f <- as.formula(paste(cn[1], '~', cn[2]))
