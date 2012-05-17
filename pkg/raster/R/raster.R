@@ -41,13 +41,25 @@ setMethod('raster', signature(x='list'),
 		if (is.null(x$z)) { stop('list has no "z"') }
 		if (! all(dim(x$z) == c(length(x$x), length(x$y)))) { stop('"z" does not have the right dimensions') }
 
-		resx <- ( x$x[length(x$x)] - x$x[1] ) / length(x$x)
-		resy <- ( x$y[length(x$y)] - x$y[1] ) / length(x$y)
+		# omitted "-1" bug fix by Barry Rowlingson 
+		resx <- ( x$x[length(x$x)] - x$x[1] ) / (length(x$x)-1)
+		resy <- ( x$y[length(x$y)] - x$y[1] ) / (length(x$y)-1)
 		xmn <- min(x$x) - 0.5 * resx
 		xmx <- max(x$x) + 0.5 * resx
 		ymn <- min(x$y) - 0.5 * resy
 		ymx <- max(x$y) + 0.5 * resy
 
+		
+		dx <- abs(max(abs((x$x[-1] - x$x[-length(x$x)])) / resx) - 1)
+		dy <- abs(max(abs((x$y[-1] - x$y[-length(x$y)])) / resy) - 1)
+		if (is.na(dx) | is.na(dy)) {
+			stop('NA values in coordinates')
+		} 
+		if (dx > 0.01 | dy > 0.01) {
+			stop('data are not on a regular grid')
+		}
+		
+		
 		if (missing(crs)) {
 			if (xmn > -360.1 & xmx < 360.1 & ymn > -90.1 & ymx < 90.1) { 
 				crs = "+proj=longlat +datum=WGS84"

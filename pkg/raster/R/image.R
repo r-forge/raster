@@ -16,9 +16,9 @@ setMethod("image", signature(x='RasterLayer'),
 		value <- t(as.matrix(x)[nrow(x):1,])
 		x <- xFromCol(x,1:ncol(x))
 		if (! is.null(coltab) & is.null(list(...)$col)) {
-			image(x=x, y=y, z=value, col=coltab, useRaster=useRaster, ...)
+			image(x=x, y=y, z=value, col=coltab[value], useRaster=useRaster, ...)
 		} else {
-			image(x=x, y=y, z=value, ...)			
+			image(x=x, y=y, z=value, useRaster=useRaster, ...)			
 		}
 	}
 )

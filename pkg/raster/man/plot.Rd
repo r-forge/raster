@@ -35,7 +35,7 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
        \link[sp]{bpy.colors} or one or your own making, perhaps using \code{\link{colorRampPalette}}}
   \item{maxpixels}{Maximum number of pixels used}
   \item{useRaster}{If \code{TRUE}, the rasterImage function is used for plotting. Otherwise the image function is used. This can be useful
-       if rasterImage does not work well on your system}
+       if rasterImage does not work well on your system (see note)}
   \item{alpha}{Number between 0 and 1 to set transparancy. 0 is entirely transparant, 1 is not transparant}
   \item{add}{Logical. Add to current plot?}
   \item{ext}{An extent object to zoom in a region (see also \code{\link{zoom}} and \code{\link{crop}(x, \link{drawExtent}())}}
@@ -55,6 +55,12 @@ Most of the code for this function was taken from image.plot (fields package).
 
 Raster objects with a color-table (e.g. a graphics file) are plotted according to the color table.
 }
+
+
+\note{
+raster uses \code{\link[graphics]{rasterImage}} from the graphics package. For unknown reasons this does not work on Windows Server. On that system you may need to use argument \code{useRaster=FALSE} to get a plot.
+}
+
 
 \seealso{
 \code{ \link[raster]{spplot}} and the \code{rasterVis} package have lattice based methods for plotting Raster* objects. 
