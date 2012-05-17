@@ -9,7 +9,7 @@
 
 
 
-.getGDALtransient <- function(r, filename, options, NAflag, ...)  {
+.getGDALtransient <- function(r, filename, options, NAflag, flip=FALSE, ...)  {
 
 	.GDALnodatavalue <- function(x){
 		if (x == 'Float32') return(-3.4E38)
@@ -70,7 +70,12 @@
 	if (rotated(r)) {
 		gt <- r@rotation@geotrans
 	} else {
-		gt <- c(xmin(r), xres(r), 0, ymax(r), 0, -yres(r))
+		if (flip) {
+			gt <- c(xmin(r), xres(r), 0, 0, ymax(r), yres(r))		
+			cat('flipping (this creates an invalid RasterLayer)\n')
+		} else {
+			gt <- c(xmin(r), xres(r), 0, ymax(r), 0, -yres(r))
+		}
 	}
 	
     .Call("RGDAL_SetGeoTransform", transient, gt, PACKAGE = "rgdal")
