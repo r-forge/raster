@@ -8,21 +8,23 @@ Read a shapefile
 }
 
 \description{
-Simple wrapper around readOGR (rgdal package)
+Reading and writing "shapefiles". Simple wrapper around readOGR and writeOGR (rgdal package).
 }
 
 
 \usage{
-shapefile(filename, verbose=FALSE)
+shapefile(filename, object=NULL, overwrite=FALSE, verbose=FALSE)
 }
  
 \arguments{
-  \item{filename}{Character. Full filename of a ESRI shapefile}
+  \item{filename}{Character. Full filename of a shapefile}
+  \item{object}{NULL when reading a shapefile. A Spatial* object when writing a shapefile}
+  \item{overwrite}{Logical. Overwrite existing shapefile?}
   \item{verbose}{Logical. If \code{TRUE}, information about the file is printed}
 }
 
 \value{
-Spatial*DataFrame 
+Spatial*DataFrame (reading). Nothing is returned when writing a shapefile.
 }
 
 \author{
