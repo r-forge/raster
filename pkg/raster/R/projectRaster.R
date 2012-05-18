@@ -202,14 +202,13 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 		return(to)
 	}
 	
-	if (canProcessInMemory(to, n=nl*2)) {
+	if (canProcessInMemory(to, n=nl*4)) {
 		inMemory <- TRUE
 	} else {
 		inMemory <- FALSE
 	}
 
-	
-	
+		
 	if (.doCluster()) {
 		
 		cl <- getCluster()
@@ -303,7 +302,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			return(to)
 			
 		} else {
-			tr <- blockSize(to)
+		
+			tr <- blockSize(to, n=nlayers(to)*4)
 			pb <- pbCreate(tr$n, ...)	
 			to <- writeStart(to, filename=filename, ...)
 			for (i in 1:tr$n) {
@@ -315,7 +315,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 					xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 					xy <- cbind(xy[[1]], xy[[2]])
 					v <- matrix(nrow=length(cells), ncol=nl)
-					v[ci, ] <- .xyValues(from, xy, method=method)
+					v[ci, ] <- raster:::.xyValues(from, xy, method=method)
 					to <- writeValues(to, v, tr$row[i])
 				}	
 				pbStep(pb)
