@@ -102,7 +102,7 @@ setReplaceMethod("[", c("RasterStackBrick","missing","missing"),
 		}
 		
 		if (is.matrix(value)) {
-			if (all(dim(value)) == c(ncell(x), nl)) {
+			if (all(dim(value) == c(ncell(x), nl))) {
 				x <- try( setValues(x, value))
 			} else {
 				stop('dimensions of the matrix do not match the Raster* object')
