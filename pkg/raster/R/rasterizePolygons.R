@@ -24,12 +24,15 @@
 		}
 		putvals <- as.vector(obj@data[[field]])
 		if (class(putvals) == 'factor') {
-			warning('selected field is factor type')
+			warning('selected field is factor type (coverted to numeric)')
 			putvals <- as.numeric(as.character(putvals))
 		}
 		if (class(putvals) == 'character') {
-			warning('selected field is character type')
-			putvals <- as.numeric(putvals)
+			warning('selected field is character type (coverted to numeric)')
+			putvals <- try( as.numeric(putvals), silent=TRUE )
+			if (class(putvals) == 'try-error') {
+				putvals <- as.numeric(as.factor(putvals))
+			}
 		}		
 		
 	} else {
