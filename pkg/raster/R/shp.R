@@ -4,20 +4,22 @@
 # Licence GPL v3
 
 
-shapefile <- function(filename, object, overwrite=FALSE, verbose=FALSE) {
+shapefile <- function(filename, object=NULL, overwrite=FALSE, verbose=FALSE) {
 	if (!(require(rgdal))) {
 		stop('This function requires the rgdal package; please install it')
 	}
-	if (missing(object)) {
+	if (is.null(object)) {
+	
 		fn <- basename(filename) 
 		extension(fn) <- ''
 		readOGR(dirname(filename), fn, stringsAsFactors=FALSE, verbose=verbose) 
+		
 	} else {
 		extension(filename) <- '.shp'
 		if (file.exists(filename)) {
 			if (!overwrite) {
 				stop('file exists, use overwrite=TRUE to overwrite it')
-			} 			
+			} 
 		}
 		layer <- basename(filename)
 		extension(layer) <- ''
