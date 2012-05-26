@@ -204,8 +204,10 @@ setMethod('raster', signature(x='RasterBrick'),
 				r@data@max <- x@data@max[dindex]
 				ln <- x@layernames[dindex]
 				if (! is.na(ln) ) { r@layernames <- ln }
-				zv <- x@zvalue[dindex]
-				if (! is.na(zv) ) { r@zvalue <- zv }
+				zv <- unlist(x@z[1])[dindex]
+				if (! is.null(zv) ) { 
+					r@z <- as.list(zv)
+				}
 				if ( x@data@inmemory ) {
 					r@data@values <- x@data@values[,dindex]
 				}

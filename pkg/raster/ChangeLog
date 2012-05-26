@@ -1,10 +1,14 @@
 To do:
 focal for multi-layer objects
-save z values to file
 
 --- Development version
+z-values are saved to file (native format only)
+Old slot @zvalue removed (use @z)
 New function 'names' to (eventually) replace 'layerNames', for compatibility with sp.
 New function 'proj4string' (equivalent to 'projection') for compatibility with sp.
+
+bug fixes:
+rasterize with polygons ignores the 'field' argument (bug introduced in previous version)
 
 --- 1-May-2012, version 1.9-82
 New features, improvements:

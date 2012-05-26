@@ -63,8 +63,8 @@ setMethod ('show' , 'RasterLayer',
 		
 		z <- getZ(object)
 		if (length(z) > 0) {
-			name <- object@zname
-			if (name == '') name <- 'z-value'
+			name <- names(object@z)
+			if (is.null(name)) name <- 'z-value'
 			name <- paste(sprintf("%-12s", name), ':', sep='')
 			cat(name, z[1], '\n')
 		}
@@ -134,8 +134,8 @@ setMethod ('show' , 'RasterBrick',
 
 		z <- getZ(object)
 		if (length(z) > 0) {
-			name <- object@zname
-			if (name == '') name <- 'z-value'
+			name <- names(object@z)
+			if (is.null(name)) name <- 'z-value'
 			name <- paste(sprintf("%-12s", name), ':', sep='')
 			if (length(z) < mnr) {
 				cat(name, paste(z, collapse=', '), '\n')
@@ -205,7 +205,8 @@ setMethod ('show' , 'RasterStack',
 		
 		z <- getZ(object)
 		if (length(z) > 0) {
-			name <- object@zname
+			name <- names(object@z)
+			if (is.null(name)) name <- 'z-value'
 			if (name == '') name <- 'z-value'
 			name <- paste(sprintf("%-12s", name), ':', sep='')
 			if (length(z) < mnr) {

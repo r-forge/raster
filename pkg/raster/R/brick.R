@@ -210,7 +210,7 @@ setMethod('brick', signature(x='array'),
 			# https://r-forge.r-project.org/forum/message.php?msg_id=4312
 			x = aperm(x, perm=c(2,1,3))
 		}
-		attributes(x) <- NULL
+		attributes(x) <- list()
 		dim(x) <- c(dm[1] * dm[2], dm[3])
 		setValues(b, x)
 	}

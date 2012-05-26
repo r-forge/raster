@@ -24,6 +24,7 @@
 	maxval <- NA
 	nodataval <- -Inf
 	layernames <- ''
+	zvalues <- ''
 	
 	iscat = FALSE
 	catlevels = matrix(NA)
@@ -56,6 +57,7 @@
 		else if (ini[i,2] == "BANDORDER") { bandorder <- ini[i,3] }  
 		else if (ini[i,2] == "PROJECTION") { projstring <- ini[i,3] } 
 		else if (ini[i,2] == "LAYERNAME") { layernames <- ini[i,3] } 
+		else if (ini[i,2] == "ZVALUES") { zvalues <- ini[i,3] } 
     }  
 	
 	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
@@ -108,6 +110,19 @@
 			lnames <- paste(lnames , 1:nbands, sep='_')
 		}
 	}
+
+	if (length(zvalues) > 0) {
+		zvalues <- unlist(strsplit(zvalues, ':'))
+		zname <- zvalues[1]
+		zvalues <- zvalues[-1]
+		if (type == 'RasterBrick') {
+			x@z <- list(zvalues)
+		} else {
+			x@z <- list(zvalues[band])
+		}
+		names(x@z) <- zname
+	} 
+	
 	if (type == 'RasterBrick') {
 		names(x) <- lnames
 	} else {
