@@ -26,6 +26,19 @@
 	cat("bandorder=",  x@file@bandorder, "\n", file = thefile)
 
 	cat("categorical=",  x@data@isfactor, "\n", file = thefile)
+	if (.hasSlot(x@data@attributes)) {
+		cat("attributes=",  x@data@hasRAT, "\n", file = thefile)
+		if (x@data@hasRAT) {
+			r <- x@data@attributes[[1]]
+			cat("ratnames=", paste(colnames(r), collapse=':'), "\n", file = thefile)
+			cat("ratrows=", nrow(r), "\n", file = thefile)
+			cat("rattypes=", paste(sapply(r, class), collapse=':'), "\n", file = thefile)
+			cat("ratvalues=", paste(trim(as.character(as.matrix(r))), collapse=':'), "\n", file = thefile)
+		}
+	} else {
+		cat("attributes=FALSE\n", file = thefile)
+	}
+	
 #	cat("levels=",  x@data@levels, "\n", file = thefile)
 
 	cat("minvalue=",  paste(minValue(x,-1), collapse=':'), "\n", file = thefile)

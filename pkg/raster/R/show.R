@@ -38,48 +38,77 @@ setMethod ('show' , 'RasterLayer',
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat('coord. ref. :' , projection(object, TRUE), '\n')
 
-		if (hasValues(object)) {
-			fd <- object@data@fromdisk
-			if (fd) {
-				cat('values      :', filename(object), '\n')
-			} else {
-				cat('values      : in memory\n')			
+
+
+		
+		if (raster:::.hasRAT(object)) {
+			x <- object@data@attributes[[1]][, -c(1:2), drop=FALSE]
+			nc <- ncol(x)
+			maxnl <- 12
+			if (nc > maxnl) {
+				x <- x[, 1:maxnl]
+			}
+			cat('Raster Attribute Table\n') #, paste(coln, collapse=', '), '\n')
+			
+			#nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
+			r <- apply(x, 2, range, na.rm=TRUE)
+			r <- data.frame(r)
+			r <- data.frame(x=c('min :','max :'), r)
+			colnames(r) <- c('    fields :', colnames(x))
+			rownames(r) <- NULL
+			if (nc > maxnl) {
+				r <- cbind(r, '...'=rbind('...', '...'))
 			}
 			
-			if (object@data@haveminmax) {
-				cat('min value   :' , minValue(object), '\n')
-				cat('max value   :' , maxValue(object), '\n')
-			#} else { 
-			#	if (fd) {
-			#		cat('min         : ? \n')
-			#		cat('max         : ? \n')
-			#	} 
-			}
+			print(r, row.names=FALSE)
+					
+			
 		} else {
-			cat('values      : none\n')			
-		}
-
-		cat('layer name  :', names(object), '\n')
 		
-		z <- getZ(object)
-		if (length(z) > 0) {
-			name <- names(object@z)
-			if (is.null(name)) name <- 'z-value'
-			name <- paste(sprintf("%-12s", name), ':', sep='')
-			cat(name, z[1], '\n')
-		}
+		
+			if (hasValues(object)) {
+				fd <- object@data@fromdisk
+				if (fd) {
+					cat('values      :', filename(object), '\n')
+				} else {
+					cat('values      : in memory\n')			
+				}
+				
+				if (object@data@haveminmax) {
+					cat('min value   :' , minValue(object), '\n')
+					cat('max value   :' , maxValue(object), '\n')
+				#} else { 
+				#	if (fd) {
+				#		cat('min         : ? \n')
+				#		cat('max         : ? \n')
+				#	} 
+				}
+			} else {
+				cat('values      : none\n')			
+			}
 
-		if (object@file@driver == 'netcdf') {
-			z <- attr(object@data, 'zvar')
-			if (!is.null(z)) { cat('zvar        :', z, '\n') } 
-			z <- attr(object@data, 'level')
-			if (!is.null(z)) { 
-				if (z>0) { 
-					cat('level       :', z, '\n')  
+		
+			cat('layer name  :', names(object), '\n')
+		
+			z <- getZ(object)
+			if (length(z) > 0) {
+				name <- names(object@z)
+				if (is.null(name)) name <- 'z-value'
+				name <- paste(sprintf("%-12s", name), ':', sep='')
+				cat(name, z[1], '\n')
+			}
+
+			if (object@file@driver == 'netcdf') {
+				z <- attr(object@data, 'zvar')
+				if (!is.null(z)) { cat('zvar        :', z, '\n') } 
+				z <- attr(object@data, 'level')
+				if (!is.null(z)) { 
+					if (z>0) { 
+						cat('level       :', z, '\n')  
+					}
 				}
 			}
 		}
-		
 		cat ('\n')
 	}
 )

@@ -23,7 +23,7 @@
 
 
 
-.rasterFromGDAL <- function(filename, band, type, sub=0, RAT=FALSE, silent=TRUE, warn=TRUE, ...) {	
+.rasterFromGDAL <- function(filename, band, type, sub=0, RAT=TRUE, silent=TRUE, warn=TRUE, ...) {	
 
 # most of this was taken from the GDALinfo function in rgdal
 # that was written by Roger Bivand and others
@@ -121,6 +121,7 @@
 		r <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs="")
 		r@file@nbands <- r@data@nlayers <- nbands
 		band <- 1:nbands
+		RAT <- FALSE
 		
 	} else {
 	
@@ -265,6 +266,7 @@
 			}
 		}
 		r@data@attributes <- att
+		r@data@hasRAT <- TRUE
 	}
 	
 #oblique.x   0  #oblique.y   0 

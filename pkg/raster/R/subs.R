@@ -55,6 +55,34 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 
 		r <- raster(x)
 		nlx <- nlayers(x)
+		
+		hasfactor <- FALSE
+		cls <- sapply(y, class)
+		levs <- list()
+		for (i in 2:length(cls)) {
+			if (cls[i] == 'character') {
+				w <- getOption('warn')
+				options('warn'=-1) 
+				tmp <- as.numeric(y[,i])
+				options('warn'= w)
+				if (all(is.na(tmp) == is.na(y[,i]))) {
+					y[,i] <- tmp
+					cls[i] <- 'numeric'				
+				} else {
+					y[,i] <- factor(y[,i])
+					cls[i] <- 'factor'
+				}
+			}
+			if (cls[i] == 'factor') {
+				b <- levels(y[[i]])
+				lv <- data.frame(VALUE=1:length(b), b)
+				colnames(lv)[2] <- colnames(y)[i]
+				levs[[i-1]] <- lv
+				y[,i] <- as.integer(y[,i])
+				hasfactor <- TRUE
+			}
+		}
+		
 		if (nlx == 1) {
 			ln <- colnames(y)[which]
 			if (length(which) > 1) {
@@ -73,6 +101,11 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 		filename <- trim(filename)
 		
 		if (canProcessInMemory(x, 3)) {
+			if (hasfactor) {
+				r@data@isfactor <- TRUE
+				r@data@hasRAT <- FALSE
+				r@data@attributes <- levs
+			}
 			v <- .localmerge( getValues(x), y, subsWithNA )
 			r <- setValues(r, v)
 			if (filename != '') {
@@ -92,11 +125,18 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 				r <- writeValues(r, .localmerge(v, y, subsWithNA), tr$row[i])
 				pbStep(pb) 
 			}
-			pbClose(pb)			
+			pbClose(pb)	
+			
+			if (isfactor) {
+				r@data@isfactor <- TRUE
+				r@data@hasRAT <- FALSE
+				r@data@attributes <- levs
+			}		
 			r <- writeStop(r)
 			return(r)
 		}
 	}
 )
+
 
 
