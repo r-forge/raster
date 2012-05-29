@@ -26,7 +26,7 @@
 	cat("bandorder=",  x@file@bandorder, "\n", file = thefile)
 
 	cat("categorical=",  x@data@isfactor, "\n", file = thefile)
-	if (.hasSlot(x@data@attributes)) {
+	if (.hasSlot(x@data, 'attributes')) {
 		cat("attributes=",  x@data@hasRAT, "\n", file = thefile)
 		if (x@data@hasRAT) {
 			r <- x@data@attributes[[1]]

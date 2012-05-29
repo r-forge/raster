@@ -26,14 +26,14 @@ rats <- function(x) {
 }
 
 
-ratToLayer <- function(x, rat=NULL, filename='', ...) {
+ratToLayer <- function(x, att=NULL, filename='', ...) {
 	RAT <- rats(x)
-	if (is.null(rat)) {
-		rat <- 3:ncol(RAT)
+	if (is.null(att)) {
+		att <- 3:ncol(RAT)
 	}
-	ratvs <- RAT[ , rat, drop=FALSE]
+	ratvs <- RAT[ , att, drop=FALSE]
 	if (is.null(ratvs)) {
-		stop("'rat' is not a valid column in the Raster Attribute Table")
+		stop("'att' is not a valid column in the Raster Attribute Table")
 	}
 	ratvs <- data.frame(VALUE=RAT$VALUE, ratvs)
 	w <- unique(2:ncol(ratvs))
