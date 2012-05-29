@@ -1,3 +1,7 @@
+# Author: Robert J. Hijmans
+# Date :  May 2012
+# Version 1.0
+# Licence GPL v3
 
 
 .hasRAT <- function(x) {
@@ -10,16 +14,20 @@
 
 
 rats <- function(x) {
-	stopifnot(.hasRAT(x))
-	x@data@attributes[[1]]
+	if(! .hasRAT(x) ) {
+		stop('This object has no Raster Attribute Table')
+	}
+	if (nlayers(x) > 1) {
+		x@data@attributes
+	} else {
+		x@data@attributes[[1]]	
+	}
 }
 
 'rats<-' <- function(x, value) {
-	
 	stopifnot(is.data.frame(value))
 	stopifnot(ncol(value) > 2)
 	stopifnot(colnames(value)[1:2] == c('VALUE', 'COUNT'))
-	
 	x@data@hasRAT <- TRUE
 	x@data@isFactor <- TRUE
 	x@data@attributes <- list(value)
@@ -43,7 +51,16 @@ ratToLayer <- function(x, att=NULL, filename='', ...) {
 
 
 ratify <- function(x, filename='', ...) {
-stop('not yet implemented')
+	f <- freq(x)
+	if (any( f[,1] != round(f[,1]))) {
+		x <- round(x)
+		f <- freq(x)
+	}
+	f <- data.frame(f)
+	colnames(f) <- toupper(colnames(f))
+	x@data@hasRAT <- TRUE
+	x@data@isfactor <- TRUE
+	x@data@attributes <- list(f)
+	x
 }
-
 

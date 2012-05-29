@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  June 2008
 # Version 0.9
 # Licence GPL v3
@@ -48,7 +48,14 @@ setMethod ('show' , 'RasterLayer',
 			if (nc > maxnl) {
 				x <- x[, 1:maxnl]
 			}
-			cat('Raster Attribute Table\n') #, paste(coln, collapse=', '), '\n')
+			
+			if (ncol(x)== 0) {
+				cat('Raster Attribute Table (empty)\n') 
+				x <- object@data@attributes[[1]]			
+				nc <- 2
+			} else {
+				cat('Raster Attribute Table\n') 
+			}
 			
 			#nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
 			r <- apply(x, 2, range, na.rm=TRUE)
@@ -61,7 +68,6 @@ setMethod ('show' , 'RasterLayer',
 			}
 			
 			print(r, row.names=FALSE)
-					
 			
 		} else {
 		

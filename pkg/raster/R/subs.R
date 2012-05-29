@@ -74,10 +74,8 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 				}
 			}
 			if (cls[i] == 'factor') {
-				b <- levels(y[[i]])
-				lv <- data.frame(VALUE=1:length(b), b)
-				colnames(lv)[2] <- colnames(y)[i]
-				levs[[i-1]] <- lv
+				levs[[i-1]] <- levels(y[[i]])
+				names(levs)[[i-1]] <- colnames(y)[i]
 				y[,i] <- as.integer(y[,i])
 				hasfactor <- TRUE
 			}
