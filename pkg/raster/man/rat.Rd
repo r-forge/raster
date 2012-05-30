@@ -42,6 +42,8 @@ data.frame or Raster* object
 \author{Robert J. Hijmans}
 
 \examples{
+
+library(raster)
 r <- raster(nrow=10, ncol=10)
 r[] = 1
 r[51:100] = 2
@@ -54,10 +56,14 @@ rat$lc_code = c(12,25,30)
 rats(r) <- rat
 r
 
+rr <- writeRaster(r, 'test.grd', overwrite=T)
+rr
+
 x <- ratToLayer(r, 'landcover')
 x
 is.factor(x)
 labels(x)
+
 }
 
 \keyword{methods}

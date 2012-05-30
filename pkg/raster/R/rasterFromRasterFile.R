@@ -26,7 +26,8 @@
 	layernames <- ''
 	zvalues <- ''
 	
-	iscat = FALSE
+	isCat <- hasRat <- FALSE
+	ratnames <- rattypes <- ratvalues <- NULL
 	catlevels = matrix(NA)
 
 	for (i in 1:length(ini[,1])) {
@@ -47,8 +48,15 @@
 		else if (ini[i,2] == "MAXVALUE") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 		else if (ini[i,2] == "VALUEUNIT") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 
-		else if (ini[i,2] == "CATEGORICAL") { try ( iscat <-  as.logical(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
-		else if (ini[i,2] == "LEVELS") { try ( catlevels <-  as.logical(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+		else if (ini[i,2] == "CATEGORICAL") { try ( isCat <-  as.logical(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+		else if (ini[i,2] == "ATTRIBUTES") { hasRat <-  ini[i,3] }
+		
+		#else if (ini[i,2] == "RATROWS") { ratrows <- as.integer(ini[i,3]) }
+		else if (ini[i,2] == "RATNAMES") { ratnames <- unlist(strsplit(ini[i,3], ':')) }
+		else if (ini[i,2] == "RATTYPES") { rattypes <- unlist(strsplit(ini[i,3], ':')) }
+		else if (ini[i,2] == "RATVALUES") { ratvalues <- unlist(strsplit(ini[i,3], ':')) }
+		
+		else if (ini[i,2] == "LEVELS") { try ( catlevels <-  unlist(strsplit(ini[i,3], ':')), silent = TRUE ) }
 		
 		else if (ini[i,2] == "NODATAVALUE") { nodataval <- as.numeric(ini[i,3]) } 
 		else if (ini[i,2] == "DATATYPE") { inidatatype <- ini[i,3] } 
@@ -87,10 +95,27 @@
 		x@data@band <- as.integer(band)
 		x@data@min <- minval[band]
 		x@data@max <- maxval[band]
-		x@data@isfactor = iscat
-		if (iscat) { 
-		#	x@data@levels = catlevels 
+	}
+	x@data@isfactor = isCat
+
+	if (hasRat) {
+	
+		rat <- data.frame(matrix(ratvalues, nrow=length(ratvalues) / length(ratnames)), stringsAsFactors=FALSE)
+		colnames(rat) <- ratnames
+		for (i in 1:ncol(rat)) {
+			if (rattypes[i] == 'integer') {
+				rat[, i] <- as.integer(rat[,i])
+			} else if (rattypes[i] == 'numeric') {
+				rat[, i] <- as.numeric(rat[,i])
+			} else if (rattypes[i] == 'factor') {
+				rat[, i] <- as.factor(rat[,i])
+			}
 		}
+		x@data@hasRAT <- TRUE
+		x@data@attributes <- list(rat)
+		
+	} else if (isCat) { 
+		x@data@attributes = list(catlevels)
 	}
 
 	x@file@nbands <- as.integer(nbands)

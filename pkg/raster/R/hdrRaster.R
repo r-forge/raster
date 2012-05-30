@@ -31,7 +31,6 @@
 		if (x@data@hasRAT) {
 			r <- x@data@attributes[[1]]
 			cat("ratnames=", paste(colnames(r), collapse=':'), "\n", file = thefile)
-			cat("ratrows=", nrow(r), "\n", file = thefile)
 			cat("rattypes=", paste(sapply(r, class), collapse=':'), "\n", file = thefile)
 			cat("ratvalues=", paste(trim(as.character(as.matrix(r))), collapse=':'), "\n", file = thefile)
 		}
