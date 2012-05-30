@@ -52,6 +52,7 @@ ratToLayer <- function(x, att=NULL, filename='', ...) {
 
 
 ratify <- function(x, filename='', ...) {
+	stopifnot(nlayers(x) == 1)
 	f <- freq(x)
 	if (any( f[,1] != round(f[,1]))) {
 		x <- round(x)
@@ -62,6 +63,13 @@ ratify <- function(x, filename='', ...) {
 	x@data@hasRAT <- TRUE
 	x@data@isfactor <- TRUE
 	x@data@attributes <- list(f)
-	x
+	if (filename != '') {
+		x <- writeRaster(x, filename, ...)
+		# only native format stores this...
+		x@data@hasRAT <- TRUE
+		x@data@isfactor <- TRUE
+		x@data@attributes <- list(f)	
+	}
+	return(x)
 }
 
