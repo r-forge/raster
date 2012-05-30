@@ -2,6 +2,7 @@ To do:
 focal for multi-layer objects
 
 --- Development version
+More support for Raster Attribute Tables (functions rats, ratify, ratToLayer)
 z-values are saved to file (native format only)
 Old slot @zvalue removed (use @z)
 New function 'names' to (eventually) replace 'layerNames', for compatibility with sp.
