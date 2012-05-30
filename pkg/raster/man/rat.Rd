@@ -35,7 +35,7 @@ ratify(x, filename='', ...)
 
 
 \value{
-Raster* object
+data.frame or Raster* object
 }
 
 
@@ -43,11 +43,21 @@ Raster* object
 
 \examples{
 r <- raster(nrow=10, ncol=10)
-r[] <- (runif(ncell(r)) * 10)
-is.factor(r)
-r <- round(r)
-f <- asFactor(r)
-is.factor(f)
+r[] = 1
+r[51:100] = 2
+r[3:6, 1:5] = 3
+r <- ratify(r)
+
+rat <- rats(r)
+rat$landcover = c('Pine', 'Oak', 'Meadow')
+rat$lc_code = c(12,25,30)
+rats(r) <- rat
+r
+
+x <- ratToLayer(r, 'landcover')
+x
+is.factor(x)
+labels(x)
 }
 
 \keyword{methods}

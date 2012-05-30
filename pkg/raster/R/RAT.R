@@ -29,8 +29,9 @@ rats <- function(x) {
 	stopifnot(ncol(value) > 2)
 	stopifnot(colnames(value)[1:2] == c('VALUE', 'COUNT'))
 	x@data@hasRAT <- TRUE
-	x@data@isFactor <- TRUE
+	x@data@isfactor <- TRUE
 	x@data@attributes <- list(value)
+	x
 }
 
 

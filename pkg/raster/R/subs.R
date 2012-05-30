@@ -30,7 +30,7 @@ if (!isGeneric("subs")) {
 
 
 setMethod('subs', signature(x='Raster', y='data.frame'), 
-	function(x, y, by=1, which=2, subsWithNA=TRUE, filename='', ...) { 
+	function(x, y, by=1, which=2, subsWithNA=TRUE, filename='', ...)  { 
 
 		if (!subsWithNA & length(which) > 1) {
 			stop('you cannot use subsWithNA=FALSE if length(which) > 1')
@@ -38,11 +38,11 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 		
 		if (is.character(by)) {
 			by <- which(by == colnames(y))[1]
-			if (is.na(by)) {stop("'by' is not a valid column name")}
+			if (is.na(by)) { stop("'by' is not a valid column name") }
 		}
 		if (is.character(which)) {
 			which <- which(which == colnames(y))[1]
-			if (is.na(which)) {stop("'which' is not valid column name")}
+			if (is.na(which)) { stop("'which' is not valid column name") }
 		}
 		
 		y <- y[ , c(by, which)]
@@ -56,8 +56,8 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 		r <- raster(x)
 		nlx <- nlayers(x)
 		
-		hasfactor <- FALSE
 		cls <- sapply(y, class)
+		hasfactor <- rep(FALSE, length(cls)-1)
 		levs <- list()
 		for (i in 2:length(cls)) {
 			if (cls[i] == 'character') {
@@ -77,7 +77,7 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 				levs[[i-1]] <- levels(y[[i]])
 				names(levs)[[i-1]] <- colnames(y)[i]
 				y[,i] <- as.integer(y[,i])
-				hasfactor <- TRUE
+				hasfactor[i-1] <- TRUE
 			}
 		}
 		
