@@ -56,7 +56,7 @@ rat$lc_code = c(12,25,30)
 rats(r) <- rat
 r
 
-rr <- writeRaster(r, 'test.grd', overwrite=T)
+rr <- writeRaster(r, 'test.grd', overwrite=TRUE)
 rr
 
 x <- ratToLayer(r, 'landcover')
