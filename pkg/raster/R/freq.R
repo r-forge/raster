@@ -11,16 +11,17 @@ if (!isGeneric("freq")) {
 
 
 setMethod('freq', signature(x='RasterLayer'), 
-	function(x, digits=0, ...) {
+	function(x, digits=0, progress='', ...) {
 
 		if (canProcessInMemory(x, 3)) {
 	
 			d <- round(getValues(x), digits=digits)
-			res <- table(d, useNA="ifany" )
+			res <- table( d, useNA="ifany" )
 		
 		} else {
+		
 			tr <- blockSize(x, n=2)
-			pb <- pbCreate(tr$n, ...)	
+			pb <- pbCreate(tr$n, progress=progress)	
 			z <- vector(length=0)
 			for (i in 1:tr$n) {
 				d <- round(getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]), digits=digits)

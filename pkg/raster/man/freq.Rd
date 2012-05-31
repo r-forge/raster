@@ -12,29 +12,19 @@ Frequency table of the values of a RasterLayer.
 }
 
 \usage{
-freq(x, ...)
+\S4method{freq}{RasterLayer}(x, digits=0, progress='', ...)
 }
 
 \arguments{
-  \item{x}{A RasterLayer object}
-  \item{...}{Additional arguments. See under Details}   
+  \item{x}{RasterLayer}
+  \item{digits}{Non-negative integer for rounding the cell values. Argument is passed to \code{\link[base]{round}} }
+  \item{progress}{Character to specify a progres bar. Choose from 'text', 'window', or '' (the default, no progress bar)}
+  \item{...}{Additional arguments (none implemented)}
 }
 
 \value{
-A matrix
+matrix
 }
-
-\section{Methods}{
-\describe{
-A full call as implemented here:
-
-\code{freq(x, digits=0, progress, ...)}
-
-the \code{digits} argument is used passed to \code{\link[base]{round}}
-
-with \code{progress}, a progres bar can be specified. Choose from "text", "window", or "" (the default, no progress bar)
-}}
-
 
 \seealso{ \code{\link[raster]{count}}, \code{\link[raster]{crosstab} } and \code{\link[raster]{zonal} } }
 
