@@ -11,9 +11,9 @@
 \title{Raster Attributes}
 
 \description{
-A Raster Attribute Table (RAT) is a data.frame that links the (integer) cell values to one or more variables. Thus the cell values are an index, whereas the actual values of interest are in the RAT (and these can include character and factor variables). This approach can be advantageous when you want to store multiple attributes for raster 'zones'.
+A Raster Attribute Table (RAT) is a data.frame that links the (integer) cell values to one or more variables. Thus the cell values are an index, whereas the actual values of interest are in the RAT (and these can include character and factor variables). This approach can be advantageous when you want to store multiple attributes for raster 'zones'. However, in the contexgt of the raster package it is not recommended to use this approach. The functions documented here are mainly availbe such that files with a RAT can be read and processed. In stead of a RAT you can use a seperate layer to represent each variable.
 
-Function 'rats' returns the RAT for inspection. It can be modfied and set using 'rats <-'  (but use caution as it is easy to mess things up). Function 'ratToLayer' creates a single layer for each variable in the RAT table. Function 'ratify' creates a RasterLayer with a RAT table.
+Function 'rats' returns the RAT for inspection. It can be modfied and set using \code{rats <-}  (but use caution as it is easy to mess things up). Function 'ratToLayer' creates a single layer for each variable in the RAT table. Function 'ratify' creates a RasterLayer with a RAT table.
 
 The first two columns in the RAT table, VALUE and COUNT, are fixed and should not be manipulated.
 }
@@ -26,7 +26,7 @@ ratify(x, filename='', ...)
 }
 
 \arguments{
-  \item{x}{A Raster* object}
+  \item{x}{RasterLayer}
   \item{value}{data.frame representing a RAT}
   \item{att}{numeric or character. Which variable(s) in the RAT table should be de-ratified? If \code{NULL}, all variables are extracted}
   \item{filename}{Character. Optional}  

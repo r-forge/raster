@@ -127,7 +127,6 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 			
 			if (isfactor) {
 				r@data@isfactor <- TRUE
-				r@data@hasRAT <- FALSE
 				r@data@attributes <- levs
 			}		
 			r <- writeStop(r)
