@@ -11,12 +11,12 @@ if (!isGeneric("freq")) {
 
 
 setMethod('freq', signature(x='RasterLayer'), 
-	function(x, digits=0, progress='', ...) {
+	function(x, digits=0, useNA="ifany", progress='', ...) {
 
 		if (canProcessInMemory(x, 3)) {
 	
 			d <- round(getValues(x), digits=digits)
-			res <- table( d, useNA="ifany" )
+			res <- table( d, useNA=useNA )
 		
 		} else {
 		
@@ -25,7 +25,7 @@ setMethod('freq', signature(x='RasterLayer'),
 			z <- vector(length=0)
 			for (i in 1:tr$n) {
 				d <- round(getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]), digits=digits)
-				res <- table(d, useNA="ifany" )
+				res <- table(d, useNA=useNA )
 				res <- cbind(as.numeric(unlist(as.vector(dimnames(res)))), as.vector(res))
 				z <- rbind(z, res)
 				pbStep(pb, i)

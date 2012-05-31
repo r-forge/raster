@@ -53,11 +53,7 @@ ratToLayer <- function(x, att=NULL, filename='', ...) {
 
 ratify <- function(x, filename='', ...) {
 	stopifnot(nlayers(x) == 1)
-	f <- freq(x)
-	if (any( f[,1] != round(f[,1]))) {
-		x <- round(x)
-		f <- freq(x)
-	}
+	f <- freq(x, useNA='no')
 	f <- data.frame(f)
 	colnames(f) <- toupper(colnames(f))
 	x@data@hasRAT <- TRUE

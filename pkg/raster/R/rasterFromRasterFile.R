@@ -136,7 +136,7 @@
 		}
 	}
 
-	if (length(zvalues) > 0) {
+	if (zvalues != '') {
 		zvalues <- unlist(strsplit(zvalues, ':'))
 		zname <- zvalues[1]
 		zvalues <- zvalues[-1]

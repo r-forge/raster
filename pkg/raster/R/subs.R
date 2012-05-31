@@ -99,9 +99,8 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 		filename <- trim(filename)
 		
 		if (canProcessInMemory(x, 3)) {
-			if (hasfactor) {
+			if (any(hasfactor)) {
 				r@data@isfactor <- TRUE
-				r@data@hasRAT <- FALSE
 				r@data@attributes <- levs
 			}
 			v <- .localmerge( getValues(x), y, subsWithNA )
@@ -125,7 +124,7 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 			}
 			pbClose(pb)	
 			
-			if (isfactor) {
+			if (any(hasfactor)) {
 				r@data@isfactor <- TRUE
 				r@data@attributes <- levs
 			}		
