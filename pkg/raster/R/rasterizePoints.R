@@ -62,7 +62,7 @@
 	field <- pvals[[1]]
 	if (!is.na(pvals[[2]][1])) {
 		rs@data@isfactor <- TRUE
-		rs@data@attributes <- pvals[[2]]
+		rs@data@attributes <- list(pvals[[2]])
 	}
 
 	xy <- points

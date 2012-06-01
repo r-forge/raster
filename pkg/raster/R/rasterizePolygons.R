@@ -25,15 +25,30 @@
 		}
 		putvals <- (obj@data[[field]])
 		if (class(putvals) == 'factor') {
-			warning('selected field is a factor (coverted to numeric)')
-			lvs <- levels(putvals)
-			putvals <- as.integer(putvals)
+			# warning('selected field is a factor (coverted to numeric)')
+			w <- getOption('warn')
+			on.exit(options('warn' = w))
+			options('warn'=-1) 
+			pvals <- as.numeric(as.character(putvals))
+			if (all(is.na(pvals) == is.na(putvals))) {
+				putvals <- pvals
+			} else {
+				lvs <- levels(putvals)
+				putvals <- as.integer(putvals)
+			}
 		}
 		if (class(putvals) == 'character') {
-			warning('selected field is character type (coverted to numeric)')
-			putvals <- try( as.numeric(putvals), silent=TRUE )
-			if (class(putvals) == 'try-error') {
-				putvals <- as.numeric(as.factor(putvals))
+			# warning('selected field is character type (coverted to numeric)')
+			w <- getOption('warn')
+			on.exit(options('warn' = w))
+			options('warn'=-1) 
+			pvals <- as.numeric(putvals)
+			if (all(is.na(pvals) == is.na(putvals))) {
+				putvals <- pvals
+			} else {
+				putvals <- as.factor(putvals)
+				lvs <- levels(putvals)
+				putvals <- as.integer(putvals)
 			}
 		}		
 		
@@ -169,7 +184,7 @@
 	putvals <- pvals[[1]]
 	if (!is.na(pvals[[2]][1])) {
 		rstr@data@isfactor <- TRUE
-		rstr@data@attributes <- pvals[[2]]
+		rstr@data@attributes <- list(pvals[[2]])
 	}
 
 	polinfo <- matrix(NA, nrow=npol * 2, ncol=6)
