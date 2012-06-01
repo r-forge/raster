@@ -203,7 +203,9 @@ setMethod('brick', signature(x='array'),
 		if (length(dm) != 3) {
 			stop('array has wrong number of dimensions (needs to be 3)')
 		}
-		b <- brick(xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs)
+		b <- brick(xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs, nl=dm[3])
+		names(b) <- dimnames(x)[[3]]
+		
 		if (transpose) {
 			dim(b) <- c(dm[2], dm[1], dm[3])
 		} else {
@@ -217,8 +219,6 @@ setMethod('brick', signature(x='array'),
 		setValues(b, x)
 	}
 )
-
-
 	
 
 
