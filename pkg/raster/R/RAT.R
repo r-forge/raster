@@ -5,8 +5,12 @@
 
 
 .hasRAT <- function(x) {
-	if (.hasSlot(x@data, 'hasRAT')) {
-		x@data@hasRAT
+	if (.hasSlot(x, 'data')) {
+		if (.hasSlot(x@data, 'hasRAT')) {
+			x@data@hasRAT
+		} else {
+			FALSE
+		}
 	} else {
 		FALSE
 	}

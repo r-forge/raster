@@ -116,15 +116,12 @@ setMethod('raster', signature(x='RasterLayer'),
 	function(x) {
 		e <- x@extent
 		r <- raster(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
-		if (rotated(x)) {
-			r@rotated <- TRUE
-			r@rotation <- x@rotation
-		}
+
+		r@rotated <- x@rotated
+		r@rotation <- x@rotation
 		
-		if (.rasterHasSlot(x@file, 'blockrows')) {  # old objects may not have this slot
-			r@file@blockrows <- x@file@blockrows
-			r@file@blockcols <- x@file@blockcols
-		}
+		r@file@blockrows <- x@file@blockrows
+		r@file@blockcols <- x@file@blockcols
 		return(r)
 	}
 )
@@ -293,8 +290,8 @@ setMethod('raster', signature(x='SpatialGrid'),
 				}
 				if (is.factor( x@data[[layer]]) ) { 
 					r@data@isfactor <- TRUE 
-					#r@data@levels <- levels(x@data[[layer]])
-					r <- setValues(r, as.numeric(x@data[[layer]]))
+					r@data@attributes <- list(levels(x@data[[layer]]))
+					r <- setValues(r, as.integer(x@data[[layer]]))
 				} else {
 					r <- setValues(r, x@data[[layer]])
 				}

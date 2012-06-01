@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
@@ -41,10 +41,19 @@ setAs('Raster', 'SpatialPixelsDataFrame',
 		grd <- .getGridTop(r)
 		
 		if (ncol(v) > 2) {
-			SpatialPixelsDataFrame(points=sp, data=data.frame(v[, 3:ncol(v), drop = FALSE], check.names=TRUE), grid=grd)
+			v <- data.frame(v[, 3:ncol(v), drop = FALSE])
+			if (is.factor(from)) {
+				f <- labels(from)
+				for (i in 1:length(f)) {
+					if (!is.null(f[[i]])) {
+						v[,i] <- as.factor(f[[i]][v[,i]])
+					}
+				}
+			}
+			SpatialPixelsDataFrame(points=sp, data=v, grid=grd)
 		} else {
-			dat <- data.frame(value=rep(NA, ncol(v)))
-			SpatialPixelsDataFrame(points=sp, data = dat, grid=grd)
+			warning('object has no values, returning a "SpatialPixels" object')
+			SpatialPixelsDataFrame(points=sp, grid=grd)
 		}
 	}
 )
@@ -74,15 +83,8 @@ setAs('Raster', 'SpatialGridDataFrame',
 
 		if (hasValues(from)) {
 		
-			if (nlayers(from) > 1) {
-				sp <- SpatialGridDataFrame(grd, proj4string=crs, data=data.frame(values(from), check.names=TRUE))
-			} else {
-				ln <- names(from)[1]
-				from <- matrix(values(from), ncol=1)
-				colnames(from) <- ln
-				from <- data.frame(from, check.names=TRUE)
-				sp <- SpatialGridDataFrame(grd, proj4string=crs, data=from)
-			}
+			sp <- SpatialGridDataFrame(grd, proj4string=crs, data=as.data.frame(from))
+			
 		} else { 
 			warning('object has no values, returning a "SpatialGrid" object')
 			sp  <- SpatialGrid(grd, proj4string=crs)

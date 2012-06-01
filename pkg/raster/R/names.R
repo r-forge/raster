@@ -60,11 +60,13 @@ setMethod('names<-', signature(x='Raster'),
 		stop('incorrect number of layer names')
 	}
 	x@layernames <- .goodNames(value)
-	if (inherits(x, 'RasterStack')){
-		for (i in 1:nl) {
-			x@layers[[i]]@layernames <- x@layernames[i]
-		}
-	}
+	
+	# the below is good, but very very slow for objects with many layers
+	#if (inherits(x, 'RasterStack')){
+	#	for (i in 1:nl) {
+	#		x@layers[[i]]@layernames <- x@layernames[i]
+	#	}
+	#}
 	return(x)
 }
 

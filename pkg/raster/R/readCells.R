@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : June 2008
 # Version 0.9
 # Licence GPL v3
@@ -6,7 +6,7 @@
 #read data on the raster for cell numbers
 
 
-.readCells <- function(x, cells, layers) {
+.readCells <- function(x, cells, layers, att=FALSE) {
 	
 	if (length(cells) < 1) {
 #		cat(cells,"\n")
@@ -62,6 +62,15 @@
 			vals <- vals * x@data@gain + x@data@offset
 		}
 	}
+	
+	if (att) {
+		if (.hasRAT(x)) {
+			rat <- rats(x)
+			vals <- match(vals, rat[,1])
+			vals <- rat[vals, -c(1:2), drop=FALSE]
+		}
+	}
+	
 	return(vals)
 }
 
@@ -73,6 +82,7 @@
 		layers <- bandnr(x)
 	}
 	laysel <- length(layers)
+	if (laysel > 1) att = FALSE
 	
 	colrow <- matrix(ncol=2+laysel, nrow=length(cells))
 	colrow[,1] <- colFromCell(x, cells)
@@ -129,7 +139,7 @@
 	}
 	closeDataset(con)
 	colnames(colrow)[2+(1:laysel)] <- names(x)[layers]
-	return(colrow[, 2+(1:laysel)]) 
+	colrow[, 2+(1:laysel)]
 }	
 
 

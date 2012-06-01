@@ -11,17 +11,27 @@ if (!isGeneric("as.data.frame")) {
 }	
 
 
-setMethod('as.data.frame', signature(x='RasterLayer'), 
+setMethod('as.data.frame', signature(x='Raster'), 
 	function(x, row.names = NULL, optional = FALSE, ...) {
-		vname <- names(x)
-		x <- matrix(values(x), ncol=1)
-		colnames(x) <- vname
-		as.data.frame(x, row.names=row.names, optional=optional, ...)
+		if (.hasRAT(x)) {
+			x <- ratToLayer(x)
+		}
+		v <- as.data.frame(values(x), row.names=row.names, optional=optional, ...)
+		colnames(v) <- names(x)  # for nlayers = 1
+		
+		if (is.factor(x)) {
+			f <- labels(x)
+			for (i in 1:length(f)) {
+				if (!is.null(f[[i]])) {
+					v[,i] <- as.factor(f[[i]][v[,i]])
+				}
+			}
+		}
+		
+		v
 	}
 )
 
-setMethod('as.data.frame', signature(x='RasterStackBrick'), 
-	function(x, row.names = NULL, optional = FALSE, ...) {
-		as.data.frame(values(x), row.names=row.names, optional=optional, ...)
-	}
-)
+
+
+

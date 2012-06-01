@@ -48,9 +48,9 @@ setMethod('click', signature(x='Raster'),
 	colnames(xyCoords) <- c('x', 'y')
 	n <- nrow(xyCoords)
 
-	value <- .cellValues(x, cells)
+	value <- .cellValues(x, cells, att=TRUE)
 
-	if (nlayers(x) == 1)  {
+	if (is.vector(value) == 1)  {
 		value <- matrix(value)
 		colnames(value) <- names(x)
 	}

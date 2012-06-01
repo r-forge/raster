@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  September 2009
 # Version 0.9
 # Licence GPL v3
@@ -54,7 +54,7 @@ setMethod('brick', signature(x='RasterLayer'),
 				b@rotation <- x@rotation
 			}
 			return(b)
-		}	
+		}
 		x <- stack(x, ...)
 		filename <- trim(filename)
 		if (missing(format)) { format <- .filetype(filename=filename) } 
@@ -169,7 +169,9 @@ setMethod('brick', signature(x='SpatialGrid'),
 					x@data[,i] =  as.factor(x@data[,i])
 				}
 				if (is.factor(x@data[,i])) {
-					x@data[,i] = as.numeric(x@data[,i])
+					x@data[,i] = as.integer(x@data[,i])
+					x@data@isfactor <- TRUE 
+					x@data@attributes[[i]] <- levels(x@data[[layer]])
 				}
 			}
 			b <- setValues(b, as.matrix(x@data))

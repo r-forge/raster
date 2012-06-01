@@ -5,10 +5,10 @@
 # Licence GPL v3
 
 	
-.cellValues <- function(x, cells, layer, nl) { 
+.cellValues <- function(x, cells, layer, nl, att=FALSE) { 
 
 	if (inherits(x, 'RasterLayer')) {
-		return( .readCells(x, cells, 1) )
+		return( .readCells(x, cells, 1, att=att) )
 		
 	} else {
 	

@@ -49,7 +49,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 	if (class(x) == 'data.frame') {
 		return(utils::stack(x, ...))
 	}
-	r <- list()
+
 	lstnames <- names(x)
 	if (is.null(lstnames)) {
 		namesFromList <- FALSE
@@ -57,6 +57,40 @@ function(x, bands=NULL, native=FALSE, ...) {
 		lstnames <- .goodNames(lstnames)
 		namesFromList <- TRUE
 	}
+
+	# first try simplest case, all RasterLayer objects
+	cls <- sapply(x, function(i) inherits(i, 'RasterLayer'))
+	if (all(cls)) {
+		hd <- sapply(x, function(i) hasValues(i) )
+		if (!all(hd)) {
+			if (sum(hd) == 0) {
+				s <- new("RasterStack")
+				s@nrows <- x[[1]]@nrows
+				s@ncols <- x[[1]]@ncols
+				s@extent <- x[[1]]@extent
+				s@crs <- x[[1]]@crs
+				return(s)
+			}
+			warning('RasterLayer objects without cell values were removed')
+			x <- x[hd]
+		}
+		compare(x)	
+		s <- new("RasterStack")
+		s@nrows <- x[[1]]@nrows
+		s@ncols <- x[[1]]@ncols
+		s@extent <- x[[1]]@extent
+		s@crs <- x[[1]]@crs
+		s@layers <- x
+		if (namesFromList) {
+			names(s) <- lstnames
+		} else {
+			names(s) <- sapply(x, names)
+		}
+		return(s)
+	}
+	
+	
+	r <- list()
 
 	first <- raster(x[[1]])
 	if (!is.null(bands)) {
