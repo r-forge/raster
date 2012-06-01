@@ -20,9 +20,9 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
 }
 
 \usage{
-\S4method{plot}{RasterLayer,missing}(x, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, ...)
+\S4method{plot}{RasterLayer,missing}(x, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, ...)
 
-\S4method{plot}{RasterStackBrick,ANY}(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, ...)
+\S4method{plot}{RasterStackBrick,ANY}(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, colNA=NA, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, ...)
 
 \S4method{plot}{Raster,Raster}(x, y, maxpixels=100000, cex=0.1, ...)
 }
@@ -37,6 +37,7 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
   \item{useRaster}{If \code{TRUE}, the rasterImage function is used for plotting. Otherwise the image function is used. This can be useful
        if rasterImage does not work well on your system (see note)}
   \item{alpha}{Number between 0 and 1 to set transparancy. 0 is entirely transparant, 1 is not transparant}
+  \item{colNA}{The color to use for the backgournd (default is transparant)}  
   \item{add}{Logical. Add to current plot?}
   \item{ext}{An extent object to zoom in a region (see also \code{\link{zoom}} and \code{\link{crop}(x, \link{drawExtent}())}}
   \item{interpolate}{Logical. Should the image be interpolated (smoothed)?}

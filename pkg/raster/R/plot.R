@@ -11,7 +11,7 @@ if (!isGeneric("plot")) {
 
 
 setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, maxnl=16, main, ...)  {
+	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, colNA=NA, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, maxnl=16, main, ...)  {
 	
 		if (alpha < 1) {
 			alpha <- max(alpha, 0) * 255 + 1
@@ -39,7 +39,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 		
 		if (length(y) == 1) {
 			if (useRaster) {
-				.plotraster2(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, ...) 
+				.plotraster2(raster(x, y), col=col, colNA=colNA, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, ...) 
 			} else {
 				.plotraster(raster(x, y), col=col, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, ...) 
 			}
@@ -75,7 +75,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				if (coln==1) ya='s' else ya='n'
 				if (useRaster) {
 					.plotraster2(raster(x, y[i]), col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=main[y[i]], 
-					 ext=ext, interpolate=interpolate, ...) 
+					 ext=ext, interpolate=interpolate, colNA=colNA, ...) 
 				} else {
 					.plotraster(raster(x, y[i]), col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=main[y[i]], 
 					ext=ext, interpolate=interpolate, ...) 
@@ -88,7 +88,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 
 
 setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, ...)  {
+	function(x, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, ...)  {
 
 		# maxpixels = min( prod(par()$din * 72), maxpixels)
 	
@@ -104,7 +104,7 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 		} else if (! useRaster) {
 			.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, ...) 
 		} else {
-			.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, ...) 
+			.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, ...) 
 			#.plot2(x, col=col, maxpixels=maxpixels, ...)
 		}
 	}

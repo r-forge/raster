@@ -5,6 +5,7 @@
 
 
 .getPutVals <- function(obj, field, n, mask) {
+	lvs <- NA
 	if (mask) {
 		putvals <- rep(1, length=n)
 	
@@ -22,10 +23,11 @@
 		if (is.na(field)) {
 			stop('field does not exist')
 		}
-		putvals <- as.vector(obj@data[[field]])
+		putvals <- (obj@data[[field]])
 		if (class(putvals) == 'factor') {
-			warning('selected field is factor type (coverted to numeric)')
-			putvals <- as.numeric(as.character(putvals))
+			warning('selected field is a factor (coverted to numeric)')
+			lvs <- levels(putvals)
+			putvals <- as.integer(putvals)
 		}
 		if (class(putvals) == 'character') {
 			warning('selected field is character type (coverted to numeric)')
@@ -48,7 +50,7 @@
 			putvals[] <- field
 		}
 	}
-	putvals
+	list(putvals, lvs)
 }
 
 .intersectSegments <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
@@ -163,7 +165,12 @@
 	}
 	
 	npol <- length(p@polygons)
-	putvals <- .getPutVals(p, field, npol, mask)
+	pvals <- .getPutVals(p, field, npol, mask)
+	putvals <- pvals[[1]]
+	if (!is.na(pvals[[2]][1])) {
+		rstr@data@isfactor <- TRUE
+		rstr@data@attributes <- pvals[[2]]
+	}
 
 	polinfo <- matrix(NA, nrow=npol * 2, ncol=6)
 	addpol <- matrix(NA, nrow=500, ncol=6)
