@@ -111,6 +111,18 @@ setMethod("plot", signature(x='RasterLayer', y='missing'),
 )	
 
 
+setMethod("plot", signature(x='RasterLayer', y='character'), 
+	function(x, y,  ...)  {
+		if (! .hasRAT(x) ) {
+			stop('"plot(RasterLayer, character)" is only meaningful for a RasterLayer with a Raster Attribute Table' )
+		}
+		x <- ratToLayers(x, y)
+		plot(x, ...)
+	}
+)	
+
+
+
 
 
 setMethod("plot", signature(x='Raster', y='Raster'), 

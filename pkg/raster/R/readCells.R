@@ -65,9 +65,7 @@
 	
 	if (att) {
 		if (.hasRAT(x)) {
-			rat <- rats(x)
-			vals <- match(vals, rat[,1])
-			vals <- rat[vals, -c(1:2), drop=FALSE]
+			vals <- ratValues(x, vals)
 		}
 	}
 	

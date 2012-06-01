@@ -24,7 +24,9 @@ setMethod ('show' , 'BasicRaster',
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat('coord. ref. :' , projection(object, TRUE), '\n')
 	}
-)	
+)
+
+
 	
 setMethod ('show' , 'RasterLayer', 
 	function(object) {
@@ -37,9 +39,6 @@ setMethod ('show' , 'RasterLayer',
 		cat('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat('coord. ref. :' , projection(object, TRUE), '\n')
-
-
-
 		
 		if (raster:::.hasRAT(object)) {
 			x <- object@data@attributes[[1]][, -c(1:2), drop=FALSE]
@@ -70,8 +69,7 @@ setMethod ('show' , 'RasterLayer',
 			print(r, row.names=FALSE)
 			
 		} else {
-		
-		
+				
 			if (hasValues(object)) {
 				fd <- object@data@fromdisk
 				if (fd) {
@@ -81,13 +79,14 @@ setMethod ('show' , 'RasterLayer',
 				}
 				
 				if (object@data@haveminmax) {
-					cat('min value   :' , minValue(object), '\n')
-					cat('max value   :' , maxValue(object), '\n')
-				#} else { 
-				#	if (fd) {
-				#		cat('min         : ? \n')
-				#		cat('max         : ? \n')
-				#	} 
+					if (is.factor(object)) {
+						labs <- labels(object)[[1]]
+						cat('min value   : ', minValue(object), ' (', labs[1], ')\n', sep='')
+						cat('max value   : ', maxValue(object), ' (', labs[length(labs)], ')\n', sep='')
+					} else {
+						cat('min value   :' , minValue(object), '\n')
+						cat('max value   :' , maxValue(object), '\n')
+					}
 				}
 			} else {
 				cat('values      : none\n')			

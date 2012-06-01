@@ -73,3 +73,12 @@ ratify <- function(x, filename='', ...) {
 	return(x)
 }
 
+
+ratValues <- function(x, v) {
+	rat <- rats(x)
+	i <- match(v, rat$VALUE)
+	r <- rat[i, -c(1:2), drop=FALSE]
+	rownames(r) <- NULL
+	r
+}
+
