@@ -42,7 +42,7 @@ setAs('Raster', 'SpatialPixelsDataFrame',
 		
 		if (ncol(v) > 2) {
 			v <- data.frame(v[, 3:ncol(v), drop = FALSE])
-			if (is.factor(from)) {
+			if (any(is.factor(from))) {
 				f <- labels(from)
 				for (i in 1:length(f)) {
 					if (!is.null(f[[i]])) {

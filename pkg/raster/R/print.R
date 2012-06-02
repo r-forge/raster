@@ -14,13 +14,18 @@ setMethod ('print', 'Raster',
 				nc <- open.ncdf(x@file@name)
 				print(nc)
 				close.ncdf(nc)
-			} else if (is.factor(x)) {
+			} else if (any(is.factor(x))) {
 				cat('factor levels (value attributes)\n')
-				f <- x@data@attributes[[1]]
-				if (nrow(f) > 15) { 
-					f <- f[1:15,]
+				f <- x@data@attributes
+				for (i in 1:length(f)) {
+					ff <- f[[i]]
+					if (!is.null(ff)) {
+						if (nrow(ff) > 15) { 
+							ff <- ff[1:15,]
+						}
+						print(ff)
+					}
 				}
-				print(f)
 			# cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
 			# cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
 			} else callNextMethod(x, ...)

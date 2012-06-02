@@ -19,7 +19,7 @@ setMethod('as.data.frame', signature(x='Raster'),
 		v <- as.data.frame(values(x), row.names=row.names, optional=optional, ...)
 		colnames(v) <- names(x)  # for nlayers = 1
 		
-		if (is.factor(x)) {
+		if (any(is.factor(x))) {
 			f <- labels(x)
 			for (i in 1:length(f)) {
 				if (!is.null(f[[i]])) {
