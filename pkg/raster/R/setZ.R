@@ -15,9 +15,11 @@ setZ <- function(x, z, name='time') {
 
 
 getZ <- function(x) {
-	return(unlist(x@z[1]))
+	if (length(x@z) == 0) {
+		return(NULL)
+	} else {
+		return(x@z[[1]])
+	}
 }
-
-
 
 
