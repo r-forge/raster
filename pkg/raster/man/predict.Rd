@@ -66,7 +66,7 @@ p <- matrix(c(48, 48, 48, 53, 50, 46, 54, 70, 84, 85, 74, 84, 95, 85, 66, 42, 26
 # 
 a <- cbind(runif(250)*(xmax(logo)-xmin(logo))+xmin(logo), runif(250)*(ymax(logo)-ymin(logo))+ymin(logo))
 
-#extract values for points from stack
+#extract values for points
 xy <- rbind(cbind(1, p), cbind(0, a))
 v <- data.frame(cbind(xy[,1], extract(logo, xy[,2:3])))
 colnames(v)[1] <- 'pa'
