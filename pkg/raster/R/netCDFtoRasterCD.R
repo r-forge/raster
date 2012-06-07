@@ -23,7 +23,7 @@
 		time <- startTime + as.numeric(getZ(x)) * 3600
 		time <- as.character(time)
 		if (!is.na(time[1])) {
-			x@z <- as.list(time)
+			x@z <- list(time)
 			names(x@z) <- as.character('Date/time')
 		}
 	}
@@ -39,7 +39,7 @@
 			warning('assuming a standard calender')
 		}
 
-		time <- x@z
+		time <- getZ(x)
 		if (greg) {
 			time <- as.Date(time, origin=startDate)
 		} else {
@@ -48,7 +48,7 @@
 			doy <- (time - (year * 365))
 			time <- as.Date(doy, origin=paste(year, "-1-1", sep='')) - 1
 		}
-		x@z <- as.list(time)
+		x@z <- list(time)
 		names(x@z) <- as.character('Date')
 		
 	}
@@ -255,11 +255,11 @@
 		nbands = 1
 	} else {
 		r@file@nbands <- nc$var[[zvar]]$dim[[dim3]]$len
-		r@z <- as.list( nc$var[[zvar]]$dim[[dim3]]$vals )
-		names(r@z) <- nc$var[[zvar]]$dim[[dim3]]$units
-		
+		r@z <- list( nc$var[[zvar]]$dim[[dim3]]$vals )
 		if ( nc$var[[zvar]]$dim[[dim3]]$name == 'time' ) {
-			r <- try( .doTime(r, nc, zvar, dim3)  )
+			try( r <- .doTime(r, nc, zvar, dim3) )
+		} else {
+			names(r@z) <- nc$var[[zvar]]$dim[[dim3]]$units
 		}
 	}
 	
@@ -277,7 +277,7 @@
 			} else {
 				r@data@band <- as.integer( min(max(1, band), r@file@nbands) )
 			}
-			r@z <- as.list( getZ(r)[r@data@band] )
+			r@z <- list( getZ(r)[r@data@band] )
 		} 
 
 	} else {

@@ -203,7 +203,7 @@ setMethod('raster', signature(x='RasterBrick'),
 				if (! is.na(ln) ) { r@layernames <- ln }
 				zv <- unlist(x@z[1])[dindex]
 				if (! is.null(zv) ) { 
-					r@z <- as.list(zv)
+					r@z <- list(zv)
 				}
 				if ( x@data@inmemory ) {
 					r@data@values <- x@data@values[,dindex]

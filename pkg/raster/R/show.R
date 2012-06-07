@@ -174,8 +174,7 @@ setMethod ('show' , 'RasterBrick',
 			if (length(z) < mnr) {
 				cat(name, paste(z, collapse=', '), '\n')
 			} else {
-				z <- summary(z)
-				cat(name, paste(z, collapse=' - '), '(range)\n')
+				cat(name, paste(range(z), collapse=' --- '), '(range)\n')
 			}
 		}
 		

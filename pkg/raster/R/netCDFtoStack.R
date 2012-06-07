@@ -34,11 +34,11 @@
 
 		if (length(bands) > 1) {
 			names(st@z) <- nc$var[[zvar]]$dim[[dim3]]$units[bands]
-			st@z <- as.list( nc$var[[zvar]]$dim[[dim3]]$vals[bands] )
+			st@z <- list( nc$var[[zvar]]$dim[[dim3]]$vals[bands] )
 			if ( nc$var[[zvar]]$dim[[dim3]]$name == 'time' ) {	
 				st <- try( .doTime(st, nc, zvar, dim3)  )
 			}
-			st@layers = lapply(as.list(bands), function(x){
+			st@layers = lapply(list(bands), function(x){
 												r@data@band <- x; 
 												r@layernames <- st@z[[1]][x]; 
 												return(r)} 
