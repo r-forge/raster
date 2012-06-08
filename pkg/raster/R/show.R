@@ -174,13 +174,13 @@ setMethod ('show' , 'RasterBrick',
 			if (length(z) < mnr) {
 				cat(name, paste(z, collapse=', '), '\n')
 			} else {
-				cat(name, paste(range(z), collapse=' --- '), '(range)\n')
+				cat(name, paste(range(z), collapse=', '), '(min, max)\n')
 			}
 		}
 		
 		if (object@file@driver == 'netcdf') {
 			z <- attr(object@data, 'zvar')
-			if (!is.null(z)) { cat('zvar        :', z, '\n') } 
+			if (!is.null(z)) { cat('varname     :', z, '\n') } 
 			z <- attr(object@data, 'level')
 			if (!is.null(z)) { 
 				if (z>0) { 
