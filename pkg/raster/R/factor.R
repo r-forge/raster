@@ -4,6 +4,13 @@
 # Licence GPL v3
 
 
+.getlevs <- function(x, f) {
+	f <- round(f)
+	x[x < 1] <- NA
+	x[x > length(f)] <- NA
+	f[x]
+}
+
 	
 if (!isGeneric("is.factor")) {
 	setGeneric("is.factor", function(x)
@@ -45,22 +52,19 @@ setMethod('levels', signature(x='Raster'),
 
 
 
-#if (!isGeneric("levels<-")) {
-#	setGeneric("levels<-", function(x, value)
-#		standardGeneric("levels"))
-#}	
-
-
 setMethod('levels<-', signature(x='Raster'), 
-
 	function(x, value) {
 
 		if (inherits(x, 'RasterLayer')) {
+			if (!is.factor(x)) {
+				x <- as.factor(x)
+			}
 			if (is.list(value)) {
 				value <- value[[1]]
 			}
 			stopifnot (is.factor(value) | is.vector(value))
 			value <- as.factor(value)
+			stopifnot(length(value) == length(levels(x)[[1]]))
 			x@data@attributes <- list(value)
 			x@data@isfactor <- TRUE 
 			x@data@hasRAT <- FALSE
@@ -76,14 +80,18 @@ setMethod('levels<-', signature(x='Raster'),
 					if (!(is.factor(value[[j]]) | is.vector(value[[j]]))) {
 						stop('the list elements should hold a factor or a vector')
 					} else {
+						if (!is.factor(x@layers[[j]])) {
+							x@layers[[j]] <- as.factor(x)
+						}
+						stopifnot(length(value[[j]]) == length(levels(x@layers[[j]][[1]])))
+						stopifnot (is.factor(value[[j]]) | is.vector(value[[j]]))
 						x@layers[[j]]@data@attributes <- list(factor(value[[j]]))
 						x@layers[[j]]@data@isfactor <- TRUE 
 						x@layers[[j]]@data@hasRAT <- FALSE
 					}
 				}
 			}
-			return(x)
-		
+			return(x)		
 		}
 		
 		# else RasterBrick
@@ -112,11 +120,14 @@ if (!isGeneric("as.factor")) {
 
 setMethod('as.factor', signature(x='RasterLayer'), 
 	function(x) {
-		#x <- round(x) 
+		x <- calc(x, function(i) {
+					i <- round(i) 
+					i[i < 1] <- NA 
+					i } 
+				)
 		x@data@isfactor <- TRUE
 		x@data@attributes <- list(factor(unique(x)))
 		return(x)
 	}
 )
 
-		

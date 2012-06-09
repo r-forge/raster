@@ -57,11 +57,9 @@ f <- as.factor(r)
 is.factor(f)
 
 levels(f)
-levels(f) <- letters[10:21]
+levels(f) <- letters[10:19]
 levels(f)
 f
-
-s <- stack(r, r, f)
 }
 
 \keyword{methods}

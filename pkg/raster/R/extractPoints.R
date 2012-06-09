@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans
-# contact: r.hijmans@gmail.com
 # Date : November 2008
 # Version 1.0
 # Licence GPL v3
@@ -63,7 +62,8 @@
 			facts <- is.factor(object)[lyrs]
 			if (any(facts)) {
 				i <- which(facts)
-				levs <- levels(x)
+				levs <- levels(object)
+				lyrs <- layer:(layer+nl-1)
 				for (j in i) {
 					k <- lyrs[j]
 					value[, j+1] <- .getlevs(value[, j+1], levs[[k]][[1]])
