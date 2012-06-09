@@ -20,7 +20,7 @@ setMethod('as.data.frame', signature(x='Raster'),
 		colnames(v) <- names(x)  # for nlayers = 1
 		
 		if (any(is.factor(x))) {
-			f <- labels(x)
+			f <- levels(x)
 			for (i in 1:length(f)) {
 				if (!is.null(f[[i]])) {
 					v[,i] <- as.factor(f[[i]][v[,i]])

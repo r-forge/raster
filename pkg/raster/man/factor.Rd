@@ -5,38 +5,37 @@
 \alias{is.factor}
 \alias{is.factor,Raster-method}
 \alias{is.factor,RasterStack-method}
-\alias{asFactor}
-\alias{asFactor,ANY-method}
-\alias{asFactor,RasterLayer-method}
-\alias{asFactor,RasterBrick-method}
-\alias{labels}
-\alias{labels,Raster-method}
-\alias{labels,RasterStack-method}
-\alias{labels<-}
-\alias{labels<-,RasterLayer,list-method}
-\alias{labels<-,RasterBrick,list-method}
+\alias{as.factor}
+\alias{as.factor,RasterLayer-method}
+\alias{levels}
+\alias{levels,Raster-method}
+\alias{levels,RasterStack-method}
+\alias{levels<-}
+\alias{levels<-,Raster-method}
    
   
 \title{Factors}
 
 \description{
 Factors are categorical variables. These functions allow for defining a layer as a categorical variable. 
-This feature is under development, and whether a layer is defined as a factor or not is currently ignored by all other functions.
+This feature is not used much in the package. Whether a layer is defined as a factor or not is currently ignored by all, except the 'extract' functions (when used with option df=TRUE).
 }
 
 \usage{
 is.factor(x)
-asFactor(x, ...)
-labels(object, ...)
-labels(object) <- value
+as.factor(x)
+levels(x)
 }
 
 \arguments{
-  \item{x}{A Raster* object}
-  \item{object}{A Raster* object}
-  \item{value}{list}
-  \item{...}{Additional arguments}
+  \item{x}{Raster* object}
 }
+
+
+\section{Methods}{
+\describe{
+factor type layers can be created with \code{as.factor} (RasterLayer objects only) or \code{levels(x) <- value}. \code{value} can be a factor or vector for RasterLayer objects. For multi-layer objects, it should be a list of the same lenght as nlayers(x). Each element of the list should be either NULL or a vector or factor. 
+}}
 
 
 \value{
@@ -47,12 +46,22 @@ Raster* object
 \author{Robert J. Hijmans}
 
 \examples{
+
+set.seed(0)
 r <- raster(nrow=10, ncol=10)
-r[] <- (runif(ncell(r)) * 10)
+r[] <- runif(ncell(r)) * 10
 is.factor(r)
+
 r <- round(r)
-f <- asFactor(r)
+f <- as.factor(r)
 is.factor(f)
+
+levels(f)
+levels(f) <- letters[10:21]
+levels(f)
+f
+
+s <- stack(r, r, f)
 }
 
 \keyword{methods}

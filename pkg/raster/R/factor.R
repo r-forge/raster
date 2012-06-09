@@ -23,91 +23,100 @@ setMethod('is.factor', signature(x='RasterStack'),
 )
 
 
-if (!isGeneric("labels")) {
-	setGeneric("labels", function(object, ...)
-		standardGeneric("labels"))
+if (!isGeneric("levels")) {
+	setGeneric("levels", function(x)
+		standardGeneric("levels"))
 }	
 
-setMethod('labels', signature(object='Raster'), 
-	function(object, ...) {
-		return(object@data@attributes)
-	}
-)
-
-setMethod('labels', signature(object='RasterStack'), 
-	function(object, ...) {
-		sapply(object@layers, function(x) x@data@attributes) 
-	}
-)
-
-
-if (!isGeneric("labels<-")) {
-	setGeneric("labels<-", function(object, value)
-		standardGeneric("labels<-"))
-}	
-
-
-setMethod('labels<-', signature(object='RasterLayer', value='list'), 
-	function(object, value) {
-		if (length(value) != 1) {
-			stop('length(value) != 1')
+setMethod('levels', signature(x='Raster'), 
+	function(x) {
+		f <- is.factor(x)
+		if (any(f)) {
+			if (inherits(x, 'RasterStack')) {
+				return( lapply(x@layers, function(i) i@data@attributes)  )
+			} else {
+				return(x@data@attributes)
+			}
+		} else {
+			return(NULL)
 		}
-		object@data@attributes <- value
-		return(object)
 	}
 )
 
-setMethod('labels<-', signature(object='RasterBrick', value='list'), 
-	function(object, value) {
-		if (length(value) != nlayers(object)) {
-			stop('length(value) != nlayers(object)')
+
+
+#if (!isGeneric("levels<-")) {
+#	setGeneric("levels<-", function(x, value)
+#		standardGeneric("levels"))
+#}	
+
+
+setMethod('levels<-', signature(x='Raster'), 
+
+	function(x, value) {
+
+		if (inherits(x, 'RasterLayer')) {
+			if (is.list(value)) {
+				value <- value[[1]]
+			}
+			stopifnot (is.factor(value) | is.vector(value))
+			value <- as.factor(value)
+			x@data@attributes <- list(value)
+			x@data@isfactor <- TRUE 
+			x@data@hasRAT <- FALSE
+			return(x)
+		} 
+		
+		i <- sapply(value, is.null)
+		stopifnot (length(value) == nlayers(x))
+
+		if (inherits(x, 'RasterStack')) {
+			if (! all(i)) {
+				for (j in which(!i)) {
+					if (!(is.factor(value[[j]]) | is.vector(value[[j]]))) {
+						stop('the list elements should hold a factor or a vector')
+					} else {
+						x@layers[[j]]@data@attributes <- list(factor(value[[j]]))
+						x@layers[[j]]@data@isfactor <- TRUE 
+						x@layers[[j]]@data@hasRAT <- FALSE
+					}
+				}
+			}
+			return(x)
+		
 		}
-		object@data@attributes <- value
-		return(object)
+		
+		# else RasterBrick
+		if (! all(i)) {
+			for (j in which(!i)) {
+				if (!(is.factor(value[[j]]) | is.vector(value[[j]]))) {
+					stop('the list elements should hold a factor or a vector')
+				} else {
+					value[[j]] <- factor(value[[j]])
+				}
+			}
+		}
+		x@data@isfactor <- i
+		x@data@attributes  <- value
+		return(x)
 	}
 )
 
 
 
-if (!isGeneric("asFactor")) {
-	setGeneric("asFactor", function(x, ...)
-		standardGeneric("asFactor"))
+if (!isGeneric("as.factor")) {
+	setGeneric("as.factor", function(x)
+		standardGeneric("as.factor"))
 }
 
-setMethod('asFactor', signature(x='ANY'), 
-	function(x, ...) {
-		return(factor(x, ...))
-	}
-)
 
-setMethod('asFactor', signature(x='RasterLayer'), 
-	function(x, value=NULL, ...) {
+setMethod('as.factor', signature(x='RasterLayer'), 
+	function(x) {
+		#x <- round(x) 
 		x@data@isfactor <- TRUE
-		if (is.null(value) ) {
-			#x <- round(x) #this makes slot isfactor FALSE again
-			x@data@attributes <- list(data.frame(VALUE=unique(x)))
-		} else {
-			x@data@attributes <- value
-		}	
+		x@data@attributes <- list(factor(unique(x)))
 		return(x)
 	}
 )
 
-.asFactor <- function(x, value){
-
-		return(x)
-}		
-
-setMethod('asFactor', signature(x='RasterBrick'), 
-	function(x, value=NULL, ...) {
-		x@data@isfactor <- TRUE
-		if (is.null(value) ) {
-			#x <- round(x) #this makes slot isfactor FALSE again
-			x@data@attributes <- list(data.frame(VALUE=unique(x)))
-		} else {
-			x@data@attributes <- value
-		}			
-		return(x)
-	}
-)
-
+		

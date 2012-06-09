@@ -5,10 +5,11 @@
 # Licence GPL v3
 
 	
-.cellValues <- function(x, cells, layer, nl, att=FALSE) { 
+.cellValues <- function(x, cells, layer, nl, att=FALSE, df=FALSE) { 
 
 	if (inherits(x, 'RasterLayer')) {
-		return( .readCells(x, cells, 1, att=att) )
+		result <- .readCells(x, cells, 1, att=att)
+		lyrs <- 1
 		
 	} else {
 	
@@ -26,7 +27,6 @@
 			for (i in 1:length(lyrs)) {
 				result[,i] <- .readCells( x@layers[[lyrs[i]]], cells, 1)
 			}
-			return( result )
 			
 		} else if (inherits(x, 'RasterBrick')) {
 		
@@ -35,10 +35,10 @@
 				if (length(na.omit(cells)) == 0) {
 					return(cells)
 				}
-				return( x@data@values[cells, lyrs] )
+				result <-  x@data@values[cells, lyrs] 
 				
 			} else if (x@file@driver == 'netcdf') {
-				return( .readBrickCellsNetCDF(x, cells, layer, nl) )
+				result <- .readBrickCellsNetCDF(x, cells, layer, nl) 
 				
 			}  else {
 				result <-  .readCells(x, cells, lyrs) 
@@ -47,10 +47,26 @@
 						# only an issue with a single layer?
 					names(result) <- names(x)[lyrs]
 				}
-				return(result)
 			}
 		}
 	}
+	if (df) {
+		if (!is.matrix(result)) {
+			result <- matrix(result)
+			colnames(result) <- names(x)
+		}
+		result <- data.frame(ID=1:NROW(result), result)
+		facts <- is.factor(x)[lyrs]
+		if (any(facts)) {
+			levs <- levels(x)
+			i <- which(facts)
+			for (j in i) {
+				k <- lyrs[j]
+				result[, j+1] <- .getlevs(result[, j+1], levs[[k]][[1]])
+			}
+		}
+	}
+	result
 }	
 
 

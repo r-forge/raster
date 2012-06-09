@@ -145,6 +145,16 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, ..
 		} else {
 			res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
 		}
+		facts <- is.factor(x)[lyrs]
+		if (any(facts)) {
+			i <- which(facts)
+			levs <- levels(x)
+			for (j in i) {
+				k <- lyrs[j]
+				res[, j+1] <- .getlevs(res[, j+1], levs[[k]][[1]])				
+			}
+		}
+				
 
 		if (ncol(res) == 2) {
 			colnames(res) <- c('ID', 'value')

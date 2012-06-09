@@ -54,7 +54,21 @@
 			value <- data.frame( do.call(rbind, 
 				lapply(1:length(value), function(x) if (!is.null(value[[x]])) cbind(ID=x, value[[x]]))) )
 		} else {
+			if (!is.matrix(value)) {
+				value <- matrix(value)
+				names(value) <- names(object)
+			}
 			value <- data.frame(cbind(ID=1:NROW(value), value))
+			
+			facts <- is.factor(object)[lyrs]
+			if (any(facts)) {
+				i <- which(facts)
+				levs <- levels(x)
+				for (j in i) {
+					k <- lyrs[j]
+					value[, j+1] <- .getlevs(value[, j+1], levs[[k]][[1]])
+				}
+			}
 		}
 	}
 	
