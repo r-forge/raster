@@ -74,10 +74,11 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 				}
 			}
 			if (cls[i] == 'factor') {
-				levs[[i-1]] <- levels(y[[i]])
-				names(levs)[[i-1]] <- colnames(y)[i]
-				y[,i] <- as.integer(y[,i])
+				lv <- data.frame(VALUE=1:length(y[[i]]), COUNT=NA, levels(y[[i]]))
+				colnames(lv)[3] <- colnames(y)[i]
+				levs[[i-1]] <- lv
 				hasfactor[i-1] <- TRUE
+				y[,i] <- as.numeric(as.factor(y[,i]))
 			}
 		}
 		
@@ -100,7 +101,7 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 		
 		if (canProcessInMemory(x, 3)) {
 			if (any(hasfactor)) {
-				r@data@isfactor <- TRUE
+				r@data@isfactor <- hasfactor
 				r@data@attributes <- levs
 			}
 			v <- .localmerge( getValues(x), y, subsWithNA )

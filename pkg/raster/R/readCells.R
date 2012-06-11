@@ -6,7 +6,7 @@
 #read data on the raster for cell numbers
 
 
-.readCells <- function(x, cells, layers, att=FALSE) {
+.readCells <- function(x, cells, layers) {
 	
 	if (length(cells) < 1) {
 #		cat(cells,"\n")
@@ -60,12 +60,6 @@
 	if (adjust) {
 		if (x@data@gain != 1 | x@data@offset != 0) {
 			vals <- vals * x@data@gain + x@data@offset
-		}
-	}
-	
-	if (att) {
-		if (.hasRAT(x)) {
-			vals <- ratValues(x, vals)
 		}
 	}
 	

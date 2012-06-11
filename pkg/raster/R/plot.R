@@ -10,14 +10,43 @@ if (!isGeneric("plot")) {
 }	
 
 
-setMethod("plot", signature(x='RasterStackBrick', y='ANY'), 
-	function(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, colNA=NA, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, maxnl=16, main, ...)  {
+
+
+
+
+setMethod("plot", signature(x='Raster', y='ANY'), 
+	function(x, y, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, maxnl=16, main, ...)  {
 	
 		if (alpha < 1) {
 			alpha <- max(alpha, 0) * 255 + 1
 			a <- c(0:9, LETTERS[1:6])
 			alpha <- paste(rep(a, each=16), rep(a, times=16), sep='')[alpha]
 			col <- paste(substr(col, 1, 7), alpha, sep="")
+		}
+
+		if (nlayers(x) == 1) {
+			if (!missing(y)) {
+				if (is.character(y)) {
+					if (is.factor(x)) {
+						x <- deratitfy(x, y)														
+					} else {
+						y <- match(y, names(x))
+						if (is.na(y)) {
+							warning('argument "y" ignored')
+						}
+					}
+				}
+			}
+				
+			if (length(x@legend@colortable) > 0) {
+				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, ...)
+			} else if (! useRaster) {
+				.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, ...) 
+			} else {
+				.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, ...) 
+				#.plot2(x, col=col, maxpixels=maxpixels, ...)
+			}
+			return(invisible(NULL))
 		}
 	
 		if (missing(y)) {
@@ -27,7 +56,7 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 			}
 		} else {
 			if (is.character(y)) {
-				y = .nameToIndex(y, names(x))
+				y <- match(y, names(x))
 			}
 			y <- unique(as.integer(round(y)))
 			y <- na.omit(y)
@@ -82,44 +111,10 @@ setMethod("plot", signature(x='RasterStackBrick', y='ANY'),
 				}
 			}		
 		}
+		return(invisible(NULL))
 	}
 )	
 
-
-
-setMethod("plot", signature(x='RasterLayer', y='missing'), 
-	function(x, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, ...)  {
-
-		# maxpixels = min( prod(par()$din * 72), maxpixels)
-	
-		if (alpha < 1) {
-			alpha <- max(alpha, 0) * 255 + 1
-			a <- c(0:9, LETTERS[1:6])
-			alpha <- paste(rep(a, each=16), rep(a, times=16), sep='')[alpha]
-			col <- paste(substr(col, 1, 7), alpha, sep="")
-		}
-
-		if (length(x@legend@colortable) > 0) {
-			.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, ...)
-		} else if (! useRaster) {
-			.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, ...) 
-		} else {
-			.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, ...) 
-			#.plot2(x, col=col, maxpixels=maxpixels, ...)
-		}
-	}
-)	
-
-
-setMethod("plot", signature(x='RasterLayer', y='character'), 
-	function(x, y,  ...)  {
-		if (! .hasRAT(x) ) {
-			stop('"plot(RasterLayer, character)" is only meaningful for a RasterLayer with a Raster Attribute Table' )
-		}
-		x <- ratToLayers(x, y)
-		plot(x, ...)
-	}
-)	
 
 
 

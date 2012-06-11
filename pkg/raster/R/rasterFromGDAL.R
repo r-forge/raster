@@ -121,7 +121,7 @@
 		r <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs="")
 		r@file@nbands <- r@data@nlayers <- nbands
 		band <- 1:nbands
-		RAT <- FALSE
+		#RAT <- FALSE
 		
 	} else {
 	
@@ -245,11 +245,12 @@
 	r@data@min <- minv
 	r@data@max <- maxv
 
-	if (! is.null(RATlist[[1]])) {
+	rats <- ! sapply(RATlist, is.null) 
+	if (any(rats)) {
 		att <- vector(length=nlayers(r), mode='list')
 		for (i in 1:length(RATlist)) {
 			if (! is.null(RATlist[[i]])) {
-				att[[i]] <- data.frame(RATlist[[i]], stringsAsFactors=FALSE)
+				att[[i]] <- data.frame(RATlist[[i]], stringsAsFactors=TRUE)
 				
 				if (! silent) {
 					usage <- attr(RATlist[[i]], 'GFT_usage')
@@ -262,11 +263,10 @@
 						}
 					}
 				}
-				r@data@isfactor[i] <- TRUE 
 			}
 		}
 		r@data@attributes <- att
-		r@data@hasRAT <- TRUE
+		r@data@isfactor <- rats
 	}
 	
 #oblique.x   0  #oblique.y   0 

@@ -26,7 +26,7 @@
 	layernames <- ''
 	zvalues <- ''
 	
-	isCat <- hasRat <- FALSE
+	isCat <- FALSE
 	ratnames <- rattypes <- ratvalues <- NULL
 	catlevels = matrix(NA)
 
@@ -49,8 +49,7 @@
 		else if (ini[i,2] == "VALUEUNIT") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 
 		else if (ini[i,2] == "CATEGORICAL") { try ( isCat <-  as.logical(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
-		else if (ini[i,2] == "ATTRIBUTES") { hasRat <-  ini[i,3] }
-		
+				
 		#else if (ini[i,2] == "RATROWS") { ratrows <- as.integer(ini[i,3]) }
 		else if (ini[i,2] == "RATNAMES") { ratnames <- unlist(strsplit(ini[i,3], ':')) }
 		else if (ini[i,2] == "RATTYPES") { rattypes <- unlist(strsplit(ini[i,3], ':')) }
@@ -96,9 +95,11 @@
 		x@data@min <- minval[band]
 		x@data@max <- maxval[band]
 	}
+	
 	x@data@isfactor = isCat
-
-	if (hasRat) {
+	if (isCat) {
+	
+	# only for a single layer!
 	
 		rat <- data.frame(matrix(ratvalues, nrow=length(ratvalues) / length(ratnames)), stringsAsFactors=FALSE)
 		colnames(rat) <- ratnames
@@ -111,11 +112,9 @@
 				rat[, i] <- as.factor(rat[,i])
 			}
 		}
-		x@data@hasRAT <- TRUE
+		x@data@isfactor <- TRUE
 		x@data@attributes <- list(rat)
 		
-	} else if (isCat) { 
-		x@data@attributes = list(catlevels)
 	}
 
 	x@file@nbands <- as.integer(nbands)

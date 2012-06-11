@@ -4,12 +4,25 @@
 # Licence GPL v3
 
 
-.getlevs <- function(x, f) {
-	f <- round(f)
-	x[x < 1] <- NA
-	x[x > length(f)] <- NA
-	f[x]
+
+factorValues <- function(x, v, layer=1, att=NULL) {
+	rat <- levels(x)[[layer]]
+	i <- match(v, rat$VALUE)
+	r <- rat[i, -c(1:2), drop=FALSE]
+	rownames(r) <- NULL
+	if (!is.null(att)) {
+		if (is.character(att)) {
+			att <- na.omit(match(colnames(r), att))
+			if (length(att)	== 0) {
+				warning("att does not includes valid names")
+			}
+		} else {
+			r <- r[, att, drop=FALSE]
+		}
+	}
+	r
 }
+
 
 	
 if (!isGeneric("is.factor")) {
@@ -52,63 +65,63 @@ setMethod('levels', signature(x='Raster'),
 
 
 
+.checkLevels <- function(old, newv) {
+	if (! is.data.frame(newv)) { 
+		stop('new raster attributes (factor values) should be in a data.frame (inside a list)')
+	}
+	if (! ncol(newv) > 2) {
+		stop('the number of columns in the raster attributes (factors) data.frame should be > 2')
+	}
+	if (! all( colnames(newv)[1:2] == c('VALUE', 'COUNT'))) {
+		stop('the first two column names of the raster attributes (factors) data.frame should be "VALUE" and "COUNT"')
+	}
+	if (! nrow(newv) == nrow(old)) {
+		stop('the number of rows in the raster attributes (factors) data.frame is not correct')
+	}
+	if (! all(sort(newv[,1]) == sort(old[,1]))) {
+		stop('the values in the "VALUE" column in the raster attributes (factors) data.frame are not correct')
+	}
+	for (n in 3:ncol(newv)) {
+		newv[, n] <- as.factor(newv[, n])
+	}
+	newv
+}
+
+
 setMethod('levels<-', signature(x='Raster'), 
 	function(x, value) {
+		
+		stopifnot(any(is.factor(x)))
 
 		if (inherits(x, 'RasterLayer')) {
-			if (!is.factor(x)) {
-				x <- as.factor(x)
+			if (!is.data.frame(value)) {
+				if (is.list(value)) {
+					value <- value[[1]]
+				}
 			}
-			if (is.list(value)) {
-				value <- value[[1]]
-			}
-			stopifnot (is.factor(value) | is.vector(value))
-			value <- as.factor(value)
-			stopifnot(length(value) == length(levels(x)[[1]]))
+			value <- .checkLevels(levels(x)[[1]], value)
 			x@data@attributes <- list(value)
-			x@data@isfactor <- TRUE 
-			x@data@hasRAT <- FALSE
 			return(x)
 		} 
 		
 		i <- sapply(value, is.null)
 		stopifnot (length(value) == nlayers(x))
 
-		if (inherits(x, 'RasterStack')) {
-			if (! all(i)) {
-				for (j in which(!i)) {
-					if (!(is.factor(value[[j]]) | is.vector(value[[j]]))) {
-						stop('the list elements should hold a factor or a vector')
-					} else {
-						if (!is.factor(x@layers[[j]])) {
-							x@layers[[j]] <- as.factor(x)
-						}
-						stopifnot(length(value[[j]]) == length(levels(x@layers[[j]][[1]])))
-						stopifnot (is.factor(value[[j]]) | is.vector(value[[j]]))
-						x@layers[[j]]@data@attributes <- list(factor(value[[j]]))
-						x@layers[[j]]@data@isfactor <- TRUE 
-						x@layers[[j]]@data@hasRAT <- FALSE
-					}
-				}
-			}
-			return(x)		
-		}
-		
-		# else RasterBrick
 		if (! all(i)) {
+			levs <- levels(x)
 			for (j in which(!i)) {
-				if (!(is.factor(value[[j]]) | is.vector(value[[j]]))) {
-					stop('the list elements should hold a factor or a vector')
-				} else {
-					value[[j]] <- factor(value[[j]])
+				if (!is.factor(x@layers[[j]])) {
+					stop('layer ', j, ' is not a factor')
 				}
+				value[j] <- .checkLevels(levs[[j]], value[[j]])				
 			}
+			x@data@attributes <- value
+			x@data@isfactor <- i
 		}
-		x@data@isfactor <- i
-		x@data@attributes  <- value
-		return(x)
+		return(x)		
 	}
 )
+
 
 
 
@@ -120,14 +133,64 @@ if (!isGeneric("as.factor")) {
 
 setMethod('as.factor', signature(x='RasterLayer'), 
 	function(x) {
-		x <- calc(x, function(i) {
-					i <- round(i) 
-					i[i < 1] <- NA 
-					i } 
-				)
-		x@data@isfactor <- TRUE
-		x@data@attributes <- list(factor(unique(x)))
-		return(x)
+		ratify(x)
 	}
 )
+
+
+
+ratify <- function(x, filename='', ...) {
+	stopifnot(nlayers(x) == 1)
+	x <- round(x)
+	f <- freq(x, useNA='no')
+	f <- data.frame(f)
+	colnames(f) <- toupper(colnames(f))
+	x@data@isfactor <- TRUE
+	x@data@attributes <- list(f)
+	if (filename != '') {
+		x <- writeRaster(x, filename, ...)
+		# only native format stores this...
+		x@data@isfactor <- TRUE
+		x@data@attributes <- list(f)	
+	}
+	return(x)
+}
+
+
+deratify <- function(x, att=NULL, layer=1, complete=FALSE, filename='', ...) {
+	rats <- is.factor(x)
+	if (!rats[[layer]]) {	
+		warning('This layer is not a factor')
+		return(x[[layer]])
+	}
+	
+	RAT <- levels(x)[[layer]]
+	if (ncol(RAT) <= 3) {
+		if (complete) {
+			x <- x[[layer]]
+			x@data@isfactor <- FALSE
+			x@data@attributes <- list()
+			return(x)
+		} else {
+			warning('this layer already has a single factor level (use "complete=TRUE" to remove it)')
+			return(x[[layer]])
+		}
+	}
+	
+	nms <- colnames(RAT)
+	if (!is.null(att)) {
+		if (is.character(att)) {
+			att <- na.omit(match(att, nms))
+			if (length(att) == 0) {
+				stop("argument 'att' does not include valid names")
+			}
+		}
+		RAT <- RAT[ , c(1, att), drop=FALSE]
+	} 
+	
+	w <- 2:ncol(RAT)
+	subs(x, RAT, by=1, which=w, subsWithNA=TRUE, filename=filename, ...)	
+}
+
+
 

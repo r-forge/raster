@@ -50,28 +50,29 @@
 	
 	if (df) {
 		if (is.list(value)) {
-			value <- data.frame( do.call(rbind, 
-				lapply(1:length(value), function(x) if (!is.null(value[[x]])) cbind(ID=x, value[[x]]))) )
+			value <- do.call(rbind, 
+				lapply(1:length(value), function(x) if (!is.null(value[[x]])) cbind(ID=x, value[[x]])))
 		} else {
-			if (!is.matrix(value)) {
-				value <- matrix(value)
-				names(value) <- names(object)
-			}
 			value <- data.frame(cbind(ID=1:NROW(value), value))
-			
-			facts <- is.factor(object)[lyrs]
-			if (any(facts)) {
+		}
+		lyrs <- layer:(layer-1+nl)
+		names(value) <- c('ID', names(object)[lyrs])
+	
+
+		facts <- is.factor(object)[lyrs]
+		if (any(facts)) {
+			if (ncol(value) == 2) {
+				# possibly multiple columns added
+				value <- cbind(value[,1], factorValues(object, value[,2], layer))
+			} else {
+				# single columns only
 				i <- which(facts)
-				levs <- levels(object)
-				lyrs <- layer:(layer+nl-1)
 				for (j in i) {
-					k <- lyrs[j]
-					value[, j+1] <- .getlevs(value[, j+1], levs[[k]][[1]])
+					value[, j+1] <- factorValues(object, value[, j+1], j, 1)
 				}
 			}
 		}
 	}
-	
 	value
 }
 

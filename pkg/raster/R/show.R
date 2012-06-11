@@ -41,7 +41,7 @@ setMethod ('show' , 'RasterLayer',
 		cat('coord. ref. :' , projection(object, TRUE), '\n')
 		
 		
-		if (raster:::.hasRAT(object)) {
+		if (is.factor(object)) {
 		
 			x <- object@data@attributes[[1]][, -c(1:2), drop=FALSE]
 			nc <- ncol(x)
@@ -81,14 +81,8 @@ setMethod ('show' , 'RasterLayer',
 				}
 				
 				if (object@data@haveminmax) {
-					if (is.factor(object)) {
-						labs <- levels(object)[[1]]
-						cat('min value   : ', minValue(object), ' (', as.character(labs[1]), ')\n', sep='')
-						cat('max value   : ', maxValue(object), ' (', as.character(labs[length(labs)]), ')\n', sep='')
-					} else {
-						cat('min value   :' , minValue(object), '\n')
-						cat('max value   :' , maxValue(object), '\n')
-					}
+					cat('min value   :' , minValue(object), '\n')
+					cat('max value   :' , maxValue(object), '\n')
 				}
 			} else {
 				cat('values      : none\n')			

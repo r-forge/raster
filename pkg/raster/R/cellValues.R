@@ -5,10 +5,10 @@
 # Licence GPL v3
 
 	
-.cellValues <- function(x, cells, layer, nl, att=FALSE, df=FALSE) { 
+.cellValues <- function(x, cells, layer, nl, df=FALSE) { 
 
 	if (inherits(x, 'RasterLayer')) {
-		result <- .readCells(x, cells, 1, att=att)
+		result <- .readCells(x, cells, 1)
 		lyrs <- 1
 		
 	} else {
@@ -56,15 +56,21 @@
 			colnames(result) <- names(x)
 		}
 		result <- data.frame(ID=1:NROW(result), result)
+		
 		facts <- is.factor(x)[lyrs]
 		if (any(facts)) {
-			levs <- levels(x)
-			i <- which(facts)
-			for (j in i) {
-				k <- lyrs[j]
-				result[, j+1] <- .getlevs(result[, j+1], levs[[k]][[1]])
+			if (ncol(result) == 2) {
+				# possibly multiple columns added
+				result <- cbind(result[,1], factorValues(c, result[,2], layer))
+			} else {
+				# single columns only
+				i <- which(facts)
+				for (j in i) {
+					result[, j+1] <- factorValues(c, result[, j+1], j, 1)
+				}
 			}
 		}
+
 	}
 	result
 }	

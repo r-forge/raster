@@ -116,7 +116,6 @@ setClass('.SingleLayerData',
 		fromdisk='logical',
 		
 		isfactor = 'logical',
-		hasRAT = 'logical',
 		attributes = 'list',
 		
 		haveminmax = 'logical',
@@ -134,7 +133,6 @@ setClass('.SingleLayerData',
 		fromdisk=FALSE,
 
 		isfactor = FALSE,
-		hasRAT = FALSE,
 		attributes = list(),
 		
 		haveminmax = FALSE,

@@ -29,10 +29,6 @@ function(x, y, filename='', snap='near', datatype=NULL, ...) {
 	if (nlayers(x) <= 1) {
 		out <- raster(x)
 		leg <- x@legend
-		if (.hasRAT(x)) { 
-			out@data@hasRAT <- x@data@hasRAT
-			out@data@attributes <- x@data@attributes
-		}
 	} else { 
 		out <- brick(x, values=FALSE)	
 		leg <- new('.RasterLegend')
@@ -44,6 +40,11 @@ function(x, y, filename='', snap='near', datatype=NULL, ...) {
 		return(out)
 	}
 
+	if (is.factor(x)) { 
+		out@data@isfactor <- x@data@isfactor
+		out@data@attributes <- x@data@attributes
+	}
+	
 	col1 <- colFromX(x, xmin(out)+0.5*xres(out))
 	col2 <- colFromX(x, xmax(out)-0.5*xres(out))
 	row1 <- rowFromY(x, ymax(out)-0.5*yres(out))

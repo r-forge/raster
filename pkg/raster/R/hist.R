@@ -8,7 +8,7 @@ setMethod('hist', signature(x='RasterStackBrick'),
 		
 		if (missing(layer)) y = 1:nlayers(x)
 		else if (is.character(layer)) {
-			y = .nameToIndex(layer, names(x))
+			y = match(layer, names(x))
 		} else { 
 			y = layer 
 		}

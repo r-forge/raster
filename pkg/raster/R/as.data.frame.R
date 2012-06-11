@@ -11,23 +11,33 @@ if (!isGeneric("as.data.frame")) {
 }	
 
 
+.insertColsInDF <- function(x, y, col) {
+	if (ncol(y) == 1) {
+		x[, col] <- y
+	} else if (col==1) {
+		data.frame(y, x[, -1, drop=FALSE])
+	} else {
+		cbind(x[,-col, drop=FALSE], y)
+	}
+}
+
 setMethod('as.data.frame', signature(x='Raster'), 
 	function(x, row.names = NULL, optional = FALSE, ...) {
-		if (.hasRAT(x)) {
-			x <- ratToLayer(x)
-		}
+
 		v <- as.data.frame(values(x), row.names=row.names, optional=optional, ...)
+	
 		colnames(v) <- names(x)  # for nlayers = 1
 		
-		if (any(is.factor(x))) {
-			f <- levels(x)
-			for (i in 1:length(f)) {
-				if (!is.null(f[[i]])) {
-					v[,i] <- as.factor(f[[i]][v[,i]])
-				}
+		i <- is.factor(x)
+		if (any(i)) {
+			i <- which(i)
+			for (j in i) {
+				fv <- factorValues(x, v[,j], j)
+				colnames(fv) <- paste(names(x)[j], '_', colnames(fv), sep='')
+				v <- .insertColsInDF(v, fv, j)
 			}
 		}
-		
+	
 		v
 	}
 )

@@ -3,8 +3,7 @@
 \docType{methods}
 
 \alias{plot}
-\alias{plot,RasterLayer,missing-method}
-\alias{plot,RasterStackBrick,ANY-method}
+\alias{plot,Raster,ANY-method}
 \alias{plot,Raster,Raster-method}
 \alias{plot,Extent,ANY-method}
 \alias{plot,Extent,missing-method}
@@ -20,9 +19,8 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
 }
 
 \usage{
-\S4method{plot}{RasterLayer,missing}(x, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, ...)
+\S4method{plot}{Raster,ANY}(x, y, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, ...)
 
-\S4method{plot}{RasterStackBrick,ANY}(x, y, col=rev(terrain.colors(255)), maxpixels=100000, alpha=1, colNA=NA, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, ...)
 
 \S4method{plot}{Raster,Raster}(x, y, maxpixels=100000, cex=0.1, ...)
 }

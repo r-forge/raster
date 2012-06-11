@@ -25,18 +25,15 @@
 	cat("nbands=",  nlayers(x), "\n", file = thefile)
 	cat("bandorder=",  x@file@bandorder, "\n", file = thefile)
 
-	cat("categorical=",  x@data@isfactor, "\n", file = thefile)
-	if (.hasRAT(x)) {
-		cat("attributes=",  x@data@hasRAT, "\n", file = thefile)
-		if (x@data@hasRAT) {
-			r <- x@data@attributes[[1]]
-			cat("ratnames=", paste(colnames(r), collapse=':'), "\n", file = thefile)
-			cat("rattypes=", paste(sapply(r, class), collapse=':'), "\n", file = thefile)
-			cat("ratvalues=", paste(trim(as.character(as.matrix(r))), collapse=':'), "\n", file = thefile)
-		}
-	} else {
-		cat("attributes=FALSE\n", file = thefile)
-	}
+	fact <- x@data@isfactor
+	cat("categorical=",  fact, "\n", file = thefile)
+	if (any(fact)) {
+		# currently only for first layer!
+		r <- x@data@attributes[[1]]
+		cat("ratnames=", paste(colnames(r), collapse=':'), "\n", file = thefile)
+		cat("rattypes=", paste(sapply(r, class), collapse=':'), "\n", file = thefile)
+		cat("ratvalues=", paste(trim(as.character(as.matrix(r))), collapse=':'), "\n", file = thefile)
+	} 
 	
 #	cat("levels=",  x@data@levels, "\n", file = thefile)
 

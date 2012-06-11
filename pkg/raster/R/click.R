@@ -81,7 +81,7 @@ setMethod('click', signature(x='Raster'),
 	function(x, n=1, id=FALSE, xy=FALSE, cell=FALSE, type="n", ...) {
 	
 	cells <- .getCellFromClick(x, n, type, id, ...)
-	value <- .cellValues(x, cells, att=TRUE)
+	value <- .cellValues(x, cells)
 	if (is.vector(value) == 1)  {
 		value <- matrix(value)
 		colnames(value) <- names(x)

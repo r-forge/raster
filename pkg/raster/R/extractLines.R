@@ -141,26 +141,27 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, ..
 	
 	if (df) {
 		if (!is.list(res)) {
-			res <- cbind(1:NROW(res), res)
+			res <- data.frame(ID=1:NROW(res), res)
 		} else {
 			res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
-		}
+		}		
+		if (ncol(res) == 2) {
+			colnames(res)[2] <- names(x)[layer]
+		} 
+		
 		facts <- is.factor(x)[lyrs]
 		if (any(facts)) {
-			i <- which(facts)
-			levs <- levels(x)
-			for (j in i) {
-				k <- lyrs[j]
-				res[, j+1] <- .getlevs(res[, j+1], levs[[k]][[1]])				
+			if (ncol(value) == 2) {
+				# possibly multiple columns added
+				res <- cbind(result[,1], factorValue(object, res[,2], layer))
+			} else {
+				# single columns only
+				i <- which(facts)
+				for (j in i) {
+					res[, j+1] <- factorValue(object, res[, j+1], j, 1)
+				}
 			}
-		}
-				
-
-		if (ncol(res) == 2) {
-			colnames(res) <- c('ID', 'value')
-		} else {
-			colnames(res)[1] <- 'ID'
-		}
+		} 
 	}
 	res
 }
