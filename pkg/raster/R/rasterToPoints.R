@@ -55,8 +55,7 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 				xyvr <- cbind(rep(X, tr$nrows[i]), rep(Y[r], each=ncol(x)), getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
 			
-				notna <- apply(xyvr[,3:ncol(xyvr), drop=FALSE], 1, function(z){ sum(is.na(z)) < length(z) })
-				
+				notna <- rowSums(is.na(xyvr[ , 3:ncol(xyvr), drop=FALSE])) == 0
 				xyvr <- xyvr[notna, ,drop=FALSE]
 				
 				if (!is.null(fun)) {
@@ -68,11 +67,12 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 			}
 			
 		} else {
-		
+			# faster
 			for (i in 1:tr$n) {
 				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-				xyvr <- cbind(rep(X, tr$nrows[i]), rep(Y[r], each=ncol(x)), getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
-				xyvr <- subset(xyvr, !is.na(xyvr[,3]))
+				v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
+				xyvr <- cbind(rep(X, tr$nrows[i]), rep(Y[r], each=ncol(x)), v)
+				xyvr <- subset(xyvr, !is.na(v))
 				if (!is.null(fun)) {
 					xyvr <- subset(xyvr, fun(xyvr[,3]))
 				}
