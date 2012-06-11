@@ -189,6 +189,10 @@ deratify <- function(x, att=NULL, layer=1, complete=FALSE, filename='', ...) {
 	} 
 	
 	w <- 2:ncol(RAT)
+	rat <- RAT
+	for (i in 2:ncol(rat)) {
+		rat[,i] <- as.numeric(rat[,i])
+	}
 	subs(x, RAT, by=1, which=w, subsWithNA=TRUE, filename=filename, ...)	
 }
 

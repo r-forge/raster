@@ -28,7 +28,7 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 			if (!missing(y)) {
 				if (is.character(y)) {
 					if (is.factor(x)) {
-						x <- deratitfy(x, y)														
+						x <- deratify(x, y)														
 					} else {
 						y <- match(y, names(x))
 						if (is.na(y)) {

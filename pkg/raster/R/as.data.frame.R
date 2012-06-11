@@ -14,10 +14,13 @@ if (!isGeneric("as.data.frame")) {
 .insertColsInDF <- function(x, y, col) {
 	if (ncol(y) == 1) {
 		x[, col] <- y
+		return(x)
 	} else if (col==1) {
-		data.frame(y, x[, -1, drop=FALSE])
+		cbind(y, x[, -1, drop=FALSE])
+	} else if (col==ncol(x)) {
+		cbind(x[, -1, drop=FALSE], y)
 	} else {
-		cbind(x[,-col, drop=FALSE], y)
+		cbind(x[,1:(col-1), drop=FALSE], y, x[,(col+1):ncol(x), drop=FALSE])
 	}
 }
 
