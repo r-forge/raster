@@ -1,20 +1,22 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
-# Date : February 2010
-# Version 0.9
+# Author: Robert J. Hijmans
+# Date : February 2010 / June 2012
+# Version 1.0
 # Licence GPL v3
 
 
 
 factorValues <- function(x, v, layer=1, att=NULL) {
 	rat <- levels(x)[[layer]]
-	i <- match(v, rat$VALUE)
+	i <- match(round(v), rat$VALUE)
 	r <- rat[i, -c(1:2), drop=FALSE]
 	rownames(r) <- NULL
 	if (!is.null(att)) {
 		if (is.character(att)) {
-			att <- na.omit(match(colnames(r), att))
+			att <- na.omit(match(att, colnames(r)))
 			if (length(att)	== 0) {
 				warning("att does not includes valid names")
+			} else {
+				r <- r[, att, drop=FALSE]
 			}
 		} else {
 			r <- r[, att, drop=FALSE]
@@ -136,65 +138,5 @@ setMethod('as.factor', signature(x='RasterLayer'),
 		ratify(x)
 	}
 )
-
-
-
-ratify <- function(x, filename='', ...) {
-	stopifnot(nlayers(x) == 1)
-	x <- round(x)
-	f <- freq(x, useNA='no')
-	f <- data.frame(f)
-	colnames(f) <- toupper(colnames(f))
-	x@data@isfactor <- TRUE
-	x@data@attributes <- list(f)
-	if (filename != '') {
-		x <- writeRaster(x, filename, ...)
-		# only native format stores this...
-		x@data@isfactor <- TRUE
-		x@data@attributes <- list(f)	
-	}
-	return(x)
-}
-
-
-deratify <- function(x, att=NULL, layer=1, complete=FALSE, filename='', ...) {
-	rats <- is.factor(x)
-	if (!rats[[layer]]) {	
-		warning('This layer is not a factor')
-		return(x[[layer]])
-	}
-	
-	RAT <- levels(x)[[layer]]
-	if (ncol(RAT) <= 3) {
-		if (complete) {
-			x <- x[[layer]]
-			x@data@isfactor <- FALSE
-			x@data@attributes <- list()
-			return(x)
-		} else {
-			warning('this layer already has a single factor level (use "complete=TRUE" to remove it)')
-			return(x[[layer]])
-		}
-	}
-	
-	nms <- colnames(RAT)
-	if (!is.null(att)) {
-		if (is.character(att)) {
-			att <- na.omit(match(att, nms))
-			if (length(att) == 0) {
-				stop("argument 'att' does not include valid names")
-			}
-		}
-		RAT <- RAT[ , c(1, att), drop=FALSE]
-	} 
-	
-	w <- 2:ncol(RAT)
-	rat <- RAT
-	for (i in 2:ncol(rat)) {
-		rat[,i] <- as.numeric(rat[,i])
-	}
-	subs(x, RAT, by=1, which=w, subsWithNA=TRUE, filename=filename, ...)	
-}
-
 
 
