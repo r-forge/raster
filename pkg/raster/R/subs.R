@@ -79,7 +79,6 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 				colnames(lv)[3] <- colnames(y)[i]
 				levs[[i-1]] <- lv
 				hasfactor[i-1] <- TRUE
-
 				m <- match(y[,i], uny)
 				y[,i] <- as.numeric(uny[m])
 			}
