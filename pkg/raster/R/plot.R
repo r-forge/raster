@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  June 2008
 # Version 0.9
 # Licence GPL v3
@@ -8,10 +8,6 @@ if (!isGeneric("plot")) {
 	setGeneric("plot", function(x,y,...)
 		standardGeneric("plot"))
 }	
-
-
-
-
 
 
 setMethod("plot", signature(x='Raster', y='ANY'), 
@@ -37,13 +33,16 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 					}
 				}
 			}
+			if (missing(main)) {
+				main <- ''
+			}
 				
 			if (length(x@legend@colortable) > 0) {
-				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, ...)
+				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main, ...)
 			} else if (! useRaster) {
-				.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, ...) 
+				.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, main=main,...) 
 			} else {
-				.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, ...) 
+				.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, main=main,...) 
 				#.plot2(x, col=col, maxpixels=maxpixels, ...)
 			}
 			return(invisible(NULL))
@@ -114,9 +113,6 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 		return(invisible(NULL))
 	}
 )	
-
-
-
 
 
 
