@@ -41,6 +41,7 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 		}
 		
 	} else {
+	
 		xyv <- matrix(NA, ncol=2+nlayers(x), nrow=0)
 		colnames(xyv) <- c('x', 'y', names(x))
 		X <- xFromCol(x, 1:ncol(x))
@@ -54,15 +55,9 @@ rasterToPoints <- function(x, fun=NULL, spatial=FALSE, ...) {
 			for (i in 1:tr$n) {
 				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
 				xyvr <- cbind(rep(X, tr$nrows[i]), rep(Y[r], each=ncol(x)), getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
-			
-				notna <- rowSums(is.na(xyvr[ , 3:ncol(xyvr), drop=FALSE])) == 0
+				notna <- rowSums(is.na(xyvr[ , 3:ncol(xyvr), drop=FALSE])) < (ncol(xyvr)-2)
 				xyvr <- xyvr[notna, ,drop=FALSE]
-				
-				if (!is.null(fun)) {
-					xyvr <- subset(xyvr, fun(xyvr[,3]))
-				}
 				xyv <- rbind(xyv, xyvr)
-				
 				pbStep(pb, i)
 			}
 			

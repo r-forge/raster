@@ -74,11 +74,14 @@ setMethod('subs', signature(x='Raster', y='data.frame'),
 				}
 			}
 			if (cls[i] == 'factor') {
-				lv <- data.frame(VALUE=1:length(y[[i]]), COUNT=NA, levels(y[[i]]))
+				uny <- unique(y[,i])
+				lv <- data.frame(VALUE=1:length(uny), COUNT=NA, uny)
 				colnames(lv)[3] <- colnames(y)[i]
 				levs[[i-1]] <- lv
 				hasfactor[i-1] <- TRUE
-				y[,i] <- as.numeric(as.factor(y[,i]))
+
+				m <- match(y[,i], uny)
+				y[,i] <- as.numeric(uny[m])
 			}
 		}
 		
