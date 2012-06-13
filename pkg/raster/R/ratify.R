@@ -51,16 +51,19 @@ deratify <- function(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, filename='
 		RAT <- RAT[ , c(1, att), drop=FALSE]
 	} 
 	
-	w <- 2:ncol(RAT)
+	cc <- 2:ncol(RAT)
 	if (drop) {
-		for (i in w) {
-			v <- as.numeric(as.character(RAT[,w]))
-			if (all(RAT[,w] == v)) {
+		for (i in cc) {
+			w <- getOption('warn')
+			options('warn'=-1) 
+			v <- as.numeric(as.character(RAT[,i]))
+			options('warn' = w)
+			if (isTRUE(all(RAT[,i] == v))) {
 				RAT[,i] <- v
 			}
 		}
 	}
-	subs(x, RAT, by=1, which=w, subsWithNA=TRUE, filename=filename, ...)	
+	subs(x, RAT, by=1, which=cc, subsWithNA=TRUE, filename=filename, ...)	
 }
 
 

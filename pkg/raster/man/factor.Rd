@@ -40,7 +40,7 @@ levels(x)
 factorValues(x, v, layer=1, att=NULL)
 
 ratify(x, filename='', ...)
-deratify(x, att=NULL, layer=1, complete=FALSE, filename='', ...) 
+deratify(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, filename='', ...) 
 }
 
 
@@ -52,7 +52,7 @@ deratify(x, att=NULL, layer=1, complete=FALSE, filename='', ...)
   \item{filename}{character. Optional}  
   \item{...}{additional arguments as for \code{\link{writeRaster}}}    
   \item{complete}{logical. If \code{TRUE}, the layer returned is no longer a factor}  
-  
+  \item{drop}{logical. If \code{TRUE} a factor is converted to a numerical value if possible}  
 }  
 
 
