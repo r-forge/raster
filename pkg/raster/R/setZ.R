@@ -6,10 +6,13 @@
 
 
 setZ <- function(x, z, name='time') {
-	z <- unlist(z)
+	if (is.list(z)) {
+		z <- unlist(z)
+	}
 	stopifnot(length(z) == nlayers(x))
-	x@z <- list(z)
+	z <- list(z)
 	names(z) <- name[1]
+	x@z <- z
 	x
 }
 

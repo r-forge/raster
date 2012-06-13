@@ -23,7 +23,9 @@ function(x, values) {
 		}
 	}
   
-	if (!is.vector(values)) {stop('values must be a vector')}
+	if (!is.vector(values)) { 
+		stop('values must be a vector')
+	}
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
 		stop('values must be numeric, integer or logical.')	}
 	
@@ -74,7 +76,7 @@ setMethod('setValues', signature(x='RasterBrick'),
 			#if (dm[1] == dm[2]) { warning('assuming values should be transposed') }
 			transpose <- TRUE
 		} else if (dmb[1] != dm[1] | dmb[2] != dm[2]) {
-			stop('dimnesions of array do not match the RasterBrick')
+			stop('dimensions of array do not match the RasterBrick')
 		}
 # speed imrovements suggested by Justin  McGrath
 # http://pastebin.com/uuLvsrYc
@@ -129,18 +131,31 @@ setMethod('setValues', signature(x='RasterBrick'),
 		
 		if (length(values) == ncell(x)) { 
 			if ( ! inMemory(x) ) { 
-				atry <- try(x <- readAll(x), silent=T)
-				if (class(atry) == "try-error") {
-					stop("you can only setValues for a single layer if all values are in memory. But values could not be loaded")				
+				if (canProcessInMemory(x)) {
+					x <- readAll(x)
+					x@file@name <- ""
+					x@file@driver <- ""
+					x@data@inmemory <- TRUE
+					x@data@fromdisk <- FALSE
+					x@data@values[,layer] <- values
+					x <- setMinMax(x)
+				} else {
+					tr <- blockSize(x)
+					pb <- pbCreate(tr$n)
+					r <- x
+					r <- writeStart(r, filename=rasterTmpFile(), format=.filetype(), overwrite=TRUE )
+					nc <- ncol(x)
+					for (i in 1:tr$n) {
+						v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
+						v[, layer] <- values[cellFromRowCol(x, tr$row[i], 1):cellFromRowCol(x, tr$row[i]+tr$nrows[i]-1, nc)]
+						r <- writeValues(r, v, tr$row[i])
+						pbStep(pb, i) 	
+					}
+					r <- writeStop(r)
+					pbClose(pb)
+					return(r)
 				}
 			}
-			x@file@name <- ""
-			x@file@driver <- ""
-			x@data@inmemory <- TRUE
-			x@data@fromdisk <- FALSE
-			x@data@values[,layer] <- values
-			x <- setMinMax(x)
-			
 		} else {
 			stop("length(values) is not equal to ncell(x)") 
 		}

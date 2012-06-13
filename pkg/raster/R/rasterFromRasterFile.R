@@ -136,15 +136,17 @@
 	}
 
 	if (zvalues != '') {
+		names(zvalues) <- NULL
 		zvalues <- unlist(strsplit(zvalues, ':'))
 		zname <- zvalues[1]
 		zvalues <- zvalues[-1]
 		if (type == 'RasterBrick') {
-			x@z <- list(zvalues)
+			zvalues <- list(zvalues)
 		} else {
-			x@z <- list(zvalues[band])
+			zvalues <- list(zvalues[band])
 		}
-		names(x@z) <- zname
+		names(zvalues) <- zname
+		x@z <- zvalues
 	} 
 	
 	if (type == 'RasterBrick') {

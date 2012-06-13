@@ -53,7 +53,11 @@
 	cat("layername=", paste(ln, collapse=':'), "\n", file = thefile)
 	z <- getZ(x)
 	if (! is.null(z)) {
-		cat("zvalues=", paste(names(z), z, collapse=':'), "\n", file = thefile)
+		zname <- names(x@z)[1]
+		if (is.null(zname)) {
+			zname <- 'z-value'
+		}
+		cat("zvalues=", paste(c(zname, z), collapse=':'), "\n", file = thefile)
 	}
 	cat("history=",  x@history, "\n", file = thefile)
 	close(thefile)
