@@ -63,12 +63,12 @@
 		if (any(facts)) {
 			if (ncol(value) == 2) {
 				# possibly multiple columns added
-				value <- cbind(value[,1], factorValues(object, value[,2], layer))
+				value <- cbind(value[,1,drop=FALSE], factorValues(object, value[,2], layer))
 			} else {
 				# single columns only
 				i <- which(facts)
 				for (j in i) {
-					value[, j+1] <- factorValues(object, value[, j+1], j, 1)
+					value <- .insertColsInDF(value, factorValues(object, value[, j+1], j), j+1)
 				}
 			}
 		}

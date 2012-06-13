@@ -1,5 +1,4 @@
 # Author: Robert J. Hijmans
-# contact: r.hijmans@gmail.com
 # Date : November 2008
 # Version 1.0
 # Licence GPL v3
@@ -9,7 +8,7 @@
 
 	if (inherits(x, 'RasterLayer')) {
 		result <- .readCells(x, cells, 1)
-		lyrs <- 1
+		lyrs <- layer <- 1
 		
 	} else {
 	
@@ -61,12 +60,12 @@
 		if (any(facts)) {
 			if (ncol(result) == 2) {
 				# possibly multiple columns added
-				result <- cbind(result[,1], factorValues(c, result[,2], layer))
+				result <- cbind(result[,1,drop=FALSE], factorValues(x, result[,2], layer))
 			} else {
 				# single columns only
 				i <- which(facts)
 				for (j in i) {
-					result[, j+1] <- factorValues(c, result[, j+1], j, 1)
+					result <- .insertColsInDF(result, factorValues(x, result[, j+1], j), j+1)
 				}
 			}
 		}

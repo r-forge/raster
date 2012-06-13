@@ -11,17 +11,27 @@ if (!isGeneric("as.data.frame")) {
 }	
 
 
-.insertColsInDF <- function(x, y, col) {
+.insertColsInDF <- function(x, y, col, combinenames=TRUE) {
+	cnames <- NULL
+	if (combinenames) {
+		if (ncol(y) > 1) {
+			cnames <- paste(colnames(x)[col], '_', colnames(y), sep='')
+		}
+	}
 	if (ncol(y) == 1) {
 		x[, col] <- y
 		return(x)
 	} else if (col==1) {
-		cbind(y, x[, -1, drop=FALSE])
+		z <- cbind(y, x[, -1, drop=FALSE])
 	} else if (col==ncol(x)) {
-		cbind(x[, -1, drop=FALSE], y)
+		z <- cbind(x[, -1, drop=FALSE], y)
 	} else {
-		cbind(x[,1:(col-1), drop=FALSE], y, x[,(col+1):ncol(x), drop=FALSE])
+		z <- cbind(x[,1:(col-1), drop=FALSE], y, x[,(col+1):ncol(x), drop=FALSE])
 	}
+	if (!is.null(cnames)) {
+		colnames(z)[col:(col+ncol(y)-1)] <- cnames
+	}
+	z
 }
 
 setMethod('as.data.frame', signature(x='Raster'), 
@@ -36,7 +46,6 @@ setMethod('as.data.frame', signature(x='Raster'),
 			i <- which(i)
 			for (j in i) {
 				fv <- factorValues(x, v[,j], j)
-				colnames(fv) <- paste(names(x)[j], '_', colnames(fv), sep='')
 				v <- .insertColsInDF(v, fv, j)
 			}
 		}

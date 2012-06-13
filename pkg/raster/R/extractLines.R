@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : December 2009
 # Version 0.9
 # Licence GPL v3
@@ -148,17 +148,19 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, ..
 		if (ncol(res) == 2) {
 			colnames(res)[2] <- names(x)[layer]
 		} 
+		colnames(res)[1] <- 'ID'
 		
+		lyrs <- layer:(layer+nl-1)
 		facts <- is.factor(x)[lyrs]
 		if (any(facts)) {
-			if (ncol(value) == 2) {
+			if (ncol(res) == 2) {
 				# possibly multiple columns added
-				res <- cbind(result[,1], factorValue(object, res[,2], layer))
+				res <- cbind(res[,1,drop=FALSE], factorValues(x, res[,2], layer))
 			} else {
 				# single columns only
 				i <- which(facts)
 				for (j in i) {
-					res[, j+1] <- factorValue(object, res[, j+1], j, 1)
+					res <- .insertColsInDF(res, factorValues(x, res[, j+1], j), j+1)
 				}
 			}
 		} 

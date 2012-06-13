@@ -6,7 +6,11 @@
 
 
 factorValues <- function(x, v, layer=1, att=NULL) {
+	stopifnot(is.factor(x)[layer])
 	rat <- levels(x)[[layer]]
+	if (!is.data.frame(rat)) {
+		rat <- rat[[1]]
+	}
 	i <- match(round(v), rat$VALUE)
 	r <- rat[i, -c(1:2), drop=FALSE]
 	rownames(r) <- NULL
