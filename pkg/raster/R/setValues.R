@@ -52,8 +52,14 @@ function(x, values) {
 
 setMethod('setValues', signature(x='RasterStack'), 
 	function(x, values, layer=-1) {
-		b <- brick(x, values=TRUE)
-		return(setValues(b, values, layer))
+		if (layer > 0) {
+			stopifnot(layer <= nlayers(x))
+			x[[layer]] <- setValues(x[[layer]], values)
+			return(x)
+		} else {
+			b <- brick(x, values=FALSE)
+			setValues(b, values)
+		}
 	}	
  )
 	
