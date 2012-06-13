@@ -2,12 +2,14 @@ To do:
 focal for multi-layer objects
 
 --- Development version
-More support for Raster Attribute Tables (functions rats, ratify, ratToLayer, ratValues)
+More support for factors and (related) Raster Attribute Tables (functions ratify, deratify)
 z-values are saved to file (native format only)
 Old slot @zvalue removed (in favor of slot @z)
 New function 'names' to (eventually) replace 'layerNames', for compatibility with sp.
 New function 'proj4string' (equivalent to 'projection') for compatibility with sp.
-Improved speed for creating a RasterStack from a list of RasterLayer objects (thanks to report by Jonathan Kennel)
+Improved speed for creating a RasterStack from a list of RasterLayer objects (thanks to report by Jonathan Kennel), and for rasterToPoints
+setValues(brick, values) now also works if the existing values (on disk) cannot be all loaded into memory.
+
 
 bug fixes:
 rasterize with polygons ignores the 'field' argument (bug introduced in previous version)
