@@ -30,7 +30,7 @@ The function may not work well when the size (number of cells) of some strata is
 }
 
 \value{
-Vector of cell numbers or matrix of coordinates
+matrix of cell numbers (and optionally coordinates) by stratum
 }
 
 \seealso{\code{\link{sampleRandom}, \link{sampleRegular}}}

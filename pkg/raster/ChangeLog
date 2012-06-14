@@ -10,7 +10,11 @@ New function 'proj4string' (equivalent to 'projection') for compatibility with s
 New function 'sampleStratified'
 Improved speed for creating a RasterStack from a list of RasterLayer objects (thanks to report by Jonathan Kennel), and for rasterToPoints
 setValues(brick, values) now also works if the existing values (on disk) cannot be all loaded into memory (suggested by Jonathan Greenberg).
-bug fix: rasterize with polygons ignores the 'field' argument (bug introduced in previous version)
+bug fixes: 
+rasterize with polygons ignores the 'field' argument (bug introduced in previous version)
+log failed when writing to disk (reported by Jochen Albrecht)
+sampleRegular failed in some cases for a RasterStack (affecting spplot). Reported by Matthew Landis)
+
 
 --- 1-May-2012, version 1.9-82
 New features, improvements:
