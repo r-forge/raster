@@ -4,7 +4,14 @@
 # Licence GPL v3
 
 
-sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE, useGDAL=FALSE) {
+if (!isGeneric("sampleRegular")) {
+	setGeneric("sampleRegular", function(x, size, ...)
+		standardGeneric("sampleRegular"))
+}	
+
+
+setMethod('sampleRegular', signature(x='Raster'), 
+function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, useGDAL=FALSE, ...) {
 
 	stopifnot(hasValues(x))
 	
@@ -107,11 +114,21 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE, useGD
 				ncol(outras) <- nc
 				if (nl > 1) {
 					outras <- brick(outras, nl=nl)
-					return( setValues(outras, v))
+					outras <- setValues(outras, v)
 				} else {
-					return( setValues(outras, as.vector(v)))
+					outras <- setValues(outras, as.vector(v))
 				}
+				
 			} else {
+				if (cells) {
+					warning("'cells=TRUE' is ignored when 'useGDAL=TRUE'")
+				}
+				if (xy) {
+					warning("'xy=TRUE' is ignored when 'useGDAL=TRUE'")
+				}
+				if (sp) {
+					warning("'sp=TRUE' is ignored when 'useGDAL=TRUE'")
+				}
 				return(v)
 			}
 		}
@@ -153,12 +170,16 @@ sampleRegular <- function( x, size, ext=NULL, cells=FALSE, asRaster=FALSE, useGD
 		
 	} else {
 	
-		m <- .cellValues(x, cell)
+		m <- NULL
+		if (xy) {
+			m <- xyFromCell(x, cell)
+		}
 		if (cells) {
-			m <- cbind(cell, m)
-			colnames(m)[2:ncol(m)] <- names(x)
+			m <- cbind(m, cell=cell)
 		} 
+		m <- cbind(m, .cellValues(x, cell))
 		return(m)
 	}	
 }
 
+)
