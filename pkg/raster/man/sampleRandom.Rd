@@ -28,14 +28,14 @@ Take a random sample from the cell values of a Raster* object (without replaceme
 }
 
 \details{
-With \code{na.rm=TRUE}, the returned sample may be smaller than requested
+With argument \code{na.rm=TRUE}, the returned sample may be smaller than requested
 }
 
 \value{
 A vector, matrix (if \code{cells=TRUE} or \code{x} is a multi-layered object), or a SpatialPointsDataFrame (if \code{sp=TRUE} )
 }
 
-\seealso{\code{\link{sampleRegular}}, \link{sampleStratified}}
+\seealso{\code{\link{sampleRegular}, \link{sampleStratified}}}
 
 \author{Robert J. Hijmans}
 
@@ -43,7 +43,7 @@ A vector, matrix (if \code{cells=TRUE} or \code{x} is a multi-layered object), o
  r <- raster(system.file("external/test.grd", package="raster"))
  sampleRandom(r, size=10)
  s <- stack(r, r)
- sampleRandom(s, size=10, cells=TRUE, sp=TRUE)
+ sampleRandom(s, size=5, cells=TRUE, sp=TRUE)
 }
 
 \keyword{spatial}

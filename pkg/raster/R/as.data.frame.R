@@ -24,7 +24,7 @@ if (!isGeneric("as.data.frame")) {
 	} else if (col==1) {
 		z <- cbind(y, x[, -1, drop=FALSE])
 	} else if (col==ncol(x)) {
-		z <- cbind(x[, -1, drop=FALSE], y)
+		z <- cbind(x[, -ncol(x), drop=FALSE], y)
 	} else {
 		z <- cbind(x[,1:(col-1), drop=FALSE], y, x[,(col+1):ncol(x), drop=FALSE])
 	}

@@ -50,13 +50,14 @@
 	
 	if (df) {
 		if (is.list(value)) {
-			value <- do.call(rbind, 
-				lapply(1:length(value), function(x) if (!is.null(value[[x]])) cbind(ID=x, value[[x]])))
+			value <- lapply(1:length(value), function(x) if (!is.null(value[[x]])) cbind(ID=x, value[[x]]))
+			value <- do.call(rbind, value)
+			rownames(value) <- NULL
 		} else {
 			value <- data.frame(cbind(ID=1:NROW(value), value))
 		}
 		lyrs <- layer:(layer-1+nl)
-		names(value) <- c('ID', names(object)[lyrs])
+		colnames(value) <- c('ID', names(object)[lyrs])
 	
 
 		facts <- is.factor(object)[lyrs]
