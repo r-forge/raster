@@ -26,11 +26,10 @@ Take a systematic sample from a Raster* object.
 }
 
 \value{
-A vector, matrix (if cells=TRUE; or for a multi-layered object), or RasterLayer (if asRaster=TRUE)
+A vector, matrix (if cells=TRUE; or for a multi-layered object), or Raster* object (if asRaster=TRUE)
 }
 
-\seealso{\code{\link{sampleRandom}}}
-
+\seealso{\code{\link{sampleRandom}}, \link{sampleStratified}}
 
 \author{Robert J. Hijmans}
 

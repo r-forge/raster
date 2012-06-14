@@ -35,7 +35,7 @@ With \code{na.rm=TRUE}, the returned sample may be smaller than requested
 A vector, matrix (if \code{cells=TRUE} or \code{x} is a multi-layered object), or a SpatialPointsDataFrame (if \code{sp=TRUE} )
 }
 
-\seealso{\code{\link{sampleRegular}}}
+\seealso{\code{\link{sampleRegular}}, \link{sampleStratified}}
 
 \author{Robert J. Hijmans}
 
