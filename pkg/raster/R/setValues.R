@@ -107,6 +107,7 @@ setMethod('setValues', signature(x='RasterBrick'),
 		if (!is.matrix(values)) {
 			values <- matrix(values, nrow=ncell(x), ncol=nlayers(x))
 		}
+		
 		if (nrow(values) == ncell(x)) {
 
 			x@file@name <- ""
@@ -122,7 +123,7 @@ setMethod('setValues', signature(x='RasterBrick'),
 			x <- setMinMax(x)
 			 
 		} else {
-			stop('data size is not correct')
+			stop("the size of 'values' is not correct")
 		}
 		
 	} else {
@@ -136,16 +137,37 @@ setMethod('setValues', signature(x='RasterBrick'),
 		}
 		
 		if (length(values) == ncell(x)) { 
-			if ( ! inMemory(x) ) { 
+			if ( inMemory(x) ) { 
+			
+				x@data@values[,layer] <- values
+				rge <- range(values, na.rm=TRUE)
+				x@data@min[layer] <- rge[1]
+				x@data@max[layer] <- rge[2]
+				
+			} else {
+			
 				if (canProcessInMemory(x)) {
-					x <- readAll(x)
-					x@file@name <- ""
-					x@file@driver <- ""
-					x@data@inmemory <- TRUE
-					x@data@fromdisk <- FALSE
+					if (hasValues(x)) {
+						x <- readAll(x)
+						x@file@name <- ""
+						x@file@driver <- ""
+						x@data@inmemory <- TRUE
+						x@data@fromdisk <- FALSE						
+					} else {
+						nl <- nlayers(x)
+						x@data@values <- matrix(NA, nrow=ncell(x), ncol=nl)
+						x@data@min <- rep(Inf, nl)
+						x@data@max <- rep(-Inf, nl)
+						x@data@haveminmax <- TRUE
+						x@data@inmemory <- TRUE
+					}
 					x@data@values[,layer] <- values
-					x <- setMinMax(x)
+					rge <- range(values, na.rm=TRUE)
+					x@data@min[layer] <- rge[1]
+					x@data@max[layer] <- rge[2]
+					
 				} else {
+				
 					tr <- blockSize(x)
 					pb <- pbCreate(tr$n)
 					r <- x
