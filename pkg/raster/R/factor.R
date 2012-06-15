@@ -11,7 +11,7 @@ factorValues <- function(x, v, layer=1, att=NULL) {
 	if (!is.data.frame(rat)) {
 		rat <- rat[[1]]
 	}
-	i <- match(round(v), rat$VALUE)
+	i <- match(round(v), rat$ID)
 	r <- rat[i, -c(1:2), drop=FALSE]
 	rownames(r) <- NULL
 	if (!is.null(att)) {
@@ -78,14 +78,14 @@ setMethod('levels', signature(x='Raster'),
 	if (! ncol(newv) > 2) {
 		stop('the number of columns in the raster attributes (factors) data.frame should be > 2')
 	}
-	if (! all( colnames(newv)[1:2] == c('VALUE', 'COUNT'))) {
-		stop('the first two column names of the raster attributes (factors) data.frame should be "VALUE" and "COUNT"')
+	if (! colnames(newv)[1] == c('ID')) {
+		stop('the first column name of the raster attributes (factors) data.frame should be "ID"')
 	}
 	if (! nrow(newv) == nrow(old)) {
 		stop('the number of rows in the raster attributes (factors) data.frame is not correct')
 	}
 	if (! all(sort(newv[,1]) == sort(old[,1]))) {
-		stop('the values in the "VALUE" column in the raster attributes (factors) data.frame are not correct')
+		stop('the values in the "ID" column in the raster attributes (factors) data.frame are not correct')
 	}
 	for (n in 3:ncol(newv)) {
 		newv[, n] <- as.factor(newv[, n])

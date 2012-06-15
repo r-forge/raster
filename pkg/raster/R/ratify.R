@@ -7,7 +7,7 @@ ratify <- function(x, filename='', ...) {
 	stopifnot(nlayers(x) == 1)
 	f <- freq(x, useNA='no')
 	f <- data.frame(f)
-	colnames(f) <- toupper(colnames(f))
+	colnames(f) <- c('ID', 'COUNT')
 	x@data@isfactor <- TRUE
 	x@data@attributes <- list(f)
 	if (filename != '') {
@@ -73,6 +73,8 @@ deratify <- function(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, fun='mean'
 	RAT <- levels(x)[[1]]
 	if (colnames(RAT)[2] == 'WEIGHT') {
 		weighted <- TRUE
+	} else {
+		weighted <- FALSE
 	}
 
 	if (complete) {

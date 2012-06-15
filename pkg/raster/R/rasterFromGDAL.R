@@ -250,8 +250,9 @@
 		att <- vector(length=nlayers(r), mode='list')
 		for (i in 1:length(RATlist)) {
 			if (! is.null(RATlist[[i]])) {
-				att[[i]] <- data.frame(RATlist[[i]], stringsAsFactors=TRUE)
-				
+				dr <- data.frame(RATlist[[i]], stringsAsFactors=FALSE)
+				colnames(dr)[1] <- 'ID'
+				att[[i]] <- dr
 				if (! silent) {
 					usage <- attr(RATlist[[i]], 'GFT_usage')
 					if (! isTRUE(usage[1] == "GFU_MinMax")) {
@@ -265,6 +266,7 @@
 				}
 			}
 		}
+		
 		r@data@attributes <- att
 		r@data@isfactor <- rats
 	}
