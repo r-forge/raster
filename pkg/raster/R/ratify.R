@@ -21,28 +21,46 @@ ratify <- function(x, filename='', ...) {
 
 
 .unweightRAT <- function(rat, fun='mean') {
-	if (!is.numeric(y)) {
-		y <- as.numeric(as.character(y))
-	}
+
+	fun <- .makeTextFun(fun)
 	x <- na.omit(rat) 
+	cols <- 3:ncol(x)
+	
 	if (fun %in% c('min', 'max')) {
-		x <- aggregate(x[, 3], x[,1,drop=FALSE], fun)
+		x <- aggregate(x[,cols], x[,1,drop=FALSE], fun)
 		x <- data.frame(ID=x[,1], COUNT=NA, x[,2])
 	} else if (fun == 'mean') {
-		v <- tapply(x[,2] * x[,3], x[,1], sum)
-		w <- tapply(x[,2], x[,1], sum)
+		v <- aggregate(x[,2] * x[,cols], x[,1,drop=FALSE], sum)
+		w <- aggregate(x[,2], x[,1,drop=FALSE], sum)
 		x <- v/w
 		x <- cbind(ID=as.numeric(names(x)), COUNT=NA, value=x)
+	} else if (fun == 'largest') {
+		ids <- unique(x[,1])
+		j <- list()
+		for (i in 1:length(ids)) {
+			v <- subset(x, x[,1]==ids[i])
+			j[[i]] <- v[which.max(v[,2]), ]
+		}
+		return( do.call(rbind, j) )
+	} else if (fun == 'smallest') {
+		ids <- unique(x[,1])
+		j <- list()
+		for (i in 1:length(ids)) {
+			v <- subset(x, x[,1]==ids[i])
+			j[[i]] <- v[which.min(v[,2]), ]
+		}
+		return( do.call(rbind, j) )
+	
 	} else {
-		stop('not a valid argument for "fun"')
+		stop('argument "fun" is not valid (should be "mean", "min", "max", "smallest", or "largest"')
 	}
-	colnames(x)[3] <- colnames(rat)[3]
+	colnames(x)[cols] <- colnames(rat)[cols]
 	merge(unique(rat[,1,drop=FALSE]), x, by=1, all.x=TRUE)
 }
 
 
 
-deratify <- function(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, filename='', ...) {
+deratify <- function(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, fun='mean', filename='', ...) {
 
 	x <- x[[layer]]
 	rats <- is.factor(x)
@@ -65,7 +83,7 @@ deratify <- function(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, filename='
 	
 	if (ncol(RAT) <= 3) {
 		if (weighted & ncol(RAT)==3) {
-			rat <- .unweightRAT(RAT)
+			levels(x) <- .unweightRAT(RAT, fun)
 		} else {
 			warning('this layer already has a single factor level (use "complete=TRUE" to remove it)')
 		}
@@ -86,6 +104,10 @@ deratify <- function(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, filename='
 	}
 	
 	cc <- 2:ncol(RAT)
+	if (weighted) {
+		levels(x) <- .unweightRAT(RAT, fun)
+	}	
+
 	if (drop) {
 		for (i in cc) {
 			w <- getOption('warn')
