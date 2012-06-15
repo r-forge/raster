@@ -69,6 +69,7 @@ setMethod('brick', signature(x='RasterLayer'),
 
 setMethod('brick', signature(x='RasterStack'), 
 	function(x, values=TRUE, nl, filename='', ...){
+	
 		e <- x@extent
 		b <- brick(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=projection(x))
 		if (rotated(x)) {
@@ -89,15 +90,20 @@ setMethod('brick', signature(x='RasterStack'),
 		b@data@nlayers <- as.integer(nl)
 		
 		filename <- trim(filename)
+		
 		if (values) {
 			
 			b@layernames <- x@layernames[1:nl]
 			if (canProcessInMemory(b, nl*2)) {
-				x <- setValues( b, getValues(x)[,1:nl]) 
-				if (filename != '') {
-					x <- writeRaster(x, filename, ...)
+				b <- setValues( b, getValues(x)[,1:nl]) 
+				if (any(is.factor(x))) {
+					b@data@isfactor <- is.factor(x)
+					b@data@attributes <- levels(x)
 				}
-				return(x)
+				if (filename != '') {
+					b <- writeRaster(b, filename, ...)
+				}
+				return(b)
 				
 			} else {
 
@@ -106,7 +112,7 @@ setMethod('brick', signature(x='RasterStack'),
 				pb <- pbCreate(tr$n, ...)			
 				for (i in 1:tr$n) {
 					vv <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
-					out <- writeValues(b, vv, tr$row[i])
+					b <- writeValues(b, vv, tr$row[i])
 					pbStep(pb, i)
 				}
 				pbClose(pb)
@@ -162,20 +168,31 @@ setMethod('brick', signature(x='SpatialGrid'),
 		extent(b) <- extent(x)
 		projection(b) <- x@proj4string
 		dim(b) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
-		
+				
 		if (class(x) == 'SpatialGridDataFrame') {
-			for (i in 1:ncol(x@data)) {
-				if (is.character(x@data[,i])) {
-					x@data[,i] =  as.factor(x@data[,i])
+			
+			x <- x@data
+			
+			b@data@isfactor <- rep(FALSE, ncol(x))
+			
+			for (i in 1:ncol(x)) {
+				if (is.character(x[,i])) {
+					x[,i] <- as.factor(x[,i])
 				}
-				if (is.factor(x@data[,i])) {
-					x@data[,i] = as.integer(x@data[,i])
-					x@data@isfactor <- TRUE 
-					x@data@attributes[[i]] <- levels(x@data[[layer]])
+				if (is.factor(x[,i])) {
+					rat <- data.frame(table(x[[layer]]))
+					rat <- data.frame(1:nrow(rat), rat)
+					colnames(rat) <- c("ID", "COUNT", colnames(x)[i])
+					
+					b@data@attributes[[i]] <- rat
+					b@data@isfactor[i] <- TRUE 
+					
+					x[,i] <- as.integer(x[,i])
 				}
 			}
-			b <- setValues(b, as.matrix(x@data))
-			b@layernames <- colnames(x@data)
+			
+			b <- setValues(b, as.matrix(x))
+			b@layernames <- colnames(x)
 		}
 		return(b)
 	}	
