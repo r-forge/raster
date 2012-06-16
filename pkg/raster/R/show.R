@@ -72,6 +72,7 @@ setMethod ('show' , 'RasterLayer',
 			
 		} else {
 				
+
 			if (hasValues(object)) {
 				fd <- object@data@fromdisk
 				if (fd) {
@@ -79,6 +80,8 @@ setMethod ('show' , 'RasterLayer',
 				} else {
 					cat('values      : in memory\n')			
 				}
+				
+				cat('layer name  :', names(object), '\n')
 				
 				if (object@data@haveminmax) {
 					cat('min value   :' , minValue(object), '\n')
@@ -88,9 +91,8 @@ setMethod ('show' , 'RasterLayer',
 				cat('values      : none\n')			
 			}
 
-		
-			cat('layer name  :', names(object), '\n')
-		
+
+
 			z <- getZ(object)
 			if (length(z) > 0) {
 				name <- names(object@z)
@@ -129,6 +131,12 @@ setMethod ('show' , 'RasterBrick',
 		cat ('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 		cat ('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat ('coord. ref. :' , projection(object, TRUE), '\n')
+
+		ln <- names(object)
+		if (nl > mnr) {
+			ln <- c(ln[1:mnr], '...')
+		}
+
 		if (hasValues(object)) {
 			fd <- object@data@fromdisk
 			if (fd) {
@@ -136,6 +144,8 @@ setMethod ('show' , 'RasterBrick',
 			} else {
 				cat('values      : in memory\n')			
 			}
+			
+			cat('layer names :', paste(ln, collapse=', '), '\n')
 
 			if (object@data@haveminmax) {
 				minv <- format(minValue(object), digits=2)
@@ -156,11 +166,6 @@ setMethod ('show' , 'RasterBrick',
 		} else {
 			cat('values      : none\n')			
 		}
-		ln <- names(object)
-		if (nl > mnr) {
-			ln <- c(ln[1:mnr], '...')
-		}
-		cat('layer names :', paste(ln, collapse=', '), '\n')
 
 		z <- getZ(object)
 		if (length(z) > 0) {
@@ -212,6 +217,11 @@ setMethod ('show' , 'RasterStack',
 			cat ('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 			cat ('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 			cat ('coord. ref. :' , projection(object, TRUE), '\n')
+			ln <- names(object)
+			if (nl > mnr) {
+				ln <- c(ln[1:mnr], '...')
+			}
+			cat('layer names :', paste(ln, collapse=', '), '\n')
 			
 			minv <- format(minValue(object), digits=2)
 			maxv <- format(maxValue(object), digits=2)
@@ -225,11 +235,6 @@ setMethod ('show' , 'RasterStack',
 			cat('max values  :', paste(trim(maxv), collapse=', '), '\n')
 			
 		}
-		ln <- names(object)
-		if (nl > mnr) {
-			ln <- c(ln[1:mnr], '...')
-		}
-		cat('layer names :', paste(ln, collapse=', '), '\n')
 		
 		
 		z <- getZ(object)

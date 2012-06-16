@@ -22,17 +22,13 @@
 
 \description{
 
-These functions allow for defining a layer as a categorical variable. This creates a layer with integer values that are linked to other values via a "Raster Attribute Table" (RAT). Thus the cell values are an index, whereas the actual values of interest are in the RAT. The RAT is a data.frame with three or more columns. The first two columns in the RAT table, ID and COUNT, are fixed and should not be changed. The other columns can be of any basic type: factor, character, integer, numeric or logical.
-
-You can use multiple factor variables in a single RAT (to store multiple attributes for raster 'zones'). However, in the context of the raster package it is not recommended to do that. The functions documented here are mainly availbe such that files with a RAT can be read and processed. 
+These functions allow for defining a layer as a categorical variable. This creates a layer with integer values that are linked to other values via a "Raster Attribute Table" (RAT). Thus the cell values are an index, whereas the actual values of interest are in the RAT. The RAT is a data.frame with three or more columns. The first two columns in the RAT table, ID and COUNT, are fixed and should not be changed. The other columns can be of any basic type (factor, character, integer, numeric or logical). You can use multiple factor variables in a single RAT (to store multiple attributes for raster 'zones'). However, in the context of the raster package it is not recommended to do that. The functions documented here are mainly availbe such that files with a RAT can be read and processed. 
 
 Function 'levels' returns the RAT for inspection. It can be modfied and set using \code{levels <- value}  (but use caution as it is easy to mess things up). 
 
 \code{as.factor} and \code{ratify} create a layer with a RAT table. Function 'deratify' creates a single layers for a variable in the RAT table. 
 
 This feature is not used much in the package. Whether a layer is defined as a factor or not is currently ignored by all, except the 'extract' functions (when used with option df=TRUE).
-
-In a "weighted RAT" the second column is WEIGHT and indicates the fraction of that class in a raster cell, and there can be multiple rows per ID (for example, 0.25 is soil type A and 0.75 is soil type B)
 }
 
 \usage{

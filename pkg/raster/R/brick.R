@@ -157,6 +157,7 @@ setMethod('brick', signature(x='Extent'),
 		projection(b) <- crs
 		nl <- max(round(nl), 0)
 		b@data@nlayers <- as.integer(nl)
+		b@data@isfactor <- rep(FALSE, nl)
 		return(b) 
 	}
 )
@@ -175,18 +176,14 @@ setMethod('brick', signature(x='SpatialGrid'),
 			
 			b@data@isfactor <- rep(FALSE, ncol(x))
 			
-			for (i in 1:ncol(x)) {
-				if (is.character(x[,i])) {
-					x[,i] <- as.factor(x[,i])
-				}
-				if (is.factor(x[,i])) {
-					rat <- data.frame(table(x[[layer]]))
-					rat <- data.frame(1:nrow(rat), rat)
+			isfact <- sapply(x, function(i) is.factor(i) | is.character(i))
+			b@data@isfactor <- isfact
+			if (any(isfact)) {
+				for (i in which(isfact)) {
+					rat <- data.frame(table(x[[i]]))
+					rat <- data.frame(1:nrow(rat), rat[,2], rat[,1])
 					colnames(rat) <- c("ID", "COUNT", colnames(x)[i])
-					
 					b@data@attributes[[i]] <- rat
-					b@data@isfactor[i] <- TRUE 
-					
 					x[,i] <- as.integer(x[,i])
 				}
 			}

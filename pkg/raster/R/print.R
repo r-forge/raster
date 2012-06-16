@@ -90,25 +90,19 @@ setMethod ('print' , 'Spatial',
 			coln <- colnames(x)
 			if (nc > maxnl) {
 				coln <- c(coln[1:maxnl], '...')
-				
+				x <- x[, 1:maxnl]
 			}
 			cat('variables   :', paste(coln, collapse=', '), '\n')
-			
-			nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
-			if (sum(nfact) > 1) {
-				r <- apply(x[,which(nfact)], 2, range, na.rm=TRUE)
-				fc <- as.character(nfact)
-				fc[! nfact] <- '(f)'
-				maxv <- minv <- fc
-				minv[nfact] <- as.vector(r[1, ])
-				maxv[nfact] <- as.vector(r[2,])
-				if (nc > maxnl) {
-					minv <- c(minv, '...')
-					maxv <- c(maxv, '...')
-				}
-				cat('min values  :', paste(minv, collapse=', '), '\n')
-				cat('max values  :', paste(maxv, collapse=', '), '\n')
-			} 
+
+			r <- apply(x, 2, range, na.rm=TRUE)
+			minv <- as.vector(r[1, ])
+			maxv <- as.vector(r[2, ])
+			if (nc > maxnl) {
+				minv <- c(minv, '...')
+				maxv <- c(maxv, '...')
+			}
+			cat('min values  :', paste(minv, collapse=', '), '\n')
+			cat('max values  :', paste(maxv, collapse=', '), '\n')
 		}
 	}
 )	

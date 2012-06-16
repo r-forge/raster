@@ -40,10 +40,8 @@ function(x, y, filename='', snap='near', datatype=NULL, ...) {
 		return(out)
 	}
 
-	if (is.factor(x)) { 
-		out@data@isfactor <- x@data@isfactor
-		out@data@attributes <- x@data@attributes
-	}
+	out@data@isfactor <- x@data@isfactor
+	out@data@attributes <- x@data@attributes
 	
 	col1 <- colFromX(x, xmin(out)+0.5*xres(out))
 	col2 <- colFromX(x, xmax(out)-0.5*xres(out))

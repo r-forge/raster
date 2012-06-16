@@ -13,10 +13,10 @@ factorValues <- function(x, v, layer=1, att=NULL) {
 	}
 	if (colnames(rat)[2]=='WEIGHT') {
 		i <- which(match(rat$ID, round(v))==1)
-		r <- rat[i, ]
+		r <- rat[i, -1, drop=FALSE]
 	} else {
 		i <- match(round(v), rat$ID)
-		r <- rat[i, ]
+		r <- rat[i, -c(1:2), drop=FALSE]
 	}
 
 	rownames(r) <- NULL
@@ -44,7 +44,12 @@ if (!isGeneric("is.factor")) {
 
 setMethod('is.factor', signature(x='Raster'), 
 	function(x) {
-		return(x@data@isfactor)
+		f <- x@data@isfactor
+		nl <- nlayers(x)
+		if (length(f) < nl) {
+			f <- c(f, rep(FALSE, nl))[1:nl]
+		}
+		f
 	}
 )
 
@@ -87,28 +92,33 @@ setMethod('levels', signature(x='Raster'),
 	if (! colnames(newv)[1] == c('ID')) {
 		stop('the first column name of the raster attributes (factors) data.frame should be "ID"')
 	}
-
+	
+	if (!is.null(old)) {
+		if (colnames(newv)[2] == 'WEIGHT') {
+			if (nrow(newv) < nrow(old)) {
+				warning('the number of rows in the raster attributes (factors) data.frame is lower than expected (values missing?)')
+			}
+			if (! all(unique(sort(newv[,1])) == sort(unique(old[,1])))) {
+				warning('the values in the "ID" column in the raster attributes (factors) data.frame have changed')
+			}
+	
+		} else {
+		
+			if (! nrow(newv) == nrow(old)) {
+				warning('the number of rows in the raster attributes (factors) data.frame is unexpected')
+			}
+			if (! all(sort(newv[,1]) == sort(old[,1]))) {
+				warning('the values in the "ID" column in the raster attributes (factors) data.frame have changed')
+			}
+		}
+	}
+	
 	if (colnames(newv)[2] == 'WEIGHT') {
-		if (nrow(newv) < nrow(old)) {
-			warning('the number of rows in the raster attributes (factors) data.frame is lower than expected (values missing?)')
-		}
-		if (! all(unique(sort(newv[,1])) == sort(unique(old[,1])))) {
-			warning('the values in the "ID" column in the raster attributes (factors) data.frame have changed')
-		}
 		newv[, 1] <- as.integer(newv[, 1])
 		newv[, 2] <- as.numeric(newv[, 2])
-	
 	} else {
-	
-		if (! nrow(newv) == nrow(old)) {
-			warning('the number of rows in the raster attributes (factors) data.frame is unexpected')
-		}
-		if (! all(sort(newv[,1]) == sort(old[,1]))) {
-			warning('the values in the "ID" column in the raster attributes (factors) data.frame have changed')
-		}
-		for (n in 1:2) {
-			newv[, n] <- as.integer(newv[, n])
-		}
+		newv[, 1] <- as.integer(newv[, 1])
+		newv[, 2] <- as.integer(newv[, 2])
 	}
 	newv
 }
@@ -117,7 +127,7 @@ setMethod('levels', signature(x='Raster'),
 setMethod('levels<-', signature(x='Raster'), 
 	function(x, value) {
 		
-		stopifnot(any(is.factor(x)))
+		isfact <- is.factor(x)
 
 		if (inherits(x, 'RasterLayer')) {
 			if (!is.data.frame(value)) {
@@ -127,23 +137,22 @@ setMethod('levels<-', signature(x='Raster'),
 			}
 			value <- .checkLevels(levels(x)[[1]], value)
 			x@data@attributes <- list(value)
+			x@data@isfactor <- TRUE
 			return(x)
 		} 
 		
 		i <- sapply(value, is.null)
-		stopifnot (length(value) == nlayers(x))
-
 		if (! all(i)) {
+			stopifnot (length(value) == nlayers(x))
 			levs <- levels(x)
 			for (j in which(!i)) {
-				if (!is.factor(x@layers[[j]])) {
-					stop('layer ', j, ' is not a factor')
-				}
 				value[j] <- .checkLevels(levs[[j]], value[[j]])				
 			}
 			x@data@attributes <- value
-			x@data@isfactor <- i
+		} else {
+			x@data@attributes <- list()		
 		}
+		x@data@isfactor <- i
 		return(x)		
 	}
 )
@@ -162,5 +171,4 @@ setMethod('as.factor', signature(x='RasterLayer'),
 		ratify(x)
 	}
 )
-
 

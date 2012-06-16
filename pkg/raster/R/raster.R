@@ -193,7 +193,6 @@ setMethod('raster', signature(x='RasterBrick'),
 				r@data@gain <- x@data@gain
 				r@data@inmemory <- x@data@inmemory
 				r@data@fromdisk <- x@data@fromdisk
-				r@data@isfactor <- x@data@isfactor
 				r@data@haveminmax <- x@data@haveminmax
 
 				r@data@band <- dindex
@@ -214,6 +213,10 @@ setMethod('raster', signature(x='RasterBrick'),
 					attr(r@data, "dim3") <- x@data@dim3
 					attr(r@data, "level") <- x@data@level
 				}
+
+				r@data@offset <- x@data@offset
+				r@data@gain <- x@data@gain
+				r@file@nodatavalue <- x@file@nodatavalue
 				
 			} else {
 			
@@ -221,13 +224,11 @@ setMethod('raster', signature(x='RasterBrick'),
 				if ( inMemory(x) ) {
 					if ( dindex != layer ) { warning(paste("layer was changed to", dindex)) }
 					r <- setValues(r, x@data@values[,dindex])
-					ln <- x@layernames[dindex]
-					if (! is.na(ln) ) { r@layernames <- ln }
+					r@layernames <- names(x)[dindex]
 				}
 			}
-			r@data@offset <- x@data@offset
-			r@data@gain <- x@data@gain
-			r@file@nodatavalue <- x@file@nodatavalue
+			r@data@isfactor <- x@data@isfactor[dindex]
+			r@data@attributes <- x@data@attributes[dindex]
 			
 		} else {
 			r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	

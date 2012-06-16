@@ -12,7 +12,7 @@
 \title{Mask values in a Raster object}
 
 \description{
-Create a new Raster* object where all cells that are \code{NA} in a 'mask' object are set to \code{NA}, and that has the same values as \code{x} in the other cells. Or use \code{inverse=TRUE} to set the cells that are not \code{NA} in the mask to \code{NA}.
+Create a new Raster* object where all cells that are \code{NA} in a 'mask' object are set to \code{NA}, and that has the same values as \code{x} in the other cells. The mask can be either another Raster* object of the same extent and resolution, or a Spatial* object (e.g. SpatialPolygons) in which case all cells that are not covered by the Spatial object are set to \code{NA}. You can use \code{inverse=TRUE} to set the cells that are not \code{NA} in the mask, or not coverd by the Spatial* object to \code{NA}.
 }
 
 \usage{
@@ -39,6 +39,8 @@ Create a new Raster* object where all cells that are \code{NA} in a 'mask' objec
 \value{
 Raster* object
 }
+
+\seealso{\code{\link{rasterize}, \link{crop}}}
 
 \author{Robert J. Hijmans}
 
