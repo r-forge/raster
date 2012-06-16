@@ -25,15 +25,27 @@ ratify <- function(x, filename='', ...) {
 	fun <- .makeTextFun(fun)
 	x <- na.omit(rat) 
 	cols <- 3:ncol(x)
+
+	cls <- sapply(x[,cols,drop=FALSE], class)
 	
 	if (fun %in% c('min', 'max')) {
+		if (any(cls %in% 'factor')) {
+			warning('you cannot use a mean value for a factor')
+			i <- which(cls %in% 'factor') + 2
+			x[, i] <- NA			
+		}
 		x <- aggregate(x[,cols], x[,1,drop=FALSE], fun)
-		x <- data.frame(ID=x[,1], COUNT=NA, x[,2])
+		x <- data.frame(ID=x[,1], COUNT=NA, x[,cols-1])
 	} else if (fun == 'mean') {
+		if (any(! cls %in% c('integer', 'numeric'))) {
+			warning('you cannot use a mean value for a variable that is not a number')
+			i <- which(! cls %in% c('integer', 'numeric')) + 2
+			x[, i] <- NA
+		}
 		v <- aggregate(x[,2] * x[,cols], x[,1,drop=FALSE], sum)
 		w <- aggregate(x[,2], x[,1,drop=FALSE], sum)
-		x <- v/w
-		x <- cbind(ID=as.numeric(names(x)), COUNT=NA, value=x)
+		v[,cols-1] <- v[,cols-1]/w[,2]
+		x <- cbind(ID=v[,1], COUNT=NA, value=v[,cols-1])
 	} else if (fun == 'largest') {
 		ids <- unique(x[,1])
 		j <- list()
