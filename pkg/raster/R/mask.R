@@ -12,11 +12,13 @@ if (!isGeneric("mask")) {
 
 setMethod('mask', signature(x='Raster', mask='Spatial'), 
 function(x, mask, filename="", inverse=FALSE, ...){ 
+	
 	if (inverse) {
 		mask <- rasterize(mask, x, -1)
-		mask(x, mask, filename=filename, ...)
+		mask(x, mask, filename=filename, inverse=TRUE, ...)
 	
 	} else {
+	
 		if (nlayers(x) > 1) {
 			mask <- rasterize(mask, x, -1)
 			mask(x, mask, filename=filename, ...)
@@ -159,7 +161,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 
 
 setMethod('mask', signature(x='RasterLayer', mask='RasterStackBrick'), 
-function(x, mask, filename="", ...){ 
+function(x, mask, filename="", inverse=FALSE, ...){ 
 
 	compare(x, mask)
 
@@ -169,7 +171,11 @@ function(x, mask, filename="", ...){
 
 		x <- getValues(x)
 		x <- matrix(rep(x, nlayers(out)), ncol=nlayers(out))
-		x[is.na(getValues(mask))] <- NA
+		if (inverse) {
+			x[!is.na(getValues(mask))] <- NA
+		} else {
+			x[is.na(getValues(mask))] <- NA
+		}
 		out <- setValues(out, x)
 		if (filename != '') {
 			out <- writeRaster(out, filename, ...)
@@ -178,24 +184,32 @@ function(x, mask, filename="", ...){
 		
 	} else {
 	
-
 		if ( filename=='') { filename <- rasterTmpFile() }
-
 		out <- writeStart(out, filename=filename, ...)
-
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, ...)
 
-		for (i in 1:tr$n) {
-			v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			v <- matrix(rep(v, nlayers(out)), ncol=nlayers(out))
-			m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-			v[is.na(m)] <- NA
-			out <- writeValues(out, v, tr$row[i])
-			pbStep(pb, i)
-		} 
-		pbClose(pb)
+		if (inverse) {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				v <- matrix(rep(v, nlayers(out)), ncol=nlayers(out))
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[!is.na(m)] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 
+		} else {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				v <- matrix(rep(v, nlayers(out)), ncol=nlayers(out))
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[is.na(m)] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 
+		}
 
+		pbClose(pb)
 		out <- writeStop(out)
 		return(out)
 	}
@@ -205,17 +219,17 @@ function(x, mask, filename="", ...){
 
 
 setMethod('mask', signature(x='RasterStackBrick', mask='RasterStackBrick'), 
-function(x, mask, filename="", ...){ 
+function(x, mask, filename="", inverse=FALSE, ...){ 
 
 
 	if ( nlayers(x) != nlayers(mask) ) {
 		if (nlayers(x) == 1) {
 			x <- raster(x)
-			return(mask(x, mask))
+			return(mask(x, mask, filename, inverse, ...))
 		}
 		if (nlayers(mask) == 1) {
 			mask <- raster(mask)
-			return(mask(x, mask))
+			return(mask(x, mask, filename, inverse, ...))
 		}
 		stop('number of layers of x and mask must match')
 	}
@@ -228,12 +242,15 @@ function(x, mask, filename="", ...){
 	if (canProcessInMemory(x, nlayers(x)+4)) {
 
 		x <- getValues(x)
-		x[is.na(getValues(mask))] <- NA
+		if (inverse) {
+			x[!is.na(getValues(mask))] <- NA		
+		} else {
+			x[is.na(getValues(mask))] <- NA
+		}
 		out <- setValues(out, x)
 		if (filename != '') {
 			out <- writeRaster(out, filename, ...)
 			names(out) <- ln
-			
 		} 
 		return(out)
 		
@@ -242,19 +259,28 @@ function(x, mask, filename="", ...){
 		if ( filename=='') { filename <- rasterTmpFile() }
 
 		out <- writeStart(out, filename=filename, ...)
-
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, ...)
 
-		for (i in 1:tr$n) {
-			v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-			v[is.na(m)] <- NA
-			out <- writeValues(out, v, tr$row[i])
-			pbStep(pb, i)
-		} 
+		if (inverse) {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[!is.na(m)] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 
+		} else {
+			for (i in 1:tr$n) {
+				v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+				m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+				v[is.na(m)] <- NA
+				out <- writeValues(out, v, tr$row[i])
+				pbStep(pb, i)
+			} 
+		}
+			
 		pbClose(pb)
-
 		out <- writeStop(out)
 		names(out) <- ln
 		return(out)
