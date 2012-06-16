@@ -11,7 +11,7 @@ Take a stratified random sample from the cell values of a Raster* object (withou
 }
 
 \usage{
-\S4method{sampleStratified}{RasterLayer}(x, size, exp=10, na.rm=TRUE, xy=FALSE, ext=NULL, ...)
+\S4method{sampleStratified}{RasterLayer}(x, size, exp=10, na.rm=TRUE, xy=FALSE, ext=NULL, sp=FALSE, ...)
 }
 
 
@@ -22,7 +22,8 @@ Take a stratified random sample from the cell values of a Raster* object (withou
   \item{na.rm}{logical. If \code{TRUE} (the default), \code{NA} values are removed from random sample}
   \item{xy}{logical. Return coordinates of cells rather than cell numbers}
   \item{ext}{Extent object. To limit regular sampling to the area within the extent}
-  \item{...}{Additional arguments as in \code{\link{writeRaster}}. Only relevant when \code{asRaster=TRUE}} 
+  \item{sp}{logical. If \code{TRUE}, a SpatialPointsDataFrame is returned}  
+  \item{...}{Additional arguments. None implemented} 
 }
 
 \details{

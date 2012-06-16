@@ -177,7 +177,7 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 		if (removeCells) {
 			x <- x[,-1,drop=FALSE]
 		}
-		x <- SpatialPointsDataFrame(xy, data=data.frame(x), proj4string=projection(x, asText=FALSE))
+		x <- SpatialPointsDataFrame(xy, data=data.frame(x), proj4string=projection(r, asText=FALSE))
 		
 	} else if (removeCells) {
 		x <- x[,-1,drop=FALSE]	
