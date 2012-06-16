@@ -11,7 +11,7 @@ if (!isGeneric("sampleStratified")) {
 
 
 setMethod('sampleStratified', signature(x='RasterLayer'), 
-function(x, size, exp=10, na.rm=TRUE, xy=FALSE, ext=NULL, ...) {
+function(x, size, exp=10, na.rm=TRUE, xy=FALSE, ext=NULL, sp=FALSE, ...) {
 
 	stopifnot(hasValues(x)) 
 	
@@ -99,17 +99,23 @@ function(x, size, exp=10, na.rm=TRUE, xy=FALSE, ext=NULL, ...) {
 	}
 
 	if (!is.null(ext)) {
-		xy <- xyFromCell(x, res[,1])
-		res[,1] <- cellFromXY(oldx, xy)
+		pts <- xyFromCell(x, res[,1])
+		res[,1] <- cellFromXY(oldx, pts)
 		if (xy) {
-			res <- cbind(res[,1,drop=FALSE], xy, res[,2,drop=FALSE])
+			res <- cbind(res[,1,drop=FALSE], pts, res[,2,drop=FALSE])
 		} 
 	} 
 	if (xy) {
-		xy <- xyFromCell(x, res[,1])
-		res <- cbind(res[,1,drop=FALSE], xy, res[,2,drop=FALSE])
+		pts <- xyFromCell(x, res[,1])
+		res <- cbind(res[,1,drop=FALSE], pts, res[,2,drop=FALSE])
 	}	
 	
+	if (sp) {
+		if (!xy) {
+			pts <- xyFromCell(x, res[,1])
+		}
+		res <- SpatialPointsDataFrame(pts, data.frame(res), proj4string=projection(x, asText=FALSE))
+	}
 	return(res)
 }
 )

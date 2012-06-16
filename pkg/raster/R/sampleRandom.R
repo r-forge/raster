@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : June 2008
 # Version 0.9
 # Licence GPL v3
@@ -177,7 +177,8 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 		if (removeCells) {
 			x <- x[,-1,drop=FALSE]
 		}
-		x <- SpatialPointsDataFrame(xy, data=data.frame(x))
+		x <- SpatialPointsDataFrame(xy, data=data.frame(x), proj4string=projection(x, asText=FALSE))
+		
 	} else if (removeCells) {
 		x <- x[,-1,drop=FALSE]	
 	}

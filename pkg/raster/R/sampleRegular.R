@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : November 2009
 # Version 0.9
 # Licence GPL v3
@@ -204,7 +204,7 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 		m <- cbind(m, .cellValues(x, cell))
 		
 		if (sp) {
-			m <- SpatialPointsDataFrame(xyFromCell(x, cell), m)
+			m <- SpatialPointsDataFrame(xyFromCell(x, cell), data.frame(m), proj4string=projection(x, asText=FALSE))
 		}
 		
 		return(m)

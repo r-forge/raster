@@ -299,6 +299,10 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			xy <- .Call("transform", projto, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
 			xy <- cbind(xy[[1]], xy[[2]])
 			to[cells] <- .xyValues(from, xy, method=method)
+			
+			if (filename != '') {
+				to <- writeRaster(to, filename, ...)
+			}	
 			return(to)
 			
 		} else {
