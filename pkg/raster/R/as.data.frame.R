@@ -38,15 +38,14 @@ setMethod('as.data.frame', signature(x='Raster'),
 	function(x, row.names = NULL, optional = FALSE, ...) {
 
 		v <- as.data.frame(values(x), row.names=row.names, optional=optional, ...)
-	
 		colnames(v) <- names(x)  # for nlayers = 1
 		
 		i <- is.factor(x)
-		if (any(i)) {
-			i <- which(i)
-			for (j in i) {
-				fv <- factorValues(x, v[,j], j)
-				v <- .insertColsInDF(v, fv, j)
+		if (any(is.factor(x))) {
+			if (ncol(v) == 1) {
+				v <- data.frame(factorValues(x, v[,1], 1))
+			} else {
+				v <- .insertFacts(x, v, 1:nlayers(x))
 			}
 		}
 	

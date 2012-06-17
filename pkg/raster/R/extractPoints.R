@@ -26,21 +26,21 @@
 		if (method != 'simple') { 
 			warning('method argument is ignored when a buffer is used') 
 		}
-		value <- .xyvBuf(object, xy, buffer, fun, na.rm, layer=layer, nl=nl, cellnumbers=cellnumbers) 		
+		res <- .xyvBuf(object, xy, buffer, fun, na.rm, layer=layer, nl=nl, cellnumbers=cellnumbers) 		
 		
 	} else if (method == 'bilinear') {
-		value <- .bilinearValue(object, xy, layer=layer, n=nl) 
+		res <- .bilinearValue(object, xy, layer=layer, n=nl) 
 		if (cellnumbers) {
 			warning("'cellnumbers' does not apply for bilinear values")
 		}
 
 	} else if (method=='simple') {
 		cells <- cellFromXY(object, xy)
-		value <-  .cellValues(object, cells, layer=layer, nl=nl) 
+		res <-  .cellValues(object, cells, layer=layer, nl=nl) 
 		if (cellnumbers) {			
-			value <- cbind(cells, value)
-			if (ncol(value) == 2) {
-				colnames(value)[2] <- names(object)[layer]
+			res <- cbind(cells, res)
+			if (ncol(res) == 2) {
+				colnames(res)[2] <- names(object)[layer]
 			} 
 		}
 			
@@ -49,32 +49,28 @@
 	}
 	
 	if (df) {
-		if (is.list(value)) {
-			value <- lapply(1:length(value), function(x) if (!is.null(value[[x]])) cbind(ID=x, value[[x]]))
-			value <- do.call(rbind, value)
-			rownames(value) <- NULL
+		if (is.list(res)) {
+			res <- lapply(1:length(res), function(x) if (length(res[[x]]) > 0) cbind(ID=x, res[[x]]))
+			res <- do.call(rbind, res)
+			rownames(res) <- NULL
 		} else {
-			value <- data.frame(cbind(ID=1:NROW(value), value))
+			res <- data.frame(cbind(ID=1:NROW(res), res))
 		}
 		lyrs <- layer:(layer-1+nl)
-		colnames(value) <- c('ID', names(object)[lyrs])
-	
+		colnames(res) <- c('ID', names(object)[lyrs])
 
-		facts <- is.factor(object)[lyrs]
-		if (any(facts)) {
-			if (ncol(value) == 2) {
-				# possibly multiple columns added
-				value <- cbind(value[,1,drop=FALSE], factorValues(object, value[,2], layer))
+		if (any(is.factor(object))) {
+			v <- res[, -1, drop=FALSE]
+			if (ncol(v) == 1) {
+				v <- data.frame(factorValues(object, v[,1], layer))
 			} else {
-				# single columns only
-				i <- which(facts)
-				for (j in i) {
-					value <- .insertColsInDF(value, factorValues(object, value[, j+1], j), j+1)
-				}
+				v <- .insertFacts(object, v, lyrs)
 			}
+			res <- data.frame(res[,1,drop=FALSE], v)
 		}
 	}
-	value
+	
+	res
 }
 
 

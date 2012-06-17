@@ -145,25 +145,19 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, ..
 		} else {
 			res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
 		}		
-		if (ncol(res) == 2) {
-			colnames(res)[2] <- names(x)[layer]
-		} 
-		colnames(res)[1] <- 'ID'
-		
+
 		lyrs <- layer:(layer+nl-1)
-		facts <- is.factor(x)[lyrs]
-		if (any(facts)) {
-			if (ncol(res) == 2) {
-				# possibly multiple columns added
-				res <- cbind(res[,1,drop=FALSE], factorValues(x, res[,2], layer))
+		colnames(res) <- c('ID', names(x)[lyrs])
+		
+		if (any(is.factor(x))) {
+			v <- res[, -1, drop=FALSE]
+			if (ncol(v) == 1) {
+				v <- data.frame(factorValues(x, v[,1], layer))
 			} else {
-				# single columns only
-				i <- which(facts)
-				for (j in i) {
-					res <- .insertColsInDF(res, factorValues(x, res[, j+1], j), j+1)
-				}
+				v <- .insertFacts(x, v, lyrs)
 			}
-		} 
+			res <- data.frame(res[,1,drop=FALSE], v)
+		}
 	}
 	res
 }

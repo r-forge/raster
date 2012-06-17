@@ -36,7 +36,7 @@ is.factor(x)
 as.factor(x)
 levels(x)
 
-factorValues(x, v, layer=1, att=NULL)
+factorValues(x, v, layer=1, att=NULL, append.names=FALSE)
 
 ratify(x, filename='', ...)
 deratify(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, fun='mean', filename='', ...) 
@@ -48,6 +48,7 @@ deratify(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, fun='mean', filename='
   \item{v}{index cell values}
   \item{layer}{index cell values}
   \item{att}{numeric or character. Which variable(s) in the RAT table should be used. If \code{NULL}, all variables are extracted. If using a numeric, skip the first two default columns}
+  \item{append.names}{logical. Should names of data.frame returned by a combination of the name of the layer and the RAT variables? (can be useful for multilayer objects}
   \item{filename}{character. Optional}  
   \item{...}{additional arguments as for \code{\link{writeRaster}}}    
   \item{complete}{logical. If \code{TRUE}, the layer returned is no longer a factor}  

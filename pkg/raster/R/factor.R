@@ -5,7 +5,7 @@
 
 
 
-factorValues <- function(x, v, layer=1, att=NULL) {
+factorValues <- function(x, v, layer=1, att=NULL, append.names=FALSE) {
 	stopifnot(is.factor(x)[layer])
 	rat <- levels(x)[[layer]]
 	if (!is.data.frame(rat)) {
@@ -32,7 +32,29 @@ factorValues <- function(x, v, layer=1, att=NULL) {
 			r <- r[, att, drop=FALSE]
 		}
 	}
+	if (append.names) {
+		colnames(r) <- paste(names(x)[layer], colnames(r), sep="_")
+	}
 	r
+}
+
+
+
+.insertFacts <- function(x, v, lyrs) {
+	facts <- is.factor(x)[lyrs]
+	if (!any(facts)) {
+		return(v)
+	}
+	i <- which(facts)
+	v <- sapply(1:length(facts), 
+		function(i) {
+			if (facts[i]) {
+				data.frame(factorValues(x, v[, i], i, append.names=TRUE))
+			} else {
+				v[, i, drop=FALSE]
+			}
+		} )
+	do.call(data.frame, v)
 }
 
 
