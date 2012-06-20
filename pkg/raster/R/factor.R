@@ -13,11 +13,10 @@ factorValues <- function(x, v, layer=1, att=NULL, append.names=FALSE) {
 	}
 	if (colnames(rat)[2]=='WEIGHT') {
 		i <- which(match(rat$ID, round(v))==1)
-		r <- rat[i, -1, drop=FALSE]
 	} else {
 		i <- match(round(v), rat$ID)
-		r <- rat[i, -c(1:2), drop=FALSE]
 	}
+	r <- rat[i, -1, drop=FALSE]
 
 	rownames(r) <- NULL
 	if (!is.null(att)) {
