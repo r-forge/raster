@@ -55,4 +55,109 @@ setMethod('as.data.frame', signature(x='Raster'),
 
 
 
+setMethod('as.data.frame', signature(x='SpatialPolygons'), 
+	function(x, row.names=NULL, optional=FALSE, xy=FALSE, centroids=TRUE, ...) {
+		
+		if (!xy) {
+			if (.hasSlot(x, 'data')) {
+				return( x@data )
+			} else {
+				return(NULL)
+			}
+		}		
+		if (centroids) {
+			xy <- coordinates(x)
+			xy <- cbind(1:nrow(xy), xy)
+			colnames(xy) <- c('object', 'x', 'y')
+			xy <- as.data.frame(xy, row.names=row.names, optional=optional, ...)
+			if (.hasSlot(x, 'data')) {
+				return( cbind(xy, x@data ) )
+			} else {
+				return(xy)
+			}
+		}
+		
+		nobs <- length(p@polygons)
+		objlist <- list()
+		cnt <- 0
+		for (i in 1:nobs) {
+			nsubobs <- length(p@polygons[[i]]@Polygons)
+			ps <- lapply(1:nsubobs, function(x) cbind(x, x+cnt, p@polygons[[i]]@Polygons[[x]]@hole, p@polygons[[i]]@Polygons[[x]]@coords))
+			objlist[[i]] <- cbind(i, do.call(rbind, ps))
+			cnt <- cnt+nsubobs
+		}
+		
+		obs <- do.call(rbind, objlist)
+		colnames(obs) <- c('object', 'part', 'partcum', 'hole', 'x', 'y')
+		
+		obs <- as.data.frame(obs, row.names=row.names, optional=optional, ...)
+		
+		if (.hasSlot(x, 'data')) {
+			d <- x@data
+			d <- data.frame(object=1:nrow(x), x@data)
+			return( merge(obs, d, by=1) )
+		} 
+		return( obs )
+	}
+)
 
+
+
+setMethod('as.data.frame', signature(x='SpatialLines'), 
+	function(x, row.names=NULL, optional=FALSE, xy=FALSE, ...) {
+		
+		if (!xy) {
+			if (.hasSlot(x, 'data')) {
+				return( x@data )
+			} else {
+				return(NULL)
+			}
+		}
+				
+		nobj <- length(p@lines)
+		objlist <- list()
+		cnt <- 0
+		for (i in 1:nobj) {
+			nsubobj <- length(p@line[[i]]@Lines)
+			ps <- lapply(1:nsubobj, function(x) cbind(x, x+cnt, p@lines[[i]]@Lines[[x]]@coords))
+			objlist[[i]] <- cbind(i, do.call(rbind, ps))
+			cnt <- cnt+nsubobj
+		}
+		obs <- do.call(rbind, objlist)
+		colnames(obs) <- c('object', 'part', 'partcum', 'x', 'y')
+		obs <- as.data.frame(obs, row.names=row.names, optional=optional, ...)
+		
+		if (.hasSlot(x, 'data')) {
+			d <- x@data
+			d <- data.frame(object=1:nrow(x), x@data)
+			obs <- merge(obs, d, by=1)
+		} 
+		return (obs)
+	}
+)
+
+
+
+
+setMethod('as.data.frame', signature(x='SpatialPoints'), 
+	function(x, row.names=NULL, optional=FALSE, xy=FALSE, ...) {
+		
+		if (!xy) {
+			if (.hasSlot(x, 'data')) {
+				return( x@data )
+			} else {
+				return(NULL)
+			}
+		} else {
+			xy <- coordinates(x)
+			xy <- cbind(1:nrow(xy), xy)
+			colnames(xy) <- c('object', 'x', 'y')
+			xy <- as.data.frame(xy, row.names=row.names, optional=optional, ...)
+			if (.hasSlot(x, 'data')) {
+				xy <- data.frame(xy, x@data )
+			} 
+			return(xy)
+		}
+	}
+)
+		

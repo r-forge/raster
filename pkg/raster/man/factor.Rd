@@ -12,7 +12,8 @@
 \alias{levels,RasterStack-method}
 \alias{levels<-}
 \alias{levels<-,Raster-method}
-   
+\alias{asFactor}
+\alias{asFactor,RasterLayer-method}
       
 \alias{factorValues}
 \alias{ratify}
@@ -40,6 +41,8 @@ factorValues(x, v, layer=1, att=NULL, append.names=FALSE)
 
 ratify(x, filename='', ...)
 deratify(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, fun='mean', filename='', ...) 
+
+asFactor(x, ...)
 }
 
 
@@ -61,6 +64,7 @@ deratify(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, fun='mean', filename='
 Raster* object; list (levels); boolean (is.factor); matrix (factorValues)
 }
 
+\note{asFactor is depracated and should not be used}
 
 \author{Robert J. Hijmans}
 

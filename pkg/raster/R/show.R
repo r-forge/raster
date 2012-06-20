@@ -40,7 +40,26 @@ setMethod ('show' , 'RasterLayer',
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat('coord. ref. :' , projection(object, TRUE), '\n')
 		
-		
+
+		if (hasValues(object)) {
+			fd <- object@data@fromdisk
+			if (fd) {
+				cat('values      :', filename(object), '\n')
+			} else {
+				cat('values      : in memory\n')			
+			}
+				
+			cat('layer name  :', names(object), '\n')
+			
+			if (object@data@haveminmax) {
+				cat('min value   :' , minValue(object), '\n')
+				cat('max value   :' , maxValue(object), '\n')
+			}
+		} else {
+			cat('values      : none\n')			
+		}
+
+
 		if (is.factor(object)) {
 		
 			x <- object@data@attributes[[1]][, -c(1:2), drop=FALSE]
@@ -72,27 +91,6 @@ setMethod ('show' , 'RasterLayer',
 			
 		} else {
 				
-
-			if (hasValues(object)) {
-				fd <- object@data@fromdisk
-				if (fd) {
-					cat('values      :', filename(object), '\n')
-				} else {
-					cat('values      : in memory\n')			
-				}
-				
-				cat('layer name  :', names(object), '\n')
-				
-				if (object@data@haveminmax) {
-					cat('min value   :' , minValue(object), '\n')
-					cat('max value   :' , maxValue(object), '\n')
-				}
-			} else {
-				cat('values      : none\n')			
-			}
-
-
-
 			z <- getZ(object)
 			if (length(z) > 0) {
 				name <- names(object@z)

@@ -194,3 +194,23 @@ setMethod('as.factor', signature(x='RasterLayer'),
 	}
 )
 
+
+
+if (!isGeneric("asFactor")) {
+	setGeneric("asFactor", function(x, ...)
+		standardGeneric("asFactor"))
+}
+
+setMethod('asFactor', signature(x='RasterLayer'), 
+	function(x, value=NULL, ...) {
+		#warning("please use as.factor")
+		x@data@isfactor <- TRUE
+		if (is.null(value) ) {
+			#x <- round(x) #this makes slot isfactor FALSE again
+			x@data@attributes <- list(data.frame(VALUE=unique(x)))
+		} else {
+			x@data@attributes <- value
+		}	
+		return(x)
+	}
+)
