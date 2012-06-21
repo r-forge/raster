@@ -62,21 +62,15 @@ setMethod ('show' , 'RasterLayer',
 
 		if (is.factor(object)) {
 		
-			x <- object@data@attributes[[1]][, -1, drop=FALSE]
+			x <- object@data@attributes[[1]]
 			nc <- ncol(x)
 			maxnl <- 12
 			if (nc > maxnl) {
 				x <- x[, 1:maxnl]
 			}
 			
-			if (ncol(x)== 0) {
-				cat('Raster Attribute Table (empty)\n') 
-				x <- object@data@attributes[[1]]			
-				nc <- 2
-			} else {
-				cat('Raster Attribute Table\n') 
-			}
-			
+			cat('Raster Attribute Table\n') 
+	
 			#nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
 			r <- apply(x, 2, range, na.rm=TRUE)
 			r <- data.frame(r)
