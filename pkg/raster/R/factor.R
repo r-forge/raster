@@ -107,8 +107,8 @@ setMethod('levels', signature(x='Raster'),
 	if (! is.data.frame(newv)) { 
 		stop('new raster attributes (factor values) should be in a data.frame (inside a list)')
 	}
-	if (! ncol(newv) > 2) {
-		stop('the number of columns in the raster attributes (factors) data.frame should be > 2')
+	if (! ncol(newv) > 1) {
+		stop('the number of columns in the raster attributes (factors) data.frame should be > 1')
 	}
 	if (! colnames(newv)[1] == c('ID')) {
 		stop('the first column name of the raster attributes (factors) data.frame should be "ID"')
@@ -133,13 +133,9 @@ setMethod('levels', signature(x='Raster'),
 			}
 		}
 	}
-	
+	newv[, 1] <- as.integer(newv[, 1])
 	if (colnames(newv)[2] == 'WEIGHT') {
-		newv[, 1] <- as.integer(newv[, 1])
 		newv[, 2] <- as.numeric(newv[, 2])
-	} else {
-		newv[, 1] <- as.integer(newv[, 1])
-		newv[, 2] <- as.integer(newv[, 2])
 	}
 	newv
 }

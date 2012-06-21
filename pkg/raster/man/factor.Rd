@@ -39,7 +39,7 @@ levels(x)
 
 factorValues(x, v, layer=1, att=NULL, append.names=FALSE)
 
-ratify(x, filename='', ...)
+ratify(x, filename='', count=FALSE, ...)
 deratify(x, att=NULL, layer=1, complete=FALSE, drop=TRUE, fun='mean', filename='', ...) 
 
 asFactor(x, ...)
@@ -53,6 +53,7 @@ asFactor(x, ...)
   \item{att}{numeric or character. Which variable(s) in the RAT table should be used. If \code{NULL}, all variables are extracted. If using a numeric, skip the first two default columns}
   \item{append.names}{logical. Should names of data.frame returned by a combination of the name of the layer and the RAT variables? (can be useful for multilayer objects}
   \item{filename}{character. Optional}  
+  \item{count}{logical. If \code{TRUE}, a columns with frequencies is added}  
   \item{...}{additional arguments as for \code{\link{writeRaster}}}    
   \item{complete}{logical. If \code{TRUE}, the layer returned is no longer a factor}  
   \item{drop}{logical. If \code{TRUE} a factor is converted to a numerical value if possible}  
