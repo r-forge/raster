@@ -193,8 +193,14 @@
 		if (any(i)) { 
 			i <- which(i)
 			vv <- extract(object, xy[i, ,drop=FALSE], na.rm=na.rm, layer=layer, nl=nl, cellnumbers=cellnumbers)
-			for (j in 1:length(i)) {
-				cv[[ i[j] ]] <- vv[j]
+			if (NCOL(vv) > 1) {
+				for (j in 1:length(i)) {
+					cv[[ i[j] ]] <- vv[j, ]
+				}			
+			} else {
+				for (j in 1:length(i)) {
+					cv[[ i[j] ]] <- vv[j]
+				}
 			}
 		}
 	}
