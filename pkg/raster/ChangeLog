@@ -1,5 +1,7 @@
---- Development version
 To do: focal for multi-layer objects
+
+--- Development version
+new option 'tmptime' to set after how many hours temp files may be deleted. Suggested by Shannon Albeke
 
 --- 17-June-2012, version 2.0-04
 More support for factors and (related) Raster Attribute Tables (functions ratify, deratify)
