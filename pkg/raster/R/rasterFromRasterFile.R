@@ -96,7 +96,7 @@
 		x@data@max <- maxval[band]
 	}
 	
-	if (isTRUE(any(isCat)) {
+	if (isTRUE(any(isCat))) {
 		x@data@isfactor = isCat
 	
 	# currently only for a single layer!
