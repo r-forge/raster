@@ -20,7 +20,7 @@ function(x, incomparables=FALSE, ...) {
 				x <- readAll(x)
 			}
 		} else {
-			stop('This RasterLayer has no values')	
+			stop('RasterLayer has no values')	
 		}
 	} 
 
@@ -54,13 +54,9 @@ function(x, incomparables=FALSE, ...) {
 	
 	
 	if (! inMemory(x) ) {
-		if ( fromDisk(x) ) {
-			if (canProcessInMemory(x, 2)) {
-				x <- readAll(x)
-			}
-		} else {
-			stop('This object has no values')	
-		}
+		if (canProcessInMemory(x, 2)) {
+			x <- readAll(x)
+		} 
 	} 
 
 	if ( inMemory(x) ) {
