@@ -19,12 +19,12 @@ Compute zonal statistics, values of a Raster* object for each "zone" in a Raster
   \item{stat}{a function to be applied to summarize the values by zone. Either as character: 'mean', 'min', 'max', 'sum'; or as a proper function (see Details) }
   \item{digits}{integer. Number of digits to maintain in 'zones'. By default averaged to an integer (zero digits)}
   \item{na.rm}{logical. If \code{TRUE}, \code{NA} values in \code{x} are ignored}
-  \item{...}{additional arguments. One implemented, progress, as in \code{\link{writeRaster}}}
+  \item{...}{additional arguments. One implemented: \code{progress}, as in \code{\link{writeRaster}}}
 }
 
 \details{
 If \code{stat} is a \code{function}, \code{zonal} will fail (gracefully) for very large Raster objects.
-The function should accept a \code{na.rm} argument. For example, \code{fun=length} will fail, but \code{fun=function(x, ...){length(x)}} will work; the '...' arguments catches the na.rm argument, even though it is not used by the function in this case. To remove \code{NA} values, you could use this function: \code{fun=function(x, na.rm){ if(na.rm){length(na.omit(x))}else{length(x)}}}
+The function should accept a \code{na.rm} argument. For example, \code{fun=length} will fail, but \code{fun=function(x, ...){length(x)}} will work; the '...' arguments catches the \code{na.rm} argument, even though it is not used by the function in this case. To remove \code{NA} values, you could use this function: \code{fun=function(x, na.rm){ if(na.rm){length(na.omit(x))}else{length(x)}}}
 }
 
 \value{

@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : December 2009
 # Version 0.9
 # Licence GPL v3
@@ -11,7 +11,7 @@ if (!isGeneric("unique")) {
 
 
 setMethod('unique', signature(x='RasterLayer', incomparables='missing'), 
-function(x, progress='') {
+function(x, incomparables=FALSE, ...) {
 	
 	
 	if (! inMemory(x) ) {
@@ -32,7 +32,7 @@ function(x, progress='') {
 		u2 <- vector()
 		
 		tr <- blockSize(x, n=2)
-		pb <- pbCreate(tr$n, progress=progress)	
+		pb <- pbCreate(tr$n, ...)	
 
 		for (i in 1:tr$n) {
 			u1 <- unique( c(u1, getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i])) )
@@ -50,7 +50,7 @@ function(x, progress='') {
 
 
 setMethod('unique', signature(x='RasterStackBrick', incomparables='missing'), 
-function(x, progress='') {
+function(x, incomparables=FALSE, ...) {
 	
 	
 	if (! inMemory(x) ) {
@@ -83,7 +83,7 @@ function(x, progress='') {
 		un <- list(length=nl, mode='list')
 		
 		tr <- blockSize(x, n=2)
-		pb <- pbCreate(tr$n, progress=progress)	
+		pb <- pbCreate(tr$n, ...)	
 
 		un <- NULL
 		for (i in 1:tr$n) {
