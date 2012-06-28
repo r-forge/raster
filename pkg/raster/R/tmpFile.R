@@ -50,7 +50,7 @@
 
 
 
-rasterTmpFile <- function(prefix='tmp_')  {
+rasterTmpFile <- function(prefix='raster_tmp_')  {
 	f <- getOption('rasterTmpFile')
 	if (!is.null(f)) {
 		f <- trim(f)

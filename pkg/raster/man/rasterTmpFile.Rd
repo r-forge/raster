@@ -13,7 +13,7 @@ when no filename is provided to a function and in functions where you cannot pro
 Temporary files are automatically removed at the start of each session. During a session you can use \code{showTmpFiles} to see what is there and \code{removeTmpFiles} to delete all the temporary files.  \code{rasterTmpFile} returns a temporary filename. These can be useful when developing your own functions. }
 
 \usage{
-rasterTmpFile(prefix='tmp_')
+rasterTmpFile(prefix='raster_tmp_')
 showTmpFiles()
 removeTmpFiles(h=24)
 }
