@@ -10,11 +10,11 @@ canProcessInMemory <- function(x, n=4) {
 #	setOptions(overwrite=TRUE)
 #	setOptions(format='GTiff')
 #	return(FALSE)
-
 	if (.toDisk()) { 
 		return(FALSE) 
 	} 
-	n <- n + (nlayers(x) - 1)
+	
+	n <- n + nlayers(x) - 1
 	cells <- round( 1.1 * ncell(x) ) * n
 
 	if ( cells > .maxmemory() ) {
