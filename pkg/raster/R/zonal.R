@@ -58,8 +58,8 @@ setMethod('zonal', signature(x='Raster', z='RasterLayer'),
 			pb <- pbCreate(tr$n, ...)
 		
 			for (i in 1:tr$n) {
-				d <- getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i])
-				d <- cbind(d,  round(getValuesBlock(z, row=tr$row[i], nrows=tr$nrows[i]), digits=digits))
+				d <- cbind(getValues(x, row=tr$row[i], nrows=tr$nrows[i]),   
+						round(getValues(z, row=tr$row[i], nrows=tr$nrows[i]), digits=digits))
 				alltab <- rbind(alltab, aggregate(d[,1:(ncol(d)-1)], by=list(d[,ncol(d)]), FUN=fun, na.rm=na.rm)) 
 				if (counts) {
 					if (na.rm) {
