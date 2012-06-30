@@ -1,6 +1,6 @@
 # Derived, with only minor changes, from functions GE_SpatialGrid and kml Overlay 
 # in the maptools package. These were written by Duncan Golicher, David Forrest and Roger Bivand 
-# Adaptation for the raster packcage by Robert J. Hijmans, r.hijmans@gmail.com
+# Adaptation for the raster packcage by Robert J. Hijmans, 
 # Date : March 2009
 # Version 0.9
 # Licence GPL v3
@@ -14,9 +14,9 @@ if (!isGeneric("KML")) {
 setMethod('KML', signature(x='Spatial'), 
 	function (x, filename, zip='', ...) {
 		.requireRgdal()
-		p <- projection(x)
-		if (p != 'NA') {
+		if (projection(x) != 'NA') {
 			if (!isLonLat(x)) {
+				warning('transforming data to longitude/latitude'))
 				spTransform(x, CRS('+proj=longlat +datum=WGS84'))
 			}
 		}
@@ -78,6 +78,3 @@ function (x, filename, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000,
 	.zipKML(kmlfile, imagefile, zip)
 }
 )
-
-
-
