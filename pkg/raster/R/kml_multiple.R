@@ -29,7 +29,9 @@
 		}
 		sss <- try( system(cmd, intern=TRUE), silent=TRUE )
 		if (file.exists(kmz)) {
-			x <- file.remove(kml, image)
+			files <- c(kml, image)
+			files <- files[file.exists(files)]
+			x <- file.remove(files)
 			return(invisible(kmz))
 		} else {
 			return(invisible(kml))
@@ -83,7 +85,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpix
 	
 	
 	for (i in 1:nl) {
-		png(filename = imagefile, width=max(480, blur*ncol(x)), height=max(480,blur*nrow(x)), bg="transparent")
+		png(filename = imagefile[i], width=max(480, blur*ncol(x)), height=max(480,blur*nrow(x)), bg="transparent")
 		if (!is.na(colNA)) {
 			par(mar=c(0,0,0,0), bg=colNA)
 		} else {
@@ -110,7 +112,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpix
 
     kml <- c(kml, "</Folder>", "</kml>")
     cat(paste(kml, sep="", collapse="\n"), file=kmlfile, sep = "")
-	raster:::.zipKML(kmlfile, imagefile, zip)
+	.zipKML(kmlfile, imagefile, zip)
 }
 )
 

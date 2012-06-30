@@ -11,6 +11,23 @@ if (!isGeneric("KML")) {
 		standardGeneric("KML"))
 }	
 
+setMethod('KML', signature(x='Spatial'), 
+	function (x, filename, zip='', ...) {
+		.requireRgdal()
+		p <- projection(x)
+		if (p != 'NA') {
+			if (!isLonLat(x)) {
+				spTransform(x, CRS('+proj=longlat +datum=WGS84'))
+			}
+		}
+		extension(filename) <- '.kml'
+		name <- deparse(substitute(x))
+		writeOGR(x, filename, name, 'KML')
+		.zipKML(filename, '', zip) 
+	}
+)
+	
+
 
 setMethod('KML', signature(x='RasterLayer'), 
 
