@@ -16,7 +16,7 @@ setMethod('KML', signature(x='Spatial'),
 		.requireRgdal()
 		if (projection(x) != 'NA') {
 			if (!isLonLat(x)) {
-				warning('transforming data to longitude/latitude'))
+				warning('transforming data to longitude/latitude')
 				spTransform(x, CRS('+proj=longlat +datum=WGS84'))
 			}
 		}

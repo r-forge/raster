@@ -7,7 +7,7 @@
 \alias{as.data.frame,SpatialPoints-method}
   
 
-\title{Get a data.frame with raster cell values, or coerce a SpatialPolygons, Lines, or Points file to a data.frame}
+\title{Get a data.frame with raster cell values, or coerce SpatialPolygons, Lines, or Points to a data.frame}
 
 \description{
 \code{as.matrix} returns all values of a Raster* object as a matrix. For RasterLayers, rows and columns in the matrix represent rows and columns in the RasterLayer object. For other Raster* objects, the matrix returned by \code{as.matrix} has columns for each layer and rows for each cell.
