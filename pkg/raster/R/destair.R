@@ -23,8 +23,7 @@
 		tf1 <- rowSums( cbind(dx[-length(dx)], dy[-1]) )
 		tf2 <- rowSums( cbind(dx[-1], dy[-length(dy)]) )
 		i <- which(tf1==0 | tf2==0) + 1
-		p[i, 1] <- (p[i-1, 1] + p[i+1, 1] + p[i, 1]) / 3
-		p[i, 2] <- (p[i-1, 2] + p[i+1, 2] + p[i, 2]) / 3
+		p[i, ] <- (p[i-1, ] + p[i+1, ] + 2 * p[i, ]) / 4
 		pts[k, 5:6] <- p[-c(1, nrow(p)),]
 	}
 
