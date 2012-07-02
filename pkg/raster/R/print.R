@@ -72,7 +72,7 @@ setMethod ('print' , 'Spatial',
 		}
 		
 		e <- bbox(x)
-		cat('extent      : ' , e[1], ', ', e[2], ', ', e[3], ', ', e[4], '  (xmin, xmax, ymin, ymax)\n', sep="")
+		cat('extent      : ' , e[1,1], ', ', e[1,2], ', ', e[2,1], ', ', e[2,2], '  (xmin, xmax, ymin, ymax)\n', sep="")
 		cat('coord. ref. :' , projection(x, TRUE), '\n')
 		
 		
