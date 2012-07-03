@@ -227,8 +227,11 @@ setMethod('raster', signature(x='RasterBrick'),
 					r@layernames <- names(x)[dindex]
 				}
 			}
-			r@data@isfactor <- x@data@isfactor[dindex]
-			r@data@attributes <- x@data@attributes[dindex]
+			isf <- is.factor(r)[dindex]
+			if (isTRUE(isf)) {
+				r@data@isfactor <- TRUE
+				r@data@attributes <- levels(x)[[dindex]]
+			}
 			
 		} else {
 			r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	

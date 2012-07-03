@@ -68,7 +68,9 @@ function(x, subset, drop=TRUE, ...) {
 	}
 	
 	varname <- attr(x@data, "zvar")
-	if (is.null(varname)) { varname <- "" }
+	if (is.null(varname)) { 
+		varname <- "" 
+	}
 
 	
 	if (fromDisk(x)) {
