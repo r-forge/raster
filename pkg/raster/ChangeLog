@@ -1,5 +1,8 @@
 To do: focal for multi-layer objects
 
+--- development version 
+fixed bug in terrain/flowdir reported by Marie Morfin
+
 --- 27-June-2012, version 2.0-08
 bug fixes (both introduced in version 2.0-04):
 multilayer files of the 'raster' format have a corrupt header file (reported by Jonathan Greenberg)
