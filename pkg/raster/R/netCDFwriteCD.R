@@ -1,11 +1,11 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date: June 2010
 # Version 1.0
 # Licence GPL v3
 
 
 .startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, att, 
-		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, ...) {
+		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, ...) {
 
 	if (!require(ncdf)) { stop('You need to install the ncdf package') }
 
@@ -66,6 +66,11 @@
 			att.put.ncdf(nc, zname, a[1], a[2])	
 		}
 	}
+
+	if (!missing(NAflag)) {
+		x@file@nodatavalue <- NAflag
+	} 
+	
 	att.put.ncdf(nc, varname, '_FillValue', x@file@nodatavalue)
 	att.put.ncdf(nc, varname, 'missing_value', x@file@nodatavalue)
 	att.put.ncdf(nc, varname, 'long_name', longname)
@@ -133,7 +138,7 @@
 		x@data@max <- max(x@data@max, rsd)
 	}	
 	
-	v[is.na(v)] = x@file@nodatavalue
+	v[is.na(v)] <- x@file@nodatavalue
 	nr <- length(v) / x@ncols
 	v <- matrix(v, ncol=nr)
 
