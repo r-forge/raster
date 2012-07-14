@@ -96,8 +96,10 @@ n <- 1000
 x <- runif(n) * 360 - 180
 y <- runif(n) * 180 - 90
 xy <- cbind(x, y)
-# point or not?
-r1 <- rasterize(xy, r)
+# get the (last) indices
+r0 <- rasterize(xy, r)
+# prensence/absensce (NA) (is there a point or not?)
+r1 <- rasterize(xy, r, field=1)
 # how many points?
 r2 <- rasterize(xy, r, fun=sum)
 vals <- runif(n)
