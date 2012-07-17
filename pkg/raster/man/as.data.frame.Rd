@@ -35,7 +35,7 @@ The methods for Spatial* objects allow for easy creation of a data.frame with th
  \item{optional}{logical. If \code{TRUE}, setting row names and converting column names (to syntactic names: see make.names) is optional}
  \item{xy}{logical. If \code{TRUE}, also return the spatial coordinates}
  \item{centroids}{logical. If \code{TRUE} return the centroids instead of all spatial coordinates (only relevant if \code{xy=TRUE})}
- \item{sepNA}{logical. If \code{TRUE} the parts of the spatial objects are seperated by lines that are \code{NA} (only if \code{xy=TRUE} and, for polygons, if \code{centroids=FALSE}}
+ \item{sepNA}{logical. If \code{TRUE} the parts of the spatial objects are separated by lines that are \code{NA} (only if \code{xy=TRUE} and, for polygons, if \code{centroids=FALSE}}
  \item{...}{Additional arguments (none)} 
 }
   

@@ -34,8 +34,8 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
   \item{maxpixels}{Maximum number of pixels used}
   \item{useRaster}{If \code{TRUE}, the rasterImage function is used for plotting. Otherwise the image function is used. This can be useful
        if rasterImage does not work well on your system (see note)}
-  \item{alpha}{Number between 0 and 1 to set transparancy. 0 is entirely transparant, 1 is not transparant}
-  \item{colNA}{The color to use for the backgournd (default is transparant)}  
+  \item{alpha}{Number between 0 and 1 to set transparency. 0 is entirely transparent, 1 is not transparent}
+  \item{colNA}{The color to use for the background (default is transparent)}  
   \item{add}{Logical. Add to current plot?}
   \item{ext}{An extent object to zoom in a region (see also \code{\link{zoom}} and \code{\link{crop}(x, \link{drawExtent}())}}
   \item{interpolate}{Logical. Should the image be interpolated (smoothed)?}
@@ -43,8 +43,8 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
         "points(xy); plot(polygons, add=TRUE)". This is particularly useful to add something to each map when plotting a multi-layer Raster* object.}
   \item{...}{Graphical parameters. Any argument that can be passed to \code{\link[fields]{image.plot}} and to \code{\link[graphics]{plot}}, 
         such as axes=FALSE, main='title', ylab='latitude'}
-  \item{nc}{Optional. The number of columns to divide the plotting device in (when plotting mulitple layers in a RasteLayer or RasterBrick object)}
-  \item{nr}{Optional. The number of rows to divide the plotting device in (when plotting mulitple layers in a RasteLayer or RasterBrick object)}
+  \item{nc}{Optional. The number of columns to divide the plotting device in (when plotting multiple layers in a RasterLayer or RasterBrick object)}
+  \item{nr}{Optional. The number of rows to divide the plotting device in (when plotting multiple layers in a RasterLayer or RasterBrick object)}
   \item{cex}{Symbol size for scatter plots}
 }
 
@@ -64,7 +64,7 @@ raster uses \code{\link[graphics]{rasterImage}} from the graphics package. For u
 \seealso{
 \code{ \link[raster]{spplot}} and the \code{rasterVis} package have lattice based methods for plotting Raster* objects. 
 
-red-green-blue plots (e.g. false color composits) can be made with \code{\link[raster]{plotRGB}}
+red-green-blue plots (e.g. false color composites) can be made with \code{\link[raster]{plotRGB}}
 
 \code{\link[raster]{text}, \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}
 }

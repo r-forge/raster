@@ -23,9 +23,9 @@ Merge Raster* objects to form a new Raster object with a larger spatial extent. 
 
 \arguments{
   \item{x}{Raster* or Extent object}
-  \item{y}{Raster* if \code{x} is a Raster* object. If \code{x} is an Extent, \code{y} can be an Extent or object from wich an Extent can be extracted}
+  \item{y}{Raster* if \code{x} is a Raster* object. If \code{x} is an Extent, \code{y} can be an Extent or object from which an Extent can be extracted}
   \item{...}{Additional Raster or Extent objects (and/or arguments for writing files as in \code{\link{writeRaster})}}
-  \item{tolerance}{Numeric. Permissable difference in origin (relative to the cell resolution). See \code{\link[base]{all.equal}}}
+  \item{tolerance}{Numeric. permissible difference in origin (relative to the cell resolution). See \code{\link[base]{all.equal}}}
   \item{filename}{Character. Output filename (optional)}
   \item{overlap}{Logical. If \code{FALSE} values of overlapping objects are based on the first layer, even if they are \code{NA}}
   \item{ext}{Extent object (optional) to limit the output to that extent}

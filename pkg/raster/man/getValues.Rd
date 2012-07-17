@@ -15,7 +15,7 @@
 \title{Get raster cell values}
 
 \description{
-getValues returns all values or the values for a number of rows of a Raster* object.  
+getValues returns all values or the values for a number of rows of a Raster* object. Values returned for a RasterLayer are a vector. The values returned for a RasterStack or RasterBrick are always a matrix, with the rows representing cells, and the columns representing layers
 
 \code{values} is a shorthand version of getValues (for all rows).
 }
@@ -33,12 +33,11 @@ values(x, ...)
 }
   
 
-\details{
+\section{Methods}{
+\describe{
 Additional arguments when x is a \code{RasterLayer}:
- \code{format} Character. specifiy the output format. Either "" or "matrix". The default is "", in which case a vector is returned. 
- The values returned for a RasterStack or RasterBrick are always a matrix, with the rows representing cells, and the columns representing layers.
-
-}
+\item{format}{Character. specifiy the output format. Either "" or "matrix". The default is "", in which case a vector is returned}
+}}
 
 \value{
 vector or matrix of raster values

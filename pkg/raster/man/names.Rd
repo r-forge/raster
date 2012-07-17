@@ -13,7 +13,7 @@
 \description{
 Get or set the names of the layers of a Raster* object
 
-Function \code{layerNames} is deprecated. Use \code{names} in stead. 
+Function \code{layerNames} is deprecated. Use \code{names} instead. 
 }
 
 \usage{

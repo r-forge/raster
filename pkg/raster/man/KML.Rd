@@ -15,9 +15,11 @@ See package plotKML for more advanced functionality
 }
 
 \usage{
-\S4method{KML}{RasterLayer}(x, filename, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', ...)
+\S4method{KML}{RasterLayer}(x, filename, col=rev(terrain.colors(255)), 
+  colNA=NA, maxpixels=100000, blur=1, zip='', ...)
 
-\S4method{KML}{RasterStackBrick}(x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', ...)
+\S4method{KML}{RasterStackBrick}(x, filename, time=NULL, 
+  col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', ...)
 
 \S4method{KML}{Spatial}(x, filename, zip='', ...)
 }
@@ -25,9 +27,9 @@ See package plotKML for more advanced functionality
 \arguments{
 \item{x}{Raster* object}
 \item{filename}{output filename}
-\item{time}{character vector with time lables for multilayer objects. The lenght of this vector should be nlayers(x) to indicate "when" or nlayers(x)+1 to indicate "begin-end"}
+\item{time}{character vector with time lables for multilayer objects. The length of this vector should be nlayers(x) to indicate "when" or nlayers(x)+1 to indicate "begin-end"}
 \item{col}{color scheme to be used (see \link[graphics]{image})}
-\item{colNA}{The color to use for the backgournd (default is transparant)}
+\item{colNA}{The color to use for the background (default is transparent)}
 \item{maxpixels}{maximum number of pixels. If ncell(raster) > maxpixels, sampleRegular is used to reduce the number of pixels}
 \item{blur}{Integer (default=1). Higher values help avoid blurring of isolated pixels (at the expense of a png file that is blur^2 times larger)}
 \item{zip}{If there is no zip program on your path (on windows), you can supply the full path to a zip.exe here, in order to make a KMZ file}

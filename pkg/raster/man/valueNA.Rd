@@ -19,7 +19,7 @@ NAvalue(x) <- value
 
 \arguments{
  \item{x}{A \code{RasterLayer} object}
- \item{value}{the value to be interpreted as NA; set this before reading the values from the file. Integer values are matched exactely; for decimal values files any value <= the value will be interpreted as NA}  
+ \item{value}{the value to be interpreted as NA; set this before reading the values from the file. Integer values are matched exactly; for decimal values files any value <= the value will be interpreted as NA}  
 }
 
 

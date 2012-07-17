@@ -13,7 +13,7 @@
 \title{Dimensions of a Raster* object}
 
 \description{
-Get (or set) the number of rows, columns, and layers of a Raster* object. You cannot use this function to set the dimentions of a RasterStack object.
+Get (or set) the number of rows, columns, and layers of a Raster* object. You cannot use this function to set the dimensions of a RasterStack object.
 }
 
 \section{Methods}{

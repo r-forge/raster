@@ -35,7 +35,7 @@ rasterize(x, y, ...)
 
 \bold{= all cases =}
 
-\item{\code{field}}{ The value(s) to be transferred. This can be a single number, or a vector of numbers that has the same length as the number of spatial features (points, lines, polygons. If \code{x} is a Spatial*DataFrame, this can be the column name of the variable to be transfered. If missing, the attribute index is used (i.e. numbers from 1 to the number of features). You can also provide a vector with the same length as the number of spatial features, or a matrix where the number of rows matches the number of spatial features}
+\item{\code{field}}{The value(s) to be transferred. This can be a single number, or a vector of numbers that has the same length as the number of spatial features (points, lines, polygons). If \code{x} is a Spatial*DataFrame, this can be the column name of the variable to be transferred. If missing, the attribute index is used (i.e. numbers from 1 to the number of features). You can also provide a vector with the same length as the number of spatial features, or a matrix where the number of rows matches the number of spatial features}
 
 \item{\code{fun}}{Determine what values to assign to cells that are covered by multiple spatial features. You can use functions such as \code{min, max}, or \code{mean}, or one of the following character values: \code{'first', 'last', 'sum', 'min'}, or \code{'max'}. The default value is \code{'last'}}
 
@@ -52,11 +52,12 @@ rasterize(x, y, ...)
 Further optional arguments as for \code{\link{writeRaster}}
 
 
+
 \bold{= points =}
 
 The value of a grid cell is determined by the values associated with the points and function \code{fun}.
 
-If \code{x} represents points, each point is assinged to a grid cell. 
+If \code{x} represents points, each point is assigned to a grid cell. 
 
 If you want to know the number of points in each grid cell, use \code{fun=function(x,...){length(x)}}. I.e., for each cell it computes the length of the vector of points. You can also use \code{fun=sum}, because the default 'field' value of a point is 1. For the number of unique values use \code{fun=function(x, ...){ length(unique(na.rm(x)))}}
 
@@ -66,7 +67,8 @@ There is one additional argument:
 
 Because of this argument, all functions \code{fun} must accept an \code{na.rm} argument, either explicitly or through 'dots'. This means that \code{fun=length} fails, but \code{fun=function(x,...)length(x)} works, although it ignores the \code{na.rm} argument. To use the \code{na.rm} argument you can use a function like this \code{fun=function(x, na.rm){if (na.rm) length(na.omit(x)) else (length(x)}}, or use a function that removes NA values in all cases, like this function to compute the number of unique values "richness": \code{fun=function(x, ...){length(unique(na.omit(x)))}}. 
 
-You can also pass multiple functions using a statement like \code{fun=function(x)c(lenght(x),mean(x))}, in which case the returned object is a RasterBrick (multiple layers).
+You can also pass multiple functions using a statement like \code{fun=function(x)c(length(x),mean(x))}, in which case the returned object is a RasterBrick (multiple layers).
+
 
 
 \bold{= polygons and Extent =}
