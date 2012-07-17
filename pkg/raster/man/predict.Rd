@@ -12,7 +12,8 @@ Make a Raster object with predictions from a fitted model object (for example, o
 }
 
 \usage{
-\S4method{predict}{Raster}(object, model, filename="", fun=predict, ext=NULL, const=NULL, index=1, na.rm=TRUE, format, datatype, overwrite=FALSE, progress='', ...)
+\S4method{predict}{Raster}(object, model, filename="", fun=predict, ext=NULL, const=NULL, 
+          index=1, na.rm=TRUE, format, datatype, overwrite=FALSE, progress='', ...)
 }
 
 
@@ -62,9 +63,12 @@ par(mfrow=c(1,1))
 }
 
 #get presence and pseudo-absence points
-p <- matrix(c(48, 48, 48, 53, 50, 46, 54, 70, 84, 85, 74, 84, 95, 85, 66, 42, 26, 4, 19, 17, 7, 14, 26, 29, 39, 45, 51, 56, 46, 38, 31, 22, 34, 60, 70, 73, 63, 46, 43, 28), ncol=2)
+p <- matrix(c(48, 48, 48, 53, 50, 46, 54, 70, 84, 85, 74, 84, 95, 85, 
+   66, 42, 26, 4, 19, 17, 7, 14, 26, 29, 39, 45, 51, 56, 46, 38, 31, 
+   22, 34, 60, 70, 73, 63, 46, 43, 28), ncol=2)
 # 
-a <- cbind(runif(250)*(xmax(logo)-xmin(logo))+xmin(logo), runif(250)*(ymax(logo)-ymin(logo))+ymin(logo))
+a <- cbind(runif(250)*(xmax(logo)-xmin(logo))+xmin(logo), 
+           runif(250)*(ymax(logo)-ymin(logo))+ymin(logo))
 
 #extract values for points
 xy <- rbind(cbind(1, p), cbind(0, a))
@@ -107,7 +111,8 @@ plot(x)
 require(randomForest)
 rfmod <- randomForest(pa ~., data=v)
 
-## note the additional argument "type='response'" that is passed to predict.randomForest
+## note the additional argument "type='response'" that is 
+## passed to predict.randomForest
 r3 <- predict(logo, rfmod, type='response', progress='window')
 
 ## get a RasterBrick with class membership probabilities
@@ -117,7 +122,6 @@ r4 <- predict(logo, rfmod2, type='prob', index=1:2)
 spplot(r4)
 
 }
-
 }
 
 \keyword{methods}

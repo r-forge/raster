@@ -9,7 +9,8 @@ Identify cells that are adjacent to a set of cells on a raster. See \code{\link{
 }
 
 \usage{
-adjacent(x, cells, directions=4, pairs=FALSE, target=NULL, sorted=FALSE, include=FALSE, id=FALSE) 
+adjacent(x, cells, directions=4, pairs=FALSE, target=NULL, sorted=FALSE, 
+         include=FALSE, id=FALSE) 
 }
 
 \arguments{

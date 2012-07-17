@@ -49,7 +49,7 @@ rasterize(x, y, ...)
 
 \item{\code{filename}}{Character. Output filename (optional)}
 
-Further optional arguments as for \code{\link{writeRaster}}
+\item{\code{...}}{Further optional arguments as for \code{\link{writeRaster}}}
 
 
 
@@ -59,7 +59,8 @@ The value of a grid cell is determined by the values associated with the points 
 
 If \code{x} represents points, each point is assigned to a grid cell. 
 
-If you want to know the number of points in each grid cell, use \code{fun=function(x,...){length(x)}}. I.e., for each cell it computes the length of the vector of points. You can also use \code{fun=sum}, because the default 'field' value of a point is 1. For the number of unique values use \code{fun=function(x, ...){ length(unique(na.rm(x)))}}
+If you want to know the number of points in each grid cell, use \code{fun=function(x,...){length(x)}}. I.e., for each cell it computes the length of the vector of points. You can also use \code{fun=sum}, because the default 'field' value of a point is 1. For the number of unique values use 
+\code{fun=function(x, ...){ length(unique(na.rm(x)))}}
 
 There is one additional argument:
 
@@ -123,7 +124,8 @@ cds1 <- rbind(c(-180,-20), c(-140,55), c(10, 0), c(-140,-60))
 cds2 <- rbind(c(-10,0), c(140,60), c(160,0), c(140,-55))
 cds3 <- rbind(c(-125,0), c(0,60), c(40,5), c(15,-45))
 
-lines <- SpatialLines(list(Lines(list(Line(cds1)), "1"), Lines(list(Line(cds2)), "2"), Lines(list(Line(cds3)), "3") ))
+lines <- SpatialLines(list(Lines(list(Line(cds1)), "1"), 
+     Lines(list(Line(cds2)), "2"), Lines(list(Line(cds3)), "3") ))
 
 r <- raster(ncols=90, nrows=45)
 r <- rasterize(lines, r)
@@ -152,7 +154,8 @@ p1 <- rbind(c(-180,-20), c(-140,55), c(10, 0), c(-140,-60), c(-180,-20))
 hole <- rbind(c(-150,-20), c(-100,-10), c(-110,20), c(-150,-20))
 p2 <- rbind(c(-10,0), c(140,60), c(160,0), c(140,-55), c(-10,0))
 p3 <- rbind(c(-125,0), c(0,60), c(40,5), c(15,-45), c(-125,0))
-pols <- SpatialPolygons( list(  Polygons(list(Polygon(p1), Polygon(hole)), 1), Polygons(list(Polygon(p2)), 2), Polygons(list(Polygon(p3)), 3)))
+pols <- SpatialPolygons( list(  Polygons(list(Polygon(p1), Polygon(hole)), 1),
+      Polygons(list(Polygon(p2)), 2), Polygons(list(Polygon(p3)), 3)))
 pols@polygons[[1]]@Polygons[[2]]@hole <- TRUE
 
 r <- raster(ncol=180, nrow=90)
@@ -163,7 +166,8 @@ plot(r)
 plot(pols, add=T)
 
 # add a polygon
-p5 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),  c(-25, -15), c(-180,0), c(-180,10))
+p5 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),  
+            c(-25, -15), c(-180,0), c(-180,10))
 addpoly <- SpatialPolygons(list(Polygons(list(Polygon(p5)), 1)))
 addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
 addpoly@data[1,1] <- 10
