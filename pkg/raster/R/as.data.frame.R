@@ -178,25 +178,25 @@ setMethod('as.data.frame', signature(x='SpatialLines'),
 
 
 
-setMethod('as.data.frame', signature(x='SpatialPoints'), 
-	function(x, row.names=NULL, optional=FALSE, xy=FALSE, ...) {
-		
-		if (!xy) {
-			if (.hasSlot(x, 'data')) {
-				return( x@data )
-			} else {
-				return(NULL)
-			}
-		} else {
-			xy <- coordinates(x)
-			xy <- cbind(1:nrow(xy), xy)
-			colnames(xy) <- c('object', 'x', 'y')
-			xy <- as.data.frame(xy, row.names=row.names, optional=optional, ...)
-			if (.hasSlot(x, 'data')) {
-				xy <- data.frame(xy, x@data )
-			} 
-			return(xy)
-		}
-	}
-)
+#setMethod('as.data.frame', signature(x='SpatialPoints'), 
+#	function(x, row.names=NULL, optional=FALSE, xy=TRUE, ...) {
+#		
+#		if (!xy) {
+#			if (.hasSlot(x, 'data')) {
+#				return( x@data )
+#			} else {
+#				return(NULL)
+#			}
+#		} else {
+#			xy <- coordinates(x)
+#			xy <- cbind(1:nrow(xy), xy)
+#			colnames(xy) <- c('object', 'x', 'y')
+#			xy <- as.data.frame(xy, row.names=row.names, optional=optional, ...)
+#			if (.hasSlot(x, 'data')) {
+#				xy <- data.frame(xy, x@data )
+#			} 
+#			return(xy)
+#		}
+#	}
+#)
 		

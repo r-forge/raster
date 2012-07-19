@@ -4,7 +4,6 @@
 \alias{as.data.frame,Raster-method}
 \alias{as.data.frame,SpatialPolygons-method}
 \alias{as.data.frame,SpatialLines-method}
-\alias{as.data.frame,SpatialPoints-method}
   
 
 \title{Get a data.frame with raster cell values, or coerce SpatialPolygons, Lines, or Points to a data.frame}
@@ -25,8 +24,6 @@ The methods for Spatial* objects allow for easy creation of a data.frame with th
 \S4method{as.data.frame}{SpatialPolygons}(x, row.names=NULL, optional=FALSE, xy=FALSE, centroids=TRUE, sepNA=FALSE, ...)
 
 \S4method{as.data.frame}{SpatialLines}(x, row.names=NULL, optional=FALSE, xy=FALSE, sepNA=FALSE, ...)
-
-\S4method{as.data.frame}{SpatialPoints}(x, row.names=NULL, optional=FALSE, xy=FALSE, ...)
 }
 
 \arguments{
