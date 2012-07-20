@@ -130,7 +130,7 @@ m[c(40, 41, 74, 75, 380, 381, 382, 413, 417, 446, 452, 480,
 init <- raster(m)
 
 # run the model
-sim(init, gameOfLife, n=100)
+sim(init, gameOfLife, n=150, pause=0.05)
 }
 }
 
