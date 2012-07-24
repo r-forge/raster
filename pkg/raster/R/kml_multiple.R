@@ -17,7 +17,7 @@
 		kml <- basename(kml)
 		kmz <- extension(kml, '.kmz')
 		
-		if (file.exists(kmz) {
+		if (file.exists(kmz)) {
 			if (overwrite) {
 				file.remove(kmz)
 			} else {
