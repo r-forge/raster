@@ -207,10 +207,13 @@ setAs('SpatialPixels', 'RasterBrick',
 setAs('STFDF', 'RasterBrick', 
 	function(from) {
 		time <- from@time
+		nc <- ncol(from@data)
 		r <- raster(from@sp)
-		b <- brick(r, nl=length(time))
-		b <- setZ(b, time)
-		m <- matrix(from@data[,1], ncol=length(time))
+		b <- brick(r, nl=length(time) * nc)
+		b <- setZ(b, rep(time, nc)) # rep changes some time formats
+		names(b) <- paste(rep(colnames(from@data), each=length(time)), as.character(time), sep='')
+		# need to imprive this for character, factor variables
+		m <- as.numeric(as.matrix(from@data))
 		setValues(b, m)
 	}
 )
@@ -218,17 +221,8 @@ setAs('STFDF', 'RasterBrick',
 
 setAs('STSDF', 'RasterBrick', 
 	function(from) {
-		time <- from@time
-		r <- raster(from@sp)
-		b <- brick(r, nl=length(time))
-		b <- setZ(b, time)
-		m <- matrix(nrow=ncell(b), ncol=length(time))
-		d <- cbind(from@index, from@data[,1])
-		for (i in 1:length(time)) {
-			s <- subset(d, d[,2] == i)
-			m[s[,1], i] <- s[,3]
-		}
-		setValues(b, m)
+		from <- as(from, 'STFDF')
+		as(from, 'RasterBrick')
 	}
 )
 
