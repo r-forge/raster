@@ -12,7 +12,7 @@ if (!isGeneric("KML")) {
 }	
 
 setMethod('KML', signature(x='Spatial'), 
-	function (x, filename, zip='', ...) {
+	function (x, filename, zip='', overwrite=FALSE, ...) {
 		.requireRgdal()
 		if (projection(x) != 'NA') {
 			if (!isLonLat(x)) {
@@ -21,6 +21,14 @@ setMethod('KML', signature(x='Spatial'),
 			}
 		}
 		extension(filename) <- '.kml'
+		if (file.exists(filename)) {
+			if (overwrite) {
+				file.remove(filename)
+			} else {
+				stop('file exists, use "overwrite=TRUE" to overwrite it')
+			}
+		}
+		
 		name <- deparse(substitute(x))
 		writeOGR(x, filename, name, 'KML')
 		.zipKML(filename, '', zip) 
@@ -29,9 +37,10 @@ setMethod('KML', signature(x='Spatial'),
 	
 
 
+	
 setMethod('KML', signature(x='RasterLayer'), 
 
-function (x, filename, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', ...) {
+function (x, filename, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...) {
 
     if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude / latitude")
@@ -50,8 +59,18 @@ function (x, filename, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000,
 
 	imagefile <- filename
 	extension(imagefile) <- '.png'
-	kmlfile <- filename
+	kmlfile <- kmzfile <- filename
 	extension(kmlfile) <- '.kml'
+	
+	if (file.exists(kmlfile)) {
+		if (overwrite) {
+			file.remove(kmlfile)
+		} else {
+			stop('kml file exists, use "overwrite=TRUE" to overwrite it')
+		}
+	}
+	
+	
 
 	png(filename = imagefile, width=max(480, blur*ncol(x)), height=max(480,blur*nrow(x)), bg="transparent")
 	if (!is.na(colNA)) {
@@ -75,6 +94,6 @@ function (x, filename, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000,
 	
     cat(paste(kml, sep="", collapse="\n"), file=kmlfile, sep="")
 	
-	.zipKML(kmlfile, imagefile, zip)
+	.zipKML(kmlfile, imagefile, zip, overwrite=overwrite)
 }
 )

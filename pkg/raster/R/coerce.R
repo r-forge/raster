@@ -190,14 +190,48 @@ setAs('SpatialPixels', 'RasterStack',
 # to RasterBrick
 
 setAs('SpatialGrid', 'RasterBrick',
-	function(from){ return(brick(from)) }
+	function(from){ 
+		return(brick(from)) 
+	}
 )
 
 
 setAs('SpatialPixels', 'RasterBrick', 
-	function(from){ return(brick(from)) }
+	function(from){ 
+		return(brick(from)) 
+	}
 )
 
+
+
+setAs('STFDF', 'RasterBrick', 
+	function(from) {
+		time <- from@time
+		r <- raster(from@sp)
+		b <- brick(r, nl=length(time))
+		b <- setZ(b, time)
+		m <- matrix(from@data[,1], ncol=length(time))
+		setValues(b, m)
+	}
+)
+
+
+
+setAs('STSDF', 'RasterBrick', 
+	test <- function(from) {
+		time <- from@time
+		r <- raster(from@sp)
+		b <- brick(r, nl=length(time))
+		b <- setZ(b, time)
+		m <- matrix(nrow=ncell(b), ncol=length(time))
+		d <- cbind(from@index, from@data[,1])
+		for (i in 1:length(time)) {
+			s <- subset(d, d[,2] == i)
+			m[s[,1], i] <- s[,3]
+		}
+		setValues(b, m)
+	}
+)
 
 
 

@@ -6,7 +6,7 @@
 # Licence GPL v3
 
 
-.zipKML <- function(kml, image, zip) {
+.zipKML <- function(kml, image, zip, overwrite=FALSE) {
 	if (zip == "") {
 		zip <- Sys.getenv('R_ZIPCMD', 'zip')
 	}
@@ -16,10 +16,16 @@
 		setwd(dirname(kml))
 		kml <- basename(kml)
 		kmz <- extension(kml, '.kmz')
+		
+		if (file.exists(kmz) {
+			if (overwrite) {
+				file.remove(kmz)
+			} else {
+				stop('kml file created, but kmz file exists, use "overwrite=TRUE" to overwrite it')
+			}
+		}	
+		
 		image <- basename(image)
-		if (file.exists(kmz)) {
-			x <- file.remove(kmz)
-		}
 		if (zip=='7z') {
 			kmzzip <- extension(kmz, '.zip')
 			cmd <- paste(zip, 'a', kmzzip, kml, image, collapse=" ")
@@ -44,7 +50,7 @@
 
 setMethod('KML', signature(x='RasterStackBrick'), 
 
-function (x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', ...) {
+function (x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...) {
 
     if (! .couldBeLonLat(x)) { 
         stop("CRS of x must be longitude/latitude")
@@ -72,6 +78,14 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpix
 	x <- sampleRegular(x, size=maxpixels, asRaster = TRUE, useGDAL=TRUE)
 	kmlfile <- filename
 	extension(kmlfile) <- '.kml'
+	if (file.exists(kmlfile)) {
+		if (overwrite) {
+			file.remove(kmlfile)
+		} else {
+			stop('kml file exists, use "overwrite=TRUE" to overwrite it')
+		}
+	}	
+	
 	
 	name <- names(x)
 
@@ -112,7 +126,7 @@ function (x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpix
 
     kml <- c(kml, "</Folder>", "</kml>")
     cat(paste(kml, sep="", collapse="\n"), file=kmlfile, sep = "")
-	.zipKML(kmlfile, imagefile, zip)
+	.zipKML(kmlfile, imagefile, zip, overwrite=overwrite)
 }
 )
 

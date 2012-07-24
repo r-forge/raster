@@ -19,8 +19,13 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 			alpha <- paste(rep(a, each=16), rep(a, times=16), sep='')[alpha]
 			col <- paste(substr(col, 1, 7), alpha, sep="")
 		}
+		
+		nl <- nlayers(x)
+		if (nl == 0) {
+			stop('Raster object has no cell values')
+		}
 
-		if (nlayers(x) == 1) {
+		if (nl == 1) {
 			if (!missing(y)) {
 				if (is.character(y)) {
 					if (is.factor(x)) {
@@ -49,7 +54,7 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 		}
 	
 		if (missing(y)) {
-			y <- 1:nlayers(x)
+			y <- 1:nl
 			if (length(y) > maxnl) {
 				y <- 1:maxnl
 			}
