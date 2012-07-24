@@ -16,12 +16,12 @@ See package plotKML for more advanced functionality
 
 \usage{
 \S4method{KML}{RasterLayer}(x, filename, col=rev(terrain.colors(255)), 
-  colNA=NA, maxpixels=100000, blur=1, zip='', ...)
+  colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...)
 
 \S4method{KML}{RasterStackBrick}(x, filename, time=NULL, 
-  col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', ...)
+  col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...)
 
-\S4method{KML}{Spatial}(x, filename, zip='', ...)
+\S4method{KML}{Spatial}(x, filename, zip='', overwrite=FALSE, ...)
 }
 
 \arguments{
@@ -33,7 +33,8 @@ See package plotKML for more advanced functionality
 \item{maxpixels}{maximum number of pixels. If ncell(raster) > maxpixels, sampleRegular is used to reduce the number of pixels}
 \item{blur}{Integer (default=1). Higher values help avoid blurring of isolated pixels (at the expense of a png file that is blur^2 times larger)}
 \item{zip}{If there is no zip program on your path (on windows), you can supply the full path to a zip.exe here, in order to make a KMZ file}
-\item{...}{Additional arguments that can be passed to \link[graphics]{image}}
+\item{overwrite}{logical. If \code{TRUE}, overwrite the file if it exists}
+\item{...}{If \code{x} is a Raster* object, additional arguments that can be passed to \link[graphics]{image}}
 }
 
 

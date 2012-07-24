@@ -216,9 +216,8 @@ setAs('STFDF', 'RasterBrick',
 )
 
 
-
 setAs('STSDF', 'RasterBrick', 
-	test <- function(from) {
+	function(from) {
 		time <- from@time
 		r <- raster(from@sp)
 		b <- brick(r, nl=length(time))
