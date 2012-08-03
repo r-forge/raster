@@ -147,17 +147,6 @@ setClass('.SingleLayerData',
 
 
 
-setClass('.SingleLayerDataSparse', 
-	contains = '.SingleLayerData',
-	representation (
-		indices = 'vector'
-	),
-	prototype (	
-		indices = vector(mode='numeric')
-	)
-)
-
-
 
 setClass ('.RasterLegend',
 	representation (
@@ -187,19 +176,6 @@ setClass ('RasterLayer',
 	)
 
 
-setClass ('.RasterLayerSparse',
-	contains = 'Raster',
-	representation (
-		file = '.RasterFile',
-		data = '.SingleLayerData',
-		legend = '.RasterLegend',
-		history = 'list'
-		),
-	prototype (
-		history = list()
-		)
-	)
-	
 
 setClass('.MultipleRasterData', 
 	representation (
@@ -254,42 +230,6 @@ setClass ('RasterBrick',
 	}
 )
 
-
-setClass('.QuadRasterData', 
-	representation (
-		values='array',
-		offset='numeric',
-		gain='numeric',
-		inmemory='logical',
-		fromdisk='logical',
-		nlayers='integer',
-		nsteps='integer',
-		dropped = 'vector',
-		isfactor = 'logical',
-		attributes = 'list',
-		haveminmax = 'logical',
-		min = 'vector',
-		max = 'vector'
-		),
-	prototype (	
-		values=array(NA,c(0,0,0)),
-		offset=0,
-		gain=1,
-		#indices =vector(mode='numeric'),
-		inmemory=FALSE,
-		fromdisk=FALSE,
-		nlayers=as.integer(0),
-		dropped=NULL,
-		isfactor = FALSE,
-		attributes = list(),
-		haveminmax = FALSE,
-		min = c(Inf),
-		max = c(-Inf)
-	),	
-	validity = function(object) {
-	}
-)
-
 	
 	
 setClass ('RasterStack',
@@ -332,32 +272,46 @@ setClass ('.RasterList',
 )
 
 
+setClass ('RasterLayerSparse',
+	contains = 'RasterLayer',
+	representation (
+		index = 'vector'
+	),
+	prototype (
+		index = vector(mode='numeric')
+	)
+)	
 
-setClass ('.RasterQuadBrick',
+setClass ('RasterBrickSparse',
 	contains = 'RasterBrick',
 	representation (
-		nlevels = 'integer',
-		nsteps = 'integer'
-	) ,
+		index = 'vector'
+	),
 	prototype (
-		nlevels = as.integer(0),
-		nsteps = as.integer(0)
+		index = vector(mode='numeric')
 	)
-)
+)	
 
-setClass ('.RasterQuadStack',
-	contains = 'RasterStack',
+
+setClass ('RasterQuad',
+	contains = 'Raster',
 	representation (
-		nlevels = 'integer',
-		nsteps = 'integer'
-	) ,
+	    filename ='character',
+		bricks ='list'
+		),
 	prototype (
-		nlevels = as.integer(0),
-		nsteps = as.integer(0)
-	)
+		filename='',
+		bricks = list()
+		),
+	validity = function(object) {
+		if (length(object@bricks) > 1) {
+			test <- compare(object@bricks, extent=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
+		} else {
+			test <- TRUE
+		}
+		return(test)
+	}
 )
-
-
 
 
 #setClassUnion("RasterStackBrickList", c("RasterStack", "RasterBrick", "RasterList"))

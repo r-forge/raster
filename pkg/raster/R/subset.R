@@ -1,4 +1,4 @@
-# Authors: Robert J. Hijmans, r.hijmans@gmail.com 
+# Authors: Robert J. Hijmans
 # Date :  August 2009
 # Version 1.0
 # Licence GPL v3
@@ -72,20 +72,25 @@ function(x, subset, drop=TRUE, ...) {
 		varname <- "" 
 	}
 
+	nav <- NAvalue(x)
 	
 	if (fromDisk(x)) {
 		if (drop & length(subset)==1) {
-			return( raster(filename(x), band=subset, varname=varname) )
+			x <- raster(filename(x), band=subset, varname=varname)
 		} else {
-			return( stack(filename(x), bands=subset, varname=varname) )
+			x <- stack(filename(x), bands=subset, varname=varname)
 		}
+		NAvalue(x) <- nav
+		return(x)
 	} else {
 		if (drop & length(subset)==1) {
 			if (hasValues(x)) {
-				return(raster(x, subset))
+				x <- raster(x, subset)
 			} else {
-				return(raster(x))			
+				x <- raster(x)
 			}
+			NAvalue(x) <- nav
+			return(x)	
 		}
 	
 		if (hasValues(x)) {
