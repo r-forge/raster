@@ -8,8 +8,18 @@
 
 	if (!require(ncdf)) { stop('You need to install the ncdf package first') }
 
-	nc <- open.ncdf(filename)
-	on.exit( close.ncdf(nc) )
+	
+		
+	if (isTRUE(attr(x, "ncdf4"))) {
+		nc <- nc_open(filename)
+		on.exit( nc_close(nc) )		
+		ncdf4 <- TRUE
+	
+	} else {
+		nc <- open.ncdf(x@file@name)
+		on.exit( close.ncdf(nc) )
+		ncdf4 <- FALSE
+	}
 
 	zvar <- .varName(nc, varname)
 
@@ -36,11 +46,11 @@
 			names(st@z) <- nc$var[[zvar]]$dim[[dim3]]$units[bands]
 			st@z <- list( nc$var[[zvar]]$dim[[dim3]]$vals[bands] )
 			if ( nc$var[[zvar]]$dim[[dim3]]$name == 'time' ) {	
-				st <- try( .doTime(st, nc, zvar, dim3)  )
+				st <- try( .doTime(st, nc, zvar, dim3, ncdf4)  )
 			}
 			st@layers = lapply(list(bands), function(x){
-												r@data@band <- x; 
-												r@layernames <- st@z[[1]][x]; 
+												r@data@band <- x;
+												r@layernames <- st@z[[1]][x];
 												return(r)} 
 											)
 			st@layernames <- getZ(st)

@@ -4,6 +4,7 @@ To do: focal for multi-layer objects
 fixed bug in terrain/flowdir reported by Marie Morfin
 zlim (argument to plot) did not function properly when used to extend the values range (reported by Bart)
 writeRaster now honours the value of the NAvalue argument when writing a ncdf file (requested by Thiago Veloso)
+added support for the ncdf4 library
 fixed many spelling mistakes in the documentation reported by Phil Heilman
 
 --- 27-June-2012, version 2.0-08
