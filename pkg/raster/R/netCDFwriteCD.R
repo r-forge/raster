@@ -7,7 +7,14 @@
 .startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, att, 
 		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, ...) {
 
-	if (!require(ncdf)) { stop('You need to install the ncdf package') }
+	if (require(ncdf4)) {
+		ncdf4 <- TRUE
+	} else {
+		if (!require(ncdf)) {
+			stop('You need to install the ncdf or ncdf4 package') 
+		}
+		ncdf4 <- FALSE
+	} 
 
 	filename = trim(filename)
 	if (filename == '') { stop('provide a filename') }
@@ -15,9 +22,7 @@
 	if (file.exists(filename) & !overwrite) {
 		stop('file exists, use overwrite=TRUE to overwrite it')
 	}
-	
 	dataType(x) <- datatype
-	
 	datatype = .getNetCDFDType(datatype)
 	
 	if (.couldBeLonLat(x)) {
@@ -41,67 +46,135 @@
 	if (missing(varunit))  varunit <- ''
 	if (missing(longname))  longname <- varname
 	
+
+	if (ncdf4) {
 	
-	xdim <- dim.def.ncdf( xname, xunit, xFromCol(x, 1:ncol(x)) )
-	ydim <- dim.def.ncdf( yname, yunit, yFromRow(x, 1:nrow(x)) )
-	if (inherits(x, 'RasterBrick')) {
-		zv <- 1:nlayers(x)
-		z <- getZ(x)
-		if (!is.null(z)) {
-			zv[] <- as.numeric(z)
+		xdim <- ncdim_def( xname, xunit, xFromCol(x, 1:ncol(x)) )
+		ydim <- ncdim_def( yname, yunit, yFromRow(x, 1:nrow(x)) )
+		if (inherits(x, 'RasterBrick')) {
+			zv <- 1:nlayers(x)
+			z <- getZ(x)
+			if (!is.null(z)) {
+				zv[] <- as.numeric(z)
+			}
+
+			zdim <- ncdim_def( zname, zunit, zv, unlim=TRUE )
+			vardef <- ncvar_def( varname, varunit, list(xdim,ydim,zdim), NAvalue(x), prec = datatype )
+			#vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim,zdim), -3.4e+38 )
+		} else {
+			#vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim), -3.4e+38 )
+			vardef <- ncvar_def( varname, varunit, list(xdim,ydim), NAvalue(x), prec = datatype )
+		}
+		nc <- nc_create(filename, vardef)
+
+		if (! missing(zatt)){
+			for (i in 1:length(zatt)) {
+				a <- trim(unlist(strsplit(zatt[i], '=')))
+				ncatt_put(nc, zname, a[1], a[2])	
+			}
 		}
 
-		zdim <- dim.def.ncdf( zname, zunit, zv, unlim=TRUE )
-		vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim,zdim), NAvalue(x), prec = datatype )
-		#vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim,zdim), -3.4e+38 )
-	} else {
-		#vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim), -3.4e+38 )
-		vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim), NAvalue(x), prec = datatype )
-	}
-	nc <- create.ncdf(filename, vardef)
+		if (!missing(NAflag)) {
+			x@file@nodatavalue <- NAflag
+		} 
+		
+		ncatt_put(nc, varname, '_FillValue', x@file@nodatavalue)
+		ncatt_put(nc, varname, 'missing_value', x@file@nodatavalue)
+		ncatt_put(nc, varname, 'long_name', longname)
 
-	if (! missing(zatt)){
-		for (i in 1:length(zatt)) {
-			a <- trim(unlist(strsplit(zatt[i], '=')))
-			att.put.ncdf(nc, zname, a[1], a[2])	
+		proj <- projection(x) 
+		if (proj != "NA") { 
+			ncatt_put(nc, varname, 'projection', proj)
+			ncatt_put(nc, varname, 'projection_format', 'PROJ.4')
 		}
-	}
 
-	if (!missing(NAflag)) {
-		x@file@nodatavalue <- NAflag
-	} 
+		if (! missing(varatt)){
+			for (i in 1:length(varatt)) {
+				a <- trim(unlist(strsplit(varatt[i], '=')))
+				ncatt_put(nc, varname, a[1], a[2])	
+			}
+		}
+
+		ncatt_put(nc, 0, 'Conventions', 'CF-1.4')
+		if (! missing(att)){
+			for (i in 1:length(att)) {
+				a <- trim(unlist(strsplit(att[i], '=')))
+				ncatt_put(nc, 0, a[1], a[2])	
+			}
+		}
+
+		
+		pkgversion <- drop(read.dcf(file=system.file("DESCRIPTION", package='raster'), fields=c("Version")))
+		ncatt_put(nc, 0, 'created_by', paste('R, packages ncdf and raster (version ', pkgversion, ')', sep=''))
+		ncatt_put(nc, 0, 'date', format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
+
+		nc_close(nc)
+		
+		attr(x, 'ncdf4') <- TRUE
+
+	} else {  # library(ncdf)
 	
-	att.put.ncdf(nc, varname, '_FillValue', x@file@nodatavalue)
-	att.put.ncdf(nc, varname, 'missing_value', x@file@nodatavalue)
-	att.put.ncdf(nc, varname, 'long_name', longname)
+		xdim <- dim.def.ncdf( xname, xunit, xFromCol(x, 1:ncol(x)) )
+		ydim <- dim.def.ncdf( yname, yunit, yFromRow(x, 1:nrow(x)) )
+		if (inherits(x, 'RasterBrick')) {
+			zv <- 1:nlayers(x)
+			z <- getZ(x)
+			if (!is.null(z)) {
+				zv[] <- as.numeric(z)
+			}
 
-	proj <- projection(x) 
-	if (proj != "NA") { 
-		att.put.ncdf(nc, varname, 'projection', proj)
-		att.put.ncdf(nc, varname, 'projection_format', 'PROJ.4')
-	}
-
-	if (! missing(varatt)){
-		for (i in 1:length(varatt)) {
-			a <- trim(unlist(strsplit(varatt[i], '=')))
-			att.put.ncdf(nc, varname, a[1], a[2])	
+			zdim <- dim.def.ncdf( zname, zunit, zv, unlim=TRUE )
+			vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim,zdim), NAvalue(x), prec = datatype )
+			#vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim,zdim), -3.4e+38 )
+		} else {
+			#vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim), -3.4e+38 )
+			vardef <- var.def.ncdf( varname, varunit, list(xdim,ydim), NAvalue(x), prec = datatype )
 		}
-	}
+		nc <- create.ncdf(filename, vardef)
 
-	att.put.ncdf(nc, 0, 'Conventions', 'CF-1.4')
-	if (! missing(att)){
-		for (i in 1:length(att)) {
-			a <- trim(unlist(strsplit(att[i], '=')))
-			att.put.ncdf(nc, 0, a[1], a[2])	
+		if (! missing(zatt)){
+			for (i in 1:length(zatt)) {
+				a <- trim(unlist(strsplit(zatt[i], '=')))
+				att.put.ncdf(nc, zname, a[1], a[2])	
+			}
 		}
+
+		if (!missing(NAflag)) {
+			x@file@nodatavalue <- NAflag
+		} 
+		
+		att.put.ncdf(nc, varname, '_FillValue', x@file@nodatavalue)
+		att.put.ncdf(nc, varname, 'missing_value', x@file@nodatavalue)
+		att.put.ncdf(nc, varname, 'long_name', longname)
+
+		proj <- projection(x) 
+		if (proj != "NA") { 
+			att.put.ncdf(nc, varname, 'projection', proj)
+			att.put.ncdf(nc, varname, 'projection_format', 'PROJ.4')
+		}
+
+		if (! missing(varatt)){
+			for (i in 1:length(varatt)) {
+				a <- trim(unlist(strsplit(varatt[i], '=')))
+				att.put.ncdf(nc, varname, a[1], a[2])	
+			}
+		}
+
+		att.put.ncdf(nc, 0, 'Conventions', 'CF-1.4')
+		if (! missing(att)){
+			for (i in 1:length(att)) {
+				a <- trim(unlist(strsplit(att[i], '=')))
+				att.put.ncdf(nc, 0, a[1], a[2])	
+			}
+		}
+
+		
+		pkgversion = drop(read.dcf(file=system.file("DESCRIPTION", package='raster'), fields=c("Version")))
+		att.put.ncdf(nc, 0, 'created_by', paste('R, packages ncdf and raster (version ', pkgversion, ')', sep=''))
+		att.put.ncdf(nc, 0, 'date', format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
+
+		close.ncdf(nc)
 	}
-
-	
-	pkgversion = drop(read.dcf(file=system.file("DESCRIPTION", package='raster'), fields=c("Version")))
-	att.put.ncdf(nc, 0, 'created_by', paste('R, packages ncdf and raster (version ', pkgversion, ')', sep=''))
-	att.put.ncdf(nc, 0, 'date', format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
-
-	close.ncdf(nc)
 	
 	x@data@min <- rep(Inf, nlayers(x))
 	x@data@max <- rep(-Inf, nlayers(x))
@@ -114,11 +187,17 @@
 
 
 .stopWriteCDF <-  function(x) {
-	nc <- open.ncdf(x@file@name, write=TRUE)
-	on.exit( close.ncdf(nc) )
-	
-	att.put.ncdf(nc, x@title, 'min', as.numeric(x@data@min))
-	att.put.ncdf(nc, x@title, 'max', as.numeric(x@data@max))
+	if (isTRUE(attr(x, "ncdf4"))) {
+		nc <- nc_open(x@file@name, write=TRUE)
+		on.exit( nc_close(nc) )
+		ncatt_put(nc, x@title, 'min', as.numeric(x@data@min))
+		ncatt_put(nc, x@title, 'max', as.numeric(x@data@max))
+	} else {
+		nc <- open.ncdf(x@file@name, write=TRUE)
+		on.exit( close.ncdf(nc) )
+		att.put.ncdf(nc, x@title, 'min', as.numeric(x@data@min))
+		att.put.ncdf(nc, x@title, 'max', as.numeric(x@data@max))
+	}
 
 	if (inherits(x, 'RasterBrick')) {
 		r <- brick(x@file@name)
@@ -142,10 +221,15 @@
 	nr <- length(v) / x@ncols
 	v <- matrix(v, ncol=nr)
 
-	nc <- open.ncdf(x@file@name, write=TRUE)
-	try ( put.var.ncdf(nc, x@title, v, start=c(1, start), count=c(x@ncols, nr)) )
-	
-	close.ncdf(nc)
+	if (isTRUE(attr(x, "ncdf4"))) {
+		nc <- nc_open(x@file@name)
+		on.exit( nc_close(nc) )
+		try ( ncvar_put(nc, x@title, v, start=c(1, start), count=c(x@ncols, nr)) )
+	} else {
+		nc <- open.ncdf(x@file@name, write=TRUE)
+		try ( put.var.ncdf(nc, x@title, v, start=c(1, start), count=c(x@ncols, nr)) )
+		close.ncdf(nc)
+	}
 	return(x)
 }
 
@@ -183,10 +267,16 @@
 	v[is.na(v)] = x@file@nodatavalue
 	rows <- length(v) / (ncols * nl)
 	v <- array(v, c(rows, ncols, nl))
-	
-	nc <- open.ncdf(x@file@name, write=TRUE)
-	try ( put.var.ncdf(nc, x@title, v, start=c(1, start, lstart), count=c(ncols, rows, lend) ) )
-	close.ncdf(nc)
+
+	if (isTRUE(attr(x, "ncdf4"))) {
+		nc <- nc_open(x@file@name)
+		on.exit( nc_close(nc) )
+		try ( ncvar_put(nc, x@title, v, start=c(1, start, lstart), count=c(ncols, rows, lend) ) )
+	} else {
+		nc <- open.ncdf(x@file@name, write=TRUE)
+		try ( put.var.ncdf(nc, x@title, v, start=c(1, start, lstart), count=c(ncols, rows, lend) ) )
+		close.ncdf(nc)
+	}
 	
 	return(x)
 }

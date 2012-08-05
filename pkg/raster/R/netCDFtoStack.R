@@ -13,12 +13,10 @@
 	if (isTRUE(attr(x, "ncdf4"))) {
 		nc <- nc_open(filename)
 		on.exit( nc_close(nc) )		
-		ncdf4 <- TRUE
 	
 	} else {
-		nc <- open.ncdf(x@file@name)
+		nc <- open.ncdf(filename)
 		on.exit( close.ncdf(nc) )
-		ncdf4 <- FALSE
 	}
 
 	zvar <- .varName(nc, varname)
