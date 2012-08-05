@@ -6,21 +6,21 @@
 
 .stackCDF <- function(filename, varname='', bands='') {
 
-	if (!require(ncdf)) { stop('You need to install the ncdf package first') }
-
-	
-		
-	if (isTRUE(attr(x, "ncdf4"))) {
+	if (require(ncdf4)) {
+		ncdf4 <- TRUE
 		nc <- nc_open(filename)
 		on.exit( nc_close(nc) )		
-	
+		
 	} else {
+		if (!require(ncdf)) {
+			stop('You need to install the ncdf or ncdf4 package') 
+		}
+		ncdf4 <- FALSE
 		nc <- open.ncdf(filename)
-		on.exit( close.ncdf(nc) )
-	}
+		on.exit( close.ncdf(nc) )		
+	} 
 
 	zvar <- .varName(nc, varname)
-
 	dims <- nc$var[[zvar]]$ndims	
 	
 	dim3 <- 3
