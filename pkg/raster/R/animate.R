@@ -17,7 +17,7 @@
 	}
 	
     i <- 1
-	plot(x[[i]], main=main[i], zlim=z)	
+	plot(x[[i]], main=main[i], zlim=zlim)	
 	while (TRUE) {
 		i <- i + 1
 		if (i > nl) i <- 1

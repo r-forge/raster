@@ -23,7 +23,7 @@
 \title{Create a RasterLayer object}
 
 \description{
-Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a filename, an Extent object, a matrix, an 'image' object, or from a Raster*, Spatial*, asc, kasc (adehabitat*), grf (geoR) or kde object.
+Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a file, an Extent object, a matrix, an 'image' object, or from a Raster*, Spatial*, asc, kasc (adehabitat*), grf (geoR) or kde object.
 
 In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values, it only has the parameters that describe the RasterLayer.
 
@@ -65,10 +65,11 @@ For netCDF files (CF convention):
 \tab \code{varname} \tab character. The variable name (e.g. 'altitude' or 'precipitation'. If not supplied and the file has multiple variables are a guess will be made (and reported))\cr
 \tab \code{band} \tab integer > 0. The 'band' (layer) number of the file. E.g., the 'time' variable (if there are any) (default=NA)\cr
 }
-To read netCDF files, the \code{ncdf} package needs to be available.  
+
+To read netCDF files, the \code{ncdf} or the \code{ncdf4} package needs to be available. If both are available, \code{ncdf4} is used. Only the \code{ncdf4} package can read the most recent version (4) of the netCDF format (as well as older versions), for windows it not available on CRAN but can be downloaded \href{http://cirrus.ucsd.edu/~pierce/ncdf/}{here}.
 
 
-If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 'native' raster package format and those that can be read via rgdal. See \code{\link[rgdal]{readGDAL}} help for supported file types.
+If \code{x} is a character value, it should be a filename of a file that the raster package can read. Supported file types are the 'native' raster package format and those that can be read via \code{rgdal}. See \code{\link[rgdal]{readGDAL}} help for supported file types.
 
 
 \bold{2) Create a RasterLayer object from scratch}
