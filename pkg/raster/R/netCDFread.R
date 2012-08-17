@@ -135,9 +135,9 @@
 	}
 	
 	if (ncdf4) {
-		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
-	} else {
 		d <- ncvar_get(nc, varid=zvar, start=start, count=count)	
+	} else {
+		d <- get.var.ncdf(nc, varid=zvar, start=start, count=count)
 	}
 	
 

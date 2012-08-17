@@ -48,10 +48,13 @@
 		if (greg) {
 			time <- as.Date(time, origin=startDate)
 		} else {
-			a <- as.numeric(time)/365
-			year <- trunc(a)
+			startyear <-  as.numeric(format(startDate, "%Y"))
+			startmonth <- as.numeric(format(startDate, "%m"))
+			startday <- as.numeric(format(startDate, "%d"))
+			year <- trunc( as.numeric(time)/365 )
 			doy <- (time - (year * 365))
-			time <- as.Date(doy, origin=paste(year, "-1-1", sep='')) - 1
+			origin <- paste(year+startyear, "-", startmonth, "-", startday, sep='')
+			time <- as.Date(doy, origin=origin)		
 		}
 		x@z <- list(time)
 		names(x@z) <- as.character('Date')
@@ -114,7 +117,7 @@
 
 .rasterObjectFromCDF <- function(filename, varname='', band=NA, type='RasterLayer', lvar=3, level=0, warn=TRUE, ...) {
 
-	if (require(ncdf4)) {
+	if (require(ncdf4, quietly=TRUE)) {
 		ncdf4 <- TRUE
 		nc <- nc_open(filename)
 		on.exit( nc_close(nc) )		

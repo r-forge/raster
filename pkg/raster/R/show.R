@@ -49,7 +49,7 @@ setMethod ('show' , 'RasterLayer',
 				cat('values      : in memory\n')			
 			}
 				
-			cat('layer name  :', names(object), '\n')
+			cat('names       :', names(object), '\n')
 			
 			if (object@data@haveminmax) {
 				cat('min value   :' , minValue(object), '\n')
@@ -90,7 +90,7 @@ setMethod ('show' , 'RasterLayer',
 				name <- names(object@z)
 				if (is.null(name)) name <- 'z-value'
 				name <- paste(sprintf("%-12s", name), ':', sep='')
-				cat(name, z[1], '\n')
+				cat(name, as.character(z[1]), '\n')
 			}
 
 			if (object@file@driver == 'netcdf') {
@@ -137,7 +137,7 @@ setMethod ('show' , 'RasterBrick',
 				cat('values      : in memory\n')			
 			}
 			
-			cat('layer names :', paste(ln, collapse=', '), '\n')
+			cat('names       :', paste(ln, collapse=', '), '\n')
 
 			if (object@data@haveminmax) {
 				minv <- format(minValue(object), digits=2)
@@ -165,9 +165,9 @@ setMethod ('show' , 'RasterBrick',
 			if (is.null(name)) name <- 'z-value'
 			name <- paste(sprintf("%-12s", name), ':', sep='')
 			if (length(z) < mnr) {
-				cat(name, paste(z, collapse=', '), '\n')
+				cat(name, paste(as.character(z), collapse=', '), '\n')
 			} else {
-				cat(name, paste(range(z), collapse=', '), '(min, max)\n')
+				cat(name, paste(as.character(range(z)), collapse=', '), '(min, max)\n')
 			}
 		}
 		
@@ -213,7 +213,7 @@ setMethod ('show' , 'RasterStack',
 			if (nl > mnr) {
 				ln <- c(ln[1:mnr], '...')
 			}
-			cat('layer names :', paste(ln, collapse=', '), '\n')
+			cat('names       :', paste(ln, collapse=', '), '\n')
 			
 			minv <- format(minValue(object), digits=2)
 			maxv <- format(maxValue(object), digits=2)
@@ -236,10 +236,10 @@ setMethod ('show' , 'RasterStack',
 			if (name == '') name <- 'z-value'
 			name <- paste(sprintf("%-12s", name), ':', sep='')
 			if (length(z) < mnr) {
-				cat(name, paste(z, collapse=', '), '\n')
+				cat(name, paste(as.character(z), collapse=', '), '\n')
 			} else {
 				z <- range(z)
-				cat(name, paste(z, collapse=' - '), '(range)\n')
+				cat(name, paste(as.character(z), collapse=' - '), '(range)\n')
 			}
 		}
 		
