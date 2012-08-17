@@ -163,7 +163,7 @@ setMethod('raster', signature(x='RasterStack'),
 
 setMethod('raster', signature(x='RasterBrick'), 
 	function(x, layer=0){
-		newindex = -1
+		newindex <- -1
 		if (nlayers(x) > 0) {
 			if (!is.numeric(layer)) {
 				newindex <- which(names(x) == layer)[1]
@@ -207,11 +207,14 @@ setMethod('raster', signature(x='RasterBrick'),
 				if ( x@data@inmemory ) {
 					r@data@values <- x@data@values[,dindex]
 				}
+				
+				# ncdf files
 				zvar <- try(slot(x@data, 'zvar'), silent=TRUE)
 				if (class(zvar) != 'try-error') {
 					attr(r@data, "zvar") <- zvar
 					attr(r@data, "dim3") <- x@data@dim3
 					attr(r@data, "level") <- x@data@level
+					attr(r, "ncdf4") <- attr(x, "ncdf4")
 				}
 
 				r@data@offset <- x@data@offset
