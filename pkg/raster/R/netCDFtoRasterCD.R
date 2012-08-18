@@ -5,6 +5,25 @@
 # Aug 2011, adapted for use with ncdf4 (or ncdf) libraries
 
 
+.NCDFversion4 <- function() {
+	ncdf4 <- getOption('rasterNCDF4')
+	if (is.null(ncdf4)) {
+#		if (require(ncdf4, quietly=TRUE)) {
+		if (require(ncdf4)) {
+			options(rasterNCDF4 = TRUE)
+			ncdf4 <- TRUE
+		} else {
+			if (!require(ncdf)) {
+				stop('You need to install the ncdf or ncdf4 package') 
+			}
+			options(rasterNCDF4 = FALSE)
+			ncdf4 <- FALSE
+		}
+	}
+	return(ncdf4)
+}
+
+
 .doTime <- function(x, nc, zvar, dim3, ncdf4) {
 	dodays <- TRUE
 	dohours <- FALSE
@@ -117,17 +136,16 @@
 
 .rasterObjectFromCDF <- function(filename, varname='', band=NA, type='RasterLayer', lvar=3, level=0, warn=TRUE, ...) {
 
-	if (require(ncdf4, quietly=TRUE)) {
-		ncdf4 <- TRUE
+	ncdf4 <- .NCDFversion4()
+
+	if (ncdf4) {
+		options(rasterNCDF4 = TRUE)
 		nc <- nc_open(filename)
 		on.exit( nc_close(nc) )		
 		conv <- ncatt_get(nc, 0, "Conventions")
 		
 	} else {
-		if (!require(ncdf)) {
-			stop('You need to install the ncdf or ncdf4 package') 
-		}
-		ncdf4 <- FALSE
+		options(rasterNCDF4 = FALSE)
 		nc <- open.ncdf(filename)
 		on.exit( close.ncdf(nc) )		
 		conv <- att.get.ncdf(nc, 0, "Conventions")
@@ -275,8 +293,6 @@
 	
 	attr(r, "prj") <- prj 
 	r@file@driver <- "netcdf"	
-	
-	attr(r, "ncdf4") <- ncdf4
 	
 	if (natest$hasatt) { 
 		r@file@nodatavalue <- as.numeric(natest$value)

@@ -214,7 +214,6 @@ setMethod('raster', signature(x='RasterBrick'),
 					attr(r@data, "zvar") <- zvar
 					attr(r@data, "dim3") <- x@data@dim3
 					attr(r@data, "level") <- x@data@level
-					attr(r, "ncdf4") <- attr(x, "ncdf4")
 				}
 
 				r@data@offset <- x@data@offset

@@ -11,7 +11,7 @@ setMethod ('print', 'Raster',
 			show(x)
 		} else {
 			if (x@file@driver == 'netcdf') {
-				if (isTRUE(attr(x, "ncdf4"))) {
+				if (getOption('rasterNCDF4')) {
 					nc <- nc_open(x@file@name)
 					print(nc)
 					nc_close(nc)

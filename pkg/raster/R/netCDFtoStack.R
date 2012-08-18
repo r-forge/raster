@@ -6,16 +6,13 @@
 
 .stackCDF <- function(filename, varname='', bands='') {
 
-	if (require(ncdf4)) {
-		ncdf4 <- TRUE
+	ncdf4 <- .NCDFversion4()
+
+	if (ncdf4) {
 		nc <- nc_open(filename)
 		on.exit( nc_close(nc) )		
 		
 	} else {
-		if (!require(ncdf)) {
-			stop('You need to install the ncdf or ncdf4 package') 
-		}
-		ncdf4 <- FALSE
 		nc <- open.ncdf(filename)
 		on.exit( close.ncdf(nc) )		
 	} 

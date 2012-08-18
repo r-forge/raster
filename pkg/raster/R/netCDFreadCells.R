@@ -37,7 +37,7 @@
 	zvar = x@data@zvar
 	time = x@data@band
 	
-	if (isTRUE(attr(x, "ncdf4"))) {
+	if (isTRUE(getOption('rasterNCDF4'))) {
 		nc <- nc_open(x@file@name)
 		on.exit( nc_close(nc) )		
 		getfun <- ncvar_get
@@ -118,7 +118,7 @@
 	if ( x@file@toptobottom ) { rows <- x@nrows - rows + 1 }
 		
 
-	if (isTRUE(attr(x, "ncdf4"))) {
+	if (getOption('rasterNCDF4')) {
 		nc <- nc_open(x@file@name)
 		on.exit( nc_close(nc) )		
 		getfun <- ncvar_get

@@ -4,18 +4,13 @@
 # Licence GPL v3
 
 
+
 .startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, att, 
 		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, ...) {
 
-	if (require(ncdf4)) {
-		ncdf4 <- TRUE
-	} else {
-		if (!require(ncdf)) {
-			stop('You need to install the ncdf or ncdf4 package') 
-		}
-		ncdf4 <- FALSE
-	} 
-
+		
+	ncdf4 <- .NCDFversion4()
+		
 	filename = trim(filename)
 	if (filename == '') { stop('provide a filename') }
 	extension(filename) <- .defaultExtension(format='CDF')
@@ -110,8 +105,6 @@
 
 		nc_close(nc)
 		
-		attr(x, 'ncdf4') <- TRUE
-
 	} else {  # library(ncdf)
 	
 		xdim <- dim.def.ncdf( xname, xunit, xFromCol(x, 1:ncol(x)) )
@@ -187,7 +180,7 @@
 
 
 .stopWriteCDF <-  function(x) {
-	if (isTRUE(attr(x, "ncdf4"))) {
+	if (getOption('rasterNCDF4')) {
 		nc <- nc_open(x@file@name, write=TRUE)
 		on.exit( nc_close(nc) )
 		ncatt_put(nc, x@title, 'min', as.numeric(x@data@min))
@@ -221,7 +214,7 @@
 	nr <- length(v) / x@ncols
 	v <- matrix(v, ncol=nr)
 
-	if (isTRUE(attr(x, "ncdf4"))) {
+	if (getOption('rasterNCDF4')) {
 		nc <- nc_open(x@file@name)
 		on.exit( nc_close(nc) )
 		try ( ncvar_put(nc, x@title, v, start=c(1, start), count=c(x@ncols, nr)) )
@@ -268,7 +261,7 @@
 	rows <- length(v) / (ncols * nl)
 	v <- array(v, c(rows, ncols, nl))
 
-	if (isTRUE(attr(x, "ncdf4"))) {
+	if (getOption('rasterNCDF4')) {
 		nc <- nc_open(x@file@name)
 		on.exit( nc_close(nc) )
 		try ( ncvar_put(nc, x@title, v, start=c(1, start, lstart), count=c(ncols, rows, lend) ) )

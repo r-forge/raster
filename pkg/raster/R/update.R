@@ -271,7 +271,7 @@ function(object, v, cell, band) {
 
 .updateNCDF <- function(object, v, cell, band) {
 		
-		if (isTRUE(attr(object, "ncdf4"))) {
+		if (isTRUE(getOption('rasterNCDF4'))) {
 			stop('update is currently only supported with the ncdf library, not with the ncdf4 library')
 		}
 
