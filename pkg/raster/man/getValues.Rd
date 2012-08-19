@@ -1,14 +1,19 @@
 \name{getValues}
+
 \alias{values}
 \alias{values,Raster-method}
 \alias{getValues}
+
 \alias{getValues,RasterLayer,missing,missing-method}
+\alias{getValues,RasterLayerSparse,missing,missing-method}
 \alias{getValues,RasterStack,missing,missing-method}
 \alias{getValues,RasterBrick,missing,missing-method}
 \alias{getValues,RasterLayer,numeric,missing-method}
+\alias{getValues,RasterLayerSparse,numeric,missing-method}
 \alias{getValues,RasterStack,numeric,missing-method}
 \alias{getValues,RasterBrick,numeric,missing-method}
 \alias{getValues,RasterLayer,numeric,numeric-method}
+\alias{getValues,RasterLayerSparse,numeric,numeric-method}
 \alias{getValues,RasterStack,numeric,numeric-method}
 \alias{getValues,RasterBrick,numeric,numeric-method}
   
@@ -22,13 +27,14 @@ getValues returns all values or the values for a number of rows of a Raster* obj
 
 \usage{
 getValues(x, row, nrows, ...)
+
 values(x, ...)
 }
 
 \arguments{
  \item{x}{Raster* object}
  \item{row}{Numeric. Row number, should be between 1 and nrow(x), or missing in which case all values are returned}
- \item{nrows}{Numeric. Number of rows. Should be an integer number > 0, or missing}
+ \item{nrows}{Numeric. Number of rows. Should be an integer > 0, or missing}
  \item{...}{Additional arguments, see Details}
 }
   

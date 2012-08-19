@@ -5,6 +5,7 @@
 \alias{BasicRaster-class}
 \alias{Raster-class}
 \alias{RasterLayer-class}
+\alias{RasterLayerSparse-class}
 \alias{RasterStack-class}
 \alias{RasterBrick-class}
 \alias{RasterStackBrick-class}
@@ -58,11 +59,11 @@ Objects can be created by calls of the form \code{new("RasterLayer", ...)}, or w
 }
 
 \section{Slots}{
-Slots for Raster* objects
+Slots for RasterLayer and RasterBrick objects
 	\describe{
     \item{\code{title}:}{Character} 
     \item{\code{file}:}{Object of class \code{".RasterFile"} }
-    \item{\code{data}:}{Object of class \code{".SingleLayerData"} or \code{".MultipleLayerData"}. Not in \code{RasterStack} objects}
+    \item{\code{data}:}{Object of class \code{".SingleLayerData"} or \code{".MultipleLayerData"}}
     \item{\code{history}:}{To record processing history, not yet in use }
     \item{\code{legend}:}{Object of class \code{.RasterLegend}, Default legend. Should store preferences for plotting. Not yet implemented except that it stores the color table of images, if available}
     \item{\code{extent}:}{Object of \code{\link{Extent-class}} }

@@ -282,7 +282,7 @@ setClass ('RasterLayerSparse',
 	)
 )	
 
-setClass ('RasterBrickSparse',
+setClass ('.RasterBrickSparse',
 	contains = 'RasterBrick',
 	representation (
 		index = 'vector'
@@ -293,7 +293,7 @@ setClass ('RasterBrickSparse',
 )	
 
 
-setClass ('RasterQuad',
+setClass ('.RasterQuad',
 	contains = 'Raster',
 	representation (
 	    filename ='character',
