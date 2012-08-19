@@ -71,8 +71,10 @@ function(x, format='') {
 	cr <- c(x@ncols, x@nrows)
 	
 	if ( inMemory(x) ) {
+		i <- x@index
+		v <- x@data@values
 		x <- rep(NA, ncell(x))
-		x[x@index] <- x@data@values
+		x[i] <- v
 	} else if ( fromDisk(x) ) {
 		# not yet implemented
 		### x <- .readRasterLayerValues(x, 1, x@nrows)

@@ -100,11 +100,10 @@ setMethod("Math", signature(x='RasterLayerSparse'),
 		funname <- as.character(sys.call(sys.parent())[[1]])
 
 		if (substr(funname, 1, 3) == 'cum' ) { 
-			r <- setValues(x, do.call(funname, list(x@data@values)))
+			setValues(x, do.call(funname, list(x@data@values)))
 		} else {
-			r <- setValues(r, callGeneric(x@data@values))
+			setValues(x, callGeneric(x@data@values))
 		}
-		return(r)
 	}
 )
 

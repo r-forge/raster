@@ -254,6 +254,20 @@ setAs('RasterLayer', 'matrix',
 	function(from){ return( getValues(from, format='matrix')) }
 )
 
+setAs('RasterLayer', 'RasterLayerSparse', 
+	function(from){ 
+		x <- new('RasterLayerSparse', from)
+		v <- na.omit(cbind(1:ncell(from), getValues(from)))
+		setValues(x, v[,2], v[,1])
+	}
+)
+
+setAs('RasterLayerSparse', 'RasterLayer', 
+	function(from){
+		raster(from)
+	}
+)
+
 
 
 

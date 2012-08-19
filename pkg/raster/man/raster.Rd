@@ -8,6 +8,7 @@
 \alias{raster,Extent-method}
 \alias{raster,BasicRaster-method}
 \alias{raster,RasterLayer-method}
+\alias{raster,RasterLayerSparse-method}
 \alias{raster,RasterStack-method}
 \alias{raster,RasterBrick-method}
 \alias{raster,Spatial-method}

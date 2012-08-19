@@ -102,8 +102,7 @@ setMethod('raster', signature(x='character'),
 
 setMethod('raster', signature(x='BasicRaster'), 
 	function(x) {
-		e <- x@extent
-		r <- raster(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
+		r <- raster(x@extent, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
 		if (rotated(x)) {
 			r@rotated <- TRUE
 			r@rotation <- x@rotation
@@ -114,15 +113,25 @@ setMethod('raster', signature(x='BasicRaster'),
 
 setMethod('raster', signature(x='RasterLayer'), 
 	function(x) {
-		e <- x@extent
-		r <- raster(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
-
+		r <- raster(x@extent, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
 		r@rotated <- x@rotated
 		r@rotation <- x@rotation
-		
 		r@file@blockrows <- x@file@blockrows
 		r@file@blockcols <- x@file@blockcols
 		return(r)
+	}
+)
+
+setMethod('raster', signature(x='RasterLayerSparse'), 
+	function(x) {
+		r <- raster(x@extent, nrows=x@nrows, ncols=x@ncols, crs=x@crs)
+		if (length(na.omit(x@data@values)) > 0) {
+			v <- rep(NA, ncell(r))
+			v[x@index] <- x@data@values
+			setValues(r, v)
+		} else {
+			r
+		}
 	}
 )
 
