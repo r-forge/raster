@@ -44,19 +44,14 @@ setMethod ('show' , 'RasterLayer',
 		if (hasValues(object)) {
 			fd <- object@data@fromdisk
 			if (fd) {
-				cat('values      :', filename(object), '\n')
+				cat('data source :', filename(object), '\n')
 			} else {
-				cat('values      : in memory\n')			
+				cat('data source : in memory\n')			
 			}
-				
 			cat('names       :', names(object), '\n')
-			
 			if (object@data@haveminmax) {
-				cat('min value   :' , minValue(object), '\n')
-				cat('max value   :' , maxValue(object), '\n')
+				cat('values      : ', minValue(object), ', ',  maxValue(object), '  (min, max)\n', sep="")
 			}
-		} else {
-			cat('values      : none\n')			
 		}
 
 
@@ -132,9 +127,9 @@ setMethod ('show' , 'RasterBrick',
 		if (hasValues(object)) {
 			fd <- object@data@fromdisk
 			if (fd) {
-				cat('values      :', filename(object), '\n')
+				cat('data source :', filename(object), '\n')
 			} else {
-				cat('values      : in memory\n')			
+				cat('data source : in memory\n')			
 			}
 			
 			cat('names       :', paste(ln, collapse=', '), '\n')
@@ -155,9 +150,7 @@ setMethod ('show' , 'RasterBrick',
 #				minv <- rep('?', min(nl, 10))
 #				maxv <- rep('?', min(nl, 10))
 			}
-		} else {
-			cat('values      : none\n')			
-		}
+		} 
 
 		z <- getZ(object)
 		if (length(z) > 0) {
