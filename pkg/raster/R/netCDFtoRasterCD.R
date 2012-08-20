@@ -14,7 +14,7 @@
 			ncdf4 <- TRUE
 		} else {
 			if (!require(ncdf)) {
-				stop('You need to install the ncdf or ncdf4 package') 
+				stop('To open ncdf files, you need to first install the ncdf package or the ncdf4 package') 
 			}
 			options(rasterNCDF4 = FALSE)
 			ncdf4 <- FALSE
@@ -67,9 +67,9 @@
 		if (greg) {
 			time <- as.Date(time, origin=startDate)
 		} else {
-			startyear <-  as.numeric(format(startDate, "%Y"))
-			startmonth <- as.numeric(format(startDate, "%m"))
-			startday <- as.numeric(format(startDate, "%d"))
+			startyear <-  as.numeric( format(startDate, "%Y") )
+			startmonth <- as.numeric( format(startDate, "%m") )
+			startday <- as.numeric( format(startDate, "%d") )
 			year <- trunc( as.numeric(time)/365 )
 			doy <- (time - (year * 365))
 			origin <- paste(year+startyear, "-", startmonth, "-", startday, sep='')
