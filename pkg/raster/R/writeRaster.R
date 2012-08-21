@@ -136,7 +136,6 @@ function(x, filename, format, ...) {
 		
 		b <- brick(x, values=FALSE)
 		if (filetype=='CDF') {
-			b@zname  <- x@zname
 			b@z  <- x@z
 		}
 

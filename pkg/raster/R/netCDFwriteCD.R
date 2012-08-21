@@ -35,7 +35,6 @@
 	
 	if (missing(zunit))  zunit <- 'unknown'
 	if (missing(zname))  zname <- 'value'
-#	x@zname <- zname
 	if (missing(varname))  varname <- 'variable'
 	x@title <- varname
 	if (missing(varunit))  varunit <- ''
