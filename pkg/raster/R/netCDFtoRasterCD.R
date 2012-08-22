@@ -115,10 +115,11 @@
 			varname <- vars
 		} else {
 			# should also check its dimensions with those of x and y 
-			a=NULL
+			a <- NULL
 			for (i in 1:nv) { 
-				a = c(a, nc$var[[i]]$ndims) 
+				a <- c(a, nc$var[[i]]$ndims) 
 			}
+			
 			varname <- vars[which.max(a)]
 			if (warn) {
 				warning('varname used is: ', varname, '\nIf that is not correct, set it to one of: ', paste(vars, collapse=", ") )
