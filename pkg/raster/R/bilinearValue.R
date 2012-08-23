@@ -6,52 +6,6 @@
 
 
 
-.fourCellsFromXY <- function(r, xy, duplicates=TRUE) {
-# if duplicates is TRUE, the same cell number can be returned 
-# twice (if point in the middle of division between two cells) or
-# four times (if point in center of cell)
-	cells <- cellFromXY(r, xy)
-	row <- rowFromCell(r, cells)
-	col <- colFromCell(r, cells)
-	cellsXY <- xyFromCell(r, cells)
-
-	if (duplicates) {
-		pos <- matrix(0, ncol=ncol(xy), nrow=nrow(xy))
-		pos[ xy[,1] > cellsXY[,1], 1 ] <- 1
-		pos[ xy[,1] < cellsXY[,1], 1 ] <- -1
-		pos[ xy[,2] < cellsXY[,2], 2 ] <- 1
-		pos[ xy[,2] > cellsXY[,2], 2 ] <- -1
-	} else {
-		pos <- matrix(-1, ncol=ncol(xy), nrow=nrow(xy))
-		pos[ xy[,1] > cellsXY[,1], 1 ] <- 1
-		pos[ xy[,2] < cellsXY[,2], 2 ] <- 1
-	}
-	
-	
-	poscol <- col + pos[,1]
-	if (raster:::.isGlobalLonLat(r)) {
-		poscol[poscol==0] <- ncol(r)
-		poscol[poscol==ncol(r)+1] <- 1
-	} else {
-		poscol[poscol==0] <- 2
-		poscol[poscol==ncol(r)+1] <- ncol(r) - 1
-	}
-	
-	posrow <- row + pos[,2]
-	posrow[posrow==0] <- 2
-	posrow[posrow==nrow(r)+1] <- nrow(r) - 1
-
-	four <- matrix(ncol=4, nrow=nrow(xy))
-	four[,1] <- cells
-	four[,2] <- cellFromRowCol(r, posrow, col)
-	four[,3] <- cellFromRowCol(r, posrow, poscol)
-	four[,4] <- cellFromRowCol(r, row, poscol)
-	return(four)
-}
-
-
-
-
 .bilinearValue <- function(raster, xyCoords, layer, n) {
 
 	
@@ -71,7 +25,7 @@
 	r <- raster(raster)
 	nls <- nlayers(raster)
 	
-	four <- .fourCellsFromXY(r, xyCoords, duplicates=FALSE)
+	four <- fourCellsFromXY(r, xyCoords, duplicates=FALSE)
 	
 	xy4 <- matrix(xyFromCell(r, as.vector(four)), ncol=8)
 	x <- apply(xy4[,1:4,drop=FALSE], 1, range)
