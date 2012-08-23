@@ -38,12 +38,12 @@ matrix (RasterLayer). List of matrices (one for each layer) or data.frame (if \c
 \examples{
 r <- raster(nrow=18, ncol=36)
 r[] <- runif(ncell(r))
-r <- r * r * r * 10
+r[1:5] <- NA
+r <- r * r * r * 5
 freq(r)
 
 s <- stack(r, r*2, r*3)
 freq(s, merge=TRUE)
-
 }
 
 \keyword{spatial}
