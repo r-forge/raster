@@ -8,6 +8,8 @@ writeRaster now honours the value of the NAvalue argument when writing a ncdf fi
 added support for the ncdf4 library
 fixed many spelling mistakes in the documentation reported by Phil Heilman
 function fourCellsFromXY is now visible.
+method 'freq' implemented for 'RasterStackBrick'
+
 
 --- 27-June-2012, version 2.0-08
 bug fixes (both introduced in version 2.0-04):

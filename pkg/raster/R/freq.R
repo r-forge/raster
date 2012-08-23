@@ -40,3 +40,30 @@ setMethod('freq', signature(x='RasterLayer'),
 	}
 )
 
+
+
+setMethod('freq', signature(x='RasterStackBrick'), 
+	function(x, digits=0, useNA="ifany", merge=FALSE, progress='', ...) {
+		nl <- nlayers(x)
+		res <- list()
+		pb <- pbCreate(nl, progress=progress)	
+		for (i in 1:nl) { 
+			res[[i]] <- freq( x[[i]], useNA=useNA, progress='', ...) 
+			pbStep(pb, i)
+		}
+		names(res) <- ln <- names(x)
+		if (merge & nl > 1) {			
+			r <- res[[1]]
+			colnames(r)[2] <- ln[1]
+			for (i in 2:nl) {
+				x <- res[[i]]
+				colnames(x)[2] <- ln[i]
+				r <- merge(r, x, by=1, all=TRUE)
+			}
+			return(r)
+		}
+		pbClose(pb)
+		return(res)
+	}
+)
+

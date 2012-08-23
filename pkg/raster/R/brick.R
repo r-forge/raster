@@ -130,7 +130,9 @@ setMethod('brick', signature(x='RasterStack'),
 
 setMethod('brick', signature(x='RasterBrick'), 
 	function(x, nl, ...){
-		if (missing(nl)) { nl <- nlayers(x) }
+		if (missing(nl)) { 
+			nl <- nlayers(x) 
+		}
 		e <- x@extent
 		b <- brick(xmn=e@xmin, xmx=e@xmax, ymn=e@ymin, ymx=e@ymax, nrows=x@nrows, ncols=x@ncols, crs=projection(x))
 		b@data@nlayers <- as.integer(nl)
