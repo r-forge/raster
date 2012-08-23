@@ -53,21 +53,23 @@ setMethod('freq', signature(x='RasterStackBrick'),
 			res[[i]] <- freq( raster(x, i), useNA=useNA, progress='', ...) 
 			pbStep(pb, i)
 		}
+		pbClose(pb)
 		
 		names(res) <- ln <- names(x)
 		
-		if (merge & nl > 1) {			
+		if (merge) {
 			r <- res[[1]]
 			colnames(r)[2] <- ln[1]
-			for (i in 2:nl) {
-				x <- res[[i]]
-				colnames(x)[2] <- ln[i]
-				r <- merge(r, x, by=1, all=TRUE)
+			if (nl > 1) {			
+				for (i in 2:nl) {
+					x <- res[[i]]
+					colnames(x)[2] <- ln[i]
+					r <- merge(r, x, by=1, all=TRUE)
+				}
 			}
 			return(r)
 		}
 		
-		pbClose(pb)
 		return(res)
 	}
 )
