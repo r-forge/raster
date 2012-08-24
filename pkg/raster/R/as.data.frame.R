@@ -38,7 +38,7 @@ if (!isGeneric("as.data.frame")) {
 setMethod('as.data.frame', signature(x='Raster'), 
 	function(x, row.names = NULL, optional = FALSE, ...) {
 
-		v <- as.data.frame(values(x), row.names=row.names, optional=optional, ...)
+		v <- as.data.frame(values(x), row.names=row.names, optional=optional, xy=FALSE, ...)
 		colnames(v) <- names(x)  # for nlayers = 1
 		
 		i <- is.factor(x)
@@ -49,6 +49,12 @@ setMethod('as.data.frame', signature(x='Raster'),
 				v <- .insertFacts(x, v, 1:nlayers(x))
 			}
 		}
+		
+		if (xy) {
+			xy <- data.frame(xyFromCell(x, 1:ncell(x)))
+			v <- cbind(xy, v)
+		}
+		
 		v
 	}
 )

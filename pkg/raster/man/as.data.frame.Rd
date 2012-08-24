@@ -19,7 +19,7 @@ The methods for Spatial* objects allow for easy creation of a data.frame with th
 }
 
 \usage{
-\S4method{as.data.frame}{Raster}(x, row.names=NULL, optional=FALSE, ...)
+\S4method{as.data.frame}{Raster}(x, row.names=NULL, optional=FALSE, xy=FALSE, ...)
 
 \S4method{as.data.frame}{SpatialPolygons}(x, row.names=NULL, optional=FALSE, xy=FALSE, centroids=TRUE, sepNA=FALSE, ...)
 
