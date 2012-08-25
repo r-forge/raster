@@ -54,13 +54,20 @@
 		} else {
 			cal = att.get.ncdf(nc, "time", "calendar")$value		
 		}
+
+		
+		
 		if (cal =='gregorian' | cal =='proleptic_gregorian' | cal=='standard') {
 			greg <- TRUE
 		} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
 			greg <- FALSE
+			nday <- 365
+		} else if (cal == '360_day') { 
+			greg <- FALSE
+			nday <- 360
 		} else {
 			greg <- TRUE
-			warning('assuming a standard calender')
+			warning('assuming a standard calender:', cal)
 		}
 
 		time <- getZ(x)
@@ -70,8 +77,8 @@
 			startyear <-  as.numeric( format(startDate, "%Y") )
 			startmonth <- as.numeric( format(startDate, "%m") )
 			startday <- as.numeric( format(startDate, "%d") )
-			year <- trunc( as.numeric(time)/365 )
-			doy <- (time - (year * 365))
+			year <- trunc( as.numeric(time)/nday )
+			doy <- (time - (year * nday))
 			origin <- paste(year+startyear, "-", startmonth, "-", startday, sep='')
 			time <- as.Date(doy, origin=origin)		
 		}
