@@ -28,14 +28,14 @@ setMethod('merge', signature(x='Extent', y='ANY'),
 
 
 setMethod('merge', signature(x='RasterStackBrick', y='missing'), 
-	function(x, ...) {
+	function(x, ..., tolerance=0.05, filename="", ext=NULL) {
 		nl <- nlayers(x)
 		if (nl < 2) {
 			return(x)
 		} else if (nl == 2) {
-			merge(x[[1]], x[[2]], ...)
+			merge(x[[1]], x[[2]], tolerance=tolerance, filename=filename, overlap=TRUE, ext=ext)
 		} else {
-			do.call(merge, c(x=x[[1]], y=x[[2]], .makeRasterList(x[[3:nl]]), ...))
+			do.call(merge, c(x=x[[1]], y=x[[2]], .makeRasterList(x[[3:nl]]), tolerance=tolerance, filename=filename, overlap=TRUE, ext=ext))
 		}
 	}
 )

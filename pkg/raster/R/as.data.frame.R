@@ -36,7 +36,7 @@ if (!isGeneric("as.data.frame")) {
 
 
 setMethod('as.data.frame', signature(x='Raster'), 
-	function(x, row.names = NULL, optional = FALSE, ...) {
+	function(x, row.names = NULL, optional = FALSE, xy=FALSE, ...) {
 
 		v <- as.data.frame(values(x), row.names=row.names, optional=optional, xy=FALSE, ...)
 		colnames(v) <- names(x)  # for nlayers = 1
