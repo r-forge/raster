@@ -13,9 +13,9 @@ Create a RasterBrick with a Boolean layer for each value in a RasterLayer (or su
 }
 
 \usage{
-\S4method{layerize}{RasterLayer,missing}(x, classes=NULL, digits=0, falseNA=FALSE, ...)
+\S4method{layerize}{RasterLayer,missing}(x, classes=NULL, digits=0, falseNA=FALSE, filename='', ...)
 
-\S4method{layerize}{RasterLayer,RasterLayer}(x, y, classes=NULL, digits=0, falseNA=FALSE, ...)
+\S4method{layerize}{RasterLayer,RasterLayer}(x, y, classes=NULL, digits=0, filename='', ...)
 }
 
 \arguments{
@@ -24,7 +24,8 @@ Create a RasterBrick with a Boolean layer for each value in a RasterLayer (or su
   \item{classes}{numeric. The values for which layers should be made. If \code{NULL} all classes are used}
   \item{digits}{non-negative integer for rounding the cell values. Argument is passed to \code{\link[base]{round}} }
   \item{falseNA}{logical. If \code{TRUE} the list will be merged in a single data.frame}
-  \item{...}{additional arguments for writing files as in \code{\link{writeRaster})}}
+  \item{filename}{character. Output filename (optional)}
+  \item{...}{Additional arguments as for \code{\link{writeRaster}}}
 }
 
 \value{

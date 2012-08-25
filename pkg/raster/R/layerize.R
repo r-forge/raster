@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : August 2012
 # Version 1.0
 # Licence GPL v3
@@ -11,7 +11,7 @@ if (!isGeneric("layerize")) {
 
 
 setMethod('layerize', signature(x='RasterLayer', y='missing'), 
-	function(x, classes=NULL, digits=0, falseNA=FALSE, ...) {
+	function(x, classes=NULL, digits=0, falseNA=FALSE, filename='', ...) {
 		
 		if (is.null(classes)) {
 			classes <- round( sort(unique(x)), digits )
@@ -23,9 +23,9 @@ setMethod('layerize', signature(x='RasterLayer', y='missing'),
 					v[v==0] <- NA
 					v
 				}
-				, forceapply=TRUE, ...)
+				, forceapply=TRUE, filename=filename, ...)
 		} else {
-			lyrs <- calc(x, function(x) round(x, digits) == classes, forceapply=TRUE, ...)
+			lyrs <- calc(x, function(x) round(x, digits) == classes, forceapply=TRUE, filename=filename, ...)
 		}
 		names(lyrs) <- as.character(classes)
 		return(lyrs)
@@ -60,6 +60,10 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 		
 		y <- brick(y, nl=length(cn))
 		y <- setValues(y, res)
+		
+		if (filename != '') {
+			y <- writeRaster(y, filename, ...)
+		}
 		return(y)
 	} 
 	#  else 
