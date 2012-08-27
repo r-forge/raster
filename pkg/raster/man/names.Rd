@@ -5,6 +5,7 @@
 \alias{names}
 \alias{names<-}
 \alias{names,Raster-method}
+\alias{names,RasterStack-method}
 \alias{names<-,Raster-method}
 
   

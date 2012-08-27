@@ -28,7 +28,7 @@ Substitute (replace) values in a Raster* object with values in a \code{data.fram
 
 
 \details{
-You could obtain the same result with \code{\link[raster]{reclass}}, but \code{subs} is more efficient for simple replacement. Use reclass if you want to replace ranges of values with new values. 
+You could obtain the same result with \code{\link[raster]{reclassify}}, but \code{subs} is more efficient for simple replacement. Use \code{reclassify} if you want to replace ranges of values with new values. 
 
 You can also replace values using a fitted model. E.g. fit a model to \code{glm} or \code{loess} and then call \link[raster]{predict}
 }
@@ -39,7 +39,7 @@ Raster object
 
 \author{Robert J. Hijmans}
 
-\seealso{ \code{\link{reclass}, \link{cut}}}
+\seealso{ \code{\link{reclassify}, \link{cut}}}
 
 \examples{
 r <- raster(ncol=10, nrow=10)

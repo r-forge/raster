@@ -207,8 +207,8 @@ setMethod('raster', signature(x='RasterBrick'),
 				r@data@band <- dindex
 				r@data@min <- x@data@min[dindex]
 				r@data@max <- x@data@max[dindex]
-				ln <- x@layernames[dindex]
-				if (! is.na(ln) ) { r@layernames <- ln }
+				ln <- x@data@names[dindex]
+				if (! is.na(ln) ) { r@data@names <- ln }
 				zv <- unlist(x@z[1])[dindex]
 				if (! is.null(zv) ) { 
 					r@z <- list(zv)
@@ -235,7 +235,7 @@ setMethod('raster', signature(x='RasterBrick'),
 				if ( inMemory(x) ) {
 					if ( dindex != layer ) { warning(paste("layer was changed to", dindex)) }
 					r <- setValues(r, x@data@values[,dindex])
-					r@layernames <- names(x)[dindex]
+					r@data@names <- names(x)[dindex]
 				}
 			}
 			isf <- is.factor(r)[dindex]

@@ -95,7 +95,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{mask}} \tab Use values from first Raster except where cells of the mask Raster are NA (these become NA)\cr
     \code{\link{cut}} \tab Reclassify values using ranges \cr
     \code{\link{subs}} \tab Reclassify values using an 'is-becomes' matrix \cr	
-    \code{\link{reclass}} \tab Reclassify using a 'from-to-becomes' matrix \cr
+    \code{\link{reclassify}} \tab Reclassify using a 'from-to-becomes' matrix \cr
     \code{\link{init}} \tab Initialize cells with new values \cr	
     \code{\link{stackApply}} \tab Computations on groups of layers in Raster* object \cr
     \code{\link{stackSelect}} \tab Select cell values from different layers using an index RasterLayer\cr

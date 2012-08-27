@@ -30,19 +30,24 @@
 
 setMethod('names', signature(x='Raster'), 
 	function(x) { 
-		ln <- x@layernames
+		ln <- x@data@names
+		ln <- ln[1:nlayers(x)]
+		.goodNames(as.vector(ln))
+	}
+)
+
+
+setMethod('names', signature(x='RasterStack'), 
+	function(x) { 
+		ln <- sapply(x@layers, function(i) i@data@names)
 		ln <- ln[1:nlayers(x)]
 		.goodNames(as.vector(ln))
 	}
 )
 
 layerNames <- function(x) {
-	ln <- x@layernames
-	ln <- ln[1:nlayers(x)]
-	.goodNames(as.vector(ln))
+	names(x)
 }
-
-
 
 
 setMethod('names<-', signature(x='Raster'), 
@@ -53,20 +58,27 @@ setMethod('names<-', signature(x='Raster'),
 
 
 'layerNames<-' <- function(x, value) {
+
 	nl <- nlayers(x)
 	if (is.null(value)) {
 		value <- rep('', nl)
 	} else if (length(value) != nl) {
 		stop('incorrect number of layer names')
 	}
-	x@layernames <- .goodNames(value)
+	value <- .goodNames(value)
 	
-	# the below is good, but very very slow for objects with many layers
-	#if (inherits(x, 'RasterStack')){
-	#	for (i in 1:nl) {
-	#		x@layers[[i]]@layernames <- x@layernames[i]
-	#	}
-	#}
+	if (inherits(x, 'RasterStack')){
+		
+		x@layers <- sapply(1:nl, function(i){ 
+			r <- x@layers[[i]]
+			r@data@names <- value[i]
+			r
+		})
+		
+	} else {
+		x@data@names <- value
+	}
+
 	return(x)
 }
 

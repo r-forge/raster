@@ -93,7 +93,7 @@ setMethod('brick', signature(x='RasterStack'),
 		
 		if (values) {
 			
-			b@layernames <- x@layernames[1:nl]
+			b@data@names <- names(x)[1:nl]
 			if (canProcessInMemory(b, nl*2)) {
 				b <- setValues( b, getValues(x)[,1:nl]) 
 				if (any(is.factor(x))) {
@@ -191,7 +191,7 @@ setMethod('brick', signature(x='SpatialGrid'),
 			}
 			
 			b <- setValues(b, as.matrix(x))
-			b@layernames <- colnames(x)
+			b@data@names <- colnames(x)
 		}
 		return(b)
 	}	

@@ -48,7 +48,6 @@ setClass ('BasicRaster',
 		ncols ='integer',
 		nrows ='integer',
 		crs = 'CRS',
-		layernames = 'vector',
 		z = 'list'
 	),
 	prototype (	
@@ -56,7 +55,6 @@ setClass ('BasicRaster',
 		ncols= as.integer(1),
 		nrows= as.integer(1),
 		crs = CRS(as.character(NA)),
-		layernames=c(""),
 		z = list()
 	),
 	validity = function(object) {
@@ -122,7 +120,8 @@ setClass('.SingleLayerData',
 		min = 'vector',
 		max = 'vector',
 		band = 'integer',
-		unit = 'character'
+		unit = 'character',
+		names = 'vector'
 		),
 	prototype (	
 		values=vector(),
@@ -139,7 +138,9 @@ setClass('.SingleLayerData',
 		min = c(Inf),
 		max = c(-Inf),
 		band = as.integer(1),
-		unit = ''
+		unit = '',
+		names=c("")
+		
 	),	
 	validity = function(object) {
 	}
@@ -191,7 +192,9 @@ setClass('.MultipleRasterData',
 		haveminmax = 'logical',
 		min = 'vector',
 		max = 'vector',
-		unit = 'vector'
+		unit = 'vector',
+		names= 'vector'
+		
 		),
 	prototype (	
 		values=matrix(NA,0,0),
@@ -207,7 +210,8 @@ setClass('.MultipleRasterData',
 		haveminmax = FALSE,
 		min = c(Inf),
 		max = c(-Inf),
-		unit = c('')
+		unit = c(''),
+		names = c('')
 	),	
 	validity = function(object) {
 	}

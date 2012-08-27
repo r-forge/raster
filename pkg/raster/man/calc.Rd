@@ -50,7 +50,7 @@ Because the mean value of each chunk will likely be different. Rather do somethi
 }
 
 
-\seealso{ \code{ \link[raster]{overlay}} ,  \code{ \link[raster]{reclass}},  \link[raster]{Arith-methods}, \link[raster]{Math-methods}, \code{ \link[raster]{reclass}}} 
+\seealso{ \code{ \link[raster]{overlay}} ,  \code{ \link[raster]{reclassify}},  \link[raster]{Arith-methods}, \link[raster]{Math-methods}} 
 
 
 \author{ Robert J. Hijmans and Matteo Mattiuzzi}

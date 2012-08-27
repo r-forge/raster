@@ -30,7 +30,6 @@ function(x, subset, drop=TRUE, ...) {
 		x <- x@layers[[subset]]
 	} else {
 		x@layers <- x@layers[subset]
-		x@layernames <- x@layernames[subset]
 		if (length(x@z)>0) {
 			x@z <- lapply(x@z, function(x) x[subset])
 		}
@@ -98,7 +97,7 @@ function(x, subset, drop=TRUE, ...) {
 			x@data@min <- x@data@min[subset]
 			x@data@max <- x@data@max[subset]
 		}	
-		x@layernames <- x@layernames[subset]
+		x@data@names <- x@data@names[subset]
 		if (length(x@z) > 0) {
 			x@z[[1]] <- x@z[[1]][subset]
 		}
