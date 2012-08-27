@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date:  October 2008
 # Version 0.9
 # Licence GPL v3
@@ -17,6 +17,7 @@
 	x
 }
 
+
 .goodNames <- function(ln, prefix='layer') {
 	ln <- trim(as.character(ln))
 	ln[is.na(ln)] <- ""
@@ -30,7 +31,11 @@
 
 setMethod('names', signature(x='Raster'), 
 	function(x) { 
-		ln <- x@data@names
+		if (.hasSlot(x@data, 'names')) {
+			ln <- x@data@names
+		} else {
+			ln <- x@layernames		
+		}
 		ln <- ln[1:nlayers(x)]
 		.goodNames(as.vector(ln))
 	}
@@ -76,13 +81,15 @@ setMethod('names<-', signature(x='Raster'),
 		})
 		
 	} else {
-		x@data@names <- value
+		if (.hasSlot(x@data, 'names')) {
+			x@data@names <- value
+		} else {
+			x@layernames <- value		
+		}
 	}
 
 	return(x)
 }
-
-
 
 
 

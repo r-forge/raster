@@ -3,10 +3,6 @@
 # Version 1.0
 # Licence GPL v3
 
-.rasterHasSlot <- function(object, slot) {
-# for older versions of the methods package that does not have the .hasSlot function
-	isTRUE(try(.hasSlot(object, slot), silent=TRUE))
-}
 
 
 if ( !isGeneric("raster") ) {
@@ -193,10 +189,8 @@ setMethod('raster', signature(x='RasterBrick'),
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
 				r@file <- x@file
 
-				if (.rasterHasSlot(x@file, 'blockrows')) {  # old objects may not have this slot
-					r@file@blockrows <- x@file@blockrows
-					r@file@blockcols <- x@file@blockcols
-				}
+				r@file@blockrows <- x@file@blockrows
+				r@file@blockcols <- x@file@blockcols
 				
 				r@data@offset <- x@data@offset
 				r@data@gain <- x@data@gain
