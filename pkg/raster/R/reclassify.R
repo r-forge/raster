@@ -4,16 +4,14 @@
 # Licence GPL v3
 
 
-if (!isGeneric("reclass")) {
-	setGeneric("reclass", function(x, rcl, ...)
-		standardGeneric("reclass"))
+if (!isGeneric("reclassify")) {
+	setGeneric("reclassify", function(x, rcl, ...)
+		standardGeneric("reclassify"))
 }	
 
 
-setMethod('reclass', signature(x='Raster', rcl='ANY'), 
+setMethod('reclassify', signature(x='Raster', rcl='ANY'), 
 function(x, rcl, filename='', include.lowest=FALSE, right=TRUE, ...) {
-	
-	warning('raster function "reclass" has been deprecated and will be removed from the package;\nPlease use "reclassify" instead')
 	
 	filename <- trim(filename)
 

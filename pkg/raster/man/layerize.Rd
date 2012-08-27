@@ -9,7 +9,9 @@
 \title{Layerize}
 
 \description{
-Create a RasterBrick with a Boolean layer for each value in a RasterLayer (or subset thereof). For example, if cells in a RasterLayer indicate what class they belong to (e.g. vegetation type), this function will create a layer (presence/absence) for each class. You can supply another RasterLayer to layerize the values to a different raster (e.g. higher resolution).
+Create a RasterBrick with a Boolean layer for each value in a RasterLayer (or subset thereof). For example, if cells in a RasterLayer indicate what class they belong to (e.g. vegetation type), this function will create a layer (presence/absence) for each class. 
+
+You can supply another overlapping RasterLayer with larger cells (do not use smaller cells!). In this case the cell values are counts for each class.
 }
 
 \usage{

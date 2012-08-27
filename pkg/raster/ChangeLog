@@ -10,6 +10,7 @@ fixed many spelling mistakes in the documentation reported by Phil Heilman
 function fourCellsFromXY is now visible.
 method 'freq' implemented for 'RasterStackBrick'
 new function 'layerize'
+function 'reclassify' replaces identical 'reclass' (still available but with warning about deprecation) to avoid hiding xts::reclass
 
 --- 27-June-2012, version 2.0-08
 bug fixes (both introduced in version 2.0-04):
