@@ -45,7 +45,7 @@ setMethod('summary', signature(object='RasterStack'),
 			if ( inMemory(object@layers[[n]]) ) {
 				sm <- as.matrix( summary(object@layers[[n]]@data@values) )
 			} else {
-				if (sumobj@ncell > maxsamp) {
+				if (ncell > maxsamp) {
 					v <- sampleRandom(object@layers[[n]], maxsamp)
 				    cat(paste('summary based on a sample of', maxsamp, 'cells, which is', round(100*maxsamp/ncell(object), 2), '% of all cells\n'))
 				} else {
@@ -66,8 +66,8 @@ setMethod('summary', signature(object='RasterStack'),
 
 setMethod('summary', signature(object='RasterBrick'), 
 	function(object, maxsamp=100000, ...) {
+	
 		ncell <- ncell(object)
-
 		values <- NULL
 		warn <- NULL
 		
@@ -79,7 +79,7 @@ setMethod('summary', signature(object='RasterBrick'),
 
 		} else if (  fromDisk(object) ) {
 		
-			if (sumobj@ncell > maxsamp) {
+			if (ncell > maxsamp) {
 				v <- sampleRandom(object, maxsamp)
 				warn <- paste('summary based on a sample of', maxsamp, 'cells, which is', round(100*maxsamp/ncell(object), 2), '% of all cells')
 			} else {
