@@ -8,8 +8,8 @@
 .NCDFversion4 <- function() {
 	ncdf4 <- getOption('rasterNCDF4')
 	if (is.null(ncdf4)) {
-#		if (require(ncdf4, quietly=TRUE)) {
-		if (require(ncdf4)) {
+		if (require(ncdf4, quietly=TRUE)) {
+#		if (require(ncdf4)) {
 			options(rasterNCDF4 = TRUE)
 			ncdf4 <- TRUE
 		} else {

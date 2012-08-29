@@ -42,7 +42,7 @@
 .quickStackOneFile <- function(filename, bands=NULL, native=FALSE) {
 
 	b <- brick(filename, native=native)
-	.stackFromBrick(b)
+	.stackFromBrick(b, bands=bands)
 
 }
 
@@ -62,7 +62,7 @@
 	}
 	ln <- names(b)
 	
-	r <- subset(b, bands[1])
+	r <- raster(b, bands[1])
 	s <- stack(r)
 	
 	if (havemnmx) {

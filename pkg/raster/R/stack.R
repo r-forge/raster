@@ -52,7 +52,9 @@ function(x, ..., bands=NULL, varname="", native=FALSE, quick=FALSE) {
 	} else {
 		
 		if (length(rlist) == 1) {
+			
 			return(.quickStackOneFile(x, bands=bands, native=native))
+			
 		} else if (quick) {
 			if (!is.null(bands)) {
 				stop("cannot do 'quick' if bands is not NULL")
