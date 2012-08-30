@@ -9,9 +9,9 @@
 \title{Layerize}
 
 \description{
-Create a RasterBrick with a Boolean layer for each value in a RasterLayer (or subset thereof). For example, if cells in a RasterLayer indicate what class they belong to (e.g. vegetation type), this function will create a layer (presence/absence) for each class. 
+Create a RasterBrick with a Boolean layer for each value (or subset thereof) in a RasterLayer . For example, if the cell values of a RasterLayer indicate what class they belong to (e.g. vegetation type), this function will create a layer (presence/absence) for each of these classes.
 
-You can supply another overlapping RasterLayer with larger cells (do not use smaller cells!). In this case the cell values are counts for each class.
+You can supply a second spatially overlapping RasterLayer with larger cells (do not use smaller cells!). In this case the cell values are counts for each class. A similar result might be obtained more efficiently by using layerize with a single RasterLayer followed by \code{\link{aggregate}(x,  , sum)}.
 }
 
 \usage{
@@ -37,10 +37,15 @@ RasterBrick
 \author{Robert J. Hijmans}
 
 \examples{
-r <- raster(nrow=18, ncol=36)
+r <- raster(nrow=36, ncol=72)
 r[] <- round(runif(ncell(r))*5)
 r[1:5] <- NA
 b <- layerize(r)
+
+r2 <- raster(nrow=10, ncol=10)
+b2 <- layerize(r, r2)
+
+
 }
 
 \keyword{spatial}

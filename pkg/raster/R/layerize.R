@@ -36,16 +36,19 @@ setMethod('layerize', signature(x='RasterLayer', y='missing'),
 setMethod('layerize', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, classes=NULL, digits=0, filename='', ...) { 
 
+	resx <- res(x)
+	resy <- res(y)
+	if (! all( resy > resx) ) {
+		stop("x and y resolution of object y should be (much) larger than that of object x")
+	}
+	
 	int <- intersect(extent(x), extent(y))
 	if (is.null(int)) {
 		return(raster(y))
 	}
-	
-	if (is.null(classes)) {
-		classes <- round( sort(unique(x)), digits )
-	}
+
 		
-	if (canProcessInMemory(x, length(classes))) {
+	if (canProcessInMemory(x, 25)) {
 		b <- crop(x, int)
 		xy <- xyFromCell(b, 1:ncell(b))
 		mc <- cellFromXY(y, xy)
@@ -59,6 +62,7 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 		}
 		
 		y <- brick(y, nl=length(cn))
+		names(y) <- paste('count_', as.character(cn), sep='')
 		y <- setValues(y, res)
 		
 		if (filename != '') {
@@ -68,14 +72,16 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 	} 
 	#  else 
 
-	# Start processing loop
-	tr <- blockSize(y, n=length(classes) * 10)
-	pb <- pbCreate(tr$n, ...)
-
+	if (is.null(classes)) {
+		classes <- round( sort(unique(x)), digits )
+	}	
+	
 	out  <- brick(y, values=FALSE, nl=length(classes))
-	names(out) <- as.character(classes)
+	names(out) <- paste('count_', as.character(classes), sep='')
 	out <- writeStart(out, filename=filename, ...)
-
+	
+	tr <- blockSize(out)
+	pb <- pbCreate(tr$n, ...)
 	for(i in 1:tr$n) {		
 		e <- extent(xmin(y), xmax(y), yFromRow(y, tr$row[i]+tr$nrows[i]-1)  - 0.5 * yres(y), yFromRow(y, tr$row[i])+0.5 * yres(y))
 		int <- intersect(e, extent(x)) 
