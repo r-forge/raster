@@ -10,7 +10,6 @@ if (!isGeneric('subset')) {
 		standardGeneric('subset')) 
 }
 
-
 setMethod('subset', signature(x='RasterStack'), 
 function(x, subset, drop=TRUE, filename='', ...) {
 	if (is.character(subset)) {
@@ -41,8 +40,15 @@ function(x, subset, drop=TRUE, filename='', ...) {
 } )
 
 
-setMethod('subset', signature(x='RasterBrick'),
+setMethod('subset', signature(x='Raster'),
 function(x, subset, drop=TRUE, filename='', ...) {
+
+	if (inherits(x, 'RasterLayer')) {
+		if (filename != '') {
+			x <- writeRaster(x, filename, ...)
+		}
+		return(x)
+	}
 
 	if (is.character(subset)) {
 		i <- na.omit(match(subset, names(x)))

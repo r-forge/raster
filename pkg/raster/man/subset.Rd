@@ -1,8 +1,8 @@
 \name{subset}
 
 \alias{subset}
+\alias{subset,Raster-method}
 \alias{subset,RasterStack-method}
-\alias{subset,RasterBrick-method}
 
 
 \title{Subset layers in a Raster* object}
@@ -12,9 +12,9 @@ Extract a set of layers from a RasterStack or RasterBrick object.
 }
 
 \usage{
-\S4method{subset}{RasterStack}(subset, drop=TRUE, filename='', ...)
+\S4method{subset}{Raster}(x, subset, drop=TRUE, filename='', ...)
 
-\S4method{subset}{RasterBrick}(subset, drop=TRUE, filename='', ...)
+\S4method{subset}{RasterStack}(x, subset, drop=TRUE, filename='', ...)
 }
 
 \arguments{
