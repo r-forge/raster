@@ -12,7 +12,7 @@ if (!isGeneric('subset')) {
 
 
 setMethod('subset', signature(x='RasterStack'), 
-function(x, subset, drop=TRUE, ...) {
+function(x, subset, drop=TRUE, filename='', ...) {
 	if (is.character(subset)) {
 		i <- na.omit(match(subset, names(x)))
 		if (length(i)==0) {
@@ -34,18 +34,15 @@ function(x, subset, drop=TRUE, ...) {
 			x@z <- lapply(x@z, function(x) x[subset])
 		}
 	}
+	if (filename != '') {
+		x <- writeRaster(x, filename, ...)
+	}
 	return(x)	
 } )
 
 
-setMethod('subset', signature(x='RasterLayer'),
-function(x, subset, ...) {
-	return(x)
-}
-)
-
 setMethod('subset', signature(x='RasterBrick'),
-function(x, subset, drop=TRUE, ...) {
+function(x, subset, drop=TRUE, filename='', ...) {
 
 	if (is.character(subset)) {
 		i <- na.omit(match(subset, names(x)))
@@ -80,7 +77,6 @@ function(x, subset, drop=TRUE, ...) {
 			x <- stack(filename(x), bands=subset, varname=varname)
 		}
 		NAvalue(x) <- nav
-		return(x)
 	} else {
 		if (drop & length(subset)==1) {
 			if (hasValues(x)) {
@@ -102,8 +98,11 @@ function(x, subset, drop=TRUE, ...) {
 			x@z[[1]] <- x@z[[1]][subset]
 		}
 		x@data@nlayers <- as.integer(length(subset))
-		return(x)
 	}
+	if (filename != '') {
+		x <- writeRaster(x, filename, ...)
+	}
+	x
 } )
 
 

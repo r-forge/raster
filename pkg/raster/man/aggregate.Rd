@@ -24,7 +24,7 @@ Aggregation groups rectangular areas to create larger cells. The value for the r
   \item{expand}{logical. If \code{TRUE} the output Raster* object will be larger then the input Raster* object if a division of the number of columns or rows with \code{factor} is not an integer}
   \item{na.rm}{logical. If \code{TRUE}, NA cells are removed from calculations }
   \item{filename}{character. Output filename (optional)}
-  \item{...}{Additional arguments as for \code{\link{writeRaster}}}
+  \item{...}{additional arguments as for \code{\link{writeRaster}}}
 }
 
 
