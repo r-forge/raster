@@ -7,7 +7,11 @@
 stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 
 	nl <- nlayers(x)
-	if (nl == 1) { 	makemat <- TRUE	} else { makemat <- FALSE  }
+	if (nl == 1) { 	
+		makemat <- TRUE	
+	} else { 
+		makemat <- FALSE  
+	}
 	
 	
 	ind <- vector(length=nl)
@@ -34,18 +38,23 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 	
 	if (canProcessInMemory(out, nl+nlout)) {
 		x <- getValues(x)
-		if (makemat) { x < - matrix(x, ncol=1) }
-		pb <- pbCreate(length(uin), ...)
-		if (rowcalc) {
-			v <- lapply(uin, function(i) fun(x[, ind==uin[i]], na.rm=na.rm))
-		} else {
-			v <- lapply(uin, function(i, ...) apply(x[, ind==uin[i]], 1, fun, na.rm=na.rm))
+		if (makemat) { 
+			x <- matrix(x, ncol=1) 
 		}
+		pb <- pbCreate(3,...)
+		pbStep(pb)
+		if (rowcalc) {
+			v <- lapply(uin, function(i) fun(x[, ind==uin[i], drop=FALSE], na.rm=na.rm))
+		} else {
+			v <- lapply(uin, function(i, ...) apply(x[, ind==uin[i], drop=FALSE], 1, fun, na.rm=na.rm))
+		}
+		pbStep(pb)		
 		v <- do.call(cbind, v)
 		out <- setValues(out, v)
 		if (filename != "") {
 			out <- writeRaster(out, filename=filename, ...)
 		}
+		pbStep(pb)
 		pbClose(pb)
 		return(out)
 	}
@@ -58,7 +67,9 @@ stackApply <- function(x, indices, fun, filename='', na.rm=TRUE, ...) {
 
 	for (i in 1:tr$n) {
 		a <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
-		if (makemat) { a < - matrix(a, ncol=1) }
+		if (makemat) { 
+			a <- matrix(a, ncol=1) 
+		}
 
 		if (rowcalc) {
 			v <- lapply(uin, function(i) fun(a[, ind==uin[i], drop=FALSE], na.rm=na.rm))
