@@ -9,8 +9,8 @@
 	ncdf4 <- .NCDFversion4()
 
 	if (ncdf4) {
-		nc <- nc_open(filename)
-		on.exit( nc_close(nc) )		
+		nc <- ncdf4::nc_open(filename)
+		on.exit( ncdf4::nc_close(nc) )		
 		
 	} else {
 		nc <- open.ncdf(filename)

@@ -12,9 +12,9 @@ setMethod ('print', 'Raster',
 		} else {
 			if (x@file@driver == 'netcdf') {
 				if (getOption('rasterNCDF4')) {
-					nc <- nc_open(x@file@name)
+					nc <- ncdf4::nc_open(x@file@name)
 					print(nc)
-					nc_close(nc)
+					ncdf4::nc_close(nc)
 				} else {
 					nc <- open.ncdf(x@file@name)
 					print(nc)

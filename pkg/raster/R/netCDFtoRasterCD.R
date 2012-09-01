@@ -63,9 +63,9 @@
 	if (dodays) {
 		# cal = nc$var[[zvar]]$dim[[dim3]]$calendar ?
 		if (ncdf4) {
-			cal = ncatt_get(nc, "time", "calendar")$value
+			cal <- ncdf4::ncatt_get(nc, "time", "calendar")$value
 		} else {
-			cal = att.get.ncdf(nc, "time", "calendar")$value		
+			cal <- att.get.ncdf(nc, "time", "calendar")$value		
 		}
 
 		
@@ -161,9 +161,9 @@
 
 	if (ncdf4) {
 		options(rasterNCDF4 = TRUE)
-		nc <- nc_open(filename)
-		on.exit( nc_close(nc) )		
-		conv <- ncatt_get(nc, 0, "Conventions")
+		nc <- ncdf4::nc_open(filename)
+		on.exit( ncdf4::nc_close(nc) )		
+		conv <- ncdf4::ncatt_get(nc, 0, "Conventions")
 		
 	} else {
 		options(rasterNCDF4 = FALSE)
@@ -246,14 +246,14 @@
 	
 	
 	if (ncdf4) {
-		a <- ncatt_get(nc, zvar, "long_name")
+		a <- ncdf4::ncatt_get(nc, zvar, "long_name")
 		if (a$hasatt) { long_name <- a$value }
-		a <- ncatt_get(nc, zvar, "units")
+		a <- ncdf4::ncatt_get(nc, zvar, "units")
 		if (a$hasatt) { unit <- a$value }
-		a <- ncatt_get(nc, zvar, "grid_mapping")
+		a <- ncdf4::ncatt_get(nc, zvar, "grid_mapping")
 		if ( a$hasatt ) { projection  <- a$value }
-		natest <- ncatt_get(nc, zvar, "_FillValue")
-		natest2 <- ncatt_get(nc, zvar, "missing_value")		
+		natest <- ncdf4::ncatt_get(nc, zvar, "_FillValue")
+		natest2 <- ncdf4::ncatt_get(nc, zvar, "missing_value")		
 		
 	} else {
 		a <- att.get.ncdf(nc, zvar, "long_name")

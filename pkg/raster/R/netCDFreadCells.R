@@ -38,9 +38,9 @@
 	time = x@data@band
 	
 	if (isTRUE(getOption('rasterNCDF4'))) {
-		nc <- nc_open(x@file@name)
-		on.exit( nc_close(nc) )		
-		getfun <- ncvar_get
+		nc <- ncdf4::nc_open(x@file@name)
+		on.exit( ncdf4::nc_close(nc) )		
+		getfun <- ncdf4::ncvar_get
 	
 	} else {
 		nc <- open.ncdf(x@file@name)
@@ -119,9 +119,9 @@
 		
 
 	if (getOption('rasterNCDF4')) {
-		nc <- nc_open(x@file@name)
-		on.exit( nc_close(nc) )		
-		getfun <- ncvar_get
+		nc <- ncdf4::nc_open(x@file@name)
+		on.exit( ncdf4::nc_close(nc) )		
+		getfun <- ncdf4::ncvar_get
 	
 	} else {
 		nc <- open.ncdf(x@file@name)
