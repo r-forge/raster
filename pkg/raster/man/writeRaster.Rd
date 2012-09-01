@@ -16,7 +16,7 @@ When writing a file to disk, the file format is determined by the 'format=' argu
 \usage{
 \S4method{writeRaster}{RasterLayer,character}(x, filename, format, ...)
 
-\S4method{writeRaster}{RasterStackBrick,character}(x, filename, format, ...)
+\S4method{writeRaster}{RasterStackBrick,character}(x, filename, format, bylayer, suffix='numbers', ...)
 }
 
 \arguments{
@@ -42,6 +42,9 @@ writing a geotiff file: \code{options=c("COMPRESS=NONE", "TFW=YES")}
 NetCDF files have the following additional, optional, arguments: 
 \code{varname, varunit, longname, xname, yname, zname, zunit}
 }
+
+\item{bylayer}{if \code{TRUE}, write a seperate file for each layer}
+\item{suffix}{'numbers' or 'names' to determine the suffix that each file gets when \code{bylayer=TRUE}; either a number between \code{1} and \code{nlayers(x)} or \code{names(x)}}
 }
 
 
