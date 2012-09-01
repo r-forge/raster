@@ -6,22 +6,35 @@
 
 
 .NCDFversion4 <- function() {
+
+
+	loadNCDF <- function() {
+		if (!require(ncdf)) {
+			stop('To open ncdf files, you need to first install package "ncdf" or "ncdf4"') 
+		}
+		options(rasterNCDF4 = FALSE)
+		return(FALSE)
+	}
+	
 	ncdf4 <- getOption('rasterNCDF4')
+
 	if (is.null(ncdf4)) {
-		if (require(ncdf4, quietly=TRUE)) {
-#		if (require(ncdf4)) {
-			options(rasterNCDF4 = TRUE)
-			ncdf4 <- TRUE
-		} else {
-			if (!require(ncdf)) {
-				stop('To open ncdf files, you need to first install the ncdf package or the ncdf4 package') 
+		if (length(find.package("ncdf4", quiet=TRUE)) > 0) {
+			if (require(ncdf4, quietly=TRUE)) {
+				options(rasterNCDF4 = TRUE)
+				ncdf4 <- TRUE
+				
+			} else {
+				ncdf4 <- loadNCDF()
 			}
-			options(rasterNCDF4 = FALSE)
-			ncdf4 <- FALSE
+			
+		} else {
+			ncdf4 <- loadNCDF()
 		}
 	}
 	return(ncdf4)
 }
+
 
 
 .doTime <- function(x, nc, zvar, dim3, ncdf4) {
