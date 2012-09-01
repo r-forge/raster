@@ -34,7 +34,7 @@ setMethod('density', signature(x='Raster'),
 		}
 		y <- unique(as.integer(round(y)))
 		y <- na.omit(y)
-		y <- subset(y, y >= 1 & y <= nlayers(x))
+		y <- y[ y >= 1 & y <= nlayers(x) ]
 		nl <- length(y)
 		if (nl == 0) {stop('no existing layers selected')}
 		
