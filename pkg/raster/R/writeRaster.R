@@ -14,7 +14,9 @@ function(x, filename, format, ...) {
 
 	stopifnot(hasValues(x))
 	filename <- trim(filename)
-	if (filename == '') {	stop('provide a filename')	}
+	if (filename == '') {	
+		stop('provide a filename')	
+	}
 	filename <- .fullFilename(filename, expand=TRUE)
 		
 	if (!file.exists(dirname(filename))) {
@@ -88,14 +90,17 @@ function(x, filename, format, bylayer=FALSE, suffix='numbers', ...) {
 		fn <- extension(filename, '')
 		if (suffix[1] == 'numbers') {
 			fn <- paste(fn, '_', 1:nl, ext, sep='')
-		} else {
+		} else if (suffix[1] == 'names') {
 			fn <- paste(fn, '_', names(x), ext, sep='')
+		} else if (length(suffix) == nl) {
+			fn <- paste(fn, '_', suffix, ext, sep='')
+		} else {
+			stop('invalid "suffix" argument')
 		}
 		if (inherits(x, 'RasterBrick')) {
 			x <- stack(x)
 		}
 		layers <- lapply(1:nl, function(i) writeRaster(x[[i]], filename=fn[i], format=filetype, ...))	
-		
 		return(stack(layers))
 	}
 	
