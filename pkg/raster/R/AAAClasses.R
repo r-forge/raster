@@ -48,16 +48,14 @@ setClass ('BasicRaster',
 		ncols ='integer',
 		nrows ='integer',
 		crs = 'CRS',
-		z = 'list',
-		layernames = 'character'
+		z = 'list'
 	),
 	prototype (	
 		rotated = FALSE,
 		ncols= as.integer(1),
 		nrows= as.integer(1),
 		crs = CRS(as.character(NA)),
-		z = list(),
-		layernames = "Do not use the layernames slot (it is obsolete and will be removed)\nUse function 'names'"
+		z = list()
 	),
 	validity = function(object) {
 		validObject(extent(object))
