@@ -53,7 +53,6 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 }
 
 
-
 \section{II. Changing the spatial extent and/or resolution of Raster* objects}{
 
   \tabular{ll}{
@@ -170,7 +169,7 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
 
 Apart from the function listed below, you can also use indexing with \code{[} for cell numbers, and \code{[[} for row / column number combinations \cr
 
-  \tabular{ll}{
+\tabular{ll}{
     \code{\link{getValues}} \tab Get all cell values (fails with very large rasters), or a row of values (safer) \cr
     \code{\link{getValuesBlock}} \tab Get values for a block (a rectangular area defined by start and end row and column \cr
     \code{\link{getValuesFocal}} \tab Get focal values for one or more rows\cr
@@ -185,6 +184,7 @@ Apart from the function listed below, you can also use indexing with \code{[} fo
   --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
   }
 }
+
 
 \section{X. Plotting}{
 
@@ -275,7 +275,6 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
 
 \section{XIII. Writing files}{
 
-Basic writing
   \tabular{ll}{
    \bold{Basic}\cr
     \code{\link{setValues}} \tab Put new values in a Raster* object \cr
@@ -355,7 +354,7 @@ Basic writing
 \author{Except where indicated otherwise, all functions were written by Robert J. Hijmans}
 
 \section{Acknowledgements}{
-Extensive suggestions were made by Jonathan Greenberg, Phil Heilman, Agustin Lobo, Matteo Mattiuzzi, Steven Mosher, Stefan Schlaffer, and Kevin Ummel. Contributions were also made by Jochen Albrecht, Neil Best, Andrew Bevan, Roger Bivand, Isabelle Boulangeat, Lyndon Estes, Josh Gray, Tim Haering, Herry Herry, Paul Hiemstra, Ned Hornig, Mayeul Kauffmann, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, Justin McGrath, Richard Plant, Edzer Pebesma, Oscar Perpinan Lamigueiro, Etienne Racine, David Ramsey, Michael Sumner, Jon Olav Skoien, Shaun Walbridge, Julian Zeidler, and many others.
+Extensive contributions were made by Jonathan Greenberg, Phil Heilman, Agustin Lobo, Matteo Mattiuzzi, Steven Mosher, Stefan Schlaffer, and Kevin Ummel. Contributions were also made by Jochen Albrecht, Neil Best, Andrew Bevan, Roger Bivand, Isabelle Boulangeat, Lyndon Estes, Josh Gray, Tim Haering, Herry Herry, Paul Hiemstra, Ned Hornig, Mayeul Kauffmann, Rainer Krug, Alice Laborte, John Lewis, Lennon Li, Justin McGrath, Richard Plant, Edzer Pebesma, Oscar Perpinan Lamigueiro, Etienne Racine, David Ramsey, Michael Sumner, Jon Olav Skoien, Shaun Walbridge, Julian Zeidler, and many others.
 }
 
 \keyword{package}
