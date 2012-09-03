@@ -4,6 +4,33 @@
 # Licence GPL v3
 
 
+
+setMethod('extract', signature(x='Raster', y='matrix'), 
+function(x, y, ...){ 
+	return( .xyValues(x, y, ...) )
+})
+
+
+
+setMethod('extract', signature(x='Raster', y='data.frame'), 
+function(x, y, ...){ 
+	return( .xyValues(x, as.matrix(y), ...))
+})
+
+
+setMethod('extract', signature(x='Raster', y='SpatialPoints'), 
+function(x, y, ...){ 
+	px <- projection(x, asText=FALSE)
+	comp <- .compareCRS(px, projection(y), unknown=TRUE)
+	if (!comp) {
+		.requireRgdal()
+		warning('Transforming SpatialPoints to the CRS of the Raster')
+		y <- spTransform(y, px)
+	}
+	.xyValues(x, coordinates(y), ...)
+})
+
+
 	
 .xyValues <- function(object, xy, method='simple', cellnumbers=FALSE, buffer=NULL, fun=NULL, na.rm=TRUE, layer, nl, df=FALSE, factors=FALSE, ...) { 
 
