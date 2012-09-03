@@ -83,14 +83,9 @@ setMethod('raster', signature(x='matrix'),
 
 
 setMethod('raster', signature(x='character'), 
-	function(x, band=1, crs=NULL, ...) {
-	
+	function(x, band=1, ...) {
 		x <- .fullFilename(x)
-		
 		r <- .rasterObjectFromFile(x, band=band, objecttype='RasterLayer', ...)
-		if (! is.null(crs)) {
-			projection(r) = crs
-		}
 		return(r)
 	}
 )
@@ -314,10 +309,10 @@ setMethod('raster', signature(x='SpatialGrid'),
 
 
 setMethod('raster', signature(x='SpatialPixels'), 
-	function(x, layer=1){
+	function(x, layer=1, values=TRUE){
 		if (inherits(x, 'SpatialPixelsDataFrame')) {
 			x <- as(x[layer], 'SpatialGridDataFrame')
-			return(raster(x, 1))
+			return(raster(x, layer=layer, values=values))
 		} else {
 			x <- as(x, 'SpatialGrid')
 			return(raster(x))		

@@ -28,7 +28,7 @@
 		}	
 		
 		out <- raster(x)
-		out <- brick(out, nl=2)
+		out <- brick(out, nl=2, values=FALSE)
 		names(out) <- c('range_min', 'range_max')
 	
 		if (canProcessInMemory(x)) {
