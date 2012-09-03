@@ -33,8 +33,8 @@ These are shorthand methods that only work for relatively small Raster* objects.
 
 \code{x[i,j] <- value}
 
-Arguments
 \tabular{rll}{
+\tab \bold{Arguments:} \tab  \cr
 \tab \code{x} \tab a Raster* object \cr
 \tab \code{i} \tab cell number(s), row number(s), Extent, Spatial* object \cr
 \tab \code{j} \tab columns number(s) (only available if i is (are) a row number(s)) \cr
