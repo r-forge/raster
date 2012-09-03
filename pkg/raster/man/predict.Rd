@@ -45,8 +45,8 @@ RasterLayer or RasterBrick
 
 \examples{
 # A simple model to predict the location of the R in the R-logo using 20 presence points 
-# and 50 (random) pseudo-absence points. This type of model is often used to predict species distributions
-# see the dismo package for more of that.
+# and 50 (random) pseudo-absence points. This type of model is often used to predict
+# species distributions. See the dismo package for more of that.
 
 # create a RasterStack or RasterBrick with with a set of predictor layers
 logo <- brick(system.file("external/rlogo.grd", package="raster"))

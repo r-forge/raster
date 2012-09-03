@@ -74,11 +74,11 @@ If \code{x} is a character value, it should be a filename of a file that the ras
 
 \code{sub}: positive integer. Subdataset number for a file with subdatasets
 
-\code{native}: logical.  Default is FALSE except when package rgdal is missing. If TRUE, reading and writing of IDRISI, BIL, BSQ, BIP, SAGA, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal. 'raster' and netcdf format files are always read with native drivers. 
+\code{native}: logical.  Default is \code{FALSE} except when package \code{rgdal} is missing. If \code{TRUE}, reading and writing of IDRISI, BIL, BSQ, BIP, SAGA, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal. 'raster' and netcdf format files are always read with native drivers. 
 
 \code{offset}: integer. To indicate the number of header rows on non-standard ascii files (rarely useful; use with caution)
 
-To read NetCDF files (CF convention), the \code{ncdf} or the \code{ncdf4} package needs to be available. If both are available, \code{ncdf4} is used. Only the \code{ncdf4} package can read the most recent version (4) of the netCDF format (as well as older versions), for windows it not available on CRAN but can be downloaded \href{http://cirrus.ucsd.edu/~pierce/ncdf/}{here}.  For these files, the following additional variable is recoginzed:
+To read NetCDF files (CF convention), the \code{ncdf} or the \code{ncdf4} package needs to be available. If both are available, \code{ncdf4} is used. Only the \code{ncdf4} package can read the most recent version (4) of the netCDF format (as well as older versions), for windows it not available on CRAN but can be downloaded \href{http://cirrus.ucsd.edu/~pierce/ncdf/}{here}.  For these files, the following additional variable is recognized:
 
 \code{varname}: character. The variable name, such as 'tasmax' or 'pr'. If not supplied and the file has multiple variables are a guess will be made (and reported)
 

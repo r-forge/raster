@@ -20,7 +20,8 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
 
 \usage{
 \S4method{plot}{Raster,ANY}(x, y, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1,
-   colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, ...)
+   colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, 
+   addfun=NULL, nc, nr, ...)
 
 
 \S4method{plot}{Raster,Raster}(x, y, maxpixels=100000, cex=0.1, ...)

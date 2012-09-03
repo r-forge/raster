@@ -39,8 +39,7 @@ For some other formats you can use the 'options' argument (see below)
 \code{options}: Character. File format specific GDAL options. E.g., when
 writing a geotiff file: \code{options=c("COMPRESS=NONE", "TFW=YES")}
 
-NetCDF files have the following additional, optional, arguments: 
-\code{varname, varunit, longname, xname, yname, zname, zunit}
+NetCDF files have the following additional, optional, arguments: \code{varname}, \code{varunit}, \code{longname}, \code{xname}, \code{yname}, \code{zname}, \code{zunit}
 }
 
 \item{bylayer}{if \code{TRUE}, write a seperate file for each layer}
