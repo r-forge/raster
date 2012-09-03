@@ -67,7 +67,7 @@ Raster* object; list (levels); boolean (is.factor); matrix (factorValues)
 
 \note{asFactor is deprecated and should not be used}
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 

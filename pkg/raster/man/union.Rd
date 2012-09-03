@@ -27,7 +27,7 @@ Union of two Extent objects. See \code{\link{crop}} and \code{\link{expand}} to 
 Extent
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{
 \code{\link[raster]{intersect}, \link[raster]{extent}, \link[raster]{setExtent}}

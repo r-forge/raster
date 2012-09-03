@@ -34,7 +34,7 @@ You can supply a second spatially overlapping RasterLayer with larger cells (do 
 RasterBrick
 }
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 r <- raster(nrow=36, ncol=72)

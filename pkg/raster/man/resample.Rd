@@ -29,7 +29,7 @@ Before using resample, you may want to consider using these other functions inst
 RasterLayer or RasterBrick object 
 }
 
-\author{Robert J. Hijmans }
+
 
 
 \seealso{ \code{\link[raster]{aggregate}}, \code{\link[raster]{disaggregate}}, \code{\link[raster]{crop}}, \code{\link[raster]{expand}}, \code{\link[raster]{merge}}, \code{\link[raster]{projectRaster}} }

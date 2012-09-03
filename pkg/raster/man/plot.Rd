@@ -71,7 +71,7 @@ red-green-blue plots (e.g. false color composites) can be made with \code{\link[
 \code{\link[raster]{text}, \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}
 }
 
-\author{ Robert J. Hijmans }
+
 
 \examples{ 
 # RasterLayer

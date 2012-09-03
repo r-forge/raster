@@ -87,7 +87,7 @@ RasterLayer or RasterBrick
 
 \seealso{ \code{\link{extract}} }
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 

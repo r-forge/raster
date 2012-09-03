@@ -33,10 +33,10 @@ gridDistance(x, origin, omit=NULL, filename="", ...)
 If the RasterLayer to be processed is big, it will be processed in chunks automatically. This may lead to errors in the case of complex objects spread over different chunks (meandering rivers, for instance). You can try to solve these issues by varying the chunk size, see function setOptions().
 }
 
-\value{A RasterLayer object}
+\value{RasterLayer}
 
 
-\author{ Jacob van Etten and Robert J. Hijmans }
+\author{Jacob van Etten and Robert J. Hijmans }
 
 
 \examples{

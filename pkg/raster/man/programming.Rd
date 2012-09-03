@@ -54,7 +54,7 @@ closeHandle: RasterLayer object
 getCluster: snow cluster object
 }
 
-\author{Robert J. Hijmans}
+
 
 
 \examples{

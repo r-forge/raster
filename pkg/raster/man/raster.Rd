@@ -88,7 +88,7 @@ To read NetCDF files (CF convention), the \code{ncdf} or the \code{ncdf4} packag
 RasterLayer object
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[raster]{stack}, \link[raster]{brick}} }
 

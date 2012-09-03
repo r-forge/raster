@@ -81,7 +81,7 @@ A vector for RasterLayer objects, and a matrix for a RasterStack or RasterBrick 
 \seealso{ \code{\link{getValues}, \link{getValuesFocal}}  }
 
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 

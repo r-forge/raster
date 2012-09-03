@@ -38,7 +38,7 @@ update(object, ...)
 RasterLayer or RasterBrick
 }
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 # setting up an example RasterLayer with file

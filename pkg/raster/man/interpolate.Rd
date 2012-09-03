@@ -36,7 +36,7 @@ Raster object
 
 \seealso{ \code{\link[raster]{predict}}, \code{\link[gstat]{predict.gstat}}, \code{\link[fields]{Tps}} }
 
-\author{ Robert J. Hijmans}
+
 
 \examples{
 

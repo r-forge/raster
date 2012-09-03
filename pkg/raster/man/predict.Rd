@@ -41,7 +41,7 @@ Use \code{\link[raster]{interpolate}} if your model has 'x' and 'y' as implicit 
 RasterLayer or RasterBrick
 }
 
-\author{ Robert J. Hijmans}
+
 
 \examples{
 # A simple model to predict the location of the R in the R-logo using 20 presence points 

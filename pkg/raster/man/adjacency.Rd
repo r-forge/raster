@@ -36,7 +36,7 @@ A two column matrix with each row containing a pair of adjacent cells.
 \code{\link{adjacent}}
 }
 
-\author{Jacob van Etten \email{jacobvanetten@yahoo.com}}
+\author{Jacob van Etten}
 
 
 \examples{

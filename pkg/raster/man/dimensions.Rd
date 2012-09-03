@@ -30,7 +30,7 @@ Integer or Raster* object
 }
 \seealso{ \code{ \link{ncell}, \link{extent}, \link{res} } } 
 
-\author{ Robert J. Hijmans }
+
 
 \examples{
 r <- raster()

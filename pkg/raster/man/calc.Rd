@@ -54,7 +54,7 @@ Because the mean value of each chunk will likely be different. Rather do somethi
 \seealso{ \code{ \link[raster]{overlay}} ,  \code{ \link[raster]{reclassify}},  \link[raster]{Arith-methods}, \link[raster]{Math-methods}} 
 
 
-\author{ Robert J. Hijmans and Matteo Mattiuzzi}
+\author{Robert J. Hijmans and Matteo Mattiuzzi}
 
 \examples{
 r <- raster(ncols=36, nrows=18)

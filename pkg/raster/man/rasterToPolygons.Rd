@@ -30,7 +30,7 @@ e.g.: \code{fun=function(x){x==1}} or  \code{fun=function(x){x>3 & x<6}}
 SpatialPolygonsDataFrame
 }
 
-\author{Robert J. Hijmans}
+
 
 \examples{ 
 r <- raster(nrow=18, ncol=36)

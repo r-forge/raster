@@ -34,7 +34,7 @@ Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStac
   \item{...}{graphical parameters as in \code{\link{rasterImage}}}
 }
 
-\author{ Robert J. Hijmans; stretch option based on functions by Josh Gray }
+\author{Robert J. Hijmans; stretch option based on functions by Josh Gray }
 
 \seealso{ \code{\link[raster]{plot}} }
 

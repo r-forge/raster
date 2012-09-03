@@ -28,10 +28,10 @@ You can use the additional logical argument \code{cells}. If cells=\code{FALSE} 
 \seealso{ \code{\link[base]{which}} }
 
 \value{
-a RasterLayer object
+RasterLayer object
 }
 
-\author{Robert J.Hijmans}
+
 
 \examples{
 r <- raster(ncol=10, nrow=10)

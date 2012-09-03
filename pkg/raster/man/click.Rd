@@ -43,7 +43,7 @@ Unless the process is terminated prematurely values at at most \code{n} position
 
 \seealso{ \code{\link{select}, \link[raster]{drawExtent}} }
 
-\author{ Robert J. Hijmans }
+
 
 \examples{
  r <- raster(system.file("external/test.grd", package="raster"))

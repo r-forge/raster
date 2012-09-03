@@ -22,7 +22,7 @@ You can use the, somewhat more flexible, function \code{\link[raster]{calc}} ins
 \seealso{ \code{\link[raster]{Arith-methods}}, \code{\link{calc}}, \code{\link{overlay}}, \code{\link{atan2}} }
 
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 r1 <- raster(nrow=10, ncol=10)

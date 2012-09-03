@@ -35,7 +35,7 @@ The Raster objects must have the same origin and resolution.
 RasterLayer or RasterBrick object.
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[raster]{merge}}, \code{\link[raster]{expand}}}
 

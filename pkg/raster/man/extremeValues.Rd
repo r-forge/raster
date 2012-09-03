@@ -34,7 +34,7 @@ If a Raster* object is created from a file on disk, the min and max values are o
 }
 
 
-\author{Robert J. Hijmans }
+
 \examples{
 r <- raster()
 r <- setValues(r, 1:ncell(r))

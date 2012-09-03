@@ -30,7 +30,7 @@ bandnr(x, ...)
 a numeric value >= 1
 }
 
-\author{Robert J. Hijmans }
+
 \examples{
 r <- raster()
 nbands(r)

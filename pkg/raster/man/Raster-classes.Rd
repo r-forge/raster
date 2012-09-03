@@ -75,7 +75,7 @@ Slots for RasterLayer and RasterBrick objects
 
 
 
-\author{ Robert J. Hijmans }
+
 
 
 \examples{

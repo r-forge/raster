@@ -42,9 +42,7 @@ See package plotKML for more advanced functionality
 None. Used for the side-effect files written to disk. 
 }
 
-\author{
-This function was adapted for the raster package by Robert J. Hijmans, with ideas from Tony Fischbach, and based on functions in the maptools package by Duncan Golicher, David Forrest and Roger Bivand.
-}
+\author{This function was adapted for the raster package by Robert J. Hijmans, with ideas from Tony Fischbach, and based on functions in the maptools package by Duncan Golicher, David Forrest and Roger Bivand.}
 
 
 \examples{

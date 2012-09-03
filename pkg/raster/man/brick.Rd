@@ -83,7 +83,7 @@ If a new file is created, additional arguments are as for \code{\link{writeRaste
 RasterBrick
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[raster]{raster}} }
 

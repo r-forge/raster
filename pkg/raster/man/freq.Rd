@@ -33,7 +33,7 @@ matrix (RasterLayer). List of matrices (one for each layer) or data.frame (if \c
 
 \seealso{ \code{\link[raster]{count}}, \code{\link[raster]{crosstab} } and \code{\link[raster]{zonal} } }
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 r <- raster(nrow=18, ncol=36)

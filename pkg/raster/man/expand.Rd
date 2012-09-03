@@ -34,7 +34,7 @@ RasterLayer or RasterBrick, or Extent
 }
 
 
-\author{Robert J. Hijmans and Etienne B. Racine (Extent method) }
+\author{Robert J. Hijmans and Etienne B. Racine (Extent method)}
 
 \seealso{\code{\link[raster]{crop}}, \code{\link[raster]{merge}}}
 

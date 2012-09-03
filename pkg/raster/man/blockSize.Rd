@@ -26,7 +26,7 @@ blockSize(x, chunksize, n=nlayers(x), minblocks=4, minrows=1)
 A list with \code{rows}, the suggested row numbers at which to start the blocks for reading and writing, \code{size}, the block size (number of rows) and \code{n}, the total number of blocks 
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[raster]{writeValues}} }  
 

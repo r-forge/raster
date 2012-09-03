@@ -26,7 +26,7 @@ isLonLat(x)
 Logical
 }
 
-\author{Robert J. Hijmans }
+
 
 \examples{
 r <- raster()

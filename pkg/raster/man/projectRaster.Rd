@@ -59,7 +59,7 @@ With such data you may need to adjust the returned object. E.g. do \code{ymax(ob
 RasterLayer or RasterBrick object.
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{
 \code{\link{resample}}, \code{\link[rgdal]{CRS-class}}, \code{\link[rgdal]{projInfo}}, \code{\link[rgdal]{spTransform}}

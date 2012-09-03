@@ -49,10 +49,6 @@ Raster* object
 
 \seealso{\code{ \link[raster]{calc},  \link[raster]{Arith-methods}} }
 
-\author{
-Robert J. Hijmans 
-}
-
 \examples{
 r <- raster(ncol=10, nrow=10)
 r1 <- init(r, fun=runif)

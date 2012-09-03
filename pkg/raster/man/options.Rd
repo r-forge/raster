@@ -52,7 +52,7 @@ clearOptions()
 None. These functions are used to get or set global options.
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[base]{options}}, \code{\link[raster]{rasterTmpFile}} }  
 

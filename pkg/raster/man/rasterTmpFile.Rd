@@ -36,7 +36,7 @@ The default path where the temporary files are stored is returned by \code{showO
 }
 
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[raster]{setOptions}}, \code{\link[raster]{showOptions}}, \code{\link[base]{tempfile}} }  
 

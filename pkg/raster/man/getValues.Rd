@@ -52,7 +52,7 @@ vector or matrix of raster values
 \seealso{ \code{\link{getValuesBlock}, \link{getValuesFocal}, \link{setValues}} }
 
 
-\author{Robert J. Hijmans}
+
 \examples{
 r <- raster(system.file("external/test.grd", package="raster"))
 r

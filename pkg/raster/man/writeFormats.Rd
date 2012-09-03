@@ -34,7 +34,7 @@ Supported formats include:
 }
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[rgdal]{GDALDriver-class}} }  
 

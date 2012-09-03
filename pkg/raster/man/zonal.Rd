@@ -32,7 +32,7 @@ A matrix with a value for each zone (unique value in \code{zones})
 
 \seealso{ See \code{\link{cellStats}} for 'global' statistics (i.e., all of \code{x} is considered a single zone), and \code{\link{extract}} for summarizing values for polygons}
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 r <- raster(ncols=10, nrows=10)

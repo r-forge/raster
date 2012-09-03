@@ -22,7 +22,7 @@ intersectExtent(x, ..., validate=TRUE)
 Extent object
 }
   
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[raster]{union}, \link[raster]{intersect}, \link[raster]{extent}} }
 

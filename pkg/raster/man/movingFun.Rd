@@ -27,7 +27,7 @@ movingFun(x, n, fun=mean, type='around', circular=FALSE, na.rm=FALSE)
 Numeric
 }
 
-\author{Robert J. Hijmans (who was inspired by Diethelm Wuertz' rollFun function in the fTrading package)}
+\author{Robert J. Hijmans, inspired by Diethelm Wuertz' rollFun function in the fTrading package}
 
 \examples{
 movingFun(1:12, 3, mean)

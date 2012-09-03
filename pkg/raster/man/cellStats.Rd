@@ -38,7 +38,7 @@ Numeric
 \code{\link[raster]{quantile}}, \code{\link[raster]{minValue}}, \code{\link[raster]{maxValue}}, \code{\link[raster]{setMinMax}}
 }
 
-\author{Robert J. Hijmans}
+
 
 \examples{
 r <- raster(nrow=18, ncol=36)

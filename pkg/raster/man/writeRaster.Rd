@@ -74,7 +74,7 @@ Supported file types include:
 This function is used for the side-effect of writing values to a file.
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{\code{\link[raster]{writeFormats}}, \code{\link[raster]{writeValues}} }  
 

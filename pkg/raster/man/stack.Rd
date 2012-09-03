@@ -32,7 +32,7 @@ A RasterStack is a collection of RasterLayer objects with the same spatial exten
 RasterStack
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ \code{\link[raster]{addLayer}, \link[raster]{dropLayer}, \link[raster]{raster}, \link[raster]{brick}} }
 

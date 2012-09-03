@@ -21,7 +21,7 @@ unionExtent(x, ...)
 Extent object
 }
   
-\author{Robert J. Hijmans}
+
 
 \seealso{  \code{\link[raster]{union}}, \code{\link[raster]{intersect}},  \code{\link[raster]{extent}}} 
 

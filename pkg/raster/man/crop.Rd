@@ -31,7 +31,7 @@ Objects from which an Extent can be extracted/created include RasterLayer, Raste
 RasterLayer or RasterBrick object; or SpatialLines or SpatialPolygons object.
 }
 
-\author{Robert J. Hijmans}
+
 
 \seealso{ 
 \code{\link[raster]{expand}}, \code{\link[raster]{merge}}

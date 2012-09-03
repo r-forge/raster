@@ -36,7 +36,7 @@ image(x, ...)
 
 \seealso{ \code{\link[graphics]{image}}, \code{\link[raster]{contour}}, \code{\link[raster]{plot}} }
 
-\author{ Robert J. Hijmans }
+
 
 \examples{ 
 r <- raster(system.file("external/test.grd", package="raster"))

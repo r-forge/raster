@@ -24,6 +24,6 @@ slopeAspect(dem, filename='', out=c('slope', 'aspect'), unit='radians', neighbor
 
 \seealso{ \code{\link{terrain}} }
 
-\author{Robert J. Hijmans}
+
 
 \keyword{spatial}
