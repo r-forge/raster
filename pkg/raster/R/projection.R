@@ -31,10 +31,11 @@
 
 
 projection <- function(x, asText=TRUE) {
+
 	if (extends(class(x), "BasicRaster")) { 
 		x <- x@crs 
 	} else if (extends(class(x), "Spatial")) { 
-		x <- proj4string(x)
+		x <- x@proj4string
 	} else if (class(x) == 'character') { 
 		if (asText) {
 			return(x)
@@ -76,5 +77,4 @@ setMethod("proj4string<-", signature('Raster'),
 		obj
 	}
 )
-
 
