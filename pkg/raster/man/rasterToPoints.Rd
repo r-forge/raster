@@ -20,8 +20,9 @@ rasterToPoints(x, fun=NULL, spatial=FALSE, ...)
 }
 
 \details{
-\code{fun} should be a simple function returning a logical value
-e.g.: \code{fun=function(x){x==1}} or  \code{fun=function(x){x>3}}
+\code{fun} should be a simple function returning a logical value. 
+
+E.g.: \code{fun=function(x){x==1}} or  \code{fun=function(x){x>3}}
 }
 
 \value{

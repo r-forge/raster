@@ -22,8 +22,9 @@ rasterToPolygons(x, fun=NULL, n=4, na.rm=TRUE, digits=12, dissolve=FALSE)
 }
 
 \details{
-\code{fun} should be a simple function returning a logical value
-e.g.: \code{fun=function(x){x==1}} or  \code{fun=function(x){x>3 & x<6}}
+\code{fun} should be a simple function returning a logical value. 
+
+E.g.: \code{fun=function(x){x==1}} or  \code{fun=function(x){x>3 & x<6}}
 }
 
 \value{

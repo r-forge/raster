@@ -59,7 +59,8 @@ The value of a grid cell is determined by the values associated with the points 
 
 If \code{x} represents points, each point is assigned to a grid cell. 
 
-If you want to know the number of points in each grid cell, use \code{fun=function(x,...){length(x)}}. I.e., for each cell it computes the length of the vector of points. You can also use \code{fun=sum}, because the default 'field' value of a point is 1. For the number of unique values use 
+If you want to know the number of points in each grid cell, use \code{fun=function(x,...){length(x)}}. I.e., for each cell it computes the length of the vector of points. You can also use \code{fun=sum}, because the default 'field' value of a point is 1. For example, for the number of unique values per grid cell you can use:
+
 \code{fun=function(x, ...){ length(unique(na.rm(x)))}}
 
 There is one additional argument:

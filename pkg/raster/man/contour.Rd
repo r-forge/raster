@@ -43,7 +43,7 @@ The rasterVis package has more advanced plotting methods for Raster* objects.
 
 
 
-\examples{ 
+\examples{
 r <- raster(system.file("external/test.grd", package="raster"))
 plot(r)
 contour(r, add=TRUE)

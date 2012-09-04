@@ -9,7 +9,8 @@ This is a deprecated function. Use \code{\link{terrain}} instead.
 }
 
 \usage{
-slopeAspect(dem, filename='', out=c('slope', 'aspect'), unit='radians', neighbors=8, flatAspect, ...)  
+slopeAspect(dem, filename='', out=c('slope', 'aspect'), unit='radians', 
+                 neighbors=8, flatAspect, ...)  
 }
 
 \arguments{

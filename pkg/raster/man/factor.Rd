@@ -70,7 +70,6 @@ Raster* object; list (levels); boolean (is.factor); matrix (factorValues)
 
 
 \examples{
-
 set.seed(0)
 r <- raster(nrow=10, ncol=10)
 r[] <- runif(ncell(r)) * 10

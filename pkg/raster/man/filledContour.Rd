@@ -23,7 +23,7 @@ filledContour(x, y=1, maxpixels=100000, ...)
 
 
 
-\examples{ 
+\examples{
 r <- raster(system.file("external/test.grd", package="raster"))
 filledContour(r)
 }

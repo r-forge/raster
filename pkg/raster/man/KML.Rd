@@ -16,10 +16,10 @@ See package plotKML for more advanced functionality
 
 \usage{
 \S4method{KML}{RasterLayer}(x, filename, col=rev(terrain.colors(255)), 
-  colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...)
+     colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...)
 
-\S4method{KML}{RasterStackBrick}(x, filename, time=NULL, 
-  col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...)
+\S4method{KML}{RasterStackBrick}(x, filename, time=NULL, col=rev(terrain.colors(255)), 
+     colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...)
 
 \S4method{KML}{Spatial}(x, filename, zip='', overwrite=FALSE, ...)
 }

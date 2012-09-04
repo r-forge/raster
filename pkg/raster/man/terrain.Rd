@@ -49,7 +49,8 @@ Such measures can also be computed with the \code{\link{focal}} function:
 
 \code{TPI <- focal(x, w=f, fun=function(x, ...) x[5] - mean(x[-5]), pad=TRUE, padValue=NA)}
 
-\code{rough <- focal(x, w=f, fun=function(x, ...) max(x) - min(x), pad=TRUE, padValue=NA, na.rm=TRUE)}
+\code{rough <- focal(x, w=f, fun=function(x, ...) {max(x) - min(x)}, 
+                         pad=TRUE, padValue=NA, na.rm=TRUE) }
 }
 
 

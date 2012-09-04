@@ -108,10 +108,12 @@ extract(r, sp, method='bilinear')
 extract(r, xy[1:3,], buffer=1000000)
 extract(r, xy[1:3,], buffer=1000000, fun=mean)
 
-## illustrating the varying size of a buffer (expressed in meters) on a longitude/latitude raster
+## illustrating the varying size of a buffer (expressed in meters) 
+## on a longitude/latitude raster
  z <- extract(r, xy, buffer=1000000)
  s <- raster(r)
  for (i in 1:length(z)) { s[z[[i]]] <- i }
+ 
 ## compare with raster that is not longitude/latitude
  projection(r) <- "+proj=utm +zone=17" 
  xy[,1] <- 50
@@ -137,7 +139,8 @@ extract(r, lines)
 ###############################
 cds1 <- rbind(c(-180,-20), c(-160,5), c(-60, 0), c(-160,-60), c(-180,-20))
 cds2 <- rbind(c(80,0), c(100,60), c(120,0), c(120,-55), c(80,0))
-polys <- SpatialPolygons(list(Polygons(list(Polygon(cds1)), 1), Polygons(list(Polygon(cds2)), 2)))
+polys <- SpatialPolygons(list(Polygons(list(Polygon(cds1)), 1), 
+                              Polygons(list(Polygon(cds2)), 2)))
 
 #plot(r)
 #plot(polys, add=TRUE)

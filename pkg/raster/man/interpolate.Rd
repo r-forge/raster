@@ -39,9 +39,7 @@ Raster object
 
 
 \examples{
-
 \dontrun{
-
 ## Thin plate spline interpolation with x and y only
 library(fields) 
 r <- raster(system.file("external/test.grd", package="raster"))

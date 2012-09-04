@@ -15,7 +15,7 @@ Most of these options are used when writing files to disk. They can be ignored b
 
 The default location is returned by \code{rasterTmpDir}. It is the same as that of the R tempdir but you can change it (for the current session) with \code{rasterOptions(tmpdir= }. 
 
-To permanently set any of these options, you can add them to \code{<your R installation>/etc/Rprofile.site}. For example, to change the default directory used to save temporary files, add a line like this: \code{options(rasterTmpDir='c:/temp/')} to that file. All temporary raster files in that folder that are older than 24 hrs are deleted when the raster package is loaded.
+To permanently set any of these options, you can add them to \code{<your R installation>/etc/Rprofile.site>}. For example, to change the default directory used to save temporary files, add a line like this: \code{options(rasterTmpDir='c:/temp/')} to that file. All temporary raster files in that folder that are older than 24 hrs are deleted when the raster package is loaded.
 
 \code{showOptions} shows the current options.
 

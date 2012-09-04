@@ -65,14 +65,16 @@ r5 <- overlay(s, fun=function(x,y) x*y )
 r5c <- calc(s, fun=function(x) x[1]*x[2] )
 
 
-#Combine RasterStack and RasterLayer objects (s2 has four layers. r1 (one layer) and s (two layers) are recycled) 
+#Combine RasterStack and RasterLayer objects (s2 has four layers. 
+# r1 (one layer) and s (two layers) are recycled) 
 s2 <- stack(r1, r2, r3, r4)
 b <- overlay(r1, s, s2, fun=function(x,y,z){return(x*y*z)} )
 
 # use a single RasterLayer (same as calc function)
 r6 <- overlay(r1, fun=sqrt)
 
-# multiplication with more than two layers (make sure the number of RasterLayers matches the arguments of 'fun'
+# multiplication with more than two layers 
+# (make sure the number of RasterLayers matches the arguments of 'fun')
 r7 <- overlay(r1, r2, r3, r4, fun=function(a,b,c,d){return(a*b+c*d)} )  
 # equivalent function, efficient if values can be loaded in memory
 r8 <- r1 * r2 + r3 * r4

@@ -27,11 +27,9 @@ A list with \code{rows}, the suggested row numbers at which to start the blocks 
 }
 
 
-
 \seealso{ \code{\link[raster]{writeValues}} }  
 
-\examples{ 
-
+\examples{
 r <- raster(system.file("external/test.grd", package="raster"))
 blockSize(r)
 }
