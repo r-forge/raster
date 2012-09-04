@@ -3,17 +3,17 @@
 # Version 0.9
 # Licence GPL v3
 
-.startGDALwriting <- function(x, filename, options, ...) {
+.startGDALwriting <- function(x, filename, options, setStatistics=TRUE, ...) {
 
 	temp <- .getGDALtransient(x, filename=filename, options=options, ...)
 	attr(x@file, "transient") <- temp[[1]]
 	x@file@nodatavalue <- temp[[2]]
 	attr(x@file, "options") <- temp[[3]]
-	
+	attr(x@file, "stats") <- setStatistics
+
 	x@data@min <- rep(Inf, nlayers(x))
 	x@data@max <- rep(-Inf, nlayers(x))
 	x@data@haveminmax <- FALSE
-
 	
 	x@file@datanotation <- .getRasterDType(temp[[4]])
 	x@file@driver <- 'gdal'
@@ -27,17 +27,19 @@
 
 	nl <- nlayers(x)
 
-	statistics <- cbind(x@data@min, x@data@max)
+	statistics <- cbind(x@data@min, x@data@max)	
 	if (substr(x@file@datanotation, 1, 1) != 'F') {
 		statistics <- round(statistics)
 	}
-	statistics <- cbind(statistics, stat[,1], stat[,2])
 
-	for (i in 1:nl) {
-		b <- new("GDALRasterBand", x@file@transient, i)
-		try ( .Call("RGDAL_SetStatistics", b, as.double(statistics[i,]), PACKAGE = "rgdal"), silent=TRUE )
+	statistics <- cbind(statistics, stat[,1], stat[,2])
+	if (isTRUE( attr(x@file, "stats") ) ) {
+		for (i in 1:nl) {
+			b <- new("GDALRasterBand", x@file@transient, i)
+			try ( .Call("RGDAL_SetStatistics", b, as.double(statistics[i,]), PACKAGE = "rgdal"), silent=TRUE )
+		}
 	}
-		
+	
 	if(x@file@options[1] != "") {
 		saveDataset(x@file@transient, x@file@name, options=x@file@options)
 	} else {

@@ -37,7 +37,11 @@ unless this default value was changed with \code{\link{setOptions}}}
 For some other formats you can use the 'options' argument (see below)
 	
 \code{options}: Character. File format specific GDAL options. E.g., when
-writing a geotiff file: \code{options=c("COMPRESS=NONE", "TFW=YES")}
+writing a geotiff file you can use: \code{options=c("COMPRESS=NONE", "TFW=YES")}
+
+You can use options=c("PROFILE=BASELINE") to create a plain  tif with no GeoTIFF tags. 
+This can be useful when writing files to be read by applications intolerant of unrecognised tags. 
+(see \url{http://www.gdal.org/frmt_gtiff.html})
 
 NetCDF files have the following additional, optional, arguments: \code{varname}, \code{varunit}, \code{longname}, \code{xname}, \code{yname}, \code{zname}, \code{zunit}
 }
