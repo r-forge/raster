@@ -32,8 +32,19 @@
 		statistics <- round(statistics)
 	}
 
-	statistics <- cbind(statistics, stat[,1], stat[,2])
+	
 	if (isTRUE( attr(x@file, "stats") ) ) {
+	
+		statistics <- cbind(statistics, stat[,1], stat[,2])	
+
+		# could do wild guesses to avoid problems in other software
+		# but not sure if this cure would be worse. Could have an option to do this
+		#i <- is.na(statistics[,3])
+		#if (sum(i) > 0) {
+		#	statistics[i, 3] <- (statistics[i, 1] + statistics[i, 2]) / 2
+		#	statistics[i, 4] <- statistics[i, 3] * 0.2
+		#}
+		
 		for (i in 1:nl) {
 			b <- new("GDALRasterBand", x@file@transient, i)
 			try ( .Call("RGDAL_SetStatistics", b, as.double(statistics[i,]), PACKAGE = "rgdal"), silent=TRUE )

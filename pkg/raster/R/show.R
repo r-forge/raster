@@ -67,7 +67,12 @@ setMethod ('show' , 'RasterLayer',
 			cat('Raster Attribute Table\n') 
 	
 			#nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
+			w <- getOption('warn')
+			on.exit(options('warn' = w))
+			options('warn'=-1) 
 			r <- apply(x, 2, range, na.rm=TRUE)
+			r[!is.finite(r)] <- NA
+			options('warn' = w)
 			r <- data.frame(r)
 			r <- data.frame(x=c('min :','max :'), r)
 			colnames(r) <- c('    fields :', colnames(x))
