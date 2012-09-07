@@ -25,6 +25,7 @@
 	nodataval <- -Inf
 	layernames <- ''
 	zvalues <- ''
+	zclass <- NULL
 	
 	isCat <- FALSE
 	ratnames <- rattypes <- ratvalues <- NULL
@@ -65,6 +66,7 @@
 		else if (ini[i,2] == "PROJECTION") { projstring <- ini[i,3] } 
 		else if (ini[i,2] == "LAYERNAME") { layernames <- ini[i,3] } 
 		else if (ini[i,2] == "ZVALUES") { zvalues <- ini[i,3] } 
+		else if (ini[i,2] == "ZCLASS") { zclass <- ini[i,3] } 
     }  
 	
 	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
@@ -140,6 +142,12 @@
 		zvalues <- unlist(strsplit(zvalues, ':'))
 		zname <- zvalues[1]
 		zvalues <- zvalues[-1]
+
+		if (!is.null(zclass)) {
+			if (zclass == 'Date') {
+				try ( zvalues <- as.Date(zvalues), silent=TRUE )
+			}
+		}
 		if (type == 'RasterBrick') {
 			zvalues <- list(zvalues)
 		} else {

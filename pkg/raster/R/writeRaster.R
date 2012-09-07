@@ -118,6 +118,7 @@ function(x, filename, format, bylayer=FALSE, suffix='numbers', ...) {
 	
 		out <- brick(x, values=FALSE)
 		names(out) <- names(x)
+		out <- setZ(out, getZ(x))
 		out <- writeStart(out, filename, format=filetype, ...)
 	
 		if (inMemory(x)) {

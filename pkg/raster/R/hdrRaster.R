@@ -58,7 +58,10 @@
 		if (is.null(zname)) {
 			zname <- 'z-value'
 		}
+		zclass <- class(z)
+		z <- as.character(z)
 		cat("zvalues=", paste(c(zname, z), collapse=':'), "\n", file = thefile)
+		cat("zclass=", zclass, "\n", file = thefile)
 	}
 	cat("history=",  x@history, "\n", file = thefile)
 	close(thefile)
