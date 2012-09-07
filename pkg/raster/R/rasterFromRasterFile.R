@@ -145,7 +145,9 @@
 
 		if (!is.null(zclass)) {
 			if (zclass == 'Date') {
-				try ( zvalues <- as.Date(zvalues), silent=TRUE )
+				try( zvalues <- as.Date(zvalues), silent=TRUE )
+			} else {
+				try( zvalues <- as(zvalues, zclass), silent=TRUE )
 			}
 		}
 		if (type == 'RasterBrick') {
