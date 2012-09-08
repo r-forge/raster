@@ -224,7 +224,7 @@
 	if (! silent) {  cat('Found', npol, 'region(s) and', cnt, 'polygon(s)\n') }
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
 #	polinfo <- polinfo[order(polinfo[,1]),]
-	rm(p)
+#	rm(p)
 
 		
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(rstr)
@@ -259,7 +259,7 @@
 		if (length(subpol[,1]) > 0) { 		
 			updateHoles <- FALSE
 			lastpolnr <- subpol[1,6]
-			for (i in 1:length(subpol[,1])) {
+			for (i in 1:nrow(subpol)) {
 				if (i == nrow(subpol)) { 
 					updateHoles <- TRUE 
 				} else if (subpol[i+1,6] > lastpolnr) { # new polygon
@@ -341,17 +341,17 @@
 				}
 				if (updateHoles) {
 					if (doFun) {
-						tmp <- rv
-						rv <- lst1
-						ind <- which(!holes )
+						#tmp <- rv
+						#rv <- lst1
+						ind <- which(holes )
 						for (ii in ind) {
-							if (!is.null(tmp[[ii]])) {
-								rv[[ii]] <- tmp[[ii]]
-							}
+							vals <- rv[[ii]]
+							rv[[ii]] <- vals[-length(vals)]
 						}
 					} else {
 						rv[holes] <- NA
 					}
+					stopifnot(length(rrv) == length(rv))
 					rrv[!is.na(rv)] <- rv[!is.na(rv)]
 					holes <- holes1
 					updateHoles = FALSE	
@@ -361,11 +361,13 @@
 		}
 		
 		if (doFun) {
-			for (i in 1:length(rrv)) {
-				if (is.null(rrv[[i]])) {
-					rrv[[i]] <- NA
-				}
-			}
+		    
+			rrv <- lapply(rrv, function(x) if(is.null(x)) NA else x)
+			#for (i in 1:length(rrv)) {
+			#	if (is.null(rrv[[i]])) {
+			#		rrv[[i]] <- NA
+			#	}
+			#}
 			rrv <- sapply(rrv, fun)
 		}
 		
