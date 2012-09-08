@@ -79,37 +79,68 @@ function(x, filename, format, bylayer=FALSE, suffix='numbers', ...) {
 
 	stopifnot(hasValues(x))
 	filename <- trim(filename)
-	if (filename == '') {	stop('provide a filename')	}
-	filename <- .fullFilename(filename, expand=TRUE)
-	filetype <- .filetype(format, filename=filename)
-	filename <- .getExtension(filename, filetype)
 	
 	if (bylayer) {
+		
 		nl <- nlayers(x)
-		ext <- extension(filename)
-		fn <- extension(filename, '')
-		if (suffix[1] == 'numbers') {
-			fn <- paste(fn, '_', 1:nl, ext, sep='')
-		} else if (suffix[1] == 'names') {
-			fn <- paste(fn, '_', names(x), ext, sep='')
-		} else if (length(suffix) == nl) {
-			fn <- paste(fn, '_', suffix, ext, sep='')
+		
+		if (length(filename) > 1) {
+			if (length(filename) != nlayers(x) ) {
+				stop('the number of filenames is > 1 but not equal to the number of layers')	
+			}
+			
+			filename <- .fullFilename(filename, expand=TRUE)
+			filetype <- .filetype(format, filename=filename[1])
+			filename <- .getExtension(filename, filetype)
+				   
 		} else {
-			stop('invalid "suffix" argument')
+		
+			if (filename == '') { 
+				stop('provide a filename') 
+			}
+			filename <- .fullFilename(filename, expand=TRUE)
+			filetype <- .filetype(format, filename=filename)
+			filename <- .getExtension(filename, filetype)
+
+			ext <- extension(filename)
+			filename <- extension(filename, '')
+			if (suffix[1] == 'numbers') {
+				filename <- paste(filename, '_', 1:nl, ext, sep='')
+			} else if (suffix[1] == 'names') {
+				filename <- paste(filename, '_', names(x), ext, sep='')
+			} else if (length(suffix) == nl) {
+				filename <- paste(filename, '_', suffix, ext, sep='')
+			} else {
+				stop('invalid "suffix" argument')
+			}
 		}
+		
+		
+		if (filetype == 'KML') {
+			layers <- lapply(1:nl, function(i) KML(x[[i]], filename=filename[i], ...))	
+			return(invisible(x))
+		}
+			
 		if (inherits(x, 'RasterBrick')) {
 			x <- stack(x)
 		}
-		layers <- lapply(1:nl, function(i) writeRaster(x[[i]], filename=fn[i], format=filetype, ...))	
+		layers <- lapply(1:nl, function(i) writeRaster(x[[i]], filename=filename[i], format=filetype, ...))	
 		return(stack(layers))
 	}
 	
 
+	if (filename == '') {	
+		stop('provide a filename')	
+	}
+	filename <- .fullFilename(filename, expand=TRUE)
+	filetype <- .filetype(format, filename=filename)
+	filename <- .getExtension(filename, filetype)
+	
+	
 	if (filetype == 'KML') {
 		KML(x, filename, ...) 
 		return(invisible(x))
 	}
-	
 	
 	if (.isNativeDriver(filetype)) {
 		if (! filetype %in% c("raster", "BIL", "BSQ", "BIP") ) {
@@ -118,7 +149,10 @@ function(x, filename, format, bylayer=FALSE, suffix='numbers', ...) {
 	
 		out <- brick(x, values=FALSE)
 		names(out) <- names(x)
-		out <- setZ(out, getZ(x))
+		z <- getZ(x)
+		if (!is.null(z)) {
+			out <- setZ(out, z)
+		}
 		out <- writeStart(out, filename, format=filetype, ...)
 	
 		if (inMemory(x)) {
