@@ -100,6 +100,9 @@ setMethod ('print' , 'Spatial',
 			}
 			cat('variables   :', paste(coln, collapse=', '), '\n')
 
+			w <- getOption('warn')
+			on.exit(options('warn' = w))
+			options('warn'=-1) 
 			r <- apply(x, 2, range, na.rm=TRUE)
 			minv <- as.vector(r[1, ])
 			maxv <- as.vector(r[2, ])
