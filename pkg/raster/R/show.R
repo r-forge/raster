@@ -71,7 +71,7 @@ setMethod ('show' , 'RasterLayer',
 			on.exit(options('warn' = w))
 			options('warn'=-1) 
 			r <- apply(x, 2, range, na.rm=TRUE)
-			r[!is.finite(r)] <- NA
+			r[is.numeric(r) & !is.finite(r)] <- NA
 			options('warn' = w)
 			r <- data.frame(r)
 			r <- data.frame(x=c('min :','max :'), r)
@@ -137,24 +137,28 @@ setMethod ('show' , 'RasterBrick',
 				cat('data source : in memory\n')			
 			}
 			
-			cat('names       :', paste(ln, collapse=', '), '\n')
-
 			if (object@data@haveminmax) {
-				minv <- format(minValue(object), digits=2)
-				maxv <- format(maxValue(object), digits=2)
+				minv <- format(minValue(object))
+				maxv <- format(maxValue(object))
 				minv <- gsub('Inf', '?', minv)
 				maxv <- gsub('-Inf', '?', maxv)
 				if (nl > mnr) {
 					minv <- c(minv[1:mnr], '...')
 					maxv <- c(maxv[1:mnr], '...')
 				}
-				cat('min values  :', paste(trim(minv), collapse=', '), '\n')
-				cat('max values  :', paste(trim(maxv), collapse=', '), '\n')
+				w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
+				m <- rbind(ln, minv, maxv)
+				# a loop because 'width' is not recycled by format
+				for (i in 1:ncol(m)) {
+					m[,i]   <- format(m[,i], width=w[i], justify="right")
+				}
+				cat('names       :', paste(m[1,], collapse=', '), '\n')
+				cat('min values  :', paste(m[2,], collapse=', '), '\n')
+				cat('max values  :', paste(m[3,], collapse=', '), '\n')
 
-#			} else {
-#				minv <- rep('?', min(nl, 10))
-#				maxv <- rep('?', min(nl, 10))
-			}
+			} else {
+				cat('names       :', paste(ln, collapse=', '), '\n')
+			}			
 		} 
 
 		z <- getZ(object)
@@ -211,19 +215,24 @@ setMethod ('show' , 'RasterStack',
 			if (nl > mnr) {
 				ln <- c(ln[1:mnr], '...')
 			}
-			cat('names       :', paste(ln, collapse=', '), '\n')
 			
-			minv <- format(minValue(object), digits=2)
-			maxv <- format(maxValue(object), digits=2)
+			minv <- format(minValue(object))
+			maxv <- format(maxValue(object))
 			minv <- gsub('Inf', '?', minv)
 			maxv <- gsub('-Inf', '?', maxv)
 			if (nl > mnr) {
 				minv <- c(minv[1:mnr], '...')
 				maxv <- c(maxv[1:mnr], '...')
 			}
-			cat('min values  :', paste(trim(minv), collapse=', '), '\n')
-			cat('max values  :', paste(trim(maxv), collapse=', '), '\n')
-			
+			w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
+			m <- rbind(ln, minv, maxv)
+				# a loop because 'width' is not recycled by format
+			for (i in 1:ncol(m)) {
+				m[,i]   <- format(m[,i], width=w[i], justify="right")
+			}
+			cat('names       :', paste(m[1,], collapse=', '), '\n')
+			cat('min values  :', paste(m[2,], collapse=', '), '\n')
+			cat('max values  :', paste(m[3,], collapse=', '), '\n')
 		}
 		
 		

@@ -14,8 +14,8 @@ Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStac
 
 
 \usage{
-\S4method{plotRGB}{RasterStackBrick}(x, r=1, g=2, b=3, scale, maxpixels=500000, 
-    stretch=NULL, ext=NULL, interpolate=FALSE, bgcol='white', alpha, bgalpha, ...)
+\S4method{plotRGB}{RasterStackBrick}(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL,
+         ext=NULL, interpolate=FALSE, bgcol='white', alpha, bgalpha, addfun=NULL, ...)
 }
 
 \arguments{
@@ -31,6 +31,7 @@ Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStac
   \item{bgcol}{Background (NA) color. Default is 'white'}
   \item{alpha}{transparency. Integer between 0 (transparent) and 255 (opaque)}
   \item{bgalpha}{Background transparency. Integer between 0 (transparent) and 255 (opaque)}
+  \item{addfun}{Function to add additional items such as points or polygons to the plot (map). See \code{\link[raster]{plot}}}
   \item{...}{graphical parameters as in \code{\link{rasterImage}}}
 }
 

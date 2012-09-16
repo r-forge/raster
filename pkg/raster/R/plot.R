@@ -25,6 +25,7 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 			stop('Raster object has no cell values')
 		}
 
+		
 		if (nl == 1) {
 			if (!missing(y)) {
 				if (is.character(y)) {
@@ -34,25 +35,33 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 						y <- match(y, names(x))
 						if (is.na(y)) {
 							warning('argument "y" ignored')
+						} else {
+							if (missing(main)) {
+								main <- names(x)[y]
+							}
 						}
 					}
 				}
 			}
+
 			if (missing(main)) {
-				main <- ''
+				main <- names(x)
 			}
-				
+			
 			if (length(x@legend@colortable) > 0) {
-				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main, ...)
+				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main[1], addfun=addfun, ...)
 			} else if (! useRaster) {
-				.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, main=main,...) 
+				.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, main=main[1], addfun=addfun, ...) 
 			} else {
-				.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, main=main,...) 
+				.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, main=main[1], addfun=addfun, ...) 
 				#.plot2(x, col=col, maxpixels=maxpixels, ...)
 			}
 			return(invisible(NULL))
 		}
 	
+		if (missing(main)) {
+			main <- names(x)
+		}
 		if (missing(y)) {
 			y <- 1:nl
 			if (length(y) > maxnl) {
@@ -66,18 +75,15 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 			y <- na.omit(y)
 		}
 		
-		if (missing(main)) {
-			main <- names(x)
-		}
 		
 		if (length(y) == 1) {
 			x <- raster(x, y)
 			if (length(x@legend@colortable) > 0) {
-				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main, ...)
+				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main[y], addfun=addfun, ...)
 			} else if (useRaster) {
-				.plotraster2(x, col=col, colNA=colNA, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, ...) 
+				.plotraster2(x, col=col, colNA=colNA, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, addfun=addfun, ...) 
 			} else {
-				.plotraster(x, col=col, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, ...) 
+				.plotraster(x, col=col, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, addfun=addfun, ...) 
 			}
 		} else {
 
@@ -112,101 +118,18 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 				
 				obj <- raster(x, y[i])
 				if (length(obj@legend@colortable) > 0) {
-					.plotCT(obj, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main, ...)
+					.plotCT(obj, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main, addfun=addfun, ...)
 				} else if (useRaster) {
 					.plotraster2(obj, col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=main[y[i]], 
-						ext=ext, interpolate=interpolate, colNA=colNA, ...) 
+						ext=ext, interpolate=interpolate, colNA=colNA, addfun=addfun, ...) 
 				} else {
 					.plotraster(obj, col=col, maxpixels=maxpixels, xaxt=xa, yaxt=ya, main=main[y[i]], 
-						ext=ext, interpolate=interpolate, ...) 
+						ext=ext, interpolate=interpolate, addfun=addfun, ...) 
 				}
 			}		
 		}
 		return(invisible(NULL))
 	}
 )	
-
-
-
-setMethod("plot", signature(x='Raster', y='Raster'), 
-	function(x, y, maxpixels=100000, cex=0.2, xlab, ylab, maxnl=16, ...)  {
-		compare(c(x, y), extent=TRUE, rowcol=TRUE, crs=FALSE, stopiffalse=TRUE) 
-		nlx <- nlayers(x)
-		nly <- nlayers(y)
-
-		maxnl <- max(1, round(maxnl))
-		nl <- max(nlx, nly)
-		if (nl > maxnl) {
-			nl <- maxnl
-			if (nlx > maxnl) {
-				x <- x[[1:maxnl]]
-				nlx <- maxnl
-			}
-			if (nly > maxnl) {
-				y <- y[[1:maxnl]]
-				nly <- maxnl
-			}
-		}
-		
-		if (missing(xlab)) {
-			ln1 <- names(x)
-		} else {
-			ln1 <- xlab
-			if (length(ln1) == 1) {
-				ln1 <- rep(ln1, nlx)
-			}
-		}
-		if (missing(ylab)) {
-			ln2 <- names(y)
-		} else {
-			ln2 <- ylab
-			if (length(ln1) == 1) {
-				ln2 <- rep(ln2, nly)
-			}
-		}
-
-		cells <- ncell(x)
-		
-		# gdal selects a slightly different set of cells than raster does for other formats.
-		# using gdal directly to subsample is faster.
-		dx <- .driver(x, warn=FALSE)
-		dy <- .driver(y, warn=FALSE)
-		if ( all(dx =='gdal') & all(dy == 'gdal')) {
-			x <- sampleRegular(x, size=maxpixels, useGDAL=TRUE) 
-			y <- sampleRegular(y, size=maxpixels, useGDAL=TRUE)
-		} else {
-			x <- sampleRegular(x, size=maxpixels)
-			y <- sampleRegular(y, size=maxpixels)
-		}
-		if (length(x) < cells) {
-			warning(paste('plot used a sample of ', round(100*length(x)/cells), "% of the cells", sep=""))
-		}
-			
-		if (nlx != nly) {	
-			# recycling
-			d <- cbind(as.vector(x), as.vector(y))
-			x <- matrix(d[,1], ncol=nl)
-			y <- matrix(d[,2], ncol=nl)
-			lab <- vector(length=nl)
-			lab[] <- ln1
-			ln1 <- lab
-			lab[] <- ln2
-			ln2 <- lab		
-		}
-		
-		if (nl > 1) {
-			old.par <- par(no.readonly = TRUE) 
-			on.exit(par(old.par))
-			nc <- ceiling(sqrt(nl))
-			nr <- ceiling(nl / nc)
-			par(mfrow=c(nr, nc), mar=c(4, 4, 2, 2))
-			for (i in 1:nl) {
-				plot(x[,i], y[,i], cex=cex, xlab=ln1[i], ylab=ln2[i], ...)			
-			}		
-		} else  {
-			plot(x, y, cex=cex, xlab=ln1[1], ylab=ln2[1], ...)			
-		}		
-	}
-)
 
 

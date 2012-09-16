@@ -15,16 +15,17 @@ Plot (that is, make a map of) the values of a Raster* object, or make a scatterp
 
 Points, lines, and polygons can be drawn on top of a map using \code{plot(..., add=TRUE)}, or with functions like \code{points, lines, polygons}
 
-See the rasterVis package for more advanced (trellis/lattice) plotting of Raster* objects.
+See the \code{rasterVis} package for more advanced (trellis/lattice) plotting of Raster* objects.
 }
 
 \usage{
 \S4method{plot}{Raster,ANY}(x, y, col=rev(terrain.colors(255)), maxpixels=500000, alpha=1,
    colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, 
-   addfun=NULL, nc, nr, ...)
+   addfun=NULL, nc, nr, maxnl=16, main, ...)
+   
 
-
-\S4method{plot}{Raster,Raster}(x, y, maxpixels=100000, cex=0.1, ...)
+\S4method{plot}{Raster,Raster}(x, y, maxpixels=100000, cex=0.2, nc, nr, 
+    maxnl=16, main, add=FALSE, gridded=FALSE, ncol=25, nrow=25, ...)
 }
 
 
@@ -47,14 +48,19 @@ See the rasterVis package for more advanced (trellis/lattice) plotting of Raster
         such as axes=FALSE, main='title', ylab='latitude'}
   \item{nc}{Optional. The number of columns to divide the plotting device in (when plotting multiple layers in a RasterLayer or RasterBrick object)}
   \item{nr}{Optional. The number of rows to divide the plotting device in (when plotting multiple layers in a RasterLayer or RasterBrick object)}
+  \item{maxnl}{integer. Maximum number of layers to plot (for a multi-layer object)}
+  \item{main}{character. Main plot title}
   \item{cex}{Symbol size for scatter plots}
+  \item{gridded}{logical. If \code{TRUE} the scatterplot is gridded (counts by cells)}
+  \item{ncol}{integer. Number of columns for gridding}
+  \item{nrow}{integer. Number of rows for gridding}
 }
 
 
 \details{
-Most of the code for this function was taken from image.plot (fields package). 
+Most of the code for the plot function for a single Raster* object was taken from image.plot (fields package). 
 
-Raster objects with a color-table (e.g. a graphics file) are plotted according to the color table.
+Raster objects with a color-table (e.g. a graphics file) are plotted according to that color table.
 }
 
 

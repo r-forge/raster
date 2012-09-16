@@ -116,7 +116,17 @@ projectExtent <- function(object, crs) {
 }
 
 
-projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ...)  {
+.getAlignedRaster <- function(x,y) {
+	x <- raster(x)
+	y <- raster(y)
+	p <- projectRaster(x, crs=projection(y))
+	m <- merge(extent(y), extent(p))
+	rx <- expand(y, m)
+	crop(rx, p)
+}
+
+
+projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE, filename="", ...)  {
 
 	.requireRgdal()
 	validObject(projection(from, asText=FALSE))
@@ -171,10 +181,9 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 			e@xmax <- min(180, e@xmax)
 			e@ymin <- max(-90, e@ymin)
 			e@ymax <- min(90, e@ymax)
-		}
-		
+		}	
 	}
-
+	
 	validObject(to)
 	validObject(projection(to, asText=FALSE))
 
@@ -186,8 +195,11 @@ projectRaster <- function(from, to, res, crs, method="bilinear", filename="", ..
 	} else {
 		projto_int <- projto	
 	}
-	
 
+	if (alignOnly) {
+		to <- .getAlignedRaster(to, from)
+	}
+	
 #	pbb <- projectExtent(to, projection(from))
 #	bb <- intersect(extent(pbb), extent(from))
 #	validObject(bb)

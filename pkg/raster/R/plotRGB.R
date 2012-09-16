@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  April 2010
 # Version 0.9
 # Licence GPL v3
@@ -12,7 +12,7 @@ if (!isGeneric("plotRGB")) {
 
 
 setMethod("plotRGB", signature(x='RasterStackBrick'), 
-function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, bgcol='white', alpha, bgalpha, ...) { 
+function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, bgcol='white', alpha, bgalpha, addfun=NULL, ...) { 
 
 	if (missing(scale)) {
 		scale <- 255
@@ -96,9 +96,10 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 	}
 	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate)
 	
-	addfun <- dots$addfun
-	if (is.function(addfun)) {
-		addfun()
+	if (!is.null(addfun)) {
+		if (is.function(addfun)) {
+			addfun()
+		}
 	}
 }
 )
