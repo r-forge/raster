@@ -92,7 +92,7 @@ function(x, y, ..., fun, filename="", unstack=TRUE){
 		out <- brick(x[[1]], values=FALSE, nl=nlout)
 	}
 	
-	if ( canProcessInMemory(out, sum(nl)) ) {
+	if ( canProcessInMemory(out, sum(nl)+maxnl) ) {
 		pb <- pbCreate(3, ...)			
 		pbStep(pb, 1)
 		if (doapply) {
@@ -140,7 +140,8 @@ function(x, y, ..., fun, filename="", unstack=TRUE){
 		} 
 		out <- writeStart(out, filename=filename, ...)
 		
-		tr <- blockSize(out, n=length(x))
+		
+		tr <- blockSize(out, n=sum(nl)+maxnl)
 		pb <- pbCreate(tr$n, ...)
 		
 		if (doapply) { 
