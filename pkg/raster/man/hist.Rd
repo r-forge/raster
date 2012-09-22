@@ -16,7 +16,7 @@ Create a histogram of the values of a RasterLayer. NA values are ignored. For la
 }
 
 \arguments{
-  \item{x}{A Raster* object}
+  \item{x}{Raster* object}
   \item{layer}{integer (or character) to indicate layer number (or name). Can be used to subset the layers to plot in a multilayer Raster* object} 
   \item{maxpixels}{integer. To regularly subsample very large objects}
   \item{plot}{logical. Plot the histogram or only return the histogram values}
