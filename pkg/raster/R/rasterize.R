@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : October 2010
 # Version 1.0
 # Licence GPL v3
@@ -11,38 +11,38 @@ if (!isGeneric("rasterize")) {
 
 
 setMethod('rasterize', signature(x='matrix', y='Raster'), 
-function(x, y, ...){ 
-	return( .pointsToRaster(x, y, ...))
+function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...){ 
+	return( .pointsToRaster(x, y, field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, na.rm=na.rm,	...))
 })
 
 
 setMethod('rasterize', signature(x='data.frame', y='Raster'), 
-function(x, y, ...){ 
+function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...){ 
 	x <- as.matrix(x)
-	return( .pointsToRaster(x, y, ...))
+	return( .pointsToRaster(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...))
 })
 
 
 setMethod('rasterize', signature(x='SpatialPoints', y='Raster'), 
-function(x, y, ...){ 
-	return( .pointsToRaster(x, y, ...))
+function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...){ 
+	return( .pointsToRaster(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...))
 })
 
 
 setMethod('rasterize', signature(x='SpatialLines', y='Raster'), 
-function(x, y, ...){ 
-	.linesToRaster(x, y, ...)
+function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", ...){ 
+	.linesToRaster(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", ...)
 })
 
 
 setMethod('rasterize', signature(x='SpatialPolygons', y='Raster'), 
-function(x, y, ...){ 
-	.polygonsToRaster(x, y, ...)
+function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", getCover=FALSE, silent=FALSE, ...){ 
+	.polygonsToRaster(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", getCover=getCover, silent=silent, ...)
 })
 
 setMethod('rasterize', signature(x='Extent', y='Raster'), 
- 	function(x, y, ...) {
+function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", getCover=FALSE, silent=TRUE, ...){ 
 		y <- as(y, 'SpatialPolygons')
-		.polygonsToRaster(x, y, ...)
+		.polygonsToRaster(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", getCover=getCover, silent=silent,...)
 	}
 )
