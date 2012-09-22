@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : September 2008
 # Version 0.9
 # Licence GPL v3
@@ -15,7 +15,6 @@ function(x) {
 	return(new("RasterStack"))
 	}
 )
-
 
 
 setMethod("stack", signature(x='Raster'), 
@@ -216,12 +215,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 
 setMethod("stack", signature(x='SpatialGridDataFrame'), 
 	function(x) {
-		stk <- new("RasterStack")
-		for (i in 1:ncol(x@data)) {
-			rs <- raster(x, i)
-			stk <- addLayer(stk, rs)
-		}
-		return(stk)
+		.stackFromBrick(brick(x))
 	}
 )
 
@@ -230,7 +224,7 @@ setMethod("stack", signature(x='SpatialGridDataFrame'),
 setMethod("stack", signature(x='SpatialPixelsDataFrame'), 
 	function(x) {
 		x <- as(x, 'SpatialGridDataFrame')
-		return(stack(x))
+		.stackFromBrick(brick(x))
 	}
 )
 
