@@ -42,12 +42,13 @@ If \code{x} represents points, each point is assigned to a grid cell. The value 
 
 \item{field}{numeric or character. The value(s) to be transferred. This can be a single number, or a vector of numbers that has the same length as the number of spatial features (points, lines, polygons). If \code{x} is a Spatial*DataFrame, this can be the column name of the variable to be transferred. If missing, the attribute index is used (i.e. numbers from 1 to the number of features). You can also provide a vector with the same length as the number of spatial features, or a matrix where the number of rows matches the number of spatial features}
 
-\item{fun}{function or character. To determine what values to assign to cells that are covered by multiple spatial features. You can use functions such as \code{min, max}, or \code{mean}, or one of the following character values: \code{'first', 'last', 'sum', 'min'}, or \code{'max'}. The default value is \code{'last'}. 
+\item{fun}{function or character. To determine what values to assign to cells that are covered by multiple spatial features. You can use functions such as \code{min, max}, or \code{mean}, or one of the following character values: \code{'first'}, \code{'last'}, \code{count}, \code{'sum'}, \code{'min'} or \code{'max'}. The default value is \code{'last'}. 
 
 
 If \code{x} represents points, \code{fun} must accept a \code{na.rm} argument, either explicitly or through 'dots'. This means that \code{fun=length} fails, but \code{fun=function(x,...)length(x)} works, although it ignores the \code{na.rm} argument. To use the \code{na.rm} argument you can use a function like this \code{fun=function(x, na.rm){if (na.rm) length(na.omit(x)) else (length(x)}}, or use a function that removes NA values in all cases, like this function to compute the number of unique values "richness": \code{fun=function(x, ...){length(unique(na.omit(x)))}}. 
 
-If you want to know the number of points in each grid cell, use \code{fun=function(x,...){length(x)}}. I.e., for each cell it computes the length of the vector of points. For the number of unique values per grid cell you can use: \code{fun=function(x, ...){ length(unique(na.rm(x)))}}. You can also pass multiple functions using a statement like \code{fun=function(x)c(length(x),mean(x))}, in which case the returned object is a RasterBrick (multiple layers).}
+If you want to know the number of points in each grid cell, you can use \code{ fun='count'} or  \code{fun=function(x,...){length(x)}}. For the number of unique values per grid cell you can use: \code{fun=function(x, ...){ length(unique(na.rm(x)))}}. You can also pass multiple functions using a statement like \code{fun=function(x)c(length(x),mean(x))}, in which case the returned object is a RasterBrick (multiple layers).
+}
 
 \item{background}{numeric. Value to put in the cells that are not covered by any of the features of \code{x}. Default is \code{NA}}
 
