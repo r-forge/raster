@@ -4,27 +4,21 @@
 
 \alias{select}
 \alias{select,Raster-method}
-\alias{select,SpatialPoints-method}
-\alias{select,SpatialLines-method}
-\alias{select,SpatialPolygons-method}
+\alias{select,Spatial-method}
 
 \title{
-Select features from Spatial objects
+Geometric subsetting
 }
 
 \description{
-Select spatial features from Raster*, SpatialPoints*, SpatialLines*, or SpatialPolygons* by drawing on a plot (map).
+Geometrically subset Raster* or Spatial* objects by drawing on a plot (map).
 }
 
 
 \usage{
 \S4method{select}{Raster}(x, use='rec', ...)
 
-\S4method{select}{SpatialPolygons}(x, use='rec', draw=TRUE, col='cyan', size=2, ...)
-
-\S4method{select}{SpatialLines}(x, use='rec', draw=TRUE, col='cyan', size=2, ...)
-
-\S4method{select}{SpatialPoints}(x, use='rec', draw=TRUE, col='cyan', size=2, ...)
+\S4method{select}{Spatial}(x, use='rec', draw=TRUE, col='cyan', size=2, ...)
 }
 
 \arguments{
@@ -45,8 +39,19 @@ Select spatial features from Raster*, SpatialPoints*, SpatialLines*, or SpatialP
 Raster* or Spatial* object
 }
 
-\author{
-Robert J. Hijmans
+
+\examples{
+\dontrun{
+r <- raster(nrow=10, ncol=10)
+r[] <- 1:ncell(r)
+plot(r)
+s <- select(r)
+# now click on the map twice
+
+# plot the selection on a new canvas:
+x11()
+plot(s)
+}
 }
 
 \keyword{spatial}

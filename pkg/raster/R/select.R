@@ -37,60 +37,7 @@ setMethod('select', signature(x='Raster'),
 )
 	
 	
-setMethod('select', signature(x='SpatialPolygons'), 
-	function(x, use='rec', draw=TRUE, col='cyan', size=2, ...) {
-		stopifnot(require(rgeos))
-		use <- substr(tolower(use), 1, 3)
-		stopifnot(use %in% c('rec', 'pol'))
-		if (use == 'rec') {
-			e <- as(drawExtent(), 'SpatialPolygons')
-		} else {
-			e <- drawPoly()
-		}
-		e@proj4string <- x@proj4string
-		int <- gIntersects(x, e, byid=TRUE)
-		int <- apply(int, 2, any)
-		if (any(int)) {
-			x <- x[int, ]
-			if (draw) {
-				sp::plot(x, add=TRUE, border=col, lwd=size)
-			}
-		} else {
-			x <- NULL
-		}
-		x
-	}
-)
-
-
-	
-setMethod('select', signature(x='SpatialLines'), 
-	function(x, use='rec', draw=TRUE, col='cyan', size=2, ...) {
-		stopifnot(require(rgeos))
-		use <- substr(tolower(use), 1, 3)
-		stopifnot(use %in% c('rec', 'pol'))
-		if (use == 'rec') {
-			e <- as(drawExtent(), 'SpatialPolygons')
-		} else {
-			e <- drawPoly()
-		}
-		e@proj4string <- x@proj4string
-		int <- gIntersects(x, e, byid=TRUE)
-		int <- apply(int, 2, any)
-		if (any(int)) {
-			x <- x[int, ]
-			if (draw) {
-				sp::plot(x, add=TRUE, col=col, lwd=size)
-			}
-		} else {
-			x <- NULL
-		}			
-		x
-	}
-)
-
-
-setMethod('select', signature(x='SpatialPoints'), 
+setMethod('select', signature(x='Spatial'), 
 	function(x, use='rec', draw=TRUE, col='cyan', size=2, ...) {
 		use <- substr(tolower(use), 1, 3)
 		stopifnot(use %in% c('rec', 'pol'))
@@ -100,16 +47,88 @@ setMethod('select', signature(x='SpatialPoints'),
 			e <- drawPoly()
 		}
 		e@proj4string <- x@proj4string
-		i <- which(!is.na(over(x, e)))
-		if (length(i) > 0) {
-			x <- x[i,]
-			if (draw) {
-				points(x, col=col, lwd=size)
-			}
-		} else {
-			x <- NULL
+		int <- intersect(e, extent(x))
+		if (is.null(int)) {
+			return(  NULL )
 		}
+
+		if (inherits(x, 'SpatialPolygons')) {
+			stopifnot(require(rgeos))
+			int <- gIntersects(x, e, byid=TRUE)
+			int <- apply(int, 2, any)
+			if (any(int)) {
+				x <- x[int, ]
+				if (draw) {
+					sp::plot(x, add=TRUE, border=col, lwd=size)
+				}
+			} else {
+				x <- NULL
+			}
+			
+		} else if (inherits(x, 'SpatialLines')) {
+			stopifnot(require(rgeos))
+			int <- gIntersects(x, e, byid=TRUE)
+			int <- apply(int, 2, any)
+			if (any(int)) {
+				x <- x[int, ]
+				if (draw) {
+					sp::plot(x, add=TRUE, col=col, lwd=size)
+				}
+			} else {
+				x <- NULL
+			}
+			
+		} else if (inherits(x, 'SpatialGrid')) {
+			cls <- class(x)
+			if (.hasSlot(x, 'data')) {
+				x <- as(x, 'SpatialPointsDataFrame')
+			} else {
+				x <- as(x, 'SpatialPoints')			
+			}
+			i <- which(!is.na(over(x, e)))
+			if (length(i) > 0) {
+				x <- x[i,]
+				gridded(x) <- TRUE
+				x <- as(x, cls)
+				if (draw) {
+					sp::plot(x, col=col, cex=size, add=TRUE)
+				}
+			} else {
+				x <- NULL
+			}
+
+		} else if (inherits(x, 'SpatialPixels')) {
+			cls <- class(x)
+			if (.hasSlot(x, 'data')) {
+				x <- as(x, 'SpatialPointsDataFrame')
+			} else {
+				x <- as(x, 'SpatialPoints')			
+			}
+			i <- which(!is.na(over(x, e)))
+			if (length(i) > 0) {
+				x <- x[i,]
+				x <- as(x, cls)
+				if (draw) {
+					points(x, col=col, cex=size)
+				}
+			} else {
+				x <- NULL
+			}
+		
+		} else { # SpatialPoints
+		
+			i <- which(!is.na(over(x, e)))
+			if (length(i) > 0) {
+				x <- x[i,]
+				if (draw) {
+					points(x, col=col, cex=size)
+				}
+			} else {
+				x <- NULL
+			}
+		}	
 		x
 	}
 )
+
 

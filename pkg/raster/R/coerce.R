@@ -53,7 +53,7 @@ setAs('Raster', 'SpatialPixelsDataFrame',
 			SpatialPixelsDataFrame(points=sp, data=v, grid=grd)
 		} else {
 			warning('object has no values, returning a "SpatialPixels" object')
-			SpatialPixelsDataFrame(points=sp, grid=grd)
+			SpatialPixels(points=sp, grid=grd)
 		}
 	}
 )
