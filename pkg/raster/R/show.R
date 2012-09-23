@@ -58,7 +58,10 @@ setMethod ('show' , 'RasterLayer',
 		if (is.factor(object)) {
 		
 			x <- object@data@attributes[[1]]
-			nc <- ncol(x)
+			nc <- NCOL(x)
+			if (nc == 1) {
+				x <- data.frame(value=x)
+			}
 			maxnl <- 12
 			if (nc > maxnl) {
 				x <- x[, 1:maxnl]

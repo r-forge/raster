@@ -194,7 +194,8 @@ setMethod('predict', signature(object='Raster'),
 						} else {
 							factaschar = TRUE
 						}
-						predrast@data@attributes <- list(levels(predv))
+						levs <- levels(predv)
+						predrast@data@attributes <- list(data.frame(ID=1:length(levs), value=levs))
 						predrast@data@isfactor <- TRUE
 						facttest <- FALSE
 					}

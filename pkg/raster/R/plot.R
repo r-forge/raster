@@ -27,22 +27,11 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 
 		
 		if (nl == 1) {
-			if (!missing(y)) {
-				if (is.character(y)) {
-					if (is.factor(x)) {
-						x <- deratify(x, y)														
-					} else {
-						y <- match(y, names(x))
-						if (is.na(y)) {
-							warning('argument "y" ignored')
-						} else {
-							if (missing(main)) {
-								main <- names(x)[y]
-							}
-						}
-					}
-				}
-			}
+#			if (!missing(y)) {
+#				if (is.factor(x)) {
+#					x <- deratify(x, y)
+#				} 
+#			}
 
 			if (missing(main)) {
 				main <- names(x)

@@ -10,6 +10,7 @@ if (!isGeneric('setValues')) {
 	}	
 
 	
+
 setMethod('setValues', signature(x='RasterLayer'), 
 function(x, values, ...) {
 
@@ -22,12 +23,19 @@ function(x, values, ...) {
 			stop('cannot use a matrix with these dimensions')
 		}
 	}
-  
+	
 	if (!is.vector(values)) { 
-		stop('values must be a vector')
+		if (is.factor(values)) {
+			levs <- levels(values)
+			values <- as.integer(values)
+			x@data@isfactor <- TRUE
+			x@data@attributes <- list(data.frame(ID=1:length(levs), VALUE=levs))
+		} else {
+			stop('values must be a vector')
+		}
 	}
 	if (!(is.numeric(values) | is.integer(values) | is.logical(values))) {
-		stop('values must be numeric, integer or logical.')	}
+		stop('values must be numeric, integer, logical or factor')	}
 	
 
 	if (length(values) == 1) {	

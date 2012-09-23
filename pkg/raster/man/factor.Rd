@@ -48,8 +48,8 @@ asFactor(x, ...)
 
 \arguments{
   \item{x}{Raster* object}
-  \item{v}{index cell values}
-  \item{layer}{index cell values}
+  \item{v}{integer cell values}
+  \item{layer}{integer > 0 indicating which layer to use (in a RasterStack or RasterBrick)}
   \item{att}{numeric or character. Which variable(s) in the RAT table should be used. If \code{NULL}, all variables are extracted. If using a numeric, skip the first two default columns}
   \item{append.names}{logical. Should names of data.frame returned by a combination of the name of the layer and the RAT variables? (can be useful for multilayer objects}
   \item{filename}{character. Optional}  
