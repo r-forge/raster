@@ -5,6 +5,7 @@ new function 'select'
 changed from igraph0 to igraph (functions gridDistance and clump)
 renamed function 'compare' to 'compareRaster' (to avoid name hiding by the igraph package)
 renamed function 'expand' to 'extend' (to avoid name hiding by the Matrix package)
+incorporated function 'count' into 'freq' (via the 'value' argument) and 'count' is now hidden as '.count' (to avoid name hiding by the plyr package)
 new argument 'alignOnly' to projectRaster
 new option 'setStatistics=FALSE' for writing to some GDAL files (geoTiff in particular) to suppress writing band statistics (min, max, mean, sd). This is currently not documented. When TRUE, all statistics are written when all the values are in memory, but only min and max are written in other cases, leading to problems in QGIS (reported by Agustin Lobo)
 Added argument "gridded=TRUE" for plot(RasterLayer, RasterLayer), to show counts for intervals (suggested by Agustin Lobo)

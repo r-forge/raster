@@ -1,18 +1,11 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : March 2009
 # Version 0.9
 # Licence GPL v3
 
 
-if (!isGeneric("count")) {
-	setGeneric("count", function(x, value, ...)
-		standardGeneric("count"))
-}	
+.count <- function(x, value, digits=0, progress='', ...) {
 
-setMethod('count', signature(x='Raster', value='ANY'), 
-function(x, value, digits=0, progress='', ...) {
-
-	if (missing(value)) { stop("'value' is missing") }
 	value <- value[1]
 	
 	if (nlayers(x) > 1) {
@@ -70,6 +63,6 @@ function(x, value, digits=0, progress='', ...) {
 			return(r)
 		}
 	}
-} )
+}
 
 

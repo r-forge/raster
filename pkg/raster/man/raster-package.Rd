@@ -156,7 +156,6 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{cellStats}} \tab Summarize a Raster cell values with a function \cr
     \code{\link{summary}} \tab Summary of the values of a Raster* object (quartiles and mean) \cr
     \code{\link{freq}} \tab Frequency table of Raster cell values \cr
-    \code{\link{count}} \tab Count the frequency of a single (range of) value(s) \cr
     \code{\link{crosstab}} \tab Cross-tabulate two RasterLayer objects, or multiple layers in a RasterStack/Brick \cr
     \code{\link{unique}} \tab Get the unique values in a Raster* object \cr
     \code{\link{zonal}} \tab Summarize a Raster* object by zones in a RasterLayer \cr
@@ -202,8 +201,9 @@ See the rasterVis package for additional plotting methods for Raster* objects us
     \code{\link{text}} \tab Plot the values of a RasterLayer on top of a map \cr
     .\cr
     \bold{Interacting with a map} \tab \cr
-    \code{\link{zoom}} \tab Zoom in on a plot of a RasterLayer \cr
+    \code{\link{zoom}} \tab Zoom in to a part of a map \cr
     \code{\link{click}} \tab Draw points and/or query values of RasterLayer by clicking on a map \cr
+    \code{\link{select}} \tab Select a geometric subset of a Raster* or Spatial* object \cr
     \code{\link{drawPoly}} \tab Create a SpatialPolygons object by drawing it \cr
     \code{\link{drawLine}} \tab Create a SpatialLines object by drawing it \cr
     \code{\link{drawExtent}} \tab Create an Extent object by drawing it \cr	
