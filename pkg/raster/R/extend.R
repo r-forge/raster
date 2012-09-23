@@ -13,7 +13,7 @@ if (!isGeneric("expand")) {
 
 setMethod('expand', signature(x='Extent'), 
 function(x, y, ...) {
-	warning("function 'extend' is obsolete. It has been replaced by 'expand'")
+	warning("function 'expand' is obsolete. It has been replaced by 'extend'")
 	expand(x, y, ...)
 }
 )
@@ -21,8 +21,8 @@ function(x, y, ...) {
 
 setMethod('expand', signature(x='Raster'), 
 function(x, y, value=NA, filename='', ...) {
-	warning("function 'extend' is obsolete. It has been replaced by 'expand'")
-	extpand(x, y, value=value, filename=filename, ...)
+	warning("function 'expand' is obsolete. It has been replaced by 'extend'")
+	expand(x, y, value=value, filename=filename, ...)
 } )
 
 

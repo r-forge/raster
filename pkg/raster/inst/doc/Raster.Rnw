@@ -271,7 +271,7 @@ The "..."  argument allows for setting additional arguments that are relevant wh
 
 There are several functions that deal with modifying the spatial extent of \verb@Raster*@ objects. The {\bf crop} function lets you take a geographic subset of a larger \verb@Raster@ object. You can crop a \verb@Raster*@ by providing an extent object or another spatial object from which an extent can be extracted (objects from classes deriving from Raster and from Spatial in the sp package). An easy way to get an extent object is to plot a \verb@RasterLayer@ and then use {\bf drawExtent} to visually determine the new extent (bounding box) to provide to the crop function. 
 
-{\bf trim} crops a \verb@RasterLayer@ by removing the outer rows and columns that only contain \NA values. In contrast, {\bf expand} adds new rows and/or columns with \NA values. The purpose of this could be to create a new \verb@RasterLayer@ of the same extent of another larger \verb@RasterLayer@ such that the can be used together in other functions. 
+{\bf trim} crops a \verb@RasterLayer@ by removing the outer rows and columns that only contain \NA values. In contrast, {\bf extend} adds new rows and/or columns with \NA values. The purpose of this could be to create a new \verb@RasterLayer@ with the same Extent of another larger \verb@RasterLayer@ such that the can be used together in other functions. 
 
 The {\bf merge} function lets you merge 2 or more \verb@Raster*@ objects into a single new object. The input objects must have the same resolution and origin (such that their cells neatly fit into a single larger raster). If this is not the case you can first adjust one of the \verb@Raster*@ objects with use {\bf (dis)aggregate} or {\bf resample}.
 
