@@ -43,6 +43,8 @@ r[1:5] <- NA
 r <- r * r * r * 5
 freq(r)
 
+freq(r, value=2)
+
 s <- stack(r, r*2, r*3)
 freq(s, merge=TRUE)
 }
