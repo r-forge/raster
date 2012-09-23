@@ -16,15 +16,15 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 		proj1 <- projection(e1)
 		proj2 <- projection(e2)
 	
-		if ( ! compare(e1, e2, crs=FALSE, stopiffalse=FALSE) ) {
-			if ( compare(e1, e2, extent=FALSE, rowcol=FALSE, crs=TRUE, res=TRUE, orig=TRUE, stopiffalse=TRUE) ) {
+		if ( ! compareRaster(e1, e2, crs=FALSE, stopiffalse=FALSE) ) {
+			if ( compareRaster(e1, e2, extent=FALSE, rowcol=FALSE, crs=TRUE, res=TRUE, orig=TRUE, stopiffalse=TRUE) ) {
 				ie <- intersect(extent(e1), extent(e2))
 				if (is.null(ie)) { 	stop() }
 				warning('Raster objects have different extents. Result for their intersection is returned')
 				e1 <- crop(e1, ie)
 				e2 <- crop(e2, ie)
 			} else {
-				stop()  # stops anyway because compare returned FALSE
+				stop()  # stops anyway because compareRaster returned FALSE
 			}
 		}
 

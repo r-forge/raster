@@ -31,7 +31,7 @@ function(x, y, ..., fun, tolerance=0.05, filename="") {
 	dotargs$filename <- filename
 
 	nl <- max(unique(sapply(x, nlayers)))
-	compare(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
+	compareRaster(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
 
 	bb <- .unionExtent(x)
 	if (nl > 1) {

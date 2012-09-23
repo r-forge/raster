@@ -99,7 +99,9 @@ function(x, bands=NULL, native=FALSE, ...) {
 			warning('RasterLayer objects without cell values were removed')
 			x <- x[hd]
 		}
-		if (length(x) > 1) compare(x)	
+		if (length(x) > 1) {
+			compareRaster(x)
+		}
 		s <- new("RasterStack")
 		s@nrows <- x[[1]]@nrows
 		s@ncols <- x[[1]]@ncols

@@ -32,7 +32,7 @@ setReplaceMethod("[[", c("RasterStack", "numeric", "missing"),
 			}
 			value[] <- val
 		} else {
-			compare(x, value)
+			compareRaster(x, value)
 		}
 		
 		if (i > nl) {
@@ -52,7 +52,7 @@ setReplaceMethod("[", c("RasterStackBrick", "Raster", "missing"),
 	
 		if (! hasValues(i) ) {
 			i <- cellsFromExtent(x, i)
-		} else if (compare(x, i, stopiffalse=FALSE, showwarning=FALSE)) {
+		} else if (compareRaster(x, i, stopiffalse=FALSE, showwarning=FALSE)) {
 			dims <- dim(i)
 			i <- as.logical(getValues(i))
 			dim(i) <- c(prod(dims[1:2]), dims[3])

@@ -1,11 +1,14 @@
 # Author: Robert J. Hijmans
-# contact: r.hijmans@gmail.com
 # Date : October 2008
 # Version 0.9
 # Licence GPL v3
 
-
 compare <- function(x, ..., extent=TRUE, rowcol=TRUE, crs=TRUE, res=FALSE, orig=FALSE, rotation=TRUE, tolerance, stopiffalse=TRUE, showwarning=FALSE) {
+	warning("raster function 'compare' is obsolete. It has been replaced by 'compareRaster'")
+	compareRaster(x, ..., extent=extent, rowcol=rowcol, crs=crs, res=res, orig=orig, rotation=rotation, tolerance=tolerance, stopiffalse=stopiffalse, showwarning=showwarning)
+}
+
+compareRaster <- function(x, ..., extent=TRUE, rowcol=TRUE, crs=TRUE, res=FALSE, orig=FALSE, rotation=TRUE, tolerance, stopiffalse=TRUE, showwarning=FALSE) {
 
 	if (missing(tolerance)) {
 		tolerance <- .tolerance()

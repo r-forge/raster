@@ -121,7 +121,7 @@ projectExtent <- function(object, crs) {
 	y <- raster(y)
 	p <- projectRaster(x, crs=projection(y))
 	m <- merge(extent(y), extent(p))
-	rx <- expand(y, m)
+	rx <- extend(y, m)
 	crop(rx, p)
 }
 
@@ -160,7 +160,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			e@ymin <- max(-90, e@ymin)
 			e@ymax <- min(90, e@ymax)
 		}
-		to <- expand(to, e)
+		to <- extend(to, e)
 	} else {
 		projto <- projection(to)
 		if (projto == "NA") { 

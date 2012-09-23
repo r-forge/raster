@@ -54,7 +54,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 	dotargs <- x[ !isRast ]
 	x <- x[ isRast ]
 	
-	compare(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
+	compareRaster(x, extent=FALSE, rowcol=FALSE, orig=TRUE, res=TRUE, tolerance=tolerance)
 	
 	if (is.null(dotargs$datatype)) {
 		dotargs$datatype <- .commonDataType(sapply(x, dataType))  
@@ -74,7 +74,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 
 	if (!is.null(ext)) {
 		ext <- extent(ext)
-		out1 <- expand(out, union(ext, extent(out)))
+		out1 <- extend(out, union(ext, extent(out)))
 		out1 <- crop(out1, ext)
 
 		test <- try( intersect(extent(out), extent(out1)) )

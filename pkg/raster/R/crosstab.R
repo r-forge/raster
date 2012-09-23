@@ -72,7 +72,7 @@ setMethod('crosstab', signature(x='RasterStackBrick', y='missing'),
 
 .oldcrosstab <- function(x, y, digits=0, long=FALSE, progress, ...) {
 # old function, not used any more	
-		compare(c(x, y))
+		compareRaster(c(x, y))
 		if (missing(progress)) { progress <- .progress() }
 
 		if (canProcessInMemory(x, 3) | ( inMemory(x) & inMemory(y) )) {

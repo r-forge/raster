@@ -242,7 +242,7 @@ Basic parameters of existing Raster* objects can be obtained, and in most cases 
     \code{\link{filename}} \tab Filename to which a RasterLayer or RasterBrick is linked \cr	
     \code{\link{band}} \tab Band (layer) of a multi-band file that this RasterLayer is linked to \cr	
     \code{\link{nbands}} \tab How many bands (layers) does the file have? \cr	
-    \code{\link{compare}} \tab Compare for equality the basic parameters of two Raster* objects \cr		
+    \code{\link{compareRaster}} \tab Compare the geometry of Raster* objects \cr		
     \code{\link{NAvalue}} \tab Get or set the \code{NA} value (for reading from file; see \link{writeRaster} for setting it when writing a file) \cr
   --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 	

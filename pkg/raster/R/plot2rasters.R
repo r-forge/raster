@@ -7,7 +7,7 @@
 setMethod("plot", signature(x='Raster', y='Raster'), 
 	function(x, y, maxpixels=100000, cex=0.2, xlab, ylab, nc, nr, maxnl=16, main, add=FALSE, gridded=FALSE, ncol=25, nrow=25, ...)  {
 	
-		compare(c(x, y), extent=TRUE, rowcol=TRUE, crs=FALSE, stopiffalse=TRUE) 
+		compareRaster(c(x, y), extent=TRUE, rowcol=TRUE, crs=FALSE, stopiffalse=TRUE) 
 		nlx <- nlayers(x)
 		nly <- nlayers(y)
 

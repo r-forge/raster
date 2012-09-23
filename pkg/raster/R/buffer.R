@@ -16,7 +16,7 @@ function(x, width=0, filename='', doEdge=FALSE, ...) {
 	stopifnot(width > 0)
 
 	if (doEdge) {
-		r <- edge(x, classes=FALSE, type='inner', progress=.progress(...)) 
+		r <- raster::edge(x, classes=FALSE, type='inner', progress=.progress(...)) 
 		pts <- try(  rasterToPoints(r, fun=function(z){ z>0 } )[,1:2, drop=FALSE] )
 	} else {
 		pts <- try(  rasterToPoints(x)[,1:2, drop=FALSE] )

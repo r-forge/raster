@@ -33,7 +33,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 setMethod('mask', signature(x='RasterLayer', mask='RasterLayer'), 
 function(x, mask, filename="", inverse=FALSE, ...){ 
 
-	compare(x, mask)
+	compareRaster(x, mask)
 	ln <- names(x)
 	if ( inMemory(x) & inMemory(mask)=='all') {
 		x[is.na(mask)] <- NA
@@ -99,7 +99,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 setMethod('mask', signature(x='RasterStackBrick', mask='RasterLayer'), 
 function(x, mask, filename="", inverse=FALSE, ...){ 
 
-	compare(x, mask)
+	compareRaster(x, mask)
 	
 	out <- brick(x, values=FALSE)
 	ln <- names(x)
@@ -163,7 +163,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 setMethod('mask', signature(x='RasterLayer', mask='RasterStackBrick'), 
 function(x, mask, filename="", inverse=FALSE, ...){ 
 
-	compare(x, mask)
+	compareRaster(x, mask)
 
 	out <- brick(mask, values=FALSE)
 	
@@ -234,7 +234,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		stop('number of layers of x and mask must match')
 	}
 	
-	compare(x, mask)
+	compareRaster(x, mask)
 	out <- brick(x, values=FALSE)
 	ln <- names(x)
 	names(out) <- ln

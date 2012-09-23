@@ -248,7 +248,7 @@ setClass ('RasterStack',
 		),
 	validity = function(object) {
 		if (length(object@layers) > 1) {
-			cond <- compare(object@layers, extent=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
+			cond <- compareRaster(object@layers, extent=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
 		} else {
 			cond <- TRUE
 		}
@@ -309,7 +309,7 @@ setClass ('.RasterQuad',
 		),
 	validity = function(object) {
 		if (length(object@bricks) > 1) {
-			test <- compare(object@bricks, extent=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
+			test <- compareRaster(object@bricks, extent=TRUE, rowcol=TRUE, tolerance=0.05, stopiffalse=FALSE, showwarning=FALSE) 
 		} else {
 			test <- TRUE
 		}

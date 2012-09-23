@@ -11,8 +11,27 @@ if (!isGeneric("expand")) {
 }	
 
 
-
 setMethod('expand', signature(x='Extent'), 
+function(x, y, ...) {
+	warning("function 'extend' is obsolete. It has been replaced by 'expand'")
+	expand(x, y, ...)
+}
+)
+
+
+setMethod('expand', signature(x='Raster'), 
+function(x, y, value=NA, filename='', ...) {
+	warning("function 'extend' is obsolete. It has been replaced by 'expand'")
+	extpand(x, y, value=value, filename=filename, ...)
+} )
+
+
+if (!isGeneric("extend")) {
+	setGeneric("extend", function(x, y, ...)
+		standardGeneric("extend"))
+}	
+
+setMethod('extend', signature(x='Extent'), 
 # function by Etienne B. Racine
 function(x, y, ...) {
 	if (length(y) == 1) {
@@ -31,7 +50,7 @@ function(x, y, ...) {
 }
 )
 
-setMethod('expand', signature(x='Raster'), 
+setMethod('extend', signature(x='Raster'), 
 function(x, y, value=NA, filename='', ...) {
 
 	if (is.vector(y)) {

@@ -42,8 +42,12 @@ function(x, y, ..., fun, filename="", unstack=TRUE){
 	
 	
 	ln <- length(x)
-	if (ln < 1) { stop('no Rasters') }
-	if (ln > 2) { compare(x) }
+	if (ln < 1) { 
+		stop('no Rasters') 
+	}
+	if (ln > 2) { 
+		compareRaster(x) 
+	}
 	
 	nl <- sapply(x, nlayers)
 	maxnl <- max(nl)

@@ -12,7 +12,7 @@ if (!isGeneric("zonal")) {
 setMethod('zonal', signature(x='Raster', z='RasterLayer'), 
 	function(x, z, stat='mean', digits=0, na.rm=TRUE, ...) {
 
-		compare(c(x, z))
+		compareRaster(c(x, z))
 		stopifnot(hasValues(z))
 		stopifnot(hasValues(x))
 	
