@@ -94,6 +94,7 @@ plot(e, add=TRUE, col='red')
 # Scatterplot of 2 RasterLayers
 r2 <- sqrt(r)
 plot(r, r2)
+plot(r, r2, gridded=TRUE)
 
 # Multi-layer object (RasterStack / Brick)
 s <- stack(r, r2, r/r)
@@ -105,9 +106,10 @@ r[] <- runif(ncell(r))
 r2 <- r/2
 brks <- seq(0, 1, by=0.1) 
 nb <- length(brks)-1 
+cols <- rev(terrain.colors(nb))
 par(mfrow=c(1,2))
-plot(r, breaks=brks, col=rev(terrain.colors(nb)), lab.breaks=brks, zlim=c(0,1)) 
-plot(r2, breaks=brks, col=rev(terrain.colors(nb)), lab.breaks=brks, zlim=c(0,1)) 
+plot(r, breaks=brks, col=cols, lab.breaks=brks, zlim=c(0,1), main='first') 
+plot(r2, breaks=brks, col=cols, lab.breaks=brks, zlim=c(0,1), main='second') 
 
 
 # breaks and labels
