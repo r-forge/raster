@@ -124,19 +124,24 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 
 
 .plotdens <- function(x, y, nc, nr, asp=NULL, ...) {
-	rx <- range(x)
+	xy <- na.omit(cbind(x,y))
+	if (ncol(xy) == 0) {
+		stop('only NA values (in this sample?)')
+	}
+	r <- apply(xy, 2, range)
+	rx <- r[,1]
 	if (rx[1] == rx[2]) {
 		rx[1] <- rx[1] - 0.5
 		rx[2] <- rx[2] + 0.5
 	}
-	ry <- range(y)
+	ry <- r[,2]
 	if (ry[1] == ry[2]) {
 		ry[1] <- ry[1] - 0.5
 		ry[2] <- ry[2] + 0.5
 	}
 	
-	out <- raster(xmn=rx[1], xmx=rx[2], ymn=ry[1], ymx=ry[2], ncol=nc, nrow=nr, crs='+proj=utm +zone=17')
-	out <- rasterize(cbind(x,y), out, fun=function(x, ...) length(x), background=0)
+	out <- raster(xmn=rx[1], xmx=rx[2], ymn=ry[1], ymx=ry[2], ncol=nc, nrow=nr)
+	out <- rasterize(xy, out, fun=function(x, ...) length(x), background=0)
 	.plotraster2(out, maxpixels=nc*nr, asp=asp, ...) 	
 }
 
