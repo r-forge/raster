@@ -12,7 +12,10 @@ if (!isGeneric('writeRaster')) {
 setMethod('writeRaster', signature(x='RasterLayer', filename='character'), 
 function(x, filename, format, ...) {
 
-	stopifnot(hasValues(x))
+	if (!hasValues(x)) {
+		warning('all cell values are NA')
+	}
+	
 	filename <- trim(filename)
 	if (filename == '') {	
 		stop('provide a filename')	
@@ -77,7 +80,12 @@ function(x, filename, format, ...) {
 setMethod('writeRaster', signature(x='RasterStackBrick', filename='character'), 
 function(x, filename, format, bylayer=FALSE, suffix='numbers', ...) {
 
-	stopifnot(hasValues(x))
+	
+	if (!hasValues(x)) {
+		warning('all cell values are NA')
+	}
+	
+	
 	filename <- trim(filename)
 	
 	if (bylayer) {
