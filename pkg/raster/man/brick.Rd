@@ -65,7 +65,7 @@ A RasterBrick can be created from RasterLayer objects, from a RasterStack, or fr
 \details{
 supported file types are the 'native' raster package format and those that can be read via rgdal (see \code{\link[rgdal]{readGDAL}}), and some NetCDF files (CF convention, the \code{ncdf} or \code{ncdf4} package should be available)
 
-If code{x} is a filename there are the following additional arguments: 
+If \code{x} is a filename there are the following additional arguments: 
 
 \code{native}: logical. If \code{TRUE} (not the default), reading and writing of IDRISI, BIL, BSQ, BIP, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal
  
