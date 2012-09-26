@@ -24,12 +24,8 @@
 
 
 
-.rasterFromGDAL <- function(filename, band, type, sub=0, RAT=TRUE, silent=TRUE, warn=TRUE, old=FALSE, ...) {	
+.rasterFromGDAL <- function(filename, band, type, sub=0, RAT=TRUE, silent=TRUE, warn=TRUE, ...) {	
 
-	if (old) {
-		return(.rasterFromGDALold(filename=filename, band=band, type=type, sub=sub, RAT=RAT, silent=silent, warn=warn, ...) )
-	}
-	
 	.requireRgdal() 
 	
 	if (sub > 0) {
@@ -153,8 +149,7 @@
 	projection(r) <- attr(gdalinfo, 'projection')
 
 #   	r@history[[1]] <- mdata
-#    r@history[[2]] <- .Call("RGDAL_GetMetadata", x, "SUBDATASETS", PACKAGE = "rgdal")
-	
+
 		
 	bi <- attr(gdalinfo, 'df')
 	GDType <- as.character(bi[['GDType']])
