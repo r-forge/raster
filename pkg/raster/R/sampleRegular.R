@@ -190,6 +190,9 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 		}
 		outras <- setValues(outras, m)
 		names(outras) <- names(x)
+		if (is.factor(x)) {
+			levels(outras) <- levels(x)
+		}
 		return(outras)
 		
 	} else {

@@ -4,8 +4,12 @@
 # Licence GPL v3
 
 
-.plotCT <- function(x, maxpixels=500000, ext=NULL, interpolate=FALSE, axes, xlab='', ylab='', asp, add=FALSE, addfun=NULL, ...) { 
+.plotCT <- function(x, maxpixels=500000, ext=NULL, interpolate=FALSE, axes, xlab='', ylab='', asp, add=FALSE, addfun=NULL, main, ...) { 
 # plotting with a color table
+	
+	if (missing(main)) {
+		main <- names(x)[1]
+	}
 	
 	if (!add) {
 		if (missing(axes)) {
@@ -46,7 +50,7 @@
 	bb <- as.vector(t(bbox(x)))
 
 	if (! add) {
-		plot(c(bb[1], bb[2]), c(bb[3], bb[4]), type = "n", xlab=xlab, ylab=ylab, asp=asp, axes=axes, ...)
+		plot(c(bb[1], bb[2]), c(bb[3], bb[4]), type = "n", xlab=xlab, ylab=ylab, asp=asp, axes=axes, main=main, ...)
 	}
 	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate, ...)
 	

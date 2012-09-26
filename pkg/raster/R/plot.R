@@ -1,6 +1,6 @@
 # Author: Robert J. Hijmans
 # Date :  June 2008
-# Version 0.9
+# Version 1.0
 # Licence GPL v3
 
 
@@ -27,22 +27,20 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 
 		
 		if (nl == 1) {
-#			if (!missing(y)) {
-#				if (is.factor(x)) {
-#					x <- deratify(x, y)
-#				} 
-#			}
-
-			if (missing(main)) {
-				main <- names(x)
+			facvar <- 0
+			if (!missing(y)) {
+				if (is.factor(x)) {
+					facvar <- max(y, 0)
+				} 
 			}
+	
 			
 			if (length(x@legend@colortable) > 0) {
-				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main[1], addfun=addfun, ...)
+				.plotCT(x, maxpixels=maxpixels, ext=ext, interpolate=interpolate, main=main, addfun=addfun, ...)
 			} else if (! useRaster) {
-				.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, main=main[1], addfun=addfun, ...) 
+				.plotraster(x, col=col, maxpixels=maxpixels, add=add, ext=ext, main=main, addfun=addfun, ...) 
 			} else {
-				.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, main=main[1], addfun=addfun, ...) 
+				.plotraster2(x, col=col, maxpixels=maxpixels, add=add, ext=ext, interpolate=interpolate, colNA=colNA, main=main, addfun=addfun, facvar=facvar, ...) 
 				#.plot2(x, col=col, maxpixels=maxpixels, ...)
 			}
 			return(invisible(NULL))
@@ -96,6 +94,11 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 			rown=1
 			coln=0
 			maxpixels=maxpixels/nl
+			
+			if (missing(main)) {
+				main <- names(x)
+			}			
+			
 			for (i in 1:nl) {
 				coln = coln + 1
 				if (coln > nc) {
