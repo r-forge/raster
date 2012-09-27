@@ -57,19 +57,19 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 
   \tabular{ll}{
     \code{\link{merge}} \tab Combine Raster* objects with different extents (but same origin and resolution) \cr
-    \code{\link{mosaic}} \tab Combine RasterLayers with different extents and a function to set values in overlap areas \cr
+    \code{\link{mosaic}} \tab Combine RasterLayers with different extents and a function for overlap areas \cr
     \code{\link{crop}} \tab Select a geographic subset of a Raster* object \cr
     \code{\link{expand}} \tab Enlarge a Raster* object \cr
-    \code{\link{trim}} \tab Trim a Raster* object by removing exterior rows and/or columns that only have NA values \cr
+    \code{\link{trim}} \tab Trim a Raster* object by removing exterior rows and/or columns that only have NAs\cr
     \code{\link{aggregate}} \tab Combine cells of a Raster* object to create larger cells \cr
     \code{\link{disaggregate}} \tab Subdivide cells \cr
     \code{\link{resample}} \tab Warp values to a Raster* object with a different origin or resolution \cr	
-    \code{\link{projectRaster}} \tab Warp values to a Raster* object with a different coordinate reference system  \cr	
+    \code{\link{projectRaster}} \tab project values to a raster with a different coordinate reference system \cr	
     \code{\link{shift}} \tab Move the location of Raster \cr
     \code{\link{flip}} \tab  Flip values horizontally or vertically \cr
     \code{\link{rotate}} \tab Rotate values around the date-line (for lon/lat data) \cr
     \code{\link{t}} \tab Transpose a Raster* object\cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -77,11 +77,11 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
 \section{III. Raster algebra}{
 	\tabular{ll}{
     \code{\link{Arith-methods}} \tab Arith functions (\code{+, -, *, ^, \%\%, \%/\%, /}) \cr
-	\code{\link{Math-methods}} \tab Math functions (\code{abs, sqrt, trunc, log, log10, exp, sin, round} among others)	\cr	
+	\code{\link{Math-methods}} \tab Math functions like \code{abs, sqrt, trunc, log, log10, exp, sin, round} \cr	
     \code{\link{Logic-methods}} \tab Logic functions (\code{!, &, |}) \cr
     \code{\link{Summary-methods}} \tab Summary functions (\code{mean, max, min, range, prod, sum, any, all}) \cr
     \code{\link{Compare-methods}} \tab Compare functions (\code{==, !=, >, <, <=, >=}) \cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
 	}
 }  
   
@@ -91,15 +91,15 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
   \tabular{ll}{
     \code{\link{calc}} \tab Computations on a single Raster* object \cr
     \code{\link{overlay}} \tab Computations on multiple RasterLayer objects \cr
-    \code{\link{cover}} \tab First layer covers second layer except where the first layer is NA \cr
-    \code{\link{mask}} \tab Use values from first Raster except where cells of the mask Raster are NA (these become NA)\cr
+    \code{\link{cover}} \tab First layer covers second layer except where the first layer is \code{NA} \cr
+    \code{\link{mask}} \tab Use values from first Raster except where cells of the mask Raster are \code{NA}\cr
     \code{\link{cut}} \tab Reclassify values using ranges \cr
     \code{\link{subs}} \tab Reclassify values using an 'is-becomes' matrix \cr	
     \code{\link{reclassify}} \tab Reclassify using a 'from-to-becomes' matrix \cr
     \code{\link{init}} \tab Initialize cells with new values \cr	
     \code{\link{stackApply}} \tab Computations on groups of layers in Raster* object \cr
     \code{\link{stackSelect}} \tab Select cell values from different layers using an index RasterLayer\cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -118,7 +118,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{area}} \tab Compute area of cells (for longitude/latitude data) \cr
     \code{\link{terrain}} \tab Compute slope, aspect and other characteristics from elevation data \cr	
     \code{\link{Moran}} \tab Compute global or local Moran or Geary indices of spatial autocorrelation  \cr	
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -128,7 +128,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
   \tabular{ll}{
     \code{\link{predict}} \tab Predict a non-spatial model to a RasterLayer \cr
     \code{\link{interpolate}} \tab Predict a spatial model to a RasterLayer \cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
 }
 }
 
@@ -145,7 +145,7 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{rasterToContour}} \tab Contour lines from a RasterLayer \cr
     \code{\link{rasterFromXYZ}} \tab RasterLayer from regularly spaces points\cr
     \code{\link{rasterFromCells}} \tab RasterLayer from a Raster object and cell numbers\cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -156,10 +156,10 @@ You can coerce Raster* objects to Spatial* objects using \code{as}, as in \code{
     \code{\link{cellStats}} \tab Summarize a Raster cell values with a function \cr
     \code{\link{summary}} \tab Summary of the values of a Raster* object (quartiles and mean) \cr
     \code{\link{freq}} \tab Frequency table of Raster cell values \cr
-    \code{\link{crosstab}} \tab Cross-tabulate two RasterLayer objects, or multiple layers in a RasterStack/Brick \cr
+    \code{\link{crosstab}} \tab Cross-tabulate two Raster* objects\cr
     \code{\link{unique}} \tab Get the unique values in a Raster* object \cr
     \code{\link{zonal}} \tab Summarize a Raster* object by zones in a RasterLayer \cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -170,7 +170,7 @@ Apart from the function listed below, you can also use indexing with \code{[} fo
 
 \tabular{ll}{
     \code{\link{getValues}} \tab Get all cell values (fails with very large rasters), or a row of values (safer) \cr
-    \code{\link{getValuesBlock}} \tab Get values for a block (a rectangular area defined by start and end row and column \cr
+    \code{\link{getValuesBlock}} \tab Get values for a block (a rectangular area) \cr
     \code{\link{getValuesFocal}} \tab Get focal values for one or more rows\cr
     \code{\link{as.matrix}} \tab Get cell values as a matrix \cr
     \code{\link{as.array}} \tab Get cell values as an array \cr
@@ -180,7 +180,7 @@ Apart from the function listed below, you can also use indexing with \code{[} fo
     \code{\link{minValue}} \tab Get the minimum value of the cells of a Raster* object (not always known) \cr
     \code{\link{maxValue}} \tab Get the maximum value of the cells of a Raster* object (not always known) \cr
     \code{\link{setMinMax}} \tab Compute the minimum and maximum value of a Raster* object if these are not known \cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -202,7 +202,7 @@ See the rasterVis package for additional plotting methods for Raster* objects us
     .\cr
     \bold{Interacting with a map} \tab \cr
     \code{\link{zoom}} \tab Zoom in to a part of a map \cr
-    \code{\link{click}} \tab Draw points and/or query values of RasterLayer by clicking on a map \cr
+    \code{\link{click}} \tab Query values of Raster* or Spatial* objects by clicking on a map \cr
     \code{\link{select}} \tab Select a geometric subset of a Raster* or Spatial* object \cr
     \code{\link{drawPoly}} \tab Create a SpatialPolygons object by drawing it \cr
     \code{\link{drawLine}} \tab Create a SpatialLines object by drawing it \cr
@@ -214,7 +214,7 @@ See the rasterVis package for additional plotting methods for Raster* objects us
     \code{\link{density}} \tab Density plot of Raster* object values \cr
     \code{\link{pairs}} \tab Pairs plot for layers in a RasterStack or RasterBrick \cr
     \code{\link{boxplot}} \tab Box plot of the values of one or multiple layers\cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -243,8 +243,8 @@ Basic parameters of existing Raster* objects can be obtained, and in most cases 
     \code{\link{band}} \tab Band (layer) of a multi-band file that this RasterLayer is linked to \cr	
     \code{\link{nbands}} \tab How many bands (layers) does the file have? \cr	
     \code{\link{compareRaster}} \tab Compare the geometry of Raster* objects \cr		
-    \code{\link{NAvalue}} \tab Get or set the \code{NA} value (for reading from file; see \link{writeRaster} for setting it when writing a file) \cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+    \code{\link{NAvalue}} \tab Get or set the \code{NA} value (for reading from a file) \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
 	
 }
 }
@@ -269,7 +269,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
     \code{\link{validCell}} \tab Is this a valid cell number? \cr
     \code{\link{validCol}} \tab Is this a valid column number? \cr
     \code{\link{validRow}} \tab Is this a valid row number? \cr
-  --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+  --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -287,7 +287,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
    \code{\link{writeValues}} \tab Write some values  \cr
    \code{\link{writeStop}} \tab Close the file after writing \cr
    \code{\link{update}} \tab Change the values of an existing file \cr	
-    --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+    --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
 }
 }	
 
@@ -301,7 +301,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
     \code{\link{round}} \tab round/floor/ceiling of the coordinates of an Extent object \cr			
     \code{\link{alignExtent}} \tab Align an extent with a Raster* object \cr
     \code{\link{drawExtent}} \tab Create an Extent object by drawing it on top of a map (see plot) \cr		
-    --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+    --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
   }
 }
 
@@ -312,7 +312,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
   \code{\link{showOptions}} \tab  Show session options \cr
   \code{\link{saveOptions}} \tab Save session options to make them persistent \cr
   \code{\link{clearOptions}} \tab Set session options to default values \cr
-    --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+    --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
 }
 }
 
@@ -331,7 +331,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
     \code{\link{sampleInt}} \tab Random sample of (possibly very large) range of integer values \cr
     \code{\link{showTmpFiles}} \tab Show temporary files \cr
     \code{\link{removeTmpFiles}} \tab Remove temporary files \cr
-    --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+    --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
 }
 }
 
@@ -347,7 +347,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
   \code{\link{rasterTmpFile}}  \tab Get a name for a temporary file \cr
   \code{\link{inMemory}} \tab Are the cell values in memory? \cr
   \code{\link{fromDisk}} \tab Are the cell values read from a file? \cr	
-    --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+    --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
 }
 }
 

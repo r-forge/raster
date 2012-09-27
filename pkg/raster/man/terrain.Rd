@@ -43,14 +43,13 @@ The terrain indices are according to Wilson et al. (2007), as in \href{http://ww
 
 Such measures can also be computed with the \code{\link{focal}} function:
 
-\code{f <- matrix(1, nrow=3, ncol=3)}
+f <- matrix(1, nrow=3, ncol=3)
 
-\code{TRI <- focal(x, w=f, fun=function(x, ...) sum(abs(x[-5]-x[5]))/8, pad=TRUE, padValue=NA)}
+TRI <- focal(x, w=f, fun=function(x, ...) sum(abs(x[-5]-x[5]))/8, pad=TRUE, padValue=NA)
 
-\code{TPI <- focal(x, w=f, fun=function(x, ...) x[5] - mean(x[-5]), pad=TRUE, padValue=NA)}
+TPI <- focal(x, w=f, fun=function(x, ...) x[5] - mean(x[-5]), pad=TRUE, padValue=NA)
 
-\code{rough <- focal(x, w=f, fun=function(x, ...) {max(x) - min(x)}, 
-                         pad=TRUE, padValue=NA, na.rm=TRUE) }
+rough <- focal(x, w=f, fun=function(x, ...) {max(x) - min(x)}, pad=TRUE, padValue=NA, na.rm=TRUE)
 }
 
 

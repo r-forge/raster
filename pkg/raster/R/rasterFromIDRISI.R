@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : October 2009
 # Version 0.9
 # Licence GPL v3
@@ -43,7 +43,7 @@
     }  
 	
 	if (filetype=='PACKED BINARY') {
-		stop('cannot read packed binary files, read via rgdal?')
+		stop('cannot natively read packed binary files, read via rgdal?')
 	}
 	
 	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
