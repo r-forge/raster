@@ -209,8 +209,9 @@ See the rasterVis package for additional plotting methods for Raster* objects us
     \code{\link{drawExtent}} \tab Create an Extent object by drawing it \cr	
     .\cr
 	\bold{Other plots} \tab \cr
-    \code{\link{plot}} \tab x-y scatter plot of values of two RasterLayer objects\cr
+    \code{\link{plot}} \tab x-y scatter plot of the values of two RasterLayer objects\cr
     \code{\link{hist}} \tab Histogram of Raster* object values \cr
+    \code{\link{barplot}} \tab barplot of a RasterLayer \cr
     \code{\link{density}} \tab Density plot of Raster* object values \cr
     \code{\link{pairs}} \tab Pairs plot for layers in a RasterStack or RasterBrick \cr
     \code{\link{boxplot}} \tab Box plot of the values of one or multiple layers\cr
