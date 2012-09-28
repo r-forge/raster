@@ -43,7 +43,6 @@
 	}
 	
 	gdalinfo <- GDALinfo(filename, silent=silent, returnRAT=RAT, returnCategoryNames=RAT)
-	x <- GDAL.open(filename, silent=TRUE)
 
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
@@ -135,10 +134,6 @@
 			band <- 1 
 		}
 		r@data@band <- as.integer(band)
-		ct <- getColorTable( x )
-		if (! is.null(ct)) { 
-			r@legend@colortable <- ct 
-		}
 		nbands <-1 
 	}
 	if (rotated) {
@@ -162,17 +157,23 @@
 	RATlist <- attr(gdalinfo, 'RATlist')
 	CATlist <- attr(gdalinfo, 'CATlist')
 
-	
 	blockrows <- integer(nbands)
 	blockcols <- integer(nbands)
+	
+	x <- GDAL.open(filename, silent=TRUE)
+	ct <- getColorTable( x )
+	if (! is.null(ct)) { 
+		r@legend@colortable <- ct 
+	}
 	for (i in 1:nbands) {
 		bs <- getRasterBlockSize( getRasterBand(x, i) )
 		blockrows[i] <- bs[1]
 		blockcols[i] <- bs[2]
 	}
+	GDAL.close(x)
+
 	r@file@blockrows <- blockrows
 	r@file@blockcols <- blockcols
-	GDAL.close(x)
 
 
 	if (fixGeoref) {
