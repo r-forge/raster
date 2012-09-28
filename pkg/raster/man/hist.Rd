@@ -8,7 +8,7 @@
 \title{Histogram}
 
 \description{
-Create a histogram of the values of a RasterLayer. NA values are ignored. For large datasets a sample is used..
+Create a histogram of the values of a RasterLayer. For large datasets a sample is used.
 }
 
 \usage{
