@@ -54,11 +54,11 @@ For an overview of the functions in the raster package have a look here: \code{\
 
 
 \arguments{
-\item{x}{Filename (character), Extent, Raster*, SpatialPixels*, SpatialGrid*, object, 'image', matrix, or missing}
-\item{band}{positive integer. Band number in case of a file of multiple bands (=layers)}
+\item{x}{filename (character), Extent, Raster*, SpatialPixels*, SpatialGrid*, object, 'image', matrix, or missing}
+\item{band}{integer. The layer to use in a multi-layer file}
 \item{...}{Additional arguments, see Details }  
+\item{layer}{integer. The layer to use in a multi-layer file, or the layer to extract from a RasterStack/Brick. If the latter case, an empty RasterLayer (no associated values) is returned if \code{layer=0}}
  \item{values}{logical. If \code{TRUE}, the cell values of '\code{x}' are copied to the RasterLayer object that is returned}
- \item{layer}{integer. The layer from which to copy values to the new RasterLayer. If this value is zero, an empty RasterLayer (no associated values) is returned}
  \item{nrows}{integer > 0. Number of rows}
  \item{ncols}{integer > 0. Number of columns}
  \item{xmn}{minimum x coordinate (left border)}
@@ -85,7 +85,7 @@ To read NetCDF files (CF convention), the \code{ncdf} or the \code{ncdf4} packag
 }
 
 \value{
-RasterLayer object
+RasterLayer
 }
 
 

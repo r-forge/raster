@@ -8,7 +8,7 @@
 \title{Red-Green-Blue plot of a multi-layered Raster object}
 
 \description{
-Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStack). Three layers (bands) are combined such that one is the red channel, one is the green channel, and one is the blue channel. This function could be used to make 'True (or false) color images' from Landsat and other multi-band satellite images. 
+Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStack). Three layers (sometimes referred to as "bands" because they may reperesent different bandwidths in the electromagnetic spectrum) are combined such that they represent the red, green and blue channel. This function can be used to make 'True (or false) color images' from Landsat and other multi-band satellite images. 
 }
 
 

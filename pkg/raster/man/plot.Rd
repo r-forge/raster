@@ -68,13 +68,12 @@ raster uses \code{\link[graphics]{rasterImage}} from the graphics package. For u
 
 
 \seealso{
-\code{ \link[raster]{spplot}} and the \code{rasterVis} package have lattice based methods for plotting Raster* objects. 
+The \code{rasterVis} package has lattice based methods for plotting Raster* objects (like \code{\link[raster]{spplot}})
 
 red-green-blue plots (e.g. false color composites) can be made with \code{\link[raster]{plotRGB}}
 
-\code{\link[raster]{text}, \link[raster]{persp}, \link[raster]{contour}, \link[raster]{pairs}, \link[raster]{hist}}
+\code{\link[raster]{barplot}}, \code{\link[raster]{hist}}, \code{\link[raster]{text}}, \code{\link[raster]{persp}}, \code{\link[raster]{contour}}, \code{\link[raster]{pairs}}
 }
-
 
 
 \examples{ 

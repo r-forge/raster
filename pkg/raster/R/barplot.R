@@ -10,12 +10,13 @@ if (!isGeneric("barplot")) {
 
 
 setMethod('barplot', 'RasterLayer', 
-	function(height, maxpixels=1000000, digits=0, cuts=NULL, col=rainbow, ...)  {
+	function(height, maxpixels=1000000, digits=0, breaks=NULL, col=rainbow, ...)  {
 		x <- sampleRegular(height, maxpixels)
-		if (!is.null(cuts)) {
-			x <- cut(x, cuts)
-		} else {
+		if (!is.null(digits)) {
 			x <- round(x, digits)
+		}
+		if (!is.null(breaks)) {
+			x <- cut(x, breaks)
 		}
 		x <- table(x)
 		if (is.function(col)) {
@@ -24,9 +25,3 @@ setMethod('barplot', 'RasterLayer',
 		barplot(x, col=col, ...)
 	}
 )
-
-
-#f <- system.file("external/test.grd", package="raster")
-#f
-#r <- raster(f)
-#barplot(r, cuts=10, col=rainbow(10))

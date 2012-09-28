@@ -241,7 +241,7 @@ Basic parameters of existing Raster* objects can be obtained, and in most cases 
     \code{\link{projection}} \tab The coordinate reference system (map projection) \cr	
     \code{\link{isLonLat}} \tab Test if an object has a longitude/latitude coordinate reference system \cr
     \code{\link{filename}} \tab Filename to which a RasterLayer or RasterBrick is linked \cr	
-    \code{\link{band}} \tab Band (layer) of a multi-band file that this RasterLayer is linked to \cr	
+    \code{\link{band}} \tab layer (=band) of a multi-band file that this RasterLayer is linked to \cr	
     \code{\link{nbands}} \tab How many bands (layers) does the file have? \cr	
     \code{\link{compareRaster}} \tab Compare the geometry of Raster* objects \cr		
     \code{\link{NAvalue}} \tab Get or set the \code{NA} value (for reading from a file) \cr

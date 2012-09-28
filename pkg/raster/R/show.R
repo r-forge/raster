@@ -59,7 +59,7 @@ setMethod ('show' , 'RasterLayer',
 		
 			x <- object@data@attributes[[1]]
 			nc <- NCOL(x)
-			if (nc == 1) {
+			if (nc == 1) { # this should never happen
 				x <- data.frame(value=x)
 			}
 			maxnl <- 12
@@ -67,24 +67,29 @@ setMethod ('show' , 'RasterLayer',
 				x <- x[, 1:maxnl]
 			}
 			
-			cat('Raster Attribute Table\n') 
 	
 			#nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
-			w <- getOption('warn')
-			on.exit(options('warn' = w))
-			options('warn'=-1) 
-			r <- apply(x, 2, range, na.rm=TRUE)
-			r[is.numeric(r) & !is.finite(r)] <- NA
-			options('warn' = w)
-			r <- data.frame(r)
-			r <- data.frame(x=c('min :','max :'), r)
-			colnames(r) <- c('    fields :', colnames(x))
-			rownames(r) <- NULL
-			if (nc > maxnl) {
-				r <- cbind(r, '...'=rbind('...', '...'))
+			if (nrow(x) > 5) {
+				cat('attributes\n') 
+				w <- getOption('warn')
+				on.exit(options('warn' = w))
+				options('warn'=-1) 
+				r <- apply(x, 2, range, na.rm=TRUE)
+				r[is.numeric(r) & !is.finite(r)] <- NA
+				options('warn' = w)
+				r <- data.frame(r)
+				r <- data.frame(x=c('min :','max :'), r)
+				colnames(r) <- c('    fields :', colnames(x))
+				rownames(r) <- NULL
+				if (nc > maxnl) {
+					r <- cbind(r, '...'=rbind('...', '...'))
+				}
+				print(r, row.names=FALSE)
+			} else {
+				cat('attributes  :\n') 
+				print(x, row.names=FALSE)
 			}
 			
-			print(r, row.names=FALSE)
 			
 		} else {
 				

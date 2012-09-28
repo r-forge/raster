@@ -56,7 +56,7 @@ See \code{writeFormats} for supported file types ("formats", "drivers").
 
 The rgdal package is needed, except for these file formats: 'raster', 'BIL', 'BIP', 'BSQ', 'SAGA', 'ascii', 'IDRISI', and 'CDF'. Some of these formats can be used with or without rgdal (idrisi, SAGA, ascii).  You need the 'ncdf' library for the 'CDF' format. 
 
-In multi-band files  (i.e. files saved from RasterStack or RasterBrick objects), in the native 'raster' format, the bandorder can be set to BIL ('Bands Interleaved by Line'), BIP ('Bands Interleaved by Pixels') or BSQ ('Bands SeQuential'). Note that bandorder is not the same as filetype here. 
+In multi-layer files (i.e. files saved from RasterStack or RasterBrick objects), in the native 'raster' format, the band-order can be set to BIL ('Bands Interleaved by Line'), BIP ('Bands Interleaved by Pixels') or BSQ ('Bands SeQuential'). Note that bandorder is not the same as filetype here. 
 
 Supported file types include:
 
@@ -91,7 +91,7 @@ r <- crop(r, extent(179880, 180800, 329880, 330840) )
 # write to an integer binary file
 rf <- writeRaster(r, filename="allint.grd", datatype='INT4S', overwrite=TRUE)
 
-# make a brick and save multi-band file
+# make a brick and save multi-layer file
 b <- brick(r, sqrt(r))
 bf <- writeRaster(b, filename="multi.grd", bandorder='BIL', overwrite=TRUE)
 
