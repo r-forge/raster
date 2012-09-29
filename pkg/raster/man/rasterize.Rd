@@ -17,8 +17,7 @@ Transfer values associated with 'object' type spatial data (points, lines, polyg
 
 For polygons, values are transferred if the polygon covers the center of a raster cell. For lines, values are transferred to all cells that are touched by a line. You can combine this behaviour by rasterizing polygons as lines first and then as polygons. 
 
-Points that fall on a border between cells are placed in the cell to the right and/or in the cell below.
-If \code{x} represents points, each point is assigned to a grid cell. The value of a grid cell is determined by the values associated with the points and function \code{fun}. 
+If \code{x} represents points, each point is assigned to a grid cell. Points that fall on a border between cells are placed in the cell to the right and/or in the cell below. The value of a grid cell is determined by the values associated with the points and function \code{fun}. 
 }
 
 \usage{
