@@ -12,37 +12,49 @@ if (!isGeneric("rasterize")) {
 
 setMethod('rasterize', signature(x='matrix', y='Raster'), 
 function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...){ 
-	return( .pointsToRaster(x, y, field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, na.rm=na.rm,	...))
+	
+	.pointsToRaster(x, y, field=field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, na.rm=na.rm,	...)
+	
 })
 
 
 setMethod('rasterize', signature(x='data.frame', y='Raster'), 
 function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...){ 
+	
 	x <- as.matrix(x)
-	return( .pointsToRaster(x, y, field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, na.rm=na.rmTRUE, ...))
+	.pointsToRaster(x, y, field=field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, na.rm=na.rmTRUE, ...)
+	
 })
 
 
 setMethod('rasterize', signature(x='SpatialPoints', y='Raster'), 
 function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...){ 
-	return( .pointsToRaster(x, y, field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, na.rm=na.rm, ...))
+	
+	.pointsToRaster(x, y, field=field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, na.rm=na.rm, ...)
+	
 })
 
 
 setMethod('rasterize', signature(x='SpatialLines', y='Raster'), 
 function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", ...){ 
-	.linesToRaster(x, y, field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, ...)
+	
+	.linesToRaster(x, y, field=field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, ...)
+	
 })
 
 
 setMethod('rasterize', signature(x='SpatialPolygons', y='Raster'), 
 function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", getCover=FALSE, silent=FALSE, ...){ 
-	.polygonsToRaster(x, y, field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, getCover=getCover, silent=silent, ...)
+	
+	.polygonsToRaster(x, y, field=field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, getCover=getCover, silent=silent, ...)
+	
 })
 
 setMethod('rasterize', signature(x='Extent', y='Raster'), 
 function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", getCover=FALSE, silent=TRUE, ...){ 
-		y <- as(y, 'SpatialPolygons')
-		.polygonsToRaster(x, y, field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, getCover=getCover, silent=silent,...)
+	
+	x <- as(x, 'SpatialPolygons')
+	.polygonsToRaster(x, y, field=field, fun=fun, background=background, mask=mask, update=update, updateValue=updateValue, filename=filename, getCover=getCover, silent=silent,...)
+	
 	}
 )
