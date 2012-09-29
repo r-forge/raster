@@ -1,4 +1,6 @@
-To do: focal for multi-layer objects
+--- to do
+focal for multi-layer objects
+support for RasterQuad (4 dimensional) objects
 
 --- development version
 new function 'select'

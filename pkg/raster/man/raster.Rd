@@ -78,10 +78,13 @@ If \code{x} is a character value, it should be a filename of a file that the ras
 
 \code{offset}: integer. To indicate the number of header rows on non-standard ascii files (rarely useful; use with caution)
 
-To read NetCDF files (CF convention), the \code{ncdf} or the \code{ncdf4} package needs to be available. If both are available, \code{ncdf4} is used. Only the \code{ncdf4} package can read the most recent version (4) of the netCDF format (as well as older versions), for windows it not available on CRAN but can be downloaded \href{http://cirrus.ucsd.edu/~pierce/ncdf/}{here}.  For these files, the following additional variable is recognized:
+To use \bold{NetCDF} files (CF convention), the \code{ncdf} or the \code{ncdf4} package needs to be available. If both are available, \code{ncdf4} is used. Only the \code{ncdf4} package can read the most recent version (4) of the netCDF format (as well as older versions), for windows it not available on CRAN but can be downloaded \href{http://cirrus.ucsd.edu/~pierce/ncdf/}{here}.  For these files, the following additional variable is recognized:
 
 \code{varname}: character. The variable name, such as 'tasmax' or 'pr'. If not supplied and the file has multiple variables are a guess will be made (and reported)
 
+\code{lvar}: integer > 0 (default=3). To select the 'level variable' (3rd dimension variable) to use, if the file has 4 dimensions (e.g. depth instead of time)\cr
+
+\code{level}: integer > 0 (default=1). To select the 'level' (4th dimension variable) to use, if the file has 4 dimensions, e.g. to create a RasterBrick of weather over time at a certain height. \cr
 }
 
 \value{

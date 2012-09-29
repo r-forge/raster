@@ -27,6 +27,9 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 
 		
 		if (nl == 1) {
+			if (inherits(x, 'RasterBrick')) {
+				x <- raster(x, 1)
+			}
 			facvar <- 0
 			if (!missing(y)) {
 				if (is.factor(x)) {

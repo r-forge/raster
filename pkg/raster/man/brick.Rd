@@ -47,7 +47,7 @@ A RasterBrick can be created from RasterLayer objects, from a RasterStack, or fr
 
 
 \arguments{
- \item{x}{character (filename, see Details); Raster* object; missing; array; SpatialGrid*; SpatialPixels*; Extent; or list of Raster* objects }
+ \item{x}{character (filename, see Details); Raster* object; missing; array; SpatialGrid*; SpatialPixels*; Extent; or list of Raster* objects. Supported file types are the 'native' raster package format and those that can be read via rgdal (see \code{\link[rgdal]{readGDAL}}), and some NetCDF files (CF convention, the \code{ncdf} or \code{ncdf4} package should be available)}
  \item{...}{see Details}
  \item{values}{logical. If \code{TRUE}, the cell values of '\code{x}' are copied to the RasterBrick object that is returned}
  \item{nl}{integer > 0. How many layers should the RasterBrick have?}
@@ -63,27 +63,23 @@ A RasterBrick can be created from RasterLayer objects, from a RasterStack, or fr
 }
 
 \details{
-supported file types are the 'native' raster package format and those that can be read via rgdal (see \code{\link[rgdal]{readGDAL}}), and some NetCDF files (CF convention, the \code{ncdf} or \code{ncdf4} package should be available)
+If \code{x} is a filename there is the following additional argument:
 
-If \code{x} is a filename there are the following additional arguments: 
+\code{native}: logical. If \code{TRUE} (not the default), reading and writing of IDRISI, BIL, BSQ, BIP, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal.
 
-\code{native}: logical. If \code{TRUE} (not the default), reading and writing of IDRISI, BIL, BSQ, BIP, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal
+In addition, if \code{x} is a \bold{NetCDF} filename there are the following additional arguments:
  
 \code{varname}: character. The variable name (e.g. 'altitude' or 'precipitation'. If not supplied and the file has multiple
-variables are a guess will be made (and reported))\cr
+variables are a guess will be made (and reported))
 
-\code{level}: integer > 0 (default=3). To select the 'level' (4th dimension variable) to use, if the data has 4 dimensions \cr
+\code{lvar}: integer > 0 (default=3). To select the 'level variable' (3rd dimension variable) to use, if the file has 4 dimensions (e.g. depth instead of time)
 
-
-If a new file is created, additional arguments are as for \code{\link{writeRaster}}. 
+\code{level}: integer > 0 (default=1). To select the 'level' (4th dimension variable) to use, if the file has 4 dimensions, e.g. to create a RasterBrick of weather over time at a certain height.
 }
-
 
 \value{
 RasterBrick
 }
-
-
 
 \seealso{ \code{\link[raster]{raster}} }
 

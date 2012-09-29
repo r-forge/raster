@@ -196,7 +196,7 @@
 			v <- as.vector(d)
 		}
 		v <- matrix(v, ncol=1)
-		v <- v[,lyrs,drop=FALSE]
+		#v <- v[,lyrs,drop=FALSE]
 	}
 	
 	v[v == navalue] <- NA

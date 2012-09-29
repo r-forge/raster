@@ -59,30 +59,30 @@
 			x@z <- list(time)
 			names(x@z) <- as.character('Date/time')
 		}
-	}
-	if (dodays) {
+	} else if (dodays) {
 		# cal = nc$var[[zvar]]$dim[[dim3]]$calendar ?
 		if (ncdf4) {
-			cal <- ncdf4::ncatt_get(nc, "time", "calendar")$value
+			cal <- ncdf4::ncatt_get(nc, "time", "calendar")
 		} else {
-			cal <- att.get.ncdf(nc, "time", "calendar")$value		
+			cal <- att.get.ncdf(nc, "time", "calendar")		
 		}
-
-		
-		
-		if (cal =='gregorian' | cal =='proleptic_gregorian' | cal=='standard') {
+		if (! cal$hasatt ) {
 			greg <- TRUE
-		} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
-			greg <- FALSE
-			nday <- 365
-		} else if (cal == '360_day') { 
-			greg <- FALSE
-			nday <- 360
 		} else {
-			greg <- TRUE
-			warning('assuming a standard calender:', cal)
+			cal <- cal$value
+			if (cal =='gregorian' | cal =='proleptic_gregorian' | cal=='standard') {
+				greg <- TRUE
+			} else if (cal == 'noleap' | cal == '365 day' | cal == '365_day') { 
+				greg <- FALSE
+				nday <- 365
+			} else if (cal == '360_day') { 
+				greg <- FALSE
+				nday <- 360
+			} else {
+				greg <- TRUE
+				warning('assuming a standard calender:', cal)
+			}
 		}
-
 		time <- getZ(x)
 		if (greg) {
 			time <- as.Date(time, origin=startDate)
@@ -96,8 +96,7 @@
 			time <- as.Date(doy, origin=origin)		
 		}
 		x@z <- list(time)
-		names(x@z) <- as.character('Date')
-		
+		names(x@z) <- 'Date'
 	}
 	return(x)
 }
