@@ -48,7 +48,7 @@ For an overview of the functions in the raster package have a look here: \code{\
 
 \S4method{raster}{matrix}(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, template=NULL)
 
-\S4method{raster}{big.matrix}(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, template=NULL, filename='', ...)
+\S4method{raster}{big.matrix}(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, template=NULL)
 
 \S4method{raster}{SpatialGrid}(x, layer=1, values=TRUE)
 
@@ -91,8 +91,6 @@ If \code{x} represents a \bold{NetCDF} file, the following additional variable i
 \code{level}: integer > 0 (default=1). To select the 'level' (4th dimension variable) to use, if the file has 4 dimensions, e.g. to create a RasterBrick of weather over time at a certain height. \cr
 
 To use NetCDF files the \code{ncdf} or the \code{ncdf4} package needs to be available. If both are available, \code{ncdf4} is used. Only the \code{ncdf4} package can read the most recent version (4) of the netCDF format (as well as older versions), for windows it not available on CRAN but can be downloaded \href{http://cirrus.ucsd.edu/~pierce/ncdf/}{here}. It is assumed that these files follow, or are compatible with the CF convention.
-
-If \code{x} is a \code{big.matrix}, the additional arguments are as for \code{\link{writeRaster}}
 }
 
 \value{

@@ -68,7 +68,7 @@
 		}
 	}
 
-	if ( fileext == ".BIG") {
+	if ( fileext == ".BIG" | fileext == ".BRD") {
 		return( .rasterFromRasterFile(x, band=band, objecttype, driver='big.matrix') )
 	}
 	

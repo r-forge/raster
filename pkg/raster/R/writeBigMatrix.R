@@ -28,19 +28,38 @@
 	} else {
 		dtype <- 'double'
 	}
-	
+
 	dscfile <- extension(basename(fnamevals), 'big.dsc')
-	if (inherits(x, 'RasterLayer')) {
+	
+	if (.driver(x) == 'big.matrix') {
+		b <- deepcopy(attr(x, 'big.memory'), type=dtype, backingfile=basename(fnamevals), 
+			backingpath=dirname(fnamevals), descriptorfile=dscfile)
+			
+	} else if (inherits(x, 'RasterLayer')) {
 		b <- filebacked.big.matrix(nrow(x), ncol(x), type=dtype, backingfile=basename(fnamevals),
 			backingpath=dirname(fnamevals), descriptorfile=dscfile)
-		b[] <- as.matrix(x)	
+		b[] <- as.matrix(x)
+		
 	} else {
 		b <- filebacked.big.matrix(ncell(x), nlayers(x), type=dtype, backingfile=basename(fnamevals),
 			backingpath=dirname(fnamevals), descriptorfile=dscfile)
 		b[] <- getValues(x)
 	}
 	
-	
+#	if (canProcessInMemory(r)) {
+#		r <- setValues(r, as.vector(t(x[])))
+#		if (filename != '') {
+#			r <- writeRaster(r, filename, ...)
+#		}
+#	} else {
+#		tr <- blockSize(r)
+#		pb <- pbCreate(tr$n, ...)
+#		r <- writeStart(r, filename, ...)
+#		for (i in 1:tr$n) {
+#			r <- writeValues(r, as.vector( t ( x[tr$row[i]:(tr$row[i]+tr$nrows[i]-1), ] ) ), tr$row[i] )
+#			pbStep(pb) 
+#		}
+#	}
 #	mn <- minValue(x)
 #	mx <- maxValue(x)
 #	dsize <- dataSize(x@file@datanotation)
