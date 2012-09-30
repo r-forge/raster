@@ -1,5 +1,5 @@
 # Author: Robert J. Hijmans
-# Date :  September 2011
+# Date :  September 2012
 # Version 1.0
 # Licence GPL v3
 
@@ -31,11 +31,7 @@
 
 	dscfile <- extension(basename(fnamevals), 'big.dsc')
 	
-	if (.driver(x) == 'big.matrix') {
-		b <- deepcopy(attr(x, 'big.memory'), type=dtype, backingfile=basename(fnamevals), 
-			backingpath=dirname(fnamevals), descriptorfile=dscfile)
-			
-	} else if (inherits(x, 'RasterLayer')) {
+	if (inherits(x, 'RasterLayer')) {
 		b <- filebacked.big.matrix(nrow(x), ncol(x), type=dtype, backingfile=basename(fnamevals),
 			backingpath=dirname(fnamevals), descriptorfile=dscfile)
 		b[] <- as.matrix(x)
@@ -45,6 +41,7 @@
 			backingpath=dirname(fnamevals), descriptorfile=dscfile)
 		b[] <- getValues(x)
 	}
+	flush(b)
 	
 #	if (canProcessInMemory(r)) {
 #		r <- setValues(r, as.vector(t(x[])))

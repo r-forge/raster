@@ -70,7 +70,6 @@ For an overview of the functions in the raster package have a look here: \code{\
 \item{ext}{object of class Extent. If present, the arguments xmn, xmx, ymn and ynx are ignored}
 \item{crs}{character or object of class CRS. PROJ4 type description of a Coordinate Reference System (map projection). If this argument is missing, and the x coordinates are withing -360 .. 360 and the y coordinates are within -90 .. 90, "+proj=longlat +datum=WGS84" is used}
 \item{template}{Raster* or Extent object used to set the extent (and CRS in case of a Raster* object). If not \code{NULL}, arguments \code{xmn}, \code{xmx}, \code{ymn}, \code{ymx} and \code{crs} (unless \code{template} is an Extent object) are ignored}
-\item{filename}{character, filename to write the values to}
 }
 
 \details{
