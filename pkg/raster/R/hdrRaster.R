@@ -3,8 +3,8 @@
 # Version 0.9
 # Licence GPL v3
 
-.writeHdrRaster <- function(x) {
-	rastergrd <- .setFileExtensionHeader(filename(x), 'raster')
+.writeHdrRaster <- function(x, type='raster') {
+	rastergrd <- .setFileExtensionHeader(filename(x), type)
 	thefile <- file(rastergrd, "w")  # open an txt file connectionis
 	cat("[general]", "\n", file = thefile)
 	cat("creator=R package 'raster'", "\n", file = thefile)

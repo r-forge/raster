@@ -15,8 +15,10 @@
 #	startcol <- min(max(1, round(startcol)), object@ncols)
 #	endcol <- min(object@ncols, startcol+ncols-1)
 #	ncols <- endcol - startcol + 1
-		
-	if (.isNativeDriver(object@file@driver))  {
+
+	driver <- object@file@driver
+	
+	if (.isNativeDriver(driver))  {
 
 		getBSQData <- function(raster, r, nrows, c, ncols, dtype, dsize, dsign, band=1) {
 			offset <- raster@file@offset + (band-1) * raster@ncols * raster@nrows + (r-1) * raster@ncols 
@@ -115,12 +117,15 @@
 		
 
 # ascii is internal to this package but not 'native' (not binary)
-	} else if (object@file@driver == 'ascii') {
+	} else if (driver == 'ascii') {
 		result <- .readRowsAscii(object, startrow, nrows, startcol, ncols)
 		
-	} else if (object@file@driver == 'netcdf') {
+	} else if (driver == 'netcdf') {
 		result <- .readRowsNetCDF(object, startrow, nrows, startcol, ncols)
 		
+	} else if (driver == 'big.matrix') {
+		b <- attr(object, 'big.matrix')
+		result <- as.vector(t(b[startrow:(startrow+nrows-1), startcol:(startcol+ncols-1)]))
 		
 #use GDAL  		
 	} else { 

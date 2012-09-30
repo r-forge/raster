@@ -74,12 +74,54 @@ setMethod('raster', signature(x='list'),
 
 
 setMethod('raster', signature(x='matrix'), 
-	function(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA) {
-		r <- raster(ncols=ncol(x), nrows=nrow(x), xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs)
+	function(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, template=NULL) {
+		if (!is.null(template)) {
+			if (inherits(template, 'Extent')) {
+				r <- raster(template, crs=crs)
+			} else {
+				r <- raster(template)
+			}
+		} else {
+			r <- raster(ncols=ncol(x), nrows=nrow(x), xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs)
+		}
 		r <- setValues(r, as.vector(t(x)))
 		return(r)
 	}
 )
+
+
+setMethod('raster', signature(x='big.matrix'), 
+	function(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, template=NULL, filename='', ...) {
+		if (!is.null(template)) {
+			if (inherits(template, 'Extent')) {
+				r <- raster(template, crs=crs)
+			} else {
+				r <- raster(template)
+			}
+		} else {
+			r <- raster(ncols=ncol(x), nrows=nrow(x), xmn=xmn, xmx=xmx, ymn=ymn, ymx=ymx, crs=crs)
+		}
+		filename <- trim(filename)
+		if (canProcessInMemory(r)) {
+			r <- setValues(r, as.vector(t(x[])))
+			if (filename != '') {
+				r <- writeRaster(r, filename, ...)
+			}
+		} else {
+			tr <- blockSize(r)
+			pb <- pbCreate(tr$n, ...)
+			r <- writeStart(r, filename, ...)
+			for (i in 1:tr$n) {
+				r <- writeValues(r, as.vector( t ( x[tr$row[i]:(tr$row[i]+tr$nrows[i]-1), ] ) ), tr$row[i] )
+				pbStep(pb) 
+			}
+			r <- writeStop(r)
+			pbClose(pb)
+		}
+		return(r)
+	}
+)
+
 
 
 setMethod('raster', signature(x='character'), 

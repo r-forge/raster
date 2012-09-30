@@ -4,13 +4,13 @@
 # Licence GPL v3
 
 
-.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer') {
-	valuesfile <- raster:::.setFileExtensionValues(filename, "raster")
+.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster') {
+	valuesfile <- .setFileExtensionValues(filename, driver)
 	if (!file.exists( valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
 	}	
 	
-	filename <- raster:::.setFileExtensionHeader(filename, "raster")
+	filename <- .setFileExtensionHeader(filename, driver)
 	
 	ini <- readIniFile(filename)
 	ini[,2] = toupper(ini[,2]) 
@@ -167,7 +167,6 @@
 	
 	dataType(x) <- inidatatype
 
-	x@file@name <- filename
 	x@data@haveminmax <- TRUE  # should check?
 	x@file@nodatavalue <- nodataval
 
@@ -175,12 +174,20 @@
 		x@file@byteorder <- byteorder 
 	} 	
 	x@data@fromdisk <- TRUE
-	
-	x@file@driver <- "raster"
+	x@file@driver <- driver
 
 #	if( dataSize(x) * (ncell(x) * nbands(x) + x@file@offset) !=  file.info(valuesfile)$size ) {
-	if( (dataSize(x) * ncell(x) * nbands(x))  !=  file.info(valuesfile)$size ) {
-		warning('size of values file does not match the number of cells (given the data type)')
+	
+	if (driver == 'big.matrix') {
+		x@file@name <- valuesfile
+		dscfile <- extension(valuesfile, 'big.dsc')
+		attr(x, 'big.matrix') <- attach.big.matrix(dscfile)
+		
+	} else {
+		x@file@name <- filename
+		if( (dataSize(x) * ncell(x) * nbands(x))  !=  file.info(valuesfile)$size ) {
+			warning('size of values file does not match the number of cells (given the data type)')
+		}
 	}
 	
     return(x)

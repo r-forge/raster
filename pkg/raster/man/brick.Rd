@@ -11,6 +11,7 @@
 \alias{brick,RasterBrick-method}
 \alias{brick,Extent-method}
 \alias{brick,array-method}
+\alias{brick,big.matrix-method}
 \alias{brick,list-method}
 \alias{brick,SpatialPixels-method}
 \alias{brick,SpatialGrid-method}
@@ -30,7 +31,7 @@ A RasterBrick can be created from RasterLayer objects, from a RasterStack, or fr
 
 \S4method{brick}{RasterStack}(x, values=TRUE, nl, filename='', ...) 
 
-\S4method{brick}{RasterBrick}(x, nl, ...) 
+\S4method{brick}{RasterBrick}(x, nl, ...)
 
 \S4method{brick}{RasterLayer}(x, ..., values=TRUE, nl=1, filename='') 
 
@@ -40,6 +41,8 @@ A RasterBrick can be created from RasterLayer objects, from a RasterStack, or fr
 
 \S4method{brick}{array}(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, transpose=FALSE)
 
+\S4method{brick}{big.matrix}(x, template, filename='', ...)
+
 \S4method{brick}{SpatialGrid}(x)
 
 \S4method{brick}{SpatialPixels}(x)
@@ -47,23 +50,28 @@ A RasterBrick can be created from RasterLayer objects, from a RasterStack, or fr
 
 
 \arguments{
- \item{x}{character (filename, see Details); Raster* object; missing; array; SpatialGrid*; SpatialPixels*; Extent; or list of Raster* objects. Supported file types are the 'native' raster package format and those that can be read via rgdal (see \code{\link[rgdal]{readGDAL}}), and some NetCDF files (CF convention, the \code{ncdf} or \code{ncdf4} package should be available)}
- \item{...}{see Details}
- \item{values}{logical. If \code{TRUE}, the cell values of '\code{x}' are copied to the RasterBrick object that is returned}
- \item{nl}{integer > 0. How many layers should the RasterBrick have?}
- \item{filename}{character. Filename if you want the RasterBrick to be saved on disk}
- \item{nrows}{integer > 0. Number of rows}
- \item{ncols}{integer > 0. Number of columns}
- \item{xmn}{minimum x coordinate (left border)}
- \item{xmx}{maximum x coordinate (right border)}
- \item{ymn}{minimum y coordinate (bottom border)}
- \item{ymx}{maximum y coordinate (top border)}
- \item{crs}{character or object of class CRS. PROJ4 type description of a Coordinate Reference System (map projection). If this argument is missing, and the x coordinates are withing -360 .. 360 and the y coordinates are within -90 .. 90, "+proj=longlat +datum=WGS84" is used}
- \item{transpose}{if \code{TRUE}, the values in the array are transposed}
+\item{x}{character (filename, see Details); Raster* object; missing; array; SpatialGrid*; SpatialPixels*; Extent; or list of Raster* objects. Supported file types are the 'native' raster package format and those that can be read via rgdal (see \code{\link[rgdal]{readGDAL}}), and NetCDF files (see details)}
+\item{...}{see Details}
+\item{values}{logical. If \code{TRUE}, the cell values of '\code{x}' are copied to the RasterBrick object that is returned}
+\item{nl}{integer > 0. How many layers should the RasterBrick have?}
+\item{filename}{character. Filename if you want the RasterBrick to be saved on disk}
+\item{nrows}{integer > 0. Number of rows}
+\item{ncols}{integer > 0. Number of columns}
+\item{xmn}{minimum x coordinate (left border)}
+\item{xmx}{maximum x coordinate (right border)}
+\item{ymn}{minimum y coordinate (bottom border)}
+\item{ymx}{maximum y coordinate (top border)}
+\item{crs}{character or object of class CRS. PROJ4 type description of a Coordinate Reference System (map projection). If this argument is missing, and the x coordinates are withing -360 .. 360 and the y coordinates are within -90 .. 90, "+proj=longlat +datum=WGS84" is used}
+\item{transpose}{if \code{TRUE}, the values in the array are transposed}
+\item{template}{Raster* object used to set the extent, number of rows and columns and CRS}
 }
 
 \details{
-If \code{x} is a filename there is the following additional argument:
+If \code{x} is a RasterLayer, the additional arguments can be used to pass additional Raster* objects.
+
+If there is a \code{filename} argument, the additional arguments are as for \code{\link{writeRaster}}. The big.matrix most have rows representing cells and columns representing layers.
+
+If \code{x} represents a filename there is the following additional argument:
 
 \code{native}: logical. If \code{TRUE} (not the default), reading and writing of IDRISI, BIL, BSQ, BIP, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal.
 
@@ -75,6 +83,8 @@ variables are a guess will be made (and reported))
 \code{lvar}: integer > 0 (default=3). To select the 'level variable' (3rd dimension variable) to use, if the file has 4 dimensions (e.g. depth instead of time)
 
 \code{level}: integer > 0 (default=1). To select the 'level' (4th dimension variable) to use, if the file has 4 dimensions, e.g. to create a RasterBrick of weather over time at a certain height.
+
+To use NetCDF files the \code{ncdf} or the \code{ncdf4} package needs to be available. If both are available, \code{ncdf4} is used. Only the \code{ncdf4} package can read the most recent version (4) of the netCDF format (as well as older versions), for windows it not available on CRAN but can be downloaded \href{http://cirrus.ucsd.edu/~pierce/ncdf/}{here}. It is assumed that these files follow, or are compatible with the CF convention.
 }
 
 \value{

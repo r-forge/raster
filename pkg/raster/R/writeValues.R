@@ -1,7 +1,14 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  September 2009
-# Version 0.9
+# Version 1.0
 # Licence GPL v3
+
+
+if (!isGeneric('writeValues')) {
+	setGeneric('writeValues', function(x, v, start)
+		standardGeneric('writeValues')) 
+}
+
 
 setMethod('writeValues', signature(x='RasterLayer', v='vector'), 
 	function(x, v, start) {
@@ -13,8 +20,10 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			x@data@min <- min(x@data@min, rsd)
 			x@data@max <- max(x@data@max, rsd)
 		}	
+
+		driver <- x@file@driver
 		
-		if ( x@file@driver == 'gdal' ) {
+		if ( driver == 'gdal' ) {
 			off = c(start-1, 0)
 			if (substr(x@file@datanotation,1,1) != 'F') {
 				v <- round(v)
@@ -30,7 +39,7 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			
 			gd <- putRasterData(x@file@transient, v, band=1, offset=off) 	
 
-		} else if ( x@file@driver %in% .nativeDrivers() ) {
+		} else if ( driver %in% .nativeDrivers() ) {
 			if (x@file@dtype == "INT" ) { 
 				if (substr(x@file@datanotation, 5 , 5) == 'U') { 
 					v[v < 0] <- NA
@@ -55,11 +64,16 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			seek(x@file@con, start, rw='w')			
 			writeBin(v, x@file@con, size=x@file@dsize )
 			
-		} else if ( x@file@driver == 'netcdf') {
+		} else if ( driver == 'netcdf') {
 
 			x <- .writeValuesCDF(x, v, start)
 			
-		} else if ( x@file@driver == 'ascii') {
+		} else if ( driver == 'big.matrix') {
+
+			b <- attr(x, 'big.matrix')
+			b[rowColFromCell(x, start:(start+length(v)-1))] <- v
+
+		} else if ( driver == 'ascii') {
 		
 			opsci = options('scipen')
 			if (x@file@dtype == 'INT') {
@@ -85,7 +99,8 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 	
 		v[is.infinite(v)] <- NA
 		
-		if ( x@file@driver %in% .nativeDrivers() ) {
+		driver <- x@file@driver
+		if ( driver %in% .nativeDrivers() ) {
 			
 			#if (!is.matrix(v)) v <- matrix(v, ncol=1)
 
@@ -144,11 +159,17 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 				stop('unknown band order')
 			}
 			
-		} else if ( x@file@driver == 'netcdf') {
+		} else if ( driver == 'netcdf') {
 
 			x <- .writeValuesBrickCDF(x, v, start)
 
-		} else {
+		} else if ( driver == 'big.matrix') {
+
+			b <- attr(x, 'big.matrix')
+			b[start:(start+length(v)-1), ] <- v
+			
+		} else { # rgdal
+		
 			off = c(start-1, 0)
 			if (x@file@datanotation == 'INT1U') {
 				v[v < 0] <- NA

@@ -33,7 +33,7 @@
 		}
 	} else {
 		if (!overwrite & (file.exists(filename) | file.exists(fnamevals))) {
-			stop(paste(filename,"exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
+			stop(paste(filename,"or", fnamevals, "exists.","use 'overwrite=TRUE' if you want to overwrite it")) 
 		}
 	}
 	

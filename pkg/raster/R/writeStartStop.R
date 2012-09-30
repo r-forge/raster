@@ -13,10 +13,6 @@ if (!isGeneric('writeStop')) {
 		standardGeneric('writeStop'))
 }
 	
-if (!isGeneric('writeValues')) {
-	setGeneric('writeValues', function(x, v, start)
-		standardGeneric('writeValues')) 
-}
 
 
 setMethod('writeStart', signature(x='RasterLayer', filename='character'), 
@@ -38,6 +34,8 @@ function(x, filename, options=NULL, format, ...) {
 		x <- .startRasterWriting(x, filename, format=filetype, ...)
 	} else if ( filetype == 'CDF' ) { 
 		x <- .startWriteCDF(x, filename, ...)
+	} else if ( filetype == 'big.matrix' ) { 
+		x <- .startBigMatrixWriting(x, filename, ...)
 	} else {
 		x <- .startGDALwriting(x, filename, options=options, format=filetype, ...)
 	}		
@@ -61,6 +59,8 @@ function(x, filename, options=NULL, format, ...) {
 		x <- .startRasterWriting(x, filename, format=filetype, ...) 
 	} else if ( filetype == 'CDF' ) { 
 		x <- .startWriteCDF(x, filename, ...)
+	} else if ( filetype == 'big.matrix' ) { 
+		x <- .startBigMatrixWriting(x, filename, ...)
 	} else {
 		x <- .startGDALwriting(x, filename, options=options, format=filetype, ...) 
 	}
@@ -69,27 +69,34 @@ function(x, filename, options=NULL, format, ...) {
 
 
 setMethod('writeStop', signature(x='RasterLayer'), 
-function(x) {
-	if ( x@file@driver %in% .nativeDrivers() ) { 
-		return( .stopRasterWriting(x) )
-	} else if ( x@file@driver == 'ascii' ) { 
-		return( .stopAsciiWriting(x) )
-	} else if ( x@file@driver == 'netcdf' ) { 
-		return( .stopWriteCDF(x) )
-	} else {
-		return( .stopGDALwriting(x) )
+	function(x) {
+		driver <- x@file@driver
+		if ( driver %in% .nativeDrivers() ) { 
+			return( .stopRasterWriting(x) )
+		} else if ( driver == 'big.matrix' ) { 
+			return( .stopBigMatrixWriting(x) )
+		} else if ( driver == 'ascii' ) { 
+			return( .stopAsciiWriting(x) )
+		} else if ( driver == 'netcdf' ) { 
+			return( .stopWriteCDF(x) )
+		} else {
+			return( .stopGDALwriting(x) )
+		}
 	}
-})
+)
 
 setMethod('writeStop', signature(x='RasterBrick'), 
-function(x) {
-	native <- x@file@driver %in% c(.nativeDrivers())
-	if (native) { 
-		return( .stopRasterWriting(x) )
-	} else if ( x@file@driver == 'netcdf' ) { 
-		return( .stopWriteCDF(x) )
-	} else {
-		return( .stopGDALwriting(x) )
+	function(x) {
+		driver <- x@file@driver
+		if (driver  %in% .nativeDrivers()) { 
+			return( .stopRasterWriting(x) )
+		} else if ( driver == 'netcdf' ) { 
+			return( .stopWriteCDF(x) )
+		} else if ( driver == 'big.matrix' ) { 
+			return( .stopBigMatrixWriting(x) )
+		} else {
+			return( .stopGDALwriting(x) )
+		}
 	}
-})
+)
 

@@ -3,9 +3,10 @@ focal for multi-layer objects
 support for RasterQuad (4 dimensional) objects
 
 --- development version
-new function 'select'
+new function 'select' for selecting spatial subsets by drawing on plot (map)
 new function 'barplot' for RasterLayer objects
 new function 'scale' for Raster* objects
+new functions to coerce to and from big.matrix objects: as(x, 'big.matrix') and raster(x) or brick(x)
 changed use of igraph0 to igraph (functions gridDistance and clump)
 renamed function 'compare' to 'compareRaster' (to avoid name hiding by the igraph package)
 renamed function 'expand' to 'extend' (to avoid name hiding by the Matrix package)
@@ -469,9 +470,7 @@ Not yet used in writing, or with other formats
 New clump function, now always using igraph (also for large rasters) & minor bug fix
 Fixes to subs function (needs more checking)
 To allow for better behaviour when using objects derived from Raster* objects (perhaps in other packages), replaced code like
-  if (class(x) == 'RasterLayer') 
-with
-  if (inherits(x, 'RasterLayer'))
+"if (class(x) == 'RasterLayer')" with "if (inherits(x, 'RasterLayer'))"
 Bug fix: error when indexing a RasterStack as in s[1]  (as reported by Kevin Ummel)
 
 --- 27-July-2010, version 1.3-4

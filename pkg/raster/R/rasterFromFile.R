@@ -41,6 +41,8 @@
 			return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
 		} 
 	}
+	
+	
 	if (! file.exists(x) ) {
 		if (extension(x) == '') {
 			grifile <- .setFileExtensionValues(x, 'raster')
@@ -66,6 +68,10 @@
 		}
 	}
 
+	if ( fileext == ".BIG") {
+		return( .rasterFromRasterFile(x, band=band, objecttype, driver='big.matrix') )
+	}
+	
 	if (!is.null(offset)) {
 		return ( .rasterFromASCIIFile(x, offset) )
 	}
