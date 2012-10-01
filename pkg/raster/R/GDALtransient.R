@@ -58,9 +58,9 @@
 		options <- c(options, "COMPRESS=LZW")
 	}
 
-	driver = new("GDALDriver", gdalfiletype)
+	driver <- new("GDALDriver", gdalfiletype)
 	
-    transient = new("GDALTransientDataset", driver=driver, rows=r@nrows, cols=r@ncols, bands=nbands, type=dataformat, fname=filename, options=options, handle=NULL)
+    transient <- new("GDALTransientDataset", driver=driver, rows=r@nrows, cols=r@ncols, bands=nbands, type=dataformat, fname=filename, options=options, handle=NULL)
  
 	for (i in 1:nbands) {
 		b <- new("GDALRasterBand", transient, i)

@@ -37,7 +37,7 @@ setMethod("stack", signature(x='Raster'),
 
 
 setMethod("stack", signature(x='character'), 
-function(x, ..., bands=NULL, varname="", native=FALSE, quick=FALSE) {
+function(x, ..., bands=NULL, varname="", native=FALSE, RAT=TRUE, quick=FALSE) {
 
 	rlist <- c(x, list(...))
 
@@ -61,14 +61,14 @@ function(x, ..., bands=NULL, varname="", native=FALSE, quick=FALSE) {
 			return(.quickStack(rlist, native=native))
 		}
 		
-		return(stack(rlist, bands=bands, native=native))
+		return(stack(rlist, bands=bands, native=native, RAT=RAT))
 	}
 } )
 
 
 
 setMethod("stack", signature(x='list'), 
-function(x, bands=NULL, native=FALSE, ...) {
+function(x, bands=NULL, native=FALSE, RAT=TRUE, ...) {
 
 	if (inherits(x, 'data.frame')) {
 		return(utils::stack(x, ...))
@@ -119,7 +119,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 	
 	r <- list()
 
-	first <- raster(x[[1]], native=native, RAT=FALSE)
+	first <- raster(x[[1]], native=native, RAT=RAT)
 	if (!is.null(bands)) {
 		lb <- length(bands)
 		bands <- bands[bands %in% 1:nbands(first)]
@@ -136,14 +136,14 @@ function(x, bands=NULL, native=FALSE, ...) {
 		if (is.character(x[[i]])) {
 			if (!is.null(bands)) {
 				for (b in bands) {
-					r[j] <- raster(x[[i]], band=b, native=native, RAT=FALSE, ...)
+					r[j] <- raster(x[[i]], band=b, native=native, RAT=RAT, ...)
 					if (namesFromList) {
 						names(r[[j]]) <- paste(lstnames[i], '_', b, sep='')
 					}
 					j <- j + 1
 				}
 			} else {
-				r[j] <- raster(x[[i]], band=1, native=native, RAT=FALSE, ...)
+				r[j] <- raster(x[[i]], band=1, native=native, RAT=RAT, ...)
 				bds <- nbands(r[[j]])
 
 				if (namesFromList) {
@@ -156,7 +156,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 				j <- j + 1
 				if (bds > 1) {
 					for (b in 2:bds) {
-						r[j] <- raster(x[[i]], band=b, native=native, RAT=FALSE, ...)
+						r[j] <- raster(x[[i]], band=b, native=native, RAT=RAT, ...)
 							
 						if (namesFromList) {
 							names(r[[j]]) <- paste(lstnames[i], '_', b, sep='')

@@ -5,8 +5,7 @@
 
 
 .gdFixGeoref <- function(mdata) {
-	gdversion = getGDALVersionInfo()
-	gdversion = trim(substr(gdversion, 5, 10))
+	gdversion <- getOption('rasterGDALVersion')
 	test <- gdversion < '1.8.0'	
 	if (test) {
 		if (! is.null(mdata) ) {

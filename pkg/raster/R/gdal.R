@@ -1,26 +1,74 @@
 
 
+.requireRgdal <- function(stopIfAbsent=TRUE) {
+	
+	y <- getOption('rasterGDALLoaded')
+	
+	w <- getOption('warn')
+	options('warn'=-1) 
+	x <- isTRUE( try( require(rgdal, quietly=TRUE ) ) )
+	options('warn'= w) 
+	
+	if (! isTRUE(y) ) {
+		if (x) {
+			options('rasterGDALLoaded'=TRUE)
+			gdversion <- getGDALVersionInfo()
+			gdversion <- trim(substr(gdversion, 5, 10))
+			options('rasterGDALVersion'=gdversion)
+			pkg.info <- utils::packageDescription('rgdal') 
+			rgdversion <- pkg.info[["Version"]]		
+			options('rasterRGDALVersion'=rgdversion)
+		} else if (stopIfAbsent) {
+			stop("package 'rgdal' is not available")
+		}
+	}
+	return(x)
+}
+
+# temporary tricks to move avoid .Calling rgdal as per CRAN request
+# next version of raster should depend on rgdal > "0.7-12"
+
 .gd_SetNoDataValue <- function(object, NAflag) {
-	.Call("RGDAL_SetNoDataValue", object, as.double(NAflag), PACKAGE="rgdal")
+	if (getOption('rasterRGDALVersion') > "0.7-12") {
+		rgdal:::.gd_SetNoDataValue(object, NAflag)
+	} else {
+		.Call("RGDAL_SetNoDataValue", object, as.double(NAflag), PACKAGE="rgdal")
+	}
 }
 
 
 .gd_SetGeoTransform <- function(object, geotrans) {
-   .Call("RGDAL_SetGeoTransform", object, geotrans, PACKAGE="rgdal")
+	if (getOption('rasterRGDALVersion') > "0.7-12") {
+		rgdal:::.gd_SetGeoTransform(object, geotrans)
+	} else {
+		.Call("RGDAL_SetGeoTransform", object, geotrans, PACKAGE="rgdal")
+	}
 }
 
 
 .gd_SetProject <- function(object, proj4string) {
-    .Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")
+	if (getOption('rasterRGDALVersion') > "0.7-12") {
+		rgdal:::.gd_SetProject(object, proj4string)	
+	} else {
+		.Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")
+	}
 }
 
 
 .gd_SetStatistics <- function(object, statistics) {
-	.Call("RGDAL_SetStatistics", object, as.double(statistics), PACKAGE="rgdal")
+	if (getOption('rasterRGDALVersion') > "0.7-12") {
+		rgdal:::.gd_SetStatistics(object, statistics)
+	} else {
+		.Call("RGDAL_SetStatistics", object, as.double(statistics), PACKAGE="rgdal")
+	}
 }
 
 .gd_transform <- function(projfrom, projto, n, x, y) {
-	.Call("transform", projfrom, projto, n, x, y, PACKAGE="rgdal")
+	if (getOption('rasterRGDALVersion') > "0.7-12") {
+		rgdal:::.gd_transform(projfrom, projto, n, x, y)
+	} else {
+		.Call("transform", projfrom, projto, n, x, y, PACKAGE="rgdal")
+	}
 }
 
 

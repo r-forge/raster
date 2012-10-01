@@ -20,13 +20,13 @@ A RasterStack is a collection of RasterLayer objects with the same spatial exten
 }
 
 \usage{
-\S4method{stack}{character}(x, ..., bands=NULL, varname="", native=FALSE, quick=FALSE)
+\S4method{stack}{character}(x, ..., bands=NULL, varname="", native=FALSE, RAT=TRUE, quick=FALSE)
 
 \S4method{stack}{Raster}(x, ...)
 
 \S4method{stack}{missing}(x)
 
-\S4method{stack}{list}(x, bands=NULL, native=FALSE, ...)
+\S4method{stack}{list}(x, bands=NULL, native=FALSE, RAT=TRUE, ...)
 }
 
 
@@ -34,8 +34,9 @@ A RasterStack is a collection of RasterLayer objects with the same spatial exten
 \item{x}{filename (character), Raster* object, missing (to create an empty RasterStack), SpatialGrid*, SpatialPixels*, or list (of filenames and/or Raster* objects). If \code{x} is a list, additional arguments \code{...} are ignored}
 \item{bands}{integer. which bands (layers) of the file should be used (default is all layers)}
 \item{native}{logical. If \code{TRUE} native drivers are used instead of gdal drivers (where available, such as for  BIL and Arc-ASCII files)}
+\item{RAT}{logical. If \code{TRUE} a raster attribute table is created for files that have one}
 \item{quick}{logical. If \code{TRUE} the extent and resolution of the objects are not compared. This speeds up the creation of the RasteStack but should be use with great caution. Only use this option when you are absolutely sure that all the data in all the files are aligned, and you need to create RasterStack for many (>100) files}
-\item{varname}{character. To select the variable of interest of a NetCDF file}
+\item{varname}{character. To select the variable of interest in a NetCDF file (see \code{\link{raster}}}
 \item{...}{additional filenames or Raster* objects}
 }
 
