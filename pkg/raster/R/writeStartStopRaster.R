@@ -79,6 +79,7 @@
 	close(x@file@con)
 #	fnamevals <- .setFileExtensionValues(x@file@name)
 #	attr(x@file, "con") <- file(fnamevals, "rb")
+
 	x@data@haveminmax <- TRUE
 	if (x@file@dtype == "INT") {
 		x@data@min <- round(x@data@min)
@@ -87,6 +88,10 @@
 #		x@data@min <- as.logical(x@data@min)
 #		x@data@max <- as.logical(x@data@max)
 	}
+	
+	#x@data@min[!is.finite(x@data@min)] <- NA
+	#x@data@max[!is.finite(x@data@max)] <- NA
+	
 	hdr(x, .driver(x)) 
 	filename <- .setFileExtensionValues(filename(x), x@file@driver)
 	

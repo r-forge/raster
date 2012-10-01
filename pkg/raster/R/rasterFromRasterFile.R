@@ -1,10 +1,31 @@
 # Author: Robert J. Hijmans
 # Date : June 2008
-# Version 0.9
+# Version 1.0
 # Licence GPL v3
 
 
+.getRat <- function(x, ratvalues, ratnames, rattypes) {
+
+	rat <- data.frame(matrix(ratvalues, nrow=length(ratvalues) / length(ratnames)), stringsAsFactors=FALSE)
+	colnames(rat) <- ratnames
+	for (i in 1:ncol(rat)) {
+		if (rattypes[i] == 'integer') {
+			rat[, i] <- as.integer(rat[,i])
+		} else if (rattypes[i] == 'numeric') {
+			rat[, i] <- as.numeric(rat[,i])
+		} else if (rattypes[i] == 'factor') {
+			rat[, i] <- as.factor(rat[,i])
+		}
+	}
+	x@data@isfactor <- TRUE
+	x@data@attributes <- list(rat)
+	x
+	
+}
+
+
 .rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster') {
+
 	valuesfile <- .setFileExtensionValues(filename, driver)
 	if (!file.exists( valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
@@ -96,27 +117,10 @@
 		x@data@band <- as.integer(band)
 		x@data@min <- minval[band]
 		x@data@max <- maxval[band]
-	}
-	
-	if (isTRUE(any(isCat))) {
-		x@data@isfactor <- isCat
-	
-	# currently only for a single layer!
-	
-		rat <- data.frame(matrix(ratvalues, nrow=length(ratvalues) / length(ratnames)), stringsAsFactors=FALSE)
-		colnames(rat) <- ratnames
-		for (i in 1:ncol(rat)) {
-			if (rattypes[i] == 'integer') {
-				rat[, i] <- as.integer(rat[,i])
-			} else if (rattypes[i] == 'numeric') {
-				rat[, i] <- as.numeric(rat[,i])
-			} else if (rattypes[i] == 'factor') {
-				rat[, i] <- as.factor(rat[,i])
-			}
+		if (isTRUE(isCat[band])) {
+		# currently only for a single layer!
+			try( x <- .getRat(ratvalues, ratnames, rattypes) )
 		}
-		x@data@isfactor <- TRUE
-		x@data@attributes <- list(rat)
-		
 	}
 
 	x@file@nbands <- as.integer(nbands)
@@ -192,3 +196,5 @@
 	
     return(x)
 }
+
+

@@ -98,12 +98,19 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 	function(x, v, start) {
 	
 		v[is.infinite(v)] <- NA
+
+		w <- getOption('warn')
+		options('warn'=-1) 
+		rng <- apply(v, 2, range, na.rm=TRUE)
+		x@data@min <- pmin(x@data@min, rng[1,])
+		x@data@max <- pmax(x@data@max, rng[2,])
+		options('warn'= w) 		
 		
 		driver <- x@file@driver
 		if ( driver %in% .nativeDrivers() ) {
 			
 			#if (!is.matrix(v)) v <- matrix(v, ncol=1)
-
+			
 			if (x@file@dtype == "INT") { 
 				v[is.na(v)] <- x@file@nodatavalue		
 				dm <- dim(v)
@@ -115,18 +122,13 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 				dm <- dim(v)
 				v <- as.integer(round(v))  
 				dim(v) <- dm
-			} else { 
-				v[]  <- as.numeric( v ) 
 			}
+			# else { 
+			# should not be necessary...
+			# v[]  <- as.numeric( v ) 
+			#}
 
-			w <- getOption('warn')
-			options('warn'=-1) 
-			rng <- apply(v, 2, range, na.rm=TRUE)
-			x@data@min <- pmin(x@data@min, rng[1,])
-			x@data@max <- pmax(x@data@max, rng[2,])
-			options('warn'= w) 
-
-			
+		
 			if (x@file@bandorder=='BIL') {
 			
 				start <- (start-1) * x@ncols * x@file@dsize * nlayers(x)
@@ -170,21 +172,14 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 			
 		} else { # rgdal
 		
-			off = c(start-1, 0)
+			off <- c(start-1, 0)
 			if (x@file@datanotation == 'INT1U') {
 				v[v < 0] <- NA
 			}
 
-			w <- getOption('warn')
-			options('warn'=-1) 
-			rng <- apply(v, 2, range, na.rm=TRUE)
-			x@data@min <- pmin(x@data@min, rng[1,])
-			x@data@max <- pmax(x@data@max, rng[2,])
-			options('warn'= w) 
-
 			v[is.na(v)] <- x@file@nodatavalue
 			for (i in 1:nlayers(x)) {
-				vv = matrix(v[,i], nrow=ncol(x))
+				vv <- matrix(v[,i], nrow=ncol(x))
 				gd <- putRasterData(x@file@transient, vv, band=i, offset=off) 	
 			}
 		}
