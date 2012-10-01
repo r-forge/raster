@@ -5,7 +5,7 @@
 
 
 setMethod("plot", signature(x='Raster', y='Raster'), 
-	function(x, y, maxpixels=100000, cex=0.2, xlab, ylab, nc, nr, maxnl=16, main, add=FALSE, gridded=FALSE, ncol=25, nrow=25, ...)  {
+	function(x, y, maxpixels=100000, cex=0.2, xlab, ylab, nc, nr, maxnl=16, main, add=FALSE, gridded=FALSE, ncol=25, nrow=25, ...) {
 	
 		compareRaster(c(x, y), extent=TRUE, rowcol=TRUE, crs=FALSE, stopiffalse=TRUE) 
 		nlx <- nlayers(x)
@@ -125,7 +125,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 
 .plotdens <- function(x, y, nc, nr, asp=NULL, ...) {
 	xy <- na.omit(cbind(x,y))
-	if (ncol(xy) == 0) {
+	if (nrow(xy) == 0) {
 		stop('only NA values (in this sample?)')
 	}
 	r <- apply(xy, 2, range)
