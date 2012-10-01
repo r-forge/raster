@@ -42,7 +42,11 @@
 		}
 	}
 	
-	gdalinfo <- GDALinfo(filename, silent=silent, returnRAT=RAT, returnCategoryNames=RAT)
+	gdalinfo <- try ( GDALinfo(filename, silent=silent, returnRAT=RAT, returnCategoryNames=RAT) )
+	if (class(gdalinfo) == 'try-error') {
+		gdalinfo <- GDALinfo(filename, silent=silent, returnRAT=FALSE, returnCategoryNames=FALSE)
+		warning('Could not read RAT or Category names')
+	}
 
 	nc <- as.integer(gdalinfo[["columns"]])
 	nr <- as.integer(gdalinfo[["rows"]])
