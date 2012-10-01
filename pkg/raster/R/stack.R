@@ -119,7 +119,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 	
 	r <- list()
 
-	first <- raster(x[[1]])
+	first <- raster(x[[1]], native=native, RAT=FALSE)
 	if (!is.null(bands)) {
 		lb <- length(bands)
 		bands <- bands[bands %in% 1:nbands(first)]
@@ -136,14 +136,14 @@ function(x, bands=NULL, native=FALSE, ...) {
 		if (is.character(x[[i]])) {
 			if (!is.null(bands)) {
 				for (b in bands) {
-					r[j] <- raster(x[[i]], band=b, native=native, ...)
+					r[j] <- raster(x[[i]], band=b, native=native, RAT=FALSE, ...)
 					if (namesFromList) {
 						names(r[[j]]) <- paste(lstnames[i], '_', b, sep='')
 					}
 					j <- j + 1
 				}
 			} else {
-				r[j] <- raster(x[[i]], band=1, native=native, ...)
+				r[j] <- raster(x[[i]], band=1, native=native, RAT=FALSE, ...)
 				bds <- nbands(r[[j]])
 
 				if (namesFromList) {
@@ -156,7 +156,7 @@ function(x, bands=NULL, native=FALSE, ...) {
 				j <- j + 1
 				if (bds > 1) {
 					for (b in 2:bds) {
-						r[j] <- raster(x[[i]], band=b, native=native, ...)
+						r[j] <- raster(x[[i]], band=b, native=native, RAT=FALSE, ...)
 							
 						if (namesFromList) {
 							names(r[[j]]) <- paste(lstnames[i], '_', b, sep='')
