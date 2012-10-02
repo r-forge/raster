@@ -29,7 +29,7 @@
 # next version of raster should depend on rgdal > "0.7-12"
 
 .gd_SetNoDataValue <- function(object, NAflag) {
-	if (getOption('rasterRGDALVersion') > "0.7-12") {
+	if (getOption('rasterRGDALVersion') > "0.7-20") {
 		rgdal:::.gd_SetNoDataValue(object, NAflag)
 	} else {
 		.Call("RGDAL_SetNoDataValue", object, as.double(NAflag), PACKAGE="rgdal")
@@ -38,7 +38,7 @@
 
 
 .gd_SetGeoTransform <- function(object, geotrans) {
-	if (getOption('rasterRGDALVersion') > "0.7-12") {
+	if (getOption('rasterRGDALVersion') > "0.7-20") {
 		rgdal:::.gd_SetGeoTransform(object, geotrans)
 	} else {
 		.Call("RGDAL_SetGeoTransform", object, geotrans, PACKAGE="rgdal")
@@ -47,7 +47,7 @@
 
 
 .gd_SetProject <- function(object, proj4string) {
-	if (getOption('rasterRGDALVersion') > "0.7-12") {
+	if (getOption('rasterRGDALVersion') > "0.7-20") {
 		rgdal:::.gd_SetProject(object, proj4string)	
 	} else {
 		.Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")
@@ -56,7 +56,7 @@
 
 
 .gd_SetStatistics <- function(object, statistics) {
-	if (getOption('rasterRGDALVersion') > "0.7-12") {
+	if (getOption('rasterRGDALVersion') > "0.7-20") {
 		rgdal:::.gd_SetStatistics(object, statistics)
 	} else {
 		.Call("RGDAL_SetStatistics", object, as.double(statistics), PACKAGE="rgdal")
@@ -64,7 +64,7 @@
 }
 
 .gd_transform <- function(projfrom, projto, n, x, y) {
-	if (getOption('rasterRGDALVersion') > "0.7-12") {
+	if (getOption('rasterRGDALVersion') > "0.7-20") {
 		rgdal:::.gd_transform(projfrom, projto, n, x, y)
 	} else {
 		.Call("transform", projfrom, projto, n, x, y, PACKAGE="rgdal")
