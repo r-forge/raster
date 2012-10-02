@@ -66,8 +66,9 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 		cat('Using cluster with', nodes, 'nodes\n')
 		flush.console()
 
-		clFun <- function(i) {
-			pp <- y[i,]
+		
+		clusterExport(cl, varlist=c('rsbb', 'rr', 'weights', 'addres', 'cellnumbers', 'small'), envir=environment())
+		clFun <- function(i, pp) {
 			spbb <- bbox(pp)
 		
 			if (spbb[1,1] >= rsbb[1,2] | spbb[1,2] <= rsbb[1,1] | spbb[2,1] >= rsbb[2,2] | spbb[2,2] <= rsbb[2,1]) {
@@ -131,18 +132,18 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 		}
 		
         for (ni in 1:nodes) {
-			sendCall(cl[[ni]], clFun, ni, tag=ni)
+			parallel:::sendCall(cl[[ni]], clFun, list(ni, y[ni,]), tag=ni)
 		}
 		
 		for (i in 1:npol) {
-			d <- recvOneData(cl)
+			d <- parallel:::recvOneData(cl)
 			if (! d$value$success) {
 				stop('cluster error at polygon: ', i)
 			}
 			res[[d$value$tag]] <- d$value$value
 			ni <- ni + 1
 			if (ni <= npol) {
-				sendCall(cl[[d$node]], clFun, ni, tag=ni)
+				parallel:::sendCall(cl[[d$node]], clFun, list(ni, y[ni,]), tag=ni)
 			}
 			pbStep(pb, i)
 		}

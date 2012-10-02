@@ -21,14 +21,14 @@ The use of the cluster is automatic in these functions: \code{ \link{predict}, \
 }
 
 \usage{
-beginCluster(n, type, nice, exclude)
+beginCluster(n, type='SOCK', nice, exclude)
 endCluster()
 clusterR(x, fun, args=NULL, filename='', cl=NULL, m=2, ...)
 }
 
 \arguments{
 \item{n}{Integer. The number of nodes to be used (optional)}
-\item{type}{Character. The cluster type to be used (optional). E.g. "SOCK", see the snow package for details }
+\item{type}{Character. The cluster type to be used}
 \item{nice}{Integer. To set the prioirty for the workers, between -20 and 20 (UNIX like platforms only)}
 \item{exclude}{Character. Packages to exclude from loading on the nodes (because they may fail there) but are required/loaded on the master }
 \item{x}{Raster* object}

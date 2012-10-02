@@ -239,6 +239,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 		tr <- blockSize(to, minblocks=nodes)
 		pb <- pbCreate(tr$n, ...)
 
+		clusterExport(cl, varlist=c('tr', 'to', 'from', 'e', 'nl', 'projto_int', 'projfrom', 'method'), envir=environment())
+		
 		clFun <- function(i) {
 			start <- cellFromRowCol(to, tr$row[i], 1)
 			end <- start + tr$nrows[i] * ncol(to) - 1
@@ -248,17 +250,19 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			v <- matrix(nrow=length(cells), ncol=nl)
 			if (nrow(xy) > 0) {
 				ci <- match(cellFromXY(to, xy), cells)
-				xy <- .gd_transform( projto_int, projfrom, nrow(xy), xy[,1], xy[,2] )
+				xy <- .Call("transform", projto_int, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
+				#xy <- .gd_transform( projto_int, projfrom, nrow(xy), xy[,1], xy[,2] )
 				xy <- cbind(xy[[1]], xy[[2]])
 				v[ci, ] <- .xyValues(from, xy, method=method)
 			} 
 			return(v)
 		}
 	
+	
 		# for debugging
 		# clusterExport(cl,c("tr", "projto", "projfrom", "method", "from", "to"))
         for (i in 1:nodes) {
-			sendCall(cl[[i]], clFun, i, tag=i)
+			parallel:::sendCall(cl[[i]], clFun, list(i), tag=i)
 		}
 		        
 		if (inMemory) {
@@ -266,8 +270,9 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 
 			for (i in 1:tr$n) {
 				pbStep(pb, i)
-				d <- recvOneData(cl)
+				d <- parallel:::recvOneData(cl)
 				if (! d$value$success) {
+					print(d)
 					stop('cluster error')
 				}
 				start <- cellFromRowCol(to, tr$row[d$value$tag], 1)
@@ -275,7 +280,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 				v[start:end, ] <- d$value$value
 				ni <- nodes+i
 				if (ni <= tr$n) {
-					sendCall(cl[[d$node]], clFun, ni, tag=ni)
+					parallel:::sendCall(cl[[d$node]], clFun, list(ni), tag=ni)
 				}
 			}
 			
@@ -290,12 +295,15 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 
 			for (i in 1:tr$n) {
 				pbStep(pb, i)
-				d <- recvOneData(cl)
-				if (! d$value$success ) { stop('cluster error') }
+				d <- parallel:::recvOneData(cl)
+				if (! d$value$success ) { 
+					print(d)
+					stop('cluster error') 
+				}
 				to <- writeValues(to, d$value$value, tr$row[d$value$tag])
 				ni <- nodes+i
 				if (ni <= tr$n) {
-					sendCall(cl[[d$node]], clFun, ni, tag=ni)
+					parallel:::sendCall(cl[[d$node]], clFun, list(ni), tag=ni)
 				}
 			}
 			pbClose(pb)

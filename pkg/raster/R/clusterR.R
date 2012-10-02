@@ -44,14 +44,14 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 	}
 	
 	for (i in 1:nodes) {
-		sendCall(cl[[i]], clusfun, list(fun, i), tag=i)
+		parallel:::sendCall(cl[[i]], clusfun, list(fun, i), tag=i)
 	}
  	
 	if (canProcessInMemory(x)) {
 
 		for (i in 1:tr$n) {
 			pbStep(pb, i)
-			d <- recvOneData(cl)
+			d <- parallel:::recvOneData(cl)
 			if (! d$value$success ) { stop('cluster error') }
 
 			if (i ==1) {
@@ -66,7 +66,7 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 			res[cellFromRowCol(out, tr$row[j], 1):cellFromRowCol(out, tr$row2[j], ncol(out)), ] <- d$value$value
 			ni <- nodes + i
 			if (ni <= tr$n) {
-				sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
+				parallel:::sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
 			}
 		}
 		out <- setValues(out, res)
@@ -80,7 +80,8 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 	
 		for (i in 1:tr$n) {
 			pbStep(pb, i)
-			d <- recvOneData(cl)
+			
+			d <- parallel:::recvOneData(cl)
 			if (! d$value$success ) { stop('cluster error') }
 
 			if (i ==1) {
@@ -94,7 +95,7 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 			out <- writeValues(out, d$value$value, tr$row[d$value$tag])
 			ni <- nodes + i
 			if (ni <= tr$n) {
-				sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
+				parallel:::sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
 			}
 		}
 		out <- writeStop(out)
@@ -166,12 +167,12 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 	if (canPiM) {
 
 		for (i in 1:nodes) {
-			sendCall(cl[[i]], clusfun, list(fun, i), tag=i)
+			parallel:::sendCall(cl[[i]], clusfun, list(fun, i), tag=i)
 		}
 		
 		for (i in 1:tr$n) {
 			pbStep(pb, i)
-			d <- recvOneData(cl)
+			d <- parallel:::recvOneData(cl)
 			if (! d$value$success ) { stop('cluster error') }
 
 			if (i ==1) {
@@ -186,7 +187,7 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 			res[cellFromRowCol(out, tr$row[j], 1):cellFromRowCol(out, tr$row2[j], ncol(out)), ] <- d$value$value
 			ni <- nodes + i
 			if (ni <= tr$n) {
-				sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
+				parallel:::sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
 			}
 		}
 		out <- setValues(out, res)
@@ -208,17 +209,17 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 		out <- writeValues(out, r, 1)
 		
 		for (i in 1:nodes) {
-			sendCall(cl[[i]], clusfun, list(fun, i+1), tag=i+1)
+			parallel:::sendCall(cl[[i]], clusfun, list(fun, i+1), tag=i+1)
 		}
 
 		for (i in 2:tr$n) {
 			pbStep(pb, i)
-			d <- recvOneData(cl)
+			d <- parallel:::recvOneData(cl)
 			if (! d$value$success ) { stop('cluster error') }
 			
 			ni <- nodes + i
 			if (ni <= tr$n) {
-				sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
+				parallel:::sendCall(cl[[d$node]], clusfun, list(fun, ni), tag=ni)
 			}
 		}
 		

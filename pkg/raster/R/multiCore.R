@@ -3,9 +3,10 @@
 # Version 1.0
 # Licence GPL v3
 
-beginCluster <- function(n, type, nice, exclude=NULL) {
-	if (! require(snow) ) {
-		stop('you need to install the "snow" package')
+
+beginCluster <- function(n, type='SOCK', nice, exclude=NULL) {
+	if (! require(parallel) ) {
+		stop('you need to install the "parallel" package (should ship with R...)')
 	}
 
 	if (exists('raster_Cluster_raster_Cluster', envir=.GlobalEnv)) {
@@ -17,12 +18,11 @@ beginCluster <- function(n, type, nice, exclude=NULL) {
 		cat(n, 'cores detected\n')
 	}
 
-	if (missing(type)) {
-		type <- getClusterOption("type")
-		cat('cluster type:', type, '\n')
-	}
+#	if (missing(type)) {
+#		type <- getClusterOption("type")
+#		cat('cluster type:', type, '\n')
+#	}
 	
-
 	cl <- makeCluster(n, type) 
 	cl <- .addPackages(cl, exclude=exclude)
 	options(rasterClusterObject = cl)

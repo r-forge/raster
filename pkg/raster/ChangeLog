@@ -7,7 +7,8 @@ new function 'select' for selecting spatial subsets by drawing on plot (map)
 new function 'barplot' for RasterLayer objects
 new function 'scale' for Raster* objects
 new functions to coerce to and from big.matrix objects: as(x, 'big.matrix') and raster(x) or brick(x)
-changed use of igraph0 to igraph (functions gridDistance and clump)
+raster now uses 'igraph' instead of 'igraph0' (functions gridDistance and clump)
+raster now uses package 'parallel' instead of 'snow' for parallelization
 renamed function 'compare' to 'compareRaster' (to avoid name hiding by the igraph package)
 renamed function 'expand' to 'extend' (to avoid name hiding by the Matrix package)
 incorporated function 'count' into 'freq' (via the 'value' argument) and 'count' is now hidden as '.count' (to avoid name hiding of count by the plyr package)
@@ -454,7 +455,7 @@ Minor bug fix in rasterToPoints with multi-layer objects (reported by Jon Olav S
 Minor bug fixes in crop (reported by Jon Olav Skoien) and in focalNA (reported by Matteo Mattiuzzi)
 Changes in gridDistance to avoid it (igraph) from crashing when using very complex grids.
 Added @data@gain and @data@offset slots to Raster* objects and use these when reading values from file
-v = v * r@gain + r@offset  (suggestion by Jonathan Greenberg)
+v = v * gain + offset  (suggestion by Jonathan Greenberg)
 It is now possible to do Arith (e.g. addition, multiplication) with a RasterStack or Brick using a vector argument of lenght that equals nlayers(object).
 E.g. you can mutliply a RasterStack with 5 layers with vector c(1,3,5,3,1), where indices are matched to layers.
 It is also possible to do Arith & Math with mutliple RasterStackBrick objects (as long as nlayers is the same) and with a RasterStack/Brick and a RasterLayer objects.
