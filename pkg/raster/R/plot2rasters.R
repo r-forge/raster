@@ -51,6 +51,13 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 		
 		# gdal selects a slightly different set of cells than raster does for other formats.
 		# using gdal directly to subsample is faster.
+		
+		if (gridded) {
+			if ((ncell(x) * (nlx + nly)) < .maxmemory()) {
+				maxpixels <- ncell(x)
+			}
+		}
+		
 		dx <- .driver(x, warn=FALSE)
 		dy <- .driver(y, warn=FALSE)
 		if ( all(dx =='gdal') & all(dy == 'gdal')) {

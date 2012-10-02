@@ -151,10 +151,17 @@
 		
 	bi <- attr(gdalinfo, 'df')
 	GDType <- as.character(bi[['GDType']])
-	Bmin <- bi[['Bmin']]
-	Bmax <- bi[['Bmax']]
 	hasNoDataValues <- bi[['hasNoDataValue']]
 	NoDataValue <- bi[['NoDataValue']]
+	
+	if (getOption('rasterRGDALVersion') > "0.7-12") {	
+		sbi <- attr(gdalinfo, 'sdf')
+		Bmin <- sbi[['Bmin']]
+		Bmax <- sbi[['Bmax']]	
+	} else {
+		Bmin <- bi[['Bmin']]
+		Bmax <- bi[['Bmax']]
+	}
 	
 	
 	RATlist <- attr(gdalinfo, 'RATlist')

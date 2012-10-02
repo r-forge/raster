@@ -232,7 +232,7 @@ When you use multiple multi-layer objects with different numbers or layers, the 
 r <- raster(ncol=5, nrow=5)
 r[] <- 1
 s <- stack(r, r+1)
-q <- stack(r, r+2, r+4)
+q <- stack(r, r+2, r+4, r+6)
 x <- r + s + q
 x
 @
