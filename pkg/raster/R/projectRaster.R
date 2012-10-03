@@ -126,7 +126,7 @@ projectExtent <- function(object, crs) {
 }
 
 
-projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE, over=TRUE, filename="", ...)  {
+projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE, over=FALSE, filename="", ...)  {
 
 	.requireRgdal()
 	validObject( projection(from, asText=FALSE) )

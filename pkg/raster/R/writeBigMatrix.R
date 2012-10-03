@@ -17,7 +17,7 @@
 	
 	overwrite <- .overwrite(...)
 	if ( ! overwrite & (file.exists(fnamehdr) | file.exists(fnamevals))) {
-		stop(paste(filename,"exists. Use 'overwrite=TRUE' if you want to overwrite it"))
+		stop(paste(filename, "exists. Use 'overwrite=TRUE' if you want to overwrite it"))
 	}
 	
 #	x <- setMinMax(x)
@@ -41,7 +41,7 @@
 			backingpath=dirname(fnamevals), descriptorfile=dscfile)
 		b[] <- getValues(x)
 	}
-	flush(b)
+	#flush(b)
 	
 #	if (canProcessInMemory(r)) {
 #		r <- setValues(r, as.vector(t(x[])))
