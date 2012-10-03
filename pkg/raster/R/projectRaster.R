@@ -126,12 +126,14 @@ projectExtent <- function(object, crs) {
 }
 
 
-projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE, filename="", ...)  {
+projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE, over=TRUE, filename="", ...)  {
 
 	.requireRgdal()
-	validObject(projection(from, asText=FALSE))
+	validObject( projection(from, asText=FALSE) )
 	projfrom <- projection(from)
-	if (projfrom == "NA") { stop("input projection is NA") }
+	if (projfrom == "NA") { 
+		stop("input projection is NA") 
+	}
 	lonlat <- isLonLat(projfrom)
 	
 	if (missing(to)) {
@@ -190,7 +192,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 	if (identical(projfrom, projto)) {
 		stop('projections of "from" and "to" are the same')
 	}	
-	if (lonlat) {
+	if (lonlat & over) {
 		projto_int <- paste(projto, "+over")
 	} else {
 		projto_int <- projto	
@@ -204,8 +206,12 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 #	bb <- intersect(extent(pbb), extent(from))
 #	validObject(bb)
 
-	if (!method %in% c('bilinear', 'ngb')) { stop('invalid method') }
-	if (method=='ngb') { method <- 'simple' } # for extract (.xyValues)
+	if (!method %in% c('bilinear', 'ngb')) { 
+		stop('invalid method') 
+	}
+	if (method=='ngb') { 
+		method <- 'simple' # for extract (.xyValues)
+	} 
 
 	nl <- nlayers(from)
 	if ( nl == 1) {
@@ -288,6 +294,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			if (filename != '') {
 				to <- writeRaster(to, filename, ...)
 			}
+			pbClose(pb)
 			return(to)
 			
 		} else {
@@ -310,6 +317,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			to <- writeStop(to)	
 			return(to)
 		}	
+
 		
 	} else {
 		# this seems to need smaller chunks
