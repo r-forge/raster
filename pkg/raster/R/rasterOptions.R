@@ -157,17 +157,6 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 	if (!missing(standardnames)) { setStandardNames(standardnames); cnt <- cnt+1 }
 
 
-	fn <- paste(R.home(component="etc"), '/', 'Rprofile.site', sep='')
-	if (file.exists(fn)) {
-		lst <- readLines(fn)
-		if (length(lst) == 0) { lst <- "" }
-		lst <- .removeRasterOptions(lst)
-		if (lst[length(lst)] != "") { lst <- c(lst, "") }
-	} else {
-		lst <- ""
-	}
-	
-
 	lst <- list(
 		format=.filetype(),
 		overwrite=.overwrite(),
@@ -181,13 +170,41 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		todisk=.toDisk(),
 		setfileext=.setfileext(),
 		tolerance=.tolerance(),
-		standardnames=.standardnames(),
+		standardnames=.standardnames()
 	)
 	
 	if (save) {
+	
+		fn <- paste(R.home(component="etc"), '/', 'Rprofile.site', sep='')
+		if (file.exists(fn)) {
+			oplst <- readLines(fn)
+			if (length(oplst) == 0) { 
+				oplst <- "" 
+			}
+			oplst <- .removeRasterOptions(oplst)
+			if (oplst[length(oplst)] != "") { 
+				oplst <- c(oplst, "") 
+			}
+		} else {
+			oplst <- ""
+		}
+
 		cnt <- 1
-		lst <- c("# Options for the 'raster' package", lst)
-		r <- try( write(unlist(lst), fn), silent = TRUE )
+		oplst <- c(oplst, "# Options for the 'raster' package")
+		oplst <- c(oplst, paste("options(rasterFiletype='", lst$format, "')", sep='')) 
+		oplst <- c(oplst, paste("options(rasterOverwrite=", lst$overwrite, ')', sep=''))
+		oplst <- c(oplst, paste("options(rasterDatatype='", lst$datatype, "')", sep=''))
+		oplst <- c(oplst, paste("options(rasterTmpDir='", lst$tmpdir, "')", sep=''))
+		oplst <- c(oplst, paste("options(rasterTmpTime='", lst$tmptime, "')", sep=''))
+		oplst <- c(oplst, paste("options(rasterProgress='", lst$progress, "')", sep=''))
+		oplst <- c(oplst, paste("options(rasterTimer=", lst$timer, ')', sep=''))
+		oplst <- c(oplst, paste("options(rasterChunkSize=", lst$chunksize, ")", sep=''))
+		oplst <- c(oplst, paste("options(rasterMaxMemory=", lst$maxmemory, ")", sep=''))
+		oplst <- c(oplst, paste("options(rasterSetFileExt=", lst$setfileext, ')', sep=''))
+		oplst <- c(oplst, paste("options(rasterTolerance=", lst$tolerance, ')', sep=''))
+		oplst <- c(oplst, paste("options(rasterStandardNames=", lst$standardnames, ')', sep=''))
+		
+		r <- try( write(unlist(oplst), fn), silent = TRUE )
 		if (class(r) == "try-error") { 
 			warning('Cannot save options. No write access to: ', fn, '\n')	
 		}
@@ -207,7 +224,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		cat('setfileext   :', lst$setfileext, '\n')
 		cat('tolerance    :', lst$tolerance, '\n')
 		cat('standardnames:', lst$standardnames, '\n')
-		if (lst$toDisk) {
+		if (lst$todisk) {
 		   cat('toDisk       : TRUE\n')
 		}
 	}
