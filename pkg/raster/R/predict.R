@@ -9,7 +9,7 @@ if (!isGeneric("predict")) {
 }	
 
 setMethod('predict', signature(object='Raster'), 
-	function(object, model, filename="", fun=predict, ext=NULL, const=NULL, index=1, na.rm=TRUE, format, datatype, overwrite=FALSE, progress='', ...) {
+	function(object, model, filename="", fun=predict, ext=NULL, const=NULL, index=1, na.rm=TRUE, inf.rm=FALSE, format, datatype, overwrite=FALSE, progress='', ...) {
 	
 		filename <- trim(filename)
 		if (missing(format)) { format <- .filetype(filename=filename) } 
@@ -138,11 +138,14 @@ setMethod('predict', signature(object='Raster'),
 			}
 			
 			if (! is.null(const)) {
-				blockvals = cbind(blockvals, const)
+				blockvals <- cbind(blockvals, const)
 			} 
 
-			if (na.rm) {  
-				blockvals <- na.omit(blockvals)		
+			if (na.rm) { 
+				if (inf.rm) {
+					blockvals[!is.finite(as.matrix(blockvals))] <- NA
+				}
+				blockvals <- na.omit(blockvals)						
 			}
 
 			nrb <- nrow(blockvals)
