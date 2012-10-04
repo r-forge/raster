@@ -1,19 +1,25 @@
 # Author: Robert J. Hijmans
 # September 2009
-# Version 2.0
+# Version 1.0
 # Licence GPL v3
 
 
 rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress, timer, chunksize, maxmemory, todisk, setfileext, tolerance, standardnames, default=FALSE, save=FALSE) {
 	
 	setFiletype <- function(format) {
-		if (.isSupportedFormat(format)) {	options(rasterFiletype = format)	
-		} else { warning(paste('Cannot set filetype to unknown or unsupported file format:', format, '. See writeFormats()'))	}
+		if (.isSupportedFormat(format)) {	
+			options(rasterFiletype = format)	
+		} else { 
+			warning(paste('Cannot set filetype to unknown or unsupported file format:', format, '. See writeFormats()'))
+		}
 	}
 	
 	setOverwrite <- function(overwrite) {
-		if (is.logical(overwrite)) { options(rasterOverwrite = overwrite)
-		} else { warning(paste('Could not set overwrite. It must be a logical value'))	}
+		if (is.logical(overwrite)) { 
+			options(rasterOverwrite = overwrite)
+		} else { 
+			warning(paste('Could not set overwrite. It must be a logical value'))
+		}
 	}
 	
 	setDataType <- function(datatype) {
