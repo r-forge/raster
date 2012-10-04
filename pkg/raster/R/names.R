@@ -50,11 +50,6 @@ setMethod('names', signature(x='RasterStack'),
 	}
 )
 
-layerNames <- function(x) {
-	warning('the layerNames function is obsolete. Use "names" instead')
-	names(x)
-}
-
 
 setMethod('names<-', signature(x='Raster'), 
 	function(x, value)  {

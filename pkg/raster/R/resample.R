@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  January 2009
 # Version 0.9
 # Licence GPL v3
@@ -38,7 +38,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		warning('you are resampling y a raster with a much larger cell size, perhaps you should use "aggregate" first')
 	}
 	
-	e <- intersectExtent(x, y, validate=TRUE)
+	e <- .intersectExtent(x, y, validate=TRUE)
 	
 	filename <- trim(filename)
 	if (canProcessInMemory(y, 3*nl)) {

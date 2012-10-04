@@ -3,6 +3,40 @@
 # Version 0.9
 # Licence GPL v3
 
+unionExtent <- function(...) {
+	warning('this function has been depracated. Use "union"')
+	union(...)
+}
+
+
+intersectExtent <- function(...) {
+	warning('this function has been depracated. Use "intersect"')
+	intersect(...)
+}
+
+
+setOptions <- function(...) {
+	warning('this function is depracated. Use "rasterOptions" instead')
+	rasterOptions(...)
+}
+
+showOptions <- function() {
+	warning('This function is depracated. Use "rasterOptions()" in stead')
+	rasterOptions()
+}
+
+clearOptions <- function() {
+	warning('This function is depracated. Use "rasterOptions(default=TRUE)" in stead')
+	rasterOptions(default=TRUE)
+}
+
+
+saveOptions <- function() {
+	warning('This function is depracated. Use "rasterOptions(save=TRUE)" in stead')
+	rasterOptions(save=TRUE)
+}
+
+
 	
 .focalValues <- function(x, row, ngb=3, fun=NULL, na.rm=FALSE, layer, nl, ...) {
 
@@ -92,3 +126,8 @@
 }
 
 
+
+layerNames <- function(x) {
+	warning('the layerNames function is obsolete. Use "names" instead')
+	names(x)
+}
