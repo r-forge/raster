@@ -127,18 +127,18 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 	if (default) {
 		cnt <- 1
 		options(rasterFiletype = 'raster')
-		options(rasterDatatype = 'FLT4S')
 		options(rasterOverwrite = FALSE)
+		options(rasterDatatype = 'FLT4S')
 		options(rasterProgress = 'none')
 		options(rasterTimer = FALSE)
-		options(rasterChunkSize = 1000000)
-		options(rasterMaxMemory = 10000000)
-		options(setfileext = TRUE)
 		options(rasterTmpDir = .tmpdir())
 		options(rasterTmpTime = 24*7)
+		options(rasterToDisk = FALSE)
+		options(rasterSetFileExt = TRUE)
+		options(rasterChunkSize = 1000000)
+		options(rasterMaxMemory = 10000000)
 		options(rasterTolerance = 0.1)
 		options(rasterStandardNames = TRUE)
-		options(rasterToDisk = TRUE)
 	}
 
 	
@@ -225,7 +225,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		cat('tolerance    :', lst$tolerance, '\n')
 		cat('standardnames:', lst$standardnames, '\n')
 		if (lst$todisk) {
-		   cat('toDisk       : TRUE\n')
+		   cat('todisk       : TRUE\n')
 		}
 	}
 	
