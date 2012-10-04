@@ -10,7 +10,7 @@
 \description{
 Write an entire Raster* object to a file, using one of the many supported formats. See \code{\link[raster]{writeValues}} for writing in chunks (e.g.  by row). 
 
-When writing a file to disk, the file format is determined by the 'format=' argument if supplied, or else by the file extension (if the extension is known). If other cases the default format is used. The 'factory-fresh' default format is 'raster', but this can be changed using \code{\link[raster]{setOptions}}.
+When writing a file to disk, the file format is determined by the 'format=' argument if supplied, or else by the file extension (if the extension is known). If other cases the default format is used. The default format is 'raster', but this setting can be changed (see \code{\link{rasterOptions}}).
 }
 
 \usage{
@@ -22,12 +22,12 @@ When writing a file to disk, the file format is determined by the 'format=' argu
 \arguments{
 \item{x}{Raster* object}
 \item{filename}{Output filename}
-\item{format}{Character. Output file type. See \code{\link[raster]{writeFormats}}. If this argument is not provided, it is attempted to infer it from the filename extension. If that fails, the default format is used. The default format is 'raster', but this can be changed using \code{\link[raster]{setOptions}}}
+\item{format}{Character. Output file type. See \code{\link[raster]{writeFormats}}. If this argument is not provided, it is attempted to infer it from the filename extension. If that fails, the default format is used. The default format is 'raster', but this can be changed using \code{\link{rasterOptions}}}
 \item{...}{Additional arguments: 
   		
 \code{datatype}{Character. Output data type (e.g. 'INT2S' or 'FLT4S'). 
 See \code{\link{dataType}}. If no datatype is specified, 'FLT4S' is used,
-unless this default value was changed with \code{\link{setOptions}}}
+unless this default value was changed with \code{\link{rasterOptions}}}
 	
 \code{overwrite}: Logical. If TRUE, "filename" will be overwritten if it exists
 	

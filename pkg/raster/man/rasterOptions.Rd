@@ -27,7 +27,7 @@ rasterOptions(format, overwrite, datatype, tmpdir, tmptime, progress, timer, chu
 \item{overwrite}{Logical. The default value for overwriting existing files. If \code{TRUE}, existing files will be overwritten}
 \item{datatype}{character. The default data type to use. See \link[raster]{dataType}}
 \item{tmpdir}{character. The default location for writing temporary files; See \code{\link{rasterTmpFile}}}
-\item{tmptime}{number > 1. The number of hours after which a temporary file will be deleted. As files are deleted when loading the raster package, this option is only useful if you (can) use \code{saveOptions})}
+\item{tmptime}{number > 1. The number of hours after which a temporary file will be deleted. As files are deleted when loading the raster package, this option is only useful if you  save this option so that it is loaded when starting a new session}
 \item{progress}{character. Valid values are "text",  "window" and "" (the default in most functions, no progress bar)}
 \item{timer}{Logical. If \code{TRUE}, the time it took to complete the function is printed}
 \item{chunksize}{integer. Maximum number of cells to read/write in a single chunk while processing (chunk by chunk) disk based Raster* objects}

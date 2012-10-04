@@ -306,21 +306,10 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
   }
 }
 
-\section{XV. Options}{
+\section{XV. Miscellaneous}{
 
 \tabular{ll}{
-  \code{\link{setOptions}} \tab Set session options \cr
-  \code{\link{showOptions}} \tab  Show session options \cr
-  \code{\link{saveOptions}} \tab Save session options to make them persistent \cr
-  \code{\link{clearOptions}} \tab Set session options to default values \cr
-    --------------------------- \tab ------------------------------------------------------------------------------------------ \cr
-}
-}
-
-
-\section{XVI. Miscellaneous}{
-
-\tabular{ll}{
+    \code{\link{rasterOptions}} \tab Show, set, save or get session options \cr
     \code{\link{getData}} \tab Download and geographic data\cr
     \code{\link{pointDistance}} \tab Distance between points \cr
     \code{\link{readIniFile}} \tab Read a (windows) 'ini' file \cr
@@ -336,7 +325,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
 }
 }
 
-\section{XVII. For programmers}{
+\section{XVI. For programmers}{
 
 \tabular{ll}{
   \code{\link{canProcessInMemory}} \tab Test whether a file can be created in memory \cr
