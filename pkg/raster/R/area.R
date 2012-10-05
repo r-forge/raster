@@ -167,12 +167,11 @@ setMethod('area', signature(x='RasterStackBrick'),
 			clusterExport(cl, c('tr', 'dx', 'dy', 'out', 'nl'), envir=environment())
 			
 		    for (i in 1:nodes) {
-#				parallel:::sendCall(cl[[i]], clFun, list(i, tr, dx, dy, out, nl), tag=i)
-				parallel:::sendCall(cl[[i]], clFun, list(i), tag=i)
+				sendCall(cl[[i]], clFun, list(i), tag=i)
 			}
 
 			for (i in 1:tr$n) {
-				d <- parallel:::recvOneData(cl)
+				d <- recvOneData(cl)
 				if (! d$value$success ) { 
 					print(d)
 					stop('cluster error') 
@@ -188,8 +187,8 @@ setMethod('area', signature(x='RasterStackBrick'),
 				}
 
 				if ((nodes + i) <= tr$n) {
-#					parallel:::sendCall(cl[[d$node]], clFun, list(nodes+i, tr, dx, dy, out, nl), tag=nodes+i)
-					parallel:::sendCall(cl[[d$node]], clFun, list(nodes+i), tag=nodes+i)
+#					sendCall(cl[[d$node]], clFun, list(nodes+i, tr, dx, dy, out, nl), tag=nodes+i)
+					sendCall(cl[[d$node]], clFun, list(nodes+i), tag=nodes+i)
 				}
 				pbStep(pb, i) 	
 			}		

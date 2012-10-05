@@ -1,12 +1,12 @@
-# Author: Matteo Mattiuzzi and Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Matteo Mattiuzzi and Robert J. Hijmans
 # Date : November 2010
 # Version 1.0
 # Licence GPL v3
 
 
 beginCluster <- function(n, type='SOCK', nice, exclude=NULL) {
-	if (! require(parallel) ) {
-		stop('you need to install the "parallel" package (should ship with R...)')
+	if (! require(snow) ) {
+		stop('you need to install the "snow" package')
 	}
 
 	if (exists('raster_Cluster_raster_Cluster', envir=.GlobalEnv)) {

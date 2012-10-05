@@ -69,15 +69,15 @@ function(x, y, method="bilinear", filename="", ...)  {
 			.xyValues(x, xy, method=method)
 		}
 
-		clusterExport(cl, varlist=c('x', 'y', 'tr', 'method'), envir=environment())
+		clusterExport(cl, c('x', 'y', 'tr', 'method'), envir=environment())
 		
         for (ni in 1:nodes) {
-			parallel:::sendCall(cl[[ni]], clFun, list(ni), tag=ni)
+			sendCall(cl[[ni]], clFun, list(ni), tag=ni)
 		}
 
 		if (inMemory) {
 			for (i in 1:tr$n) {
-				d <- parallel:::recvOneData(cl)
+				d <- recvOneData(cl)
 				if (! d$value$success) {
 					stop('cluster error')
 				}
@@ -87,7 +87,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 
 				ni <- ni + 1
 				if (ni <= tr$n) {
-					parallel:::sendCall(cl[[d$node]], clFun, list(ni), tag=ni)
+					sendCall(cl[[d$node]], clFun, list(ni), tag=ni)
 				}
 				pbStep(pb)
 			}
@@ -99,11 +99,11 @@ function(x, y, method="bilinear", filename="", ...)  {
 		} else {
 		
 			for (i in 1:tr$n) {
-				d <- parallel:::recvOneData(cl)
+				d <- recvOneData(cl)
 				y <- writeValues(y, d$value$value, tr$row[d$value$tag])
 				ni <- ni + 1
 				if (ni <= tr$n) {
-					parallel:::sendCall(cl[[d$node]], clFun, list(ni), tag=ni)
+					sendCall(cl[[d$node]], clFun, list(ni), tag=ni)
 				}
 				pbStep(pb)
 			}

@@ -8,7 +8,6 @@ new function 'barplot' for RasterLayer objects
 new function 'scale' for Raster* objects
 new functions to coerce to and from big.matrix objects: as(x, 'big.matrix') and raster(x) or brick(x)
 raster now uses 'igraph' instead of 'igraph0' (functions gridDistance and clump)
-raster now uses package 'parallel' instead of 'snow' for parallelization
 renamed function 'compare' to 'compareRaster' (to avoid name hiding by the igraph package)
 renamed function 'expand' to 'extend' (to avoid name hiding by the Matrix package)
 functions setOptions, showOptions, saveOptions, and clearOptions have been replaced by new function "rasterOptions"

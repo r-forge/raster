@@ -47,7 +47,7 @@
 			flush.console()
 			
 
-			clusterExport(cl, varlist=c('object', 'obj', 'cellnumbers'), envir=environment())
+			clusterExport(cl, c('object', 'obj', 'cellnumbers'), envir=environment())
 			
 			clFun1 <- function(i, rn, rx, cn, cx) {
 				s <- sum(rn, rx, cn, cx)
@@ -72,10 +72,10 @@
 			}
 		
 			for (i in 1:nodes) {
-				parallel:::sendCall(cl[[i]], clFun1, list(i, rn[i], rx[i], cn[i], cx[i]), tag=i)
+				sendCall(cl[[i]], clFun1, list(i, rn[i], rx[i], cn[i], cx[i]), tag=i)
 			}
 			for (i in 1:nrow(xy)) {
-				d <- parallel:::recvOneData(cl)
+				d <- recvOneData(cl)
 				
 				if (! d$value$success) {
 					print(d)
@@ -86,7 +86,7 @@
 				
 				ni <- nodes + i 
 				if (ni <= nrow(xy)) {
-					parallel:::sendCall(cl[[d$node]], clFun1, list(i, rn[i], rx[i], cn[i], cx[i]), tag=ni)
+					sendCall(cl[[d$node]], clFun1, list(i, rn[i], rx[i], cn[i], cx[i]), tag=ni)
 				}
 			}
 		
@@ -134,7 +134,7 @@
 			flush.console()
 
 	
-			clusterExport(cl, varlist=c('object', 'obj', 'cellnumbers'), envir=environment())
+			clusterExport(cl, c('object', 'obj', 'cellnumbers'), envir=environment())
 			
 			clFun2 <- function(i, xy, rn, rx, cn, cx) {
 				s <- sum(rn, rx, cn, cx)
@@ -159,10 +159,10 @@
 			}
 
 			for (i in 1:nodes) {
-				parallel:::sendCall(cl[[i]], clFun2, list(i, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
+				sendCall(cl[[i]], clFun2, list(i, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
 			}
 			for (i in 1:nrow(xy)) {
-				d <- parallel:::recvOneData(cl)
+				d <- recvOneData(cl)
 				if (! d$value$success) {
 					print(d)
 					stop('cluster error')
@@ -171,7 +171,7 @@
 				}
 				ni <- nodes + i
 				if (ni <= nrow(xy)) {
-					parallel:::sendCall(cl[[d$node]], clFun2, list(ni, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
+					sendCall(cl[[d$node]], clFun2, list(ni, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
 				}
 			}
 		} else {
