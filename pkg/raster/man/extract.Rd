@@ -21,11 +21,14 @@ If \code{y} represents lines, the \code{extract} method returns the values of th
 }
 
 \usage{
-\S4method{extract}{Raster,matrix}(x, y, method='simple', buffer=NULL, small=FALSE, cellnumbers=FALSE, fun=NULL, na.rm=TRUE, layer, nl, df=FALSE, factors=FALSE, ...)
+\S4method{extract}{Raster,matrix}(x, y, method='simple', buffer=NULL, small=FALSE, cellnumbers=FALSE, 
+     fun=NULL, na.rm=TRUE, layer, nl, df=FALSE, factors=FALSE, ...)
 
-\S4method{extract}{Raster,SpatialLines}(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, factors=FALSE, ...)
+\S4method{extract}{Raster,SpatialLines}(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer,
+     nl, factors=FALSE, ...)
 
-\S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, df=FALSE, layer, nl, factors=FALSE, ...)
+\S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE,
+     small=FALSE, df=FALSE, layer, nl, factors=FALSE, ...)
 }
 
 \arguments{

@@ -13,7 +13,7 @@ Make a Raster object with predictions from a fitted model object (for example, o
 
 \usage{
 \S4method{predict}{Raster}(object, model, filename="", fun=predict, ext=NULL, const=NULL, 
-          index=1, na.rm=TRUE, inf.rm=FALSE, format, datatype, overwrite=FALSE, progress='', ...)
+   index=1, na.rm=TRUE, inf.rm=FALSE, format, datatype, overwrite=FALSE, progress='', ...)
 }
 
 

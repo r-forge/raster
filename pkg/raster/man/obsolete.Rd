@@ -14,7 +14,7 @@
 \title{Obsolete (depracated) functions}
 
 \description{
-Functions setOptions, showOptions, saveOptions, and clearOptions have been replaced by \code{link{rasterOptions}}
+Functions setOptions, showOptions, saveOptions, and clearOptions have been replaced by \code{\link{rasterOptions}}
 
 intersectExtent has been replaced by \code{\link{intersect}}
 unionExtent has been replaced by \code{\link{union}}

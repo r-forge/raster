@@ -10,15 +10,15 @@ Set, inspect, reset, save a number of global options used by the raster package.
 
 Most of these options are used when writing files to disk. They can be ignored by specific functions if the corresponding argument is provided as an argument to these functions.
 
-The default location is returned by \code{rasterTmpDir}. It is the same as that of the R temp directory but you can change it (for the current session) with \code{rasterOptions(tmpdir= }. 
+The default location is returned by \code{rasterTmpDir}. It is the same as that of the R temp directory but you can change it (for the current session) with \code{rasterOptions(tmpdir="path")}. 
 
 To permanently set any of these options, you can add them to \code{<your R installation>/etc/Rprofile.site>}. For example, to change the default directory used to save temporary files, add a line like this: \code{options(rasterTmpDir='c:/temp/')} to that file. All temporary raster files in that folder that are older than 24 hrs are deleted when the raster package is loaded.
 }
 
 \usage{
-rasterOptions(format, overwrite, datatype, tmpdir, tmptime, progress, timer, chunksize,
-			maxmemory, todisk, setfileext, tolerance, standardnames, default=FALSE, save=FALSE)
-			
+rasterOptions(format, overwrite, datatype, tmpdir, tmptime, progress, 
+     timer, chunksize, maxmemory, todisk, setfileext, tolerance, 
+     standardnames, default=FALSE, save=FALSE)		
 }
 
 
