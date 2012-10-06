@@ -41,10 +41,19 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 			warning('invalid stretch value')
 		}
 	}
-	
-	scale = as.vector(scale)[1]
-	
+
+
+	scale <- as.vector(scale)[1]
+	dots <- list(...)
+
 	RGB <- na.omit(cbind(getValues(r), getValues(g), getValues(b)))
+	if (!is.null(dots$zlim)) {
+		if (length(dots$zlim) != 2) {
+			stop('zlim should be a vector of two numbers')
+		}
+		RGB[RGB < dots$zlim[1]] <- dots$zlim[1]
+		RGB[RGB > dots$zlim[2]] <- dots$zlim[2]
+	}
 	
 	naind <- as.vector( attr(RGB, "na.action") )
 	if (!is.null(naind)) {
@@ -61,7 +70,6 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 	require(grDevices)
 	bb <- as.vector(t(bbox(r)))
 
-	dots <- list(...)
 	add <- ifelse(is.null(dots$add), FALSE, dots$add)
 	
 	if (!add) {
