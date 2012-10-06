@@ -48,11 +48,17 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 
 	RGB <- na.omit(cbind(getValues(r), getValues(g), getValues(b)))
 	if (!is.null(dots$zlim)) {
-		if (length(dots$zlim) != 2) {
-			stop('zlim should be a vector of two numbers')
+		if (length(dots$zlim) == 2) {
+			RGB[RGB < dots$zlim[1]] <- dots$zlim[1]
+			RGB[RGB > dots$zlim[2]] <- dots$zlim[2]
+		} else if (NROW(dots$zlim) == 3 & NCOL(dots$zlim) == 2) {
+			for (i in 1:3) {
+				RGB[RGB[,i] < dots$zlim[i,1], i] <- dots$zlim[i,1]
+				RGB[RGB[,i] > dots$zlim[i,2], i] <- dots$zlim[i,2]
+			}
+		} else {
+			stop('zlim should be a vector of two numbers or a 3x2 matrix (one row for each color)')
 		}
-		RGB[RGB < dots$zlim[1]] <- dots$zlim[1]
-		RGB[RGB > dots$zlim[2]] <- dots$zlim[2]
 	}
 	
 	naind <- as.vector( attr(RGB, "na.action") )
