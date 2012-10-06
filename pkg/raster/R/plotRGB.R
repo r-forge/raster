@@ -74,9 +74,9 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 		asp <- dots$asp
 		if (is.null(asp)) {
 			if (.couldBeLonLat(x)) {
-				ym <- mean(x@extent@ymax + x@extent@ymin)
-				asp <- min(5, 1/cos((ym * pi)/180))
-				asp <- NA
+			    ym <- mean(c(x@extent@ymax, x@extent@ymin))
+				asp <- 1/cos((ym * pi)/180)
+				#asp <- min(5, 1/cos((ym * pi)/180))
 			} else {
 				asp <- 1
 			}

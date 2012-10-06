@@ -18,11 +18,10 @@
 		if (!axes) par(plt=c(0,1,0,1))
 		if (missing(asp)) {
 			if (.couldBeLonLat(x)) {
-				ym <- mean(x@extent@ymax + x@extent@ymin)
-				asp <- min(5, 1/cos((ym * pi)/180))
-				asp = NA
+				ym <- mean(c(x@extent@ymax, x@extent@ymin))
+				asp <- 1/cos((ym * pi)/180)
 			} else {
-				asp = 1
+				asp <- 1
 			}		
 		}
 	}
