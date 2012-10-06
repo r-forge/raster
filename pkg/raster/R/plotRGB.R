@@ -22,31 +22,15 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 			}
 		}
 	}
+	scale <- as.vector(scale)[1]
+	dots <- list(...)
 	
 	r <- sampleRegular(raster(x,r), maxpixels, ext=ext, asRaster=TRUE, useGDAL=TRUE)
 	g <- sampleRegular(raster(x,g), maxpixels, ext=ext, asRaster=TRUE, useGDAL=TRUE)
 	b <- sampleRegular(raster(x,b), maxpixels, ext=ext, asRaster=TRUE, useGDAL=TRUE)
-	
-	if (!is.null(stretch)) {
-		stretch = tolower(stretch)
-		if (stretch == 'lin') {
-			r <- .linStretch(r)
-			g <- .linStretch(g)
-			b <- .linStretch(b)
-		} else if (stretch == 'hist') {
-			r <- .eqStretch(r)
-			g <- .eqStretch(g)
-			b <- .eqStretch(b)
-		} else if (stretch != '') {
-			warning('invalid stretch value')
-		}
-	}
-
-
-	scale <- as.vector(scale)[1]
-	dots <- list(...)
 
 	RGB <- na.omit(cbind(getValues(r), getValues(g), getValues(b)))
+	
 	if (!is.null(dots$zlim)) {
 		if (length(dots$zlim) == 2) {
 			RGB[RGB < dots$zlim[1]] <- dots$zlim[1]
@@ -60,6 +44,22 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 			stop('zlim should be a vector of two numbers or a 3x2 matrix (one row for each color)')
 		}
 	}
+	
+	if (!is.null(stretch)) {
+		stretch = tolower(stretch)
+		if (stretch == 'lin') {
+			RGB[,1] <- .linStretchVec(RGB[,1])
+			RGB[,2] <- .linStretchVec(RGB[,2])
+			RGB[,3] <- .linStretchVec(RGB[,3])
+		} else if (stretch == 'hist') {
+			RGB[,1] <- .eqStretchVec(RGB[,1])
+			RGB[,2] <- .eqStretchVec(RGB[,2])
+			RGB[,3] <- .eqStretchVec(RGB[,3])
+		} else if (stretch != '') {
+			warning('invalid stretch value')
+		}
+	}
+
 	
 	naind <- as.vector( attr(RGB, "na.action") )
 	if (!is.null(naind)) {

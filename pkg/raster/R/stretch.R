@@ -3,6 +3,15 @@
 # minor modifications by Robert Hijmans
 # Note: these functions only work (correctly) for single layer objects 
 
+.linStretchVec <- function (x) {
+    v <- quantile(x, c(0.02, 0.98), na.rm = TRUE)
+    temp <- (255 * (x - v[1]))/(v[2] - v[1])
+    temp[temp < 0] <- 0
+    temp[temp > 255] <- 255
+    return(temp)
+}
+
+
 .linStretch <- function (x) {
     v <- quantile(x, c(0.02, 0.98), na.rm = TRUE)
     temp <- calc(x, fun = function(x) (255 * (x - v[1]))/(v[2] - v[1]))
@@ -17,6 +26,10 @@
 	return( calc(x, fun=function(x) ecdfun(x)*255) )
 }
 
+.eqStretchVec <- function(x){
+	ecdfun <- ecdf(x)
+	ecdfun(x)*255
+}
 
 
 # This one works for multilayer objects
