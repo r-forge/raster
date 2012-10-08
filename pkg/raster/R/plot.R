@@ -73,8 +73,9 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 			} else if (useRaster) {
 				.plotraster2(x, col=col, colNA=colNA, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, addfun=addfun, ...) 
 			} else {
-				.plotraster(x, col=col, maxpixels=maxpixels, main=main[y], ext=ext, interpolate=interpolate, addfun=addfun, ...) 
+				.plotraster(x, col=col, maxpixels=maxpixels, main=main[y], ext=ext, addfun=addfun, ...) 
 			}
+			
 		} else {
 
 			nl <- length(y)
