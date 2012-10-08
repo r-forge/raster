@@ -83,7 +83,7 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=FALSE, ...) {
 		
 		for(i in 1:nl) {
 			for(j in i:nl) {
-				r <- raster(x, layer=i) * 	raster(x, layer=j)
+				r <- raster(x, layer=i) * raster(x, layer=j)
 				if (na.rm) {
 					v <- cellStats(r, stat='sum', na.rm=na.rm) / ((n - cellStats(r, stat='countNA') - asSample) * sds[i] * sds[j])
 				} else {

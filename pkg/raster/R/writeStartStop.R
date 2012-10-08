@@ -21,13 +21,13 @@ function(x, filename, options=NULL, format, ...) {
 	if (trim(filename) == '') { 
 		filename <- rasterTmpFile() 
 	}
-	filename <- .fullFilename(filename, expand=TRUE)
+	filename <- raster:::.fullFilename(filename, expand=TRUE)
 	if (!file.exists(dirname(filename))) {
 		stop("Attempting to write a file to a path that does not exist:\n  ", dirname(filename))
 	}
 	
-	filetype <- .filetype(format=format, filename=filename)
-	filename <- .getExtension(filename, filetype)
+	filetype <- raster:::.filetype(format=format, filename=filename)
+	filename <- raster:::.getExtension(filename, filetype)
 	if (filetype=='ascii') { 
 		x <- .startAsciiWriting(x, filename, ...)
 	} else if ( filetype %in% .nativeDrivers() ) { 

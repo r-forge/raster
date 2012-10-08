@@ -161,8 +161,10 @@
 	
  	} else if (object@file@driver == 'big.matrix') {
 
-		b <- attr(object, 'big.matrix')
-		result <- b[cellFromRowCol(object, row, col):cellFromRowCol(object, row+nrows-1, col+ncols-1), ]
+		b <- attr(object@file, 'big.matrix')
+		start <- cellFromRowCol(object, startrow, startcol)
+		end <- cellFromRowCol(object, endrow, endcol)
+		result <- b[start:end, ]
  
 	} else {
 	#use GDAL  			

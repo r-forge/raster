@@ -18,6 +18,7 @@ Added argument "gridded=TRUE" for plot(RasterLayer, RasterLayer), to show counts
 Fixed bug in sampleRandom with "rowcol=TRUE" (reported by Agustin Lobo)
 Fixed bug with RAT tables in native format (reported by Joseph Steward)
 Added big.matrix as a "driver" (file format). This is experimental (and not documented).
+raster now attempts to interpret the CRS from netcdf files
 
 --- 1-September-2012, version 2.0-12
 fixed bug in summary reported by Agustin Lobo

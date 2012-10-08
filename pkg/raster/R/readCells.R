@@ -82,7 +82,7 @@
 
 .readBigMatrixCells <- function(x, cells, layers) {
 	
-	b <- attr(x, 'big.matrix')
+	b <- attr(x@file, 'big.matrix')
 	
 	if (inherits(x, 'RasterLayer')) {
 	

@@ -5,11 +5,13 @@
 
 .startBigMatrixWriting <- function(x, filename, update=FALSE, ...) {
 
+	stopifnot(require(bigmemory))
+
  	filename <- trim(filename)
 	if (filename == "") {
 		stop('missing filename')
 	}
-	filetype <- 'bit.matrix'
+	filetype <- 'big.matrix'
 	filename <- .setFileExtensionHeader(filename, filetype)
 	fnamevals <- .setFileExtensionValues(filename, filetype)
 	datatype <- .datatype(...)
@@ -29,10 +31,10 @@
 		dscfile <- extension(basename(fnamevals), 'big.dsc')
 		
 		if (inherits(x, 'RasterLayer')) {
-			attr(x, "big.matrix") <- filebacked.big.matrix(nrow(x), ncol(x), type=dtype, 
+			attr(x@file, "big.matrix") <- filebacked.big.matrix(nrow(x), ncol(x), type=dtype, 
 			backingfile=basename(fnamevals), backingpath=dirname(fnamevals), descriptorfile=dscfile)
 		} else {
-			attr(x, "big.matrix") <- filebacked.big.matrix(ncell(x), nlayers(x),
+			attr(x@file, "big.matrix") <- filebacked.big.matrix(ncell(x), nlayers(x),
 			backingfile=basename(fnamevals), backingpath=dirname(fnamevals), descriptorfile=dscfile )
 		}
 	}
@@ -50,10 +52,10 @@
 .stopBigMatrixWriting <- function(x) {
 
 	x@data@haveminmax <- TRUE
-	if (x@file@dtype == "INT") {
-		x@data@min <- round(x@data@min)
-		x@data@max <- round(x@data@max)
-	} 
+#	if (x@file@dtype == "INT") {
+#		x@data@min <- round(x@data@min)
+#		x@data@max <- round(x@data@max)
+#	} 
 	.writeHdrRaster(x, type='big.matrix')
 	filename <- .setFileExtensionValues(filename(x), 'big.matrix')
 	

@@ -1,6 +1,6 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date: Sept 2009
-# Version 0.9
+# Version 1.0
 # Licence GPL v3
 
 
@@ -124,8 +124,16 @@
 		result <- .readRowsNetCDF(object, startrow, nrows, startcol, ncols)
 		
 	} else if (driver == 'big.matrix') {
-		b <- attr(object, 'big.matrix')
-		result <- as.vector(t(b[startrow:(startrow+nrows-1), startcol:(startcol+ncols-1)]))
+		bm <- attr(object@file, 'big.matrix')
+		if (nbands(object) > 1) {
+			bn <- bandnr(object)
+			startcell <- cellFromRowCol(object, startrow, startcol)
+			endcell <- cellFromRowCol(object, (startrow+nrows-1), (startcol+ncols-1))	
+			result <- bm[startcell:endcell, bn]
+		
+		} else {
+			result <- as.vector(t(bm[startrow:(startrow+nrows-1), startcol:(startcol+ncols-1)]))
+		}
 		
 #use GDAL  		
 	} else { 

@@ -37,7 +37,7 @@ RasterLayer or RasterBrick object.
 
 
 
-\seealso{ \code{\link[raster]{merge}}, \code{\link[raster]{expand}}}
+\seealso{ \code{\link[raster]{merge}}, \code{\link[raster]{extend}}}
 
 \examples{
 r <- raster(ncol=100, nrow=100)

@@ -1,4 +1,4 @@
-\name{expand}
+\name{extend}
 
 \alias{expand}
 \alias{expand,Raster-method}

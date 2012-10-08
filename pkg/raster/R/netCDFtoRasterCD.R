@@ -117,11 +117,14 @@
 
 .varName <- function(nc, varname='', warn=TRUE) {
 	n <- nc$nvars
-	vars <- vector(length=n)
+	dims <- vars <- vector(length=n)
 	if (n > 0) {
 		for (i in 1:n) {
 			vars[i] <- nc$var[[i]]$name
+			dims[i] <- nc$var[[i]]$ndims
 		}
+		vars <- vars[dims > 1]
+		dims <- dims[dims > 1]
 	}
 
 	if (varname=='') { 
@@ -133,15 +136,12 @@
 		if (nv  == 1) {
 			varname <- vars
 		} else {
-			# should also check its dimensions with those of x and y 
-			a <- NULL
-			for (i in 1:nv) { 
-				a <- c(a, nc$var[[i]]$ndims) 
-			}
-			
-			varname <- vars[which.max(a)]
+			varname <- vars[which.max(dims)]
 			if (warn) {
-				warning('varname used is: ', varname, '\nIf that is not correct, set it to one of: ', paste(vars, collapse=", ") )
+				if (sum(dims == max(dims)) > 1) {
+					vars <- vars[dims==max(dims)]
+					warning('varname used is: ', varname, '\nIf that is not correct, you can set it to one of: ', paste(vars, collapse=", ") )
+				}
 			}
 		}
 	}
@@ -154,9 +154,57 @@
 }
 
 
+.getCRSfromGridMap3 <- function(nc, gridmap) {
+	m <- matrix(c("grid_mapping_name", "+proj", "false_easting", "+x_0","false_northing", "+y_0", "scale_factor_at_projection_origin", "+k_0", "scale_factor_at_central_meridian", "+k_0", "standard_parallel", "+lat_1", "standard_parallel1", "+lat_1", "standard_parallel2", "+lat_2", "longitude_of_central_meridian", "+lon_0", "longitude_of_projection_origin", "+lon_0", "latitude_of_projection_origin", "+lat_0", "straight_vertical_longitude_from_pole", "+lon_0"), ncol=2, byrow=TRUE)
+	g <- list()
+	for (i in 1:nrow(m)) {
+		a <- att.get.ncdf(nc, gridmap, m[i,1])
+		if (a$hasatt) {
+			lst <- list(a$value)
+			names(lst) <- m[i,1]
+			g <- c(g, lst)
+		}
+	}
+	.getCRSfromGridMap(g)
+}
+
+
+
+.getCRSfromGridMap <- function(g) {
+# based on info at 
+# http://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
+# accessed 7 October 2012
+	prj <- matrix(c("albers_conical_equal_area", "aea", "azimuthal_equidistant", "aeqd", "lambert_cylindrical_equal_area", "cea", "lambert_azimuthal_equal_area", "laea", "lambert_conformal_conic", "lcc", "mercator", "merc", "orthographic", "ortho", "polar_stereographic", "stere", "stereographic", "stere", "transverse_mercator", "tmerc"), ncol=2, byrow=TRUE)
+	
+	m <- matrix(c("grid_mapping_name", "+proj", "false_easting", "+x_0","false_northing", "+y_0", "scale_factor_at_projection_origin", "+k_0", "scale_factor_at_central_meridian", "+k_0", "standard_parallel", "+lat_1", "standard_parallel1", "+lat_1", "standard_parallel2", "+lat_2", "longitude_of_central_meridian", "+lon_0", "longitude_of_projection_origin", "+lon_0", "latitude_of_projection_origin", "+lat_0", "straight_vertical_longitude_from_pole", "+lon_0"), ncol=2, byrow=TRUE)
+
+	
+	sp <- g$standard_parallel
+	if (!is.null(sp)) {
+		if (length(sp) > 1)
+		g$standard_parallel1 <- sp[1]
+		g$standard_parallel2 <- sp[2]
+		g$standard_parallel <- NULL
+	}
+	vars <- names(g)
+	vals <- unlist(g)
+	i <- match(vars, m[,1])
+	if (any(is.na(i))) {
+		warning("could not process the CRS")
+		print(as.matrix(g))
+		return(NA)
+	}
+	tab <- cbind(m[i,], vals)
+	j <- match(tab[1,3], prj[,1])
+	tab[1,3] <- prj[j,2]
+	paste(apply(tab[,2:3], 1, function(x)paste(x, collapse='=')), collapse=' ')
+}
+
+
 .rasterObjectFromCDF <- function(filename, varname='', band=NA, type='RasterLayer', lvar=3, level=0, warn=TRUE, ...) {
 
-	ncdf4 <- .NCDFversion4()
+	ncdf4 <- raster:::.NCDFversion4()
+	
 
 	if (ncdf4) {
 		options(rasterNCDF4 = TRUE)
@@ -174,9 +222,9 @@
 	
 	# assuming "CF-1.0"
 	
-	zvar <- .varName(nc, varname, warn=warn)
+	zvar <- raster:::.varName(nc, varname, warn=warn)
 	
-	datatype <- .getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
+	datatype <- raster:::.getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
 	
 	dim3 <- 3
 	dims <- nc$var[[zvar]]$ndims
@@ -240,47 +288,61 @@
 	yrange[2] <- yrange[2] + 0.5 * resy
  
 	long_name <- zvar
-	projection <- NA
 	unit <- ''
 	
-	
+	crs <- NA
 	if (ncdf4) {
 		a <- ncdf4::ncatt_get(nc, zvar, "long_name")
 		if (a$hasatt) { long_name <- a$value }
 		a <- ncdf4::ncatt_get(nc, zvar, "units")
 		if (a$hasatt) { unit <- a$value }
 		a <- ncdf4::ncatt_get(nc, zvar, "grid_mapping")
-		if ( a$hasatt ) { projection  <- a$value }
+		if ( a$hasatt ) { 
+			gridmap  <- a$value 
+			atts <- ncdf4::ncatt_get(nc, gridmap)
+			try(crs <- .getCRSfromGridMap(atts), silent=TRUE)
+		} else {
+			a <- ncdf4::ncatt_get(nc, zvar, "projection")
+			if ( a$hasatt ) { projection  <- a$value }
+			a <- ncdf4::ncatt_get(nc, zvar, "projection_format")
+			if ( a$hasatt ) { projection_format  <- a$value }
+			if (isTRUE(projection_format == "PROJ.4")) {
+				crs <- projection
+			}
+		}
 		natest <- ncdf4::ncatt_get(nc, zvar, "_FillValue")
 		natest2 <- ncdf4::ncatt_get(nc, zvar, "missing_value")		
+		
 		
 	} else {
 		a <- att.get.ncdf(nc, zvar, "long_name")
 		if (a$hasatt) { long_name <- a$value }
 		a <- att.get.ncdf(nc, zvar, "units")
 		if (a$hasatt) { unit <- a$value }
+
 		a <- att.get.ncdf(nc, zvar, "grid_mapping")
-		if ( a$hasatt ) { projection  <- a$value }
+		if ( a$hasatt ) { 
+			try(crs <- .getCRSfromGridMap3(nc, a$value), silent=TRUE)
+		} else {
+			a <- att.get.ncdf(nc, zvar, "projection")
+			if ( a$hasatt ) { projection  <- a$value }
+			a <- att.get.ncdf(nc, zvar, "projection_format")
+			if ( a$hasatt ) { projection_format  <- a$value }
+			if (isTRUE(projection_format == "PROJ.4")) {
+				crs <- projection
+			}
+		}
 		natest <- att.get.ncdf(nc, zvar, "_FillValue")
 		natest2 <- att.get.ncdf(nc, zvar, "missing_value")		
 	}
 
-	prj <- list()
-	if (!is.na(projection)) {
-		att <- nc$var[[projection]]
-		prj <- as.list(unlist(att))
-		# now parse .....
-		# projection(r) <- ...
-	}
-	
-	if (((tolower(substr(nc$var[[zvar]]$dim[[1]]$name, 1, 3)) == 'lon')  &
-		(tolower(substr(nc$var[[zvar]]$dim[[2]]$name, 1, 3)) == 'lat')) | 
-		(xrange[1] < -181 | xrange[2] > 181 | yrange[1] < -91 | yrange[2] > 91)) {
-			crs <- '+proj=longlat +datum=WGS84'
-	} else {
-		crs <- NA
-	}
-
+	if (is.na(crs)) {
+		if (((tolower(substr(nc$var[[zvar]]$dim[[1]]$name, 1, 3)) == 'lon')  &
+		    ( tolower(substr(nc$var[[zvar]]$dim[[2]]$name, 1, 3)) == 'lat' ) ) | 
+		    ( xrange[1] < -181 | xrange[2] > 181 | yrange[1] < -91 | yrange[2] > 91 )) {
+				crs <- '+proj=longlat +datum=WGS84'
+		}
+	} 
 		
 	if (type == 'RasterLayer') {
 		r <- raster(xmn=xrange[1], xmx=xrange[2], ymn=yrange[1], ymx=yrange[2], ncols=ncols, nrows=nrows, crs=crs)
@@ -311,7 +373,6 @@
 	attr(r@data, "dim3") <- dim3
 	attr(r@data, "level") <- level
 	
-	attr(r, "prj") <- prj 
 	r@file@driver <- "netcdf"	
 	
 	if (natest$hasatt) { 

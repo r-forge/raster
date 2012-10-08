@@ -6,10 +6,6 @@
 
 canProcessInMemory <- function(x, n=4) {
 
-# used for testing:
-#	setOptions(overwrite=TRUE)
-#	setOptions(format='GTiff')
-#	return(FALSE)
 	if (.toDisk()) { 
 		return(FALSE) 
 	} 

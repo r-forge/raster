@@ -108,7 +108,7 @@ setMethod('raster', signature(x='big.matrix'),
 		}
 		r@data@fromdisk <- TRUE
 		r@data@inmemory <- FALSE
-		attr(r, 'big.matrix') <- x
+		attr(r@file, 'big.matrix') <- x
 		return(r)
 	}
 )

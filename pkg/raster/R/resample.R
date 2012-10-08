@@ -41,7 +41,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 	e <- .intersectExtent(x, y, validate=TRUE)
 	
 	filename <- trim(filename)
-	if (canProcessInMemory(y, 3*nl)) {
+	if (canProcessInMemory(y, 4*nl)) {
 		inMemory <- TRUE
 		v <- matrix(NA, nrow=ncell(y), ncol=nlayers(x))
 	} else {
@@ -60,7 +60,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		cat('Using cluster with', nodes, 'nodes\n')
 		flush.console()
 		
-		tr <- blockSize(y, minblocks=nodes)
+		tr <- blockSize(y, minblocks=nodes, n=nl*4)
 		pb <- pbCreate(tr$n, ...)
 
 		clFun <- function(i) {
@@ -112,7 +112,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		
 	} else {
 	
-		tr <- blockSize(y)
+		tr <- blockSize(y, n=nl*4)
 		pb <- pbCreate(tr$n, ...)
 		
 		if (inMemory) {

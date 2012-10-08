@@ -7,7 +7,7 @@
 
 \description{
 crop returns a geographic subset of an object as specified by an Extent object (or object from which an extent object can be extracted/created). 
-If \code{x} is a Raster* object, the Extent is aligned to \code{x}. Areas included in \code{y} but outside the extent of \code{x} are ignored (see \code{\link{expand}} if you want a larger area)
+If \code{x} is a Raster* object, the Extent is aligned to \code{x}. Areas included in \code{y} but outside the extent of \code{x} are ignored (see \code{\link{extend}} if you want a larger area)
 }
 
 \usage{
@@ -34,7 +34,7 @@ RasterLayer or RasterBrick object; or SpatialLines or SpatialPolygons object.
 
 
 \seealso{ 
-\code{\link[raster]{expand}}, \code{\link[raster]{merge}}
+\code{\link[raster]{extend}}, \code{\link[raster]{merge}}
 }
 
 \examples{

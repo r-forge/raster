@@ -89,7 +89,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 		} else {
 			tr <- blockSize(e1)
 			pb <- pbCreate(tr$n)			
-			r <- writeStart(r, filename=rasterTmpFile(), format=.filetype(), overwrite=TRUE )
+			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
 
 			if (length(e2) > 0) {
 				for (i in 1:tr$n) {
@@ -128,7 +128,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 		} else {
 			tr <- blockSize(e2)
 			pb <- pbCreate(tr$n)			
-			r <- writeStart(r, filename=rasterTmpFile(), format=.filetype(), overwrite=TRUE )
+			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
 
 			if (length(e1) > 0) {
 				for (i in 1:tr$n) {

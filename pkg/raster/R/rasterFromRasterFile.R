@@ -185,7 +185,7 @@
 	if (driver == 'big.matrix') {
 		x@file@name <- valuesfile
 		dscfile <- extension(valuesfile, 'big.dsc')
-		attr(x, 'big.matrix') <- attach.big.matrix(dscfile)
+		attr(x@file, 'big.matrix') <- attach.big.matrix(dscfile)
 		
 	} else {
 		x@file@name <- filename

@@ -41,7 +41,7 @@
 		} else {
 			return("byte")
 		}
-	} else if (type == 'int') {
+	} else if (type == 'integer') {
 		if (!signed) {
 			warning('netcdf only stores signed integers')
 		}

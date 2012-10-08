@@ -59,7 +59,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{merge}} \tab Combine Raster* objects with different extents (but same origin and resolution) \cr
     \code{\link{mosaic}} \tab Combine RasterLayers with different extents and a function for overlap areas \cr
     \code{\link{crop}} \tab Select a geographic subset of a Raster* object \cr
-    \code{\link{expand}} \tab Enlarge a Raster* object \cr
+    \code{\link{extend}} \tab Enlarge a Raster* object \cr
     \code{\link{trim}} \tab Trim a Raster* object by removing exterior rows and/or columns that only have NAs\cr
     \code{\link{aggregate}} \tab Combine cells of a Raster* object to create larger cells \cr
     \code{\link{disaggregate}} \tab Subdivide cells \cr

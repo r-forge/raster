@@ -70,8 +70,10 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			
 		} else if ( driver == 'big.matrix') {
 
-			b <- attr(x, 'big.matrix')
-			b[rowColFromCell(x, start:(start+length(v)-1))] <- v
+			b <- attr(x@file, 'big.matrix')
+			nrows <- length(v) / ncol(x)
+			# b[rowColFromCell(x, start:(start+length(v)-1))] <- v
+			b[start:(start+nrows-1), ] <-  matrix(v, nrow=nrows, byrow=TRUE)
 
 		} else if ( driver == 'ascii') {
 		
@@ -167,8 +169,10 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 
 		} else if ( driver == 'big.matrix') {
 
-			b <- attr(x, 'big.matrix')
-			b[start:(start+length(v)-1), ] <- v
+			b <- attr(x@file, 'big.matrix')
+			startcell <- cellFromRowCol(x, start, 1)
+			endcell <- startcell+nrow(v)-1
+			b[startcell:endcell, ] <- v
 			
 		} else { # rgdal
 		
