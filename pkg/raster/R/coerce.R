@@ -447,7 +447,7 @@ setAs('RasterLayer', 'big.matrix',
 			b[]  <- as.matrix(from)
 		} else {
 			tr <- blockSize(from)
-			pb <- pbCreate(tr$n, ...)			
+			pb <- pbCreate(tr$n)			
 			for (i in 1:tr$n) {
 				b[tr$row[i]:(tr$row[i]+tr$nrows[i]-1), ] <- getValues(from, row=tr$row[i], nrows=tr$nrows[i], format='matrix')
 				pbStep(pb) 
@@ -467,7 +467,7 @@ setAs('RasterStackBrick', 'big.matrix',
 	}
 	stopifnot(hasValues(from))
 
-	names(b) <- colnames(x)
+	names(b) <- colnames(from)
 
 	b <- big.matrix(ncell(from), nlayers(from) )
 	
@@ -480,7 +480,7 @@ setAs('RasterStackBrick', 'big.matrix',
 		b[]  <- as.matrix(from)
 	} else {
 		tr <- blockSize(from)
-		pb <- pbCreate(tr$n, ...)			
+		pb <- pbCreate(tr$n)
 		for (i in 1:tr$n) {
 			b[tr$row[i]:(tr$row[i]+tr$nrows[i]-1), ] <- getValues(from, row=tr$row[i], nrows=tr$nrows[i], format='matrix')
 			pbStep(pb) 

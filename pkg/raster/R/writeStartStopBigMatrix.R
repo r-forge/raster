@@ -5,7 +5,7 @@
 
 .startBigMatrixWriting <- function(x, filename, update=FALSE, ...) {
 
-	stopifnot(require(bigmemory))
+	require(bigmemory)
 
  	filename <- trim(filename)
 	if (filename == "") {

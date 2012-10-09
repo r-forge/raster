@@ -5,7 +5,7 @@
 
 .writeBigMatrix <- function(x, filename, ... ) {
 
-	stopifnot(require(bigmemory))
+	require(bigmemory)
 	
 	filetype <- 'big.matrix'
 	x@file@driver <- filetype
