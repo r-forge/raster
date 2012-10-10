@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.plotCT <- function(x, maxpixels=500000, ext=NULL, interpolate=FALSE, axes, xlab='', ylab='', asp, add=FALSE, addfun=NULL, main, ...) { 
+.plotCT <- function(x, maxpixels=500000, ext=NULL, interpolate=FALSE, axes, xlab='', ylab='', asp, add=FALSE, addfun=NULL, main, zlim=NULL, zlimcol=NULL, ...) { 
 # plotting with a color table
 	
 	if (missing(main)) {
@@ -28,7 +28,18 @@
 	coltab <- x@legend@colortable
 	x <- sampleRegular(x, maxpixels, ext=ext, asRaster=TRUE, useGDAL=TRUE)
 	z <- getValues(x)
+
 	
+	if (!is.null(zlim)) { # not that relevant here, but for consistency....
+		if (is.null(zlimcol)) {
+			z[ z<zlim[1] ] <- zlim[1]
+			z[ z>zlim[2] ] <- zlim[2]
+		} else { #if (is.na(zlimcol)) {
+			z[z<zlim[1] | z>zlim[2]] <- NA
+		} 
+	}
+	
+
 	if (NCOL(coltab) == 2) {
 		# not implemented
 		z <- as.numeric(cut(z, coltab[,1]))

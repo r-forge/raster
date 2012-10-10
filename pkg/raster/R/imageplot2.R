@@ -12,8 +12,8 @@
 	legend.lab = NULL, graphics.reset = FALSE, 
     bigplot = NULL, smallplot = NULL, legend.only = FALSE, 
     lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
-	interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, fun=NULL, asp, 
-	colNA = NA, ...) {
+	interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, zlimcol=NULL,
+	fun=NULL, asp, colNA = NA, ...) {
 
 
  	if (missing(asp)) {
@@ -55,8 +55,14 @@
 	x <- as.matrix(x)
 	x[is.infinite(x)] <- NA
 	if (!is.null(zlim)) {
-		x[x<zlim[1] | x>zlim[2]] <- NA
+		if (is.null(zlimcol)) {
+			x[ x<zlim[1] ] <- zlim[1]
+			x[ x>zlim[2] ] <- zlim[2]
+		} else { #if (is.na(zlimcol)) {
+			x[x<zlim[1] | x>zlim[2]] <- NA
+		} 
 	}
+	
 	w <- getOption('warn')
 	options('warn'=-1) 
 	if (is.null(breaks)) {

@@ -12,7 +12,7 @@ if (!isGeneric("plotRGB")) {
 
 
 setMethod("plotRGB", signature(x='RasterStackBrick'), 
-function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, bgcol='white', alpha, bgalpha, addfun=NULL, ...) { 
+function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, interpolate=FALSE, colNA='white', alpha, bgalpha, addfun=NULL, zlim=NULL, zlimcol=NULL, ...) { 
 
 	if (missing(scale)) {
 		scale <- 255
@@ -31,14 +31,25 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 
 	RGB <- na.omit(cbind(getValues(r), getValues(g), getValues(b)))
 	
-	if (!is.null(dots$zlim)) {
-		if (length(dots$zlim) == 2) {
-			RGB[RGB < dots$zlim[1]] <- dots$zlim[1]
-			RGB[RGB > dots$zlim[2]] <- dots$zlim[2]
+	if (!is.null(zlim)) {
+		if (length(zlim) == 2) {
+			zlim <- sort(zlim)
+			if (is.null(zlimcol)) {
+				RGB[ RGB<zlim[1] ] <- zlim[1]
+				RGB[ RGB>zlim[2] ] <- zlim[2]
+			} else { #if (is.na(zlimcol)) {
+				RGB[RGB<zlim[1] | RGB>zlim[2]] <- NA
+			} 
 		} else if (NROW(dots$zlim) == 3 & NCOL(dots$zlim) == 2) {
 			for (i in 1:3) {
-				RGB[RGB[,i] < dots$zlim[i,1], i] <- dots$zlim[i,1]
-				RGB[RGB[,i] > dots$zlim[i,2], i] <- dots$zlim[i,2]
+				zmin <- min(zlim[i,])		
+				zmax <- max(zlim[i,])
+				if (is.null(zlimcol)) {
+					RGB[RGB[,i] < zmin, i] <- zmin
+					RGB[RGB[,i] > zmax, i] <- zmax
+				} else { #if (is.na(zlimcol)) {
+					RGB[RGB < zmin | RGB > zmax, i] <- NA
+				}
 			}
 		} else {
 			stop('zlim should be a vector of two numbers or a 3x2 matrix (one row for each color)')
