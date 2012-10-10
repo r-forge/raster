@@ -6,7 +6,7 @@
 \alias{mosaic,Raster,Raster-method}
 
 \title{ 
-Merge Raster* objects, using a function to compute cell value for overlapping areas. See \code{\link{merge}} for a simpler apporach.
+Merge Raster* objects using a function for overlapping areas 
 }
 
 \description{
