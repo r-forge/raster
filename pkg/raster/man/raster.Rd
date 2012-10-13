@@ -17,6 +17,7 @@
 \alias{raster,matrix-method}
 \alias{raster,big.matrix-method}
 \alias{raster,list-method}
+\alias{raster,im-method}
 \alias{raster,asc-method}
 \alias{raster,kasc-method}
 \alias{raster,kde-method}
@@ -25,7 +26,7 @@
 \title{Create a RasterLayer object}
 
 \description{
-Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a file, an Extent object, a matrix, an 'image' object, or from a Raster*, Spatial*, asc, kasc (adehabitat*), grf (geoR) or kde object.
+Methods to create a RasterLayer object. RasterLayer objects can be created from scratch, a file, an Extent object, a matrix, an 'image' object, or from a Raster*, Spatial*, im (spatstat) asc, kasc (adehabitat*), grf (geoR) or kde object.
 
 In many cases, e.g. when a RasterLayer is created from a file, it does (initially) not contain any cell (pixel) values in (RAM) memory, it only has the parameters that describe the RasterLayer. You can access cell-values with \code{\link[raster]{getValues}, \link[raster]{extract}} and related functions. You can assign new values with  \code{\link[raster]{setValues}} and with \code{\link[raster]{replacement}}.
 
@@ -56,7 +57,7 @@ For an overview of the functions in the raster package have a look here: \code{\
 }
 
 \arguments{
-\item{x}{filename (character), Extent, Raster*, SpatialPixels*, SpatialGrid*, object, 'image', matrix, or missing. Supported file types are the 'native' raster package format and those that can be read via \code{rgdal} (see \code{\link[rgdal]{readGDAL}}}
+\item{x}{filename (character), Extent, Raster*, SpatialPixels*, SpatialGrid*, object, 'image', matrix, im, or missing. Supported file types are the 'native' raster package format and those that can be read via \code{rgdal} (see \code{\link[rgdal]{readGDAL}}}
 \item{band}{integer. The layer to use in a multi-layer file}
 \item{...}{Additional arguments, see Details }  
 \item{layer}{integer. The layer to use in a multi-layer file, or the layer to extract from a RasterStack/Brick. If the latter case, an empty RasterLayer (no associated values) is returned if \code{layer=0}}

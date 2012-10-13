@@ -356,6 +356,18 @@ setMethod('raster', signature(x='SpatialPixels'),
 
 
 
+setMethod('raster', signature(x='im'), 
+	function(x, crs) {
+		r <- as(x, 'RasterLayer')
+		if (!missing(crs)) {
+			projection(r) <- crs
+		}
+		r
+	}
+)
+
+
+
 setMethod('raster', signature(x='kasc'), 
 	function(x, crs) {
 		x <- as(x, 'RasterLayer')
