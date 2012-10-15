@@ -38,6 +38,17 @@ if (!isGeneric("calc")) {
 }
 
 
+
+.getColFun <- function(fun) {
+	if (fun == 'mean') { return(colMeans)
+	} else if (fun == 'sum') { return(colSums)
+	} else if (fun == 'min') { return(.colMin)
+	} else if (fun == 'max') { return(.colMax)
+	} else { stop('unknown fun') }
+}
+
+
+
 .calcTest <- function(tstdat, fun, na.rm, forcefun=FALSE, forceapply=FALSE) {
 	
 	if (forcefun & forceapply) {

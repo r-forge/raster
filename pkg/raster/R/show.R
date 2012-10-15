@@ -79,7 +79,13 @@ setMethod ('show' , 'RasterLayer',
 				options('warn' = w)
 				r <- data.frame(r)
 				r <- data.frame(x=c('min :','max :'), r)
-				colnames(r) <- c('    fields :', colnames(x))
+				a <- colnames(x)
+				n <- nchar(a)
+				b <- n > 26
+				if (any(b)) {
+					a[b] <- paste(substr(a[b], 1, 9), '//', substr(a[b], n[b]-9, n[b]), sep='')
+				}
+				colnames(r) <- c('    fields :', a)
 				rownames(r) <- NULL
 				if (nc > maxnl) {
 					r <- cbind(r, '...'=rbind('...', '...'))
@@ -154,6 +160,14 @@ setMethod ('show' , 'RasterBrick',
 					minv <- c(minv[1:mnr], '...')
 					maxv <- c(maxv[1:mnr], '...')
 				}
+				
+				
+				n <- nchar(ln)
+				b <- n > 26
+				if (any(b)) {
+					ln[b] <- paste(substr(ln[b], 1, 9), '//', substr(ln[b], nchar(ln[b])-9, nchar(ln[b])), sep='')
+				}
+				
 				w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
 				m <- rbind(ln, minv, maxv)
 				# a loop because 'width' is not recycled by format
@@ -223,6 +237,12 @@ setMethod ('show' , 'RasterStack',
 			if (nl > mnr) {
 				ln <- c(ln[1:mnr], '...')
 			}
+			n <- nchar(ln)
+			b <- n > 26
+			if (any(b)) {
+				ln[b] <- paste(substr(ln[b], 1, 9), '//', substr(ln[b], nchar(ln[b])-9, nchar(ln[b])), sep='')
+			}
+			
 			
 			minv <- format(minValue(object))
 			maxv <- format(maxValue(object))
