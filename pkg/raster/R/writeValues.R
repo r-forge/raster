@@ -124,11 +124,10 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 				dm <- dim(v)
 				v <- as.integer(round(v))  
 				dim(v) <- dm
+			} else if (!is.numeric(v)) { 
+			# for logical values
+				v[]  <- as.numeric( v ) 
 			}
-			# else { 
-			# should not be necessary...
-			# v[]  <- as.numeric( v ) 
-			#}
 
 		
 			if (x@file@bandorder=='BIL') {
