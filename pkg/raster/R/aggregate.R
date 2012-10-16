@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : July 2010
 # Version 1.0
 # Licence GPL v3
@@ -150,16 +150,14 @@ function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		
 			cols <- rep(rep(1:csteps,each=xfact)[1:ncol(x)], times=yfact)
 			rows <- rep(1, each=(ncol(x) * yfact))
-			
-			out <- writeStart(out, filename=filename, ...)
-			
 			cells <- cellFromRowCol(x, rows, cols)
-			nrows = yfact
+			nrows <- yfact
 
 			w <- getOption('warn')
 			on.exit(options('warn' = w))
 			options('warn'=-1) 
 			
+			out <- writeStart(out, filename=filename, ...)
 			pb <- pbCreate(rsteps, ...)
 			for (r in 1:rsteps) {
 				startrow <- 1 + (r - 1) * yfact
