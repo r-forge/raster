@@ -14,6 +14,9 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 	function(x, v, start) {
 
 		v[is.infinite(v)] <- NA
+		if (is.logical(v)) {
+			v[] <- as.integer(v)
+		}
 		
 		rsd <- na.omit(v) # min and max values
 		if (length(rsd) > 0) {
@@ -57,7 +60,7 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 				v[v != 1] <- 0
 				v <- as.integer(v)  
 				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
-			} else { 
+			} else if (!is.numeric(v)) { 
 				v  <- as.numeric( v ) 
 			}
 			start <- (start-1) * x@ncols * x@file@dsize
