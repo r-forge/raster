@@ -1,5 +1,5 @@
 
-.aggtest <- function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", ...)  {
+.aggtest <- function(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename="", padNA=TRUE, doC=FALSE, ...)  {
 
 
 	if (length(fact)==1) {
@@ -59,6 +59,13 @@
 	
 	if (nl < 2) {	
 
+		if (doC) {
+			op <- as.integer(match(fun, c('sum', 'mean', 'min', 'max')) - 1)
+			dim=c(dim(x)[1:2], dim(out)[1:2], xfact, yfact)
+			values(out) <- .Call("aggregate", as.double(getValues(x)), op, as.integer(na.rm), as.integer(dim), PACKAGE='raster')
+			return(out)	
+		}
+	
 		fun <- raster:::.makeTextFun(fun)
 		if (class(fun) == 'character') { 
 			rowcalc <- TRUE 

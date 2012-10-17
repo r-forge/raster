@@ -5,7 +5,7 @@
 
 
 setMethod("plot", signature(x='Raster', y='Raster'), 
-	function(x, y, maxpixels=100000, cex=0.2, xlab, ylab, nc, nr, maxnl=16, main, add=FALSE, gridded=FALSE, ncol=25, nrow=25, ...) {
+	function(x, y, maxpixels=100000, cex, xlab, ylab, nc, nr, maxnl=16, main, add=FALSE, gridded=FALSE, ncol=25, nrow=25, ...) {
 	
 		compareRaster(c(x, y), extent=TRUE, rowcol=TRUE, crs=FALSE, stopiffalse=TRUE) 
 		nlx <- nlayers(x)
@@ -67,10 +67,22 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 			x <- sampleRegular(x, size=maxpixels)
 			y <- sampleRegular(y, size=maxpixels)
 		}
-		if (length(x) < cells) {
-			warning(paste('plot used a sample of ', round(100*length(x)/cells, 1), '% of the cells. You can use "maxpixels" to increase the sample)', sep=""))
+		if (NROW(x) < cells) {
+			warning(paste('plot used a sample of ', round(100*NROW(x)/cells, 1), '% of the cells. You can use "maxpixels" to increase the sample)', sep=""))
 		}
-			
+
+		if (missing(cex)) {
+			if (NROW(x) < 100) {
+				cex <- 1
+			} else if (NROW(x) < 1000) {
+				cex <- 0.5
+			} else {
+				cex <- 0.2
+			}
+		}
+
+
+		
 		if (nlx != nly) {	
 			# recycling
 			d <- cbind(as.vector(x), as.vector(y))
@@ -99,6 +111,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 			old.par <- par(no.readonly = TRUE) 
 			on.exit(par(old.par))
 			par(mfrow=c(nr, nc), mar=c(4, 4, 2, 2))
+			
 			
 			if (! gridded) {
 				if (add) {
