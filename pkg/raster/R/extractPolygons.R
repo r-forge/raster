@@ -254,7 +254,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 		if (!is.list(res)) {
 			res <- data.frame(ID=1:NROW(res), res)
 		} else {
-			res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
+			res <- data.frame( do.call(rbind, lapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
 		}		
 
 		lyrs <- layer:(layer+nl-1)
