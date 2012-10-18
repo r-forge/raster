@@ -1,6 +1,7 @@
 --- to do
 focal for multi-layer objects
 support for RasterQuad (4 dimensional) objects
+add equivalent to "subsWithNA" to reclassify
 
 --- development version
 new function 'select' for selecting spatial subsets by drawing on plot (map)

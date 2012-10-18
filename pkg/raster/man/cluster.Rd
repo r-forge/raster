@@ -15,9 +15,9 @@ NOTE: beginCluster may fail when the package 'nws' is installed. You can fix tha
 
 endCluster closes the cluster and removes the object.
 
-The use of the cluster is automatic in these functions: \code{ \link{predict}, \link{projectRaster}, \link{resample}} and in \code{\link{extract}} when using polygons.
+The use of the cluster is automatic in these functions: \code{  \link{projectRaster}, \link{resample}} and in \code{\link{extract}} when using polygons.
 
-\code{clusterR} is a flexible interface for using cluster with other functions. This function only works with functions from the raster package that return Raster* objects that operate on a cell by cell basis and return an object with the same number of cells as the input raster object(s). Among other functions, it does _not_ work with merge, crop, mosaic, (dis)aggregate, resample, projectRaster, focal, distance, buffer, direction.
+\code{clusterR} is a flexible interface for using cluster with other functions. This function only works with functions from the raster package that return Raster* objects that operate on a cell by cell basis and return an object with the same number of cells as the input raster object(s). It works with functions like predict and interpolate. Among other functions, it does _not_ work with merge, crop, mosaic, (dis)aggregate, resample, projectRaster, focal, distance, buffer, direction.
 }
 
 \usage{
@@ -33,7 +33,7 @@ clusterR(x, fun, args=NULL, filename='', cl=NULL, m=2, ...)
 \item{exclude}{Character. Packages to exclude from loading on the nodes (because they may fail there) but are required/loaded on the master }
 \item{x}{Raster* object}
 \item{fun}{function}
-\item{args}{arguments for the function (excluding x, which should always be the first argument}
+\item{args}{list with the arguments for the function (excluding \code{x}, which should always be the first argument}
 \item{filename}{character. Output filename (optional)}
 \item{cl}{cluster object (do not use it if beginCluster() has been called}
 \item{m}{tuning parameter to determine how many blocks should be used. The number is rounded and multiplied with the number of nodes.}

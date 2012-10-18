@@ -52,7 +52,10 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 		for (i in 1:tr$n) {
 			pbStep(pb, i)
 			d <- recvOneData(cl)
-			if (! d$value$success ) { stop('cluster error') }
+			if (! d$value$success ) { 
+				print(d)
+				stop('cluster error') 
+			}
 
 			if (i ==1) {
 				nl <- NCOL(d$value$value) 

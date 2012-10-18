@@ -87,15 +87,7 @@ setMethod('predict', signature(object='Raster'),
 			predrast <- writeStart(predrast, filename=filename, format=format, datatype=datatype, overwrite=overwrite )
 		}
 		
-		tr <- blockSize(predrast, n=nlayers(object)+3)
-		doCluster <- .doCluster()
-		if (doCluster) {
-			cl <- getCluster()
-			on.exit( returnCluster() )
-			cat( 'Using cluster with', length(cl), 'nodes\n' )
-			flush.console()		
-		}
-
+		tr <- blockSize(predrast, n=nlayers(predrast)+3)
 		
 		napred <- matrix(rep(NA, ncol(predrast) * tr$nrows[1] * nlayers(predrast)), ncol=nlayers(predrast))
 		factres	<- FALSE
@@ -153,17 +145,7 @@ setMethod('predict', signature(object='Raster'),
 				predv <- napred
 			} else {
 	
-				if (doCluster) {
-				
-					predv <- clusterApply(cl, splitRows(blockvals, length(cl)), fun, object=model)
-					if (is.vector(predv[[1]])) {
-						predv <- unlist(predv)
-					} else {
-						predv <- do.call(rbind, predv)
-					}
-				} else {
-					predv <- fun(model, blockvals, ...)
-				}
+				predv <- fun(model, blockvals, ...)
 		
 				if (class(predv)[1] == 'list') {
 					predv <- unlist(predv)
