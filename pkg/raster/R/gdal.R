@@ -17,7 +17,7 @@
 			options('rasterGDALVersion'=gdversion)
 			pkg.info <- utils::packageDescription('rgdal') 
 			rgdversion <- pkg.info[["Version"]]		
-			options('rasterNewRGDALVersion'=compareVersion(rgdversion, "0.7-19") >= 0)
+			options('rasterNewRGDALVersion'=compareVersion(rgdversion, "0.7-19") > 0)
 		} else if (stopIfAbsent) {
 			stop("package 'rgdal' is not available")
 		}
@@ -29,7 +29,7 @@
 # next version of raster should depend on rgdal > "0.7-12"
 
 .gd_SetNoDataValue <- function(object, NAflag) {
-	if (getOption('rasterNewRGDALVersion')) {
+	if (isTRUE(getOption('rasterNewRGDALVersion'))) {
 		rgdal:::.gd_SetNoDataValue(object, NAflag)
 	} else {
 		.Call("RGDAL_SetNoDataValue", object, as.double(NAflag), PACKAGE="rgdal")
