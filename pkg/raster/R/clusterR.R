@@ -53,7 +53,7 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 			pbStep(pb, i)
 			d <- recvOneData(cl)
 			if (! d$value$success ) { 
-				print(d)
+				print(d$value$value)
 				stop('cluster error') 
 			}
 

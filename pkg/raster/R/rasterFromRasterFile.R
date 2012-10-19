@@ -51,7 +51,11 @@
 	isCat <- FALSE
 	ratnames <- rattypes <- ratvalues <- NULL
 	catlevels = matrix(NA)
-
+	w <- getOption('warn')
+	on.exit(options('warn' = w))
+	
+	#match(c("MINX", "MAXX", "MINY", "MAXY", "XMIN", "XMAX", "YMIN", "YMAX", "ROWS", "COLUMNS", "NROWS", "NCOLS"), toupper(ini[,2]))
+	
 	for (i in 1:length(ini[,1])) {
 		if (ini[i,2] == "MINX") { xn <- as.numeric(ini[i,3]) } 
 		else if (ini[i,2] == "MAXX") { xx <- as.numeric(ini[i,3]) } 
@@ -66,10 +70,18 @@
 		else if (ini[i,2] == "NROWS") { nr <- as.integer(ini[i,3]) } 
 		else if (ini[i,2] == "NCOLS") { nc <- as.integer(ini[i,3]) } 
 		
-		else if (ini[i,2] == "MINVALUE") { try ( minval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
-		else if (ini[i,2] == "MAXVALUE") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
+	
+		else if (ini[i,2] == "MINVALUE") { 
+			options('warn'=-1) 
+			try ( minval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) 
+			options('warn' = w)
+		}
+		else if (ini[i,2] == "MAXVALUE") { 
+			options('warn'=-1) 
+			try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) 
+			options('warn' = w)
+		}
 		else if (ini[i,2] == "VALUEUNIT") { try ( maxval <-  as.numeric(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
-
 		else if (ini[i,2] == "CATEGORICAL") { try ( isCat <-  as.logical(unlist(strsplit(ini[i,3], ':'))), silent = TRUE ) }
 				
 		#else if (ini[i,2] == "RATROWS") { ratrows <- as.integer(ini[i,3]) }
