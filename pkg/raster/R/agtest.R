@@ -59,15 +59,11 @@
 	
 	if (nl < 2) {	
 
-		if (doC) {
-			op <- as.integer(match(fun, c('sum', 'mean', 'min', 'max')) - 1)
-			dim=c(dim(x)[1:2], dim(out)[1:2], xfact, yfact)
-			values(out) <- .Call("aggregate", as.double(getValues(x)), op, as.integer(na.rm), as.integer(dim), PACKAGE='raster')
-			return(out)	
-		}
 	
 		fun <- raster:::.makeTextFun(fun)
-		if (class(fun) == 'character') { 
+	
+	
+		if (!doC & class(fun) == 'character') { 
 			rowcalc <- TRUE 
 			fun <- raster:::.getColFun(fun)
 		} else { 
@@ -75,6 +71,17 @@
 		}
 
 		if ( canProcessInMemory(x)) {
+
+			if (doC) {
+				op <- as.integer(match(fun, c('sum', 'mean', 'min', 'max')) - 1)
+				dim=c(dim(x)[1:2], dim(out)[1:2], xfact, yfact)
+				values(out) <- .Call("aggregate", 
+					as.double(getValues(x)), 
+					op, 
+					as.integer(na.rm), 
+					as.integer(dim), PACKAGE='raster')
+				return(out)	
+			}
 			
 			m <- ceiling(nrx / yfact)
 			vv <- matrix(NA, nrow= yfact*xfact, ncol=csteps * m)
@@ -136,7 +143,25 @@
 			w <- getOption('warn')
 			on.exit(options('warn' = w))
 			options('warn'=-1) 
-			
+		
+
+			if (doC) {
+				op <- as.integer(match(fun, c('sum', 'mean', 'min', 'max')) - 1)
+				stopifnot(!is.na(op))
+				dim <- c(dim(x)[1:2], dim(out)[1:2], xfact, yfact)
+				for (i in 1:(tr$n-1)) {
+					vals <- getValuesBlock(x, tr$row[i], tr$nrows[i], 1, lastcol)
+					vals <- .Call("aggregate", as.double(vals), op,
+							as.integer(na.rm), as.integer(dim), PACKAGE='raster')
+					out <- writeValues(out, vals, tr$row[i])
+					pbStep(pb, i) 
+				}
+				pbClose(pb)
+				out <- writeStop(out)
+				return(out)
+			}
+
+
 			for (i in 1:(tr$n-1)) {
 				
 				vals <- getValuesBlock(x, tr$row[i], tr$nrows[i], 1, lastcol)
@@ -253,3 +278,17 @@
 	
 	}
 }
+
+
+
+
+#library(raster)
+#r <- raster(nc=9, nr=9)
+#r <- raster()
+#r[] = 1:ncell(r)
+#raster:::.aggtest(r, 5, 'min', doC=T)
+
+
+
+
+	

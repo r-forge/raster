@@ -154,7 +154,7 @@
 	hasNoDataValues <- bi[['hasNoDataValue']]
 	NoDataValue <- bi[['NoDataValue']]
 	
-#	if (getOption('rasterRGDALVersion') > "0.7-19") {	
+#	if (getOption('rasterNewRGDALVersion')) {	
 #		sbi <- attr(gdalinfo, 'sdf')
 #		Bmin <- sbi[['Bmin']]
 #		Bmax <- sbi[['Bmax']]	
