@@ -8,6 +8,7 @@
 \alias{[<-,RasterStackBrick,missing,missing-method}
 
 \alias{[[<-,RasterStack,numeric,missing-method}
+\alias{[[<-,RasterBrick,numeric,missing-method}
 
 
 \alias{[<-,Raster,numeric,numeric-method}
@@ -23,8 +24,7 @@
 \description{
 You can set values of a Raster* object, when \code{i} is a vector of cell numbers, a Raster*, Extent, or Spatial* object. 
 
-These are shorthand methods that only work for relatively small Raster* objects. In other cases you can use functions such as \code{\link{calc} and \link{rasterize}}. 
-
+These are shorthand methods that work best for relatively small Raster* objects. In other cases you can use functions such as \code{\link{calc} and \link{rasterize}}. 
 }
 
 \section{Methods}{

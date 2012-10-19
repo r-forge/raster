@@ -46,6 +46,48 @@ setReplaceMethod("[[", c("RasterStack", "numeric", "missing"),
 
 
 
+setReplaceMethod("[[", c("RasterBrick", "numeric", "missing"),
+	function(x, i, j, value) {
+		i <- round(i)
+
+		if (i < 1) {
+			stop('index should be > 0')
+		}
+		nl <- nlayers(x)
+		if (i > nl + 1) {
+			stop('index should be <= nlayers(x)+1')
+		}
+		
+		if (canProcessInMemory(x)) {
+			if (!inMemory(x)) {
+				x <- readAll(x)
+			}
+			if (!inherits(value, 'RasterLayer')) {
+				val <- value
+				if (i > nl) {
+					value <- getValues(x[[nl]])
+				} else {
+					value <- getValues(x[[i]])
+				}
+				# for recycling
+				value[] <- val
+			} else {
+				compareRaster(x, value)
+				value <- getValues(value)
+			}
+			x <- setValues(x, value, i)
+		} else {
+			x <- stack(x)
+			x[[i]] <- value
+		}	
+		return(x)
+	}
+)
+
+
+
+
+
 
 setReplaceMethod("[", c("RasterStackBrick", "Raster", "missing"),
 	function(x, i, j, value) {
