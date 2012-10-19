@@ -42,8 +42,8 @@
 	
 #	cat("levels=",  x@data@levels, "\n", file = thefile)
 
-	cat("minvalue=",  paste(minValue(x,-1, warn=FALSE), collapse=':'), "\n", file = thefile)
-	cat("maxvalue=",  paste(maxValue(x,-1, warn=FALSE), collapse=':'), "\n", file = thefile)
+	cat("minvalue=",  paste(minValue(x, -1, warn=FALSE), collapse=':'), "\n", file = thefile)
+	cat("maxvalue=",  paste(maxValue(x, -1, warn=FALSE), collapse=':'), "\n", file = thefile)
 	cat("nodatavalue=", .nodatavalue(x), "\n", file = thefile)
 #	cat("Sparse=", x@sparse, "\n", file = thefile)
 #	cat("nCellvals=", x@data@ncellvals, "\n", file = thefile)	
