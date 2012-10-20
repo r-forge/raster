@@ -8,6 +8,7 @@ new function 'select' for selecting spatial subsets by drawing on plot (map)
 new function 'barplot' for RasterLayer objects
 new function 'scale' for Raster* objects (suggested by Agustin Lobo)
 new functions to coerce to and from big.matrix objects: as(x, 'big.matrix') and raster(x) or brick(x)
+new implementation of aggregate that is _much_ faster with fun= min, max, mean or sum
 raster now uses 'igraph' instead of 'igraph0' (functions gridDistance and clump)
 renamed function 'compare' to 'compareRaster' (to avoid name hiding by the igraph package)
 renamed function 'expand' to 'extend' (to avoid name hiding by the Matrix package)
@@ -21,6 +22,8 @@ Fixed bug with RAT tables in native format (reported by Joseph Steward)
 Fixed corner case bug with extract/polygons df=TRUE (reported by Jon Olav Skoien)
 Added big.matrix as a "driver" (file format). This is experimental (and not documented).
 raster now attempts to interpret the CRS from netcdf files
+added support for the 360 day calander in netcdf files
+
 
 --- 1-September-2012, version 2.0-12
 fixed bug in summary reported by Agustin Lobo

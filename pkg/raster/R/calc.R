@@ -19,8 +19,9 @@ if (!isGeneric("calc")) {
 			} else if (test == '.Primitive(\"max\")') { fun <- 'max' 
 			}
 		} else {
-			test <- try( deparse(fun)[2] == 'UseMethod(\"mean\")', silent=TRUE)
-			if (isTRUE(test)) { 
+			test1 <- isTRUE(try( deparse(fun)[2] == 'UseMethod(\"mean\")', silent=TRUE))
+			test2 <- isTRUE(try( fun@generic == 'mean', silent=TRUE))
+			if (test1 | test2) { 
 				fun <- 'mean' 
 			}
 		} 
