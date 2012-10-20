@@ -47,7 +47,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	rr <- raster(x)
 	cn <- names(x)
 	
-	pb <- pbCreate(nlns, ...)
+	pb <- pbCreate(nlns, label='extract', ...)
 	
 	
 	if (.doCluster()) {

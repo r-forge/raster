@@ -61,7 +61,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		flush.console()
 		
 		tr <- blockSize(y, minblocks=nodes, n=nl*4)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='resample', ...)
 
 		clFun <- function(i) {
 			#r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
@@ -113,7 +113,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 	} else {
 	
 		tr <- blockSize(y, n=nl*4)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='resample', ...)
 		
 		if (inMemory) {
 			for (i in 1:tr$n) {

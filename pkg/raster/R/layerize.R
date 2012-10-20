@@ -81,7 +81,7 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 	out <- writeStart(out, filename=filename, ...)
 	
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, ...)
+	pb <- pbCreate(tr$n, label='layerize', ...)
 	for(i in 1:tr$n) {		
 		e <- extent(xmin(y), xmax(y), yFromRow(y, tr$row[i]+tr$nrows[i]-1)  - 0.5 * yres(y), yFromRow(y, tr$row[i])+0.5 * yres(y))
 		int <- intersect(e, extent(x)) 

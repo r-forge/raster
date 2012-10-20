@@ -34,7 +34,7 @@ function(x, filename='', doEdge=TRUE, ...) {
 	}
 	                                                                        
 	if (canProcessInMemory(out, 6)) {
-		pb <- pbCreate(3, ...)
+		pb <- pbCreate(3, label='distance', ...)
 		x <- values(x)
 		i <- which(is.na(x))
 		if (length(i) < 1) {
@@ -56,7 +56,7 @@ function(x, filename='', doEdge=TRUE, ...) {
 	
 	out <- writeStart(out, filename=filename, ...)
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, ...)
+	pb <- pbCreate(tr$n, label='distance', ...)
 	xy <- cbind(rep(xFromCol(out, 1:ncol(out)), tr$nrows[1]), NA)
 	for (i in 1:tr$n) {
 		if (i == tr$n) {

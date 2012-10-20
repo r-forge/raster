@@ -341,7 +341,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 		} else {
 		
 			tr <- blockSize(to, n=nlayers(to)*4)
-			pb <- pbCreate(tr$n, ...)	
+			pb <- pbCreate(tr$n, label='projectRaster', ...)	
 			to <- writeStart(to, filename=filename, ...)
 			for (i in 1:tr$n) {
 				cells <- cellFromRowCol(to, tr$row[i], 1):cellFromRowCol(to, tr$row[i]+tr$nrows[i]-1, ncol(to))

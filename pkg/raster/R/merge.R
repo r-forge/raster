@@ -222,7 +222,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 	#	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
 	#	tr$n <- length(tr$row)
 
-		pb <- pbCreate(tr$n, dotargs$progress)
+		pb <- pbCreate(tr$n, dotargs$progress, label='merge')
 		dotargs$x <- out
 		out <- do.call(writeStart, dotargs)
 		
@@ -346,7 +346,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 	#	tr$nrows <- c(tr$row[-1], nrow(out)+1) - c(tr$row)
 	#	tr$n <- length(tr$row)
 
-		pb <- pbCreate(tr$n, dotargs$progress)
+		pb <- pbCreate(tr$n, dotargs$progress, label='merge')
 		dotargs$x <- out
 		out <- do.call(writeStart, dotargs)
 

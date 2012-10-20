@@ -226,7 +226,7 @@ function(x, fun, filename='', na.rm, forcefun=FALSE, forceapply=FALSE, ...) {
 	
 	out <- writeStart(out, filename=filename, ...)
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, ...)			
+	pb <- pbCreate(tr$n, label='calc', ...)			
 
 	if (missing(na.rm)) {
 		for (i in 1:tr$n) {

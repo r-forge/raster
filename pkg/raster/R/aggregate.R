@@ -94,7 +94,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			if (expand) {
 				tr$nrows[tr$n] <-  tr$nrows[tr$n] - (sum(tr$nrows)-x@nrows)
 			}
-			pb <- pbCreate(tr$n, ...)
+			pb <- pbCreate(tr$n, label='aggregate', ...)
 			for (i in 1:(tr$n-1)) {
 				vals <- getValuesBlock(x, tr$row[i], tr$nrows[i], 1, lastcol)
 				vals <- .Call("aggregate", as.double(vals), op,
@@ -179,7 +179,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			if (expand) {
 				tr$nrows[tr$n] <-  tr$nrows[tr$n] - (sum(tr$nrows)-x@nrows)
 			}
-			pb <- pbCreate(tr$n, ...)
+			pb <- pbCreate(tr$n, label='aggregate', ...)
 			
 			m <- tr$nrows[1] / yfact
 			vv <- matrix(NA, nrow= yfact*xfact, ncol=csteps * m)
@@ -296,7 +296,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			on.exit(options('warn' = w))
 			options('warn'=-1) 
 			
-			pb <- pbCreate(rsteps, ...)
+			pb <- pbCreate(rsteps, label='aggregate', ...)
 			for (r in 1:rsteps) {
 				startrow <- 1 + (r - 1) * yfact
 				if ( r==rsteps) {

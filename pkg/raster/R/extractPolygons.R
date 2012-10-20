@@ -57,7 +57,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 	
 	rr <- raster(x)
 	
-	pb <- pbCreate(npol, ...)
+	pb <- pbCreate(npol, label='extract', ...)
 	
 	if (.doCluster()) {
 		cl <- getCluster()

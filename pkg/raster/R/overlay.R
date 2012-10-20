@@ -97,7 +97,7 @@ function(x, y, ..., fun, filename="", unstack=TRUE){
 	}
 	
 	if ( canProcessInMemory(out, sum(nl)+maxnl) ) {
-		pb <- pbCreate(3, ...)			
+		pb <- pbCreate(3, label='overlay', ...)			
 		pbStep(pb, 1)
 		if (doapply) {
 			valmat <- matrix(nrow=ncell(out)*maxnl, ncol=length(x)) 
@@ -146,7 +146,7 @@ function(x, y, ..., fun, filename="", unstack=TRUE){
 		
 		
 		tr <- blockSize(out, n=sum(nl)+maxnl)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='overlay', ...)
 		
 		if (doapply) { 
 			valmat = matrix(nrow=tr$nrows[1]*ncol(out)*maxnl, ncol=length(x)) 

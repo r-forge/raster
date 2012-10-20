@@ -82,7 +82,7 @@ setMethod('interpolate', signature(object='Raster'),
 		ablock <- 1:(ncol(object) * tr$nrows[1])
 		napred <- rep(NA, ncol(predrast)*tr$nrows[1])
 				
-		pb <- pbCreate(tr$n,  ... )			
+		pb <- pbCreate(tr$n, label='interpolate',  ... )			
 		
 		if (filename != '') {
 			predrast <- writeStart(predrast, filename=filename, ... )
