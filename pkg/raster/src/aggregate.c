@@ -76,7 +76,7 @@ SEXP aggregate(SEXP d, SEXP op, SEXP na, SEXP dim) {
 			if ((newcol < ncout) & (newrow < nrout)) {	
 				for (k=0; k<nl; k++) {
 					j = i + ncell * k;
-					if (R_FINITE(xd[j])) {
+					if (!R_IsNA(xd[j])) {
 						n = newcell + ncellout * k;	
 						xv[n] = xv[n] + xd[j];
 						cnts[n] = cnts[n] + 1;
@@ -95,7 +95,7 @@ SEXP aggregate(SEXP d, SEXP op, SEXP na, SEXP dim) {
 			if ((newcol < ncout) & (newrow < nrout)) {	
 				for (k=0; k<nl; k++) {
 					j = i + ncell * k;
-					if (R_FINITE(xd[j])) {
+					if (!R_IsNA(xd[j])) {
 						n = newcell + ncellout * k;	
 						if (oper==2) {
 							xv[n] = min(xv[n], xd[j]);

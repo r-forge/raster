@@ -37,7 +37,7 @@ SEXP layerize(SEXP d, SEXP cls, SEXP falsena) {
 	int n = length(cls);
 	
 	for (i=0; i<length(d); i++) {
-		if (R_FINITE(xd[i])) {
+		if (xd[i] != R_NaInt) {
 			for (j=0; j<n; j++) {
 				if (xd[i] == xc[j]) {
 					xv[j * m + i] = 1;
