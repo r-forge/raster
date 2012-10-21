@@ -63,13 +63,13 @@ setMethod('layerize', signature(x='RasterLayer', y='missing'),
 			classes <- as.integer(classes) 
 		}
 		if (length(classes) > 1) {
-			out <- brick(x, nl=length(classes))
+			out <- brick(out, nl=length(classes))
 		} 
 		names(out) <- classes
-		out <- writeStart(out, filename=filename, ...)
+		out <- writeStart(out, filename=filename)
 
 		tr <- blockSize(out)
-		pb <- pbCreate(tr$n, label='layerize', ...)
+		pb <- pbCreate(tr$n, label='layerize')
 
 		fNA <- as.integer(falseNA)
 		if (doC) {
