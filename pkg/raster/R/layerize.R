@@ -11,57 +11,96 @@ if (!isGeneric("layerize")) {
 
 
 setMethod('layerize', signature(x='RasterLayer', y='missing'), 
-	function(x, classes=NULL, digits=0, falseNA=FALSE, filename='', ...) {
+	function(x, classes=NULL, falseNA=FALSE, filename='', ...) {
+		
+		doC <- list(...)$doC
+		if (is.null(doC)) doC <- TRUE		
 		
 		out <- raster(x)
 		if (canProcessInMemory(out)) {
-			v <- round(getValues(x), digits)
+			v <- as.integer(getValues(x))
 			if (is.null(classes)) {
-				classes <- sort(unique(v))
-			} 
-			vv <- t( apply(matrix(v), 1, function(x) x == classes) )
-			if (falseNA) {
-				vv[!vv] <- NA
+				classes <- as.integer(sort(unique(v)))
+			} else {
+				classes <- as.integer(classes)
 			}
-		
 			if (length(classes) > 1) {
 				out <- brick(out, nl=length(classes))
 			}
 			names(out) <- classes
-			out <- setValues(out, vv*1)
+
+			if (doC) {
+				v <- .Call("layerize", v, as.integer(classes), as.integer(falseNA), PACKAGE='raster')
+				v <- matrix(v, ncol=length(classes))
+			} else {
+				v <- t( apply(matrix(v), 1, function(x) x == classes) )
+				if (falseNA) {
+					v[!v] <- NA
+				}
+			}
+# alternative approach (assuming sorted classes)
+# alternative approach (assuming sorted classes)
+#			vv <- cbind(1:length(v), as.integer(as.factor(v)))
+#			if (falseNA) {
+#				v <- matrix(NA, nrow=ncell(out), ncol=nlayers(out))
+#			} else {
+#				v <- matrix(0, nrow=ncell(out), ncol=nlayers(out))
+#			}
+#			v[vv] <- 1
+				
+			out <- setValues(out, v*1)
 			if (filename != '') {
 				out <- writeRaster(out, filename, ...)
 			}
 			return(out)
 		}
 		
-# to be done without calling calc.
+# else to disk		
 
 		if (is.null(classes)) {
-			classes <- round( sort(unique(x)), digits )
+			classes <- as.integer( sort(unique(x)) )
+		} else {
+			classes <- as.integer(classes) 
 		}
 		if (length(classes) > 1) {
 			out <- brick(x, nl=length(classes))
 		} 
-				
-		if (falseNA) {
-			lyrs <- calc(x, function(x) {
-					v <- round(x, digits) == classes
-					v[v==0] <- NA
-					v
-				}
-				, forceapply=TRUE, filename=filename, ...)
+		names(out) <- classes
+		out <- writeStart(out, filename=filename, ...)
+
+		tr <- blockSize(out)
+		pb <- pbCreate(tr$n, label='layerize', ...)
+
+		fNA <- as.integer(falseNA)
+		if (doC) {
+			for (i in 1:tr$n) {
+				v <- as.integer(getValues(x, tr$row[i], tr$nrows[i]))
+				v <- .Call("layerize", v, classes, fNA, PACKAGE='raster')
+				v <- matrix(v, ncol=length(classes))
+				out <- writeValues(out, v*1, tr$row[i])
+				pbStep(pb, i) 
+			}
 		} else {
-			lyrs <- calc(x, function(x) round(x, digits) == classes, forceapply=TRUE, filename=filename, ...)
+			for (i in 1:tr$n) {
+				v <- getValues(x, tr$row[i], tr$nrows[i]) 
+				v <- t( apply(matrix(v, ncol=1), 1, function(x) x == classes) )
+				if (falseNA) {
+					v[!v] <- NA
+				}
+				out <- writeValues(out, v*1, tr$row[i])
+				pbStep(pb, i) 
+			}
 		}
-		names(lyrs) <- as.character(classes)
-		return(lyrs)
+
+		pbClose(pb)
+		writeStop(out)	
 	}
 )
 
 
+
 setMethod('layerize', signature(x='RasterLayer', y='RasterLayer'), 
-function(x, y, classes=NULL, digits=0, filename='', ...) { 
+function(x, y, classes=NULL, filename='', ...) { 
 
 	resx <- res(x)
 	resy <- res(y)
@@ -79,7 +118,7 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 		b <- crop(x, int)
 		xy <- xyFromCell(b, 1:ncell(b))
 		mc <- cellFromXY(y, xy)
-		v <- table(mc, round(getValues(b), digits))
+		v <- table(mc, as.integer(getValues(b)))
 		cells <- as.integer(rownames(v))
 		m <- match(cells, 1:ncell(y))
 		cn <- as.integer(colnames(v))
@@ -100,7 +139,7 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 	#  else 
 
 	if (is.null(classes)) {
-		classes <- round( sort(unique(x)), digits )
+		classes <- as.integer( sort(unique(x)))
 	}	
 	
 	out  <- brick(y, values=FALSE, nl=length(classes))
@@ -118,7 +157,7 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 			b <- crop(x, int)
 			xy <- xyFromCell(b, 1:ncell(b))
 			mc <- cellFromXY(y, xy)
-			v <- table(mc, round(getValues(b), digits=digits))
+			v <- table(mc, as.integer(getValues(b)))
 			cells <- as.integer(rownames(v))
 			modcells <- cellFromRowCol(y, tr$row[i], 1) : cellFromRowCol(y, tr$row[i]+ tr$nrows[i]-1, ncol(y))
 			m <- match(cells, modcells)
@@ -135,6 +174,4 @@ function(x, y, classes=NULL, digits=0, filename='', ...) {
 	out	
 }
 )
-
-
 
