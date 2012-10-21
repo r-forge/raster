@@ -13,9 +13,36 @@ if (!isGeneric("layerize")) {
 setMethod('layerize', signature(x='RasterLayer', y='missing'), 
 	function(x, classes=NULL, digits=0, falseNA=FALSE, filename='', ...) {
 		
+		out <- raster(x)
+		if (canProcessInMemory(out)) {
+			v <- round(getValues(x), digits)
+			if (is.null(classes)) {
+				classes <- sort(unique(v))
+			} 
+			vv <- t( apply(matrix(v), 1, function(x) x == classes) )
+			if (falseNA) {
+				vv[!vv] <- NA
+			}
+		
+			if (length(classes) > 1) {
+				out <- brick(out, nl=length(classes))
+			}
+			names(out) <- classes
+			out <- setValues(out, vv*1)
+			if (filename != '') {
+				out <- writeRaster(out, filename, ...)
+			}
+			return(out)
+		}
+		
+# to be done without calling calc.
+
 		if (is.null(classes)) {
 			classes <- round( sort(unique(x)), digits )
 		}
+		if (length(classes) > 1) {
+			out <- brick(x, nl=length(classes))
+		} 
 				
 		if (falseNA) {
 			lyrs <- calc(x, function(x) {

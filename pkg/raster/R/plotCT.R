@@ -15,7 +15,11 @@
 		if (missing(axes)) {
 			axes <- FALSE
 		} 
-		if (!axes) par(plt=c(0,1,0,1))
+		if (!axes) {
+			old.par <- par(no.readonly = TRUE) 
+			on.exit(par(old.par))
+			par(plt=c(0,1,0,1))
+		}	
 		if (missing(asp)) {
 			if (.couldBeLonLat(x)) {
 				ym <- mean(c(x@extent@ymax, x@extent@ymin))
