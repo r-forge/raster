@@ -41,7 +41,12 @@
 		}
 	}
 	
+	w <- getOption('warn')
+	on.exit(options('warn' = w))
+	options('warn'=-1) 
 	gdalinfo <- try ( GDALinfo(filename, silent=silent, returnRAT=RAT, returnCategoryNames=RAT) )
+	options('warn'= w) 
+
 	if (class(gdalinfo) == 'try-error') {
 		gdalinfo <- GDALinfo(filename, silent=silent, returnRAT=FALSE, returnCategoryNames=FALSE)
 		warning('Could not read RAT or Category names')
@@ -249,8 +254,8 @@
 						next
 					} else {
 						j <- which(colnames(dr) == 'Histogram')
-						if (isTRUE(j>0)) {
-							dr <- data.frame(ID=0:(nrow(dr)-1), COUNT=dr[,j], dr[,-j])
+						if (isTRUE(j>0) & ncol(dr) > 1) {
+							dr <- data.frame(ID=0:(nrow(dr)-1), COUNT=dr[,j], dr[,-j,drop=FALSE])
 						} else {
 							dr <- data.frame(ID=0:(nrow(dr)-1), dr)
 						}
