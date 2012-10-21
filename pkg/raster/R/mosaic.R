@@ -99,7 +99,7 @@ function(x, y, ..., fun, tolerance=0.05, filename="") {
 	}
 
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, dotargs$progress)
+	pb <- pbCreate(tr$n, dotargs$progress, label='mosaic')
 
 	dotargs$x <- out
 	out <- do.call(writeStart, dotargs)

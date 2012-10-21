@@ -81,7 +81,7 @@ function(x, fact=NULL, method='', filename='', ...) {
 	
 		tr <- blockSize(x)
 		rown <- (tr$row-1) * yfact + 1
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='disaggregate', ...)
 		out <- writeStart(out, filename=filename, datatype=.commonDataType(dataType(x)), ...)
 		
 		cols <- rep(seq.int(ncx), each=xfact)

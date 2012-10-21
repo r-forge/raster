@@ -246,7 +246,7 @@
 	rv1 <- rep(NA, ncol(rstr))
 	lst1 <- vector(length=ncol(rstr), mode='list')
 	holes1 <- rep(FALSE, ncol(rstr))
-	pb <- pbCreate(nrow(rstr), ...)
+	pb <- pbCreate(nrow(rstr), label='rasterize', ...)
 
 	for (r in 1:nrow(rstr)) {
 		if (doFun) {
@@ -437,7 +437,7 @@
 		bigraster <- writeStart(bigraster, filename=filename, ...)
 	}
 	
-	pb <- pbCreate(nrow(bigraster), ...)
+	pb <- pbCreate(nrow(bigraster), label='rasterize', ...)
 	for (rr in 1:nrow(bigraster)) {
 		y <- yFromRow(bigraster, rr)
 		yn <- y - hr

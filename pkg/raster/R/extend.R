@@ -125,7 +125,7 @@ function(x, y, value=NA, filename='', ...) {
 		tr$nrows <- c(tr$row[-1], nrow(out)+1) - tr$row
 		tr$n <- length(tr$row)
 			
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='extend', ...)
 		out <- writeStart(out, filename=filename, datatype=datatype, ... )
 		for (i in 1:tr$n) {
 			d <- matrix(value, nrow=tr$nrows[i] * ncol(out), ncol=nlayers(out))

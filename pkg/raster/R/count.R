@@ -19,7 +19,7 @@
 			}
 		} else {
 			tr <- blockSize(x, n=2)
-			pb <- pbCreate(tr$n, progress=progress)
+			pb <- pbCreate(tr$n, label='count', progress=progress)
 			v <- 0
 			for (i in 1:tr$n) {
 				vv <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
@@ -47,7 +47,7 @@
 			return(x)
 		} else {
 			tr <- blockSize(x, n=2)
-			pb <- pbCreate(tr$n, progress=progress)
+			pb <- pbCreate(tr$n, label='count', progress=progress)
 			r <- 0
 			for (i in 1:tr$n) {
 				v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])

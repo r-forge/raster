@@ -68,7 +68,7 @@ setMethod('area', signature(x='RasterLayer'),
 		dx <- .haversine(0, y, xres(out), y)
 
 		tr <- blockSize(out)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='area', ...)
 
 			for (i in 1:tr$n) {
 				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
@@ -150,7 +150,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 			flush.console()		
 				
 			tr <- blockSize(out, minblocks=nodes)
-			pb <- pbCreate(tr$n, ...)
+			pb <- pbCreate(tr$n, label='area', ...)
 
 #			clFun <- function(i, tr, dx, dy, out, nl) {
 			clFun <- function(i) {
@@ -196,7 +196,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 		} else {
 
 			tr <- blockSize(out)
-			pb <- pbCreate(tr$n, ...)
+			pb <- pbCreate(tr$n, label='area', ...)
 		
 		#rows <- 1
 			for (i in 1:tr$n) {

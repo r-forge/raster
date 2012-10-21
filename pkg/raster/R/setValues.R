@@ -189,7 +189,7 @@ setMethod('setValues', signature(x='RasterBrick'),
 				} else {
 				
 					tr <- blockSize(x)
-					pb <- pbCreate(tr$n)
+					pb <- pbCreate(tr$n, label='setValues',)
 					r <- brick(x)
 					nc <- ncol(x)
 					if (bind) {

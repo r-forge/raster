@@ -67,7 +67,7 @@ function(x, filename='', directions=8, gaps=TRUE, ...) {
 	out <- writeStart(out, filename=rasterTmpFile(), datatype='INT4S')
 
 	tr <- blockSize(out, minrows=3)
-	pb <- pbCreate(tr$n, ...)
+	pb <- pbCreate(tr$n, label='clump', ...)
 	
 	ext <- c(xmin(out), xmax(out), ymax(out), NA)
 	maxval <- 0

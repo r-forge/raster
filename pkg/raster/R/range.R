@@ -46,7 +46,7 @@
 		
 		tr <- blockSize(x)
 		out <- writeStart(out, filename="")
-		pb <- pbCreate(tr$n)
+		pb <- pbCreate(tr$n, label='range',)
 		if (!is.null(add)) {
 			add <- range(add)
 			for (i in 1:tr$n) {

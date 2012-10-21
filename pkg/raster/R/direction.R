@@ -52,7 +52,7 @@ function(x, filename='', degrees=FALSE, from=FALSE, doEdge=FALSE, ...) {
 	
 	out <- writeStart(out, filename, ...)
 	tr <- blockSize(out)
-	pb <- pbCreate(tr$n, ...)
+	pb <- pbCreate(tr$n, label='direction', ...)
 	xy <- cbind(rep(xFromCol(out, 1:ncol(out)), tr$nrows[1]), NA)
 	for (i in 1:tr$n) {
 		if (i == tr$n) {

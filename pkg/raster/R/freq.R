@@ -25,7 +25,7 @@ setMethod('freq', signature(x='RasterLayer'),
 		} else {
 		
 			tr <- blockSize(x, n=2)
-			pb <- pbCreate(tr$n, progress=progress)	
+			pb <- pbCreate(tr$n, progress=progress, label='freq')	
 			z <- vector(length=0)
 			for (i in 1:tr$n) {
 				d <- round(getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]), digits=digits)
@@ -56,7 +56,7 @@ setMethod('freq', signature(x='RasterStackBrick'),
 		nl <- nlayers(x)
 		res <- list()
 		
-		pb <- pbCreate(nl, progress=progress)	
+		pb <- pbCreate(nl, progress=progress, label='freq')	
 		for (i in 1:nl) { 
 			res[[i]] <- freq( raster(x, i), useNA=useNA, progress='', ...) 
 			pbStep(pb, i)

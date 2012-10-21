@@ -67,7 +67,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 
 		out <- writeStart(out, filename=filename, ...)
 		tr <- blockSize(out)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='mask', ...)
 
 		if (inverse) {
 			for (i in 1:tr$n) {
@@ -130,7 +130,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		out <- writeStart(out, filename=filename, ...)
 
 		tr <- blockSize(out)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='mask', ...)
 
 		if (inverse) {
 			for (i in 1:tr$n) {
@@ -187,7 +187,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		if ( filename=='') { filename <- rasterTmpFile() }
 		out <- writeStart(out, filename=filename, ...)
 		tr <- blockSize(out)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='mask', ...)
 
 		if (inverse) {
 			for (i in 1:tr$n) {
@@ -260,7 +260,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 
 		out <- writeStart(out, filename=filename, ...)
 		tr <- blockSize(out)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='mask', ...)
 
 		if (inverse) {
 			for (i in 1:tr$n) {

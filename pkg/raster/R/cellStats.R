@@ -148,7 +148,7 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 
 			
 		tr <- blockSize(x)
-		pb <- pbCreate(tr$n)			
+		pb <- pbCreate(tr$n, label='cellStats', ...)
 		
 		for (i in 1:tr$n) {
 			d <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
@@ -322,7 +322,7 @@ setMethod('cellStats', signature(x='RasterLayer'),
 
 			
 		tr <- blockSize(x)
-		pb <- pbCreate(tr$n)			
+		pb <- pbCreate(tr$n, label='cellStats', ...)
 		
 		for (i in 1:tr$n) {
 			d <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])

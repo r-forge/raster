@@ -25,7 +25,7 @@ setMethod('zonal', signature(x='Raster', z='RasterLayer'),
 		}
 	
 		if (inmem) {
-			pb <- pbCreate(2, ...)		
+			pb <- pbCreate(2, label='zonal', ...)		
 			fun <- match.fun(stat)
 			x <- getValues(x)
 			x <- cbind(x, round(getValues(z), digits=digits))
@@ -55,7 +55,7 @@ setMethod('zonal', signature(x='Raster', z='RasterLayer'),
 			cnttab <- alltab
 	
 			tr <- blockSize(x, n=2)
-			pb <- pbCreate(tr$n, ...)
+			pb <- pbCreate(tr$n, label='zonal', ...)
 		
 			for (i in 1:tr$n) {
 				d <- cbind(getValues(x, row=tr$row[i], nrows=tr$nrows[i]),   

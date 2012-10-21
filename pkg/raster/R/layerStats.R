@@ -18,7 +18,7 @@ layerStats <- function(x, stat, w, asSample=TRUE, na.rm=FALSE, ...) {
 	mat <- matrix(NA, nrow=nl, ncol=nl)
 	colnames(mat) <- rownames(mat) <- names(x)
 
-	pb <- pbCreate(nl^2, ...)	
+	pb <- pbCreate(nl^2, label='layerStats', ...)	
 	
 	if (stat == 'weighted.cov') {
 		if (missing(w))	{

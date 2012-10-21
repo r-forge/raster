@@ -243,7 +243,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 		flush.console()
 		
 		tr <- blockSize(to, minblocks=nodes)
-		pb <- pbCreate(tr$n, ...)
+		pb <- pbCreate(tr$n, label='projectRaster', ...)
 
 		clusterExport(cl, c('tr', 'to', 'from', 'e', 'nl', 'projto_int', 'projfrom', 'method'), envir=environment())
 		

@@ -45,7 +45,7 @@ setMethod("Arith", signature(e1='Raster', e2='Raster'),
 		} else {
 		
 			tr <- blockSize(e1)
-			pb <- pbCreate(tr$n)			
+			pb <- pbCreate(tr$n, label='arith')
 			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
 			if (nl1 == nl2 ) {
 				for (i in 1:tr$n) {
@@ -88,7 +88,7 @@ setMethod("Arith", signature(e1='RasterLayer', e2='numeric'),
 			
 		} else {
 			tr <- blockSize(e1)
-			pb <- pbCreate(tr$n)			
+			pb <- pbCreate(tr$n, label='arith')			
 			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
 
 			if (length(e2) > 0) {
@@ -127,7 +127,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterLayer'),
 			
 		} else {
 			tr <- blockSize(e2)
-			pb <- pbCreate(tr$n)			
+			pb <- pbCreate(tr$n, label='arith')			
 			r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
 
 			if (length(e1) > 0) {
@@ -205,7 +205,7 @@ setMethod("Arith", signature(e1='RasterStackBrick', e2='numeric'),
 			
 			b <- brick(e1, values=FALSE)
 			tr <- blockSize(b)
-			pb <- pbCreate(tr$n)
+			pb <- pbCreate(tr$n, label='arith')
 			b <- writeStart(b, filename=rasterTmpFile(), bandorder='BIL')
 			for (i in 1:tr$n) {
 				v <- t (callGeneric( t(getValues(e1, row=tr$row[i], nrows=tr$nrows[i])), e2) )
@@ -225,7 +225,7 @@ setMethod("Arith", signature(e1='RasterStackBrick', e2='numeric'),
 		} else {
 			b <- brick(e1, values=FALSE)
 			tr <- blockSize(b)
-			pb <- pbCreate(tr$n)
+			pb <- pbCreate(tr$n, label='arith')
 			b <- writeStart(b, filename=rasterTmpFile())
 			for (i in 1:tr$n) {
 				v <- callGeneric( getValues(e1, row=tr$row[i], nrows=tr$nrows[i]), e2)
@@ -259,7 +259,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterStackBrick'),
 			
 			b <- brick(e2, values=FALSE)
 			tr <- blockSize(b)
-			pb <- pbCreate(tr$n)
+			pb <- pbCreate(tr$n, label='arith')
 			b <- writeStart(b, filename=rasterTmpFile())
 			for (i in 1:tr$n) {
 				v <- t (callGeneric( e1, t(getValues(e2, row=tr$row[i], nrows=tr$nrows[i]))) )
@@ -280,7 +280,7 @@ setMethod("Arith", signature(e1='numeric', e2='RasterStackBrick'),
 			
 			b <- brick(e2, values=FALSE)
 			tr <- blockSize(b)
-			pb <- pbCreate(tr$n)
+			pb <- pbCreate(tr$n, label='arith')
 			b <- writeStart(b, filename=rasterTmpFile())
 			for (i in 1:tr$n) {
 				v <- callGeneric( e1, getValues(e2, row=tr$row[i], nrows=tr$nrows[i]))

@@ -22,7 +22,7 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 	}
 	
 	tr$row2 <- tr$row + tr$nrows - 1
-	pb <- pbCreate(tr$n, ...)
+	pb <- pbCreate(tr$n, label='clusterR', ...)
 
 	
 	if (!is.null(args)) {
@@ -126,7 +126,7 @@ clusterR <- function(x, fun, args=NULL, filename='', cl=NULL, m=2, ...) {
 	nodes <- min(nodes, tr$n-1)
 	
 	tr$row2 <- tr$row + tr$nrows - 1
-	pb <- pbCreate(tr$n, ...)
+	pb <- pbCreate(tr$n, label='clusterR', ...)
 
 	canPiM <- canProcessInMemory(x)
 	

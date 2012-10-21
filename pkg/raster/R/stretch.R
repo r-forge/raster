@@ -53,7 +53,7 @@
 			out <- setValues(out, x)
 		} else {
 			tr <- blockSize(out)
-			pb <- pbCreate(tr$n, ...)		
+			pb <- pbCreate(tr$n, label='stretch', ...)		
 			out <- writeStart(out, filename, ...)
 			mult <- maxv / (q[2]-q[1])
 			for (i in 1:tr$n) {
@@ -77,7 +77,7 @@
 			out <- setValues(out, x)
 		} else {
 			tr <- blockSize(out)
-			pb <- pbCreate(tr$n, ...)		
+			pb <- pbCreate(tr$n, label='stretch', ...)		
 			out <- writeStart(out, filename, ...)
 			for (i in 1:tr$n) {
 				v <- getValues(x, tr$row[i], tr$nrows[i])
