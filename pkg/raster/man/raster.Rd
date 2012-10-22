@@ -80,7 +80,7 @@ If \code{x} represents a filename, the following additional variables are recogn
 
 \code{native}: logical.  Default is \code{FALSE} except when package \code{rgdal} is missing. If \code{TRUE}, reading and writing of IDRISI, BIL, BSQ, BIP, SAGA, and Arc ASCII files is done with native (raster package) drivers, rather then via rgdal. 'raster' and netcdf format files are always read with native drivers. 
 
-\code{RAT}{logical. The default is \code{TRUE}, in which case a raster attribute table is created for files that have one}
+\code{RAT}: logical. The default is \code{TRUE}, in which case a raster attribute table is created for files that have one
 
 \code{offset}: integer. To indicate the number of header rows on non-standard ascii files (rarely useful; use with caution)
 

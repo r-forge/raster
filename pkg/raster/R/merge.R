@@ -63,7 +63,7 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 	dotargs$filename <- filename
 	
 	nl <- max(unique(sapply(x, nlayers)))
-	bb <- .unionExtent(x)
+	bb <- raster:::.unionExtent(x)
 	if (nl > 1) {
 		out <- brick(x[[1]], values=FALSE, nl=nl)
 	} else {
@@ -117,7 +117,8 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 						xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) ) 
 						if (xy1[2] > ymin(out) & xy2[2] < ymax(out) & xy1[1] < xmax(out) & xy2[1] > xmin(out)) {		
 							cells <- cellsFromExtent( out, extent(x[[i]]) )
-							d <- extract(x[[i]], cells)
+							xy <- xyFromCell(out, cells)
+							d <- extract(x[[i]], xy)
 							j <- !is.na(d)
 							v[cells[j]] <- d[j]
 						}

@@ -212,7 +212,11 @@ setMethod('raster', signature(x='RasterBrick'),
 			dindex <- as.integer(max(1, min(nlayers(x), layer)))
 			
 			if ( fromDisk(x) ) {
+			
 				if (dindex != layer) { warning(paste("layer was changed to", dindex))}
+				
+				# better raster(filename(x), band=dindex)  ?
+				# with zvar for ncdf files?
 				
 				r <- raster(extent(x), nrows=nrow(x), ncols=ncol(x), crs=projection(x))	
 				r@file <- x@file
@@ -222,8 +226,8 @@ setMethod('raster', signature(x='RasterBrick'),
 				
 				r@data@offset <- x@data@offset
 				r@data@gain <- x@data@gain
-				r@data@inmemory <- x@data@inmemory
-				r@data@fromdisk <- x@data@fromdisk
+				r@data@inmemory <- FALSE
+				r@data@fromdisk <- TRUE
 				r@data@haveminmax <- x@data@haveminmax
 
 				r@data@band <- dindex
@@ -234,9 +238,6 @@ setMethod('raster', signature(x='RasterBrick'),
 				zv <- unlist(x@z[1])[dindex]
 				if (! is.null(zv) ) { 
 					r@z <- list(zv)
-				}
-				if ( x@data@inmemory ) {
-					r@data@values <- x@data@values[,dindex]
 				}
 				
 				# ncdf files
@@ -257,10 +258,10 @@ setMethod('raster', signature(x='RasterBrick'),
 				if ( inMemory(x) ) {
 					if ( dindex != layer ) { warning(paste("layer was changed to", dindex)) }
 					r <- setValues(r, x@data@values[,dindex])
-					r@data@names <- names(x)[dindex]
+					r@data@names <- names(x)[dindex]	
 				}
 			}
-			isf <- is.factor(r)[dindex]
+			isf <- is.factor(x)[dindex]
 			if (isTRUE(isf)) {
 				r@data@isfactor <- TRUE
 				r@data@attributes <- levels(x)[[dindex]]

@@ -24,7 +24,7 @@
 }
 
 
-.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster') {
+.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster', RAT=TRUE) {
 
 	valuesfile <- .setFileExtensionValues(filename, driver)
 	if (!file.exists( valuesfile )){
@@ -129,9 +129,11 @@
 		x@data@band <- as.integer(band)
 		x@data@min <- minval[band]
 		x@data@max <- maxval[band]
-		if (isTRUE(isCat[band])) {
+		if (RAT) {
+			if (isTRUE(isCat[band])) {
 		# currently only for a single layer!
-			try( x <- .getRat(ratvalues, ratnames, rattypes) )
+				try( x <- .getRat(ratvalues, ratnames, rattypes) )
+			}
 		}
 	}
 

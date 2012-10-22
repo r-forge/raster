@@ -104,6 +104,11 @@ function(x, subset, drop=TRUE, filename='', ...) {
 			x@z[[1]] <- x@z[[1]][subset]
 		}
 		x@data@nlayers <- as.integer(length(subset))
+		f <- is.factor(x)
+		if (any(f)) {
+			f@data@attributes <- f@data@attributes[subset]
+			f@data@isfactor <- f@data@isfactor[subset]
+		}
 	}
 	if (filename != '') {
 		x <- writeRaster(x, filename, ...)

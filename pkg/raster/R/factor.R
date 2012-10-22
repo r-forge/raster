@@ -91,7 +91,7 @@ setMethod('levels', signature(x='Raster'),
 		f <- is.factor(x)
 		if (any(f)) {
 			if (inherits(x, 'RasterStack')) {
-				return( lapply(x@layers, function(i) i@data@attributes)  )
+				return( sapply(x@layers, function(i) i@data@attributes)  )
 			} else {
 				return(x@data@attributes)
 			}
@@ -158,14 +158,15 @@ setMethod('levels<-', signature(x='Raster'),
 			return(x)
 		} 
 		
-		i <- sapply(value, is.null)
-		if (! all(i)) {
+		i <- ! sapply(value, is.null)
+		if ( any(i) ) {
 			stopifnot (length(value) == nlayers(x))
 			levs <- levels(x)
-			for (j in which(!i)) {
-				value[j] <- .checkLevels(levs[[j]], value[[j]])				
+			for (j in which(i)) {
+				value[[j]] <- .checkLevels(levs[[j]], value[[j]])
 			}
 			x@data@attributes <- value
+			x@data@isfactor <- i
 		} else {
 			x@data@attributes <- list()		
 		}
