@@ -223,12 +223,15 @@
 			atts <- ncdf4::ncatt_get(nc, gridmap)
 			try(crs <- .getCRSfromGridMap4(atts), silent=TRUE)
 		} else {
-			a <- ncdf4::ncatt_get(nc, zvar, "projection")
-			if ( a$hasatt ) { projection  <- a$value }
 			a <- ncdf4::ncatt_get(nc, zvar, "projection_format")
-			if ( a$hasatt ) { projection_format  <- a$value }
-			if (isTRUE(projection_format == "PROJ.4")) {
-				crs <- projection
+			if ( a$hasatt ) { 
+				projection_format  <- a$value 
+				if (isTRUE(projection_format == "PROJ.4")) {
+					a <- ncdf4::ncatt_get(nc, zvar, "projection")
+					if ( a$hasatt ) { 
+						crs <- a$value 
+					}
+				}
 			}
 		}
 		natest <- ncdf4::ncatt_get(nc, zvar, "_FillValue")
