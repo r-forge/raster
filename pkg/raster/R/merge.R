@@ -117,13 +117,12 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 						xy2 <- xyFromCell(x[[i]], ncell(x[[i]]) ) 
 						if (xy1[2] > ymin(out) & xy2[2] < ymax(out) & xy1[1] < xmax(out) & xy2[1] > xmin(out)) {		
 							cells <- cellsFromExtent( out, extent(x[[i]]) )
-							d <- extract(x[[i]])
+							d <- extract(x[[i]], cells)
 							j <- !is.na(d)
 							v[cells[j]] <- d[j]
 						}
 					}
 				}
-				rm(vv)
 				out <- setValues(out, v)
 				if (filename != '') {
 					dotargs$x <- out
