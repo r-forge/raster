@@ -41,7 +41,7 @@ clusterR(x, fun, args=NULL, filename='', cl=NULL, m=2, ...)
 \item{filename}{character. Output filename (optional)}
 \item{cl}{cluster object (do not use it if beginCluster() has been called}
 \item{m}{tuning parameter to determine how many blocks should be used. The number is rounded and multiplied with the number of nodes.}
-\item{...}{additional arguments for writing Raster objects to disk}
+\item{...}{additional arguments as for \code{\link{writeRaster}}}
 }
 
 \note{
@@ -75,6 +75,15 @@ z <- clusterR(s, f2)
 pts <- matrix(c(0,0, 45,45), ncol=2, byrow=T)
 d <- clusterR(r, distanceFromPoints, args=list(xy=pts))
 
+values(r) <- runif(ncell(r))
+m <- c(0, 0.25, 1,  0.25, 0.5, 2,  0.5, 1, 3)
+m <- matrix(m, ncol=3, byrow=TRUE)
+rc1 <- clusterR(r, reclassify, args=list(rcl=m, right=FALSE), 
+               filename='rcltest.grd', datatype='INT2S', overwrite=TRUE)
+
+# equivalent to:
+rc2 <- reclassify(r, rcl=m, right=FALSE, filename='rcltest.grd', datatype='INT2S', overwrite=TRUE)
+			   
 endCluster()
 }
 }

@@ -4,6 +4,7 @@ if (!isGeneric("interpolate")) {
 		standardGeneric("interpolate"))
 }	
 
+# to do: should allow index to be a vector
 
 setMethod('interpolate', signature(object='Raster'), 
 	
@@ -11,6 +12,7 @@ setMethod('interpolate', signature(object='Raster'),
 		
 		predrast <- raster(object)
 		filename <- trim(filename)
+		ln <- NULL
 				
 		if (!is.null(ext)) {
 			predrast <- crop(predrast, extent(ext))
@@ -125,6 +127,7 @@ setMethod('interpolate', signature(object='Raster'),
 				}
 				if (i == 1) { 
 					predv <- predict(model, blockvals, debug.level=debug.level, ...) 
+					ln <- names(predv)[index]
 				} else { 
 					predv <- predict(model, blockvals, debug.level=0, ...) 
 				}
@@ -179,6 +182,10 @@ setMethod('interpolate', signature(object='Raster'),
 			pbStep(pb, i) 
 		}
 		pbClose(pb)
+
+		if (gstatmod) { 
+			names(out) <- ln
+		}
 		
 		if (filename == '') {
 			predrast <- setValues(predrast, as.numeric(v))  # or as.vector
