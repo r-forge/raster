@@ -184,7 +184,7 @@ setMethod('interpolate', signature(object='Raster'),
 		pbClose(pb)
 
 		if (gstatmod) { 
-			names(out) <- ln
+			names(predrast) <- ln
 		}
 		
 		if (filename == '') {
