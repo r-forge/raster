@@ -70,7 +70,11 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 		out <- raster(x[[1]])
 	}
 	out <- setExtent(out, bb, keepres=TRUE, snap=FALSE)
-	
+
+	hasV <- sapply(x, hasValues)
+	if (!any(hasV)) {
+		return(out)
+	}
 
 	if (!is.null(ext)) {
 		ext <- extent(ext)
@@ -86,7 +90,8 @@ function(x, y, ..., tolerance=0.05, filename="", overlap=TRUE, ext=NULL) {
 	}
 			
 
-
+	
+			
 	if ( canProcessInMemory(out, 3) ) {
 	
 		if (!is.null(ext)) {
