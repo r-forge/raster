@@ -83,7 +83,7 @@ OK <- interpolate(r, gOK)
 vu <- variogram(log(zinc)~elev, meuse)
 mu <- fit.variogram(vu, vgm(1, "Sph", 300, 1))
 gUK <- gstat(NULL, "log.zinc", log(zinc)~elev, meuse, model=mu)
-names(r) = 'elev'
+names(r) <- 'elev'
 UK <- interpolate(r, gUK, xyOnly=FALSE)
 
 ## co-kriging
