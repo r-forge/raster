@@ -251,9 +251,11 @@
 			a <- att.get.ncdf(nc, zvar, "projection")
 			if ( a$hasatt ) { projection  <- a$value }
 			a <- att.get.ncdf(nc, zvar, "projection_format")
-			if ( a$hasatt ) { projection_format  <- a$value }
-			if (isTRUE(projection_format == "PROJ.4")) {
-				crs <- projection
+			if ( a$hasatt ) { 
+				projection_format  <- a$value 
+				if (isTRUE(projection_format == "PROJ.4")) {
+					crs <- projection
+				}
 			}
 		}
 		natest <- att.get.ncdf(nc, zvar, "_FillValue")
