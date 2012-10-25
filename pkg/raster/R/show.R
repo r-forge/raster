@@ -80,11 +80,8 @@ setMethod ('show' , 'RasterLayer',
 				r <- data.frame(r)
 				r <- data.frame(x=c('min :','max :'), r)
 				a <- colnames(x)
-				n <- nchar(a)
-				b <- n > 26
-				if (any(b)) {
-					a[b] <- paste(substr(a[b], 1, 9), '//', substr(a[b], n[b]-9, n[b]), sep='')
-				}
+			
+				
 				colnames(r) <- c('    fields :', a)
 				rownames(r) <- NULL
 				if (nc > maxnl) {
@@ -163,9 +160,12 @@ setMethod ('show' , 'RasterBrick',
 				
 				
 				n <- nchar(ln)
-				b <- n > 26
-				if (any(b)) {
-					ln[b] <- paste(substr(ln[b], 1, 9), '//', substr(ln[b], nchar(ln[b])-9, nchar(ln[b])), sep='')
+				if (nl > 5) {
+					b <- n > 26
+					if (any(b)) {
+						mid <- floor(n/2)
+						ln[b] <- paste(substr(ln[b], 1, 9), '//', substr(ln[b], nchar(ln[b])-9, nchar(ln[b])), sep='')
+					}
 				}
 				
 				w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
@@ -238,9 +238,11 @@ setMethod ('show' , 'RasterStack',
 				ln <- c(ln[1:mnr], '...')
 			}
 			n <- nchar(ln)
-			b <- n > 26
-			if (any(b)) {
-				ln[b] <- paste(substr(ln[b], 1, 9), '//', substr(ln[b], nchar(ln[b])-9, nchar(ln[b])), sep='')
+			if (nl > 5) {
+				b <- n > 26
+				if (any(b)) {
+					ln[b] <- paste(substr(ln[b], 1, 9), '//', substr(ln[b], nchar(ln[b])-9, nchar(ln[b])), sep='')
+				}
 			}
 			
 			
