@@ -42,7 +42,8 @@ function(x, filename, format, ...) {
 		r <- raster(x)
 		tr <- blockSize(r)
 		pb <- pbCreate(tr$n, ...)			
-		r <- writeStart(r, filename=filename, format=filetype, ...)
+		# use x to keep layer names
+		r <- writeStart(x, filename=filename, format=filetype, ...)
 		for (i in 1:tr$n) {
 			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 			r <- writeValues(r, v, tr$row[i])
