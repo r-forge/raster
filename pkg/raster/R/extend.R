@@ -5,26 +5,6 @@
 # version 1.0
 
 
-if (!isGeneric("expand")) {
-	setGeneric("expand", function(x, y, ...)
-		standardGeneric("expand"))
-}	
-
-
-setMethod('expand', signature(x='Extent'), 
-function(x, y, ...) {
-	warning("function 'expand' is obsolete. It has been replaced by 'extend'")
-	extend(x, y, ...)
-}
-)
-
-
-setMethod('expand', signature(x='Raster'), 
-function(x, y, value=NA, filename='', ...) {
-	warning("function 'expand' is obsolete. It has been replaced by 'extend'")
-	extend(x, y, value=value, filename=filename, ...)
-} )
-
 
 if (!isGeneric("extend")) {
 	setGeneric("extend", function(x, y, ...)

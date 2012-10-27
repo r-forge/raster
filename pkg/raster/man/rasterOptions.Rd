@@ -18,7 +18,7 @@ To permanently set any of these options, you can add them to \code{<your R insta
 \usage{
 rasterOptions(format, overwrite, datatype, tmpdir, tmptime, progress, 
      timer, chunksize, maxmemory, todisk, setfileext, tolerance, 
-     standardnames, default=FALSE, save=FALSE)		
+     standardnames, depracatedwarnings, default=FALSE, save=FALSE)		
 }
 
 
@@ -36,6 +36,7 @@ rasterOptions(format, overwrite, datatype, tmpdir, tmptime, progress,
 \item{setfileext}{logical. Default is \code{TRUE}. If \code{TRUE}, the file extension will be changed when writing (if known for the file type). E.g. GTiff files will be saved with the .tif extension }
 \item{tolerance}{numeric. The tolerance used when comparing the origin and resolution of Raster* objects. Expressed as the fraction of a single cell. This should be a number between 0 and 0.5 }
 \item{standardnames}{logical. Default is \code{TRUE}. Should \code{\link{names}} be standardized to be syntactically valid names (using \code{\link{make.names}})}
+\item{depracatedwarnings}{logical. If \code{TRUE} (the default) a warning is generated when a depracated (obsolete) function is used}
 
 \item{default}{logical. If \code{TRUE}, all options are set to their default values}
 \item{save}{logical. If \code{TRUE}, an attempt is made to save the current options (with the exception of the 'todisk' option) to the \code{/etc/Rprofile.site} file to make them persistent (they will be set when starting a new R session)}

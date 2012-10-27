@@ -4,7 +4,9 @@
 # Licence GPL v3
 
 
-rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress, timer, chunksize, maxmemory, todisk, setfileext, tolerance, standardnames, default=FALSE, save=FALSE) {
+rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress, timer, chunksize, maxmemory, todisk, setfileext, tolerance, standardnames, depracatedwarnings, default=FALSE, save=FALSE) {
+	
+	
 	
 	setFiletype <- function(format) {
 		if (.isSupportedFormat(format)) {	
@@ -123,6 +125,15 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		}
 	}
 		
+	depracatedWarnings <- function(x) {
+		if (is.logical(x)) {
+			if (is.na(x)) {
+				x <- TRUE
+			}
+			options(rasterDepracatedWarnings = x)
+		}
+	}
+	
 	cnt <- 0
 	if (default) {
 		cnt <- 1
@@ -139,6 +150,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		options(rasterMaxMemory = 10000000)
 		options(rasterTolerance = 0.1)
 		options(rasterStandardNames = TRUE)
+		options(rasterDepracatedWarnings = TRUE)
 	}
 
 	
@@ -155,6 +167,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 	if (!missing(chunksize)) { setChunksize(chunksize); cnt <- cnt+1 }
 	if (!missing(tolerance)) { setTolerance(tolerance); cnt <- cnt+1 }
 	if (!missing(standardnames)) { setStandardNames(standardnames); cnt <- cnt+1 }
+	if (!missing(depracatedwarnings)) { depracatedWarnings(depracatedwarnings); cnt <- cnt+1 }
 
 
 	lst <- list(
@@ -170,7 +183,8 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		todisk=.toDisk(),
 		setfileext=.setfileext(),
 		tolerance=.tolerance(),
-		standardnames=.standardnames()
+		standardnames=.standardnames(),
+		depwarning=.depracatedwarnings()
 	)
 	
 	if (save) {
@@ -203,6 +217,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		oplst <- c(oplst, paste("options(rasterSetFileExt=", lst$setfileext, ')', sep=''))
 		oplst <- c(oplst, paste("options(rasterTolerance=", lst$tolerance, ')', sep=''))
 		oplst <- c(oplst, paste("options(rasterStandardNames=", lst$standardnames, ')', sep=''))
+		oplst <- c(oplst, paste("options(rasterDepracatedWarnings=", lst$depwarning, ')', sep=''))
 		
 		r <- try( write(unlist(oplst), fn), silent = TRUE )
 		if (class(r) == "try-error") { 
@@ -212,18 +227,19 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 	
 	
 	if (cnt == 0) {
-		cat('format       :', lst$format, '\n' )
-		cat('datatype     :', lst$datatype, '\n')
-		cat('overwrite    :', lst$overwrite, '\n')
-		cat('progress     :', lst$progress, '\n')
-		cat('timer        :', lst$timer, '\n')
-		cat('chunksize    :', lst$chunksize, '\n')
-		cat('maxmemory    :', lst$maxmemory, '\n')
-		cat('tmpdir       :', lst$tmpdir, '\n')
-		cat('tmptime      :', lst$tmptime, '\n')
-		cat('setfileext   :', lst$setfileext, '\n')
-		cat('tolerance    :', lst$tolerance, '\n')
-		cat('standardnames:', lst$standardnames, '\n')
+		cat('format        :', lst$format, '\n' )
+		cat('datatype      :', lst$datatype, '\n')
+		cat('overwrite     :', lst$overwrite, '\n')
+		cat('progress      :', lst$progress, '\n')
+		cat('timer         :', lst$timer, '\n')
+		cat('chunksize     :', lst$chunksize, '\n')
+		cat('maxmemory     :', lst$maxmemory, '\n')
+		cat('tmpdir        :', lst$tmpdir, '\n')
+		cat('tmptime       :', lst$tmptime, '\n')
+		cat('setfileext    :', lst$setfileext, '\n')
+		cat('tolerance     :', lst$tolerance, '\n')
+		cat('standardnames :', lst$standardnames, '\n')
+		cat('warn depracat.:', lst$depwarning, '\n')
 		if (lst$todisk) {
 		   cat('todisk       : TRUE\n')
 		}
@@ -233,8 +249,17 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 }
 
 
+.depracatedwarnings <- function() {
+	d <- getOption('rasterDepracatedWarnings')
+	if (is.null(d)) {
+		return( TRUE )
+	} 
+	return(as.logical(d))
+}
 
-.dataloc <- function(){
+
+
+.dataloc <- function() {
 	d <- getOption('rasterDataDir')
 	if (is.null(d) ) {
 		d <- getwd()

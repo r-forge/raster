@@ -12,7 +12,9 @@
 
 adjacency <- function(x, fromCells, toCells, directions) {
 
-	# warning('This function is obsolete. Use "adjacent" in stead')
+	#if (.depracatedwarnings()) {
+	#	 warning('This function is obsolete. Use "adjacent" in stead')
+	#}
 	if (is.character(directions)) { directions <- tolower(directions) }
 	stopifnot(directions %in% c(4,8,16) | directions=='bishop')
 
