@@ -189,7 +189,7 @@
 	}
 	
 	npol <- length(p@polygons)
-	pvals <- .getPutVals(p, field, npol, mask)
+	pvals <- raster:::.getPutVals(p, field, npol, mask)
 	putvals <- pvals[,1]
 	if (ncol(pvals) > 1) {
 		rstr@data@isfactor <- TRUE
@@ -231,7 +231,7 @@
 		
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(rstr)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(rstr)
-	if (getCover) { return (.polygoncover(rstr, filename, polinfo, lxmin, lxmax, pollist, ...)) }
+	if (getCover) { return (raster:::.polygoncover(rstr, filename, polinfo, lxmin, lxmax, pollist, ...)) }
 
 	adj <- 0.5 * xres(rstr)
 
@@ -398,6 +398,7 @@
 		if (filename == "") {
 			v[,r] <- rrv
 		} else {
+#			print(rrv)
 			rstr <- writeValues(rstr, rrv, r)
 		}
 		pbStep(pb, r)
@@ -547,7 +548,7 @@
 	}
 
 	if (class(p) == 'SpatialPolygons' | field == 0) {
-		putvals <- as.integer(1:length(p@polygons))
+		putvals <- 1:length(p@polygons)
 	} else {
 		putvals <- as.vector(p@data[,field])
 		if (class(putvals) == 'character') {

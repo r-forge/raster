@@ -15,7 +15,7 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 
 		v[is.infinite(v)] <- NA
 		if (is.logical(v)) {
-			v[] <- as.integer(v)
+			v <- as.integer(v)
 		}
 		
 		rsd <- na.omit(v) # min and max values
@@ -59,12 +59,15 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			} else if ( x@file@dtype =='LOG' ) {
 				v[v != 1] <- 0
 				v <- as.integer(v)  
-				v[is.na(v)] <- as.integer(x@file@nodatavalue)		
-			} else if (!is.numeric(v)) { 
+				v[is.na(v)] <- as.integer(x@file@nodatavalue)
+				
+			} else { #if (!is.numeric(v)) { 
+				# v may be integers, while the filetype is FLT
 				v  <- as.numeric( v ) 
 			}
 			start <- (start-1) * x@ncols * x@file@dsize
-			seek(x@file@con, start, rw='w')			
+			seek(x@file@con, start, rw='w')	
+#			print(v)
 			writeBin(v, x@file@con, size=x@file@dsize )
 			
 		} else if ( driver == 'netcdf') {
@@ -91,7 +94,7 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			options(scipen=opsci)
 			
 		} else {
-			stop('huh? Was writeStart used?')
+			stop('was writeStart used?')
 		}
 		return(x)
 	} 		
@@ -103,6 +106,9 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 	function(x, v, start) {
 	
 		v[is.infinite(v)] <- NA
+		if (is.logical(v)) {
+			v[] <- as.integer(v)
+		}
 
 		w <- getOption('warn')
 		options('warn'=-1) 
@@ -127,9 +133,8 @@ setMethod('writeValues', signature(x='RasterBrick', v='matrix'),
 				dm <- dim(v)
 				v <- as.integer(round(v))  
 				dim(v) <- dm
-			} else if (!is.numeric(v)) { 
-			# for logical values
-				v[]  <- as.numeric( v ) 
+			} else { # if (!is.numeric(v)) { 
+				v[] <- as.numeric( v ) 
 			}
 
 		

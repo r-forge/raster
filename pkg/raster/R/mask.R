@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : November 2009
 # Version 0.9
 # Licence GPL v3
@@ -14,13 +14,13 @@ setMethod('mask', signature(x='Raster', mask='Spatial'),
 function(x, mask, filename="", inverse=FALSE, ...){ 
 	
 	if (inverse) {
-		mask <- rasterize(mask, x, -1)
+		mask <- rasterize(mask, x, 1)
 		mask(x, mask, filename=filename, inverse=TRUE, ...)
 	
 	} else {
 	
 		if (nlayers(x) > 1) {
-			mask <- rasterize(mask, x, -1)
+			mask <- rasterize(mask, x, 1)
 			mask(x, mask, filename=filename, ...)
 		} else {
 			rasterize(mask, x, filename=filename, mask=TRUE, ...)
@@ -102,8 +102,7 @@ function(x, mask, filename="", inverse=FALSE, ...){
 	compareRaster(x, mask)
 	
 	out <- brick(x, values=FALSE)
-	ln <- names(x)
-	names(out) <- ln
+	names(out) <- ln <- names(x)
 	
 	if (canProcessInMemory(x, nlayers(x)+4)) {
 
@@ -117,7 +116,6 @@ function(x, mask, filename="", inverse=FALSE, ...){
 		if (filename != '') {
 			out <- writeRaster(out, filename, ...)
 		} 
-		names(out) <- ln
 		return(out)
 		
 	} else {
