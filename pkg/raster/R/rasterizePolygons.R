@@ -115,11 +115,11 @@
 	maxy <- max(line[,2])
 	xyxy <- cbind(poly, rbind(poly[-1,], poly[1,]))
     xyxy <- subset(xyxy, !( (xyxy[,2] > maxy & xyxy[,4] > maxy ) | (xyxy[,2] < miny & xyxy[,4] < miny)) )
-	if (length(xyxy) < 1) { 
+	if (nrow(xyxy) == 0) { 
 		return(resxy) 
 	}
-	for (i in 1:length(xyxy[,1])) {
-		xy <- .intersectSegments(xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4], line[1,1], line[1,2], line[2,1], line[2,2] )
+	for (i in 1:nrow(xyxy)) {
+		xy <- raster:::.intersectSegments(xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4], line[1,1], line[1,2], line[2,1], line[2,2] )
 		if (!is.na(xy[1])) {
 			resxy <- rbind(resxy, xy)
 		}
@@ -129,7 +129,24 @@
 
 
 
+
+
 .polygonsToRaster <- function(p, rstr, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", getCover=FALSE, filename="", silent=FALSE, ...) {
+
+	leftColFromX <- function ( object, x )	{
+		colnr <- (x - xmin(object)) / xres(object)
+		i <- colnr %% 1 == 0
+		colnr[!i] <- trunc(colnr[!i]) + 1 
+		colnr[colnr==0] <- 1
+		colnr
+	}
+
+
+	rightColFromX <- function ( object, x )	{
+		colnr <- trunc((x - xmin(object)) / xres(object)) + 1 
+		colnr[ x == xmax(object) ] <- object@ncols
+		colnr
+	}
 
 		
 	if (! inherits(p, 'SpatialPolygons') ) {
@@ -303,8 +320,8 @@
 							if (x2a < rxmn) { next }
 							x1a <- min(rxmx, max(rxmn, x1a))
 							x2a <- min(rxmx, max(rxmn, x2a))
-							col1 <- colFromX(rstr, x1a)
-							col2 <- colFromX(rstr, x2a)
+							col1 <- leftColFromX(rstr, x1a)
+							col2 <- rightColFromX(rstr, x2a)
 							if (col1 > col2) { next }
 							if ( subpol[i, 5] == 1 ) {
 								holes[col1:col2] <- TRUE

@@ -2,6 +2,7 @@
 focal for multi-layer objects
 support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
+move rasterize/(lines, polygons) to C
 
 --- development version
 new function 'select' for selecting spatial subsets by drawing on plot (map)
@@ -17,6 +18,7 @@ incorporated function 'count' into 'freq' (via the 'value' argument) and 'count'
 new argument 'alignOnly' to projectRaster
 new option 'setStatistics=FALSE' for writing to some GDAL files (geoTiff in particular) to suppress writing band statistics (min, max, mean, sd). This is currently not documented. When TRUE, all statistics are written when all the values are in memory, but only min and max are written in other cases, leading to problems in QGIS (reported by Agustin Lobo)
 Added argument "gridded=TRUE" for plot(RasterLayer, RasterLayer), to show counts for intervals (suggested by Agustin Lobo)
+improvement to rasterize with polygons. Polygons that cross a cell vertically and through the center are now inside (they were at the right side of a polygon, but not at the left side of a polygon). Reported by Jon Olav Skoien
 Fixed bug in sampleRandom with "rowcol=TRUE" (reported by Agustin Lobo)
 Fixed bug with RAT tables in native format (reported by Joseph Steward)
 Fixed corner case bug with extract/polygons df=TRUE (reported by Jon Olav Skoien)
