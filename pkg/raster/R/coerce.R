@@ -212,7 +212,7 @@ setAs('STFDF', 'RasterBrick',
 		b <- brick(r, nl=length(time) * nc)
 		b <- setZ(b, rep(time, nc)) # rep changes some time formats
 		names(b) <- paste(rep(colnames(from@data), each=length(time)), as.character(time), sep='')
-		# need to imprive this for character, factor variables
+		# need to improve this for character, factor variables
 		m <- as.numeric(as.matrix(from@data))
 		setValues(b, m)
 	}
