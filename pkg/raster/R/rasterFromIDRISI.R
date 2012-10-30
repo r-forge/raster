@@ -59,7 +59,6 @@
 	x@data@min <- minval
 	x@data@max <- maxval
 	x@data@haveminmax <- TRUE
-	x@file@nodatavalue <- nodataval
 
 	if (inidatatype == 'BYTE') {
 		dataType(x) <- 'INT1U'
@@ -71,6 +70,7 @@
 		stop(paste('unsupported IDRISI data type:', inidatatype))
 	}
 	
+	x@file@nodatavalue <- nodataval
 	x@data@fromdisk <- TRUE
 
 	x@file@driver <- 'IDRISI'

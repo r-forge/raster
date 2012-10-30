@@ -64,7 +64,11 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			} else { #if (!is.numeric(v)) { 
 				# v may be integers, while the filetype is FLT
 				v  <- as.numeric( v ) 
+				if (driver != 'raster') {
+					v[is.na(v)] <- x@file@nodatavalue
+				}
 			}
+			
 			start <- (start-1) * x@ncols * x@file@dsize
 			seek(x@file@con, start, rw='w')	
 #			print(v)
