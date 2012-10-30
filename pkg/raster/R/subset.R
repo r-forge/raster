@@ -74,7 +74,9 @@ function(x, subset, drop=TRUE, filename='', ...) {
 		varname <- "" 
 	}
 
+	# these values may have been changed
 	nav <- NAvalue(x)
+	e <- extent(x)
 	
 	if (fromDisk(x)) {
 		if (drop & length(subset)==1) {
@@ -82,6 +84,7 @@ function(x, subset, drop=TRUE, filename='', ...) {
 		} else {
 			x <- stack(filename(x), bands=subset, varname=varname)
 		}
+		extent(x) <- e
 		NAvalue(x) <- nav
 	} else {
 		if (drop & length(subset)==1) {
@@ -90,6 +93,7 @@ function(x, subset, drop=TRUE, filename='', ...) {
 			} else {
 				x <- raster(x)
 			}
+			extent(x) <- e
 			NAvalue(x) <- nav
 			return(x)	
 		}
