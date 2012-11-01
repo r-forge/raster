@@ -16,8 +16,8 @@
 			gdversion <- trim(substr(gdversion, 5, 10))
 			options('rasterGDALVersion'=gdversion)
 			pkg.info <- utils::packageDescription('rgdal') 
-			rgdversion <- pkg.info[["Version"]]		
-			options('rasterNewRGDALVersion'=compareVersion(rgdversion, "0.7-19") > 0)
+			test <- utils::compareVersion(pkg.info[["Version"]], "0.7-19") > 0
+			options('rasterNewRGDALVersion' = test)
 		} else if (stopIfAbsent) {
 			stop("package 'rgdal' is not available")
 		}

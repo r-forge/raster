@@ -103,7 +103,7 @@ setMethod('getValuesBlock', signature(x='RasterBrick', row='numeric'),
 			if (NCOL(res) > nlyrs) {
 				res <- res[, lyrs, drop=FALSE]
 			}
-			
+			colnames(res) <- names(x)[lyrs]
 			
 		} else if ( fromDisk(x) ) {
 			res <- .readRasterBrickValues(x, row, nrows, col, ncols)

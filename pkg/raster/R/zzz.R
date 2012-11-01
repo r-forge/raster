@@ -6,14 +6,6 @@
 
 	tst <- try( removeTmpFiles( .tmptime() ), silent=TRUE ) 
 
-# for testing purposes	
-
-#	rasterOptions(format='GTiff')
-#	rasterOptions(format='big.matrix')
-#	rasterOptions(format='CDF')
-#	rasterOptions(overwrite=TRUE)
-#	rasterOptions(todisk=TRUE)
-	
 	return(invisible(0))
 }
 

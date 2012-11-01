@@ -8,12 +8,10 @@
 
 
 .rasterImagePlot <- function(x, col, add=FALSE, legend=TRUE, horizontal = FALSE, 
-    legend.shrink = 0.5, legend.width = 0.6, legend.mar = ifelse(horizontal, 3.1, 5.1),
-	legend.lab = NULL, graphics.reset = FALSE, 
-    bigplot = NULL, smallplot = NULL, legend.only = FALSE, 
-    lab.breaks = NULL, axis.args = NULL, legend.args = NULL, 
-	interpolate=FALSE, box=TRUE, breaks=NULL, zlim=NULL, zlimcol=NULL,
-	fun=NULL, asp, colNA = NA, ...) {
+    legend.shrink=0.5, legend.width=0.6, legend.mar = ifelse(horizontal, 3.1, 5.1),
+	legend.lab=NULL, graphics.reset=FALSE, bigplot = NULL, smallplot = NULL, legend.only = FALSE, 
+    lab.breaks=NULL, axis.args=NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, 
+	zlim=NULL, zlimcol=NULL, fun=NULL, asp, colNA = NA, ...) {
 
 
  	if (missing(asp)) {
@@ -27,7 +25,10 @@
 	
 	asRaster <- function(x, col, breaks=NULL, fun=NULL, r=NULL) {
 		if (!is.null(breaks)) {
-			x[] <- as.numeric(cut(x, breaks, include.lowest=TRUE))
+			if (is.logical(x)) {
+				x <- x * 1
+			}
+			x[] <- as.numeric(cut(as.vector(x), breaks, include.lowest=TRUE))
 			
 		} else {
 			if (is.function(fun)) {

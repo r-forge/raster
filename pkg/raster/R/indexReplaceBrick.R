@@ -6,15 +6,21 @@
 
 setMethod("[[", "Raster",
 function(x,i,j,...,drop=TRUE) {
-	if ( missing(i)) { stop('you must provide an index') }
-	if (! missing(j)) { warning('second index is ignored') }
-	sgn <- sign(i)
-	sgn[sgn==0] <- 1
-	if (! all(sgn == 1) ) {
-		if (! all(sgn == -1) ) {
-			stop("only 0's may be mixed with negative subscripts")
-		} else {
-			i <- (1:nlayers(x))[i]
+	if ( missing(i)) { 
+		stop('you must provide an index') 
+	}
+	if (! missing(j)) { 
+		warning('second index is ignored') 
+	}
+	if (is.numeric(i)) {
+		sgn <- sign(i)
+		sgn[sgn==0] <- 1
+		if (! all(sgn == 1) ) {
+			if (! all(sgn == -1) ) {
+				stop("only 0's may be mixed with negative subscripts")
+			} else {
+				i <- (1:nlayers(x))[i]
+			}
 		}
 	}
 	subset(x, i, drop=drop)
