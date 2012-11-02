@@ -229,8 +229,9 @@
 		r@data@haveminmax <- TRUE 
 	}
 	r@file@datanotation <- datatype
-	r@data@min <- minv
-	r@data@max <- maxv
+	
+	r@data@min <- minv[band]
+	r@data@max <- maxv[band]
 
 	rats <- ! sapply(RATlist, is.null) 
 	if (any(rats)) {
@@ -265,8 +266,8 @@
 			}
 		}
 		
-		r@data@attributes <- att
-		r@data@isfactor <- rats
+		r@data@attributes <- att[[band]]
+		r@data@isfactor <- rats[[band]]
 	}
 	
 #oblique.x   0  #oblique.y   0 
