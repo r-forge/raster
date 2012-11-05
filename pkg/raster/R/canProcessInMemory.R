@@ -8,8 +8,7 @@ canProcessInMemory <- function(x, n=4) {
 
 
 # for testing purposes	
-
-#	rasterOptions(format='GTiff')  this fails in R 2.15.2 when used here
+#	rasterOptions(format='GTiff') 
 #	require(ncdf)
 #	require(rgdal)
 #	rasterOptions(format='big.matrix')
