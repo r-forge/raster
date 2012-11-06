@@ -110,8 +110,8 @@ function(x, subset, drop=TRUE, filename='', ...) {
 		x@data@nlayers <- as.integer(length(subset))
 		f <- is.factor(x)
 		if (any(f)) {
-			f@data@attributes <- f@data@attributes[subset]
-			f@data@isfactor <- f@data@isfactor[subset]
+			x@data@attributes <- x@data@attributes[subset]
+			x@data@isfactor <- x@data@isfactor[subset]
 		}
 	}
 	if (filename != '') {

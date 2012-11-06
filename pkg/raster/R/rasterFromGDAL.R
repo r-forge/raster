@@ -266,8 +266,8 @@
 			}
 		}
 		
-		r@data@attributes <- att[[band]]
-		r@data@isfactor <- rats[[band]]
+		r@data@attributes <- att[band]
+		r@data@isfactor <- rats[band]
 	}
 	
 #oblique.x   0  #oblique.y   0 

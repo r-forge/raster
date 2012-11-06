@@ -264,7 +264,7 @@ setMethod('raster', signature(x='RasterBrick'),
 			isf <- is.factor(x)[dindex]
 			if (isTRUE(isf)) {
 				r@data@isfactor <- TRUE
-				r@data@attributes <- levels(x)[[dindex]]
+				r@data@attributes <- levels(x)[dindex]
 			}
 			
 		} else {
