@@ -182,20 +182,21 @@
 				d[d == navalue] <- NA
 				return(d)
 			}
-		} else {
+		} else { # length(dims) == 1
 			v <- matrix(nrow=nrows*ncols, ncol=n)
 			if ( x@file@toptobottom & nrows > 1) {
 				d <- rev(d)
 			}
-			v[] <- d[, alyrs,drop=FALSE]
+			
+			v[] <- d # d[, alyrs, drop=FALSE]
 		}
 	} else {
 		if ( x@file@toptobottom ) { 
-			v <- as.vector( d[, ncol(d):1] )
-		} else {
-			v <- as.vector(d)
-		}
-		v <- matrix(v, ncol=1)
+			if (is.matrix(d)) {
+				d <- d[, ncol(d):1]
+			}
+		} 
+		v <- matrix(as.vector(d), ncol=1)
 		#v <- v[,lyrs,drop=FALSE]
 	}
 	
