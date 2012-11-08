@@ -1,4 +1,4 @@
-﻿/* Robert Hijmans, October 2011 */
+/* Robert Hijmans, October 2011 */
 
 #include <R.h>
 #include <Rinternals.h>
