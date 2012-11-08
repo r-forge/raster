@@ -118,11 +118,11 @@
 		dsum <- d1 + d2
       
       # create distance weighted rasters
-		z1 <- d1 * crop(r1, d1) / dsum
-		z2 <- d2 * crop(r2, d2) / dsum
+		z1 <- d1 * crop(x, d1) / dsum
+		z2 <- d2 * crop(y, d2) / dsum
       
       # merge rasters
-		m <- merge(z1 + z2, r1, r2, filename=filename, ...)
+		m <- merge(z1 + z2, x, y, filename=filename, ...)
    }
    
    m
