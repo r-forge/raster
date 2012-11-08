@@ -8,7 +8,7 @@
 # needs to be generalized to n input rasters and to multi-layer objects
 .old_blend <- function(r1, r2) {
 	i <- intersect(raster(r1), raster(r2))
-	j <- raster::expand(i, c(1,1)) 
+	j <- extend(i, c(1,1)) 
 	a <- crop(r1, j)
 	b <- crop(r2, j)
 	values(a) <- 1
@@ -27,7 +27,7 @@
 }
 
 
-.blend <- function(x, y, logistic=FALSE, ...) {
+.blend <- function(x, y, logistic=FALSE, filename='', ...) {
    
    # check for difference in extent
 	stopifnot( extent(x) != extent(y))
@@ -44,15 +44,14 @@
    
    # create intersection rasters
 	i <- intersect(raster(x), raster(y))
-	j <- raster::expand(i, c(1,1)) 
+	j <- extend(i, c(1,1)) 
    
    # is one of the rasters nested within the other?
 	ex <- extent(x)
 	ey <- extent(y)
 	exy <- union(ex, ey)
-	nested <- exy==ex | exy==ey
-   # the nested case
-	if (nested){
+
+	if (exy==ex | exy==ey){    # the nested case
       
       # which raster has the smaller extent?
 		if (extent(x) < extent(y)){
@@ -88,10 +87,10 @@
 		z2 <- abs(1-d.sc) * crop(rlarge, d.sc)
       
       # merge rasters
-		m <- merge(z1 + z2, rsmall, rlarge)
-      
-   # the overlapping case
-	} else {
+		m <- merge(z1 + z2, rsmall, rlarge, filename=filename, ...)
+
+
+	} else {    # the overlapping case
       
 		# create points around ovelapping area
 		a <- crop(x, j)
@@ -109,10 +108,10 @@
       
       # the logistic case
 		if(logistic){
-			dmin <- cellStats(d,'min')
-			dmax <- cellStats(d,'max')
-			d1 <- logfun((d1 - dmin + 1e-9) / (dmax - dmin))
-			d2 <- logfun((d2 - dmin + 1e-9) / (dmax - dmin))
+			d1min <- cellStats(d1,'min')
+			d2min <- cellStats(d2,'min')
+			d1 <- logfun((d1 - d1min + 1e-9)/(cellStats(d1,'max') - d1min))
+			d2 <- logfun((d2 - d2min + 1e-9)/(cellStats(d2,'max') - d2min))
 		}	
       
       # sum distance rasters
@@ -123,8 +122,9 @@
 		z2 <- d2 * crop(r2, d2) / dsum
       
       # merge rasters
-		m <- merge(z1 + z2, r1, r2)
+		m <- merge(z1 + z2, r1, r2, filename=filename, ...)
    }
+   
    m
 }
 
