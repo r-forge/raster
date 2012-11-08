@@ -1,3 +1,8 @@
+# Author: Robert J. Hijmans
+# Date : September 2012
+# Version 1.0
+# Licence GPL v3
+
 
 
 .requireRgdal <- function(stopIfAbsent=TRUE) {
