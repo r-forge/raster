@@ -2,9 +2,11 @@
 focal for multi-layer objects
 support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
-move rasterize/(lines, polygons) to C
+move resample (bilenear interp.) and rasterize/(lines, polygons) to C
 
 --- development version
+blockSize made safer for resample with cluster (thanks to Stefan Schlaffer)
+'timer' works again (thanks to Stefan Schlaffer)
 
 --- 7-November-2012, version 2.0-29
 new function 'select' for selecting spatial subsets by drawing on plot (map)
