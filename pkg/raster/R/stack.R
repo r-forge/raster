@@ -68,8 +68,7 @@ function(x, ..., bands=NULL, varname="", native=FALSE, RAT=TRUE, quick=FALSE) {
 
 
 setMethod("stack", signature(x='list'), 
-
-test <- function(x, bands=NULL, native=FALSE, RAT=TRUE, ...) {
+function(x, bands=NULL, native=FALSE, RAT=TRUE, ...) {
 
 	if (inherits(x, 'data.frame')) {
 		return(utils::stack(x, ...))
