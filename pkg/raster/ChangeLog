@@ -2,11 +2,13 @@
 focal for multi-layer objects
 support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
-move resample (bilenear interp.) and rasterize/(lines, polygons) to C
+move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 
 --- development version
 blockSize made safer for resample with cluster (thanks to Stefan Schlaffer)
 'timer' works again (thanks to Stefan Schlaffer)
+subsetting a brick to a single layer now returns a RasterLayer (unless drop=FALSE), which is consistent with the behavior or a RasterStack (suggested by Jon Olav Skoien)
+Fixed error occurring when creating a RasterStack from several ncdf files using a 'varname' argument. Problem reported by Greg
 
 --- 7-November-2012, version 2.0-29
 new function 'select' for selecting spatial subsets by drawing on plot (map)
