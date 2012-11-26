@@ -1,6 +1,6 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date :  January 2009
-# Version 0.9
+# Version 1.0
 # Licence GPL v3
 
 
@@ -140,7 +140,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 		if (missing(crs)) {
 			stop("'crs' argument is missing.")
 		}
-		projto <- crs
+		projto <- projection(crs)
 		to <- projectExtent(from, projto)
 		if (missing(res)) {
 			res <- .computeRes(from, projto)
