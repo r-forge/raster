@@ -5,6 +5,9 @@ add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 
 --- development version
+fixed bug, introduced in previous version, in aggregate with expand=FALSE (reported by Mark Payne)
+fixed bug in summary that occurred when some layers had NA values and others not (reported by Agustin Lobo)
+getValuesBlock now has a row=1 default value. docs suggested that the default was all rows (but there was no default). Inconsistency reported by Oliver Soong
 blockSize made safer for resample with cluster (thanks to Stefan Schlaffer)
 'timer' works again (thanks to Stefan Schlaffer)
 subsetting a brick to a single layer now returns a RasterLayer (unless drop=FALSE), which is consistent with the behavior or a RasterStack (suggested by Jon Olav Skoien)

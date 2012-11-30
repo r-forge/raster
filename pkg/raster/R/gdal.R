@@ -33,8 +33,7 @@
 	return(x)
 }
 
-# temporary tricks to move avoid .Calling rgdal as per CRAN request
-# next version of raster should depend on rgdal > "0.7-12"
+# temporary tricks to avoid .Calling rgdal as per CRAN request
 
 .gd_SetNoDataValue <- function(object, NAflag) {
 	if (isTRUE(getOption('rasterNewRGDALVersion'))) {

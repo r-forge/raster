@@ -241,7 +241,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		cat('standardnames :', lst$standardnames, '\n')
 		cat('warn depracat.:', lst$depwarning, '\n')
 		if (lst$todisk) {
-		   cat('todisk       : TRUE\n')
+		   cat('todisk        : TRUE\n')
 		}
 	}
 	
