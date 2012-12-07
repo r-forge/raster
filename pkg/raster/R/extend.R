@@ -30,6 +30,8 @@ function(x, y, ...) {
 }
 )
 
+
+
 setMethod('extend', signature(x='Raster'), 
 function(x, y, value=NA, filename='', ...) {
 
@@ -74,12 +76,14 @@ function(x, y, value=NA, filename='', ...) {
 		return(out)
 	}
 	
+	dtp <- FALSE
 	datatype <- list(...)$datatype
 	if (is.null(datatype)) { 
 		datatype <- unique(dataType(x))
 		if (length(datatype) > 1) {
 			datatype <- .commonDataType(datatype)
 		}
+		dtp <- TRUE
 	}
 
 	
@@ -89,7 +93,11 @@ function(x, y, value=NA, filename='', ...) {
 		d[cellsFromExtent(out, extent(x)), ] <- getValues(x)
 		x <- setValues(out, d)	
 		if (filename != '') {
-			x <- writeRaster(x, filename=filename, datatype=datatype, ...)
+			if (dtp) {
+				x <- writeRaster(x, filename=filename, datatype=datatype, ...)
+			} else {
+				x <- writeRaster(x, filename=filename, ...)
+			}
 		}
 		return(x)
 		
@@ -106,7 +114,11 @@ function(x, y, value=NA, filename='', ...) {
 		tr$n <- length(tr$row)
 			
 		pb <- pbCreate(tr$n, label='extend', ...)
-		out <- writeStart(out, filename=filename, datatype=datatype, ... )
+		if (dtp) {
+			out <- writeStart(out, filename=filename, datatype=datatype, ... )
+		} else {
+			out <- writeStart(out, filename=filename, ... )		
+		}
 		for (i in 1:tr$n) {
 			d <- matrix(value, nrow=tr$nrows[i] * ncol(out), ncol=nlayers(out))
 			if (tr$row[i] <= endrow & (tr$row[i]+tr$nrows[i]-1) >= startrow) {
