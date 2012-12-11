@@ -1,4 +1,5 @@
---- 6-December-2012, version: 2.0-36
+--- 11-December-2012, version: 2.0-37
+fixed bugs in extend: added rows did in some cases get values from row above, and using a 'datatype' arugment led to an error. Both reported by Oliver Soong
 fixed bug, introduced in previous version, in aggregate with expand=FALSE (reported by Mark Payne)
 fixed bug in summary that occurred when some layers had NA values and others not (reported by Agustin Lobo)
 getValuesBlock now has a row=1 default value. docs suggested that the default was all rows (but there was no default). Inconsistency reported by Oliver Soong

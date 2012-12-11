@@ -109,7 +109,7 @@ function(x, y, value=NA, filename='', ...) {
 		endcol <- colFromX(out, xFromCol(x, ncol(x)))
 		
 		tr <- blockSize(out)
-		tr$row <- sort(unique(c(tr$row, startrow, endrow)))
+		tr$row <- sort(unique(c(tr$row, startrow, endrow+1)))
 		tr$nrows <- c(tr$row[-1], nrow(out)+1) - tr$row
 		tr$n <- length(tr$row)
 			
@@ -130,7 +130,7 @@ function(x, y, value=NA, filename='', ...) {
 		}
 		
 		pbClose(pb)
-		return(  writeStop(out) )
+		writeStop(out)
 	} 
 }
 )
