@@ -39,7 +39,7 @@
 	if (isTRUE(getOption('rasterNewRGDALVersion'))) {
 		rgdal:::.gd_SetNoDataValue(object, NAflag)
 	} else {
-		.Call("RGDAL_SetNoDataValue", object, as.double(NAflag), PACKAGE="rgdal")
+		stop("you need a newer version of rgdal to use this function")
 	}
 }
 
@@ -48,7 +48,7 @@
 	if (getOption('rasterNewRGDALVersion')) {
 		rgdal:::.gd_SetGeoTransform(object, geotrans)
 	} else {
-		.Call("RGDAL_SetGeoTransform", object, geotrans, PACKAGE="rgdal")
+		stop("you need a newer version of rgdal to use this function")
 	}
 }
 
@@ -57,7 +57,7 @@
 	if (getOption('rasterNewRGDALVersion')) {
 		rgdal:::.gd_SetProject(object, proj4string)	
 	} else {
-		.Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")
+		stop("you need a newer version of rgdal to use this function")
 	}
 }
 
@@ -66,7 +66,7 @@
 	if (getOption('rasterNewRGDALVersion')) {
 		rgdal:::.gd_SetStatistics(object, statistics)
 	} else {
-		.Call("RGDAL_SetStatistics", object, as.double(statistics), PACKAGE="rgdal")
+		stop("you need a newer version of rgdal to use this function")
 	}
 }
 
@@ -74,7 +74,7 @@
 	if (getOption('rasterNewRGDALVersion')) {
 		rgdal:::.gd_transform(projfrom, projto, n, x, y)
 	} else {
-		.Call("transform", projfrom, projto, n, x, y, PACKAGE="rgdal")
+		stop("you need a newer version of rgdal to use this function")
 	}
 }
 

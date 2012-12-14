@@ -256,8 +256,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			v <- matrix(nrow=length(cells), ncol=nl)
 			if (nrow(xy) > 0) {
 				ci <- match(cellFromXY(to, xy), cells)
-				xy <- .Call("transform", projto_int, projfrom, nrow(xy), xy[,1], xy[,2], PACKAGE="rgdal")
-				#xy <- .gd_transform( projto_int, projfrom, nrow(xy), xy[,1], xy[,2] )
+				xy <- rgdal:::.gd_transform(projto_int, projfrom, nrow(xy), xy[,1], xy[,2])
 				xy <- cbind(xy[[1]], xy[[2]])
 				v[ci, ] <- .xyValues(from, xy, method=method)
 			} 
