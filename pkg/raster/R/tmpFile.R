@@ -36,8 +36,8 @@
 	}
 	
 	extension <- .defaultExtension(.filetype())
-	d <- .tmpdir()
-	dir.create(d,  showWarnings = FALSE)
+	d <- .tmpdir(create=TRUE)
+#	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
 	d <- paste(d, prefix, f, extension, sep="")
 	if (file.exists(d)) {
