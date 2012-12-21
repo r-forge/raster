@@ -279,9 +279,9 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		d <- .tmppath()
 	}
 	lastchar <- substr(d, nchar(d), nchar(d))
-	if (lastchar == '/' | lastchar == '\\') {
-		d <- substr( d, 1, nchar(d)-1 )
-	}
+	# if (lastchar == '/' | lastchar == '\\') {
+	#	d <- substr( d, 1, nchar(d)-1 )
+	#}
 	if (!file.exists(d) & create) {
 		dir.create( d, recursive=TRUE, showWarnings=FALSE )
 	}
