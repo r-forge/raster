@@ -55,13 +55,15 @@ rook <- matrix(c(NA, 1, NA,
 adjacent(r, cells = c(1,55,90), directions=rook, sorted=TRUE) 
 
 
-# How many time does one cell value occur next to another cell value?
-
+# Count the number of times that a cell with a certain value
+# occurs next to a cell with a certain value
 set.seed(0)
 r <- raster(ncol=10, nrow=10)
 r[] <- round(runif(ncell(r)) * 5)
-a <- adjacent(r, 1:ncell(r), 8, pairs=TRUE)
-table(r[a[,1]], r[a[,2]])
+a <- adjacent(r, 1:ncell(r), 4, pairs=TRUE)
+tb <- table(r[a[,1]], r[a[,2]])
+tb
+plot(raster(tb[], xmn=-0.5, xmx=5.5, ymn=-0.5, ymx=5.5))
 }
 
 \keyword{spatial}
