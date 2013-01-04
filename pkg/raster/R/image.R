@@ -35,7 +35,7 @@ setMethod("image", signature(x='RasterLayer'),
 setMethod("image", signature(x='RasterStackBrick'), 
 	function(x, y=1, maxpixels=100000, useRaster=TRUE, main, ...)  {
 		y <- round(y)
-		stopifnot(y > 0 & y < nlayers(x))
+		stopifnot(y > 0 & y <= nlayers(x))
 		x <- raster(x, y)
 		if (missing(main)) {
 			main <- names(x)
