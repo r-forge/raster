@@ -64,7 +64,7 @@
  
 	for (i in 1:nbands) {
 		b <- new("GDALRasterBand", transient, i)
-		.gd_SetNoDataValue(b, NAflag)
+		rgdal:::.gd_SetNoDataValue(b, NAflag)
 	}
 
 	if (rotated(r)) {
@@ -78,9 +78,11 @@
 		#}
 	}
 	
-    .gd_SetGeoTransform(transient, gt)
-	.gd_SetProject(transient, projection(r))
-
-	if (is.null(options)) options <- ''
+	rgdal:::.gd_SetGeoTransform(transient, gt)
+	rgdal:::.gd_SetProject(transient, projection(r))
+		
+	if (is.null(options)) {
+		options <- ''
+	}
 	return(list(transient, NAflag, options, dataformat))
 }
