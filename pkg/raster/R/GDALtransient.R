@@ -25,6 +25,12 @@
 
 
     nbands <- nlayers(r)
+	ct <- r@legend@colortable
+	if (length(ct) > 0 ) {
+		hasCT <- TRUE
+	} else {
+		hasCT <- FALSE
+	}
 	r <- raster(r)
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
@@ -45,6 +51,8 @@
 	}	
 
 	dataformat <- .getGdalDType(datatype, gdalfiletype)
+	
+	if (datafromat != 'Byte') hasCT <- FALSE
 		
 	if (missing(NAflag)) { 
 		NAflag <- .GDALnodatavalue(dataformat) 
@@ -65,6 +73,9 @@
 	for (i in 1:nbands) {
 		b <- new("GDALRasterBand", transient, i)
 		rgdal:::.gd_SetNoDataValue(b, NAflag)
+		if (hasCT & exists('GDALsetCT')) {
+			GDALsetCT(b, col2rgb(ct, TRUE), i)
+		}
 	}
 
 	if (rotated(r)) {
