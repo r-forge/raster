@@ -52,7 +52,7 @@
 
 	dataformat <- .getGdalDType(datatype, gdalfiletype)
 	
-	if (datafromat != 'Byte') hasCT <- FALSE
+	if (dataformat != 'Byte') hasCT <- FALSE
 		
 	if (missing(NAflag)) { 
 		NAflag <- .GDALnodatavalue(dataformat) 
