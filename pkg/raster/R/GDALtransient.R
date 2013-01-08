@@ -73,8 +73,11 @@
 	for (i in 1:nbands) {
 		b <- new("GDALRasterBand", transient, i)
 		rgdal:::.gd_SetNoDataValue(b, NAflag)
-		if (hasCT & exists('GDALsetCT')) {
-			GDALsetCT(b, col2rgb(ct, TRUE), i)
+		if (hasCT) {
+			try( .SetRasterColorTable. <- rgdal:::.gd_SetRasterColorTable, silent=TRUE)
+			if (exists(".SetRasterColorTable.")) {
+				rgdal:::.gd_SetRasterColorTable(b, t(col2rgb(ct, TRUE)))
+			}
 		}
 	}
 
