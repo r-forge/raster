@@ -107,6 +107,7 @@ setReplaceMethod("[[", c("RasterBrick", "numeric", "missing"),
 setReplaceMethod("[", c("RasterStackBrick", "Raster", "missing"),
 	function(x, i, j, value) {
 	
+		nl <- nlayers(i)
 		if (! hasValues(i) ) {
 			i <- cellsFromExtent(x, i)
 		} else if (compareRaster(x, i, stopiffalse=FALSE, showwarning=FALSE)) {
@@ -116,8 +117,8 @@ setReplaceMethod("[", c("RasterStackBrick", "Raster", "missing"),
 		} else {
 			i <- cellsFromExtent(x, i)
 		}			
-		if (nlayers(i) < nlayers(x)) {
-			.replace(x, i, value=value, recycle=nlayers(i)) 		
+		if (nl < nlayers(x)) {
+			.replace(x, i, value=value, recycle=nl)
 		} else {
 			.replace(x, i, value=value, recycle=1) 
 		}
