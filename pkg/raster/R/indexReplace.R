@@ -63,11 +63,13 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 	}
 
 	if (allLayers) {
-		i <- i[ i > 0 & i <= ncell(x) ]
 		nl <- nlayers(x)
+		i <- i[ i > 0 & i <= (ncell(x)*nl) ]
 		if (nl > 1) {
-			add <- ncell(x) * 0:(nl-1)
-			i <- as.vector(t((matrix(rep(i, nl), nrow=nl, byrow=TRUE)) + add))
+			if (max(i) <= ncell(x)) {
+				add <- ncell(x) * 0:(nl-1)
+				i <- as.vector(t((matrix(rep(i, nl), nrow=nl, byrow=TRUE)) + add))
+			}
 		}
 	}
 	

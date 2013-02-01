@@ -5,6 +5,7 @@ add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 
 --- development version
+replacement with multi-layer object now works as expected (problem reported by Julian Zeidler)
 adjacency is now obsolete
 replacing a logical value in a RasterLayer previously changed the data type to numeric
 rasterOptions now (optionally) saved in a file in the start-up working directory

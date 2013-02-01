@@ -1,8 +1,8 @@
 Package: raster
 Type: Package
 Title: raster: Geographic data analysis and modeling
-Version: 2.1-0
-Date: 28-December-2012
+Version: 2.1-1
+Date: 31-January-2012
 Depends: methods, sp, R (>= 2.14.0)
 Suggests: rgdal (>= 0.7-22), rgeos (>= 0.2-3), ncdf, ncdf4, igraph, snow, bigmemory, tcltk, rasterVis
 Author: Robert J. Hijmans & Jacob van Etten
