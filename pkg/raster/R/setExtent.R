@@ -12,11 +12,9 @@ setExtent <- function(x, ext, keepres=FALSE, snap=FALSE) {
 	
 	oldbb <- extent(x)
 	bb <- extent(ext)
-	newobj <- clearValues(x)
 	if (snap) {
-		bb <- alignExtent(bb, newobj)
+		bb <- alignExtent(bb, x)
 	}
-	newobj@extent <- bb
 
 	if (inherits(x, 'RasterStack')) {
 		if (keepres) {
@@ -31,6 +29,8 @@ setExtent <- function(x, ext, keepres=FALSE, snap=FALSE) {
 		return(x)
 	}
 
+	newobj <- clearValues(x)
+	newobj@extent <- bb
 	
 	if (keepres) {
 		xrs <- xres(x)
@@ -54,21 +54,17 @@ setExtent <- function(x, ext, keepres=FALSE, snap=FALSE) {
 			if ( canProcessInMemory(x) ) {
 				newobj <- setValues(newobj, getValues(x))
 			} else {
-				extent(x) <- extent(newobj)
+				x@extent <- extent(newobj)
 				newobj <- writeRaster(x, rasterTmpFile())
 			}
 		}
 		
+		return(newobj)
+		
 	} else if (class(x) != "BasicRaster") {
-		if (ncol(x)==ncol(newobj) & nrow(x)==nrow(newobj))  {
-			if ( inMemory(x) ) {
-				newobj <- setValues(newobj, getValues(x))
-			} else {
-				extent(x) <- extent(newobj)
-				newobj <- writeRaster(x, rasterTmpFile())
-			}
-		}
+		x@extent <- bb
+		return(x)
 	}
-	return(newobj)
+	
 }
 
