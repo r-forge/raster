@@ -238,7 +238,7 @@
 		att <- vector(length=nlayers(r), mode='list')
 		for (i in 1:length(RATlist)) {
 			if (! is.null(RATlist[[i]])) {
-				dr <- data.frame(RATlist[[i]], stringsAsFactors=FALSE)
+				dr <- data.frame(RATlist[[i]], stringsAsFactors=TRUE)
 				wv <- which(colnames(dr)=='VALUE')
 				if (length(wv) > 0) {
 					if (wv != 1) {
@@ -278,9 +278,9 @@
 					att[[i]] <- data.frame(ID=(1:length(CATlist[[i]]))-1, category=CATlist[[i]], stringsAsFactors=TRUE)
 				}
 			}
-		}	
-		r@data@attributes <- att[band]
-		r@data@isfactor <- cats[band]
+			r@data@attributes <- att[band]
+			r@data@isfactor <- cats[band]
+		}
 	}
 	return(r)
 }
