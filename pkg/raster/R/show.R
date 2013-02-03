@@ -70,19 +70,16 @@ setMethod ('show' , 'RasterLayer',
 	
 			#nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
 			if (nrow(x) > 5) {
-				cat('attributes\n') 
-				w <- getOption('warn')
-				on.exit(options('warn' = w))
-				options('warn'=-1) 
-				r <- apply(x, 2, range, na.rm=TRUE)
-				r[is.numeric(r) & !is.finite(r)] <- NA
-				options('warn' = w)
-				r <- data.frame(r)
-				r <- data.frame(x=c('min :','max :'), r)
+				cat('attributes  :\n') 
+				r <- x[c(1, nrow(x)), ]
+				for (j in 1:ncol(r)) {
+					r[is.numeric(r[,j]) & !is.finite(r[,j]), j] <- NA
+				}	
+				r <- data.frame(x=c('from:','to  :'), r)
 				a <- colnames(x)
-			
-				
+
 				colnames(r) <- c('    fields :', a)
+				colnames(r) <- c('', a)
 				rownames(r) <- NULL
 				if (nc > maxnl) {
 					r <- cbind(r, '...'=rbind('...', '...'))
