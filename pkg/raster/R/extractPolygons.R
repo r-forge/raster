@@ -258,16 +258,21 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 		}		
 
 		lyrs <- layer:(layer+nl-1)
-		colnames(res) <- c('ID', names(x)[lyrs])
+		if (cellnumbers) {
+			colnames(res) <- c('ID', 'cell', names(x)[lyrs])
+		} else {
+			colnames(res) <- c('ID', names(x)[lyrs])
+		}
 		
 		if (any(is.factor(x)) & factors) {
-			v <- res[, -1, drop=FALSE]
+			i <- ifelse(cellnumbers, 1:2, 1)
+			v <- res[, -i, drop=FALSE]
 			if (ncol(v) == 1) {
 				v <- data.frame(factorValues(x, v[,1], layer))
 			} else {
 				v <- .insertFacts(x, v, lyrs)
 			}
-			res <- data.frame(res[,1,drop=FALSE], v)
+			res <- data.frame(res[,i,drop=FALSE], v)
 		}
 	}
 
