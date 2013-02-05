@@ -9,6 +9,7 @@ replacement with multi-layer object now works as expected (problem reported by J
 adjacency is now obsolete
 replacing a logical value in a RasterLayer previously changed the data type to numeric
 rasterOptions now (optionally) saved in a file in the start-up working directory
+fixed colnames in extract/polygons (cellnumbers=T & df = TF). Reported by Florian de Boissieu
 
 --- 21-December-2012, version: 2.0-41
 fixed bugs in extend: added rows did in some cases get values from row above, and using a 'datatype' arugment led to an error. Both reported by Oliver Soong
