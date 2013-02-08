@@ -43,7 +43,7 @@
 		}
 	}
 
-	if ( fileext %in% c(".NC", ".CDF", ".NCDF", ".NETCDF")) {
+	if ( fileext %in% c(".NC", ".NC4", ".CDF", ".NCDF", ".NETCDF")) {
 		return ( .rasterObjectFromCDF(x, type=objecttype, band=band, ...) )
 		# return ( .rasterFromCDF(x, objecttype, ...) )
 	}
