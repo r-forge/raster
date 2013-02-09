@@ -6,8 +6,9 @@ move resample (bilenear interp. (and add other options)) and rasterize/(lines, p
 
 --- development version
 replacement with multi-layer object now works as expected (problem reported by Julian Zeidler)
-adjacency is now obsolete
 replacing a logical value in a RasterLayer previously changed the data type to numeric
+improved setExtent (bug report by Kathi Borgmann)
+adjacency is now obsolete
 rasterOptions now (optionally) saved in a file in the start-up working directory
 fixed colnames in extract/polygons (cellnumbers=T & df = TF). Reported by Florian de Boissieu
 

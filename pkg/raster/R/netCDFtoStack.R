@@ -43,9 +43,10 @@
 			if ( nc$var[[zvar]]$dim[[dim3]]$name == 'time' ) {	
 				st <- try( .doTime(st, nc, zvar, dim3, ncdf4)  )
 			}
+			nms <- as.character(st@z[[1]])
 			st@layers <- lapply(list(bands), function(x){
 												r@data@band <- x;
-												r@data@names <- st@z[[1]][x];
+												r@data@names <- nms[x];
 												return(r)} 
 											)
 		} 
