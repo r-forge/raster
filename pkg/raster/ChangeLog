@@ -11,6 +11,8 @@ improved setExtent (bug report by Kathi Borgmann)
 adjacency is now obsolete
 rasterOptions now (optionally) saved in a file in the start-up working directory
 fixed colnames in extract/polygons (cellnumbers=T & df = TF). Reported by Florian de Boissieu
+bug with Math methods that occured when using mapply fixed thanks to Martin Morgan
+Then results of terrain(flowdir) were the mirror image of what the help says. The code has been fixed to match the help file. Reporte by Daniel Schlaepfer.
 
 --- 21-December-2012, version: 2.0-41
 fixed bugs in extend: added rows did in some cases get values from row above, and using a 'datatype' arugment led to an error. Both reported by Oliver Soong
