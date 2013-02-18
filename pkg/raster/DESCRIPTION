@@ -10,3 +10,4 @@ Maintainer: Robert J. Hijmans <r.hijmans@gmail.com>
 Description: Reading, writing, manipulating, analyzing and modeling of gridded spatial data. The package implements basic and high-level functions and processing of very large files is supported.
 License: GPL (>=3)
 URL: http://cran.r-project.org/web/packages/raster/
+ByteCompile: TRUE
