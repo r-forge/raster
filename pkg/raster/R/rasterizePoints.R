@@ -5,7 +5,7 @@
 
 
 
-.pointsToRaster <- function(xy, raster, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...) {
+.pointsToRaster <- function(xy, raster, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, asRAT=FALSE, ...) {
 
 	rs <- raster(raster)
 	
@@ -59,8 +59,8 @@
 	points <- .pointsToMatrix(xy)
 
 	pvals <- .getPutVals(xy, field, nrow(points), mask)
-	field <- pvals[,1]
-	if (ncol(pvals) > 1) {
+	if (ncol(pvals) > 1 & asRAT) {
+		field <- pvals[,1]
 		rs@data@isfactor <- TRUE
 		rs@data@attributes <- list(pvals)
 	}
@@ -107,7 +107,9 @@
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
 			rs@data@nlayers <- nres
-			if (ncols > 1) { names(rs) <- colnames(field) }
+			if (ncols > 1) { 
+				names(rs) <- colnames(field) 
+			}
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 			datacols <- 5:ncol(xyarc)
 		}
@@ -128,7 +130,7 @@
 					cells <- as.numeric(v[,1])
 					d[cells, ] <- as.matrix(v)[,-1]
 				} else {
-					v = tapply(ss[,5], ss[,4], fun, na.rm=na.rm)
+					v <- tapply(ss[,5], ss[,4], fun, na.rm=na.rm)
 					cells <- as.numeric(rownames(v))
 					if (nres > 1) {
 						v <- as.matrix(v)
@@ -184,10 +186,11 @@
 			v = t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
 		}
 
-		if (dim(v)[2] > 1) { 
-			vv <- matrix(background, nrow=ncell(rs), ncol=dim(v)[2])
+		nc <- NCOL(v)
+		if (nc > 1) { 
+			vv <- matrix(background, nrow=ncell(rs), ncol=nc)
 			vv[cells, ] <- v
-		    rs <- brick(rs)  #  return a'RasterBrick'
+		    rs <- brick(rs, nl=nc)  #  return a'RasterBrick'
 		} else {
 			vv <- 1:ncell(rs)
 			vv[] <- background
