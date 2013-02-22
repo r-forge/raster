@@ -8,11 +8,11 @@ move resample (bilenear interp. (and add other options)) and rasterize/(lines, p
 replacement with multi-layer object now works as expected (problem reported by Julian Zeidler)
 replacing a logical value in a RasterLayer previously changed the data type to numeric
 improved setExtent (bug report by Kathi Borgmann)
-adjacency is now obsolete
+adjacency is now obsolete (use adjacent instead)
 rasterOptions now (optionally) saved in a file in the start-up working directory
 fixed colnames in extract/polygons (cellnumbers=T & df = TF). Reported by Florian de Boissieu
 bug with Math methods that occured when using mapply fixed thanks to Martin Morgan
-Then results of terrain(flowdir) were the mirror image of what the help says. The code has been fixed to match the help file. Reporte by Daniel Schlaepfer.
+Then results of terrain(flowdir) were the mirror image of what the help says. The code has been fixed to match the help file. Reported by Daniel Schlaepfer.
 
 --- 21-December-2012, version: 2.0-41
 fixed bugs in extend: added rows did in some cases get values from row above, and using a 'datatype' arugment led to an error. Both reported by Oliver Soong

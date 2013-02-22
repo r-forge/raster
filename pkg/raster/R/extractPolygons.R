@@ -1,4 +1,4 @@
-# Author: Robert J. Hijmans, r.hijmans@gmail.com
+# Author: Robert J. Hijmans
 # Date : December 2009
 # Version 0.9
 # Licence GPL v3
@@ -25,12 +25,13 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 
 	if (!is.null(fun)) {
 		cellnumbers <- FALSE
-	} else if (weights) {
-		if (!is.null(fun)) {
-			test <- try(slot(fun, 'generic') == 'mean', silent=TRUE)
-			if (!isTRUE(test)) {
-				warning('"fun" was changed to "mean"; other functions cannot be used when "weights=TRUE"' )
-			}
+	    if (weights) {
+			if (!is.null(fun)) {
+				test <- try(slot(fun, 'generic') == 'mean', silent=TRUE)
+				if (!isTRUE(test)) {
+					warning('"fun" was changed to "mean"; other functions cannot be used when "weights=TRUE"' )
+				}
+			}	
 		}
 	}
 	
