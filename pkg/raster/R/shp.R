@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-shapefile <- function(filename, object=NULL, overwrite=FALSE, verbose=FALSE) {
+shapefile <- function(filename, object=NULL, overwrite=FALSE, verbose=FALSE, stringsAsFactors=FALSE, ...) {
 
 	.requireRgdal() 
 	
@@ -14,7 +14,7 @@ shapefile <- function(filename, object=NULL, overwrite=FALSE, verbose=FALSE) {
 		stopifnot(file.exists(extension(filename, '.dbf')))
 		fn <- basename(filename) 
 		extension(fn) <- ''
-		readOGR(dirname(filename), fn, stringsAsFactors=FALSE, verbose=verbose) 
+		readOGR(dirname(filename), fn, stringsAsFactors=stringsAsFactors, verbose=verbose, ...) 
 		
 	} else {
 		extension(filename) <- '.shp'
@@ -43,7 +43,8 @@ shapefile <- function(filename, object=NULL, overwrite=FALSE, verbose=FALSE) {
 				}
 			}
 		}
-		writeOGR(object, filename, layer, driver='ESRI Shapefile', verbose=verbose, overwrite_layer=overwrite)
+		
+		writeOGR(object, filename, layer, driver='ESRI Shapefile', verbose=verbose, overwrite_layer=overwrite, ...)
 	}
 }
 
