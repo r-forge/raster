@@ -7,10 +7,20 @@
 projectExtent <- function(object, crs) {
 	.requireRgdal()
 
+	object <- raster(object)
+	dm <- oldm <- dim(object)
+	# simple way to avoid a bug with a single column/row reported by 
+	# Jon Olav Skoien
+	dm[1] <- max(10, dm[1])
+	dm[2] <- max(10, dm[2])
+	dim(object) <- dm
+	
 	validObject(projection(object, asText=FALSE))
 	validObject(projection(crs, asText=FALSE))
 	projfrom <- projection(object)
 	projto <- projection(crs)
+	
+	
 	
 #	rs <- res(object)
 #	xmn <- object@extent@xmin - 0.5 * rs[1]
@@ -41,7 +51,7 @@ projectExtent <- function(object, crs) {
 	xy3[ncol(xy3),1] <- xy3[ncol(xy3),1] + 0.5 * xres(object)
 	
 	xy4 <- xyFromCell(object, cellFromRowCol(object, nrow(object), cols))
-	xy4[,2] <- xy4[,2] + 0.5 * yres(object)
+	xy4[,2] <- xy4[,2] - 0.5 * yres(object)
 	xy4[1,1] <- xy4[1,1] - 0.5 * xres(object)
 	xy4[ncol(xy4),1] <- xy4[ncol(xy4),1] + 0.5 * xres(object)
 	
@@ -84,7 +94,7 @@ projectExtent <- function(object, crs) {
 		miny <- miny - 0.5
 	}
 	
-	obj <- raster(extent(minx, maxx, miny,  maxy), nrows=nrow(object), ncols=ncol(object), crs=crs)
+	obj <- raster(extent(minx, maxx, miny,  maxy), nrows=oldm[1], ncols=oldm[2], crs=crs)
 	return(obj)
 }
 
