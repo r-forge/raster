@@ -197,6 +197,8 @@ setMethod('zonal', signature(x='RasterStackBrick', z='RasterLayer'),
 			nc1 <- nc + 1
 			nc2 <- 2:nc1
 			
+			# it might be more efficient to loop over the layers, particularly for a RasterStack
+			
 			for (i in 1:tr$n) {
 				d <- cbind(getValues(x, row=tr$row[i], nrows=tr$nrows[i]),   
 					 round(getValues(z, row=tr$row[i], nrows=tr$nrows[i]), digits=digits))
