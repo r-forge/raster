@@ -26,7 +26,8 @@ setMethod('rotate', signature(x='Raster'),
 		r1 <- crop(x, extent(e@xmin, hx, e@ymin, e@ymax))
 		r2 <- crop(x, extent(hx, e@xmax, e@ymin, e@ymax))
 		if (inverse) {
-		
+			r1@extent@xmin <- r2@extent@xmax
+			r1@extent@xmax <- r1@extent@xmin + xrange
 		} else {
 			r2@extent@xmin <- r2@extent@xmin - xrange
 			r2@extent@xmax <- r2@extent@xmax - xrange
