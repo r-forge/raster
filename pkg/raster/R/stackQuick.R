@@ -19,8 +19,8 @@
 	}
 	
 	r@data@haveminmax=FALSE 
-	r@file@nbands = nbands[1]
-	r@data@band = band[1]
+	r@file@nbands = as.integer(nbands[1])
+	r@data@band = as.integer(band[1])
 	
 	ln <- extension(basename(files), '')
 	s <- stack(r)
