@@ -65,7 +65,7 @@ function(x, y, filename='', snap='near', datatype=NULL, ...) {
 	} 
 	dataType(out) <- datatype
 	
-	if (canProcessInMemory(out, 3)) {
+	if (canProcessInMemory(out, 4)) {
 		v <- getValuesBlock(x, row1, nrows=nr, col=col1, ncols=nc)
 		out <- setValues(out, v)
 		if (filename != "") { 
