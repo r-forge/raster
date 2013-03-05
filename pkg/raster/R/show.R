@@ -34,7 +34,9 @@ setMethod ('show' , 'RasterLayer',
 		if (rotated(object)) {
 			cat('rotated     : TRUE\n')
 		}
-		if (nbands(object) > 1) { cat('band        :' , bandnr(object), '\n')	}	
+		if (nbands(object) > 1) { 
+			cat('band        :' , bandnr(object), ' (of ', nbands(object), ' bands)\n')	
+		}	
 		cat('dimensions  : ', nrow(object), ', ', ncol(object), ', ', ncell(object),'  (nrow, ncol, ncell)\n', sep="" ) 
 		cat('resolution  : ' , xres(object), ', ', yres(object), '  (x, y)\n', sep="")
 		cat('extent      : ' , object@extent@xmin, ', ', object@extent@xmax, ', ', object@extent@ymin, ', ', object@extent@ymax, '  (xmin, xmax, ymin, ymax)\n', sep="")

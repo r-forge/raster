@@ -5,7 +5,7 @@
 
 
 
-.pointsToRaster <- function(xy, raster, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, asRAT=FALSE, ...) {
+.pointsToRaster <- function(xy, raster, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...) {
 
 	rs <- raster(raster)
 	
@@ -58,13 +58,8 @@
 	
 	points <- .pointsToMatrix(xy)
 
-	pvals <- .getPutVals(xy, field, nrow(points), mask)
-	if (ncol(pvals) > 1 & asRAT) {
-		field <- pvals[,1]
-		rs@data@isfactor <- TRUE
-		rs@data@attributes <- list(pvals)
-	}
-	
+	field <- .getPutVals(xy, field, nrow(points), mask)
+
 	xy <- points
 	
 	nres <- max(length(fun(1)), length(fun(1:5)))
@@ -77,7 +72,7 @@
 		if (is.atomic(field) & length(field)==1) {
 			field <- rep(field, dim(xy)[1])
 		}
-		if (dim(xy)[1] != length(field)) {
+		if (nrow(xy) != NROW(field)) {
 			stop('number of points does not match the number of fields')
 		}
 	}
@@ -107,9 +102,7 @@
 		} else {
 			rs <- brick(rs)  #  return a'RasterBrick'
 			rs@data@nlayers <- nres
-			if (ncols > 1) { 
-				names(rs) <- colnames(field) 
-			}
+			if (ncols > 1) { names(rs) <- colnames(field) }
 			dna <- matrix(background, nrow=ncol(rs), ncol=nres)
 			datacols <- 5:ncol(xyarc)
 		}
@@ -134,7 +127,7 @@
 					cells <- as.numeric(rownames(v))
 					if (nres > 1) {
 						v <- as.matrix(v)
-						v = t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
+						v <- t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
 						d[cells, ] <- v
 					} else {
 						d[cells] <- v
@@ -172,25 +165,18 @@
 		
 	} else {
 	
-		if (ncols > 1) {
-			v <- aggregate(field, list(cells), fun, na.rm=na.rm)
-			cells <- as.numeric(v[,1])
-			v <- as.matrix(v)[,-1,drop=FALSE]
-		} else {
-			v <- tapply(field, cells, fun, na.rm=na.rm)
-			cells <- as.numeric(rownames(v))
-			v <- as.matrix(v)
-		}
+		v <- aggregate(field, list(cells), fun, na.rm=na.rm)
+		cells <- as.numeric(v[,1])
+		v <- as.matrix(v)[,-1,drop=FALSE]
 		
 		if(class(v[1]) == "list") {
-			v = t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
+			v <- t(apply(v, 1, function(x) x[[1]]))  # Reshape the data if more than one value is returned by 'fun'
 		}
 
-		nc <- NCOL(v)
-		if (nc > 1) { 
-			vv <- matrix(background, nrow=ncell(rs), ncol=nc)
+		if (ncol(v) > 1) { 
+			vv <- matrix(background, nrow=ncell(rs), ncol=dim(v)[2])
 			vv[cells, ] <- v
-		    rs <- brick(rs, nl=nc)  #  return a'RasterBrick'
+		    rs <- brick(rs)  #  return a'RasterBrick'
 		} else {
 			vv <- 1:ncell(rs)
 			vv[] <- background
@@ -231,4 +217,3 @@
 	}
 	return(rs)	
 }
-
