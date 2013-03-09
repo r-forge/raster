@@ -26,18 +26,22 @@
 	
 	zvar <- x@data@zvar
 
-	
 	if (nc$var[[zvar]]$ndims == 1) {
 		# for GMT
-		start <- (row-1) * ncol(x) + 1
-		count <- nrows * ncol(x) + 1
+		ncx <- ncol(x)
+		start <- (row-1) * ncx + col
+		count <- nrows * ncx 
 		if (ncdf4) {
 			d <- ncdf4::ncvar_get( nc, varid=zvar,  start=start, count=count )		
 		} else {
 			d <- get.var.ncdf( nc,  varid=zvar,  start=start, count=count )
 		}
-		i <- cellFromRowColCombine(r, row:(row+nrows-1), col:(col+ncols-1)) - cellFromRowCol(r, row, 1)
-		d <- d[i]
+
+		if (col > 1 | ncols < ncx) {
+			i <- cellFromRowColCombine(x, row:(row+nrows-1), col:(col+ncols-1)) - cellFromRowCol(x, row, 1) + 1
+			d <- d[i]
+		}
+
 	
 	} else if (nc$var[[zvar]]$ndims == 2) {
 		start <- c(col, row)
