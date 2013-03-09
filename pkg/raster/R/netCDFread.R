@@ -4,6 +4,9 @@
 # Licence GPL v3
 
 
+
+
+
 .readRowsNetCDF <- function(x, row, nrows=1, col=1, ncols=(ncol(x)-col+1)) {
 
 	if ( x@file@toptobottom ) { 
@@ -22,8 +25,21 @@
 	}
 	
 	zvar <- x@data@zvar
-		
-	if (nc$var[[zvar]]$ndims == 2) {
+
+	
+	if (nc$var[[zvar]]$ndims == 1) {
+		# for GMT
+		start <- (row-1) * ncol(x) + 1
+		count <- nrows * ncol(x) + 1
+		if (ncdf4) {
+			d <- ncdf4::ncvar_get( nc, varid=zvar,  start=start, count=count )		
+		} else {
+			d <- get.var.ncdf( nc,  varid=zvar,  start=start, count=count )
+		}
+		i <- cellFromRowColCombine(r, row:(row+nrows-1), col:(col+ncols-1)) - cellFromRowCol(r, row, 1)
+		d <- d[i]
+	
+	} else if (nc$var[[zvar]]$ndims == 2) {
 		start <- c(col, row)
 		count <- c(ncols, nrows)
 		if (ncdf4) {
