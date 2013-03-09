@@ -31,15 +31,25 @@
 	#datatype <- raster:::.getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
 	#ncell <- nc$var[[zvar]]$dim[[1]]$len
 	#stopifnot(prod(dims) == ncell)
-	resx <- (xr[2] - xr[1]) / (dims[1]-1)
-	resy <- (yr[2] - yr[1]) / (dims[2]-1)
+
 	crs <- NA
 	if (xr[1] > -181 & xr[2] < 181 & yr[1] > -91 & yr[2] < 91 ) {
 		crs <- "+proj=longlat +datum=WGS84"
 	}
-	r <- raster(xmn=xr[1]-(0.5*resx), xmx=xr[2]+(0.5*resx), ymn=yr[1]-(0.5*resy), ymx=yr[2]+(0.5*resy), ncol=dims[1], nrow=dims[2], crs=crs)
-		
+
+	dif1 <- abs(((xr[2] - xr[1]) / dims[1]) - sp[2])
+	dif2 <- abs(((xr[2] - xr[1]) / (dims[1]-1)) - sp[2])
+	
+	if (dif1 < dif2) {  # 30 sec GEBCO data
+		r <- raster(xmn=xr[1], xmx=xr[2], ymn=yr[1], ymx=yr[2], ncol=dims[1], nrow=dims[2], crs=crs)
+	} else {  # 1 min data 
+		resx <- (xr[2] - xr[1]) / (dims[1]-1)
+		resy <- (yr[2] - yr[1]) / (dims[2]-1)
+		r <- raster(xmn=xr[1]-(0.5*resx), xmx=xr[2]+(0.5*resx), ymn=yr[1]-(0.5*resy), ymx=yr[2]+(0.5*resy), ncol=dims[1], nrow=dims[2], crs=crs)
+	}
+	
 	r@file@name <- filename
+	r@file@toptobottom <- FALSE
 	attr(r@data, "zvar") <- zvar
 	attr(r@data, "dim3") <- 1
 	r@file@driver <- "netcdf"
