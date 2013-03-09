@@ -1,12 +1,9 @@
 # Author: Robert J. Hijmans
-# Date: Aug 2009
+# Date: March 2013
 # Version 1.0
 # Licence GPL v3
-# Aug 2012, adapted for use with ncdf4 library 
 
-
-.rasterObjectFromCDF_GMT <- function(filename, varname='', band=NA, type='RasterLayer', lvar=3, level=0, warn=TRUE, ...) {
-
+.rasterObjectFromCDF_GMT <- function(filename, ...) {
 	ncdf4 <- raster:::.NCDFversion4()
 	if (ncdf4) {
 		options(rasterNCDF4 = TRUE)
@@ -31,12 +28,11 @@
 		sp <- get.var.ncdf(nc, "spacing", 1)
 	} 
 	zvar = 'z'
-	datatype <- raster:::.getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
+	#datatype <- raster:::.getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
 	#ncell <- nc$var[[zvar]]$dim[[1]]$len
 	#stopifnot(prod(dims) == ncell)
 	resx <- (xr[2] - xr[1]) / (dims[1]-1)
 	resy <- (yr[2] - yr[1]) / (dims[2]-1)
-	
 	crs <- NA
 	if (xr[1] > -181 & xr[2] < 181 & yr[1] > -91 & yr[2] < 91 ) {
 		crs <- "+proj=longlat +datum=WGS84"
@@ -48,7 +44,6 @@
 	attr(r@data, "dim3") <- 1
 	r@file@driver <- "netcdf"
 	r@data@fromdisk <- TRUE
-
 	return(r)
 }
 
