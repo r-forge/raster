@@ -45,6 +45,7 @@
 		
 	r@file@name <- filename
 	attr(r@data, "zvar") <- zvar
+	attr(r@data, "dim3") <- 1
 	r@file@driver <- "netcdf"
 	r@data@fromdisk <- TRUE
 

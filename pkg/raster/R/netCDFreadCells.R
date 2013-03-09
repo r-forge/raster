@@ -49,8 +49,14 @@
 	}
 	
 #####		
+# this needs to be optimized. Read chunks and extract cells
 	
-	if (nc$var[[zvar]]$ndims == 2) {
+	if (nc$var[[zvar]]$ndims == 1) {
+		res <- matrix(nrow=length(cells), ncol=1)
+		for (i in 1:length(cells)) {
+			res[i] <- getfun(nc, varid=zvar, start=i, count=1)
+		}	
+	} else	if (nc$var[[zvar]]$ndims == 2) {
 		count <- c(x@ncols, 1)
 		for (i in 1:length(rows)) {
 			start <- c(1, readrows[i])
@@ -130,6 +136,8 @@
 	}
 	
 	
+	# this needs to be optimized. Read chunks and extract cells
+
 	if (nc$var[[zvar]]$ndims == 2) {
 		count <- c(1, 1)
 		res <- matrix(nrow=length(cells), ncol=1)
