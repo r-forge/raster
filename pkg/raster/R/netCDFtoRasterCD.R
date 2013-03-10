@@ -98,7 +98,7 @@
 	if (varname=='') { 
 		nv <- length(vars)
 		if (nv == 0) {
-			stop()
+			return('z')
 		} 
 		
 		if (nv  == 1) {

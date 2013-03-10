@@ -48,7 +48,7 @@
 		r <- raster(xmn=xr[1]-(0.5*resx), xmx=xr[2]+(0.5*resx), ymn=yr[1]-(0.5*resy), ymx=yr[2]+(0.5*resy), ncol=dims[1], nrow=dims[2], crs=crs)
 	}
 	
-	r@file@name <- filename
+	r@file@name <- nc$filename
 	r@file@toptobottom <- FALSE
 	attr(r@data, "zvar") <- zvar
 	attr(r@data, "dim3") <- 1
