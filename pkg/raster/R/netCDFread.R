@@ -29,17 +29,17 @@
 	if (nc$var[[zvar]]$ndims == 1) {
 		# for GMT
 		ncx <- ncol(x)
-		start <- (row-1) * ncx + col
+		start <- (row-1) * ncx + 1
 		count <- nrows * ncx 
 		if (ncdf4) {
 			d <- ncdf4::ncvar_get( nc, varid=zvar,  start=start, count=count )		
 		} else {
 			d <- get.var.ncdf( nc,  varid=zvar,  start=start, count=count )
 		}
-
 		if (col > 1 | ncols < ncx) {
-			i <- cellFromRowColCombine(x, row:(row+nrows-1), col:(col+ncols-1)) - cellFromRowCol(x, row, 1) + 1
-			d <- d[i]
+			d <- matrix(d, ncol=ncx, byrow=TRUE)
+			d <- d[, col:(col+ncols-1)]
+			d <- as.vector(t(d))
 		}
 
 	
