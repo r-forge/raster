@@ -3,12 +3,12 @@
 # Version 1.0
 # Licence GPL v3
 
-.rasterObjectFromCDF_GMT <- function(filename, ...) {
-	ncdf4 <- raster:::.NCDFversion4()
+.rasterObjectFromCDF_GMT <- function(nc, ncdf4) {
+#	ncdf4 <- raster:::.NCDFversion4()
 	if (ncdf4) {
 		options(rasterNCDF4 = TRUE)
-		nc <- ncdf4::nc_open(filename)
-		on.exit( ncdf4::nc_close(nc) )		
+#		nc <- ncdf4::nc_open(filename)
+#		on.exit( ncdf4::nc_close(nc) )		
 	#	conv <- ncdf4::ncatt_get(nc, 0, "Conventions")
 		dims <- ncdf4::ncvar_get(nc, "dimension", 1)
 		xr <- ncdf4::ncvar_get(nc, "x_range", 1)
@@ -18,8 +18,8 @@
 		
 	} else {
 		options(rasterNCDF4 = FALSE)
-		nc <- open.ncdf(filename)
-		on.exit( close.ncdf(nc) )		
+#		nc <- open.ncdf(filename)
+#		on.exit( close.ncdf(nc) )		
 	#	conv <- att.get.ncdf(nc, 0, "Conventions")
 		dims <- get.var.ncdf(nc, "dimension", 1)
 		xr <- get.var.ncdf(nc, "x_range", 1)
