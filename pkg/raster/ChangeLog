@@ -4,7 +4,7 @@ support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 
---- development version
+--- 10-March-2013, version: 2.1-10
 replacement with multi-layer object now works as expected (problem reported by Julian Zeidler)
 replacing a logical value in a RasterLayer previously changed the data type to numeric
 improved setExtent (bug report by Kathi Borgmann)
