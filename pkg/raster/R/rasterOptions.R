@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress, timer, chunksize, maxmemory, todisk, setfileext, tolerance, standardnames, depracatedwarnings, default=FALSE, save=FALSE) {
+rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress, timer, chunksize, maxmemory, todisk, setfileext, tolerance, standardnames, depracatedwarnings, default=FALSE) {
 	
 	
 	
@@ -152,8 +152,8 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		options(rasterStandardNames = TRUE)
 		options(rasterDepracatedWarnings = TRUE)
 		v <- utils::packageDescription('raster')[["Version"]]
-		fn <- paste(options('startup.working.directory'), '/rasterOptions_', v, sep='')
-		if (file.exists(fn)) { file.remove(fn) }
+#		fn <- paste(options('startup.working.directory'), '/rasterOptions_', v, sep='')
+#		if (file.exists(fn)) { file.remove(fn) }
 	}
 
 	
@@ -190,6 +190,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		depwarning=.depracatedwarnings()
 	)
 	
+	save <- FALSE
 	if (save) {
 	
 		v <- utils::packageDescription('raster')[["Version"]]
