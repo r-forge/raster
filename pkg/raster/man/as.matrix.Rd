@@ -1,5 +1,6 @@
 \name{as.matrix}
 
+\alias{as.vector}
 \alias{as.matrix}
 \alias{as.array}
 \alias{as.array,RasterStackBrick-method}
@@ -30,7 +31,8 @@ as.vector(x, mode="any")
 
 \arguments{
  \item{x}{ Raster* or (for as.matrix and as.vector) Extent object }
- \item{...}{ Additional arguments: 
+ \item{mode}{ character string giving an atomic mode or "list", or "any" }
+ \item{...}{ additional arguments: 
  
 	\code{maxpixels} Integer. To regularly subsample very large objects 
 	
