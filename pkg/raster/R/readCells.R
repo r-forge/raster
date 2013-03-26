@@ -54,6 +54,11 @@
 		return(rep(NA, times=length(cells[,1])))
 	}
 	
+	if (is.null(dim(vals))) { 
+		vals <- matrix(vals, nrow=1)
+		colnames(vals) <- names(x)[layers]
+	}
+		
 	vals <- cbind(uniquecells, vals)
 	vals <- merge(x=cells[,2], y=vals, by=1, all=TRUE)
 	vals <- as.matrix(cbind(cells[,1], vals[,2:ncol(vals)]))
