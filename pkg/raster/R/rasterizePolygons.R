@@ -14,10 +14,16 @@
 		
 	} else if (isTRUE (is.na(field))) { 
 		putvals <- data.frame(v=rep(NA, n))
-		
+
+	} else if (NROW(field) == n) {
+		return(field)
+			
 	} else if (!is.numeric(field) ) {
+		if (length(field != 1)) {
+			stop("field is a character vector of length not equal to 1 or the number of geometries")		
+		}
 		if (! .hasSlot(obj, 'data')) {
-			stop("field name is not numeric, and vector object has no data.frame")
+			stop("field name is a single character value, but vector object has no data.frame")
 		}
 		field <- which(colnames(obj@data) == field)[1]
 		if (is.na(field)) {

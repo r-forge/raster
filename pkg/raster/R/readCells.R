@@ -55,7 +55,7 @@
 	}
 	
 	if (is.null(dim(vals))) { 
-		vals <- matrix(vals, nrow=1)
+		vals <- matrix(vals, ncol=1)
 		colnames(vals) <- names(x)[layers]
 	}
 		
