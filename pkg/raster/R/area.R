@@ -27,6 +27,9 @@ if (!isGeneric("area")) {
 
 setMethod('area', signature(x='SpatialPolygons'), 
 	function(x, ...) {
+		if (.couldBeLonLat(x)) {
+			warning('polygon area in square degrees is not very meaningful')
+		}
 		sapply(x@polygons, function(i) slot(i, 'area'))
 	}
 )	

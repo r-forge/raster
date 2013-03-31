@@ -19,7 +19,7 @@
 		return(field)
 			
 	} else if (!is.numeric(field) ) {
-		if (length(field != 1)) {
+		if (length(field) != 1) {
 			stop("field is a character vector of length not equal to 1 or the number of geometries")		
 		}
 		if (! .hasSlot(obj, 'data')) {
