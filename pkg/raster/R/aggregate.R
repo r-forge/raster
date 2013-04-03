@@ -20,8 +20,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 	} else if (length(fact)==2) {
 		xfact <- as.integer(round(fact[[1]]))
 		yfact <- as.integer(round(fact[[2]]))
-		if (xfact < 2) { stop('fact[[1]] should be > 1') } 
-		if (yfact < 2) { stop('fact[[2]] should be > 1') }
+		if (xfact < 2 & yfact < 2) { stop('fact[1] or fact[2] should be > 1') } 
 	} else {
 		stop('length() should be 1 or 2')
 	}
