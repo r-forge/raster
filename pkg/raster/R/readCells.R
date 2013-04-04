@@ -37,8 +37,8 @@
 				vals <- .readCellsGDAL(x, uniquecells, layers)
 			} else if ( .isNativeDriver( driver) ) {  # raster, BIL, ..
 				vals <- .readCellsRaster(x, uniquecells, layers)
-			} else if ( driver == 'big.matrix') {
-				vals <- .readBigMatrixCells(x, uniquecells) 
+#			} else if ( driver == 'big.matrix') {
+#				vals <- .readBigMatrixCells(x, uniquecells) 
 			} else if ( driver == 'netcdf') {
 				vals <- .readRasterCellsNetCDF(x, uniquecells) 
 			} else if ( driver == 'ascii') {
