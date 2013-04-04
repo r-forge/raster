@@ -4,7 +4,7 @@ Title: raster: Geographic data analysis and modeling
 Version: 2.1-20
 Date: 1-April-2013
 Depends: methods, sp, R (>= 2.14.0)
-Suggests: rgdal (>= 0.7-22), rgeos (>= 0.2-3), ncdf, ncdf4, igraph, snow, bigmemory, tcltk, rasterVis
+Suggests: rgdal (>= 0.7-22), rgeos (>= 0.2-3), ncdf, ncdf4, igraph, snow, tcltk, rasterVis
 Author: Robert J. Hijmans & Jacob van Etten
 Maintainer: Robert J. Hijmans <r.hijmans@gmail.com> 
 Description: Reading, writing, manipulating, analyzing and modeling of gridded spatial data. The package implements basic and high-level functions and processing of very large files is supported.

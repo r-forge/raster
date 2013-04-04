@@ -43,4 +43,3 @@ function(x,  mode = "any") {
 	as.vector(getValues(x), mode=mode)
 })
 
-
