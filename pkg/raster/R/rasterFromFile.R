@@ -73,7 +73,7 @@
 	}
 	if (native) {
 		if ( fileext == ".ASC" ) {
-			return ( .rasterFromASCIIFile(x, ...) )
+			return ( .rasterFromASCIIFile(x) )
 		}
 		if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
 			return ( .rasterFromGenericFile(x, type=objecttype, ...) )
