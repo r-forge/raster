@@ -6,9 +6,10 @@ move resample (bilenear interp. (and add other options)) and rasterize/(lines, p
 
 --- development version
 Removed bugs from 'f8' in the writing functions vignette (reported by J. R. Matchett)
-Removed bug that occured when creating stack from list of ascii files
+Removed bug that occured when creating stack from ascii files if rgdal was not installed
 Removed support for big.matrix to store raster data (because currently the bigmemory package is not available on windows) 
 aggregate now allows aggregation to be 1 in one dimension 
+added option 'along' to extract with lines
 
 --- 10-March-2013, version: 2.1-10
 replacement with multi-layer object now works as expected (problem reported by Julian Zeidler)

@@ -14,7 +14,7 @@
 \title{Extract values from Raster objects}
 
 \description{
-Extract data from a Raster object for the locations of other spatial data (i.e., a spatial query). You can use coordinates (points), lines, polygons or an Extent (rectangle) object. You can also use cell numbers. 
+Extract values from a Raster* object at the locations of other spatial data (that is, perform a spatial query). You can use coordinates (points), lines, polygons or an Extent (rectangle) object. You can also use cell numbers to extract values. 
 
 If \code{y} represents points, \code{extract} returns the values of a Raster* object for the cells in which a set of points fall.
 If \code{y} represents lines, the \code{extract} method returns the values of the cells of a Raster* object that are touched by a line. If \code{y} represents polygons, the \code{extract} method returns the values of the cells of a Raster* object that are covered by a polygon. A cell is covered if its center is inside the polygon (but see the \code{weights} option for considering partly covered cells; and argument \code{small} for getting values for small polygons anyway).
@@ -25,7 +25,7 @@ If \code{y} represents lines, the \code{extract} method returns the values of th
      fun=NULL, na.rm=TRUE, layer, nl, df=FALSE, factors=FALSE, ...)
 
 \S4method{extract}{Raster,SpatialLines}(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer,
-     nl, factors=FALSE, ...)
+     nl, factors=FALSE, along=FALSE, ...)
 
 \S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE,
      small=FALSE, df=FALSE, layer, nl, factors=FALSE, ...)
@@ -58,7 +58,9 @@ If \code{y} represents lines, the \code{extract} method returns the values of th
 
 \item{nl}{ integer. Number of layers for which you want values (if \code{x} is a multilayer object)}
 
-\item{...}{Additional arguments (none implemented)}  
+\item{along}{ boolean. Should returned values be ordered to go along the lines?}
+
+\item{...}{additional arguments (none implemented)}  
 }
 
 \value{
@@ -141,7 +143,6 @@ unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=TRUE) else NA ))
 # equivalent to:
 # v <- extract(r, polys, weights=TRUE)
 # sapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  )
-
 
 
 ###############################
