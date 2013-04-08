@@ -132,7 +132,7 @@
 		if (RAT) {
 			if (isTRUE(isCat[band])) {
 		# currently only for a single layer!
-				try( x <- .getRat(ratvalues, ratnames, rattypes) )
+				try( x <- .getRat(x, ratvalues, ratnames, rattypes) )
 			}
 		}
 	}
