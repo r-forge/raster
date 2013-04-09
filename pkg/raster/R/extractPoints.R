@@ -33,9 +33,9 @@ function(x, y, ..., df=FALSE, sp=FALSE){
 	if (sp) {
 		v <- .xyValues(x, coordinates(y), ..., df=TRUE)
 		if (!.hasSlot(y, 'data')) {
-			y <- SpatialPointsDataFrame(y, v)
+			y <- SpatialPointsDataFrame(y,  v[, -1, drop=FALSE])
 		} else {
-			y@data <- cbind(y@data, v)
+			y@data <- cbind(y@data, v[, -1, drop=FALSE])
 		}
 		return(y)
 	} else {

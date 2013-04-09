@@ -16,7 +16,11 @@
 		putvals <- data.frame(v=rep(NA, n))
 
 	} else if (NROW(field) == n) {
-		return(field)
+		if (is.null(nrow(field))) {
+			return(data.frame(field, stringsAsFactors=FALSE))
+		} else {
+			return(field)
+		}
 			
 	} else if (!is.numeric(field) ) {
 		if (length(field) != 1) {
@@ -64,9 +68,8 @@
 		
 	} else {
 		if (missing(field)) {
-			field <- 1
-		}
-		if (length(field) > 1) { 
+			field <- data.frame(field=rep(1, n))
+		} else if (length(field) > 1) { 
 			if (NROW(field) == n) {  # multiple fields at once?
 #			if (length(field) == n) {
 				putvals <- data.frame(field)
@@ -169,9 +172,9 @@
 	
 	if (getCover) {
 		fun <- 'first'
-		mask = FALSE
-		update=FALSE
-		field=-1
+		mask <- FALSE
+		update <- FALSE
+		field <- -1
 	}
 
 	if (is.character(fun)) {

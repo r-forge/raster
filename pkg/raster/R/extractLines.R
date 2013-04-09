@@ -165,9 +165,9 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	
 	if (sp) {
 		if (! .hasSlot(y, 'data') ) {
-			y <- SpatialPolygonsDataFrame(y, res)
+			y <- SpatialPolygonsDataFrame(y,  res[, -1, drop=FALSE])
 		} else {
-			y@data <- cbind(y@data, res)
+			y@data <- cbind(y@data,  res[, -1, drop=FALSE])
 		}
 		return(y)
 	}
