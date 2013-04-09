@@ -27,8 +27,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	}
 	
 	if (along) {
-		return(.extractLinesAlong(x, y, fun=fun, na.rm=na.rm, 
-		           cellnumbers=cellnumbers, df=df, layer, nl, factors=factors, ...))
+		return(.extractLinesAlong(x, y, cellnumbers=cellnumbers, df=df, layer, nl, factors=factors, ...))
 	}
 
 	spbb <- bbox(y)
@@ -163,7 +162,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 )
 
 
-.extractLinesAlong <- function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, factors=FALSE, ...){ 
+.extractLinesAlong <- function(x, y, cellnumbers=FALSE, df=FALSE, layer, nl, factors=FALSE, ...){ 
 
 	spbb <- bbox(y)
 	rsbb <- bbox(x)
@@ -227,27 +226,9 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	res <- res[1:nlns]
 	pbClose(pb)
 	
-	if (! is.null(fun)) {
-		i <- sapply(res, is.null)
-		if (nlayers(x) > 1) {
-			j <- matrix(ncol=nlayers(x), nrow=length(res))
-			j[!i] <- t(sapply(res[!i], function(x) apply(x, 2, fun, na.rm=na.rm)))
-			colnames(j) <- names(x)
-		} else {
-			j <- vector(length=length(i))
-			j[i] <- NA
-			j[!i] <- sapply(res[!i], fun, na.rm)
-		}
-		res <- j
-	}
 	
 	if (df) {
-		if (!is.list(res)) {
-			res <- data.frame(ID=1:NROW(res), res)
-		} else {
-			res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
-		}		
-
+		res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
 		lyrs <- layer:(layer+nl-1)
 		colnames(res) <- c('ID', names(x)[lyrs])
 		
