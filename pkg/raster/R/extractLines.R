@@ -137,7 +137,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 		} else {
 			j <- vector(length=length(i))
 			j[i] <- NA
-			j[!i] <- sapply(res[!i], fun, na.rm)
+			j[!i] <- sapply(res[!i], fun, na.rm=na.rm)
 		}
 		res <- j
 	}
@@ -165,7 +165,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	
 	if (sp) {
 		if (! .hasSlot(y, 'data') ) {
-			y <- SpatialPolygonsDataFrame(y,  res[, -1, drop=FALSE])
+			y <- SpatialLinesDataFrame(y,  res[, -1, drop=FALSE])
 		} else {
 			y@data <- cbind(y@data,  res[, -1, drop=FALSE])
 		}
