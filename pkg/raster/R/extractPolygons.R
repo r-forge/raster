@@ -6,7 +6,7 @@
 
 
 setMethod('extract', signature(x='Raster', y='SpatialPolygons'), 
-function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, df=FALSE, layer, nl, factors=FALSE, ...){ 
+function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, df=FALSE, layer, nl, factors=FALSE, sp=FALSE, ...){ 
 
 	px <- projection(x, asText=FALSE)
 	comp <- .compareCRS(px, projection(y), unknown=TRUE)
@@ -21,7 +21,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 	addres <- max(res(x))
 	npol <- length(y@polygons)
 	res <- list()
-	res[[npol+1]] = NA
+	res[[npol+1]] <- NA
 
 	if (!is.null(fun)) {
 		cellnumbers <- FALSE
@@ -33,6 +33,11 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 				}
 			}	
 		}
+		if (sp) {
+			df <- TRUE
+		}
+	} else {
+		sp <- FALSE
 	}
 	
 	if (missing(layer)) {
@@ -275,6 +280,15 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 			}
 			res <- data.frame(res[,i,drop=FALSE], v)
 		}
+	}
+	
+	if (sp) {
+		if (! .hasSlot(y, 'data') ) {
+			y <- SpatialPolygonsDataFrame(y, res)
+		} else {
+			y@data <- cbind(y@data, res)
+		}
+		return(y)
 	}
 
 	res

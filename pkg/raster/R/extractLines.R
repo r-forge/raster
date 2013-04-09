@@ -5,7 +5,7 @@
 
 
 setMethod('extract', signature(x='Raster', y='SpatialLines'), 
-function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, factors=FALSE, along=FALSE, ...){ 
+function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, factors=FALSE, along=FALSE, sp=FALSE, ...){ 
 
 	px <- projection(x, asText=FALSE)
 	comp <- .compareCRS(px, projection(y), unknown=TRUE)
@@ -24,6 +24,11 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	if (!is.null(fun)) {
 		cellnumbers <- FALSE
 		along <- FALSE
+		if (sp) {
+			df <- TRUE
+		}
+	} else {
+		sp <- FALSE
 	}
 	
 	if (along) {
@@ -157,6 +162,17 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 			res <- data.frame(res[,1,drop=FALSE], v)
 		}
 	}
+	
+	if (sp) {
+		if (! .hasSlot(y, 'data') ) {
+			y <- SpatialPolygonsDataFrame(y, res)
+		} else {
+			y@data <- cbind(y@data, res)
+		}
+		return(y)
+	}
+	
+	
 	res
 }
 )
