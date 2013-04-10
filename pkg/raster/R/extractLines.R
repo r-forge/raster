@@ -28,7 +28,10 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 			df <- TRUE
 		}
 	} else {
-		sp <- FALSE
+		if (sp) {
+			sp <- FALSE
+			warning('argument sp=TRUE is ignored if fun=NULL')
+		}
 	}
 	
 	if (along) {
@@ -164,6 +167,11 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	}
 	
 	if (sp) {
+		if (nrow(res) != nlns) {
+			warning('sp=TRUE is ignored because fun does not summarize the values of each line to a single number')
+			return(res)
+		}
+	
 		if (! .hasSlot(y, 'data') ) {
 			y <- SpatialLinesDataFrame(y,  res[, -1, drop=FALSE])
 		} else {

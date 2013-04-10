@@ -37,7 +37,10 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 			df <- TRUE
 		}
 	} else {
-		sp <- FALSE
+		if (sp) {
+			sp <- FALSE
+			warning('argument sp=TRUE is ignored if fun=NULL')
+		}
 	}
 	
 	if (missing(layer)) {
@@ -228,7 +231,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 						w <- matrix(rep(w, nl), ncol=nl)
 						w[is.na(x)] <- NA
 						w <- colSums(w, na.rm=TRUE)
-						x <- apply(x, 1, function(x) x / w )
+						x <- apply(x, 1, function(X) { X / w } )
 						res <- rowSums(x, na.rm=na.rm) 
 					} else {
 						return( NULL )
@@ -283,6 +286,11 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 	}
 	
 	if (sp) {
+		if (nrow(res) != npol) {
+			warning('sp=TRUE is ignored because fun does not summarize the values of each polygon to a single number')
+			return(res)
+		}
+		
 		if (! .hasSlot(y, 'data') ) {
 			y <- SpatialPolygonsDataFrame(y, res[, -1, drop=FALSE])
 		} else {
