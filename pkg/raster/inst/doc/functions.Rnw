@@ -279,7 +279,7 @@ f8 <- function(x, a, filename='', ...) {
 	return(out)
 }
 
-s <- f8(r, 5, filename='test', overwrite=TRUE, progress='text')
+s <- f8(r, 5, filename='test', overwrite=TRUE)
 
 if(require(rgdal)) { # only if rgdal is installed
 	s <- f8(r, 5, filename='test.tif', format='GTiff', overwrite=TRUE)
