@@ -291,7 +291,7 @@ Note that most of the additional arguments are passed on to writeStart:
 
 \code{out <- writeStart(out, filename, ...)}
 
-Only the 'progress=' argument goes to \code{pbCreate}
+Only the \texttt{progress=} argument goes to \texttt{pbCreate}
 
 
 \section{Debugging}
