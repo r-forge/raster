@@ -5,12 +5,12 @@ add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 function for affine transformation
 
---- development version
+--- 11-April-2013, version: 2.1-25
 removed bugs from 'f8' in the writing functions vignette (reported by J. R. Matchett)
 fixed bug that occured when creating stack from ascii files if rgdal was not installed
 fixed support for big.matrix to store raster data (because currently the bigmemory package is not available on windows) 
 aggregate now allows aggregation to be 1 in one dimension 
-fixed bug in density (reported by Carsten Neumann)
+fixed bug in density and hist with RasterStack objects (reported by Carsten Neumann)
 added option 'along' to extract with lines
 added option 'factors' to predict function to be able to specify factor levels.
 added option 'sp' to extract to return an Spatial object
