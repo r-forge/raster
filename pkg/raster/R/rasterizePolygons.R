@@ -192,7 +192,7 @@
 		rstr@data@isfactor <- TRUE
 		rstr@data@attributes <- list(pvals)
 		if (!(fun %in% c('first', 'last'))) {
-			stop('when rasterizing multiple values you must use "fun=first" or "fun=last")
+			stop('when rasterizing multiple values you must use "fun=first" or "fun=last"')
 		}
 	}
 
