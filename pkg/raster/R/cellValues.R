@@ -44,7 +44,7 @@
 			}
 			
 			if (is.null(dim(result))) { 
-				result <- matrix(result, nrow=1)
+				result <- matrix(result, ncol=1)
 			}
 			colnames(result) <- names(x)[lyrs]
 		}
