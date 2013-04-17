@@ -28,7 +28,7 @@
 			if (length(uniquecells) > 250 & canProcessInMemory(x, 4)) {
 				vals <- getValues(x)
 				if (length(layers) > 1) {
-					vals <- vals[uniquecells, layers]
+					vals <- vals[uniquecells, layers, drop=FALSE]
 				} else {
 					vals <- vals[uniquecells]				
 				}
