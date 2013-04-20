@@ -30,6 +30,7 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP directions) {
 	ncol = INTEGER(dim)[1];
 	n = nrow * ncol;
 	
+	
 	PROTECT(d = coerceVector(d, INTSXP));
 	xd = INTEGER(d);
 
@@ -38,33 +39,41 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP directions) {
 
 	int r[8] = { -1,0,0,1 , -1,-1,1,1};
 	int c[8] = { 0,-1,1,0 , -1,1,-1,1};	
+	int cell;
+	int k;
 	
 	if (class == 0) {
 		if (edgetype == 0) { // inner
-			for (i = ncol; i < ncol * (nrow-1); i++) {
-				xval[i] = R_NaInt;
-				if ( xd[i] != R_NaInt ) {
-					xval[i] = falseval;
-					for (j=0; j< dirs; j++) {			
-						if ( xd[r[j] * ncol + c[j] + i] == R_NaInt ) {
-							xval[i] = 1;
-							break;
+			for (i = 1; i < (nrow-1); i++) {
+				for (j = 1; j < (ncol-1); j++) {
+					cell = i*ncol+j;
+					xval[cell] = R_NaInt;
+					if ( xd[cell] != R_NaInt ) {
+						xval[cell] = falseval;
+						for (k=0; k< dirs; k++) {
+							if ( xd[cell + r[k] * ncol + c[k]] == R_NaInt ) {
+								xval[cell] = 1;
+								break;
+							}
 						}
 					}
 				}
 			}
 		
 		} else if (edgetype == 1) { //outer
-
-			for (i = ncol; i < ncol * (nrow-1); i++) {
-				xval[i] = falseval;
-				if ( (xd[i] == R_NaInt) ) {
-					xval[i] = R_NaInt;
-					for (j=0; j < dirs; j++) {			
-						if ( xd[r[j] * ncol + c[j] + i] != R_NaInt ) {
-							xval[i] = 1;
-							break;
+			for (i = 1; i < (nrow-1); i++) {
+				for (j = 1; j < (ncol-1); j++) {
+					cell = i*ncol+j;
+					xval[cell] = falseval;
+					if ( (xd[cell] == R_NaInt) ) {
+						xval[cell] = R_NaInt;
+						for (k=0; k < dirs; k++) {			
+							if ( xd[cell+ r[k] * ncol + c[k] ] != R_NaInt ) {
+								xval[cell] = 1;
+								break;
+							}
 						}
+
 					}
 				}
 			}
