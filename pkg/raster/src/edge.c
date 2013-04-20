@@ -73,14 +73,11 @@ SEXP edge(SEXP d, SEXP dim, SEXP classes, SEXP type, SEXP directions) {
 								break;
 							}
 						}
-
 					}
 				}
 			}
 		} 
-		
 	} else { // by class
-
 		int test;
 		for (i = ncol; i < ncol * (nrow-1); i++) {
 			test = xd[ r[0]*ncol+c[0]+i ];
