@@ -108,7 +108,7 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 						if (length(value) == length(i)) {
 							v[localcells] <- value[j]
 						} else {
-							v[localcells] <- j
+							v[localcells] <- value
 						}
 					}
 					r <- writeValues(r, v, tr$row[k])
@@ -129,11 +129,11 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 					cells <- cells + rep(add, each=length(cells))
 					j <- which(i %in% cells)
 					if (length(j) > 0) {
-						localcells <- i[j] - (cells[1]-1)
+						localcells <- i[j] - cells[1] - 1
 						if (length(value) == length(i)) {
 							v[localcells] <- value[j]
 						} else {
-							v[localcells] <- j						
+							v[localcells] <- value
 						}
 					}
 					r <- writeValues(r, v, tr$row[k])
