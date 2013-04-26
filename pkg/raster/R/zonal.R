@@ -64,9 +64,10 @@ setMethod('zonal', signature(x='RasterLayer', z='RasterLayer'),
 			tr <- blockSize(x, n=2)
 			pb <- pbCreate(tr$n, label='zonal', ...)
 		
-			nc <- nlayers(x)
-			nc1 <- nc + 1
-			nc2 <- 2:nc1
+			#nc <- nlayers(x)
+			#nc1 <- nc + 1
+			#nc2 <- 2:nc1
+			nc2 <- 2
 			
 			for (i in 1:tr$n) {
 				d <- cbind(getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
@@ -118,7 +119,7 @@ setMethod('zonal', signature(x='RasterLayer', z='RasterLayer'),
 			if (counts) {
 				cnttab <- tapply(cnttab[,nc2], cnttab[,1], FUN=sum) 
 				cnttab <- cbind(as.numeric(names(cnttab)), cnttab)
-				alltab[nc2] <- alltab[nc2] / cnttab[nc2]
+				alltab[,nc2] <- alltab[,nc2] / cnttab[,nc2]
 				if (sdtab) {
 					sqtab <- tapply(sqtab[,nc2], sqtab[,1], FUN=sum, na.rm=na.rm) 
 					sqtab <- cbind(as.numeric(names(sqtab)), sqtab)
