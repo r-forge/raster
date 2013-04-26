@@ -9,6 +9,8 @@
 
 %\VignetteIndexEntry{Writing functions for large raster files}
 
+\newcommand{\R}{{\normalfont\textsf{R }}{}}
+
 \SweaveOpts{keep.source=TRUE}
 
 \begin{document}
