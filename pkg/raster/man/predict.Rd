@@ -99,6 +99,15 @@ predfun <- function(model, data) {
 # predfun returns two variables, so use index=1:2
 r2 <- predict(logo, model, fun=predfun, index=1:2)
 
+
+\dontrun{
+# You can use multiple cores to speed up the predict function
+# by calling it via the clusterR function
+beginCluster()
+r1c <- clusterR(logo, predict, args=list(model))
+r2c <- clusterR(logo, predict, args=list(model=model, fun=predfun, index=1:2))
+}
+
 # principal components of a RasterBrick
 # here using sampling to simulate an object too large
 # too feed all its values to prcomp
