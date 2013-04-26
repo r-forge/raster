@@ -84,6 +84,9 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 				x <- setValues(x, rep(NA, times=ncell(x)))
 			}
 		} else {
+			if (! length(value) %in% c(1, length(i))) {
+				stop('cannot replace values in large Raster objects if their length is not 1 or the number of cells to be replaced')
+			}
 			tr <- blockSize(x)
 			pb <- pbCreate(tr$n, label='replace')
 			hv <- hasValues(x)
@@ -91,16 +94,22 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 				r <- raster(x)
 				r <- writeStart(r, filename=rasterTmpFile(), overwrite=TRUE )
 				for (k in 1:tr$n) {
-					cells <- cellFromRowCol(x, tr$row[k], 1):cellFromRowCol(x, tr$row[k]+tr$nrows[k]-1, ncol(x))
+					# cells <- cellFromRowCol(x, tr$row[k], 1):cellFromRowCol(x, tr$row[k]+tr$nrows[k]-1, ncol(x))
+					cell1 <- cellFromRowCol(x, tr$row[k], 1)
+					cell2 <- cell1 + tr$nrows[k] * ncol(x)
 					if (hv) {
 						v <- getValues(x, row=tr$row[k], nrows=tr$nrows[k])
 					} else {
-						v <- rep(NA, length(cells))
+						v <- rep(NA, 1+cell2-cell1)
 					}
-					j <- which(i %in% cells)
+					j <- which(i >= cell1 & i <= cell2)
 					if (length(j) > 0) {
-						localcells <- i[j] - (cells[1]-1)
-						v[localcells] <- value[j]
+						localcells <- i[j] - (cell1-1)
+						if (length(value) == length(i)) {
+							v[localcells] <- value[j]
+						} else {
+							v[localcells] <- j
+						}
 					}
 					r <- writeValues(r, v, tr$row[k])
 					pbStep(pb, k) 	
@@ -121,7 +130,11 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 					j <- which(i %in% cells)
 					if (length(j) > 0) {
 						localcells <- i[j] - (cells[1]-1)
-						v[localcells] <- value[j]
+						if (length(value) == length(i)) {
+							v[localcells] <- value[j]
+						} else {
+							v[localcells] <- j						
+						}
 					}
 					r <- writeValues(r, v, tr$row[k])
 					pbStep(pb, k)
