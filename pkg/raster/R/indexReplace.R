@@ -96,7 +96,7 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 				for (k in 1:tr$n) {
 					# cells <- cellFromRowCol(x, tr$row[k], 1):cellFromRowCol(x, tr$row[k]+tr$nrows[k]-1, ncol(x))
 					cell1 <- cellFromRowCol(x, tr$row[k], 1)
-					cell2 <- cell1 + tr$nrows[k] * ncol(x)
+					cell2 <- cell1 + tr$nrows[k] * ncol(x) - 1
 					if (hv) {
 						v <- getValues(x, row=tr$row[k], nrows=tr$nrows[k])
 					} else {
