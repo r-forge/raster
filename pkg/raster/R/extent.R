@@ -18,12 +18,42 @@ setMethod('extent', signature(x='BasicRaster'),
 	function(x, r1, r2, c1, c2){ 
 		e <- x@extent
 		r <- res(x)
-		if (! missing(c1) )  { xn <- xFromCol(x, c1) - 0.5 * r[1] } else { xn <- e@xmin }
-		if (! missing(c2) )  { xx <- xFromCol(x, c2) + 0.5 * r[1] } else { xx <- e@xmax }
-		if (! missing(r1) )  { yx <- yFromRow(x, r1) + 0.5 * r[2] } else { yx <- e@ymax }
-		if (! missing(r2) )  { yn <- yFromRow(x, r2) - 0.5 * r[2] } else { yn <- e@ymin }
-		e <- extent(xn, xx, yn, yx )
-		if (validObject(e)) { return(e) }
+		if (! missing(c1) )  { 
+			xn <- xFromCol(x, c1) - 0.5 * r[1]
+			if (is.na(xn)) {
+				xn <- e@xmin
+			}
+		} else { 
+			xn <- e@xmin 
+		}
+		if (! missing(c2) )  { 
+			xx <- xFromCol(x, c2) + 0.5 * r[1]
+			if (is.na(xx)) {
+				xx <- e@xmax
+			}
+		} else {
+			xx <- e@xmax 
+		}
+		if (! missing(r1) )  { 
+			yx <- yFromRow(x, r1) + 0.5 * r[2]
+			if (is.na(yx)) {
+				yx <- e@ymax
+			}
+		} else {
+			yx <- e@ymax 
+		}
+		if (! missing(r2) )  {
+			yn <- yFromRow(x, r2) - 0.5 * r[2]
+			if (is.na(yn)) {
+				yn <- e@ymin
+			}
+		} else { 
+			yn <- e@ymin 
+		}
+		e <- extent(sort(c(xn, xx)), sort(c(yn, yx)))
+		if (validObject(e)) { 
+			return(e) 
+		}
 	}
 )
 
