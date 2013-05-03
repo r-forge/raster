@@ -21,6 +21,7 @@ setMethod('extent', signature(x='BasicRaster'),
 		if (! missing(c1) )  { 
 			xn <- xFromCol(x, c1) - 0.5 * r[1]
 			if (is.na(xn)) {
+				warning('invalid first colummn')
 				xn <- e@xmin
 			}
 		} else { 
@@ -29,6 +30,7 @@ setMethod('extent', signature(x='BasicRaster'),
 		if (! missing(c2) )  { 
 			xx <- xFromCol(x, c2) + 0.5 * r[1]
 			if (is.na(xx)) {
+				warning('invalid second colummn')
 				xx <- e@xmax
 			}
 		} else {
@@ -37,6 +39,7 @@ setMethod('extent', signature(x='BasicRaster'),
 		if (! missing(r1) )  { 
 			yx <- yFromRow(x, r1) + 0.5 * r[2]
 			if (is.na(yx)) {
+				warning('invalid first row')
 				yx <- e@ymax
 			}
 		} else {
@@ -45,11 +48,25 @@ setMethod('extent', signature(x='BasicRaster'),
 		if (! missing(r2) )  {
 			yn <- yFromRow(x, r2) - 0.5 * r[2]
 			if (is.na(yn)) {
+				warning('invalid second row')			
 				yn <- e@ymin
 			}
 		} else { 
 			yn <- e@ymin 
 		}
+		if (xn == xx) {
+			stop('min and max x are the same')
+		}
+		if (yn == yx) {
+			stop('min and max y are the same')
+		}
+		if (xn > xx) {
+			warning('min x larger than max x')
+		}
+		if (yn > yx) {
+			warning('min y larger than max y')
+		}
+		
 		e <- extent(sort(c(xn, xx)), sort(c(yn, yx)))
 		if (validObject(e)) { 
 			return(e) 

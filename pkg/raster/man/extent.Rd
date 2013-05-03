@@ -15,7 +15,7 @@
 
 \description{
 This function returns an Extent object of a Raster* or Spatial* object (or an Extent object), or creates an 
-Extent object from a 2x2 matrix (rows=x, y; cols=min, max), vector (length=4; order= xmin, xmax, ymin, ymax) or list (with at least two elements, with names 'x' and 'y')
+Extent object from a 2x2 matrix (first row: xmin, xmax; second row: ymin, ymax), vector (length=4; order= xmin, xmax, ymin, ymax) or list (with at least two elements, with names 'x' and 'y')
 
 \code{bbox} returns a \code{sp} package like 'bbox' object (a matrix)
 }
