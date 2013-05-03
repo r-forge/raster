@@ -45,6 +45,7 @@ RasterLayer, RasterStack, and RasterBrick objects are, as a group, referred to a
     \code{\link{raster}}\tab To create a RasterLayer \cr
     \code{\link{stack}} \tab To create a RasterStack (multiple layers)\cr
     \code{\link{brick}} \tab To create a RasterBrick (multiple layers)\cr
+    \code{\link{subset}} \tab Select layers of a RasterStack/Brick\cr
     \code{\link{addLayer}} \tab Add a layer to a Raster* object\cr
     \code{\link{dropLayer}} \tab Remove a layer from a RasterStack or RasterBrick \cr
     \code{\link{unstack}} \tab Create a list of RasterLayer objects from a RasterStack \cr
