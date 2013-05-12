@@ -47,8 +47,7 @@ rs <- r/s
 r[1:5] <- NA
 s[20:25] <- NA
 x <- stack(r, s, rs)
-crosstab(x, useNA='always', long=TRUE)
-
+crosstab(x, useNA=TRUE, long=TRUE)
 }
 
 \keyword{methods}

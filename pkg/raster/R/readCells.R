@@ -207,12 +207,18 @@
 	signed <- dataSigned(x@file@datanotation)
 	if (dsize > 2) { signed <- TRUE }
 	
-	x <- openConnection(x)
+	is.open <- x@file@open
+	if (!is.open) {
+		x <- readStart(x)
+	}
+
 	for (i in seq(along=cells)) {
 		seek(x@file@con, cells[i])
 		res[i] <- readBin(x@file@con, what=dtype, n=1, size=dsize, endian=byteord, signed=signed) 
 	}
-	x <- closeConnection(x)
+	if (!is.open) {
+		x <- readStop(x)
+	}
 	
 	if (x@file@datanotation == 'INT4U') {
 		i <- !is.na(res) & res < 0

@@ -334,8 +334,8 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
   \code{\link{pbCreate}} \tab Initialize a progress bar  \cr
   \code{\link{pbStep}} \tab Take a progress bar step \cr
   \code{\link{pbClose}} \tab Close a progress bar \cr
-  \code{\link{openConnection}} \tab Open a file connection \cr
-  \code{\link{closeConnection}} \tab Close a file connection \cr
+  \code{\link{readStart}} \tab Open file connections for efficient multi-chunck reading \cr
+  \code{\link{readStop}} \tab Close file connections \cr
   \code{\link{rasterTmpFile}}  \tab Get a name for a temporary file \cr
   \code{\link{inMemory}} \tab Are the cell values in memory? \cr
   \code{\link{fromDisk}} \tab Are the cell values read from a file? \cr	
