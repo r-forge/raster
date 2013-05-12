@@ -37,19 +37,24 @@ setMethod('readStart', signature(x='RasterStack'),
 	driver <- .driver(x)
 	if (driver == "gdal") {
 		attr(x@file, "con") <- GDAL.open(fn, silent=silent)
+		x@file@open <- TRUE
 	} else 	if (.isNativeDriver(driver))  {
-		fn <- .setFileExtensionValues(fn, driver)
-		attr(x@file, "con") <- file(fn, "rb")
+		# R has a max of 128 connections
+		if (length(getAllConnections()) < 103) {
+			fn <- .setFileExtensionValues(fn, driver)
+			attr(x@file, "con") <- file(fn, "rb")
+			x@file@open <- TRUE
+		}
 	} else if (driver == 'netcdf') {
 		if (isTRUE(getOption('rasterNCDF4'))) {
 			attr(x@file, 'con') <- ncdf4::nc_open(x@file@name)
 		} else {
 			attr(x@file, 'con') <- open.ncdf(x@file@name)
 		}
+		x@file@open <- TRUE
 	} else if (driver == 'ascii') {
 		# cannot be opened
 	}	
-	x@file@open <- TRUE
 	x
 }
 
