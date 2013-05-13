@@ -41,6 +41,7 @@ setMethod("mean", signature(x='Raster'),
 			tr <- blockSize(x)
 			pb <- pbCreate(tr$n, label='mean')
 			out <- writeStart(out, filename="")
+			x <- readStart(x, ...)
 			if (old) {
 				for (i in 1:tr$n) {
 					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
@@ -57,7 +58,8 @@ setMethod("mean", signature(x='Raster'),
 				}
 			}
 			pbClose(pb)
-			writeStop(out)
+			x <- readStop(x)
+			return( writeStop(out) )
 		} else {
 			d3 <- d[3] + length(add)
 			if (canProcessInMemory(x)) {
@@ -78,6 +80,7 @@ setMethod("mean", signature(x='Raster'),
 			tr <- blockSize(x)
 			pb <- pbCreate(tr$n, label='mean')
 			out <- writeStart(out, filename="")
+			x <- readStart(x, ...)
 			if (old) {
 				for (i in 1:tr$n) {
 					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
@@ -96,7 +99,9 @@ setMethod("mean", signature(x='Raster'),
 				}
 			}
 			pbClose(pb)
-			writeStop(out)
+			x <- readStop(x)
+			return( writeStop(out) )
+			
 		}
 	}
 )

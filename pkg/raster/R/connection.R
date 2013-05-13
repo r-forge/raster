@@ -23,7 +23,7 @@ setMethod('readStart', signature(x='Raster'),
 setMethod('readStart', signature(x='RasterStack'), 
 	function(x, ...) {
 		for (i in 1:nlayers(x)) {
-			x@layers[[i]] <- readStart(x@layers[[i]], ...)
+			x@layers[[i]] <- readStart(x@layers[[i]], con.check=103, ...)
 		}
 		x
 	}
@@ -32,7 +32,7 @@ setMethod('readStart', signature(x='RasterStack'),
 
 
 
-.openConnection <- function(x, silent=TRUE, ...) {
+.openConnection <- function(x, silent=TRUE, con.check=Inf, ...) {
 	fn <- trim(x@file@name)
 	driver <- .driver(x)
 	if (driver == "gdal") {
@@ -40,7 +40,7 @@ setMethod('readStart', signature(x='RasterStack'),
 		x@file@open <- TRUE
 	} else 	if (.isNativeDriver(driver))  {
 		# R has a max of 128 connections
-		if (length(getAllConnections()) < 103) {
+		if (length(getAllConnections()) < con.check) {
 			fn <- .setFileExtensionValues(fn, driver)
 			attr(x@file, "con") <- file(fn, "rb")
 			x@file@open <- TRUE

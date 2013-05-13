@@ -76,6 +76,8 @@ setMethod('zonal', signature(x='RasterLayer', z='RasterLayer'),
 			#nc1 <- nc + 1
 			#nc2 <- 2:nc1
 			#nc2 <- 2
+			x <- readStart(x, ...)
+			z <- readStart(z, ...)
 			
 			for (i in 1:tr$n) {
 				d <- cbind(getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
@@ -121,6 +123,8 @@ setMethod('zonal', signature(x='RasterLayer', z='RasterLayer'),
 				}
 				pbStep(pb, i)
 			}
+			x <- readStop(x)
+			z <- readStop(z)
 			
 			alltab <- tapply(alltab[,2], alltab[,1], FUN=func, na.rm=na.rm)
 			alltab <- cbind(as.numeric(names(alltab)), alltab)
@@ -215,7 +219,9 @@ setMethod('zonal', signature(x='RasterStackBrick', z='RasterLayer'),
 			nc1 <- nc + 1
 			nc2 <- 2:nc1
 			
-			# it might be more efficient to loop over the layers, particularly for a RasterStack
+			# for a RasterStack it would be more efficient to loop over the layers
+			x <- readStart(x, ...)
+			z <- readStart(z, ...)
 			
 			for (i in 1:tr$n) {
 				d <- cbind(getValues(x, row=tr$row[i], nrows=tr$nrows[i]),   
@@ -247,6 +253,8 @@ setMethod('zonal', signature(x='RasterStackBrick', z='RasterLayer'),
 				}
 				pbStep(pb, i)
 			}
+			x <- readStop(x)
+			z <- readStop(z)
 			
 			alltab <- aggregate(alltab[,nc2], by=list(alltab[,1]), FUN=func, na.rm=na.rm) 	
 			if (counts) {
@@ -258,6 +266,7 @@ setMethod('zonal', signature(x='RasterStackBrick', z='RasterLayer'),
 				}
 				
 			}
+			
 		}
 	
 		alltab <- as.matrix(alltab)
