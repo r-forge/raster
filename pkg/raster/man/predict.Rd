@@ -68,15 +68,16 @@ plot(logo, 3, col=rgb(cbind(0,0,0:255), maxColorValue=255))
 par(mfrow=c(1,1))
 }
 
-#get presence and pseudo-absence points
+# known presence and absence points
 p <- matrix(c(48, 48, 48, 53, 50, 46, 54, 70, 84, 85, 74, 84, 95, 85, 
    66, 42, 26, 4, 19, 17, 7, 14, 26, 29, 39, 45, 51, 56, 46, 38, 31, 
    22, 34, 60, 70, 73, 63, 46, 43, 28), ncol=2)
-# 
-a <- cbind(runif(250)*(xmax(logo)-xmin(logo))+xmin(logo), 
-           runif(250)*(ymax(logo)-ymin(logo))+ymin(logo))
 
-#extract values for points
+a <- matrix(c(22, 33, 64, 85, 92, 94, 59, 27, 30, 64, 60, 33, 31, 9,
+   99, 67, 15, 5, 4, 30, 8, 37, 42, 27, 19, 69, 60, 73, 3, 5, 21,
+   37, 52, 70, 74, 9, 13, 4, 17, 47), ncol=2)
+
+# extract values for points
 xy <- rbind(cbind(1, p), cbind(0, a))
 v <- data.frame(cbind(xy[,1], extract(logo, xy[,2:3])))
 colnames(v)[1] <- 'pa'

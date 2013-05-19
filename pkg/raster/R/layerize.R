@@ -122,7 +122,11 @@ function(x, y, classes=NULL, filename='', ...) {
 		b <- crop(x, int)
 		xy <- xyFromCell(b, 1:ncell(b))
 		mc <- cellFromXY(out, xy)
-		v <- table(mc, as.integer(getValues(b)))
+		b <- as.integer(getValues(b))
+		if (!is.null(classes)) {
+			b[! b %in% classes] <- NA
+		}	
+		v <- table(mc, b)
 		cells <- as.integer(rownames(v))
 		m <- match(cells, 1:ncell(out))
 		cn <- as.integer(colnames(v))

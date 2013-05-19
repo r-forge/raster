@@ -52,8 +52,7 @@ setMethod('readStart', signature(x='RasterStack'),
 			attr(x@file, 'con') <- open.ncdf(x@file@name)
 		}
 		x@file@open <- TRUE
-	} else if (driver == 'ascii') {
-		# cannot be opened
+#	} else if (driver == 'ascii') { # cannot be opened
 	}	
 	x
 }
