@@ -88,7 +88,9 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 	} else if (canProcessInMemory(x)) {
 		if (inherits(x, 'RasterStack')) {
 			x <- brick( x, values=TRUE )
-			x <- readAll(x) # probably not needed
+			if (!inMemory(x)) {
+				x <- readAll(x) 
+			}
 			x <- .clearFile(x)
 		} else if ( fromDisk(x) ) {
 			x <- readAll(x)

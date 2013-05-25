@@ -146,6 +146,13 @@ m <- cforest(pa~., control=cforest_unbiased(mtry=3), data=v)
 f <- list(levels(v$red))
 names(f) <- 'red'
 pc <- predict(logo, m, OOB=TRUE, factors=f)
+
+
+# knn example, using calc instead of predict
+library(class)
+cl <- factor(c(rep(1, nrow(p)), rep(0, nrow(a))))
+train <- extract(logo, rbind(p, a))
+k <- calc(logo, function(x) as.integer(as.character(knn(train, x, cl))))
 }
 }
 
