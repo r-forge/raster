@@ -22,7 +22,7 @@
 \alias{raster,kasc-method}
 \alias{raster,kde-method}
 \alias{raster,grf-method}
-\alias{raster,gridTopology-method}
+\alias{raster,GridTopology-method}
 
 \title{Create a RasterLayer object}
 
