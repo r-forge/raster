@@ -7,8 +7,10 @@
 \alias{extent,matrix-method}
 \alias{extent,numeric-method}
 \alias{extent,list-method}
+\alias{extent,gridTopology-method}
 \alias{bbox,Raster-method}
 \alias{bbox,Extent-method}
+
 
   
 \title{Extent}
