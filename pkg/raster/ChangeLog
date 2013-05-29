@@ -6,6 +6,7 @@ move resample (bilenear interp. (and add other options)) and rasterize/(lines, p
 function for affine transformation
 
 --- developement version
+coercion methods to Extent and RasterLayer from GridTopology contributed by Michael Sumner
 bug fixes in crosstab and in zonal, reported by Josh Perlman
 changed default datatype to FLT8S (from FLT4S) to avoid generalization of large integers
 NA value in native arc ascii files now only the flag value (it was any value <= the flag value)

@@ -141,3 +141,20 @@ setMethod('extent', signature(x='list'),
 		return(extent(lim,...))
 	}
 )
+
+
+
+setMethod('extent', signature(x='GridTopology'),
+# contributed by Michael Sumner
+	function(x){
+		cco <- x@cellcentre.offset
+		cs <- x@cellsize
+		cdim <- x@cells.dim
+		e <- new('Extent')
+		e@xmin <- cco[1] - cs[1]/2
+		e@xmax <- e@xmin + cs[1] * cdim[1]
+		e@ymin <- cco[2] - cs[2]/2
+		e@ymax <- e@ymin + cs[2] * cdim[2]
+		return(e)
+    }
+)
