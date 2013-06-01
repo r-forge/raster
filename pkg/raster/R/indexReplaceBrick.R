@@ -28,6 +28,7 @@ setMethod("$<-", "Raster",
 				r[] <- value
 				x[[name]] <- value
 			}
+			return(x)
 		} 
 	}
 )
