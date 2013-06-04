@@ -26,7 +26,7 @@
 			r
 		}
 	}
-	x <- overlay(x, y, fun=filler)
+	x <- overlay(x, y, fun=fill)
 	names(x) = paste('v', 1:maxv, sep='')
 	x
 }
