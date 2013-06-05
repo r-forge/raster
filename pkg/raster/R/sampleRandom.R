@@ -41,7 +41,6 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 	stopifnot(size <= ncell(x))
 	
 	r <- raster(x)
-	nc <- ncell(r)
 	
 	layn <- names(x)
 
@@ -51,12 +50,14 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 		cells <- TRUE
 	}
 
+	nc <- ncell(r)
 
 	if ( inMemory(x) ) {
 		if (is.null(ext)) {
 			x <- getValues(x)
 		} else {
 			x <- crop(x, ext)
+			rc <- raster(x)
 			x <- getValues(x)
 		}
 		
@@ -64,8 +65,8 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 			if (is.null(ext)) {
 				x <- cbind(cell=1:nc, value=x)			
 			} else {
-				xy <- xyFromCell(r, 1:nc)
-				cell <- cellFromXY(r, xy)
+				XY <- xyFromCell(rc, 1:ncell(x))
+				cell <- cellFromXY(r, XY)
 				x <- cbind(cell, value=x)
 			}
 		}
@@ -90,23 +91,23 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 	} else {
 		
 		if (! is.null(ext)) {
-			r <- crop(r, ext)
+			rr <- crop(r, ext)
 		}
 			
 		if (size >= nc) {
 			
 			if (is.null(ext)) {
-				x <- cbind(1:nc, getValues(x))
+				x <- getValues(r)
 			} else {
-				x <- cbind(1:nc, getValues(crop(x, ext)))			
+				x <- getValues(rr)
 			}
 			
 			if (cells) {
 				if (is.null(ext)) {
 					x <- cbind(cell=1:nc, value=x)
 				} else {
-					xy <- xyFromCell(r, 1:nc)
-					cell <- cellFromXY(x, xy)
+					XY <- xyFromCell(rr, 1:ncell(rr))
+					cell <- cellFromXY(r, XY)
 					x <- cbind(cell, value=x)
 				}
 			}
@@ -132,8 +133,8 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 			rcells <- sampleInt(nc, N)
 			
 			if (!is.null(ext)) {
-				xy <- xyFromCell(r, rcells)
-				rcells <- cellFromXY(x, xy)
+				XY <- xyFromCell(r, rcells)
+				rcells <- cellFromXY(r, XY)
 			}
 			
 			x <- .cellValues(x, rcells)
@@ -169,19 +170,19 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 	}
 	
 	if (xy) {
-		xy <- xyFromCell(r, x[,1])
-		x <- cbind(x[,1,drop=FALSE], xy, x[,2:ncol(x),drop=FALSE])
+		XY <- xyFromCell(r, x[,1])
+		x <- cbind(x[,1,drop=FALSE], XY, x[,2:ncol(x),drop=FALSE])
 	}
 	if (rowcol) {
 		rc <- cbind(row=rowFromCell(r, x[,1]), col=colFromCell(r, x[,1]))
 		x <- cbind(x[ , 1, drop=FALSE], rc, x[ , 2:ncol(x), drop=FALSE])
 	}
 	if (sp) {
-		xy <- data.frame(xyFromCell(r, x[,1]))
+		XY <- data.frame(xyFromCell(r, x[,1]))
 		if (removeCells) {
 			x <- x[,-1,drop=FALSE]
 		}
-		x <- SpatialPointsDataFrame(xy, data=data.frame(x), proj4string=projection(r, asText=FALSE))
+		x <- SpatialPointsDataFrame(XY, data=data.frame(x), proj4string=projection(r, asText=FALSE))
 		
 	} else if (removeCells) {
 		x <- x[,-1,drop=FALSE]	
