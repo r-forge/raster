@@ -6,6 +6,7 @@ move resample (bilenear interp. (and add other options)) and rasterize/(lines, p
 function for affine transformation
 
 --- developement version
+new argument 'values' to 'trim' to allow trimming for other values that NA
 new functions (for Raster objects) which.min and which.max
 layers can now be refered to with a $ (as in lists and data.frames)
 coercion methods to Extent and RasterLayer from GridTopology contributed by Michael Sumner
