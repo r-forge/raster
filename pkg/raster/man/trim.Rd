@@ -15,7 +15,7 @@ Or remove the whitespace before or after a string of characters (or a matrix, or
 }
 
 \usage{
-\S4method{trim}{Raster}(x, values=NA, padding=0, filename='', ...)
+\S4method{trim}{Raster}(x, padding=0, values=NA, filename='', ...)
 \S4method{trim}{character}(x, ...)
 }
 
