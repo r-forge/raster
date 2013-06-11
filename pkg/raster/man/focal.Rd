@@ -53,12 +53,6 @@ RasterLayer
 }
 
 
-\note{
-This function has replaced a previous version of \code{focal}, and functions \code{focalNA} and \code{focalFilter})
-}
-
-
-
 
 \examples{
 r <- raster(ncols=36, nrows=18, xmn=0)
