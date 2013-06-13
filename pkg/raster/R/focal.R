@@ -20,61 +20,6 @@
 	return(ngb)
 }
 
-..circular.weight <- function(radius) {
-# based on a function provided by Thomas Cornulier
-	x <- -radius:radius
-	n <- length(x)
-    d <- sqrt(rep(x, n)^2 + rep(x, each=n)^2) <= radius
-    matrix(d + 0, n, n) / sum(d)
-}
-
-
-.circular.weight <- function(r, distance) {
-	rs <- res(r)
-	nx <- 1 + 2 * floor(distance/rs[1])
-	ny <- 1 + 2 * floor(distance/rs[2])
-	m <- matrix(ncol=nx, nrow=ny)
-	m[ceiling(ny/2), ceiling(nx/2)] <- 1
-	if (nx == 1 & ny == 1) {
-		return(m)
-	} else {
-		x <- raster(m, xmn=0, xmx=nx*rs[1], ymn=0, ymx=ny*rs[2], crs='+proj=utm +zone=1')
-		d <- as.matrix(distance(x)) <= distance
-		d / sum(d)
-	}
-}
-
-.Gauss.weight <- function(r, n, sigma) {
-# need to adjust for non-square cells to distance.... 
-	m <- matrix(ncol=n, nrow=n)
-	col <- rep(1:n, n)
-	row <- rep(1:n, each=n)
-	x <- col - ceiling(n/2)
-	y <- row - ceiling(n/2)
-# according to http://en.wikipedia.org/wiki/Gaussian_filter
-	m[cbind(row, col)] <- 1/(2*pi*sigma^2) * exp(-(x^2+y^2)/(2*sigma^2))
-# sum of weights should add up to 1	
-	m / sum(m)
-}
-
-
-
-focalWeight <- function(x, d, type=c('circle', 'Gauss', 'rectangle')) {
-	type <- match.arg(type)
-	if (type == 'circle') {
-		.circular.weight(x, d[1])
-	} else if (type == 'Gauss') {
-		if (length(d) != 2) {
-			stop("If type=Gauss, r should be a vector of length 2. The first argument should be\n the number of rows/columns, the second argument should be sigma")
-		}
-		.Gauss.weight(x, d[1], d[2])
-	} else {
-		# need to adjust for cell size!
-		d <- rep_len(d, length.out=2)
-		d <- matrix(1, ncol=d, nrow=d)
-		d <- d / sum(d)
-	}
-}
 
 
 .getW <- function(w) {
@@ -82,10 +27,13 @@ focalWeight <- function(x, d, type=c('circle', 'Gauss', 'rectangle')) {
 		w <- round(w)
 		stopifnot(w > 0)
 		w <- matrix(1, ncol=w, nrow=w)
+		w <- w / sum(w)
+		warning('the computation of the weights matrix has changed in version 2.1-35. The sum of weights is now 1')
 	} else if (length(w) == 2) {
 		w <- round(w)
 		w <- matrix(1, ncol=w[1], nrow=w[2])
-		w <- w
+		w <- w / sum(w)
+		warning('the computation of the weights matrix has changed in version 2.1-35. The sum of weights is now 1')
 	} 
 	if (! is.matrix(w) ) {
 		stop('w should be a single number, two numbers, or a matrix')

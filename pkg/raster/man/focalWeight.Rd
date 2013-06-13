@@ -5,7 +5,7 @@
 \title{Focal weights matrix}
 
 \description{
-Calculate focal ("moving window") weight matrix for use in the focal function.
+Calculate focal ("moving window") weight matrix for use in the \code{\link{focal}} function. The sum of the values adds up to one.
 }
 
 \usage{
@@ -14,21 +14,19 @@ focalWeight(x, d, type=c('circle', 'Gauss', 'rectangle'))
 
 \arguments{
 \item{x}{Raster* object}
-\item{d}{ xxx }
-\item{type}{ yyy }
+\item{d}{numeric. If \code{type=circle}, the radius of the circle (in units of the CRS). If \code{type=rectangle} the dimension of the rectangle (one or two numbers). If \code{type=Gauss} the size of sigma, and optionally another number to determine the size of the matrix returned (default is 3 times sigma)} 
+\item{type}{character indicating the type of filter to be returned}
 }
 
 \value{
-matrix
+matrix that can be used in \code{\link{focal}}
 }
 
 
 \examples{
 r <- raster(ncols=36, nrows=18, xmn=0)
-values(r) <- 1:ncell(r)
 # Gaussian filter for square cells
-gf <- focalWeight(r, c(5, 1.5), "Gauss")
-rg <- focal(r, w=gf)
+gf <- focalWeight(r, 2, "Gauss")
 }
 
 

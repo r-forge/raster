@@ -1,12 +1,11 @@
 --- to do
 focal for multi-layer objects
-'distance' argument to focal (for circular neighborhood)
 support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 function for affine transformation
 
---- 9-June-2013, version: 2.1-35
+--- 13-June-2013, version: 2.1-36
 new argument 'values' to 'trim' to allow trimming for other values that NA
 new functions (for Raster objects) which.min and which.max
 layers can now be refered to with a $ (as in lists and data.frames)
@@ -15,6 +14,7 @@ bug fixes in crosstab and in zonal, reported by Josh Perlman
 bug fix in terrain. flowdir was not computed when used together with other options (bug and fix reported by Etienne Racine)
 changed default datatype to FLT8S (from FLT4S) to avoid generalization of large integers
 NA value in native arc ascii files now only the flag value (it was any value <= the flag value)
+bug fix in assigning colnames when extracting values from RasterBrick
 
 --- 11-April-2013, version: 2.1-25
 removed bugs from 'f8' in the writing functions vignette (reported by J. R. Matchett)
