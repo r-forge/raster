@@ -256,21 +256,6 @@ setClass ('RasterStack',
 setClassUnion("RasterStackBrick", c("RasterStack", "RasterBrick"))
 
 
-setClass ('.RasterList',
-	representation (
-	    filename ='character',
-		layers ='list'
-		),
-	prototype (
-		filename='',
-		layers = list()
-		),
-	validity = function(object) {
-		return( length(object@layers) == object@data@nlayers )
-	}
-)
-
-
 setClass ('RasterLayerSparse',
 	contains = 'RasterLayer',
 	representation (
@@ -314,5 +299,18 @@ setClass ('.RasterQuad',
 
 
 #setClassUnion("RasterStackBrickList", c("RasterStack", "RasterBrick", "RasterList"))
+
+
+
+setClass ('.RasterList',
+	contains = 'list',
+	representation (),
+	prototype (),
+	validity = function(object) {
+		s <- sapply(object, function(x) inherits(x, 'Raster'))
+		return( sum(s) == length(s))
+	}
+)
+
 
 
