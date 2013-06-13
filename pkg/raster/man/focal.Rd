@@ -55,7 +55,7 @@ RasterLayer
 }
 
 
-\seealso{ \code{\link{focalWeights}} }
+\seealso{ \code{\link{focalWeight}} }
 
 \examples{
 r <- raster(ncols=36, nrows=18, xmn=0)
