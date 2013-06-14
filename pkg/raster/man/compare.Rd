@@ -12,8 +12,8 @@ all.equal is a wrapper around compareRaster with options \code{values=TRUE}, \co
 }
 
 \usage{
-compareRaster(x, ..., extent=TRUE, rowcol=TRUE, crs=TRUE, res=FALSE, orig=FALSE, 
-			rotation=TRUE, values=FALSE, tolerance, stopiffalse=TRUE, showwarning=FALSE) 
+compareRaster(x, ..., extent=TRUE, rowcol=TRUE, crs=TRUE, res=FALSE, orig=FALSE,
+         rotation=TRUE, values=FALSE, tolerance, stopiffalse=TRUE, showwarning=FALSE)
 }
 
 \arguments{

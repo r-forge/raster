@@ -14,8 +14,9 @@ This approach (predict a fitted model to raster data) is commonly used in remote
 }
 
 \usage{
-\S4method{predict}{Raster}(object, model, filename="", fun=predict, ext=NULL, const=NULL, 
-   index=1, na.rm=TRUE, inf.rm=FALSE, factors=NULL, format, datatype, overwrite=FALSE, progress='', ...)
+\S4method{predict}{Raster}(object, model, filename="", fun=predict, ext=NULL, 
+   const=NULL, index=1, na.rm=TRUE, inf.rm=FALSE, factors=NULL, 
+   format, datatype, overwrite=FALSE, progress='', ...)
 }
 
 
