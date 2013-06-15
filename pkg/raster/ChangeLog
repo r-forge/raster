@@ -5,7 +5,7 @@ add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 function for affine transformation
 
---- 13-June-2013, version: 2.1-36
+--- 14-June-2013, version: 2.1-37
 new argument 'values' to 'trim' to allow trimming for other values that NA
 new functions (for Raster objects) which.min and which.max
 layers can now be refered to with a $ (as in lists and data.frames)
