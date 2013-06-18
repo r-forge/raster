@@ -1,34 +1,26 @@
 
-\alias{setOptions}
-\alias{showOptions}
-\alias{count}
-
+\alias{adjacency}
 
 \name{Obsolete}
 
-  
 \title{Obsolete (depracated) functions}
 
 \description{
-Functions setOptions, showOptions, saveOptions, and clearOptions have been replaced by \code{\link{rasterOptions}}
-
-intersectExtent has been replaced by \code{\link{intersect}}
-unionExtent has been replaced by \code{\link{union}}
-
-count has been replaced by freq( , , value=  )
+adjacency has been replaced by \code{\link{adjacent}}
 }
 
 \usage{
-setOptions(...)
-showOptions()
-count(...)
+adjacency(x, fromCells, toCells, directions) 
 }
 
 \arguments{
-\item{...}{arguments}
+\item{x}{Raster* object}
+\item{fromCells}{integer}
+\item{toCells}{integer}
+\item{directions}{integer}
 }
 
-\seealso{ \code{\link{rasterOptions}}, \code{\link{freq}} }
+\seealso{ \code{\link{adjacent}} }
 
 \keyword{spatial}
 
