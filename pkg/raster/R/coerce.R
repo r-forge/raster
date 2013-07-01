@@ -7,14 +7,6 @@
 # To sp pixel/grid objects	
 
 
-..getGridTop <- function(x) {
-# replaced by as( )
-	rs <- res(x)
-	orig <- bbox(x)[,1] + 0.5 * rs
-	GridTopology(orig, rs, dim(x)[2:1] )
-}
-
-
 setAs('Raster', 'GridTopology', 
 	function(from) {
 		rs <- res(from)
@@ -23,13 +15,11 @@ setAs('Raster', 'GridTopology',
 	}
 )
 
-
 setAs('GridTopology', 'RasterLayer',
 	function(from) {
 		raster(extent(from), nrows=from@cells.dim[2], ncols=from@cells.dim[1])
 	}
 )
-
 
 
 setAs('Raster', 'SpatialPixels', 
