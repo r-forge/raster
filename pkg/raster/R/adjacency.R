@@ -10,7 +10,7 @@
 }
 
 
-adjacency <- function(x, ...) {
+.adjacency <- function(x, ...) {
 
 	dots <- list(...)
 	fromCells <- dots$fromCells
