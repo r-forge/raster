@@ -122,7 +122,7 @@ function(x, w=3, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=F
 			}
 			
 			paddim <- as.integer(dim(v))
-			#v <- as.vector(t(v))
+			v <- as.vector(t(v))
 			# in C NA and NaN are not the same
 			v[!is.finite(v)] <- NA
 			if (dofun) {
