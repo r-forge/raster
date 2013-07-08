@@ -5,9 +5,10 @@ add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 function for affine transformation
 
---- developement version
-bug fix in focal (introduced in previous version)
+--- 8-July-2014, version: 2.1-45
+bug fix in focal with pad=TRUE (introduced in previous version)
 bug fix in terrain/roughness (problem reported by Michael Sumner)
+crop failed with a single-layer RasterBrick (reported by Michael Sumner)
 
 --- 2-July-2014, version: 2.1-41
 changes in namespace (disaggregate) to keep compatibility with 'sp'
