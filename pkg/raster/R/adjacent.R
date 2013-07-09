@@ -31,13 +31,15 @@
 	x <- apply(xy[,1,drop=FALSE], 1, function(z) z + xngb )
 	y <- apply(xy[,2,drop=FALSE], 1, function(z) z + yngb )
 
-	c(as.vector(x), as.vector(y))
+	na.omit(c(as.vector(x), as.vector(y)))
 }
 
 
 adjacent <- function(x, cells, directions=4, pairs=TRUE, target=NULL, sorted=FALSE, include=FALSE, id=FALSE) {
 
-	if (is.character(directions)) { directions <- tolower(directions) }
+	if (is.character(directions)) { 
+		directions <- tolower(directions) 
+	}
 
 	x <- raster(x)
 	r <- res(x)
@@ -50,7 +52,7 @@ adjacent <- function(x, cells, directions=4, pairs=TRUE, target=NULL, sorted=FAL
 		
 		d <- .adjacentUD(x, cells, directions, include)
 		
-		directions <- sum(directions==1)
+		directions <- sum(directions==1, na.rm=TRUE)
 		mat <- TRUE
 		
 	} else if (directions==4) {
@@ -104,7 +106,7 @@ adjacent <- function(x, cells, directions=4, pairs=TRUE, target=NULL, sorted=FAL
 	if (include) directions <- directions + 1
 	
 	d <- matrix(d, ncol=2)
-	if (.isGlobalLonLat(x)) {
+	if (raster:::.isGlobalLonLat(x)) {
 		# normalize longitude to -180..180
 		d[,1] <- (d[,1] + 180) %% 360 - 180
 	}
