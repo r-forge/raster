@@ -37,7 +37,7 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 	}
 	
 	if (isLonLat(dem)) {
-		dy <- pointDistance(cbind(0,0), cbind(0, dy), longlat=TRUE)
+		dy <- pointDistance(cbind(0,0), cbind(0, dy), lonlat=TRUE)
 		fY <- fY / dy
 		
 		zy <- focal(dem, w=fY)

@@ -27,7 +27,7 @@
 	colnames(xy) <- c('x', 'y')
 	m <- merge(m, cbind(1:nrow(xy), xy), by.x='id', by.y=1)
 	
-	pd <- pointDistance(m[,c('x', 'y')], xyFromCell(r, m$to), longlat=longlat) / 1000
+	pd <- pointDistance(m[,c('x', 'y')], xyFromCell(r, m$to), lonlat=longlat) / 1000
 	pd <- pd^pow
 	pd[pd==0] <- 1e-12
 	

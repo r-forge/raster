@@ -113,7 +113,7 @@ projectExtent <- function(object, crs) {
 	out <- c((pXY[2,1] - pXY[1,1]), (pXY[4,2] - pXY[3,2]))
 	if (any(is.na(res))) {
 		if (isLonLat(raster)) {
-			out <- pointDistance(cbind(x1, y1), cbind(x2, y2), longlat=TRUE)
+			out <- pointDistance(cbind(x1, y1), cbind(x2, y2), lonlat=TRUE)
 			out <- c(out, out)
 		} else {
 			out <- res
