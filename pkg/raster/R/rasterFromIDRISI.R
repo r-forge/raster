@@ -3,7 +3,8 @@
 # Version 0.9
 # Licence GPL v3
 
-.rasterFromIDRISIFile <- function(filename) {
+.rasterFromIDRISIFile <- function(filename, crs=NULL) {
+
 	valuesfile <- .setFileExtensionValues(filename, "IDRISI")
 	if (!file.exists(valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
@@ -15,7 +16,7 @@
 	ini[,2] = toupper(ini[,2]) 
 
 	byteorder <- .Platform$endian
-	projstring <- ""
+	projstring <- "NA"
 	nodataval <- -Inf
 	layernames <- ''
 	filetype <- ''
@@ -45,6 +46,10 @@
 	if (filetype=='PACKED BINARY') {
 		stop('cannot natively read packed binary files, read via rgdal?')
 	}
+	
+	# attempt could be made to decipher some of the idrisi crs descriptions
+	
+	projstring <- .getProj(projstring, crs)
 	
 	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
 

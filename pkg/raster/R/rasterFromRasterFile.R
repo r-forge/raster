@@ -24,7 +24,19 @@
 }
 
 
-.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster', RAT=TRUE) {
+.getProj <- function(proj, crs) {
+	if (!is.null(crs)) {
+		if (proj == "NA") {
+			proj <- crs
+		} else {
+			warning('argument "crs" ignored because the file provides a crs') 
+		}
+	}
+	proj
+}
+
+
+.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster', RAT=TRUE, crs=NULL) {
 
 	valuesfile <- .setFileExtensionValues(filename, driver)
 	if (!file.exists( valuesfile )){
@@ -40,7 +52,7 @@
 	nbands <- as.integer(1)
 	band <- as.integer(band)
 	bandorder <- "BIL"
-	projstring <- ""
+	projstring <- "NA"
 	minval <- NA
 	maxval <- NA
 	nodataval <- -Inf
@@ -104,7 +116,8 @@
 	
 	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
 	if (projstring == 'UNKNOWN') { projstring <- "NA" }
-
+	
+	projstring <- .getProj(projstring, crs)
 	
 	if (band < 1) {
 		band <- 1

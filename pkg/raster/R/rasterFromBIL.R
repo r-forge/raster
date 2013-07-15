@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.rasterFromGenericFile <- function(filename, band=1, SIGNEDINT=NULL, type='RasterLayer', ...) {
+.rasterFromGenericFile <- function(filename, band=1, SIGNEDINT=NULL, type='RasterLayer', crs=NULL, ...) {
 	hdrfname <- .setFileExtensionHeader(filename, "BIL")
 	
 	ini <- readIniFile(hdrfname, token=' ')
@@ -19,7 +19,7 @@
 	nbands <- as.integer(1)
 	band <- as.integer(band)
 	bandorder <- "BIL"
-	projstring <- ""
+	projstring <- "NA"
 	minval <- Inf
 	maxval <- -Inf
 	nodataval <- -Inf
@@ -109,10 +109,11 @@
 	maxval <- maxval[1:nbands]
 	minval[is.na(minval)] <- Inf
 	maxval[is.na(maxval)] <- -Inf
+
+	if (!is.null(crs)) {
+		projstring <- crs
+	}	
 	
-	if (projstring == 'GEOGRAPHIC') {
-		projstring <- "+proj=longlat +datum=WGS84"
-	}
 	
 	if (type == 'RasterBrick') {
 		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)

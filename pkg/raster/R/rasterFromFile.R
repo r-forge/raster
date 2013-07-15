@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.rasterObjectFromFile <- function(x, band=1, objecttype='RasterLayer', native=FALSE, silent=TRUE, offset=NULL, ncdf=FALSE, ...) {
+.rasterObjectFromFile <- function(x, band=1, objecttype='RasterLayer', native=FALSE, silent=TRUE, offset=NULL, ncdf=FALSE, crs=NULL, ...) {
 	x <- trim(x)
 	if (x=='' | x=='.') { # etc? 
 		stop('provide a valid filename')
@@ -26,7 +26,7 @@
 		grifile <- .setFileExtensionValues(x, 'raster')
 		grdfile <- .setFileExtensionHeader(x, 'raster')
 		if ( file.exists( grdfile) & file.exists( grifile)) {
-			return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
+			return ( .rasterFromRasterFile(grdfile, band=band, objecttype, crs) )
 		} 
 	}
 	
@@ -36,7 +36,7 @@
 			grifile <- .setFileExtensionValues(x, 'raster')
 			grdfile <- .setFileExtensionHeader(x, 'raster')
 			if ( file.exists( grdfile) & file.exists( grifile)) {
-				return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
+				return ( .rasterFromRasterFile(grdfile, band=band, objecttype, crs) )
 			} else {
 				# stop('file: ', x, ' does not exist')
 			}
@@ -47,25 +47,24 @@
 	#	return(.rasterObjectFromCDF_GMT(x))
 	#}
 	if (( fileext %in% c(".NC", ".NCF", ".NC4", ".CDF", ".NCDF", ".NETCDF")) | (isTRUE(ncdf))) {
-		return ( .rasterObjectFromCDF(x, type=objecttype, band=band, ...) )
-		# return ( .rasterFromCDF(x, objecttype, ...) )
+		return( .rasterObjectFromCDF(x, type=objecttype, band=band, crs, ...) )
 	}
 	if ( fileext == ".GRD") {
 		if (require(ncdf)) {
 			if (.isNetCDF(x)) {
-				# return ( .rasterFromCDF(x, objecttype, ...) )
-				return ( .rasterObjectFromCDF(x, type=objecttype, band=band, ...) )
+				return( .rasterObjectFromCDF(x, type=objecttype, band=band, crs, ...)  )
 			}
 		}
 	}
 
 	if ( fileext == ".BIG" | fileext == ".BRD") {
-		return( .rasterFromRasterFile(x, band=band, objecttype, driver='big.matrix') )
+		return( .rasterFromRasterFile(x, band=band, objecttype, driver='big.matrix', crs) )
 	}
 	
 	if (!is.null(offset)) {
-		return ( .rasterFromASCIIFile(x, offset) )
+		return( .rasterFromASCIIFile(x, offset, crs) )
 	}
+	
 	if(!native) {
 		if (! .requireRgdal(FALSE) )  { 
 			native <- TRUE 
@@ -73,24 +72,24 @@
 	}
 	if (native) {
 		if ( fileext == ".ASC" ) {
-			return ( .rasterFromASCIIFile(x) )
-		}
-		if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
-			return ( .rasterFromGenericFile(x, type=objecttype, ...) )
-		}
-		if ( fileext %in% c(".RST", ".RDC") ) {
+			return ( .rasterFromASCIIFile(x, crs=crs)  )
+		} else if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
+			return ( .rasterFromGenericFile(x, type=objecttype, crs=crs, ...) )
+		} else {
+			if ( fileext %in% c(".RST", ".RDC") ) {
 #  not tested much
-			return ( .rasterFromIDRISIFile(x) )
-		}
-		if ( fileext %in% c(".SGRD", ".SDAT") ) {
+				return( .rasterFromIDRISIFile(x, crs=crs))
+			}
+			if ( fileext %in% c(".SGRD", ".SDAT") ) {
 # barely tested
-			return ( .rasterFromSAGAFile(x) )
-		}
-		
+				return( .rasterFromSAGAFile(x, crs=crs))
+			}
+		} 
+	
 	}
 	
 	if ( fileext %in% c(".SGRD", ".SDAT") ) {
-		r <-  .rasterFromSAGAFile(x) 
+		r <-  .rasterFromSAGAFile(x, crs=crs) 
 		if (r@file@toptobottom | r@data@gain != 1) {
 			return(r)
 		} # else use gdal
@@ -99,7 +98,7 @@
 	if (! .requireRgdal(FALSE) ) {
 		stop("Cannot create RasterLayer object from this file; perhaps you need to install rgdal first")
 	}
-	test <- try( r <- .rasterFromGDAL(x, band=band, objecttype, ...), silent=silent )
+	test <- try( r <- .rasterFromGDAL(x, band=band, objecttype, crs=crs, ...), silent=silent )
 	if (class(test) == "try-error") {
 		if (!file.exists(x)) {
 			stop("Cannot create a RasterLayer object from this file. (file does not exist)")

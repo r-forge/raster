@@ -70,7 +70,7 @@ For an overview of the functions in the raster package have a look here: \code{\
 \item{ymn}{minimum y coordinate (bottom border)}
 \item{ymx}{maximum y coordinate (top border)}
 \item{ext}{object of class Extent. If present, the arguments xmn, xmx, ymn and ynx are ignored}
-\item{crs}{character or object of class CRS. PROJ4 type description of a Coordinate Reference System (map projection). If this argument is missing, and the x coordinates are withing -360 .. 360 and the y coordinates are within -90 .. 90, "+proj=longlat +datum=WGS84" is used}
+\item{crs}{character or object of class CRS. PROJ.4 type description of a Coordinate Reference System (map projection). If this argument is missing, and the x coordinates are withing -360 .. 360 and the y coordinates are within -90 .. 90, "+proj=longlat +datum=WGS84" is used. Also see under Details if \code{x} is a character (filename)}
 \item{template}{Raster* or Extent object used to set the extent (and CRS in case of a Raster* object). If not \code{NULL}, arguments \code{xmn}, \code{xmx}, \code{ymn}, \code{ymx} and \code{crs} (unless \code{template} is an Extent object) are ignored}
 }
 
@@ -84,6 +84,9 @@ If \code{x} represents a filename, the following additional variables are recogn
 \code{RAT}: logical. The default is \code{TRUE}, in which case a raster attribute table is created for files that have one
 
 \code{offset}: integer. To indicate the number of header rows on non-standard ascii files (rarely useful; use with caution)
+
+\code{crs}: character. PROJ.4 string to set the CRS. Ignored when the file provides a CRS description that can be interpreted.
+
 
 If \code{x} represents a \bold{NetCDF} file, the following additional variable is recognized:
 

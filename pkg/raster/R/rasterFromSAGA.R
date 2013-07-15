@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-.rasterFromSAGAFile <- function(filename) {
+.rasterFromSAGAFile <- function(filename, crs=NULL) {
 	valuesfile <- .setFileExtensionValues(filename, "SAGA")
 	if (!file.exists(valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
@@ -17,7 +17,7 @@
 
 	byteorder <- .Platform$endian
 	ncellvals <- -9
-	projstring <- ""
+	projstring <- "NA"
 	nodataval <- -Inf
 	layernames <- ''
 	toptobottom <- FALSE
@@ -45,6 +45,13 @@
 	xn <- xn - (0.5 * cellsize)
 	yx <- yn + nr * cellsize - (0.5 * cellsize)
 	yn <- yn - (0.5 * cellsize)
+	
+	if (!is.null(crs)) {
+		if (projection(r) == "NA") {
+			projection(r) <- crs
+		}
+	}
+
 	
 	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
 
