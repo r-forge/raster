@@ -26,7 +26,7 @@
 		grifile <- .setFileExtensionValues(x, 'raster')
 		grdfile <- .setFileExtensionHeader(x, 'raster')
 		if ( file.exists( grdfile) & file.exists( grifile)) {
-			return ( .rasterFromRasterFile(grdfile, band=band, objecttype, crs) )
+			return ( .rasterFromRasterFile(grdfile, band=band, objecttype, crs=crs) )
 		} 
 	}
 	
@@ -36,7 +36,7 @@
 			grifile <- .setFileExtensionValues(x, 'raster')
 			grdfile <- .setFileExtensionHeader(x, 'raster')
 			if ( file.exists( grdfile) & file.exists( grifile)) {
-				return ( .rasterFromRasterFile(grdfile, band=band, objecttype, crs) )
+				return ( .rasterFromRasterFile(grdfile, band=band, objecttype, crs=crs) )
 			} else {
 				# stop('file: ', x, ' does not exist')
 			}
@@ -47,22 +47,22 @@
 	#	return(.rasterObjectFromCDF_GMT(x))
 	#}
 	if (( fileext %in% c(".NC", ".NCF", ".NC4", ".CDF", ".NCDF", ".NETCDF")) | (isTRUE(ncdf))) {
-		return( .rasterObjectFromCDF(x, type=objecttype, band=band, crs, ...) )
+		return( .rasterObjectFromCDF(x, type=objecttype, band=band, crs=crs, ...) )
 	}
 	if ( fileext == ".GRD") {
 		if (require(ncdf)) {
 			if (.isNetCDF(x)) {
-				return( .rasterObjectFromCDF(x, type=objecttype, band=band, crs, ...)  )
+				return( .rasterObjectFromCDF(x, type=objecttype, band=band, crs=crs, ...)  )
 			}
 		}
 	}
 
 	if ( fileext == ".BIG" | fileext == ".BRD") {
-		return( .rasterFromRasterFile(x, band=band, objecttype, driver='big.matrix', crs) )
+		return( .rasterFromRasterFile(x, band=band, type=objecttype, driver='big.matrix', crs=crs) )
 	}
 	
 	if (!is.null(offset)) {
-		return( .rasterFromASCIIFile(x, offset, crs) )
+		return( .rasterFromASCIIFile(x, offset, crs=crs) )
 	}
 	
 	if(!native) {
