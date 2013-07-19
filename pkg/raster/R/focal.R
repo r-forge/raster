@@ -22,18 +22,25 @@
 
 
 
+.wwarn() {
+	if (! isTRUE(getOption('rasterFocalWarningGiven'))) {
+		warning('the computation of the weights matrix has changed in version 2.1-35. The sum of weights is now 1')
+		setOption(rasterFocalWarningGiven=TRUE)
+	}
+}
+
 .getW <- function(w) {
 	if (length(w) == 1) {
 		w <- round(w)
 		stopifnot(w > 0)
 		w <- matrix(1, ncol=w, nrow=w)
 		w <- w / sum(w)
-		warning('the computation of the weights matrix has changed in version 2.1-35. The sum of weights is now 1')
+		.wwarn()
 	} else if (length(w) == 2) {
 		w <- round(w)
 		w <- matrix(1, ncol=w[1], nrow=w[2])
 		w <- w / sum(w)
-		warning('the computation of the weights matrix has changed in version 2.1-35. The sum of weights is now 1')
+		.wwarn()
 	} 
 	if (! is.matrix(w) ) {
 		stop('w should be a single number, two numbers, or a matrix')
