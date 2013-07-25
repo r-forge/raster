@@ -22,10 +22,10 @@
 
 
 
-.wwarn() {
-	if (! isTRUE(getOption('rasterFocalWarningGiven'))) {
+.wwarn <- function() {
+	if (! isTRUE(options('rasterFocalWarningGiven'))) {
 		warning('the computation of the weights matrix has changed in version 2.1-35. The sum of weights is now 1')
-		setOption(rasterFocalWarningGiven=TRUE)
+		options(rasterFocalWarningGiven=TRUE)
 	}
 }
 

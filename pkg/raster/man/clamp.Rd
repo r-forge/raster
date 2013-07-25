@@ -10,14 +10,14 @@ Clamp values to a mininum and maximum value. That is, all values below the lower
 }
 
 \usage{
-\S4method{clamp}{RasterLayer}(x, lower, upper, useValues=TRUE, filename="", ...)
+\S4method{clamp}{Raster}(x, lower=-Inf, upper=Inf, useValues=TRUE, filename="", ...)
 }
 
 \arguments{
   \item{x}{RasterLayer}
   \item{lower}{numeric. lowest value}
   \item{upper}{numeric. highest value}
-  \item{useValues}{logical. If \code{FALSE} values oudside the clamping range become \code{NA}, if \code{TRUE}, they get the extreme values}
+  \item{useValues}{logical. If \code{FALSE} values outside the clamping range become \code{NA}, if \code{TRUE}, they get the extreme values}
   \item{filename}{character. Filename for the output RasterLayer (optional)}  
   \item{...}{additional arguments as for \code{\link{writeRaster}}}  
 }
@@ -27,9 +27,8 @@ Raster object
 }
 
 \seealso{
-\link{\code{reclassify}}
+\code{\link{reclassify}}
 }
-
 
 \examples{
 r <- raster(ncols=12, nrows=12)
@@ -37,5 +36,6 @@ values(r) <- 1:ncell(r)
 rc <- clamp(r, 25, 75) 
 rc
 }
+
 \keyword{spatial}
 

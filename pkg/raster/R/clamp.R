@@ -11,17 +11,18 @@ if (!isGeneric("clamp")) {
 
 
 setMethod('clamp', signature(x='Raster'), 
-function(x, lower=-Inf, upper=Inf, useValues=FALSE, filename='', ...) {
+function(x, lower=-Inf, upper=Inf, useValues=TRUE, filename='', ...) {
 	if (!hasValues(x)) return(x)
-	range <- c(as.numeric(lower[1]), as.numeric(upper[1]))
+	range <- as.numeric(c(lower[1], upper[1]))
 	nl <- nlayers(x)
 	if (nl > 1) {
 		out <- brick(x, values=FALSE)
 	} else {
 		out <- raster(x)
 	}
+	useValues <- as.integer(useValues)
 	if (canProcessInMemory(out)) {
-		out <- setValues(out, .Call('clamp', values(x), range)) 
+		out <- setValues(out, .Call('clamp', values(x), range, useValues, NAOK=TRUE, PACKAGE='raster')) 
 	} else {
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, label='clamp', ...)
@@ -29,7 +30,7 @@ function(x, lower=-Inf, upper=Inf, useValues=FALSE, filename='', ...) {
 		
 		for (i in 1:tr$n) {
 			vals <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-			vals <- .Call('clamp', vals, range, as.integer(useValues), NAOK=TRUE, PACKAGE='raster')
+			vals <- .Call('clamp', vals, range, useValues, NAOK=TRUE, PACKAGE='raster')
 			if (nl > 1) {
 				vals <- matrix(vals, ncol=nl)
 			}

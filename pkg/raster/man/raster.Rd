@@ -52,7 +52,7 @@ For an overview of the functions in the raster package have a look here: \code{\
 
 \S4method{raster}{big.matrix}(x, xmn=0, xmx=1, ymn=0, ymx=1, crs=NA, template=NULL)
 
-\S4method(raster}{Spatial}(x, ...) 
+\S4method{raster}{Spatial}(x, ...) 
 
 \S4method{raster}{SpatialGrid}(x, layer=1, values=TRUE)
 
