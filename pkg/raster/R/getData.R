@@ -29,6 +29,9 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	fn <- paste(tempfile(), '.download', sep='')
 	res <- download.file(url=aurl, destfile=fn, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
 	if (res == 0) {
+		w <- getOption('warn')
+		on.exit(options('warn' = w))
+		options('warn'=-1) 
 		if (! file.rename(fn, filename) ) { 
 			# rename failed, perhaps because fn and filename refer to different devices
 			file.copy(fn, filename)
