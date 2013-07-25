@@ -11,28 +11,40 @@
 #include "util.h"
 
 
-SEXP clamp(SEXP d, SEXP r, SEXP usevals) {
+SEXP clamp(SEXP d, SEXP rr, SEXP usevals) {
 					
 	R_len_t i;
 	SEXP val;
-	double *xd, *rcl, *xval;
+	double *xd, *r, *xval;
 	PROTECT(d = coerceVector(d, REALSXP));
-	PROTECT(r = coerceVector(r, REALSXP));
+	PROTECT(rr = coerceVector(rr, REALSXP));
   	int uv = INTEGER(usevals)[0];
-	rcl = REAL(r);
+	r = REAL(rr);
 	xd = REAL(d);
 
 	int n = length(d);
 	PROTECT( val = allocVector(REALSXP, n) );
 	xval = REAL(val);
 	
-	for (i=0; i<n; i++) {
-		if ( (R_IsNA(xd[i])) | (xd[i] < rcl[1]) | (xd[i] > rcl[2])) {
-			xval[i] = R_NaReal;
-		} else {
-			xval[i] = xd[i];
-		}
-	}	
+	if (uv) {
+		for (i=0; i<n; i++) {
+			if ( xd[i] < r[0] ) { 
+				xval[i] = r[0];
+			} else if ( xd[i] > r[1] ) { 
+				xval[i] = r[1];
+			} else {
+				xval[i] = xd[i];
+			}
+		}		
+	} else {
+		for (i=0; i<n; i++) {
+			if ( (xd[i] < r[0]) | (xd[i] > r[1])) {
+				xval[i] = R_NaReal;
+			} else {
+				xval[i] = xd[i];
+			}
+		}	
+	}
 	UNPROTECT(3);
 	return(val);
 }
