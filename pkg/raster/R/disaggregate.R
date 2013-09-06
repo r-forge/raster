@@ -79,7 +79,7 @@ function(x, fact=NULL, method='', filename='', ...) {
 		
 	} else { 
 	
-		tr <- blockSize(x)
+		tr <- blockSize(x, n=xfact*yfact)
 		rown <- (tr$row-1) * yfact + 1
 		pb <- pbCreate(tr$n, label='disaggregate', ...)
 		out <- writeStart(out, filename=filename, datatype=.commonDataType(dataType(x)), ...)

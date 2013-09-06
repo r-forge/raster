@@ -25,7 +25,7 @@
 	
 	
 
-Geary <- function(x, w=3) {
+Geary <- function(x, w= matrix(1, 3, 3)) {
 
 	w <- raster:::.getFilter(w)
 	
@@ -53,7 +53,7 @@ Geary <- function(x, w=3) {
 
 
 
-GearyLocal <- function(x, w=3) { 
+GearyLocal <- function(x,  w=matrix(1, 3, 3)) { 
 	w <- .getFilter(w)
 	i <- trunc(length(w)/2)+1 
 	fun <- function(x,...) sum(w*(x-x[i])^2, ...)
