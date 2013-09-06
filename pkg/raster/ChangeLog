@@ -5,6 +5,9 @@ add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 function for affine transformation
 
+
+bug fix in stack with with input file name vector and quick=TRUE 
+	
 --- 8-July-2014, version: 2.1-45
 bug fix in focal with pad=TRUE (introduced in previous version)
 bug fix in terrain/roughness (problem reported by Michael Sumner)
