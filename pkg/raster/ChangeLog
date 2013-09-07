@@ -4,8 +4,12 @@ support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
 move resample (bilenear interp. (and add other options)) and rasterize/(lines, polygons) to C
 function for affine transformation
+add NSIDC northern hemisphere, and check implementation against https://stat.ethz.ch/pipermail/r-sig-geo/2011-October/013067.html
+add AMSR-E ice products and other raw binary products
+add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
 
 ---
+added support to read NSIDC sea ice concentration binary files (only Southern Hemisphere for now), http://nsidc.org/data/polar_stereo/ps_grids.html and http://nsidc.org/data/nsidc-0051.html
 bug fix in stack with with input file name vector and quick=TRUE 
 	
 --- 8-July-2013, version: 2.1-45
