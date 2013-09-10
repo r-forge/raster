@@ -6,15 +6,15 @@
 .rasterFromIDRISIFile <- function(filename, crs=NULL, old=FALSE, ...) {
 
 	if (old) {
-		format <- 'IDRISIold'
+		idformat <- 'IDRISIold'
 	} else {
-		format <- 'IDRISI'
+		idformat <- 'IDRISI'
 	}
-	valuesfile <- .setFileExtensionValues(filename, format)
+	valuesfile <- .setFileExtensionValues(filename, idformat)
 	if (!file.exists(valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
 	}		
-	filename <- .setFileExtensionHeader(filename, format)
+	filename <- .setFileExtensionHeader(filename, idformat)
 	
 	ini <- readIniFile(filename, token=':')
 
@@ -81,7 +81,7 @@
 	x@file@nodatavalue <- nodataval
 	x@data@fromdisk <- TRUE
 
-	x@file@driver <- 'IDRISIold'
+	x@file@driver <- idformat
     return(x)
 }
 

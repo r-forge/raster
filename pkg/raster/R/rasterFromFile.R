@@ -109,7 +109,7 @@
 
     ## MDSumner, NSIDC data
     if (fileext %in% c(".BIN")) {
-        r <- .rasterFromNSIDCFile(x, ...)
+        r <- .rasterFromNSIDCFile(x)
         if (!is.null(r)) return(r)  ## otherwise continue to GDAL
     }
 
