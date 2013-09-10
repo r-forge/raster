@@ -57,7 +57,8 @@
 	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
 
 	if (nchar(layernames) > 1) {
-		lnams <- unlist(strsplit(layernames, ':'))
+		# lnams <- unlist(strsplit(layernames, ':'))
+		lnams <- layernames
 	} else {
 		lnams <- gsub(" ", "_", extension(basename(filename), ""))
 	}
