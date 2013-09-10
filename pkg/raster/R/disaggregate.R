@@ -82,7 +82,11 @@ function(x, fact=NULL, method='', filename='', ...) {
 		tr <- blockSize(x, n=xfact*yfact)
 		rown <- (tr$row-1) * yfact + 1
 		pb <- pbCreate(tr$n, label='disaggregate', ...)
-		out <- writeStart(out, filename=filename, datatype=.commonDataType(dataType(x)), ...)
+		if (is.null(list(...)$datatype)) {
+			out <- writeStart(out, filename=filename, datatype=.commonDataType(dataType(x)), ...)
+		} else {		
+			out <- writeStart(out, filename=filename, ...)
+		}
 		x <- readStart(x, ...)		
 		
 		cols <- rep(seq.int(ncx), each=xfact)
