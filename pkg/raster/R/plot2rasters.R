@@ -143,7 +143,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 )
 
 
-.plotdens <- function(x, y, nc, nr, asp=NULL, ...) {
+.plotdens <- function(x, y, nc, nr, asp=NULL, xlim=NULL, ylim=NULL, ...) {
 	xy <- na.omit(cbind(x,y))
 	if (nrow(xy) == 0) {
 		stop('only NA values (in this sample?)')
@@ -162,6 +162,12 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 	
 	out <- raster(xmn=rx[1], xmx=rx[2], ymn=ry[1], ymx=ry[2], ncol=nc, nrow=nr)
 	out <- rasterize(xy, out, fun=function(x, ...) length(x), background=0)
+	if (!is.null(xlim) | !is.null(ylim)) {
+		if (is.null(xlim)) xlim <- c(xmin(x), xmax(x))
+		if (is.null(ylim)) ylim <- c(ymin(x), ymax(x))
+		e <- extent(xlim, ylim)
+		out <- extend(crop(out, e), e, value=0)
+	}
 	.plotraster2(out, maxpixels=nc*nr, asp=asp, ...) 	
 }
 
