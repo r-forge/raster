@@ -3,13 +3,18 @@
 # Version 0.9
 # Licence GPL v3
 
-.rasterFromIDRISIFile <- function(filename, crs=NULL) {
+.rasterFromIDRISIFile <- function(filename, crs=NULL, old=FALSE, ...) {
 
-	valuesfile <- .setFileExtensionValues(filename, "IDRISI")
+	if (old) {
+		format <- 'IDRISIold'
+	} else {
+		format <- 'IDRISI'
+	}
+	valuesfile <- .setFileExtensionValues(filename, format)
 	if (!file.exists(valuesfile )){
 		stop( paste(valuesfile,  "does not exist"))
-	}	
-	filename <- .setFileExtensionHeader(filename, "IDRISI")
+	}		
+	filename <- .setFileExtensionHeader(filename, format)
 	
 	ini <- readIniFile(filename, token=':')
 
@@ -48,9 +53,7 @@
 	}
 	
 	# attempt could be made to decipher some of the idrisi crs descriptions
-	
 	projstring <- .getProj(projstring, crs)
-	
 	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
 
 	if (nchar(layernames) > 1) {
@@ -78,7 +81,7 @@
 	x@file@nodatavalue <- nodataval
 	x@data@fromdisk <- TRUE
 
-	x@file@driver <- 'IDRISI'
+	x@file@driver <- 'IDRISIold'
     return(x)
 }
 

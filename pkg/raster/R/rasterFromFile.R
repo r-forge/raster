@@ -26,7 +26,7 @@
 		grifile <- .setFileExtensionValues(x, 'raster')
 		grdfile <- .setFileExtensionHeader(x, 'raster')
 		if ( file.exists( grdfile) & file.exists( grifile)) {
-			return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
+			return ( .rasterFromRasterFile(grdfile, band=band, objecttype, ...) )
 		}
 	}
 
@@ -36,7 +36,7 @@
 			grifile <- .setFileExtensionValues(x, 'raster')
 			grdfile <- .setFileExtensionHeader(x, 'raster')
 			if ( file.exists( grdfile) & file.exists( grifile)) {
-				return ( .rasterFromRasterFile(grdfile, band=band, objecttype) )
+				return ( .rasterFromRasterFile(grdfile, band=band, objecttype, ...) )
 			} else {
 				# stop('file: ', x, ' does not exist')
 			}
@@ -60,11 +60,11 @@
 	}
 
 	if ( fileext == ".BIG" | fileext == ".BRD") {
-		return( .rasterFromRasterFile(x, band=band, objecttype, driver='big.matrix') )
+		return( .rasterFromRasterFile(x, band=band, objecttype, driver='big.matrix', ...) )
 	}
 
 	if (!is.null(offset)) {
-		return ( .rasterFromASCIIFile(x, offset) )
+		return ( .rasterFromASCIIFile(x, offset, ...) )
 	}
 	if(!native) {
 		if (! .requireRgdal(FALSE) )  {
@@ -73,34 +73,45 @@
 	}
 	if (native) {
 		if ( fileext == ".ASC" ) {
-			return ( .rasterFromASCIIFile(x) )
+			return ( .rasterFromASCIIFile(x, ...) )
 		}
 		if ( fileext %in% c(".BIL", ".BIP", ".BSQ")) {
 			return ( .rasterFromGenericFile(x, type=objecttype, ...) )
 		}
 		if ( fileext %in% c(".RST", ".RDC") ) {
 #  not tested much
-			return ( .rasterFromIDRISIFile(x) )
+			return ( .rasterFromIDRISIFile(x, ...) )
+		}
+		if ( fileext %in% c(".DOC", ".IMG") ) {
+#  not tested much
+			return ( .rasterFromIDRISIFile(x, old=TRUE, ...))
 		}
 		if ( fileext %in% c(".SGRD", ".SDAT") ) {
 # barely tested
-			return ( .rasterFromSAGAFile(x) )
+			return ( .rasterFromSAGAFile(x, ...) )
 		}
 
 	}
+	
+	# old IDRISI format
+	if ( fileext == ".DOC" ) {
+		if (file.exists( extension(x, '.img'))) {
+			return( .rasterFromIDRISIFile(x, old=TRUE, ...))
+		}
+	} 
 
 	if ( fileext %in% c(".SGRD", ".SDAT") ) {
-		r <-  .rasterFromSAGAFile(x)
+		r <-  .rasterFromSAGAFile(x, ...)
 		if (r@file@toptobottom | r@data@gain != 1) {
 			return(r)
 		} # else use gdal
 	}
 
-        ## MDSumner, NSIDC data
-        if (fileext %in% c(".BIN")) {
-            r <- .rasterFromNSIDCFile(x)
-            if (!is.null(r)) return(r)  ## otherwise continue to GDAL
-        }
+    ## MDSumner, NSIDC data
+    if (fileext %in% c(".BIN")) {
+        r <- .rasterFromNSIDCFile(x, ...)
+        if (!is.null(r)) return(r)  ## otherwise continue to GDAL
+    }
 
 
 	if (! .requireRgdal(FALSE) ) {

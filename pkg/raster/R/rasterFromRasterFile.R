@@ -36,7 +36,7 @@
 }
 
 
-.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster', RAT=TRUE, crs=NULL) {
+.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster', RAT=TRUE, crs=NULL, ...) {
 
 	valuesfile <- .setFileExtensionValues(filename, driver)
 	if (!file.exists( valuesfile )){
