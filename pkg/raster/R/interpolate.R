@@ -81,7 +81,7 @@ setMethod('interpolate', signature(object='Raster'),
 		
 
 		tr <- blockSize(predrast, n=nlayers(object)+3)
-		ablock <- 1:(ncol(object) * tr$nrows[1])
+		ablock <- 1:(ncol(predrast) * tr$nrows[1])
 		napred <- rep(NA, ncol(predrast)*tr$nrows[1])
 				
 		pb <- pbCreate(tr$n, label='interpolate',  ... )			
