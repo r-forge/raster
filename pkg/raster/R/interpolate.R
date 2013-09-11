@@ -92,7 +92,7 @@ setMethod('interpolate', signature(object='Raster'),
 
 		for (i in 1:tr$n) {
 			if (i==tr$n) { 
-				ablock <- 1:(ncol(object) * tr$nrows[i])
+				ablock <- 1:(ncol(predrast) * tr$nrows[i])
 				napred <- rep(NA, ncol(predrast) * tr$nrows[i])
 			}
 
