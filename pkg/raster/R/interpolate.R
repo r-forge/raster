@@ -8,7 +8,7 @@ if (!isGeneric("interpolate")) {
 
 setMethod('interpolate', signature(object='Raster'), 
 	
-	function(object, model, filename="", fun=predict, xyOnly=TRUE, ext=NULL, const=NULL, index=1, na.rm=TRUE, debug.level=1, ...) {
+	function(object, model, filename="", fun=predict, xyOnly=TRUE, xyNames=c('x','y'), ext=NULL, const=NULL, index=1, na.rm=TRUE, debug.level=1, ...) {
 		
 		predrast <- raster(object)
 		filename <- trim(filename)
@@ -16,8 +16,8 @@ setMethod('interpolate', signature(object='Raster'),
 				
 		if (!is.null(ext)) {
 			predrast <- crop(predrast, extent(ext))
-			firstrow <- rowFromY(object, yFromRow(out, 1))
-			firstcol <- colFromX(object, xFromCol(out, 1))
+			firstrow <- rowFromY(object, yFromRow(predrast, 1))
+			firstcol <- colFromX(object, xFromCol(predrast, 1))
 		} else {
 			firstrow <- 1
 			firstcol <- 1
@@ -119,7 +119,8 @@ setMethod('interpolate', signature(object='Raster'),
 				}
 			} 
 			
-
+			colnames(blockvals)[1:2] <- xyNames[1:2]
+			
 			if (gstatmod) { 
 				if (sp) { 
 					row.names(p) <- 1:nrow(p)
