@@ -144,7 +144,7 @@
 	
 	# assuming "CF-1.0"
 	
-	zvar <- raster:::.varName(nc, varname, warn=warn)
+	zvar <- .varName(nc, varname, warn=warn)
 	# datatype <- .getRasterDTypeFromCDF( nc$var[[zvar]]$prec )
 	dim3 <- dims[3]
 	ndims <- nc$var[[zvar]]$ndims

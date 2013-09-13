@@ -71,7 +71,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 		warning('argument "ngb" is ignored!')		
 	}
 	
-#	w <- raster:::.getW(w)
+#	w <- .getW(w)
 	stopifnot(is.matrix(w))
 	d <- dim(w)
 	if (prod(d) == 0) { stop('ncol and nrow of w must be > 0') }
@@ -89,7 +89,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 		padrows <- TRUE
 	}
 
-	gll <- as.integer(raster:::.isGlobalLonLat(out))
+	gll <- as.integer(.isGlobalLonLat(out))
 	if (gll) {
 		pad <- TRUE
 	}

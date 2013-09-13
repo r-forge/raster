@@ -27,7 +27,7 @@
 
 Geary <- function(x, w= matrix(1, 3, 3)) {
 
-	w <- raster:::.getFilter(w)
+	w <- .getFilter(w)
 	
 	i <- trunc(length(w)/2)+1 
 

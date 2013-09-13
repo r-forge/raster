@@ -101,7 +101,7 @@
 		return(resxy) 
 	}
 	for (i in 1:nrow(xyxy)) {
-		xy <- raster:::.intersectSegments(xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4], line[1,1], line[1,2], line[2,1], line[2,2] )
+		xy <- .intersectSegments(xyxy[i,1], xyxy[i,2], xyxy[i,3], xyxy[i,4], line[1,1], line[1,2], line[2,1], line[2,2] )
 		if (!is.na(xy[1])) {
 			resxy <- rbind(resxy, xy)
 		}
@@ -188,7 +188,7 @@
 	}
 	
 	npol <- length(p@polygons)
-	pvals <- raster:::.getPutVals(p, field, npol, mask)
+	pvals <- .getPutVals(p, field, npol, mask)
 	putvals <- pvals[,1]
 	if (ncol(pvals) > 1) {
 		rstr@data@isfactor <- TRUE
@@ -233,7 +233,7 @@
 		
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(rstr)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(rstr)
-	if (getCover) { return (raster:::.polygoncover(rstr, filename, polinfo, lxmin, lxmax, pollist, ...)) }
+	if (getCover) { return (.polygoncover(rstr, filename, polinfo, lxmin, lxmax, pollist, ...)) }
 
 	adj <- 0.5 * xres(rstr)
 

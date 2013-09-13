@@ -302,7 +302,7 @@
 #r = raster(ncol=10, nrow=5)
 #r[] = c(1:49, NA)
 #names(r) = 'hello world'
-#a = raster:::.rasterSaveAsNetCDF(r, 'test.nc', overwrite=TRUE)
+#a = .rasterSaveAsNetCDF(r, 'test.nc', overwrite=TRUE)
 #plot(a)
 #print(a)
 

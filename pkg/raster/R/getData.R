@@ -236,8 +236,8 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 
 .raster <- function(country, name, mask=TRUE, path, download, keepzip=FALSE, ...) {
 
-	country <- raster:::.getCountry(country)
-	path <- raster:::.getDataPath(path)
+	country <- .getCountry(country)
+	path <- .getDataPath(path)
 	if (mask) {
 		mskname <- '_msk_'
 		mskpath <- 'msk_'
@@ -255,7 +255,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		if (!file.exists(zipfilename)) {
 			if (download) {
 				theurl <- paste("http://diva-gis.org/data/", mskpath, name, "/", country, mskname, name, ".zip", sep="")
-				raster:::.download(theurl, zipfilename)
+				.download(theurl, zipfilename)
 				if (!file.exists(zipfilename))	{ 
 					cat("\nCould not download file -- perhaps it does not exist \n") 
 				}
