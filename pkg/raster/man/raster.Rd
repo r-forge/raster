@@ -135,7 +135,8 @@ r5 <- raster(s, 3)
 
 \dontrun{
 ## from NSIDC sea ice concentration file
-f <- "ftp://sidads.colorado.edu/pub/DATASETS/nsidc0081_nrt_nasateam_seaice/south/nt_20130114_f17_nrt_s.bin"
+f <- "ftp://sidads.colorado.edu/pub/DATASETS/nsidc0081_nrt_nasateam_seaice/
+south/nt_20130114_f17_nrt_s.bin"
 download.file(f, basename(f), mode = "wb")
 (ice <- raster(basename(f)))
 }
