@@ -103,7 +103,13 @@
 		
 		else if (ini[i,2] == "LEVELS") { try ( catlevels <-  unlist(strsplit(ini[i,3], ':')), silent = TRUE ) }
 		
-		else if (ini[i,2] == "NODATAVALUE") { nodataval <- as.numeric(ini[i,3]) } 
+		else if (ini[i,2] == "NODATAVALUE") { 
+			if (ini[i,3] == 'NA') {
+				nodataval <- as.double(NA)
+			} else {
+				nodataval <- as.numeric(ini[i,3]) 
+			}
+		} 
 		else if (ini[i,2] == "DATATYPE") { inidatatype <- ini[i,3] } 
 		else if (ini[i,2] == "BYTEORDER") { byteorder <- ini[i,3] } 
 		else if (ini[i,2] == "NBANDS") { nbands <- as.integer(ini[i,3]) } 

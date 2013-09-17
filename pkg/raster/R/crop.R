@@ -62,7 +62,7 @@ function(x, y, filename='', snap='near', datatype=NULL, ...) {
 	nr <- row2 - row1 + 1
 	
 	if (is.null(datatype)) { 
-		datatype <- unique(dataType(x))
+		datatype <- unique(c(dataType(x), 'INT2S'))
 		if (length(datatype) > 1) {
 			datatype <- .commonDataType(datatype)
 		}
