@@ -45,9 +45,6 @@ setMethod('interpolate', signature(object='Raster'),
 			filename <- rasterTmpFile()	
 		} 
 
-		if (filename == '') {
-			v <- matrix(NA, ncol=nrow(predrast), nrow=ncol(predrast))
-		} 
 
 		if (! xyOnly) {
 			if (inherits(object, 'RasterStack')) {
@@ -86,7 +83,9 @@ setMethod('interpolate', signature(object='Raster'),
 				
 		pb <- pbCreate(tr$n, label='interpolate',  ... )			
 		
-		if (filename != '') {
+		if (filename == '') {
+			v <- matrix(NA, ncol=nrow(predrast), nrow=ncol(predrast))
+		} else {
 			predrast <- writeStart(predrast, filename=filename, ... )
 		}
 

@@ -36,7 +36,7 @@ setMethod('KML', signature(x='Spatial'),
 		
 		name <- deparse(substitute(x))
 		writeOGR(x, filename, name, 'KML')
-		.zipKML(filename, '', zip, ovewrite=overwrite) 
+		.zipKML(filename, '', zip, overwrite=overwrite) 
 	}
 )
 	

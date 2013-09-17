@@ -145,7 +145,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 			
 			paddim <- as.integer(dim(v))
 			if (dofun) {
-				v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+				v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 			} else {
 				v <- .Call('focal_sum', as.vector(t(v)), w, paddim, narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 			}
@@ -161,7 +161,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 		} else {
 		
 			if (dofun) {
-				v <- .Call('focal_fun', values(x), w, as.integer(dim(out)), runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+				v <- .Call('focal_fun', values(x), w, as.integer(dim(out)), runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 			} else {
 				v <- .Call('focal_sum', values(x), w, as.integer(dim(out)), narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 			}
@@ -200,7 +200,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 			paddim <- as.integer(dim(v))
 
 			if (dofun) {
-				v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+				v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 			} else {
 				v <- .Call('focal_sum', as.vector(t(v)), w, paddim, narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 			}
@@ -229,7 +229,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 				}
 				paddim <- as.integer(dim(v))
 				if (dofun) {
-					v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+					v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 				} else {
 					v <- .Call('focal_sum', as.vector(t(v)), w, paddim, narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 				}
@@ -259,7 +259,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 			paddim <- as.integer(dim(v))
 
 			if (dofun) {
-				v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+				v <- .Call('focal_fun', as.vector(t(v)), w, paddim, runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 			} else {
 				v <- .Call('focal_sum', as.vector(t(v)), w, paddim, narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 			}
@@ -278,7 +278,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 		
 			v <- getValues(x, row=1, nrows=tr$nrows[1]+addr)
 			if (dofun) {
-				v <- .Call('focal_fun', v, w, as.integer(c(tr$nrows[1]+addr, nc)), runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+				v <- .Call('focal_fun', v, w, as.integer(c(tr$nrows[1]+addr, nc)), runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 			} else {
 				v <- .Call('focal_sum', v, w, as.integer(c(tr$nrows[1]+addr, nc)), narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 			}
@@ -287,7 +287,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 			for (i in 2:(tr$n-1)) {
 				v <- getValues(x, row=tr$row[i]-addr, nrows=tr$nrows[i]+(2*addr))
 				if (dofun) {
-					v <- .Call('focal_fun', v, w, as.integer(c(tr$nrows[i]+(2*addr), nc)), runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+					v <- .Call('focal_fun', v, w, as.integer(c(tr$nrows[i]+(2*addr), nc)), runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 				} else {
 					v <- .Call('focal_sum', v, w, as.integer(c(tr$nrows[i]+(2*addr), nc)), narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 				}
@@ -297,7 +297,7 @@ function(x, w, fun, filename='', na.rm=FALSE, pad=FALSE, padValue=NA, NAonly=FAL
 			i <- tr$n
 			v <- getValues(x, row=tr$row[i]-addr, nrows=tr$nrows[i]+addr)
 			if (dofun) {
-				v <- .Call('focal_fun', v, w, as.integer(c(tr$nrows[i]+addr, nc)), runfun, NAonly, e, domean=domean, NAOK=TRUE, PACKAGE='raster')
+				v <- .Call('focal_fun', v, w, as.integer(c(tr$nrows[i]+addr, nc)), runfun, NAonly, e, NAOK=TRUE, PACKAGE='raster')
 			} else {
 				v <- .Call('focal_sum', v, w, as.integer(c(tr$nrows[i]+addr, nc)), narm, NAonly, domean=domean, NAOK=TRUE, PACKAGE='raster')
 			}

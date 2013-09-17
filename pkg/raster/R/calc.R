@@ -50,7 +50,7 @@ if (!isGeneric("calc")) {
 
 
 
-.calcTest <- function(tstdat, fun, na.rm, forcefun=FALSE, forceapply=FALSE) {
+.calcTest <- function(tstdat, fun, na.rm, forcefun=FALSE, forceapply=FALSE, nlout=NULL) {
 	
 	if (forcefun & forceapply) {
 		forcefun <- FALSE
@@ -155,26 +155,28 @@ if (!isGeneric("calc")) {
 		}
 	}	
 	
-	if (trans) {
-		test <- t(test)
-		test <- ncol(test)
-	} else {
-		test <- length(test) / 5
+	
+	if (is.null(nlout)) {
+		if (trans) {
+			nlout <- nrow(test)
+		} else {
+			nlout <- length(test) / 100
+		}
 	}
-	nlout <- as.integer(test)
 
-	list(doapply=doapply, makemat=makemat, trans=trans, nlout=nlout)
+	list(doapply=doapply, makemat=makemat, trans=trans, nlout=as.integer(nlout))
 }
 
 #.calcTest(test[1:5], fun, forceapply=T)
 
 
 setMethod('calc', signature(x='Raster', fun='function'), 
-function(x, fun, filename='', na.rm, forcefun=FALSE, forceapply=FALSE, ...) {
+function(x, fun, filename='', na.rm, forcefun=FALSE, forceapply=FALSE, nlout=NULL, ...) {
+
+	test <- .calcTest(x[1:100], fun=fun, na.rm=na.rm, forcefun=forcefun, forceapply=forceapply, nlout=nlout)
 
 	nl <- nlayers(x)
 
-	test <- .calcTest(x[1:5], fun, na.rm, forcefun, forceapply)
 	doapply <- test$doapply
 	makemat <- test$makemat
 	trans <- test$trans
@@ -182,8 +184,7 @@ function(x, fun, filename='', na.rm, forcefun=FALSE, forceapply=FALSE, ...) {
 	if (test$nlout == 1) {
 		out <- raster(x)
 	} else {
-		out <- brick(x, values=FALSE)
-		out@data@nlayers <- test$nlout
+		out <- brick(x, values=FALSE, nl=test$nlout)
 	}
 
 	fun <- .makeTextFun(fun)

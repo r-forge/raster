@@ -43,6 +43,9 @@ function(x, y, filename='', snap='near', datatype=NULL, ...) {
 	leg <- out@legend
 
 	e <- intersect(extent(x), extent(y))
+	if (is.null(e)) {
+		stop('extents do not overlap')
+	}
 	e <- alignExtent(e, x, snap=snap)
 	out <- setExtent(out, e, keepres=TRUE)
 	
