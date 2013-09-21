@@ -470,7 +470,7 @@
 						rvtmp <- rv1
 						if ( sum(x[-length(x)] == x[-1]) > 0 ) {
 					# single node intersection going out of polygon ....
-							spPnts <- xyFromCell(rstr, cellFromRowCol(rstr, rep(r, ncol(rstr)), 1:ncol(rstr)), TRUE)
+							spPnts <- SpatialPoints(xyFromCell(rstr, cellFromRowCol(rstr, rep(r, ncol(rstr)), 1:ncol(rstr))))
 							spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
 							over <- over(spPnts, spPol)
 							if ( subpol[i, 5] == 1 ) {
