@@ -109,10 +109,11 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	filename <- paste(path, country, '_adm', level, ".RData", sep="")
 	if (!file.exists(filename)) {
 		if (download) {
-			theurl <- paste("http://gadm.org/data/rda/", country, '_adm', level, ".RData", sep="")
+			theurl <- paste("http://biogeo.ucdavis.edu/data/gadm2/R/", country, '_adm', level, ".RData", sep="")
 			.download(theurl, filename)
-			if (!file.exists(filename))
-				{ cat("\nCould not download file -- perhaps it does not exist \n") }
+			if (!file.exists(filename))	{ 
+				cat("\nCould not download file -- perhaps it does not exist \n") 
+			}
 		} else {
 			cat("\nFile not available locally. Use 'download = TRUE'\n")
 		}
@@ -246,9 +247,6 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		mskpath <- ''		
 	}
 	filename <- paste(path, country, mskname, name, ".grd", sep="")
-	# theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
-
-	# http://diva-gis.org/data/msk_alt/MEX_msk_alt.zip
 	if (!file.exists(filename)) {
 		zipfilename <- filename
 		extension(zipfilename) <- '.zip'
