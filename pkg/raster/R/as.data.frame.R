@@ -36,9 +36,27 @@ if (!isGeneric("as.data.frame")) {
 
 
 setMethod('as.data.frame', signature(x='Raster'), 
-	function(x, row.names = NULL, optional = FALSE, xy=FALSE, ...) {
+	function(x, row.names = NULL, optional = FALSE, xy=FALSE, na.rm=FALSE, ...) {
 
-		v <- as.data.frame(getValues(x), row.names=row.names, optional=optional, ...)
+		if (!canProcessInMemory(x, 4) & na.rm) {
+			tr <- blockSize(x)
+			pb <- pbCreate(tr$n, label='as.data.frame', ...)
+			x <- readStart(x)
+			v <- NULL
+			for (i in 1:tr$n) {
+				vv <- na.omit(getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
+				v <- rbind(v, vv)
+				pbStep(pb, i) 	
+			}
+			x <- readStop(x)
+		} else {
+			v <- getValues(x)
+			if (na.rm) {
+				v <- na.omit(v)
+			}
+		}
+		
+		v <- as.data.frame(v, row.names=row.names, optional=optional, ...)
 		colnames(v) <- names(x)  # for nlayers = 1
 		
 		i <- is.factor(x)
