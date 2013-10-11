@@ -44,7 +44,9 @@ setMethod('as.data.frame', signature(x='Raster'),
 			x <- readStart(x)
 			v <- NULL
 			for (i in 1:tr$n) {
-				vv <- na.omit(getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
+				start <- (tr$row[i]-1) * ncol(x) + 1
+				end <- start + tr$nrows[i] * ncol(x) - 1
+				vv <- na.omit(cbind(start:end, getValues(x, row=tr$row[i], nrows=tr$nrows[i])))
 				v <- rbind(v, vv)
 				pbStep(pb, i) 	
 			}
@@ -52,13 +54,17 @@ setMethod('as.data.frame', signature(x='Raster'),
 		} else {
 			v <- getValues(x)
 			if (na.rm) {
-				v <- na.omit(v)
+				v <- na.omit(cbind(1:ncell(x), v))
 			}
 		}
 		
 		v <- as.data.frame(v, row.names=row.names, optional=optional, ...)
+		if (na.rm) {
+			rownames(v) <- as.character(v[,1])
+			v <- v[,-1,drop=FALSE]
+		} 
 		colnames(v) <- names(x)  # for nlayers = 1
-		
+				
 		i <- is.factor(x)
 		if (any(is.factor(x))) {
 			if (ncol(v) == 1) {

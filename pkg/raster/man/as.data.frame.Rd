@@ -19,7 +19,8 @@ The methods for Spatial* objects allow for easy creation of a data.frame with th
 }
 
 \usage{
-\S4method{as.data.frame}{Raster}(x, row.names=NULL, optional=FALSE, xy=FALSE, na.rm=FALSE, ...)
+\S4method{as.data.frame}{Raster}(x, row.names=NULL, optional=FALSE, xy=FALSE, 
+              na.rm=FALSE, ...)
 
 \S4method{as.data.frame}{SpatialPolygons}(x, row.names=NULL, optional=FALSE,
               xy=FALSE, centroids=TRUE, sepNA=FALSE, ...)
@@ -47,10 +48,12 @@ data.frame
 
 \examples{
 r <- raster(ncol=3, nrow=3)
-r[] = 1:ncell(r)
+r[] <- sqrt(1:ncell(r))
+r[3:5] <- NA
 as.data.frame(r)
-s <- stack(r,r)
+s <- stack(r, r*2)
 as.data.frame(s)
+as.data.frame(s, na.rm=TRUE)
 }
 
 \keyword{spatial}
