@@ -12,7 +12,7 @@
 	} else if (missing(field)) {
 		if (.hasSlot(obj, 'data')) {
 			putvals <- obj@data
-			cn <- .goodNames(c('ID', colnames(putvals)))
+			cn <- validNames(c('ID', colnames(putvals)))
 			cn[1] <- 'ID'
 			putvals <- data.frame(ID=1:nrow(putvals), putvals)
 			colnames(putvals) <- cn	

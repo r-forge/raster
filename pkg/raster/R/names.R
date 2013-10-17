@@ -19,13 +19,17 @@
 
 
 .goodNames <- function(ln, prefix='layer') {
-	ln <- trim(as.character(ln))
-	ln[is.na(ln)] <- ""
+	validNames(ln, prefix)
+}
+
+validNames <- function(x, prefix='layer') {
+	x <- trim(as.character(x))
+	x[is.na(x)] <- ""
 	if (.standardnames()) {
-		ln[ln==''] <- prefix
-		ln <- make.names(ln, unique=FALSE)
+		x[x==''] <- prefix
+		x <- make.names(x, unique=FALSE)
 	}
-	.uniqueNames(ln)
+	.uniqueNames(x)
 }
 
 
@@ -46,7 +50,7 @@ setMethod('names', signature(x='Raster'),
 			ln <- x@layernames		
 		}
 		ln <- ln[1:nlayers(x)]
-		.goodNames(as.vector(ln))
+		validNames(as.vector(ln))
 	}
 )
 
@@ -55,7 +59,7 @@ setMethod('names', signature(x='RasterStack'),
 	function(x) { 
 		ln <- sapply(x@layers, function(i) i@data@names)
 		ln <- ln[1:nlayers(x)]
-		.goodNames(as.vector(ln))
+		validNames(as.vector(ln))
 	}
 )
 
@@ -70,7 +74,7 @@ setMethod('names<-', signature(x='Raster'),
 		} else if (length(value) != nl) {
 			stop('incorrect number of layer names')
 		}
-		value <- .goodNames(value)
+		value <- validNames(value)
 		
 		if (inherits(x, 'RasterStack')){
 			
