@@ -184,7 +184,7 @@
 	xx <- nc$var[[zvar]]$dim[[dims[1]]]$vals
 	rs <- xx[-length(xx)] - xx[-1]
 	
-	if (! isTRUE ( all.equal( min(rs), max(rs), tolerance=0.025, scale=min(rs) ) ) ) {
+	if (! isTRUE ( all.equal( min(rs), max(rs), tolerance=0.025, scale=abs(min(rs)) ) ) ) {
 		stop('cells are not equally spaced; perhaps consider using these data as points') 
 	}
 	
@@ -195,7 +195,7 @@
 	
 	yy <- nc$var[[zvar]]$dim[[dims[2]]]$vals
 	rs <- yy[-length(yy)] - yy[-1]
-	if (! isTRUE ( all.equal( min(rs), max(rs), tolerance=0.025, scale= min(rs)) ) ) {
+	if (! isTRUE ( all.equal( min(rs), max(rs), tolerance=0.025, scale= abs(min(rs))) ) ) {
 		stop('cells are not equally spaced; you should extract values as points') }
 	yrange <- c(min(yy), max(yy))
 	resy <- (yrange[2] - yrange[1]) / (nrows-1)
