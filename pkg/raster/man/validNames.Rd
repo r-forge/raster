@@ -9,7 +9,7 @@ Create a set of valid names (trimmed, no duplicates, not starting with a number)
 }
 
 \usage{
-validNames(x, prefix='layer') 
+validNames(x, prefix='layer')
 }
 
 \arguments{
@@ -26,6 +26,6 @@ character
 
 
 \examples{
-validNames(c('a', 'a', '', '1', NA, 'b', 'a')
+validNames(c('a', 'a', '', '1', NA, 'b', 'a'))
 }
 
