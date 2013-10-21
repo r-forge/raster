@@ -20,7 +20,7 @@ flowpath(x, p, ...)
 
 
 \value{
-RasterLayer
+numeric (cell numbers)
 }
 
 \author{A. Shortridge}
