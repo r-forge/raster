@@ -8,6 +8,13 @@
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
 
+.gd_SetGeoTransform <- eval(parse(text="rgdal:::.gd_SetGeoTransform"))
+.gd_transform <- eval(parse(text="rgdal:::.gd_transform"))
+.gd_SetProject <- eval(parse(text="rgdal:::.gd_SetProject"))
+.gd_SetNoDataValue <- eval(parse(text="rgdal:::.gd_SetNoDataValue"))
+.gd_SetStatistics <- eval(parse(text="rgdal:::.gd_SetStatistics"))
+.gd_SetRasterColorTable <- eval(parse(text="rgdal:::.gd_SetRasterColorTable"))
+
 
 .getGDALtransient <- function(r, filename, options, NAflag, ...)  {
 
@@ -72,12 +79,9 @@
  
 	for (i in 1:nbands) {
 		b <- new("GDALRasterBand", transient, i)
-		rgdal:::.gd_SetNoDataValue(b, NAflag)
+		.gd_SetNoDataValue(b, NAflag)
 		if (hasCT) {
-			try( .SetRasterColorTable. <- rgdal:::.gd_SetRasterColorTable, silent=TRUE)
-			if (exists(".SetRasterColorTable.")) {
-				rgdal:::.gd_SetRasterColorTable(b, t(col2rgb(ct, TRUE)))
-			}
+			.gd_SetRasterColorTable(b, t(col2rgb(ct, TRUE)))
 		}
 	}
 
@@ -92,8 +96,8 @@
 		#}
 	}
 	
-	rgdal:::.gd_SetGeoTransform(transient, gt)
-	rgdal:::.gd_SetProject(transient, projection(r))
+	.gd_SetGeoTransform(transient, gt)
+	.gd_SetProject(transient, projection(r))
 		
 	if (is.null(options)) {
 		options <- ''

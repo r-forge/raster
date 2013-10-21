@@ -3,7 +3,7 @@
 # written by A. Shortridge, 10/2013
 # changes by Robert Hijmans
 
-flowpath <- function(x, p, ...) {
+flowPath <- function(x, p, ...) {
 	r <- raster(x)
 	if (length(p) > 1) {
 		p <- cellFromXY(r, p[1:2])
@@ -32,7 +32,7 @@ flowpath <- function(x, p, ...) {
 
 
 
-.flowpath1 <- function(x, p) {
+.flowPath1 <- function(x, p) {
     # This function creates a raster with 1s representing a path from
     # the start cell to the end of the flowpath. x is a flow raster
     # created with the terrain() function in raster. Returns a raster

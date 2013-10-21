@@ -15,6 +15,7 @@ added support to read NSIDC sea ice concentration binary files (southern and nor
 bug fix in stack with with input file name vector and quick=TRUE 
 bug fix: mask with maskvalue that is not NA ignored "inverse=TRUE"
 new function "validNames" (to avoid using raster:::.goodNames by another package)
+new function "flowPath"
 	
 --- 8-July-2013, version: 2.1-45
 bug fix in focal with pad=TRUE (introduced in previous version)

@@ -71,7 +71,7 @@ projectExtent <- function(object, crs) {
 	
 	}
 	
-	res <- rgdal:::.gd_transform( projfrom, projto, nrow(xy), xy[,1], xy[,2] )
+	res <- .gd_transform( projfrom, projto, nrow(xy), xy[,1], xy[,2] )
 	
 	x <- res[[1]]
 	y <- res[[2]]
@@ -108,7 +108,7 @@ projectExtent <- function(object, crs) {
 	y1 <- y - 0.5 * res[2]
 	y2 <- y + 0.5 * res[2]
 	xy <- cbind(c(x1, x2, x, x), c(y, y, y1, y2))
-	pXY <- rgdal:::.gd_transform( projection(raster), crs, nrow(xy), xy[,1], xy[,2] )
+	pXY <- .gd_transform( projection(raster), crs, nrow(xy), xy[,1], xy[,2] )
 	pXY <- cbind(pXY[[1]], pXY[[2]])
 	out <- c((pXY[2,1] - pXY[1,1]), (pXY[4,2] - pXY[3,2]))
 	if (any(is.na(res))) {
@@ -264,7 +264,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			v <- matrix(nrow=length(cells), ncol=nl)
 			if (nrow(xy) > 0) {
 				ci <- match(cellFromXY(to, xy), cells)
-				xy <- rgdal:::.gd_transform(projto_int, projfrom, nrow(xy), xy[,1], xy[,2])
+				xy <- .gd_transform(projto_int, projfrom, nrow(xy), xy[,1], xy[,2])
 				xy <- cbind(xy[[1]], xy[[2]])
 				v[ci, ] <- .xyValues(from, xy, method=method)
 			} 
@@ -336,7 +336,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			xy <- coordinates(to) 
 			xy <- subset(xy, xy[,1] > e@xmin & xy[,1] < e@xmax)
 			cells <- cellFromXY(to, xy)
-			xy <- rgdal:::.gd_transform( projto_int, projfrom, nrow(xy), xy[,1], xy[,2] )
+			xy <- .gd_transform( projto_int, projfrom, nrow(xy), xy[,1], xy[,2] )
 			xy <- cbind(xy[[1]], xy[[2]])
 			to[cells] <- .xyValues(from, xy, method=method)
 			
@@ -356,7 +356,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 				xy <- subset(xy, xy[,1] > e@xmin & xy[,1] < e@xmax)
 				if (nrow(xy) > 0) {
 					ci <- match(cellFromXY(to, xy), cells)
-					xy <- rgdal:::.gd_transform( projto_int, projfrom, nrow(xy), xy[,1], xy[,2] )
+					xy <- .gd_transform( projto_int, projfrom, nrow(xy), xy[,1], xy[,2] )
 					xy <- cbind(xy[[1]], xy[[2]])
 					v <- matrix(nrow=length(cells), ncol=nl)
 					v[ci, ] <- .xyValues(from, xy, method=method)

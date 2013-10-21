@@ -1,15 +1,15 @@
-\name{flowpath}
+\name{flowPath}
 
-\alias{flowpath}
+\alias{flowPath}
   
 \title{Flow path}
 
 \description{
-Compute the flow path (drainage path) starting at a given point. See package gdistance for more path computations
+Compute the flow path (drainage path) starting at a given point. See package \code{gdistance} for more path computations.
 }
 
 \usage{
-flowpath(x, p, ...)
+flowPath(x, p, ...)
 }
 
 \arguments{
@@ -30,7 +30,7 @@ data(volcano)
 vol <- raster(volcano, xmn=2667400, xmx=2668010, ymn=6478700, ymx=6479570, crs="+init=epsg:27200")
 fd <- terrain(vol, opt = "flowdir")
 
-path <- flowpath(fd, 2407)
+path <- flowPath(fd, 2407)
 xy <- xyFromCell(fd, path)
 plot(vol)
 lines(path)
