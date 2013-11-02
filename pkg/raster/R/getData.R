@@ -128,25 +128,16 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 
 
 
-.countries <- function(download, path, old=FALSE) {
+.countries <- function(download, path, ...) {
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
-
-	if (old) {
-		filename <- paste(path, 'countries_old.RData', sep="")
-	} else {
-		filename <- paste(path, 'countries.RData', sep="")
-	}
-#	theurl <- paste("http://www.r-gis.org/rgis/data/adm/", country, '_adm', level, ".RData", sep="")
+	filename <- paste(path, 'countries.RData', sep="")
 	if (!file.exists(filename)) {
 		if (download) {
-			if (old) {
-				theurl <- paste("http://diva-gis.org/data/misc/countries_old.RData", sep="")
-			} else {
-				theurl <- paste("http://diva-gis.org/data/misc/countries.RData", sep="")			
-			}
+			theurl <- paste("http://biogeo.ucdavis.edu/data/diva/misc/countries.RData", sep="")
 			.download(theurl, filename)
-			if (!file.exists(filename))
-				{ cat("\nCould not download file -- perhaps it does not exist \n") }
+			if (!file.exists(filename)) {
+				cat("\nCould not download file -- perhaps it does not exist \n") 
+			}
 		} else {
 			cat("\nFile not available locally. Use 'download = TRUE'\n")
 		}
@@ -252,7 +243,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		extension(zipfilename) <- '.zip'
 		if (!file.exists(zipfilename)) {
 			if (download) {
-				theurl <- paste("http://diva-gis.org/data/", mskpath, name, "/", country, mskname, name, ".zip", sep="")
+				theurl <- paste("http://biogeo.ucdavis.edu/data/diva/", mskpath, name, "/", country, mskname, name, ".zip", sep="")
 				.download(theurl, zipfilename)
 				if (!file.exists(zipfilename))	{ 
 					cat("\nCould not download file -- perhaps it does not exist \n") 
