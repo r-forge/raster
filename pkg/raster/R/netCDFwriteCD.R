@@ -88,7 +88,7 @@
 		ncdf4::ncatt_put(nc, varname, 'long_name', longname)
 
 		proj <- projection(x) 
-		if (proj != "NA") { 
+		if (! is.na(proj)) { 
 			ncdf4::ncatt_put(nc, varname, 'projection', proj)
 			ncdf4::ncatt_put(nc, varname, 'projection_format', 'PROJ.4')
 		}
@@ -151,7 +151,7 @@
 		att.put.ncdf(nc, varname, 'long_name', longname)
 
 		proj <- projection(x) 
-		if (proj != "NA") { 
+		if (! is.na(proj)) { 
 			att.put.ncdf(nc, varname, 'projection', proj)
 			att.put.ncdf(nc, varname, 'projection_format', 'PROJ.4')
 		}

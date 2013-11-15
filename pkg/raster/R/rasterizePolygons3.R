@@ -41,7 +41,7 @@
 	if (! .compareCRS(projp, x)) {
 	#	warning('crs or raster and polygons do not match')
 	}
-	if (projp != "NA") {
+	if (! is.na(projp)) {
 		projection(x) = projp
 	} 
 	

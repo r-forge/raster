@@ -26,7 +26,7 @@
 
 .getProj <- function(proj, crs) {
 	if (!is.null(crs)) {
-		if (proj == "NA") {
+		if (is.na(proj)) {
 			proj <- crs
 		} else {
 			warning('argument "crs" ignored because the file provides a crs') 
@@ -52,7 +52,7 @@
 	nbands <- as.integer(1)
 	band <- as.integer(band)
 	bandorder <- "BIL"
-	projstring <- "NA"
+	prj <- NA
 	minval <- NA
 	maxval <- NA
 	nodataval <- -Inf
@@ -114,16 +114,16 @@
 		else if (ini[i,2] == "BYTEORDER") { byteorder <- ini[i,3] } 
 		else if (ini[i,2] == "NBANDS") { nbands <- as.integer(ini[i,3]) } 
 		else if (ini[i,2] == "BANDORDER") { bandorder <- ini[i,3] }  
-		else if (ini[i,2] == "PROJECTION") { projstring <- ini[i,3] } 
+		else if (ini[i,2] == "PROJECTION") { prj <- ini[i,3] } 
 		else if (ini[i,2] == "LAYERNAME") { layernames <- ini[i,3] } 
 		else if (ini[i,2] == "ZVALUES") { zvalues <- ini[i,3] } 
 		else if (ini[i,2] == "ZCLASS") { zclass <- ini[i,3] } 
     }  
 	
-	if (projstring == 'GEOGRAPHIC') { projstring <- "+proj=longlat" }
-	if (projstring == 'UNKNOWN') { projstring <- "NA" }
+	if (prj == 'GEOGRAPHIC') { prj <- "+proj=longlat" }
+	if (prj == 'UNKNOWN') { prj <- NA }
 	
-	projstring <- .getProj(projstring, crs)
+	prj <- .getProj(prj, crs)
 	
 	if (band < 1) {
 		band <- 1
@@ -139,12 +139,12 @@
 	maxval[is.na(maxval)] <- -Inf
 	
 	if (type == 'RasterBrick') {
-		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
+		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=prj)
 		x@data@nlayers <-  as.integer(nbands)
 		x@data@min <- minval
 		x@data@max <- maxval
 	} else {
-		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
+		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=prj)
 		x@data@band <- as.integer(band)
 		x@data@min <- minval[band]
 		x@data@max <- maxval[band]

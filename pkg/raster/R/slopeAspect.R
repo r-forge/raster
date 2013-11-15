@@ -9,7 +9,7 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 	warning('this function is deprecated. Please use function "terrain" instead')
 	
 	stopifnot(neighbors %in% c(4, 8))
-	stopifnot(projection(dem) != "NA")
+	stopifnot(! is.na(projection(dem)) )
 	unit <- trim(tolower(unit))
 	stopifnot(unit %in% c('degrees', 'radians'))
 	filename <- trim(filename)
@@ -36,7 +36,7 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 		fY <- matrix(c(0,0,0,-1,0,1,0,0,0) / 2, nrow=3)
 	}
 	
-	if (isLonLat(dem)) {
+	if (isTRUE(isLonLat(dem))) {
 		dy <- pointDistance(cbind(0,0), cbind(0, dy), lonlat=TRUE)
 		fY <- fY / dy
 		

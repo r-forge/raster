@@ -21,7 +21,6 @@
 	ini[,2] = toupper(ini[,2]) 
 
 	byteorder <- .Platform$endian
-	projstring <- "NA"
 	nodataval <- -Inf
 	layernames <- ''
 	filetype <- ''
@@ -53,8 +52,8 @@
 	}
 	
 	# attempt could be made to decipher some of the idrisi crs descriptions
-	projstring <- .getProj(projstring, crs)
-	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
+	
+	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=crs)
 
 	if (nchar(layernames) > 1) {
 		# lnams <- unlist(strsplit(layernames, ':'))

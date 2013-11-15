@@ -174,8 +174,8 @@
 	
 	rstr <- raster(rstr)
 	
-	if (projection(p) != "NA") {
-		projection(rstr) = projection(p)
+	if (!is.na(projection(p))) {
+		projection(rstr) <- projection(p)
 	}
 
 # check if bbox of raster and p overlap

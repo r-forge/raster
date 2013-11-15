@@ -114,7 +114,7 @@ projectExtent <- function(object, crs) {
 	pXY <- cbind(pXY[[1]], pXY[[2]])
 	out <- c((pXY[2,1] - pXY[1,1]), (pXY[4,2] - pXY[3,2]))
 	if (any(is.na(res))) {
-		if (isLonLat(raster)) {
+		if (isTRUE(isLonLat(raster))) {
 			out <- pointDistance(cbind(x1, y1), cbind(x2, y2), lonlat=TRUE)
 			out <- c(out, out)
 		} else {
@@ -143,10 +143,10 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 	
 	validObject( projection(from, asText=FALSE) )
 	projfrom <- projection(from)
-	if (projfrom == "NA") { 
+	if (is.na(projfrom)) { 
 		stop("input projection is NA") 
 	}
-	lonlat <- isLonLat(projfrom)
+	lonlat <- isTRUE(isLonLat(projfrom))
 	
 	if (missing(to)) {
 		if (missing(crs)) {
@@ -177,10 +177,8 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 		to <- extend(to, e)
 	} else {
 		projto <- projection(to)
-		if (projto == "NA") { 
-			if (missing(crs) | is.na(crs) | crs == 'NA' ) {
-				stop("output projection is NA") 
-			} 
+		if (is.na(projto)) { 
+			stop("output projection is NA") 
 		} 
 		
 		e <- extent( projectExtent(from, projto) )

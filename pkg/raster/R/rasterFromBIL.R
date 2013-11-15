@@ -19,7 +19,6 @@
 	nbands <- as.integer(1)
 	band <- as.integer(band)
 	bandorder <- "BIL"
-	projstring <- "NA"
 	minval <- Inf
 	maxval <- -Inf
 	nodataval <- -Inf
@@ -52,7 +51,6 @@
 		else if (ini[i,2] == "BYTEORDER") {byteorder <- ini[i,3]} 
 		else if (ini[i,2] == "NBANDS") {nbands <- ini[i,3]} 
 		else if (ini[i,2] == "LAYOUT") {bandorder <- ini[i,3]} 
-		else if (ini[i,2] == "PROJECTION=") {projstring <- ini[i,3]} 
 		else if (ini[i,2] == "MINVALUE=") {try (minval <- as.numeric(unlist(strsplit(trim(ini[i,3]), ' ')))) } 
 		else if (ini[i,2] == "MAXVALUE=") {try (maxval <- as.numeric(unlist(strsplit(trim(ini[i,3]), ' ')))) } 
     }  
@@ -111,17 +109,17 @@
 	maxval[is.na(maxval)] <- -Inf
 
 	if (!is.null(crs)) {
-		projstring <- crs
+		prj <- crs
 	}	
 	
 	
 	if (type == 'RasterBrick') {
-		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
+		x <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=prj)
 		x@data@nlayers <-  as.integer(nbands)
 		x@data@min <- minval
 		x@data@max <- maxval
 	} else {
-		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
+		x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=prj)
 		x@data@band <- as.integer(band)
 		x@data@min <- minval[band]
 		x@data@max <- maxval[band]

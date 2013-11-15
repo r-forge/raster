@@ -17,7 +17,6 @@
 
 	byteorder <- .Platform$endian
 	ncellvals <- -9
-	projstring <- "NA"
 	nodataval <- -Inf
 	layernames <- ''
 	toptobottom <- FALSE
@@ -46,14 +45,9 @@
 	yx <- yn + nr * cellsize - (0.5 * cellsize)
 	yn <- yn - (0.5 * cellsize)
 	
-	if (!is.null(crs)) {
-		if (projection(r) == "NA") {
-			projection(r) <- crs
-		}
-	}
 
 	
-	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=projstring)
+	x <- raster(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs=crs)
 
 	x@file@offset <- dfoffset
 	x@file@toptobottom <- toptobottom

@@ -73,8 +73,8 @@ terrain <- function(x, opt='slope', unit='radians', neighbors=8, filename='', ..
 			un <- as.integer(0)
 		}
 		stopifnot(neighbors %in% c(4, 8))
-		stopifnot(projection(x) != "NA")
-		lonlat <- isLonLat(out)
+		stopifnot(! is.na(projection(x)) )
+		lonlat <- isTRUE(isLonLat(out))
 		if (lonlat) {		
 			rs[2] <- pointDistance(cbind(0,0), cbind(0, rs[2]), longlat=TRUE)
 		}

@@ -213,7 +213,7 @@
 	long_name <- zvar
 	unit <- ''
 	
-	proj <- "NA"
+	proj <- NA
 	if (ncdf4) {
 		a <- ncdf4::ncatt_get(nc, zvar, "long_name")
 		if (a$hasatt) { long_name <- a$value }
@@ -266,7 +266,7 @@
 		natest2 <- att.get.ncdf(nc, zvar, "missing_value")		
 	}
 
-	if (isTRUE(proj == "NA")) {
+	if (is.na(proj)) {
 		if (((tolower(substr(nc$var[[zvar]]$dim[[dims[1]]]$name, 1, 3)) == 'lon')  &
 		    ( tolower(substr(nc$var[[zvar]]$dim[[dims[2]]]$name, 1, 3)) == 'lat' ) ) | 
 		    ( xrange[1] < -181 | xrange[2] > 181 | yrange[1] < -91 | yrange[2] > 91 )) {

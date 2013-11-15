@@ -44,7 +44,7 @@ projection <- function(x, asText=TRUE) {
 		}
 	} else if (class(x) != "CRS") { 
 		if (asText) { 
-			return("NA")
+			return(NA)
 		} else { 
 			return(NA) 
 		}  
@@ -52,7 +52,7 @@ projection <- function(x, asText=TRUE) {
 	
 	if (asText) {
 		if (is.na(x@projargs)) { 
-			return("NA") 
+			return(NA) 
 		} else {
 			return(trim(x@projargs))
 		}	
