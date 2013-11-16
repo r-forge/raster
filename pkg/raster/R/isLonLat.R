@@ -58,7 +58,7 @@ setMethod('isLonLat', signature(x='BasicRaster'),
 	function(x){
 		p4str <- projection(x)
 		if (is.na(p4str) || nchar(p4str) == 0) {
-			return(as.logical(NA))
+			return(FALSE)
 		} 
 		res <- grep("longlat", p4str, fixed = TRUE)
 		if (length(res) == 0) {
@@ -91,12 +91,12 @@ setMethod('isLonLat', signature(x='CRS'),
 # ...
 	function(x){
 		if (is.na(x@projargs)) { 
-			return(NA)
+			return(FALSE)
 		} else {
 			p4str <- trim(x@projargs)
 		}	
 		if (is.na(p4str) || nchar(p4str) == 0) {
-			return(as.logical(NA))
+			return(FALSE)
 		} 
 		res <- grep("longlat", p4str, fixed = TRUE)
 		if (length(res) == 0) {

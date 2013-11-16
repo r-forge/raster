@@ -36,7 +36,13 @@ slopeAspect <- function(dem, filename='', out=c('slope', 'aspect'), unit='radian
 		fY <- matrix(c(0,0,0,-1,0,1,0,0,0) / 2, nrow=3)
 	}
 	
-	if (isTRUE(isLonLat(dem))) {
+	lonlat <- isLonLat(dem)
+	if (!lonlat & .couldBeLonLat(dem)) {
+		warning('assuming CRS is longitude/latitude')
+		lonlat <- TRUE
+	}
+	
+	if (lonlat) {
 		dy <- pointDistance(cbind(0,0), cbind(0, dy), lonlat=TRUE)
 		fY <- fY / dy
 		

@@ -74,7 +74,12 @@ terrain <- function(x, opt='slope', unit='radians', neighbors=8, filename='', ..
 		}
 		stopifnot(neighbors %in% c(4, 8))
 		stopifnot(! is.na(projection(x)) )
-		lonlat <- isTRUE(isLonLat(out))
+		lonlat <- isLonLat(out)
+		if (!lonlat & .couldBeLonLat(out)) {
+			warning('assuming CRS is longitude/latitude')
+			lonlat <- TRUE
+		}
+
 		if (lonlat) {		
 			rs[2] <- pointDistance(cbind(0,0), cbind(0, rs[2]), longlat=TRUE)
 		}
