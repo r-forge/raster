@@ -15,6 +15,8 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 		.raster(..., name=name, download=download, path=path)
 	} else if (name=='worldclim') {
 		.worldclim(..., download=download, path=path)
+	} else if (name=='CMIP5') {
+		.cmip5(..., download=download, path=path)
 	} else if (name=='ISO3') {
 		.ISO()[,c(2,1)]
 	} else if (name=='countries') {
@@ -149,6 +151,64 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	} 
 }
 
+
+.cmip5 <- function(var, model, rcp, year, res, lon, lat, path, download=TRUE) {
+	if (!res %in% c(2.5, 5, 10)) {
+		stop('resolution should be one of: 2.5, 5, 10')
+	}
+	if (res==2.5) { res <- '2-5' }
+	var <- tolower(var[1])
+	vars <- c('tmin', 'tmax', 'prec', 'bio')
+	stopifnot(var %in% vars)
+	var <- c('tn', 'tx', 'pr', 'bi')[match(var, vars)]
+	
+	model <- toupper(model)
+	models <- c('AC', 'BC', 'CC', 'CE', 'CN', 'GF', 'GD', 'GS', 'HD', 'HG', 'HE', 'IN', 'IP', 'MI', 'MR', 'MC', 'MP', 'MG', 'NO')
+	stopifnot(model %in% models)
+	
+	rcps <- c(26, 45, 60, 85)
+	stopifnot(rcp %in% rcps)
+	stopifnot(year %in% c(50, 70))
+	
+	m <- matrix(c(0,1,1,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,0,1,0,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1), ncol=4)
+	i <- m[which(model==models), which(rcp==rcps)]
+	if (!i) {
+		warning('this combination of rcp and model is not available')
+		return(invisible(NULL))
+	}
+	
+	path <- paste(path, '/cmip5/', res, 'm/', sep='')
+	dir.create(path, recursive=TRUE, showWarnings=FALSE)
+
+	zip <- tolower(paste(model, rcp, var, year, '.zip', sep=''))
+	theurl <- paste('http://biogeo.ucdavis.edu/data/climate/cmip5/', res, 'm/', zip, sep='')
+
+	zipfile <- paste(path, zip, sep='')
+	if (var == 'bi') {
+		n <- 19
+	} else {
+		n <- 12
+	}
+	tifs <- paste(extension(zip, ''), 1:n, '.tif', sep='')
+	files <- paste(path, tifs, sep='')
+	fc <- sum(file.exists(files))
+	if (fc < n) {
+		if (!file.exists(zipfile)) {
+			if (download) {
+				.download(theurl, zipfile)
+				if (!file.exists(zipfile))	{ 
+					cat("\n Could not download file -- perhaps it does not exist \n") 
+				}
+			} else {
+				cat("\nFile not available locally. Use 'download = TRUE'\n")
+			}
+		}	
+		unzip(zipfile, exdir=dirname(zipfile))
+	}
+	stack(paste(path, tifs, sep=''))
+}
+
+#.cmip5(var='prec', model='BC', rcp=26, year=50, res=10, path=getwd())
 
 
 .worldclim <- function(var, res, lon, lat, path, download=TRUE) {
