@@ -23,7 +23,7 @@ flowPath(x, p, ...)
 numeric (cell numbers)
 }
 
-\author{A. Shortridge}
+\author{Ashton Shortridge}
 
 \examples{
 data(volcano)
