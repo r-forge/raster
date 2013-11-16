@@ -25,7 +25,7 @@ See (\code{\link[raster]{overlay}}) to use functions that refer to specific laye
 }
 
 \usage{
-\S4method{calc}{Raster,function}(x, fun, filename='', na.rm, forcefun=FALSE, forceapply=FALSE, nlout=NULL, ...)
+\S4method{calc}{Raster,function}(x, fun, filename='', na.rm, forcefun=FALSE, forceapply=FALSE, ...)
 }
 
 \arguments{
@@ -35,7 +35,6 @@ See (\code{\link[raster]{overlay}}) to use functions that refer to specific laye
   \item{na.rm}{Remove \code{NA} values, if supported by 'fun' (only relevant when summarizing a multilayer Raster object into a RasterLayer)}
   \item{forcefun}{logical. Force \code{calc} to not use fun with apply; for use with ambiguous functions and for debugging (see Details)}
   \item{forceapply}{logical. Force \code{calc} to use fun with apply; for use with ambiguous functions and for debugging (see Details)}
-  \item{nlout}{positive integer or NULL to set the number of layers in the output object; for use with ambiguous functions and for debugging (see Details). Should normally not be used}
   \item{...}{Additional arguments as for \code{\link{writeRaster}}}    
 }
 
@@ -57,7 +56,6 @@ In this case, the cell values are multiplied in a vectorized manner and a single
 
 \code{calc(r, function(x) x * 1:10), forceapply=TRUE}
 
-For more complex cases, it may also be useful to set the number of layers in the output Raster* object (only do this when you must). 
 }
 
 
