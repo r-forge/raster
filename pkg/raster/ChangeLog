@@ -8,6 +8,8 @@ add AMSR-E ice products and other raw binary products
 add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
 
 --- development version
+
+--- 16-November-2013, version: 2.1-65
 added support to read NSIDC sea ice concentration binary files (southern and northern hemisphere)
 	http://nsidc.org/data/polar_stereo/ps_grids.html and
 	http://nsidc.org/data/nsidc-0051.html
@@ -16,6 +18,8 @@ bug fix in stack with with input file name vector and quick=TRUE
 bug fix: mask with maskvalue that is not NA ignored "inverse=TRUE"
 new function "validNames" (to avoid using raster:::.goodNames by another package)
 new function "flowPath"
+fixed wrong axes labels with plot( ,gridded=TRUE). Reported by Agustin Lobo
+'edge' renamed to 'edges' to avoid name overlap with igraph::edge. edge is still available for now (with a warning) for backwards compatibility
 	
 --- 8-July-2013, version: 2.1-45
 bug fix in focal with pad=TRUE (introduced in previous version)

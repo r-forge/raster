@@ -125,7 +125,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 				}
 			} else {
 				for (i in 1:nl) {
-					.plotdens(x[,i], y[,i], nc=ncol, nr=nrow, main=main[1], xlab=ln1[1], ylab=ln2[1], add=add, ...)		
+					.plotdens(x[,i], y[,i], nc=ncol, nr=nrow, main=main[i], xlab=ln1[i], ylab=ln2[i], add=add, ...)		
 				}
 			}
 		} else  {
