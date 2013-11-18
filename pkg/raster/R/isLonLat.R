@@ -107,3 +107,8 @@ setMethod('isLonLat', signature(x='CRS'),
     }
 )
 
+setMethod('isLonLat', signature(x='ANY'), 
+	function(x){
+		isLonLat(as.character(x))
+    }
+)

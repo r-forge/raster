@@ -4,6 +4,24 @@
 # Licence GPL v3
 
 
+
+if (!isGeneric("crs")) {
+	setGeneric("crs", function(x, ...)
+		standardGeneric("crs"))
+}	
+
+setMethod("crs", signature('ANY'), 
+	function(x, asText=TRUE, ...) {
+		projection(x, asText=asText)
+	}
+)
+
+
+'crs<-' <- function(x, value) {
+	projection(x) <- value
+	x
+}
+
 'projection<-' <- function(x, value) {
 
 	if (class(value)=="CRS") {
@@ -28,6 +46,7 @@
 	return(x)
 	
 }
+
 
 
 projection <- function(x, asText=TRUE) {
