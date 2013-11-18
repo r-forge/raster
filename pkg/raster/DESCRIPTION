@@ -7,7 +7,7 @@ Depends: methods, sp (>= 1.0-11), R (>= 2.15.0)
 Suggests: rgdal (>= 0.8-10), rgeos (>= 0.2-3), ncdf, ncdf4, igraph, snow, tcltk, rasterVis
 Author: Robert J. Hijmans
 Authors@R: c(
-	person("Robert J.", "Hijmans", role = c("cre", "aut"),  email = "r.hijmans@gmail.org"),
+	person("Robert J.", "Hijmans", role = c("cre", "aut"),  email = "r.hijmans@gmail.com"),
 	person("Jacob", "van Etten", role = "ctb"),
 	person("Matteo", "Mattiuzzi", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"),
