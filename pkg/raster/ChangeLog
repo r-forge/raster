@@ -8,6 +8,8 @@ add AMSR-E ice products and other raw binary products
 add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
 
 --- development version
+bug fix that prevented using certain file formats that do not provide a proj4 string
+added 'export' argument to cluserR
 
 --- 16-November-2013, version: 2.1-65
 added support to read NSIDC sea ice concentration binary files (southern and northern hemisphere)

@@ -15,8 +15,10 @@ Get or set the coordinate reference system (CRS) of a Raster* object.
 }
 
 \usage{
-\S4method{crs}{ANY}(x, asText=TRUE, ...)
+\S4method{crs}{ANY}(x, asText=FALSE, ...)
+
 crs(x) <- value
+
 projection(x, asText=TRUE)
 projection(x) <- value
 }
@@ -30,7 +32,7 @@ projection(x) <- value
 
 
 \value{
-Raster* or Spatial* object, or CRS, or character
+Raster*, Spatial*, CRS, or character object
 }
 
 \note{

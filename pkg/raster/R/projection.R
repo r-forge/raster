@@ -11,7 +11,7 @@ if (!isGeneric("crs")) {
 }	
 
 setMethod("crs", signature('ANY'), 
-	function(x, asText=TRUE, ...) {
+	function(x, asText=FALSE, ...) {
 		projection(x, asText=asText)
 	}
 )
