@@ -17,7 +17,7 @@
 		projs <- trim(projs)
 		prj <- try(CRS(projs), silent = T)
 		if (class(prj) == "try-error") { 
-			warning(paste(projs, 'is not a valid proj4 CRS string')) 
+			warning(paste(projs, 'is not a valid PROJ.4 CRS string')) 
 			prj <- CRS()
 		}
 	}
