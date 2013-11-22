@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-clusterR <- function(x, fun, args=NULL, filename='', export=NULL, cl=NULL, m=2, ...) {
+clusterR <- function(x, fun, args=NULL, export=NULL, filename='', cl=NULL, m=2, ...) {
 
 	if (is.null(cl)) {
 		cl <- getCluster()
