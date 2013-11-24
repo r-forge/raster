@@ -21,11 +21,11 @@ For estimation based on neighbouring cells see \code{\link{focal}}
   \item{x}{RasterStack or RasterBrick object}
   \item{filename}{character. Output filename (optional)}
   \item{method}{specifies the interpolation method to be used. Choices are "linear" or "constant" (step function; see the example in \code{\link{approx}}}
-  \item{yleft}{the value to be returned when input x values are less than min(x). The default is defined by the value of rule given below}
-  \item{yright}{the value to be returned when input x values are greater than max(x). The default is defined by the value of rule given below}
-  \item{rule}{an integer (of length 1 or 2) describing how interpolation is to take place at for the first and last cells (before or after any non-\code{NA} values are encountered). If rule is 1 then NAs are returned for such points and if it is 2, the value at the closest data extreme is used. Use, e.g., rule = 2:1, if the left and right side extrapolation should differ}
-  \item{f}{for method = "constant" a number between 0 and 1 inclusive, indicating a compromise between left- and right-continuous step functions. If y0 and y1 are the values to the left and right of the point then the value is y0*(1-f)+y1*f so that f = 0 is right-continuous and f = 1 is left-continuous}
-  \item{ties}{Handling of tied x values. Either a function with a single vector argument returning a single number result or the string "ordered"}
+  \item{yleft}{the value to be returned before a non-\code{NA} value is encountered. The default is defined by the value of rule given below}
+  \item{yright}{the value to be returned after the last non-\code{NA} value is encountered. The default is defined by the value of rule given below}
+  \item{rule}{an integer (of length 1 or 2) describing how interpolation is to take place at for the first and last cells (before or after any non-\code{NA} values are encountered). If rule is 1 then NAs are returned for such points and if it is 2, the value at the closest data extreme is used. Use, e.g., \code{rule = 2:1}, if the left and right side extrapolation should differ}
+  \item{f}{for method = "constant" a number between 0 and 1 inclusive, indicating a compromise between left- and right-continuous step functions. If y0 and y1 are the values to the left and right of the point then the value is \code{y0*(1-f)+y1*f} so that \code{f = 0)} is right-continuous and \code{f = 1} is left-continuous}
+  \item{ties}{Handling of tied 'z' values. Either a function with a single vector argument returning a single number result or the string "ordered"}
   \item{z}{numeric vector to indicate the distance between layers (e.g., time, depth). The default is 1:nlayers(x) }  
   \item{NArule}{single integer used to determine what to do when only a single layer with a non-\code{NA} value is encountered (and linear interpolation is not possible). The default value of 1 indicates that all layers will get this value for that cell; all other values do not change the cell values}  
   \item{...}{additional arguments as for \code{\link{writeRaster}}}
