@@ -9,7 +9,9 @@ add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on
 
 --- development version
 bug fix that prevented using certain file formats that do not provide a proj4 string
+bug fix in trim. It failed when only the last row had values. Reported by Daniel Schlaepfer
 added 'export' argument to cluserR
+added 'NArule' argument to approxNA and fixed bug when there was only one layer without an NA value (reported by Josh Perlman)
 
 --- 16-November-2013, version: 2.1-65
 added support to read NSIDC sea ice concentration binary files (southern and northern hemisphere)
