@@ -109,7 +109,7 @@
 		.gd_SetGeoTransform <- eval(parse(text="rgdal:::.gd_SetGeoTransform"))
 		.gd_SetGeoTransform(transient, gt)
 		.gd_SetProject <- eval(parse(text="rgdal:::.gd_SetProject"))	
-		.gd_SetProject(transient, crs(r))
+		.gd_SetProject(transient, projection(r))
 	}
 	if (is.null(options)) {
 		options <- ''
