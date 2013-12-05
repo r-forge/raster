@@ -24,6 +24,9 @@ setMethod('shift', signature(object='Raster'),
 		if (filename != '') {
 			object <- writeRaster(object, filename=filename, ...)
 		}
+		if (inherits(object, 'RasterStack')) {
+			object@layers <- sapply(object@layers, function(x){ extent(x) <- e; x})
+		}
 		return(object)
 	}
 )
