@@ -16,7 +16,7 @@ These are simple wrapper functions around readOGR and writeOGR (rgdal package).
 
 
 \usage{
-\S4method{shapefile}{character}(x, verbose=FALSE, stringsAsFactors=FALSE, ...)
+\S4method{shapefile}{character}(x, stringsAsFactors=FALSE, verbose=FALSE, ...)
 
 \S4method{shapefile}{Spatial}(x, filename='', overwrite=FALSE, ...)
 }
