@@ -104,7 +104,8 @@
 
 	if (packageVersion('rgdal') >= '0.8.12') {	
 		GDALcall(transient, "SetGeoTransform", gt)
-		GDALcall(transient, "SetProject", projection(r))
+		# as.character to ensure NA is character
+		GDALcall(transient, "SetProject", as.character(projection(r))) 
 	} else {
 		.gd_SetGeoTransform <- eval(parse(text="rgdal:::.gd_SetGeoTransform"))
 		.gd_SetGeoTransform(transient, gt)

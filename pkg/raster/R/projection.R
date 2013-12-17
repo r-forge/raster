@@ -22,6 +22,13 @@ setMethod("crs", signature('ANY'),
 	x
 }
 
+
+setMethod('as.character', signature(x='CRS'), 
+	function(x, ...) {
+		projection(x)
+	}
+)
+
 'projection<-' <- function(x, value) {
 
 	if (class(value)=="CRS") {
