@@ -145,7 +145,7 @@ pols <- SpatialPolygons( list(  Polygons(list(Polygon(p1), Polygon(hole)), 1),
       Polygons(list(Polygon(p2)), 2), Polygons(list(Polygon(p3)), 3)))
 pols@polygons[[1]]@Polygons[[2]]@hole <- TRUE
 
-r <- raster(ncol=180, nrow=90)
+r <- raster(ncol=90, nrow=45)
 r <- rasterize(pols, r, fun='sum')
 
 

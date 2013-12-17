@@ -23,6 +23,13 @@ setMethod("crs", signature('ANY'),
 }
 
 
+setMethod('is.na', signature(x='CRS'), 
+	function(x) {
+		is.na(projection(x))
+	}
+)
+
+
 setMethod('as.character', signature(x='CRS'), 
 	function(x, ...) {
 		projection(x)

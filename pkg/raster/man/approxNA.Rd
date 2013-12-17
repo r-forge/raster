@@ -14,7 +14,8 @@ For estimation based on neighbouring cells see \code{\link{focal}}
 }
 
 \usage{
-\S4method{approxNA}{RasterStackBrick}(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean, z=NULL, NArule=1, ...) 
+\S4method{approxNA}{RasterStackBrick}(x, filename="", method="linear", yleft, yright,
+            rule=1, f=0, ties=mean, z=NULL, NArule=1, ...) 
 }
 
 \arguments{
