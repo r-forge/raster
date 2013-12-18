@@ -1,45 +1,44 @@
-\name{edges}
+\name{borders}
 
 \alias{edge}
 \alias{edges}
-\alias{edges,RasterLayer-method}
+\alias{borders}
+\alias{borders,RasterLayer-method}
   
-\title{Edges detection}
+\title{Borders (edges) detection}
 
 \description{
-Detect edges. Edges are cells that have more than one class in the 4 or 8 cells surrounding it, or, if \code{classes=FALSE}, cells with values and cells with \code{NA}. 
+Detect borders (edges). Borders are cells that have more than one class in the 4 or 8 cells surrounding it, or, if \code{classes=FALSE}, cells with values and cells with \code{NA}. 
 }
 
 \usage{
-\S4method{edges}{RasterLayer}(x, filename="", type='inner', classes=FALSE, directions=8, ...)
+\S4method{borders}{RasterLayer}(x, filename="", type='inner', classes=FALSE, directions=8, ...)
 edge(x, ...)
+edges(x, ...)
 }
 
 \arguments{
 \item{x}{RasterLayer object}
 \item{filename}{Character. Filename for the output RasterLayer (optional)}
-\item{type}{Character. 'inner', or 'outer' }
-\item{classes}{Character. Logical. If \code{TRUE} all different values are (after rounding) distinguished, as well as \code{NA}. If \code{FALSE} (the default) only edges between \code{NA} and non-\code{NA} cells are considered }
-\item{directions}{Integer. Which cells are considered adjacent? Should be 8 (Queen's case) or 4 (Rook's case) }
-\item{...}{Additional arguments as for \code{\link{writeRaster}}}  
+\item{type}{Character. 'inner' or 'outer'}
+\item{classes}{Character. Logical. If \code{TRUE} all different values are (after rounding) distinguished, as well as \code{NA}. If \code{FALSE} (the default) only edges between \code{NA} and non-\code{NA} cells are considered}
+\item{directions}{Integer. Which cells are considered adjacent? Should be 8 (Queen's case) or 4 (Rook's case)}
+\item{...}{Additional arguments as for \code{\link{writeRaster}}} 
 }
 
 \value{
-RasterLayer. Cell values are either 1 (and edge) or 0 (not an edge), or \code{NA}
+RasterLayer. Cell values are either 1 (a border) or 0 (not a border), or \code{NA}
 }
 
 \seealso{ \code{\link{focal}}, \code{\link{clump}} }
-
-
-
 
 \examples{
 r <- raster(nrow=18, ncol=36, xmn=0)
 r[150:250] <- 1
 r[251:450] <- 2
-plot( edges(r, type='inner') )
-plot( edges(r, type='outer') )
-plot( edges(r, classes=TRUE) )
+plot( borders(r, type='inner') )
+plot( borders(r, type='outer') )
+plot( borders(r, classes=TRUE) )
 }
 
 \keyword{methods}

@@ -3,18 +3,26 @@
 # Version 1.0
 # Licence GPL v3
 
+
+# name overlap with igraph
 edge <- function(x, ...) {
 	warning('"edge" is obsolete. Use "edges"')
 	edges(x, ...)
 }
 
+# igraph now also has edges!
+edges <- function(x, ...) {
+	warning('"edges" is obsolete. Use "borders"')
+    borders(x, ...)
+}
 
-if (!isGeneric("edges")) {
-	setGeneric("edges", function(x, ...)
-		standardGeneric("edges"))
+
+if (!isGeneric("borders")) {
+	setGeneric("borders", function(x, ...)
+		standardGeneric("borders"))
 }	
 
-setMethod('edges', signature(x='RasterLayer'), 
+setMethod('borders', signature(x='RasterLayer'), 
 function(x, filename="", type='inner', classes=FALSE, directions=8, ...) {
 
 	dots <- list(...)
