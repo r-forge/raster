@@ -71,23 +71,11 @@
 	
     transient <- new("GDALTransientDataset", driver=driver, rows=r@nrows, cols=r@ncols, bands=nbands, type=dataformat, fname=filename, options=options, handle=NULL)
  
-	if (packageVersion('rgdal') >= '0.8.12') {
-		for (i in 1:nbands) {
-			b <- new("GDALRasterBand", transient, i)
-			GDALcall(b, "SetNoDataValue", NAflag)
-			if (hasCT) {
-				GDALcall(b, "SetRasterColorTable", t(col2rgb(ct, TRUE)))
-			}
-		}
-	} else {
-		for (i in 1:nbands) {
-			b <- new("GDALRasterBand", transient, i)
-			.gd_SetNoDataValue <- eval(parse(text="rgdal:::.gd_SetNoDataValue"))
-			.gd_SetNoDataValue(b, NAflag)
-			if (hasCT) {
-				.gd_SetRasterColorTable <- eval(parse(text="rgdal:::.gd_SetRasterColorTable"))
-				.gd_SetRasterColorTable(b, t(col2rgb(ct, TRUE)))
-			}
+	for (i in 1:nbands) {
+		b <- new("GDALRasterBand", transient, i)
+		GDALcall(b, "SetNoDataValue", NAflag)
+		if (hasCT) {
+			GDALcall(b, "SetRasterColorTable", t(col2rgb(ct, TRUE)))
 		}
 	}
 	
@@ -102,16 +90,9 @@
 		#}
 	}
 
-	if (packageVersion('rgdal') >= '0.8.12') {	
-		GDALcall(transient, "SetGeoTransform", gt)
-		# as.character to ensure NA is character
-		GDALcall(transient, "SetProject", as.character(projection(r))) 
-	} else {
-		.gd_SetGeoTransform <- eval(parse(text="rgdal:::.gd_SetGeoTransform"))
-		.gd_SetGeoTransform(transient, gt)
-		.gd_SetProject <- eval(parse(text="rgdal:::.gd_SetProject"))	
-		.gd_SetProject(transient, projection(r))
-	}
+	GDALcall(transient, "SetGeoTransform", gt)
+	# as.character to ensure NA is character
+	GDALcall(transient, "SetProject", as.character(projection(r))) 
 	if (is.null(options)) {
 		options <- ''
 	}
