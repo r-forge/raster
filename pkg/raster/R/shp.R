@@ -34,32 +34,32 @@ setMethod('shapefile', signature(x='Spatial'),
 		}
 		layer <- basename(filename)
 		extension(layer) <- ''
-		if (!inherits(object, 'Spatial')) {
+		if (!inherits(x, 'Spatial')) {
 			stop('To write a shapefile you need to provide an object of class Spatial*')
 		} else {
-			if (inherits(object, 'SpatialPixels')) {
-				if (.hasSlot(object, 'data')) {
-					object <- as(object, 'SpatialPointsDataFrame')
+			if (inherits(x, 'SpatialPixels')) {
+				if (.hasSlot(x, 'data')) {
+					x <- as(x, 'SpatialPointsDataFrame')
 				} else {
-					object <- as(object, 'SpatialPoints')				
+					x <- as(x, 'SpatialPoints')				
 				}
-			} else if (inherits(object, 'SpatialGrid')| inherits(object, 'SpatialPixels')) {
+			} else if (inherits(x, 'SpatialGrid')| inherits(x, 'SpatialPixels')) {
 				stop('These data cannot be written to a shapefile')
 			}
 			
-			if (!.hasSlot(object, 'data')) {
-				if (inherits(object, 'SpatialPolygons')) {
-					object <- SpatialPolygonsDataFrame(object, data.frame(ID=1:length(row.names(object))))
-				} else if (inherits(object, 'SpatialLines')) {
-					object <- SpatialLinesDataFrame(object, data.frame(ID=1:length(row.names(object))))
-				} else if (inherits(object, 'SpatialPoints')) {
-					object <- SpatialPointsDataFrame(object, data.frame(ID=1:length(row.names(object))))
+			if (!.hasSlot(x, 'data')) {
+				if (inherits(x, 'SpatialPolygons')) {
+					x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:length(row.names(x))))
+				} else if (inherits(x, 'SpatialLines')) {
+					x <- SpatialLinesDataFrame(x, data.frame(ID=1:length(row.names(x))))
+				} else if (inherits(x, 'SpatialPoints')) {
+					x <- SpatialPointsDataFrame(x, data.frame(ID=1:length(row.names(x))))
 				} else {
 					stop('These data cannot be written to a shapefile')
 				}
 			}
 		}
-		writeOGR(object, filename, layer, driver='ESRI Shapefile', verbose=verbose, overwrite_layer=overwrite, ...)
+		writeOGR(x, filename, layer, driver='ESRI Shapefile', overwrite_layer=overwrite, ...)
 	}
 )
 
