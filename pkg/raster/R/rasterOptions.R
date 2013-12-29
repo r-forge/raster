@@ -138,13 +138,11 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 	addHeader <- function(x) {
 		x <- x[1]
 		if (is.character(x)) {
+			x <- toupper(trim(x))
 			if (nchar(x) < 3) {
 				x <- ''
-			} else if (nchar(x) < 3) {
-				x <- ''
 			}
-
-			options(rasterWriteHeader <- x)
+			options(rasterAddHeader = x)
 		}
 	}
 	
@@ -166,7 +164,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		options(rasterTolerance = 0.1)
 		options(rasterStandardNames = TRUE)
 		options(rasterDepracatedWarnings = TRUE)
-		options(rasterAddHeader = 'GRD')
+		options(rasterAddHeader = '')
 		v <- utils::packageDescription('raster')[["Version"]]
 #		fn <- paste(options('startup.working.directory'), '/rasterOptions_', v, sep='')
 #		if (file.exists(fn)) { file.remove(fn) }
@@ -249,7 +247,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		cat('tolerance     :', lst$tolerance, '\n')
 		cat('standardnames :', lst$standardnames, '\n')
 		cat('warn depracat.:', lst$depwarning, '\n')
-		if (lst$addheader == 'GRD') {
+		if (lst$addheader == '') {
 			cat('header        : none\n')
 		} else {
 			cat('header        :', lst$addheader, '\n')

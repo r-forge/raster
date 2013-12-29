@@ -108,8 +108,14 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 						sdx <- apply(x, 2, function(x) sqrt(sum((x-mean(x, na.rm=na.rm))^2, na.rm=na.rm)/n))
 					}
 					return(  colSums(t(t(x) - colMeans(x, na.rm=na.rm))^3, na.rm=na.rm) / (n * sdx^3) )
+					
+				} else { # other character
+				
+					return(apply(x, 2, stat, na.rm=na.rm, ...))
 				}
-			} 
+			} else {	
+				return(apply(x, 2, stat, na.rm=na.rm, ...))
+			}
 		}
 		
 		if (class(stat) != 'character') {
