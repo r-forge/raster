@@ -6,13 +6,15 @@
 
 setMethod('aggregate', signature(x='SpatialPolygons'), 
 function(x, vars=NULL, sums=NULL, ...) {
+
+	stopifnot(require(rgeos))
 	
 	if (! .hasSlot(x, 'data') ) {
 		hd <- FALSE
 		if (!is.null(vars)) {
 			if (length(vars) == length(x@polygons)) {
 				x <- SpatialPolygonsDataFrame(x, data=data.frame(ID=vars))
-				vars = 1
+				vars <- 1
 			}
 		}
 	} else {
@@ -20,7 +22,7 @@ function(x, vars=NULL, sums=NULL, ...) {
 	}
 	
 	if (isTRUE(is.null(vars))) {
-		if (version_GEOS0() < "3.3.0") {
+		if (version_GEOS() < "3.3.0") {
 			x <- gUnionCascaded(x)
 		} else {
 			x <- gUnaryUnion(x)
@@ -41,7 +43,7 @@ function(x, vars=NULL, sums=NULL, ...) {
 					stop('invalid column numbers')
 				}
 			} else if (is.character(v)) {
-				v <- v[v %in% colnames(dat)]
+				v <- v[v %in% cn]
 				if (length(v) < 1) {
 					stop('invalid column names')
 				}
@@ -51,8 +53,6 @@ function(x, vars=NULL, sums=NULL, ...) {
 		
 		dat <- x@data
 		cn <- colnames(dat)
-		
-		
 		v <- getVars(vars, cn)
 		
 		dat <- dat[,v, drop=FALSE]

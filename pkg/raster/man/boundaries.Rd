@@ -1,18 +1,18 @@
-\name{borders}
+\name{boundaries}
 
 \alias{edge}
 \alias{edges}
-\alias{borders}
-\alias{borders,RasterLayer-method}
+\alias{boundaries}
+\alias{boundaries,RasterLayer-method}
   
-\title{Borders (edges) detection}
+\title{boundaries (edges) detection}
 
 \description{
-Detect borders (edges). Borders are cells that have more than one class in the 4 or 8 cells surrounding it, or, if \code{classes=FALSE}, cells with values and cells with \code{NA}. 
+Detect boundaries (edges). boundaries are cells that have more than one class in the 4 or 8 cells surrounding it, or, if \code{classes=FALSE}, cells with values and cells with \code{NA}. 
 }
 
 \usage{
-\S4method{borders}{RasterLayer}(x, filename="", type='inner', classes=FALSE, directions=8, ...)
+\S4method{boundaries}{RasterLayer}(x, filename="", type='inner', classes=FALSE, directions=8, ...)
 edge(x, ...)
 edges(x, ...)
 }
@@ -36,9 +36,9 @@ RasterLayer. Cell values are either 1 (a border) or 0 (not a border), or \code{N
 r <- raster(nrow=18, ncol=36, xmn=0)
 r[150:250] <- 1
 r[251:450] <- 2
-plot( borders(r, type='inner') )
-plot( borders(r, type='outer') )
-plot( borders(r, classes=TRUE) )
+plot( boundaries(r, type='inner') )
+plot( boundaries(r, type='outer') )
+plot( boundaries(r, classes=TRUE) )
 }
 
 \keyword{methods}

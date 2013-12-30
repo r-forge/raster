@@ -12,6 +12,8 @@ if (!isGeneric("union")) {
 setMethod('union', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y) {
 
+	stopifnot(require(rgeos))
+
 	x <- spChFIDs(x, as.character(1:length(row.names(x))))
 	y <- spChFIDs(y, as.character(1:length(row.names(y))))
 
@@ -24,7 +26,7 @@ function(x, y) {
 	
 	if (!any(subs)) {
 	
-		x <- combine(x, y)
+		x <- join(x, y)
 		
 	} else {
 	
@@ -40,7 +42,7 @@ function(x, y) {
 		dif2 <- erase(y, x)
 		x <- intersect(x, y)
 		if (!is.null(dif1) | !is.null(dif2)) {
-			x <- combine(dif1, x, dif2) 
+			x <- join(dif1, x, dif2) 
 		} 
 		
 		# remove slivers

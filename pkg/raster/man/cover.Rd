@@ -44,6 +44,17 @@ r1[] <- 1:ncell(r1)
 r2 <- setValues(r1, runif(ncell(r1)))
 r2[r2 < 0.5] <- NA
 r3 <- cover(r2, r1)
+
+
+#SpatialPolygons
+if (require(rgdal) & require(rgeos)) {
+	p <- shapefile(system.file("external/lux.shp", package="raster"))
+	b <- as(extent(6, 6.4, 49.75, 50), 'SpatialPolygons')
+	b <- SpatialPolygonsDataFrame(b, data.frame(ID_1=9))
+	projection(b) <- projection(p)
+	cv1 <- cover(p, b)
+	cv2 <- cover(p, b, identity=TRUE)
+}
 }
 
 

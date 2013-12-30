@@ -302,7 +302,7 @@ Some of these functions are in the \code{sp} package. The name in \bold{bold} is
   \code{\link{union}} or "+" \tab \bold{union} \cr
   \code{\link{cover}} \tab \bold{update} and \bold{identity} \cr
   \code{\link{symdif}} \tab\bold{symmetrical difference}  \cr 
-  \code{\link{combine}} \tab \bold{append} \cr
+  \code{\link{join}} \tab \bold{append} \cr
   \code{\link{aggregate}} \tab \bold{dissolve}  \cr
   \code{\link[sp]{disaggregate}} \tab \bold{explode} (in the \code{sp} package) \cr
   \code{\link{crop}} \tab \bold{clip} a Spatial* object using a rectangle (Extent object)\cr

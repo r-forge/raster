@@ -6,23 +6,23 @@
 
 # name overlap with igraph
 edge <- function(x, ...) {
-	warning('"edge" is obsolete. Use "edges"')
-	edges(x, ...)
+	warning('"edge" is obsolete. Use "boundaries"')
+	boundaries(x, ...)
 }
 
 # igraph now also has edges!
 edges <- function(x, ...) {
-	warning('"edges" is obsolete. Use "borders"')
-    borders(x, ...)
+	warning('"edges" is obsolete. Use "boundaries"')
+    boundaries(x, ...)
 }
 
 
-if (!isGeneric("borders")) {
-	setGeneric("borders", function(x, ...)
-		standardGeneric("borders"))
+if (!isGeneric("boundaries")) {
+	setGeneric("boundaries", function(x, ...)
+		standardGeneric("boundaries"))
 }	
 
-setMethod('borders', signature(x='RasterLayer'), 
+setMethod('boundaries', signature(x='RasterLayer'), 
 function(x, filename="", type='inner', classes=FALSE, directions=8, ...) {
 
 	dots <- list(...)

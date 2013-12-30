@@ -19,13 +19,13 @@
 }
 
 
-if (!isGeneric("combine")) {
-	setGeneric("combine", function(x, y, ...)
-		standardGeneric("combine"))
+if (!isGeneric("join")) {
+	setGeneric("join", function(x, y, ...)
+		standardGeneric("join"))
 }	
 
 
-setMethod('combine', signature(x='SpatialPolygons', y='SpatialPolygons'), 
+setMethod('join', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y, ..., keepnames=FALSE) {
 
 		x <- list(x, y, ...)
@@ -87,7 +87,7 @@ function(x, y, ..., keepnames=FALSE) {
 					dat[1:length(x[[i]]@polygons),] <- NA
 					rownames(dat) <- row.names(x[[i]])
 				} else {
-					dat[(nrow(dat)+1):(nrow(dat)+nrow(x[[i]]@coords)),] <- NA
+					dat[(nrow(dat)+1):(nrow(dat) + length(x[[i]])),] <- NA
 				}	
 			}
 		}
@@ -101,7 +101,7 @@ function(x, y, ..., keepnames=FALSE) {
 
 
 
-setMethod('combine', signature(x='SpatialLines', y='SpatialLines'), 
+setMethod('join', signature(x='SpatialLines', y='SpatialLines'), 
 	function(x, y, ..., keepnames=FALSE) {
 
 		x <- list(x, y, ...)
@@ -177,7 +177,7 @@ setMethod('combine', signature(x='SpatialLines', y='SpatialLines'),
 
 
 
-setMethod('combine', signature(x='SpatialPoints', y='SpatialPoints'),
+setMethod('join', signature(x='SpatialPoints', y='SpatialPoints'),
 	function(x, y, ..., keepnames=FALSE) {
 
 		x <- list(x, y, ...)

@@ -71,6 +71,16 @@ ra <- aggregate(r, fact=10, fun=max)
 # multiple layers
 s <- stack(r, r*2)
 x <- aggregate(s,2)
+
+#SpatialPolygons
+if (require(rgdal) & require(rgeos)) {
+	p <- shapefile(system.file("external/lux.shp", package="raster"))
+	p
+	pa0 <- aggregate(p)
+	pa0
+	pa1 <- aggregate(p, vars='NAME_1', sums=list(list(mean, 'ID_2')))
+	pa1
+}
 }
 
 \keyword{methods}
