@@ -65,6 +65,12 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 			
 				} else if (stat == "sum" ) {
 					return( colSums(x, na.rm=na.rm) )
+
+				} else if (stat == "min" ) {
+					return( .colMin(x, na.rm=na.rm) )
+
+				} else if (stat == "max" ) {
+					return( .colMax(x, na.rm=na.rm) )
 					
 				} else if (stat == 'countNA') { 
 					warning ("'countNA' is deprecated. Use freq(x, 'value=NA') instead")
@@ -108,14 +114,10 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 						sdx <- apply(x, 2, function(x) sqrt(sum((x-mean(x, na.rm=na.rm))^2, na.rm=na.rm)/n))
 					}
 					return(  colSums(t(t(x) - colMeans(x, na.rm=na.rm))^3, na.rm=na.rm) / (n * sdx^3) )
-					
-				} else { # other character
-				
-					return(apply(x, 2, stat, na.rm=na.rm, ...))
 				}
-			} else {	
-				return(apply(x, 2, stat, na.rm=na.rm, ...))
-			}
+			} # else 
+			
+			return(apply(x, 2, stat, na.rm=na.rm, ...))
 		}
 		
 		if (class(stat) != 'character') {
@@ -128,9 +130,9 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 			fun <- sum
 			st <- 0	
 		} else if (stat == 'min') {
-			fun <- min
+			st <- Inf
 		} else if (stat == 'max') {
-			fun <- max
+			st <- -Inf
 		} else if (stat == 'range') {
 			fun <- range
 		} else if (stat == 'countNA') {
@@ -150,6 +152,7 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 			sumsq <- 0
 			cnt <- 0
 			counts <- TRUE
+		
 		} else { 
 			stop("invalid 'stat'. Should be sum, min, max, sd, mean, 'rms', 'skew', or 'countNA'") 
 		}
@@ -195,8 +198,16 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 				d3 <- colSums(d^3, na.rm=TRUE) + d3
 				cnt <- cnt + cells
 
+			} else if (stat=='min') {
+				tmp <- .colMin(d, na.rm=na.rm)
+				st <- pmin(st, tmp, na.rm=na.rm)
+
+			} else if (stat=='max') {
+				tmp <- .colMax(d, na.rm=na.rm)
+				st <- pmax(st, tmp, na.rm=na.rm)
+				
 			} else {
-					# min, max, range
+					# range
 				st <- apply(rbind(d, st), 2, fun, na.rm=na.rm)
 			}
 				
