@@ -22,7 +22,7 @@ When using multiple RasterStack or RasterBrick objects, the number of layers of 
 In addition to arithmetic with Raster* objects, the following operations are supported for SpatialPolygons* objects.
 Given SpatialPolygon objects \code{x} and \code{y}:
 
-\code{x+y} is the same as \code{\link{join}(x, y)}
+\code{x+y} is the same as \code{\link{union}(x, y)}
 
 \code{x*y} is the same as \code{\link{intersect}(x, y)}
 

@@ -4,9 +4,9 @@
 # Licence GPL v3
 
 
-setMethod("+", signature(e1='Spatial', e2='Spatial'),
+setMethod("+", signature(e1='SpatialPolygons', e2='SpatialPolygons'),
     function(e1, e2){ 
-		join(e1, e2)
+		union(e1, e2)
 	}
 )
 
