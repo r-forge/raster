@@ -28,7 +28,7 @@ function(x, y, ...) {
 		if (gIntersects(x, y)) {
 			part1 <- erase(x, y)
 			part2 <- erase(y, x)
-			x <- join(part1, part2)
+			x <- bind(part1, part2)
 		}
 	}
 	x

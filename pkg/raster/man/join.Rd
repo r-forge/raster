@@ -1,26 +1,26 @@
-\name{join}
+\name{bind}
 
 \docType{methods}
 
-\alias{join}
-\alias{join,SpatialPolygons,SpatialPolygons-method}
-\alias{join,SpatialLines,SpatialLines-method}
-\alias{join,SpatialPoints,SpatialPoints-method}
+\alias{bind}
+\alias{bind,SpatialPolygons,SpatialPolygons-method}
+\alias{bind,SpatialLines,SpatialLines-method}
+\alias{bind,SpatialPoints,SpatialPoints-method}
 
 \title{ 
-join Spatial* objects
+Bind Spatial* objects
 }
 
 \description{
-Join (append, rbind) Spatial* objects into a single object. All objects must be of the same vector type base class (SpatialPoints, SpatialLines, or SpatialPolygons)
+Bind (append) Spatial* objects into a single object. All objects must be of the same vector type base class (SpatialPoints, SpatialLines, or SpatialPolygons)
 }
 
 \usage{
-\S4method{join}{SpatialPolygons,SpatialPolygons}(x, y, ..., keepnames=FALSE)
+\S4method{bind}{SpatialPolygons,SpatialPolygons}(x, y, ..., keepnames=FALSE)
 
-\S4method{join}{SpatialLines,SpatialLines}(x, y, ..., keepnames=FALSE)
+\S4method{bind}{SpatialLines,SpatialLines}(x, y, ..., keepnames=FALSE)
 
-\S4method{join}{SpatialPoints,SpatialPoints}(x, y, ..., keepnames=FALSE)
+\S4method{bind}{SpatialPoints,SpatialPoints}(x, y, ..., keepnames=FALSE)
 }
 
 
@@ -42,7 +42,7 @@ if (require(rgdal) & require(rgeos)) {
 	diekirch <- p[p$NAME_2=='Diekirch', ]
 	remich <- p[p$NAME_2=='Remich', ]
 	remich$NAME_1 <- NULL
-	x <- join(mersch, diekirch, remich)
+	x <- bind(mersch, diekirch, remich)
 	plot(x)
 	data.frame(x)
 }

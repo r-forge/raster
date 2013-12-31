@@ -26,7 +26,7 @@ function(x, y) {
 	
 	if (!any(subs)) {
 	
-		x <- join(x, y)
+		x <- bind(x, y)
 		
 	} else {
 	
@@ -42,7 +42,7 @@ function(x, y) {
 		dif2 <- erase(y, x)
 		x <- intersect(x, y)
 		if (!is.null(dif1) | !is.null(dif2)) {
-			x <- join(dif1, x, dif2) 
+			x <- bind(dif1, x, dif2) 
 		} 
 		
 		# remove slivers

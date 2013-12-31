@@ -19,13 +19,13 @@
 }
 
 
-if (!isGeneric("join")) {
-	setGeneric("join", function(x, y, ...)
-		standardGeneric("join"))
+if (!isGeneric("bind")) {
+	setGeneric("bind", function(x, y, ...)
+		standardGeneric("bind"))
 }	
 
 
-setMethod('join', signature(x='SpatialPolygons', y='SpatialPolygons'), 
+setMethod('bind', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y, ..., keepnames=FALSE) {
 
 		x <- list(x, y, ...)
@@ -101,7 +101,7 @@ function(x, y, ..., keepnames=FALSE) {
 
 
 
-setMethod('join', signature(x='SpatialLines', y='SpatialLines'), 
+setMethod('bind', signature(x='SpatialLines', y='SpatialLines'), 
 	function(x, y, ..., keepnames=FALSE) {
 
 		x <- list(x, y, ...)
@@ -177,7 +177,7 @@ setMethod('join', signature(x='SpatialLines', y='SpatialLines'),
 
 
 
-setMethod('join', signature(x='SpatialPoints', y='SpatialPoints'),
+setMethod('bind', signature(x='SpatialPoints', y='SpatialPoints'),
 	function(x, y, ..., keepnames=FALSE) {
 
 		x <- list(x, y, ...)

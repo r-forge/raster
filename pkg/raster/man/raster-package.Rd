@@ -297,7 +297,7 @@ Cell numbers start at 1 in the upper-left corner. They increase within rows, fro
 \section{XIV. Manipulation of SpatialPolygons* and other vector type Spatial* objects}{
 Some of these functions are in the \code{sp} package. The name in \bold{bold} is the equivalent command in ArcGIS.
 \tabular{ll}{
-  \code{\link{join}} \tab \bold{append} (*bind) Spatial* objects  \cr
+  \code{\link{bind}} \tab \bold{append} combine Spatial* objects of the same (vector) type \cr
   \code{\link{erase}} or "-" \tab \bold{erase} parts of a SpatialPolygons* object\cr
   \code{\link{intersect}} or "*"  \tab \bold{intersect} SpatialPolygons* objects\cr
   \code{\link{union}} or "+" \tab \bold{union} SpatialPolygons* objects\cr
