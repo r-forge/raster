@@ -3,6 +3,8 @@
 # Version 1.0
 # Licence GPL v3
 
+
+
 if (!isGeneric("cover")) {
 	setGeneric("cover", function(x, y, ...)
 		standardGeneric("cover"))
@@ -10,6 +12,8 @@ if (!isGeneric("cover")) {
 
 setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 	function(x, y, ..., identity=FALSE){ 
+	
+	stopifnot(require(rgeos))
 	
 	yy <- list(y, ...)
 
@@ -38,52 +42,15 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 		if (!any(subs)) {
 			next
 		} else {
-			int <- .cropSpatPolys(y, x)
+			int <- crop(y, x)
 			x <- erase(x, int)
-			x <- combine(x, int)
+			x <- bind(x, int)
 		}
 	}
 	x
 } 
 )
 
-
-..cropSpatPolys <- function(x, y, ...) {
-	
-		y <- gUnaryUnion(y)
-		row.names(y) <- '1'
-		rnx <- row.names(x)
-		row.names(x) <- as.character(1:length(rnx))
-		
-		if (.hasSlot(x, 'data')) {
-			
-			# to keep the correct IDs
-			# in future versions of rgeos, this intermediate step won't be necessary
-			i <- as.vector( gIntersects(x, y, byid=TRUE) )
-			if (sum(i) == 0) {
-				return(NULL)
-			}
-			y <- gIntersection(x[i,], y, byid=TRUE)
-			if (inherits(y, "SpatialCollections")) {
-				y <- y@polyobj
-			}
-			if (is.null(y)) { return(y) }
-			
-			ids <- strsplit(row.names(y), ' ') 
-			ids <- as.numeric(do.call(rbind, ids)[,1])
-			row.names(y) <- as.character(rnx[ids])
-			data <- x@data[ids, ,drop=FALSE]
-			rownames(data) <- rnx[ids]
-			
-			return( SpatialPolygonsDataFrame(y, data) )
-		} else {
-			y <- gIntersection(x, y)
-			if (inherits(y, "SpatialCollections")) {
-				y <- y@polyobj
-			}
-			return(y)
-		}
-}
 
 
 
@@ -107,8 +74,23 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 		x <- spChFIDs(x, as.character(1:length(row.names(x))))
 		y <- spChFIDs(y, as.character(1:length(row.names(y))))
 
-		xnames <- colnames(x@data)
-		ynames <- colnames(y@data)
+		if (.hasSlot(x, 'data')) {
+			xnames <- colnames(x@data)
+		} else {
+			xnames <-NULL
+		}
+		if (.hasSlot(y, 'data')) {
+			ynames <- colnames(y@data)
+		} else {
+			ynames <-NULL
+		}
+		if (is.null(xnames) & !is.null(ynames)) {
+			dat <- y@data[NULL, ,drop=FALSE]
+			dat[1:length(x), ] <- NA
+			x <- SpatialPolygonsDataFrame(x, dat)
+			xnames <- ynames
+		}
+		
 		yinx <- which(ynames %in% xnames)
 		doAtt <- TRUE
 		if (length(yinx) == 0) {
@@ -116,7 +98,6 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 		}
 		
 		subs <- gIntersects(x, y, byid=TRUE)
-
 		subsx <- apply(subs, 2, any)
 		subsy <- apply(subs, 1, any)
 	
@@ -140,14 +121,13 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 			
 			dat <- x@data[NULL, ,drop=FALSE]
 			dat[rows, yinx] <- y@data[idsy, yinx]
-			rownames(dat) <- 1:nrow(dat)
-			int <- SpatialPolygonsDataFrame(int, dat)
+			int <- SpatialPolygonsDataFrame(int, dat, match.ID=FALSE)
 		}
-		x <- x - int
+		x <- erase(x, int)
 		if (is.null(x)) {
 			x <- int
 		} else {
-			x <- append(x, int)
+			x <- bind(x, int)
 		}
 	}
 	x
