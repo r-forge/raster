@@ -18,7 +18,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 				
 				agg <- FALSE
 				if (ncell(rc) < 100) {
-					d <- pmax(ceiling(10/dim(r)[1:2]), c(1,1))
+					d <- pmax(ceiling(10/dim(rc)[1:2]), c(1,1))
 					rc <- disaggregate(rc, d)
 					agg <- TRUE
 				}
