@@ -38,9 +38,9 @@ function(x, vars=NULL, sums=NULL, dissolve=TRUE, ...) {
 			}
 			x <- SpatialPolygons(list(Polygons(p, '1')), proj4string=x@proj4string)
 		}
-		if (hd) {
-			x <- SpatialPolygonsDataFrame(x, data=data.frame(ID=1))
-		}
+		#if (hd) {
+		#	x <- SpatialPolygonsDataFrame(x, data=data.frame(ID=1))
+		#}
 		return(x)
 		
 	} else {
