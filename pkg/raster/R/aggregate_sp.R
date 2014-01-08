@@ -113,8 +113,8 @@ function(x, vars=NULL, sums=NULL, dissolve=TRUE, ...) {
 		
 		x <- do.call(rbind, x)
 		x@proj4string <- crs
-		rownames(dat) <- as.character(id$v)	
-		SpatialPolygonsDataFrame(x, data=dat)
+		rownames(dat) <- NULL
+		SpatialPolygonsDataFrame(x, dat, FALSE)
 	}
 }
 )
