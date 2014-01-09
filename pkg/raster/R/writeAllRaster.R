@@ -16,9 +16,6 @@
 	}
 	x@file@name <- filename
 	
-	
-
-	
 	overwrite <- .overwrite(...)
 	if (!overwrite & (file.exists(fnamehdr) | file.exists(fnamevals))) {
 		stop(paste(filename,"exists. Use 'overwrite=TRUE' if you want to overwrite it")) 
@@ -31,8 +28,14 @@
 	x <- setMinMax(x)
 
 	datatype <- .datatype(...)
+	if (filetype == 'SAGA') {
+		if (datatype == 'FLT8S') {
+			datatype = 'FLT4S'
+		}
+	}
 	dtype <- .shortDataType(datatype)
 	dataType(x) <- datatype
+	
 	if (missing(NAflag) ) {
 		NAflag <- x@file@nodatavalue
 	}	
