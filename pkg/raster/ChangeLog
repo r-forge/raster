@@ -7,8 +7,12 @@ function for affine transformation
 add AMSR-E ice products and other raw binary products
 add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
 
---- development version
-bug fix in rasterize with small polygons
+--- 10-January-2014, version: 2.2-8
+bug fix in rasterize with small polygons (reverted to previous version) (reported by Roger Bivand)
+bug fix in extract/points/RasterBrick when all points are outside the raster (reported by Jonathan Greenberg)
+bug fix in linking to SAGA files (reported by Chuck Bulmer)
+resample now first aggregates input data if it is being resampled to much larger grid cells
+projectRaster now allows re-projecting to the same CRS as the input data (an alternative to resample)
 
 --- 1-January-2014, version: 2.2-5
 bug fix that prevented using certain file formats that do not provide a proj4 string

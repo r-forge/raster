@@ -13,7 +13,6 @@
 
 
 \alias{print,Raster-method}
-\alias{print,Spatial-method}
 \alias{show,BasicRaster-method}
 \alias{show,RasterLayer-method}
 \alias{show,RasterStack-method}
