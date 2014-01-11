@@ -54,7 +54,12 @@ setMethod ('show' , 'SpatialPoints',
 	}
 )
 
-#setMethod ('print' , 'Spatial', 
+setMethod ('print' , 'Spatial', 
+	function(x, ...) {
+		.printSpatial(x)
+	}
+)	
+
 
 .printSpatial <- function(x, ...) {
 	
@@ -129,6 +134,5 @@ setMethod ('show' , 'SpatialPoints',
 			cat('max values  :', paste(m[3,], collapse=', '), '\n')
 			
 		}
-	}
-# )	
+}
 	
