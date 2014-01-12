@@ -18,6 +18,8 @@
 \alias{show,RasterStack-method}
 \alias{show,RasterBrick-method}
 
+\alias{print,Spatial-method}
+
 
 \title{ Raster* classes}
 
