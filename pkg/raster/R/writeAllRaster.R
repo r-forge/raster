@@ -3,7 +3,7 @@
 # Version 0.9
 # Licence GPL v3
 
-.writeRasterAll <- function(x, filename, NAflag, filetype, ... ) {
+..writeRasterAll <- function(x, filename, NAflag, filetype, ... ) {
 
 	x@file@driver <- filetype
  	filename <- trim(filename)
@@ -43,7 +43,7 @@
 	mn <- minValue(x)
 	mx <- maxValue(x)
 	if (dtype == 'INT' ) {
-		datatype <- .checkIntDataType(mn, mx, datatype)
+		#datatype <- .checkIntDataType(mn, mx, datatype)
 		dataType(x) <- datatype
 		NAflag <- as.integer(round(NAflag))
 		if (substr(datatype, 5 , 5) == 'U') { 
