@@ -67,10 +67,14 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 					return( colSums(x, na.rm=na.rm) )
 
 				} else if (stat == "min" ) {
-					return( .colMin(x, na.rm=na.rm) )
+					v <- .colMin(x, na.rm=na.rm) 
+					names(v) <- names(x)
+					return(v)
 
 				} else if (stat == "max" ) {
-					return( .colMax(x, na.rm=na.rm) )
+					v <- .colMax(x, na.rm=na.rm)
+					names(v) <- names(x)
+					return(v)
 					
 				} else if (stat == 'countNA') { 
 					warning ("'countNA' is deprecated. Use freq(x, 'value=NA') instead")
@@ -154,7 +158,7 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 			counts <- TRUE
 		
 		} else { 
-			stop("invalid 'stat'. Should be sum, min, max, sd, mean, 'rms', 'skew', or 'countNA'") 
+			stop("invalid 'stat'. Should be 'sum', 'min', 'max', 'sd', 'mean', 'rms', or 'skew'") 
 		}
 
 			
@@ -251,6 +255,8 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 				stsd <- sqrt(sumsq/cnt)^3
 			}
 			st <- d3 / (cnt*stsd)
+		} else if (stat %in% c('min', 'max')) {
+			names(st) <- names(x)
 		}
 		
 		pbClose(pb)
@@ -311,7 +317,7 @@ setMethod('cellStats', signature(x='RasterLayer'),
 						n <- n-1
 					}
 					# st <- apply(x, 2, function(x) sqrt(sum(x^2)/n))
-					st <- sqrt( sum(x^2)/n )
+					return(  sqrt( sum(x^2)/n ) )
 					
 					
 				} else if (stat == "skew" ) {

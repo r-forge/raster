@@ -80,22 +80,24 @@ setMethod('zonal', signature(x='RasterLayer', z='RasterLayer'),
 			}
 			sdtab <- FALSE
 			counts <- FALSE		
-			func1 <- func2 <- match.fun(fun)
-			if ( fun == 'mean' | fun == 'sd') {
-				func1 <- func2 <- sum
-				counts <- TRUE
-				if (fun == 'sd') {
-					sdtab <- TRUE
-				}
-			} else if (fun == 'count') {
+			if (fun == 'count') {
 				func1 <- function(x, na.rm) {
 					if (na.rm) {
 						length(na.omit(x))
 					} else {
 						length(x)
 					}
-				}
+				}	
 				func2 <- sum
+			} else {
+				func1 <- func2 <- match.fun(fun)
+			}
+			if ( fun == 'mean' | fun == 'sd') {
+				func1 <- func2 <- sum
+				counts <- TRUE
+				if (fun == 'sd') {
+					sdtab <- TRUE
+				}
 			} 
 
 			alltab <- array(dim=0)
@@ -240,23 +242,26 @@ setMethod('zonal', signature(x='RasterStackBrick', z='RasterLayer'),
 			}
 			sdtab <- FALSE
 			counts <- FALSE		
-			func1 <- func2 <- match.fun(fun)
-			if ( fun == 'mean' | fun == 'sd') {
-				func1 <- func2 <- sum
-				counts <- TRUE
-				if (fun == 'sd') {
-					sdtab <- TRUE
-				}
-			} else if (fun == 'length') {
+			
+			if (fun == 'count') {
 				func1 <- function(x, na.rm) {
 					if (na.rm) {
 						length(na.omit(x))
 					} else {
 						length(x)
 					}
-				}
+				}	
 				func2 <- sum
+			} else {
+				func1 <- func2 <- match.fun(fun)
 			}
+			if ( fun == 'mean' | fun == 'sd') {
+				func1 <- func2 <- sum
+				counts <- TRUE
+				if (fun == 'sd') {
+					sdtab <- TRUE
+				}
+			} 
 
 			alltab <- array(dim=0)
 			sqtab <- cnttab <- alltab
