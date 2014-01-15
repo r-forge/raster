@@ -34,7 +34,7 @@ setMethod('zonal', signature(x='RasterLayer', z='RasterLayer'),
 
 		if (inmem) {
 			pb <- pbCreate(2, label='zonal', ...)		
-			if (fun == 'count') {
+			if (isTRUE(try(fun == 'count', silent=TRUE))) {
 				func <- function(x, na.rm) {
 					if (na.rm) {
 						length(na.omit(x))
@@ -211,7 +211,7 @@ setMethod('zonal', signature(x='RasterStackBrick', z='RasterLayer'),
 	
 		if (inmem) {
 			pb <- pbCreate(2, label='zonal', ...)		
-			if (fun == 'count') {
+			if (isTRUE(try(fun == 'count', silent=TRUE))) {
 				func <- function(x, na.rm) {
 					if (na.rm) {
 						length(na.omit(x))
