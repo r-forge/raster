@@ -167,12 +167,18 @@ setMethod('cellStats', signature(x='RasterStackBrick'),
 				d <- matrix(d, ncol=1)
 			}
 			if (counts) {
-				nas <- colSums( is.na(d) )
 				if (na.rm & stat != 'countNA') {
+					nas <- colSums( is.na(d) )
 					if (min(nas) == nrow(d)) { 
 						next 
 					}
 					cells <- nrow(d) - nas
+				} else {
+					if (stat == 'countNA') {
+						nas <- colSums( is.na(d) )
+					} else {
+						cells <- nrow(d)
+					}
 				}
 			}
 				
@@ -263,7 +269,7 @@ setMethod('cellStats', signature(x='RasterLayer'),
 		stopifnot(hasValues(x))
 		stat <- .csTextFun(stat)
 	
-		if (!inMemory(x)) {
+		if (! inMemory(x) ) {
 			if (canProcessInMemory(x)) {
 				x <- readAll(x)
 			}
@@ -367,12 +373,18 @@ setMethod('cellStats', signature(x='RasterLayer'),
 		for (i in 1:tr$n) {
 			d <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 			if (counts) {
-				nas <- sum(is.na(d) )
 				if (na.rm & stat != 'countNA') {
+					nas <- sum(is.na(d) )
 					if (nas == length(d)) { # only NAs 
 						next 
 					}
 					cells <- length(d) - nas
+				} else {
+					if (stat == 'countNA') {
+						nas <- sum(is.na(d) )
+					} else {
+						cells <- length(d)
+					}
 				}
 			}
 				
