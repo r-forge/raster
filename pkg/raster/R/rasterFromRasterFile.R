@@ -52,11 +52,11 @@
 	v3 <- vv[2,]
 	a <- list()
 	for (i in 1:length(v1)) {
-		value <- v3[i]
+		value <- unlist(strsplit(v3[i], '#!#'))
 		if (type[i] == 'Date') {
 			try(value <- as.Date(value))
 		} else {
-			try(value <- as(v3[i], type[i]))
+			try(value <- as(value, type[i]))
 		}
 		if (is.na(v2[i])) {
 			a[[v1[i]]] <- value

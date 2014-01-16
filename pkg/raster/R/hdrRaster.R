@@ -75,7 +75,7 @@
 	}
 	
 	a <- NULL
-	try( a <- rapply(x@meta, as.character), silent=TRUE )
+	try( a <- rapply(x@meta, function(x) paste(as.character(x), collapse='#!#')), silent=TRUE )
 	if (!is.null(a)) {
 		type <- rapply(x@meta, class)
 		type_value <- apply(cbind(type, a), 1, function(x) paste(x, collapse=':'))
