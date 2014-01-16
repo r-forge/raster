@@ -59,6 +59,8 @@ function(x, filename, format, ...) {
 
 	if (.isNativeDriver(filetype)) {
 		out <- raster(x)
+		try( out@meta <- x@meta, silent= TRUE)
+		try( out@history <- x@history, silent=TRUE)
 		out <- .startRasterWriting(out, filename, filetype=filetype, ...)
 		out <- writeValues(out, values(x), 1)
 		return( .stopRasterWriting(out) )

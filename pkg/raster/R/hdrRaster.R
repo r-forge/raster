@@ -67,7 +67,23 @@
 		cat("zvalues=", paste(c(zname, z), collapse=':'), "\n", file = thefile)
 		cat("zclass=", zclass, "\n", file = thefile)
 	}
-	cat("history=",  x@history, "\n", file = thefile)
+	
+	a <- NULL
+	try( a <- unlist(x@history), silent=TRUE )
+	if (!is.null(a)) {
+		cat("history=", a, "\n", file = thefile)
+	}
+	
+	a <- NULL
+	try( a <- unlist(x@meta), silent=TRUE )
+	if (!is.null(a)) {
+		cat("[metadata]", "\n", file = thefile)
+		type <- unlist(sapply(x@meta, function(x) sapply(x, class)))
+		type_value <- apply(cbind(type, a), 1, function(x) paste(x, collapse=':'))
+		name_type_value <- apply(cbind(names(a), type_value), 1, function(x) paste(x, collapse='='))
+		name_type_value <- paste(name_type_value, '\n', sep='')
+		cat(name_type_value, file = thefile)		
+	}
 	close(thefile)
 	return(TRUE)
 }
