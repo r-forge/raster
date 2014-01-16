@@ -36,6 +36,7 @@
 }
 
 
+
 .getmetadata <- function(x) {
 	x <- x[x[,1] == 'metadata', , drop=FALSE]
 	if (nrow(x) == 0) {
@@ -51,9 +52,14 @@
 	v3 <- vv[2,]
 	a <- list()
 	for (i in 1:length(v1)) {
-		value <- as(v3[i], type[i])
+		value <- v3[i]
+		if (type[i] == 'Date') {
+			try(value <- as.Date(value))
+		} else {
+			try(value <- as(v3[i], type[i]))
+		}
 		if (is.na(v2[i])) {
-			a[v1[i]] <- value
+			a[[v1[i]]] <- value
 		} else {
 			b <- list(value)
 			names(b) <- v2[i]

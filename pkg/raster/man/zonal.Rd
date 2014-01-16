@@ -47,8 +47,10 @@ z[] <- rep(1:5, each=20)
 zonal(r, z, 'sum')
 
 # for smaller files you can also provide a function
+\dontrun{
 zonal(r, z, mean)
 zonal(r, z, min)
+}
 
 # multiple layers
 zonal(stack(r, r*10), z, 'sum')

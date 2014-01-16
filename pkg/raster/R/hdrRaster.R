@@ -75,13 +75,13 @@
 	}
 	
 	a <- NULL
-	try( a <- unlist(x@meta), silent=TRUE )
+	try( a <- rapply(x@meta, as.character), silent=TRUE )
 	if (!is.null(a)) {
-		cat("[metadata]", "\n", file = thefile)
-		type <- unlist(sapply(x@meta, function(x) sapply(x, class)))
+		type <- rapply(x@meta, class)
 		type_value <- apply(cbind(type, a), 1, function(x) paste(x, collapse=':'))
 		name_type_value <- apply(cbind(names(a), type_value), 1, function(x) paste(x, collapse='='))
 		name_type_value <- paste(name_type_value, '\n', sep='')
+		cat("[metadata]", "\n", file = thefile)
 		cat(name_type_value, file = thefile)		
 	}
 	close(thefile)
