@@ -54,6 +54,12 @@ setMethod ('show' , 'SpatialPoints',
 	}
 )
 
+setMethod ('show' , 'SpatialPointsDataFrame', 
+	function(object) {
+		.printSpatial(object)
+	}
+)
+
 setMethod ('print' , 'Spatial', 
 	function(x, ...) {
 		.printSpatial(x)

@@ -34,8 +34,7 @@
 	cat("DATAFORMAT\t=", pixtype, "\n", file = thefile)
 	
 	cat("DATAFILE_OFFSET\t= 0\n", file = thefile)
-    if (.Platform$endian == 'little') { bo <- 'FALSE' } else { bo <- 'TRUE' }
-	cat("BYTEORDER_BIG\t=", bo, "\n", file = thefile)
+	cat("BYTEORDER_BIG\t=", x@file@byteorder != 'little', "\n", file = thefile)
 
 	cat("POSITION_XMIN\t= ",  as.character(xmin(x) + 0.5 * xres(x)), "\n", file = thefile)
 	cat("POSITION_YMIN\t= ",  as.character(ymin(x) + 0.5 * yres(x)), "\n", file = thefile)

@@ -77,6 +77,7 @@
 		}
 	}
 	x@file@bandorder <- bandorder
+	x@file@byteorder <- .Platform$endian
 	
 	return(x)
 }

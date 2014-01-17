@@ -22,7 +22,7 @@
 
 	cat("[data]", "\n", file = thefile)
 	cat("datatype=",  x@file@datanotation, "\n", file = thefile)
-	cat("byteorder=",  .Platform$endian, "\n", file = thefile)
+	cat("byteorder=", x@file@byteorder, "\n", file = thefile)
 	nl <- nlayers(x)
 	cat("nbands=",  nl, "\n", file = thefile)
 	cat("bandorder=",  x@file@bandorder, "\n", file = thefile)
