@@ -6,7 +6,7 @@
 .writeHdrRaster <- function(x, type='raster') {
 
 	rastergrd <- .setFileExtensionHeader(filename(x), type)
-	thefile <- file(rastergrd, "w")  # open an txt file connectionis
+	thefile <- file(rastergrd, "w")  # open an txt file connection
 	cat("[general]", "\n", file = thefile)
 	cat("creator=R package 'raster'", "\n", file = thefile)
 	cat("created=", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n", file = thefile)
