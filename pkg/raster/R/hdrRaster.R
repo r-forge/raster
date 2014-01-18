@@ -75,9 +75,10 @@
 	}
 	
 	a <- NULL
-	try( a <- rapply(x@meta, function(x) paste(as.character(x), collapse='#!#')), silent=TRUE )
+	try( a <- rapply(x@history, function(x) paste(as.character(x), collapse='#,#')), silent=TRUE )
 	if (!is.null(a)) {
-		type <- rapply(x@meta, class)
+		a <- gsub('\n', '#NL#', a)
+		type <- rapply(x@history, class)
 		type_value <- apply(cbind(type, a), 1, function(x) paste(x, collapse=':'))
 		name_type_value <- apply(cbind(names(a), type_value), 1, function(x) paste(x, collapse='='))
 		name_type_value <- paste(name_type_value, '\n', sep='')

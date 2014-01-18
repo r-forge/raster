@@ -49,10 +49,10 @@
 	vv <- sapply(x[,3], function(i) .strSplitOnFirstToken(i, ':'))
 	colnames(vv) <- NULL
 	type <- vv[1,]
-	v3 <- vv[2,]
+	v3 <- gsub('#NL#', '\n', vv[2,])
 	a <- list()
 	for (i in 1:length(v1)) {
-		value <- unlist(strsplit(v3[i], '#!#'))
+		value <- unlist(strsplit(v3[i], '#,#'))
 		if (type[i] == 'Date') {
 			try(value <- as.Date(value))
 		} else {
@@ -266,7 +266,7 @@
 #		}
 	}
 	
-	x@meta <- metadata
+	x@history <- metadata
 	
     return(x)
 }

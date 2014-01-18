@@ -49,7 +49,7 @@ setClass ('BasicRaster',
 		nrows ='integer',
 		crs = 'CRS',
 		history = 'list',
-		meta = 'list',
+		#meta = 'list',
 		z = 'list'
 	),
 	prototype (	

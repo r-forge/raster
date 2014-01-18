@@ -1,6 +1,6 @@
 
 .metadata <- function(x) {
-	x@meta
+	x@history
 }
 
 '.metadata<-' <- function(x, value) {
@@ -19,7 +19,7 @@
 	if (any(type == 'matrix')) {
 		stop('invalid metadata: matrices are not allowed')
 	}
-	x@meta <- value
+	x@history <- value
 	x
 }
 
