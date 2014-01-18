@@ -58,7 +58,7 @@ setClass ('BasicRaster',
 		nrows= as.integer(1),
 		crs = CRS(),
 		history = list(),
-		meta = list(),
+		#meta = list(),
 		z = list()
 	),
 	validity = function(object) {
