@@ -1,9 +1,9 @@
 
-.metadata <- function(x) {
+metadata <- function(x) {
 	x@history
 }
 
-'.metadata<-' <- function(x, value) {
+'metadata<-' <- function(x, value) {
 	stopifnot(is.list(value))
 	if (is.data.frame(values)) {
 		values <- as.list(values)
