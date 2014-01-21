@@ -19,6 +19,11 @@ metadata(x) <- value
   \item{value}{list with named elements. Each element may be another list of named elements (but these nested lists are not allowed to be lists themselves)}
 }
 
+\note{
+The matadata can contain single values or vectors of basic data types (character, integer, numeric) and Date. Some other types may also be supported. You cannot use a matrix or data.frame as a meta-data element.
+}
+
+
 \value{
 Raster* object or list
 }
@@ -28,10 +33,8 @@ Raster* object or list
 r <- raster(nc=10, nr=10)
 r[] <- 1:ncell(r)
 
-m <- list(wave=list(a=1, b=2, c=c('cool', 'important')),
-that=list(red='44', blue=1:5,
-days=as.Date(c('2014-1-15','2014-2-15'))), this='888 miles from here
-to the there and back.', today=NA)
+m <- list(wave=list(a=1, b=2, c=c('cool', 'important')), that=list(red='44', blue=1:5,
+       days=as.Date(c('2014-1-15','2014-2-15'))), this='888 miles from here', today=NA)
 
 metadata(r) <- m
 x <- writeRaster(r, 'test.grd', overwrite=TRUE)

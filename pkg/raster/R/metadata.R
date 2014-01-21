@@ -15,6 +15,9 @@ metadata <- function(x) {
 	if (is.null(names) | any(nms == '')) {
 		stop('invalid metadata: list elements without names')	
 	}
+	if (any(unlist(sapply(value, is.data.frame)) )) {
+		stop('invalid metadata: data.frames are not allowed')	
+	}
 	type <- rapply(value, class)
 	if (any(type == 'matrix')) {
 		stop('invalid metadata: matrices are not allowed')
