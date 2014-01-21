@@ -9,6 +9,8 @@ add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on
 
 --- development version
 new functions meta<- and meta to set and get metadata to a Raster object. Metadata is saved to file for native format files only.
+bug fix in extract with polygons, in some combinations the column names setting was incorrect and led to an error. (Reported by David Walter)
+bug fix in rasterize/polygons (and affected extract with polygons). It did not consider overlapping holes. (Reported by Bart Kranstauber)
 
 --- 20-January-2014, version: 2.2-12
 bug fix in rasterize with small polygons (reverted to previous version) (reported by Roger Bivand)
