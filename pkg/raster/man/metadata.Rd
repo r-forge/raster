@@ -44,18 +44,16 @@ identical(metax, m)
 
 \dontrun{
 # nested too deep
-badmeta <- list(wave=list(a=1, b=2, c='important'),
-that=list(red='44', blue=list(bad=124)))
-metadata(r) <- badmeta
+badmeta1 <- list(wave=list(a=1, b=2, c='x'), that=list(red='4', blue=list(bad=5)))
+metadata(r) <- badmeta1
 
 # missing names
-badmeta <- list(wave=list(1, 2, c='important'), that=list(red='44', blue=14), this='8m')
-metadata(r) <- badmeta
+badmeta2 <- list(wave=list(1, 2, c='x'), that=list(red='44', blue=14), this='8m')
+metadata(r) <- badmeta2
 
 # matrix not allowed
-badmeta <- list(wave=list(a=1, b=matrix(1:4, ncol=2), c='important'),
-that=list(red='44', blue=124))
-metadata(r) <- badmeta
+badmeta3 <- list(wave=list(a=1, b=matrix(1:4, ncol=2), c='x'), that=list(red='4'))
+metadata(r) <- badmeta3
 }
 }
 
