@@ -272,7 +272,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 		} else {
 			nms <- c('ID', names(x)[lyrs])
 		}
-		if (weights) {
+		if (weights & is.null(fun)) {
 			nms <- c(nms, 'weight')
 		}
 		colnames(res) <- nms

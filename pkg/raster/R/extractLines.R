@@ -239,8 +239,12 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 			} 
 			if (cellnumbers) {
 				vv <- cbind(cellFromRowCol(rr, vv[,1], vv[,2]), vv[,-c(1:2)])
+				colnames(vv) <- c('cell', names(x))
 			} else {
 				vv <- vv[,-c(1:2)]
+				if (NCOL(vv) > 1) {
+					colnames(vv) <- names(x)
+				}
 			}
 			res[[i]] <- vv
 			pbStep(pb)

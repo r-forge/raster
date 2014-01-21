@@ -7,6 +7,9 @@ function for affine transformation
 add AMSR-E ice products and other raw binary products
 add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
 
+--- development version
+new functions meta<- and meta to set and get metadata to a Raster object. Metadata is saved to file for native format files only.
+
 --- 20-January-2014, version: 2.2-12
 bug fix in rasterize with small polygons (reverted to previous version) (reported by Roger Bivand)
 bug fix in extract/points/RasterBrick when all points are outside the raster (reported by Jonathan Greenberg)
