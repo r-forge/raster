@@ -339,7 +339,8 @@ setMethod('raster', signature(x='SpatialGrid'),
 				}
 				if (is.factor( x@data[[layer]]) ) { 
 					r@data@isfactor <- TRUE 
-					r@data@attributes <- list(levels(x@data[[layer]]))
+					levs <- levels(x@data[[layer]])
+					r@data@attributes <- list(data.frame(ID=1:length(levs), levels=levs))
 					r <- setValues(r, as.integer(x@data[[layer]]))
 				} else {
 					r <- setValues(r, x@data[[layer]])
