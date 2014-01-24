@@ -14,15 +14,16 @@
 	fnamevals <- .setFileExtensionValues(filename, filetype)
 	datatype <- .datatype(...)
 	
-	
-	if (filetype %in% c('SAGA')) {
-		resdif <- abs((yres(x) - xres(x)) / yres(x) )
-		if (resdif > 0.01) {
-			stop(paste("x has unequal horizontal and vertical resolutions. Such data cannot be stored in SAGA format"))
-		}
+	if (filetype %in% c('SAGA', 'IDRISI')) {
 		if (datatype == 'FLT8S') {
 			datatype = 'FLT4S'
 		}		
+		if (filetype == 'SAGA') {
+			resdif <- abs((yres(x) - xres(x)) / yres(x) )
+			if (resdif > 0.01) {
+				stop( paste( "x has unequal horizontal and vertical resolutions. Such data cannot be stored in SAGA format" ) )
+			}
+		}
 	}
 
 	dataType(x) <- datatype

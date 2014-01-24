@@ -12,6 +12,7 @@ new functions meta<- and meta to set and get metadata to a Raster object. Metada
 bug fix in extract with polygons, in some combinations the column names setting was incorrect and led to an error. (Reported by David Walter)
 bug fix in rasterize/polygons (and affected extract with polygons). It did not consider nested polygons with holes. (Reported by Bart Kranstauber)
 bug fix in disaggregate chunk size computation (reported by Benjamin Leutner)
+bug fix in writing IDRISI files (reported by Paulo Cardoso)
 bug fix factors were not set correctly for a Raster* derived from a Spatial* object leading to an error when sampleRegular(asRaster=T) was used (reported by Tomislav Hengl)
 
 --- 20-January-2014, version: 2.2-12

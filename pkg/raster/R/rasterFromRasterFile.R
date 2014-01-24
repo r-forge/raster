@@ -25,7 +25,7 @@
 
 
 .getProj <- function(proj, crs) {
-	if (!is.null(crs)) {
+	if ( ! (is.null(crs) | is.na(crs)) ) {
 		if (is.na(proj)) {
 			proj <- crs
 		} else {
@@ -70,7 +70,7 @@
 }
 
 
-.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster', RAT=TRUE, crs=NULL, ...) {
+.rasterFromRasterFile <- function(filename, band=1, type='RasterLayer', driver='raster', RAT=TRUE, crs=NA, ...) {
 
 	valuesfile <- .setFileExtensionValues(filename, driver)
 	if (!file.exists( valuesfile )){
