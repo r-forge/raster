@@ -315,21 +315,22 @@ setMethod('raster', signature(x='SpatialGrid'),
 		r <- raster(extent(x))
 		projection(r) <- x@proj4string
 		dim(r) <- c(x@grid@cells.dim[2], x@grid@cells.dim[1])	
+		if (layer < 1) {
+			values <- FALSE
+		}
 		
 		if (inherits(x, 'SpatialGridDataFrame') & values) {
 			if (dim(x@data)[2] > 0) {
 				layer = layer[1]
 				if (is.numeric(layer)) {
-					if (layer > 0) {
-						dindex <- max(1, min(dim(x@data)[2], layer))
-						if (dindex != layer) {
-							warning(paste("layer was changed to", dindex))
-						}
-						layer <- dindex
+					dindex <- max(1, min(dim(x@data)[2], layer))
+					if (dindex != layer) {
+						warning(paste("layer was changed to: ", dindex))
 					}
+					layer <- dindex
 					names(r) <- colnames(x@data)[layer]
 				} else if (!(layer %in% names(x))) {
-					stop(layer, 'does not exist')
+					stop(layer, ' is not a valid name')
 				} else {
 					names(r) <- layer
 				}
@@ -357,8 +358,12 @@ setMethod('raster', signature(x='SpatialGrid'),
 setMethod('raster', signature(x='SpatialPixels'), 
 	function(x, layer=1, values=TRUE){
 		if (inherits(x, 'SpatialPixelsDataFrame')) {
-			x <- as(x[layer], 'SpatialGridDataFrame')
-			return(raster(x, layer=layer, values=values))
+			if (layer < 1) {
+				x <- as(x, 'SpatialGrid')
+			} else {
+				x <- as(x[layer], 'SpatialGridDataFrame')
+				return(raster(x, values=values))
+			}	
 		} else {
 			x <- as(x, 'SpatialGrid')
 			return(raster(x))		

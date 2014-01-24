@@ -63,7 +63,7 @@ For an overview of the functions in the raster package have a look here: \code{\
 \item{x}{filename (character), Extent, Raster*, SpatialPixels*, SpatialGrid*, object, 'image', matrix, im, or missing. Supported file types are the 'native' raster package format and those that can be read via \code{rgdal} (see \code{\link[rgdal]{readGDAL}}}
 \item{band}{integer. The layer to use in a multi-layer file}
 \item{...}{Additional arguments, see Details }  
-\item{layer}{integer. The layer to use in a multi-layer file, or the layer to extract from a RasterStack/Brick. If the latter case, an empty RasterLayer (no associated values) is returned if \code{layer=0}}
+\item{layer}{integer. The layer (variable) to use in a multi-layer file, or the layer to extract from a RasterStack/Brick or SpatialPixelsDataFrame or SpatialGridDataFrame. An empty RasterLayer (no associated values) is returned if \code{layer=0}}
 \item{values}{logical. If \code{TRUE}, the cell values of '\code{x}' are copied to the RasterLayer object that is returned}
 \item{nrows}{integer > 0. Number of rows}
 \item{ncols}{integer > 0. Number of columns}

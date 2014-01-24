@@ -25,7 +25,7 @@
 
 
 .getProj <- function(proj, crs) {
-	if ( ! (is.null(crs) | is.na(crs)) ) {
+	if ( ! is.na(crs) ) {
 		if (is.na(proj)) {
 			proj <- crs
 		} else {
