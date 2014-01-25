@@ -113,7 +113,7 @@
 
 
 
-.polygonsToRaster <- function(p, rstr, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", getCover=FALSE, filename="", silent=FALSE, ...) {
+.polygonsToRaster <- function(p, rstr, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", getCover=FALSE, filename="", silent=TRUE, ...) {
 
 	leftColFromX <- function ( object, x )	{
 		colnr <- (x - xmin(object)) / xres(object)

@@ -192,44 +192,86 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...)
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, label='mask', ...)
 
-		if (is.na(maskvalue)) {
-			if (inverse) {
-				for (i in 1:tr$n) {
-					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[!is.na(m) & !is.na(v)] <- updatevalue
-					out <- writeValues(out, v, tr$row[i])
-					pbStep(pb, i)
-				} 
+		if (is.na(updatevalue)) {
+
+			if (is.na(maskvalue)) {
+				if (inverse) {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[!is.na(m)] <- NA
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				} else {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[is.na(m)] <- NA
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				}
 			} else {
-				for (i in 1:tr$n) {
-					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[is.na(m) & !is.na(v)] <- updatevalue
-					out <- writeValues(out, v, tr$row[i])
-					pbStep(pb, i)
-				} 
+				if (inverse) {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[m != maskvalue] <- NA
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				} else {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[m == maskvalue] <- NA
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				}
 			}
+
+		
 		} else {
-			if (inverse) {
-				for (i in 1:tr$n) {
-					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[m != maskvalue & !is.na(v)] <- updatevalue
-					out <- writeValues(out, v, tr$row[i])
-					pbStep(pb, i)
-				} 
+			if (is.na(maskvalue)) {
+				if (inverse) {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[!is.na(m) & !is.na(v)] <- updatevalue
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				} else {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[is.na(m) & !is.na(v)] <- updatevalue
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				}
 			} else {
-				for (i in 1:tr$n) {
-					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
-					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[m == maskvalue & !is.na(v)] <- updatevalue
-					out <- writeValues(out, v, tr$row[i])
-					pbStep(pb, i)
-				} 
+				if (inverse) {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[m != maskvalue & !is.na(v)] <- updatevalue
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				} else {
+					for (i in 1:tr$n) {
+						v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
+						m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
+						v[m == maskvalue & !is.na(v)] <- updatevalue
+						out <- writeValues(out, v, tr$row[i])
+						pbStep(pb, i)
+					} 
+				}
 			}
 		}
-
 		pbClose(pb)
 		out <- writeStop(out)
 		names(out) <- ln
@@ -333,16 +375,23 @@ setMethod('mask', signature(x='RasterStackBrick', mask='RasterStackBrick'),
 function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...){ 
 
 
-	if ( nlayers(x) != nlayers(mask) ) {
-		if (nlayers(x) == 1) {
-			x <- raster(x)
-			return(mask(x, mask, filename, inverse, maskvalue=maskvalue, updatevalue=updatevalue, ...))
+	nlx <- nlayers(x)
+	nlk <- nlayers(mask)
+	if ( nlx != nlk ) {
+		if (nlx == 1) {
+			x <- raster(x, 1)
+			return(mask(x, mask, filename=filename, inverse=inverse, maskvalue=maskvalue, updatevalue=updatevalue, ...))
+		} 
+		if (nlk == 1) {
+			mask <- raster(mask, 1)
+			return(mask(x, mask, filename=filename, inverse=inverse, maskvalue=maskvalue, updatevalue=updatevalue, ...))
 		}
-		if (nlayers(mask) == 1) {
-			mask <- raster(mask)
-			return(mask(x, mask, filename, inverse, maskvalue=maskvalue, updatevalue=updatevalue, ...))
+		
+		if (! ((nlx > nlk) & (nlx %% nlk == 0)) ) {
+			stop('number of layers of x and mask must be the same,\n
+			or one of the two should be 1, or the number of layers of x\n 
+			should be divisible by the number of layers of mask')
 		}
-		stop('number of layers of x and mask must match')
 	}
 	
 	updatevalue <- updatevalue[1]
@@ -353,20 +402,20 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...)
 	ln <- names(x)
 	names(out) <- ln
 	
-	if (canProcessInMemory(x, nlayers(x)+4)) {
+	if (canProcessInMemory(x, nlx*2)) {
 
 		x <- getValues(x)
 		if (is.na(maskvalue)) {
 			if (inverse) {
-				x[!is.na(getValues(mask)) & !is.na(x)] <- updatevalue
+				x[!is.na(as.vector(getValues(mask))) & !is.na(x)] <- updatevalue
 			} else {
-				x[is.na(getValues(mask)) & !is.na(x)] <- updatevalue
+				x[is.na(as.vector(getValues(mask))) & !is.na(x)] <- updatevalue
 			}
 		} else {
 			if (inverse) {
-				x[getValues(mask) != maskvalue  & !is.na(x)] <- updatevalue
+				x[as.vector(getValues(mask)) != maskvalue  & !is.na(x)] <- updatevalue
 			} else {
-				x[getValues(mask) == maskvalue & !is.na(x)] <- updatevalue
+				x[as.vector(getValues(mask)) == maskvalue & !is.na(x)] <- updatevalue
 			}
 		}
 		out <- setValues(out, x)
@@ -389,7 +438,7 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...)
 				for (i in 1:tr$n) {
 					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
 					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[!is.na(m) & !is.na(v)] <- updatevalue
+					v[as.vector(!is.na(m)) & !is.na(v)] <- updatevalue
 					out <- writeValues(out, v, tr$row[i])
 					pbStep(pb, i)
 				} 
@@ -397,7 +446,7 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...)
 				for (i in 1:tr$n) {
 					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
 					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[is.na(m) &  !is.na(v)] <- updatevalue
+					v[as.vector(is.na(m)) &  !is.na(v)] <- updatevalue
 					out <- writeValues(out, v, tr$row[i])
 					pbStep(pb, i)
 				} 
@@ -407,7 +456,7 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...)
 				for (i in 1:tr$n) {
 					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
 					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[m != maskvalue & !is.na(v)] <- updatevalue
+					v[as.vector(m != maskvalue) & !is.na(v)] <- updatevalue
 					out <- writeValues(out, v, tr$row[i])
 					pbStep(pb, i)
 				} 
@@ -415,7 +464,7 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...)
 				for (i in 1:tr$n) {
 					v <- getValues( x, row=tr$row[i], nrows=tr$nrows[i] )
 					m <- getValues( mask, row=tr$row[i], nrows=tr$nrows[i] )
-					v[m == maskvalue & !is.na(v)] <- updatevalue
+					v[as.vector(m == maskvalue) & !is.na(v)] <- updatevalue
 					out <- writeValues(out, v, tr$row[i])
 					pbStep(pb, i)
 				} 	
