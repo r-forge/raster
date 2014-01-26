@@ -388,9 +388,7 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, ...)
 		}
 		
 		if (! ((nlx > nlk) & (nlx %% nlk == 0)) ) {
-			stop('number of layers of x and mask must be the same,\n
-			or one of the two should be 1, or the number of layers of x\n 
-			should be divisible by the number of layers of mask')
+			stop('number of layers of x and mask must be the same,\nor one of the two should be 1, or the number of layers of x\nshould be divisible by the number of layers of mask')
 		}
 	}
 	
