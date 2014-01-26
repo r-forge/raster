@@ -32,7 +32,7 @@ If \code{x} represents points, each point is assigned to a grid cell. Points tha
 	
 \S4method{rasterize}{SpatialPolygons,Raster}(x, y, field, fun='last', background=NA, 
     mask=FALSE, update=FALSE, updateValue='all', filename="", 
-    getCover=FALSE, silent=TRUE, ...)
+    getCover=FALSE, silent=FALSE, ...)
 }
 
 \arguments{
