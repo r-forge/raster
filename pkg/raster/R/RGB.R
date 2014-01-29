@@ -14,7 +14,7 @@ if (!isGeneric("RGB")) {
 
 
 setMethod("RGB", signature(x='RasterLayer'), 
-function(x, filename='', col=rainbow(25), ext=NULL, colNA='white', breaks=NULL, zlim=NULL, zlimcol=NULL, alpha=FALSE, ...) { 
+function(x, filename='', col=rainbow(25),  breaks=NULL, alpha=FALSE, colNA='white',zlim=NULL, zlimcol=NULL, ext=NULL,  ...) { 
 
 	getCols <- function(x, col, breaks=NULL, r=NULL, colNA=NA) {
 		if (!is.null(breaks)) {
