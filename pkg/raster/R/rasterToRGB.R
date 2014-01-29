@@ -12,63 +12,55 @@ if (!isGeneric("RGB")) {
 
 
 setMethod("RGB", signature(x='RasterLayer'), 
-function(x, filename='', col=rainbow(10), ext=NULL, colNA='white', breaks=NULL, zlim=NULL, zlimcol=NULL, ...) { 
+function(x, filename='', col=rainbow(10), ext=NULL, colNA='white', breaks=NULL, zlim=NULL, zlimcol=NULL, alpha=FALSE, ...) { 
 
 	if (!is.null(ext)) {
 		x <- crop(x, ext)
 	}
 	
-#	if (!missing(alpha)) {
-#		out <- brick(x, nl=4, values=FALSE)
-#		names(out) <- c('red', 'green', 'blue', 'alpha')
-#	} else {
-	out <- brick(x, nl=3, values=FALSE)
-	names(out) <- c('red', 'green', 'blue')
-#	}
+	if (alpha) {
+		out <- brick(x, nl=4, values=FALSE)
+		names(out) <- c('red', 'green', 'blue', 'alpha')
+	} else {
+		out <- brick(x, nl=3, values=FALSE)
+		names(out) <- c('red', 'green', 'blue')
+	}
 
-	e <- as.vector(t(bbox(extent(x))))
-	x <- as.matrix(x)
-	x[is.infinite(x)] <- NA
-	if (!is.null(zlim)) {
-		if (!is.null(zlimcol)) {
-			x[x < zlim[1]] <- zlim[1]
-			x[x > zlim[2]] <- zlim[2]
-		} else { #if (is.na(zlimcol)) {
-			x[x < zlim[1] | x > zlim[2]] <- NA
-		} 
-	}
-	
-	w <- getOption('warn')
-	options('warn'=-1) 
-	if (is.null(breaks)) {
-		zrange <- range(x, zlim, na.rm=TRUE)
-	} else {
-		zrange <- range(x, zlim, breaks, na.rm=TRUE)
-	}
-	options('warn'=w) 
-	
-	
-	if (! is.finite(zrange[1])) {
-		legend <- FALSE 
-	} else {
+	if (canProcessInMemory(out)) {
+		e <- as.vector(t(bbox(extent(x))))
+		x <- as.matrix(x)
+		x[is.infinite(x)] <- NA
+		if (!is.null(zlim)) {
+			if (!is.null(zlimcol)) {
+				x[x < zlim[1]] <- zlim[1]
+				x[x > zlim[2]] <- zlim[2]
+			} else { #if (is.na(zlimcol)) {
+				x[x < zlim[1] | x > zlim[2]] <- NA
+			} 
+		}
+		
+		w <- getOption('warn')
+		options('warn'=-1) 
+		if (is.null(breaks)) {
+			zrange <- range(x, zlim, na.rm=TRUE)
+		} else {
+			zrange <- range(x, zlim, breaks, na.rm=TRUE)
+		}
+		options('warn'=w) 
+		
 		x <- .asRaster(x, col, breaks, fun, zrange, colNA)
+	
+		x <- col2rgb(as.vector(x), alpha=alpha)
+		
+		out <- setValues(out, t(x))
+		
+		if (filename != '') {
+			out <- writeRaster(out, filename, datatype='INT2U', ...)
+		} 
+		return(out)
+	} else {
+		stop('not yet implemented for large files')
 	}
-	
-	x <- as.vector(x)
-	
-#	if (!missing(alpha)) {
-#		x <- t(col2rgb(x, alpha=TRUE))
-#	} else {
-	x <- t(col2rgb(x, alpha=FALSE))	
-#	}
-	out <- setValues(out, x)
-	
-	if (filename != '') {
-		out <- writeRaster(out, filename, datatype='INT2U', ...)
-	} 
-	
-	return(out)
-
 }
 )
 
