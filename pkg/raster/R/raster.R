@@ -304,7 +304,7 @@ setMethod('raster', signature(x='Extent'),
 setMethod('raster', signature(x='Spatial'), 
 	function(x, ...){
 		r <- raster(extent(x), ...)
-		projection(r) <- x@proj4string
+		x@crs <- x@proj4string
 		r
 	}
 )
