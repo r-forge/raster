@@ -1,6 +1,6 @@
 # Author: Robert J. Hijmans
-# Date :  April 2010
-# Version 0.9
+# Date :  February 2014
+# Version 1.0
 # Licence GPL v3
 
 # partly based on functions in the pixmap package by Friedrich Leisch
