@@ -18,7 +18,8 @@ function(x, filename='', col=rainbow(25),  breaks=NULL, alpha=FALSE, colNA='whit
 
 	getCols <- function(x, col, breaks=NULL, r=NULL, colNA=NA) {
 		if (!is.null(breaks)) {
-			x <- as.numeric(cut(as.vector(x), breaks, include.lowest=TRUE))
+			breaks <- sort(breaks)
+			x <- as.numeric(cut(x, breaks, include.lowest=TRUE))
 			
 		} else {
 			x <- (x - r[1])/ (r[2] - r[1])
