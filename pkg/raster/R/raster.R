@@ -12,18 +12,30 @@ if ( !isGeneric("raster") ) {
 
 
 setMethod('raster', signature(x='missing'), 
-	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext) {
+	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, origin) {
 		if (missing(ext)) {
 			ext <- extent(xmn, xmx, ymn, ymx)
 		}
 		if (missing(crs)) {
-			if (ext@xmin > -360.01 & ext@xmax < 360.01 & ext@ymin > -90.000001 & ext@ymax < 90.000001) { 
-				crs <- "+proj=longlat +datum=WGS84"
+			if (ext@xmin > -360.01 & ext@xmax < 360.01 & ext@ymin > -90.01 & ext@ymax < 90.01) { 
+				crs <- CRS("+proj=longlat +datum=WGS84")
 			} else {
-				crs <- as.character(NA)
+				crs <- CRS(as.character(NA))
 			}
+		} else {
+			crs <- CRS(as.character(projection(crs)))
 		}
-		r <- raster(ext, nrows=nrows, ncols=ncols, crs=crs)
+		if (missing(resolution)) {
+			nrows <- as.integer(max(1, round(nrows)))
+			ncols <- as.integer(max(1, round(ncols)))
+			r <- new('RasterLayer', extent=ext, nrows=nrows, ncols=ncols, crs=crs)
+		} else {
+			r <- new('RasterLayer', extent=ext, crs=crs)
+			res(r) <- resolution
+		}
+		if (!missing(origin)) {
+			origin(r) <- origin
+		}
 		return(r)
 	}
 )
@@ -289,13 +301,7 @@ setMethod('raster', signature(x='RasterBrick'),
 
 setMethod('raster', signature(x='Extent'), 
 	function(x, nrows=10, ncols=10, crs=NA, ...) {
-		if (isTRUE(is.na(crs))) {
-			crs <- as.character(NA)
-		}	
-		nrows <- as.integer(max(1, round(nrows)))
-		ncols <- as.integer(max(1, round(ncols)))
-		r <- new("RasterLayer", extent=x, ncols=ncols, nrows=nrows)
-		projection(r) <- crs
+		r <- raster(xmn=x@xmin, xmx=x@xmax, ymn=x@ymin, ymx=x@ymax, ncols=ncols, nrows=nrows, crs=crs, ...)
 		return(r)
 	}
 )
@@ -304,7 +310,7 @@ setMethod('raster', signature(x='Extent'),
 setMethod('raster', signature(x='Spatial'), 
 	function(x, ...){
 		r <- raster(extent(x), ...)
-		x@crs <- x@proj4string
+		r@crs <- x@proj4string
 		r
 	}
 )
