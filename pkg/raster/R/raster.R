@@ -311,7 +311,9 @@ setMethod('raster', signature(x='Spatial'),
 	function(x, ...){
 		r <- raster(extent(x), ...)
 		r@crs <- x@proj4string
-		r
+		# some additional processing for when origin is specified.
+		r <- extend(r, 1)
+		crop(r, x, snap='out')
 	}
 )
 
