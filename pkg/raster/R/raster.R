@@ -12,7 +12,7 @@ if ( !isGeneric("raster") ) {
 
 
 setMethod('raster', signature(x='missing'), 
-	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, origin) {
+	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution) {
 		if (missing(ext)) {
 			ext <- extent(xmn, xmx, ymn, ymx)
 		}
@@ -32,9 +32,6 @@ setMethod('raster', signature(x='missing'),
 		} else {
 			r <- new('RasterLayer', extent=ext, crs=crs)
 			res(r) <- resolution
-		}
-		if (!missing(origin)) {
-			origin(r) <- origin
 		}
 		return(r)
 	}
@@ -301,19 +298,20 @@ setMethod('raster', signature(x='RasterBrick'),
 
 setMethod('raster', signature(x='Extent'), 
 	function(x, nrows=10, ncols=10, crs=NA, ...) {
-		r <- raster(xmn=x@xmin, xmx=x@xmax, ymn=x@ymin, ymx=x@ymax, ncols=ncols, nrows=nrows, crs=crs, ...)
-		return(r)
+		raster(xmn=x@xmin, xmx=x@xmax, ymn=x@ymin, ymx=x@ymax, ncols=ncols, nrows=nrows, crs=crs, ...)
 	}
 )
 
 
 setMethod('raster', signature(x='Spatial'), 
-	function(x, ...){
+	function(x, origin, ...){
 		r <- raster(extent(x), ...)
 		r@crs <- x@proj4string
-		# some additional processing for when origin is specified.
-		r <- extend(r, 1)
-		crop(r, x, snap='out')
+		if (!missing(origin)) {
+			origin(r) <- origin
+			r <- extend(r, 1)
+			crop(r, x, snap='out')
+		}
 	}
 )
 
