@@ -310,8 +310,9 @@ setMethod('raster', signature(x='Spatial'),
 		if (!missing(origin)) {
 			origin(r) <- origin
 			r <- extend(r, 1)
-			crop(r, x, snap='out')
+			r <- crop(r, x, snap='out')
 		}
+		r
 	}
 )
 
