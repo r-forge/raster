@@ -12,7 +12,7 @@ if (!isGeneric("mask")) {
 
 setMethod('mask', signature(x='Raster', mask='Spatial'), 
 function(x, mask, filename="", inverse=FALSE, updatevalue=NA, ...){ 
-	mask <- rasterize(mask, x, 1)
+	mask <- rasterize(mask, x, 1, silent=TRUE)
 	mask(x, mask, filename=filename, inverse=inverse, maskvalue=NA, updatevalue=updatevalue, ...)
 } )
 
