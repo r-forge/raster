@@ -1,12 +1,16 @@
 
-# this needs to be built into the plot function to avoid redrawing the legend each time.
+if (!isGeneric("animate")) {
+	setGeneric("animate", function(x, ...)
+		standardGeneric("animate"))
+}	
 
-animate <- function(x, pause=0.25, main, zlim, maxpixels=50000, n=1, ...) {
+setMethod('animate', signature(x='RasterStackBrick'), 
+function(x, pause=0.25, main, zlim, maxpixels=50000, n=10, ...) {
 	nl <- nlayers(x)
 	if (missing(main)) {
 		main <- getZ(x)
 		if (is.null(main)) {
-			main <- 1:nl
+			main <- names(x)
 		}
 	}
 
@@ -17,9 +21,9 @@ animate <- function(x, pause=0.25, main, zlim, maxpixels=50000, n=1, ...) {
 	}
 	
 	i <- 1
-	reps = 0
+	reps <- 0
     while (reps < n) {
-        plot(x[[i]], main = main[i], zlim = zlim, maxpixels = maxpixels, ...)
+        plot(x[[i]], main = main[i], zlim=zlim, maxpixels=Inf, ...)
         dev.flush()
         Sys.sleep(pause)
         i <- i + 1
@@ -29,5 +33,6 @@ animate <- function(x, pause=0.25, main, zlim, maxpixels=50000, n=1, ...) {
 		}
     }
 }
+)
 
 #anim(st, tvals)
