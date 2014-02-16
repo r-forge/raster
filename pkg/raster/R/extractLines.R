@@ -226,14 +226,27 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 					rc <- .linesToRaster(lns, rc, silent=TRUE)
 					xy <- rasterToPoints(rc)[,-3,drop=FALSE]
 					v <- cbind(row=rowFromY(rr, xy[,2]), col=colFromX(rr, xy[,1]), .xyValues(x, xy, layer=layer, nl=nl))
-				#up or down?
-					if (ppp[1,2] < ppp[2,2]) {
-						#order top to bottom
-						v <- v[order(-v[,1], v[,2]), ]
-					} else {
-					#order bottom to top
-						v <- v[order(v[,1], -v[,2]), ]
-					}
+					#up or down?
+					
+					updown <- c(1,-1)[(ppp[1,2] < ppp[2,2]) + 1]
+					rightleft <- c(-1,1)[(ppp[1,1] < ppp[2,1]) + 1]
+
+					v <- v[order(updown*v[,1], rightleft*v[,2]), ]
+
+					#up <- ppp[1,2] < ppp[2,2]
+					#right <- ppp[1,1] < ppp[2,1]					
+#					if (up) {
+#						if (right) {
+#							v <- v[order(-v[,1], v[,2]), ]
+#						} else {
+#							v <- v[order(-v[,1], -v[,2]), ]
+#						}
+					
+#					} else {
+#						if (!right) {
+#							v <- v[order(v[,1], -v[,2]), ]
+#						}
+#					}
 					vv <- rbind(vv, v)
 				}
 			} 
