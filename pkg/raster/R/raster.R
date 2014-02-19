@@ -12,7 +12,7 @@ if ( !isGeneric("raster") ) {
 
 
 setMethod('raster', signature(x='missing'), 
-	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, values=NULL) {
+	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, vals=NULL) {
 		if (missing(ext)) {
 			ext <- extent(xmn, xmx, ymn, ymx)
 		}

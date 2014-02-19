@@ -44,7 +44,7 @@ For an overview of the functions in the raster package have a look here: \code{\
 
 \S4method{raster}{RasterBrick}(x, layer=0) 
 
-\S4method{raster}{missing}(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, values=NULL)
+\S4method{raster}{missing}(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, vals=NULL)
 
 \S4method{raster}{Extent}(x, nrows=10, ncols=10, crs=NA, ...)
 
@@ -74,7 +74,7 @@ For an overview of the functions in the raster package have a look here: \code{\
 \item{ext}{object of class Extent. If present, the arguments xmn, xmx, ymn and ynx are ignored}
 \item{crs}{character or object of class CRS. PROJ.4 type description of a Coordinate Reference System (map projection). If this argument is missing, and the x coordinates are withing -360 .. 360 and the y coordinates are within -90 .. 90, "+proj=longlat +datum=WGS84" is used. Also see under Details if \code{x} is a character (filename)}
 \item{resolution}{numeric vector of length 1 or 2 to set the resolution (see \code{\link{res}}). If this argument is used, arguments \code{ncols} and \code{nrows} are ignored }
-\item{values}{optional. Values for the new RasterLayer. Accepted formats are as for \code{\link{setValues}}}
+\item{vals}{optional. Values for the new RasterLayer. Accepted formats are as for \code{\link{setValues}}}
 \item{origin}{minimum y coordinate (bottom border)}
 \item{template}{Raster* or Extent object used to set the extent (and CRS in case of a Raster* object). If not \code{NULL}, arguments \code{xmn}, \code{xmx}, \code{ymn}, \code{ymx} and \code{crs} (unless \code{template} is an Extent object) are ignored}
 }
