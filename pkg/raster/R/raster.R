@@ -12,7 +12,7 @@ if ( !isGeneric("raster") ) {
 
 
 setMethod('raster', signature(x='missing'), 
-	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution) {
+	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, values=NULL) {
 		if (missing(ext)) {
 			ext <- extent(xmn, xmx, ymn, ymx)
 		}
@@ -33,7 +33,11 @@ setMethod('raster', signature(x='missing'),
 			r <- new('RasterLayer', extent=ext, crs=crs)
 			res(r) <- resolution
 		}
-		return(r)
+		if (!is.null(values)) {
+			setValues(r, values)
+		} else {
+			r
+		}
 	}
 )
   
