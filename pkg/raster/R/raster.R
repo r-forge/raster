@@ -33,10 +33,10 @@ setMethod('raster', signature(x='missing'),
 			r <- new('RasterLayer', extent=ext, crs=crs)
 			res(r) <- resolution
 		}
-		if (!is.null(values)) {
-			setValues(r, values)
+		if (!is.null(vals)) {
+			return( setValues(r, vals) )
 		} else {
-			r
+			return( r )
 		}
 	}
 )
