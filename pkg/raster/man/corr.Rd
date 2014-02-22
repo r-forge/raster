@@ -43,7 +43,7 @@ Cell values that are \code{NA} in any of the layers are removed from the computa
 numeric
 }
 
-\seealso{ \code{\link{cor}} }
+\seealso{ \code{\link{cor}}, \code{\link{cor.test}} }
 
 
 \examples{
@@ -57,6 +57,13 @@ cor(x, method="spearman")
 # use sampleRegular for large datasets
 x <- sampleRegular(b, 1000)
 cor.test(x[,1], x[,2])
+
+\dontrun{
+x <- corrLocal(b[[1]], flip(b[[2]], 'y'))
+# show only cells where the p-value < 0.1
+xm <- mask(x[[1]], x[[2]] < 0.1, maskvalue=FALSE)
+plot(xm)
+}
 }
 
 \keyword{methods}
