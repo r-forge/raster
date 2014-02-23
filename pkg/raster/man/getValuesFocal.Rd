@@ -21,7 +21,7 @@ This function returns a matrix (or matrices) for all focal values of a number of
  \item{nrows}{Numeric. Number of rows, should be a positive integer smaller than \code{row+nrow(x)}. Should be omitted if \code{row} is omitted}
  \item{ngb}{Neighbourhood size. Either a single integer or a vector of two integers \code{c(nrow, ncol)}}
  \item{names}{logical. If \code{TRUE}, the matrix returned has row and column names}
- \item{padValue}{numeric. The value of the cells of the "padded" rows and columns. That is 'virtual' values for cells within a neigbourhood, but outside the raster} 
+ \item{padValue}{numeric. The value of the cells of the "padded" rows and columns. That is 'virtual' values for cells within a neighbourhood, but outside the raster} 
  \item{array}{logical. If \code{TRUE} and \code{x} has multiple layers, an array is returned in stead of a list of matrices}
  \item{...}{additional arguments (none implemented)}
 }
