@@ -15,7 +15,7 @@ function(x, ngb, names=FALSE, ...) {
 
 
 setMethod("getValuesFocal", signature(x='Raster', row='numeric', nrows='numeric', ngb='numeric'), 
-function(x, row, nrows, ngb, names=FALSE, padValue=NA, ...) {
+function(x, row, nrows, ngb, names=FALSE, padValue=NA, array=FALSE, ...) {
 
 	nl <- nlayers(x)
 	if (nl == 0) {
@@ -71,7 +71,7 @@ function(x, row, nrows, ngb, names=FALSE, padValue=NA, ...) {
 			if (ngbc < nv) {
 				v <- cbind(v[,(nv-ngbc+1):nv], v, v[,1:ngbc])
 			} else {
-				stop('horizontal neighborhood is too big')
+				stop('horizontal neighbourhood is too big')
 			}
 		} else {
 			add <- matrix(padValue, ncol=ngbc, nrow=nrow(v))
@@ -90,7 +90,16 @@ function(x, row, nrows, ngb, names=FALSE, padValue=NA, ...) {
 			mm[[i]] <- m
 		}
 	}
-	names(mm) <- names(x)
+	if (array) {
+		if (names) {
+			dnms <- list(rownames(mm[[1]]), colnames(mm[[1]]), names(x))
+		} else {
+			dnms <- list(NULL, NULL, names(x))
+		}
+		mm <- array(unlist(mm), c(nrow(mm[[1]]), ncol(mm[[1]]), length(mm)), dimnames=dnms )
+	} else  {
+		names(mm) <- names(x)
+	}
 	return(mm)
 }
 )
