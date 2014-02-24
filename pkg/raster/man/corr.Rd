@@ -1,4 +1,4 @@
-\name{corr}
+\name{correlation}
 
 \docType{methods}
 
