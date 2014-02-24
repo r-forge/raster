@@ -5,8 +5,8 @@
 \alias{correlation}
 \alias{correlation,RasterLayer,RasterLayer-method}
 \alias{correlation,RasterStackBrick,missing-method}
-\alias{correlationLocal}
-\alias{correlationLocal,RasterLayer,RasterLayer-method}
+\alias{corrLocal}
+\alias{corrLocal,RasterLayer,RasterLayer-method}
 
 
 \title{Pearson correlation coefficient}
