@@ -10,7 +10,7 @@ add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on
 --- development version
 
 
---- 22-February-2014, version: 2.2-22
+--- 23-February-2014, version: 2.2-23
 new functions 'meta<-' and 'meta' to set and get metadata to a Raster object. Metadata is saved to file for native format files only.
 new argument updatevalue to mask
 new function animate
