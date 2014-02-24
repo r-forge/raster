@@ -77,10 +77,10 @@
 		stop( paste(valuesfile,  "does not exist"))
 	}	
 	
-	filename <- .setFileExtensionHeader(filename, driver)
+	filename <- raster:::.setFileExtensionHeader(filename, driver)
 	
 	ini <- readIniFile(filename)
-	metadata <- .getmetadata(ini)
+	metadata <- raster:::.getmetadata(ini)
 	ini <- ini[ini[,1] != 'metadata', , drop=FALSE]
 
 	
@@ -100,7 +100,7 @@
 	
 	isCat <- FALSE
 	ratnames <- rattypes <- ratvalues <- NULL
-	catlevels = matrix(NA)
+	catlevels <- matrix(NA)
 	w <- getOption('warn')
 	on.exit(options('warn' = w))
 	
@@ -158,10 +158,13 @@
 		else if (ini[i,2] == "ZCLASS") { zclass <- ini[i,3] } 
     }  
 	
-	if (prj == 'GEOGRAPHIC') { prj <- "+proj=longlat" }
-	if (prj == 'UNKNOWN') { prj <- NA }
-	
-	prj <- .getProj(prj, crs)
+	if (!is.na(prj)) {
+		if (prj == 'GEOGRAPHIC') { prj <- "+proj=longlat" 
+		} else if (prj == 'UNKNOWN') { prj <- NA 
+		} else if (prj == 'NA') { prj <- NA }
+	}
+
+	prj <- raster:::.getProj(prj, crs)
 	
 	if (band < 1) {
 		band <- 1

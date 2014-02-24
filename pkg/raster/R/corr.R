@@ -1,18 +1,18 @@
 
-if ( !isGeneric("corr") ) {
-	setGeneric("corr", function(x, y, ...)
-		standardGeneric("corr"))
+if ( !isGeneric("correlation") ) {
+	setGeneric("correlation", function(x, y, ...)
+		standardGeneric("correlation"))
 }
 
 
-setMethod('corr', signature(x='RasterLayer', y='RasterLayer'), 
+setMethod('correlation', signature(x='RasterLayer', y='RasterLayer'), 
 	function(x, y, n=Inf, ...) {
-		corr(stack(x, y), n=n, ...)
+		correlation(stack(x, y), n=n, ...)
 	}
 )
 
 
-setMethod('corr', signature(x='RasterStackBrick', y='missing'), 
+setMethod('correlation', signature(x='RasterStackBrick', y='missing'), 
 	function(x, y, n=Inf, ...) {
 		
 		nl <- nlayers(x)

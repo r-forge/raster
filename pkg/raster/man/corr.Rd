@@ -2,11 +2,11 @@
 
 \docType{methods}
 
-\alias{corr}
-\alias{corr,RasterLayer,RasterLayer-method}
-\alias{corr,RasterStackBrick,missing-method}
-\alias{corrLocal}
-\alias{corrLocal,RasterLayer,RasterLayer-method}
+\alias{correlation}
+\alias{correlation,RasterLayer,RasterLayer-method}
+\alias{correlation,RasterStackBrick,missing-method}
+\alias{correlationLocal}
+\alias{correlationLocal,RasterLayer,RasterLayer-method}
 
 
 \title{Pearson correlation coefficient}
@@ -16,9 +16,9 @@ Pearson correlation coefficient between cell values of two RasterLayers or all l
 }
 
 \usage{
-\S4method{corr}{RasterLayer,RasterLayer}(x, y, n=Inf, ...)
+\S4method{correlation}{RasterLayer,RasterLayer}(x, y, n=Inf, ...)
 
-\S4method{corr}{RasterStackBrick,missing}(x, y, n=Inf, ...)
+\S4method{correlation}{RasterStackBrick,missing}(x, y, n=Inf, ...)
 
 \S4method{corrLocal}{RasterLayer,RasterLayer}(x, y, ngb=5, method = c("pearson", "kendall", "spearman"), filename='', ...)
 }
@@ -30,7 +30,7 @@ Pearson correlation coefficient between cell values of two RasterLayers or all l
   \item{ngb}{Neighborhood size. Either a single integer or a vector of two integers c(nrow, ncol)}
   \item{method}{character indicating which correlation coefficient is to be used. One of \code{"pearson"}, \code{"kendall"}, or \code{"spearman"}}
   \item{filename}{character. Output filename (optional)}
-  \item{...}{additional arguments. None implemented for corr. For corrLocal they are as for \code{\link{writeRaster}}}
+  \item{...}{additional arguments. None implemented for correlation. For correlationLocal they are as for \code{\link{writeRaster}}}
 }
 
 \note{
@@ -48,7 +48,7 @@ numeric
 
 \examples{
 b <- brick(system.file("external/rlogo.grd", package="raster"))
-corr(b)
+correlation(b)
  
 # for more options, use the cor function
 x <- as.matrix(b)
