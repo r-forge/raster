@@ -1,19 +1,5 @@
 
-if ( !isGeneric("correlation") ) {
-	setGeneric("correlation", function(x, y, ...)
-		standardGeneric("correlation"))
-}
-
-
-setMethod('correlation', signature(x='RasterLayer', y='RasterLayer'), 
-	function(x, y, n=Inf, ...) {
-		correlation(stack(x, y), n=n, ...)
-	}
-)
-
-
-setMethod('correlation', signature(x='RasterStackBrick', y='missing'), 
-	function(x, y, n=Inf, ...) {
+.cor <- function(x, n=Inf, ...) {
 		
 		nl <- nlayers(x)
 		if (nl < 2) return(1)
@@ -45,8 +31,8 @@ setMethod('correlation', signature(x='RasterStackBrick', y='missing'),
 			colnames(s) <- rownames(s) <- names(x)
 			s		
 		}
-	}
-)
+}
+
 
 
 
