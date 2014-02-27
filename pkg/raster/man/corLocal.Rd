@@ -13,7 +13,8 @@ Local correlation coefficient for two RasterLayer objects
 }
 
 \usage{
-\S4method{corLocal}{RasterLayer,RasterLayer}(x, y, ngb=5, method = c("pearson", "kendall", "spearman"), test=FALSE, filename='', ...)
+\S4method{corLocal}{RasterLayer,RasterLayer}(x, y, ngb=5, 
+     method=c("pearson", "kendall", "spearman"), test=FALSE, filename='', ...)
 }
 
 \arguments{

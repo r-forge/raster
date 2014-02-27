@@ -77,10 +77,10 @@
 		stop( paste(valuesfile,  "does not exist"))
 	}	
 	
-	filename <- raster:::.setFileExtensionHeader(filename, driver)
+	filename <- .setFileExtensionHeader(filename, driver)
 	
 	ini <- readIniFile(filename)
-	metadata <- raster:::.getmetadata(ini)
+	metadata <- .getmetadata(ini)
 	ini <- ini[ini[,1] != 'metadata', , drop=FALSE]
 
 	
@@ -164,7 +164,7 @@
 		} else if (prj == 'NA') { prj <- NA }
 	}
 
-	prj <- raster:::.getProj(prj, crs)
+	prj <- .getProj(prj, crs)
 	
 	if (band < 1) {
 		band <- 1
