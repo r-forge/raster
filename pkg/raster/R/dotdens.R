@@ -36,10 +36,10 @@
     res <- vector(mode = "list", length = n)
     for (i in 1:n) {
 		if (d[i] > 0) {
-			try ( ires <- spsample(p[i, ], d[i], type=f), silent=TRUE  )
+			ires <- try (spsample(p[i, ], d[i], type=f), silent=TRUE  )
 			if (class(ires) == 'try-error') {
-				print('error, ', d[i])
-				ires = NULL
+				print(paste('error, ', d[i]))
+				ires <- NULL
 			}
 			if (!is.null(ires)) {
 				res[[i]] <- cbind(coordinates(ires), id=i)
