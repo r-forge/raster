@@ -18,6 +18,7 @@ new functions corr and corrLocal
 new convenience function origin<-
 new function RGB to create Red-Green-Blue(-alpha) files.
 new intersect method for SpatialPoints with ANY(-thing from which an Extent can be extracted)
+bug fix in boundaries function with large files reported by Adrien Bayeux
 bug fix in writing multiple layers to a ncdf file if the z-value cannot be converted to numeric. Reported by Aseem Sharma
 bug fix in extract with lines and along=TRUE (reported by Robin Edwards)
 bug fix in extract with polygons, in some combinations the column names setting was incorrect and led to an error. (Reported by David Walter)

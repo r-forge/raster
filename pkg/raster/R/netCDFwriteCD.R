@@ -9,7 +9,7 @@
 		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, ...) {
 
 		
-	ncdf4 <- raster:::.NCDFversion4()
+	ncdf4 <- .NCDFversion4()
 		
 	filename = trim(filename)
 	if (filename == '') { stop('provide a filename') }
@@ -18,10 +18,10 @@
 		stop('file exists, use overwrite=TRUE to overwrite it')
 	}
 	dataType(x) <- datatype
-	datatype = raster:::.getNetCDFDType(datatype)
+	datatype <- .getNetCDFDType(datatype)
 	nl <- nlayers(x)
 	
-	if (raster:::.couldBeLonLat(x)) {
+	if (.couldBeLonLat(x)) {
 		if (missing(xname)) xname = 'longitude'
 		if (missing(yname)) yname = 'latitude'
 		xunit = 'degrees_east'

@@ -64,7 +64,7 @@ compareRaster <- function(x, ..., extent=TRUE, rowcol=TRUE, crs=TRUE, res=FALSE,
 			if (is.na(proj1)) {
 				proj1 <- thisproj
 			} else {
-				crs <- try (.compareCRS(proj1, thisproj, unknown=TRUE), silent=TRUE)
+				crs <- try (compareCRS(proj1, thisproj, unknown=TRUE), silent=TRUE)
 				if (class(crs) == 'try-error') {
 					if (stopiffalse) { stop('invalid CRS') }
 					if (showwarning) { warning('invalid CRS') }
