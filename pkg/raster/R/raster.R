@@ -421,9 +421,9 @@ setMethod('raster', signature(x='asc'),
 		if (missing(crs)) {
 			e <- x@extent
 			if (e@xmin > -360.1 & e@xmax < 360.1 & e@ymin > -90.1 & e@ymax < 90.1) { 
-				crs = "+proj=longlat +datum=WGS84"
+				crs <- "+proj=longlat +datum=WGS84"
 			} else {
-				crs = as.charcter(NA)
+				crs <- as.character(NA)
 			}
 		}
 		projection(x) <- crs
