@@ -3,6 +3,10 @@
 # version 1.0
 # license GPL3
 
+.compareCRS <- function(...) {
+	warning('use "compareCRS", not ".compareCRS"')
+	compareCRS(...)
+}
 
 compareCRS <- function(x, y, unknown=FALSE, verbatim=FALSE, verbose=FALSE) {
 	
