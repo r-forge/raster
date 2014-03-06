@@ -31,12 +31,14 @@ logical
 
 
 \examples{ 
-compareCRS("+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100 +ellps=WGS84", "+proj=longlat +datum=WGS84")
-compareCRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0", "+proj=longlat +datum=WGS84")
-compareCRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0", "+proj=longlat +datum=WGS84", verbatim=TRUE)
-compareCRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0", NA)
-compareCRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0", NA, unknown=TRUE)
-compareCRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0", NA, unknown=TRUE, verbatim=TRUE)
+compareCRS("+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100 +ellps=WGS84",
+  "+proj=longlat +datum=WGS84")
+compareCRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
+  "+proj=longlat +datum=WGS84")
+compareCRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0", 
+  "+proj=longlat +datum=WGS84", verbatim=TRUE)
+compareCRS("+proj=longlat +datum=WGS84", NA)
+compareCRS("+proj=longlat +datum=WGS84", NA, unknown=TRUE)
 }
 
 \keyword{ spatial }
