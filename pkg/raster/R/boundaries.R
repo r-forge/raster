@@ -5,16 +5,11 @@
 
 
 # name overlap with igraph
-edge <- function(x, ...) {
-	warning('"edge" is obsolete. Use "boundaries"')
+.edge <- function(x, ...) {
 	boundaries(x, ...)
+	warning('"edge" is obsolete. Use "boundaries"')
 }
 
-# igraph now also has edges!
-edges <- function(x, ...) {
-	warning('"edges" is obsolete. Use "boundaries"')
-    boundaries(x, ...)
-}
 
 
 if (!isGeneric("boundaries")) {
@@ -23,15 +18,8 @@ if (!isGeneric("boundaries")) {
 }	
 
 setMethod('boundaries', signature(x='RasterLayer'), 
-function(x, filename="", type='inner', classes=FALSE, directions=8, ...) {
+function(x, type='inner', classes=FALSE, directions=8, filename="", ...) {
 
-	dots <- list(...)
-	if (!is.null(dots$asZero)) {
-		warning("argument 'asZero' is currently ignored")
-	}
-	if (!is.null(dots$asNA)) {
-		warning("argument 'asNA' is currently ignored")
-	}
 
 	stopifnot( nlayers(x) == 1 )
 	stopifnot( hasValues(x) )
