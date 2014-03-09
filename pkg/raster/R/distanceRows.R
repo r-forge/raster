@@ -14,7 +14,7 @@
 	}
 	if (.couldBeLonLat(object)) { longlat=TRUE } else { longlat=FALSE }
 
-	e <- raster::edge(object, classes=FALSE, type='inner', asNA=TRUE) 
+	e <- boundaries(object, classes=FALSE, type='inner', asNA=TRUE) 
 	
 	r <- raster(object)
 	tr <- blockSize(r, n=3)

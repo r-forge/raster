@@ -18,7 +18,7 @@ if (!isGeneric("boundaries")) {
 }	
 
 setMethod('boundaries', signature(x='RasterLayer'), 
-function(x, type='inner', classes=FALSE, directions=8, filename="", ...) {
+function(x, type='inner', classes=FALSE, directions=8, asNA=FALSE, filename="", ...) {
 
 
 	stopifnot( nlayers(x) == 1 )
@@ -43,7 +43,6 @@ function(x, type='inner', classes=FALSE, directions=8, filename="", ...) {
 	stopifnot(directions %in% c(4,8))
 	
 	
-#	if (asNA) {	fval <- as.integer(NA) } else { fval <- as.integer(0) }
 #	asZero <- as.integer(as.logical(asZero))
 	
 	
@@ -62,6 +61,9 @@ function(x, type='inner', classes=FALSE, directions=8, filename="", ...) {
 		x <- rbind(x[1,], x, x[nrow(x),])
 		paddim <- as.integer(dim(x))
 		x <- .Call('edge', as.integer(t(x)), paddim, classes, type, directions, NAOK=TRUE, PACKAGE='raster')
+		if (asNA) {
+			x[x==0] <- as.integer(NA)
+		}
 		x <- matrix(x, nrow=paddim[1], ncol=paddim[2], byrow=TRUE)
 		x <- x[2:(nrow(x)-1), 2:(ncol(x)-1)]
 		x <- setValues(out, as.vector(t(x)))
@@ -87,6 +89,9 @@ function(x, type='inner', classes=FALSE, directions=8, filename="", ...) {
 		v <- as.integer(cbind(v[,1], v))
 		
 		v <- .Call('edge', v, as.integer(c(tr$nrows[1]+2, nc)),  classes, type, directions, NAOK=TRUE, PACKAGE='raster')
+		if (asNA) {
+			v[v==0] <- as.integer(NA)
+		}
 		v <- matrix(v, ncol=nc, byrow=TRUE)
 		v <- as.integer(t(v[2:(nrow(v)-1), 2:(ncol(v)-1)]))
 		out <- writeValues(out, v, 1)
