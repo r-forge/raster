@@ -1,7 +1,7 @@
 
 
 
-p2r <- function(p, r=1, x, field, fun, ...) {
+.p2r <- function(p, r=1, x, field, fun, ...) {
 	points <- .pointsToMatrix(p)
 	field <- .getPutVals(p, field, nrow(points), mask=FALSE)
 	x <- raster(x)
