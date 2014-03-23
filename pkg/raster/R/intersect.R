@@ -28,7 +28,7 @@ function(x, y) {
 	x@ymax <- min(x@ymax, y@ymax)
 
 	if ((x@xmax <= x@xmin) | (x@ymax <= x@ymin) ) {
-		warning('Objects do not overlap')
+		#warning('Objects do not overlap')
 		return(NULL)
 	}
 	return(x)
