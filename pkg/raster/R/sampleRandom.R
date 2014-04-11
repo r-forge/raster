@@ -97,9 +97,12 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 			
 		if (size >= nc) {
 			
+			#warning('size > ncell(x)')
+			
 			if (is.null(ext)) {
 				x <- getValues(x)
 			} else {
+				r <- raster(x)
 				x <- getValues(xx)
 			}
 			
@@ -107,7 +110,7 @@ function(x, size, na.rm=TRUE, ext=NULL, cells=FALSE, rowcol=FALSE, xy=FALSE, sp=
 				if (is.null(ext)) {
 					x <- cbind(cell=1:nc, value=x)
 				} else {
-					XY <- xyFromCell(rr, 1:ncell(rr))
+					XY <- xyFromCell(xx, 1:ncell(xx))
 					cell <- cellFromXY(r, XY)
 					x <- cbind(cell, x)
 				}

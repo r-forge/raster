@@ -6,11 +6,13 @@ move resample (bilinear interp. (and add other options)) and rasterize/(lines, p
 function for affine transformation
 add AMSR-E ice products and other raw binary products
 add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
+add VRT output to saveStack
 
 --- development version
 removed obsolete functions edge and edges (use boundaries instead)
 bug fix: aspect computation for plotting lon/lat rasters failed in some cases (Reported by Francisco Quevedo)
 bug fix: datum/ellipsoid and true scale latitude was incorrect for South NSIDC (Reported by Neal Young)
+	
 	
 --- 6-March-2014, version: 2.2-31
 new functions 'meta<-' and 'meta' to set and get metadata to a Raster object. Metadata is saved to file for native format files only.
