@@ -12,7 +12,7 @@ add VRT output to saveStack
 removed obsolete functions edge and edges (use boundaries instead)
 bug fix: aspect computation for plotting lon/lat rasters failed in some cases (Reported by Francisco Quevedo)
 bug fix: datum/ellipsoid and true scale latitude was incorrect for South NSIDC (Reported by Neal Young)
-	
+Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux	
 	
 --- 6-March-2014, version: 2.2-31
 new functions 'meta<-' and 'meta' to set and get metadata to a Raster object. Metadata is saved to file for native format files only.
