@@ -47,7 +47,7 @@
 		cat("map info = {projection, 1, 1,", xmin(r),", ", ymax(r),", ", xres(r),", ", yres(r), "}\n", file = thefile)
 	}
 	if (.requireRgdal(FALSE)) {
-		cat("coordinate system string = {", showWKT(projection(r)), "}\n", file = thefile)
+		cat("coordinate system string = {", showWKT(projection(r)), "}\n", file = thefile, sep="")
 	} else {
 		cat("projection info =", projection(r), "\n", file = thefile) 
 	}
