@@ -349,7 +349,14 @@
 			if (is.na(band)) {
 				r@data@band <- as.integer(1)
 			} else {
-				r@data@band <- as.integer( min(max(1, band), r@file@nbands) )
+				band <- as.integer(band)
+				if ( band > nbands(r) ) {
+					error(paste("band too high. Should be between 1 and", nbands))
+				} 
+				if ( band < 1) { 
+					error(paste("band should be 1 or higher"))		
+				}			
+				r@data@band <- band
 			}
 			r@z <- list( getZ(r)[r@data@band] )
 		} 
