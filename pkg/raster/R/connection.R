@@ -21,9 +21,10 @@ setMethod('readStart', signature(x='Raster'),
 
 
 setMethod('readStart', signature(x='RasterStack'), 
-	function(x, ...) {
+	function(x, maxopen=100, ...) {
 		d <- which(sapply(x@layers, fromDisk))
-		if (length(d) > 0) {
+		ld <- length(d)
+		if (ld > 0 & ld <= maxopen) {
 			for (i in d) {
 				x@layers[[i]] <- readStart(x@layers[[i]], con.check=103, ...)
 			}

@@ -215,10 +215,13 @@ function(x, filename, format, bylayer=FALSE, suffix='numbers', ...) {
 		if (filetype=='CDF') {
 			b@z  <- x@z
 		}
+		nl <- nlayers(x)
 
 		tr <- blockSize(b)
 		pb <- pbCreate(tr$n, ...)
-		x <- readStart(x, ...)
+		if (nl < 100) {
+			x <- readStart(x, ...)
+		}
 		b <- writeStart(b, filename=filename, format=filetype, ...)
 		for (i in 1:tr$n) {
 			v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
@@ -226,7 +229,9 @@ function(x, filename, format, bylayer=FALSE, suffix='numbers', ...) {
 			pbStep(pb, i)
 		}
 		b <- writeStop(b)
-		x <- readStop(x)
+		if (nl < 100) {
+			x <- readStop(x)
+		}
 		pbClose(pb)
 		return(b)	
 	} 
