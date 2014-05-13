@@ -130,16 +130,16 @@
 		r@file@nbands <- as.integer(nbands)
 		band <- as.integer(band)
 		if ( band > nbands(r) ) {
-			error(paste("band too high. Should be between 1 and", nbands))
+			stop(paste("band too high. Should be between 1 and", nbands))
 			#if (warn) {
-				#error("band too high. Set to nbands")
+				#stop("band too high. Set to nbands")
 			#}
 			#band <- nbands(r) 
 		}
 		if ( band < 1) { 
-			error(paste("band should be 1 or higher"))		
+			stop(paste("band should be 1 or higher"))		
 			#if (warn) {
-				#error("band too low. Set to 1")
+				#stop("band too low. Set to 1")
 			#}
 			#band <- 1 
 		}

@@ -351,10 +351,10 @@
 			} else {
 				band <- as.integer(band)
 				if ( band > nbands(r) ) {
-					error(paste("band too high. Should be between 1 and", nbands))
+					stop(paste("band too high. Should be between 1 and", nbands))
 				} 
 				if ( band < 1) { 
-					error(paste("band should be 1 or higher"))		
+					stop(paste("band should be 1 or higher"))		
 				}			
 				r@data@band <- band
 			}
