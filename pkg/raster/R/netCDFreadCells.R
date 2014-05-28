@@ -14,7 +14,7 @@
 	} 
 	
 
-	if (canProcessInMemory(r, 2)) {
+	if (canProcessInMemory(x, 2)) {
 	# read only rows needed	
 		row1 <- rowFromCell(x, min(cells))
 		row2 <- rowFromCell(x, max(cells))
