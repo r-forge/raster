@@ -60,6 +60,11 @@ cor(x, method="spearman")
 # use sampleRegular for large datasets
 x <- sampleRegular(b, 1000)
 cor.test(x[,1], x[,2])
+
+# RasterStack or Brick objects
+y <- corLocal(b, flip(b, 'y'))
+
+
 }
 
 \keyword{methods}
