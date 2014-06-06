@@ -7,7 +7,6 @@
 \alias{aggregate,SpatialPolygons-method}
 
 
-
 \title{Aggregate raster cells or polygons}
 
 \description{
@@ -28,7 +27,7 @@ Aggregate ('dissolve') SpatialPolygons, optionally by combining polygons that ha
 }
 
 \arguments{
-  \item{x}{Raster* object}
+  \item{x}{Raster* object or SpatialPolygons* object}
   \item{fact}{integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details}  
   \item{fun}{function used to aggregate values }  
   \item{expand}{logical. If \code{TRUE} the output Raster* object will be larger then the input Raster* object if a division of the number of columns or rows with \code{factor} is not an integer}

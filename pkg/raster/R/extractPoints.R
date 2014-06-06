@@ -76,7 +76,7 @@ function(x, y, ..., df=FALSE, sp=FALSE){
 
 	} else if (method=='simple') {
 		cells <- cellFromXY(object, xy)
-		res <-  .cellValues(object, cells, layer=layer, nl=nl) 
+		res <- .cellValues(object, cells, layer=layer, nl=nl) 
 		if (cellnumbers) {			
 			res <- cbind(cells, res)
 			if (ncol(res) == 2) {
