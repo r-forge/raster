@@ -63,10 +63,12 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 			RGB[,1] <- .linStretchVec(RGB[,1])
 			RGB[,2] <- .linStretchVec(RGB[,2])
 			RGB[,3] <- .linStretchVec(RGB[,3])
+			scale <- 255
 		} else if (stretch == 'hist') {
 			RGB[,1] <- .eqStretchVec(RGB[,1])
 			RGB[,2] <- .eqStretchVec(RGB[,2])
 			RGB[,3] <- .eqStretchVec(RGB[,3])
+			scale <- 255
 		} else if (stretch != '') {
 			warning('invalid stretch value')
 		}
