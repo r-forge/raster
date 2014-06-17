@@ -58,3 +58,29 @@ function(x, y) {
 }
 )
 
+
+
+setMethod('union', signature(x='SpatialPolygons', y='missing'), 
+function(x, y) {
+	stopifnot(require(rgeos))
+	n <- length(x)
+	if (n < 2) {
+		return(x)
+	}
+	if (.hasSlot(x, 'data')) {
+		x$ID <- 1:n
+		x@data <- x@data[, 'ID', drop=FALSE]
+	} else {
+		x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:n))
+	}
+	u <- x[1,]
+	for (i in 2:n) {
+		u <- union(u, x[i, ])
+		names(u)[i] <- paste('ID.', i, sep='')
+	}
+	u$count <- apply(data.frame(u), 1, fun=function(x)sum(!is.na(x)))
+	u
+}	
+)
+
+
