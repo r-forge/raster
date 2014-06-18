@@ -16,6 +16,7 @@ Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux
 specifying an invalid band number when creating a RasterLayer now leads to an error instead of a warning. In the case of ncdf files there was no warning (reported by Sahar Mokhtari) 
 bug fix: in plotRGB with stretching (in some cases the image became black). (Reported by Agus Lobo)
 expanded corLocal to RasterStackBrick	
+union function for single SpatialPolygons* object
 	
 --- 6-March-2014, version: 2.2-31
 new functions 'meta<-' and 'meta' to set and get metadata to a Raster object. Metadata is saved to file for native format files only.
