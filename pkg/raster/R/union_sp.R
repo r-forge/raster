@@ -44,6 +44,8 @@ function(x, y) {
 		x <- intersect(x, y)
 		x <- list(dif1, dif2, x)
 		x <- x[!sapply(x, is.null)]
+		i <- sapply(x, length) # 
+		x <- x[ i > 0]
 		if (length(x) > 1) {
 			x <- do.call(bind, x)
 		} else {
@@ -74,6 +76,7 @@ function(x, y) {
 		x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:n))
 	}
 	u <- x[1,]
+	names(u) <- 'ID.1'
 	for (i in 2:n) {
 		u <- union(u, x[i, ])
 		names(u)[i] <- paste('ID.', i, sep='')
