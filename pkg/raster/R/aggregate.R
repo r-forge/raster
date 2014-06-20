@@ -11,7 +11,9 @@ setMethod('aggregate', signature(x='Raster'),
 function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 
 	doC <- list(...)$doC
-	if (is.null(doC)) doC <- TRUE
+	if (is.null(doC)) {
+		doC <- TRUE
+	}
 	fact <- rep(as.integer(round(fact)), length.out=2)
 	xfact <- fact[1]
 	yfact <- fact[2]
