@@ -61,8 +61,9 @@ setMethod('interpolate', signature(object='Raster'),
 				}				
 			}
 		}
-		if (xyOnly) na.rm <- FALSE
-		
+		if (xyOnly) {
+			na.rm <- FALSE
+		}
 		
 		if (inherits(model, "gstat")) { 
 			gstatmod <- TRUE 
@@ -113,10 +114,10 @@ setMethod('interpolate', signature(object='Raster'),
 				p <- xyFromCell(predrast, ablock + (tr$row[i]-1) * ncol(predrast)) 
 				blockvals <- cbind(data.frame( x=p[,1], y=p[,2]), v=blockvals) 
 
-				if (! is.null(const)) {
-					blockvals = cbind(blockvals, const)
-				}
 			} 
+			if (! is.null(const)) {
+				blockvals <- cbind(blockvals, const)
+			}
 			
 			colnames(blockvals)[1:2] <- xyNames[1:2]
 			
@@ -168,7 +169,7 @@ setMethod('interpolate', signature(object='Raster'),
 				}
 				
 				# to change factor to numeric; should keep track of this to return a factor type RasterLayer
-				predv = as.numeric(predv)
+				predv <- as.numeric(predv)
 							
 			}
 			
