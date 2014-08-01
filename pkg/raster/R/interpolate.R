@@ -112,7 +112,7 @@ setMethod('interpolate', signature(object='Raster'),
 				}
 
 				p <- xyFromCell(predrast, ablock + (tr$row[i]-1) * ncol(predrast)) 
-				blockvals <- cbind(data.frame( x=p[,1], y=p[,2]), v=blockvals) 
+				blockvals <- cbind(data.frame( x=p[,1], y=p[,2]), blockvals) 
 
 			} 
 			if (! is.null(const)) {

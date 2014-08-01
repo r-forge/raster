@@ -35,7 +35,7 @@ Aggregate ('dissolve') SpatialPolygons, optionally by combining polygons that ha
   \item{filename}{character. Output filename (optional)}
   \item{...}{if \code{x} is a Raster* object, additional arguments as for \code{\link{writeRaster}}}
   
-  \item{vars}{character or integer. The variables (column names or numbers) that should be used to aggregate (dissolve) the SpatialPolygons by only maintaining unique combinations of these variables. The default setting is to use no variables and aggregate all polygons. You can also supply a vector with a length of length(row.names(x)) }
+  \item{vars}{character or integer. The variables (column names or numbers) that should be used to aggregate (dissolve) the SpatialPolygons by only maintaining unique combinations of these variables. The default setting is to use no variables and aggregate all polygons. You can also supply a vector with a length of length(x) }
 
   \item{sums}{list with function(s) and variable(s) to summarize. This should be a list of lists in which each element of the main lists has two items. The first item is function (e.g. mean), the second element is a vector of column names (or indices) that need to summarize with that function. Be careful with character and factor variables (you can use, e.g. 'first' \code{function(x)x[1]} or 'last' \code{function(x)x[length(x)]} or \code{modal} for these variables}
   \item{dissolve}{logical. If \code{TRUE} overlapping polygons are dissolved into single features (requires package rgeos)}  

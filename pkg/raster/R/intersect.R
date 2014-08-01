@@ -37,7 +37,7 @@ function(x, y) {
 
 
 
-setMethod('intersect', signature(x='SpatialPoints', y='ANY'), 
+setMethod('intersect', signature(x='SpatialPoints', y='Raster'), 
 function(x, y) {
 	y <- extent(y)
 	xy <- coordinates(x)

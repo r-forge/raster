@@ -129,6 +129,7 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 						v[v == x@file@nodatavalue] <- NA
 					}
 				}
+				colnames(v) <- names(x)
 			}
 	
 			if (asRaster) {
@@ -162,7 +163,9 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 				if (sp) {
 					warning("'sp=TRUE' is ignored when 'useGDAL=TRUE'")
 				}
-				return( as.vector(v) )
+
+				
+				return( v )
 			}
 		}
 	}
@@ -209,14 +212,18 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 	} else {
 	
 		m <- NULL
+		nstart <- 1
 		if (xy) {
 			m <- xyFromCell(x, cell)
+			nstart <- 3
 		}
 		if (cells) {
 			m <- cbind(m, cell=cell)
+			nstart <- nstart + 1
 		} 
 		m <- cbind(m, .cellValues(x, cell))
-		
+		colnames(m)[nstart:(nstart+nl-1))] <- names(x)
+
 		if (sp) {
 			m <- SpatialPointsDataFrame(xyFromCell(x, cell), data.frame(m), proj4string=projection(x, asText=FALSE))
 		}
