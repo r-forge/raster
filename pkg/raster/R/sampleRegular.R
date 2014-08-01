@@ -222,7 +222,7 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 			nstart <- nstart + 1
 		} 
 		m <- cbind(m, .cellValues(x, cell))
-		colnames(m)[nstart:(nstart+nl-1))] <- names(x)
+		colnames(m)[nstart:(nstart+nl-1)] <- names(x)
 
 		if (sp) {
 			m <- SpatialPointsDataFrame(xyFromCell(x, cell), data.frame(m), proj4string=projection(x, asText=FALSE))
