@@ -23,7 +23,7 @@ Contour plot of a RasterLayer.
 
 
 \seealso{ 
-\code{\link{persp}}, \code{\link{filledContour}, \code{\link{rasterToContour} }
+\code{\link{persp}}, \code{\link{filledContour}}, \code{\link{rasterToContour} }
 }
 
 \examples{
