@@ -4,20 +4,20 @@
 # Licence GPL v3
 
 
-if (!isGeneric("project")) {
-	setGeneric("project", function(x, ...)
-		standardGeneric("project"))
+if (!isGeneric(".project")) {
+	setGeneric(".project", function(x, ...)
+		standardGeneric(".project"))
 }	
 
 
-setMethod('project', signature(x='Raster'), 
+setMethod('.project', signature(x='Raster'), 
 	function(x, to=NULL, res=NULL, crs=NULL, method="bilinear", alignOnly=FALSE, over=FALSE, filename="", ...)  {
 		projectRaster(x, to=to, res=res, crs=crs, method=method, alignOnly=alignOnly, over=over, filename=filename, ...)
 	}
 )
 
 
-setMethod('project', signature(x='SpatialGrid'), 
+setMethod('.project', signature(x='SpatialGrid'), 
 	function(x, ...)  {
 		y <- brick(x)
 		.requireRgdal()
@@ -31,7 +31,7 @@ setMethod('project', signature(x='SpatialGrid'),
 	}
 )
 
-setMethod('project', signature(x='SpatialPixels'), 
+setMethod('.project', signature(x='SpatialPixels'), 
 	function(x, ...)  {
 		y <- brick(x)
 		.requireRgdal()
@@ -46,7 +46,7 @@ setMethod('project', signature(x='SpatialPixels'),
 )
 
 
-setMethod('project', signature(x='Spatial'), 
+setMethod('.project', signature(x='Spatial'), 
 	function(x, crs, ...)  {
 		.requireRgdal()
 		if (!is.null(list(...)$CRSobj)) {
