@@ -85,8 +85,13 @@ function(x, y) {
 
 setMethod('intersect', signature(x='SpatialPoints', y='SpatialPolygons'), 
 function(x, y) {
-	i <- over(as(x, 'SpatialPoints'), as(y, 'SpatialPolygons'))
-	i <- which(!is.na(i))
-	x[i,]
+   if (!identical(proj4string(x), proj4string(y))) {
+        warning("non identical CRS")
+        y@proj4string <- x@proj4string
+    }
+    i <- over(as(x, "SpatialPoints"), as(y, "SpatialPolygons"))
+    i <- which(!is.na(i))
+    x[i, ]
 }	
 )
+

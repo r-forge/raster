@@ -12,7 +12,7 @@ Contour plot of a RasterLayer.
 }
 
 \usage{
-\S4method{contour}{RasterLayer}(x, maxpixels=10000, ...)
+\S4method{contour}{RasterLayer}(x, maxpixels=100000, ...)
 }
 
 \arguments{

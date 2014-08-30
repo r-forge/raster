@@ -18,6 +18,20 @@ function(x, y, ...){
 })
 
 
+setMethod('extract', signature(x='SpatialPoints', y='SpatialPolygons'), 
+function(x, y, ...){ 
+	if (! identical(proj4string(x), proj4string(y)) ) {
+		warning('non identical CRS')
+		y@proj4string <- x@proj4string
+	}
+	if (!.hasSlot(y, 'data')) {
+		y <- SpatialPolygonsDataFrame(y, data.frame(ID=1:length(y)))
+	}
+    over(x, y)
+})
+
+
+
 setMethod('extract', signature(x='Raster', y='SpatialPoints'), 
 function(x, y, ..., df=FALSE, sp=FALSE){ 
 	px <- projection(x, asText=FALSE)
