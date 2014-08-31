@@ -6,7 +6,7 @@
 
 
 setMethod('extract', signature(x='Raster', y='SpatialPolygons'), 
-function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FALSE, df=FALSE, layer, nl, factors=FALSE, sp=FALSE, ...){ 
+function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=TRUE, df=FALSE, layer, nl, factors=FALSE, sp=FALSE, ...){ 
 
 	px <- projection(x, asText=FALSE)
 	comp <- compareCRS(px, projection(y), unknown=TRUE)
@@ -32,17 +32,24 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 					warning('"fun" was changed to "mean"; other functions cannot be used when "weights=TRUE"' )
 				}
 			}
-			fun <- function(x) {
+			fun <- function(x, ...) {
 				# some complexity here because different layers could 
 				# have different NA cells
+				if ( is.null(x) ) {
+					return(rep(NA, nl))
+				}
 				w <- x[,nl+1]
-				x <- x[,-(nl+1)]
+				x <- x[,-(nl+1), drop=FALSE]
 				x <- x * w
 				w <- matrix(rep(w, nl), ncol=nl)
 				w[is.na(x)] <- NA
 				w <- colSums(w, na.rm=TRUE)
 				x <- apply(x, 1, function(X) { X / w } )
-				rowSums(x, na.rm=na.rm) 
+				if (!is.null(dim(x))) {
+					rowSums(x, na.rm=na.rm)
+				} else {
+					sum(x, na.rm=na.rm)
+				}
 			}
 		}
 		
@@ -112,8 +119,8 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 					rc <- .polygonsToRaster(pp, rc, getCover=TRUE, silent=TRUE)
 					rc[rc==0] <- NA
 					xy <- rasterToPoints(rc)
-					weight <- xy[,3] / 100
-					xy <- xy[,-3,drop=FALSE]
+					weight <- xy[,3] / sum(xy[,3])
+					xy <- xy[, -3, drop=FALSE]
 				} else {
 					rc <- .polygonsToRaster(pp, rc, silent=TRUE)
 					xy <- rasterToPoints(rc)[,-3,drop=FALSE]
@@ -142,7 +149,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 							cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
 							value <- .cellValues(x, cell, layer=layer, nl=nl)
 							if (weights) {
-								weight=0
+								weight=rep(1/NROW(value), NROW(value))
 								if (cellnumbers) {
 									r <- cbind(cell, value, weight)
 								} else {
@@ -176,7 +183,11 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 
 			if (doFun) {
 				if (!is.null(d$value$value)) {
-					res[[d$value$tag]] <- fun(d$value$value)
+					if (nl > 1 & !weights) {
+						res[[i]] <- apply(d$value$value, 2, fun, na.rm=na.rm)							
+					} else { 
+						res[[d$value$tag]] <- fun(d$value$value)
+					}
 				}
 			} else {
 				res[[d$value$tag]] <- d$value$value
@@ -201,7 +212,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 					rc <- .polygonsToRaster(pp, rc, getCover=TRUE, silent=TRUE)
 					rc[rc==0] <- NA
 					xy <- rasterToPoints(rc)
-					weight <- xy[,3] / 100
+					weight <- xy[,3] / sum(xy[,3])
 					xy <- xy[,-3,drop=FALSE]
 				} else {
 					rc <- .polygonsToRaster(pp, rc, silent=TRUE)
@@ -233,8 +244,12 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 						cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
 						value <- .cellValues(x, cell, layer=layer, nl=nl)
 						if (weights) {
-							weight=0
-							res[[i]] <- cbind(cell, value, weight)
+							weight=rep(1/NROW(value), NROW(value))
+							if (cellnumbers) {
+								res[[i]] <- cbind(cell, value, weight)
+							} else {
+								res[[i]] <- cbind(value, weight)
+							}
 						} else if (cellnumbers) {
 							res[[i]] <- cbind(cell, value)					
 						} else {
@@ -244,7 +259,11 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=FA
 				} 
 				if (doFun) {
 					if (!is.null(res[[i]])) {
-						res[[i]] <- fun(res[[i]])
+						if (nl > 1 & !weights) {
+							res[[i]] <- apply(res[[i]], 2, fun, na.rm=na.rm)							
+						} else {
+							res[[i]] <- fun(res[[i]])
+						}
 					}
 				}	
 			}

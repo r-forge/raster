@@ -23,7 +23,7 @@ bug fixes:
 - RasterLayer with single column RAT tables gave an error on show(). Reported by Nevil Amos 
 - aspect computation for plotting lon/lat rasters failed in some cases (Reported by Francisco Quevedo)
 - datum/ellipsoid and true scale latitude was incorrect for South NSIDC (Reported by Neal Young)
-- extracting values failed for very large rasters (cellsnumbers > 2*10^9 because as.integer() returns NA). Problem reported by Samantha Franks and by Herry Alexander
+- extracting values failed for very large rasters (cell numbers > 2*10^9 because as.integer() returns NA). Problem reported by Samantha Franks and by Alexander Herr
 	
 	
 --- 6-March-2014, version: 2.2-31
