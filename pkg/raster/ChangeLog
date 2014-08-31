@@ -10,14 +10,21 @@ add VRT output to saveStack
 
 --- development version
 removed obsolete functions edge and edges (use boundaries instead)
-bug fix: aspect computation for plotting lon/lat rasters failed in some cases (Reported by Francisco Quevedo)
-bug fix: datum/ellipsoid and true scale latitude was incorrect for South NSIDC (Reported by Neal Young)
 Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux	
-specifying an invalid band number when creating a RasterLayer now leads to an error instead of a warning. In the case of ncdf files there was no warning (reported by Sahar Mokhtari) 
-bug fix: in plotRGB with stretching (in some cases the image became black). (Reported by Agus Lobo)
 expanded corLocal to RasterStackBrick	
 union function for single SpatialPolygons* object
-bug fix. as.data.frame(xy=TRUE, na.rm=TRUE) now works. Reported by Helen Sofaer
+removeTmpFiles now also removes sub-folders. Code suggestions by Matteo Mattiuzzi	
+expanded functionality: aggregate can now aggregate in space and 'time' (layers).  	
+specifying an invalid band number when creating a RasterLayer now leads to an error instead of a warning. In the case of ncdf files there was no warning (reported by Sahar Mokhtari) 
+
+bug fixes: 
+- in plotRGB with stretching (in some cases the image became black). (Reported by Agus Lobo)
+- as.data.frame(xy=TRUE, na.rm=TRUE) now works. Reported by Helen Sofaer
+- RasterLayer with single column RAT tables gave an error on show(). Reported by Nevil Amos 
+- aspect computation for plotting lon/lat rasters failed in some cases (Reported by Francisco Quevedo)
+- datum/ellipsoid and true scale latitude was incorrect for South NSIDC (Reported by Neal Young)
+- extracting values failed for very large rasters (cellsnumbers > 2*10^9 because as.integer() returns NA). Problem reported by Samantha Franks and by Herry Alexander
+	
 	
 --- 6-March-2014, version: 2.2-31
 new functions 'meta<-' and 'meta' to set and get metadata to a Raster object. Metadata is saved to file for native format files only.

@@ -61,9 +61,12 @@ setMethod ('show' , 'RasterLayer',
 		
 			x <- object@data@attributes[[1]]
 			nc <- NCOL(x)
-			if (nc == 1) { # this should never happen
-				x <- data.frame(value=x)
-			}
+			
+			# this can actually happen, but x should be a data.frame anyway
+			#if (nc == 1) { # this should never happen
+			#	x <- data.frame(value=x)
+			#}
+			
 			maxnl <- 12
 			if (nc > maxnl) {
 				x <- x[, 1:maxnl]
@@ -73,7 +76,7 @@ setMethod ('show' , 'RasterLayer',
 			#nfact <- sapply(1:ncol(x), function(i) is.numeric(x[,i]))
 			if (nrow(x) > 5) {
 				cat('attributes  :\n') 
-				r <- x[c(1, nrow(x)), ]
+				r <- x[c(1, nrow(x)), ,drop=FALSE]
 				for (j in 1:ncol(r)) {
 					r[is.numeric(r[,j]) & !is.finite(r[,j]), j] <- NA
 				}	
