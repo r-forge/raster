@@ -23,9 +23,9 @@ setMethod('.project', signature(x='SpatialGrid'),
 		.requireRgdal()
 		dots <- list(...)
 		if (!is.null(dots$CRSobj) & is.null(dots$crs)) {
-			y <- project(y, crs=dots$CRSobj, ...)
+			y <- projectRaster(y, crs=dots$CRSobj, ...)
 		} else {
-			y <- project(y, ...)
+			y <- projectRaster(y, ...)
 		}
 		as(y, class(x))
 	}
@@ -37,9 +37,9 @@ setMethod('.project', signature(x='SpatialPixels'),
 		.requireRgdal()
 		dots <- list(...)
 		if (!is.null(dots$CRSobj) & is.null(dots$crs)) {
-			y <- project(y, crs=dots$CRSobj, ...)
+			y <- projectRaster(y, crs=dots$CRSobj, ...)
 		} else {
-			y <- project(y, ...)
+			y <- projectRaster(y, ...)
 		}
 		as(y, class(x))
 	}

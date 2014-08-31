@@ -13,6 +13,10 @@
 #		flush.console()
 		return(NULL)
 	}
+	
+	
+	cells <- round(cells)
+	
 	cells <- cbind(1:length(cells), cells)
 	cells <- cells[order(cells[,2]), ,drop=FALSE]
 	uniquecells <- sort(na.omit(unique(cells[,2])))
@@ -20,7 +24,11 @@
 	if (length(uniquecells) == 0) {
 		return( matrix(NA, nrow=nrow(cells), ncol=length(layers)) )
 	}
-	uniquecells <- as.integer(uniquecells)
+#  creates problems with large integers
+#  perhaps not needed (or causes problems with merge?)
+#	uniquecells <- as.integer(uniquecells)
+# now using round (above)
+
 	adjust <- TRUE
 	if (length(uniquecells) > 0) {
 		if ( inMemory(x) ) {
