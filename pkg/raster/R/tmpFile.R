@@ -95,7 +95,7 @@ removeTmpFiles <- function(h=24) {
 	if (!is.na(tmpdir)) {
 	
 		d <- .removeTrailingSlash(tmpdir)
-		f <- list.files(path=d, pattern='raster_tmp*', full.names=TRUE)
+		f <- list.files(path=d, pattern='raster_tmp*', full.names=TRUE, include.dirs=TRUE)
 		fin <- file.info(f)
 		dif <- Sys.time() - fin$mtime
 		dif <- as.numeric(dif, units="hours")
@@ -103,15 +103,12 @@ removeTmpFiles <- function(h=24) {
 		dif[is.na(dif)] <- h + 1
 		f <- f[dif > h]
 		if (length(f) > 1) {
-			unlink(f)
+			unlink(f, recursive=TRUE)
 		}
-	#	if (file.exists(d)) {
-	#		unlink(paste(d, "/raster_tmp_*", sep=""), recursive = FALSE)
-	#	}
-	}
-	
+	}	
 	options('warn'=warnopt) 
 }
+
 
 
 showTmpFiles <- function() {

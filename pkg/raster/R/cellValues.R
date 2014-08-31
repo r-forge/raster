@@ -5,7 +5,6 @@
 
 	
 .cellValues <- function(x, cells, layer, nl, df=FALSE, factors=FALSE) { 
-	cells <- round(cells)
 	
 	if (inherits(x, 'RasterLayer')) {
 		result <- .readCells(x, cells, 1)
