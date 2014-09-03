@@ -1,6 +1,7 @@
 \name{boundaries}
 
 \alias{boundaries}
+\alias{edge}
 \alias{boundaries,RasterLayer-method}
   
 \title{boundaries (edges) detection}
@@ -11,6 +12,8 @@ Detect boundaries (edges). boundaries are cells that have more than one class in
 
 \usage{
 \S4method{boundaries}{RasterLayer}(x, type='inner', classes=FALSE, directions=8, asNA=FALSE, filename="", ...)
+
+edge(x, ...)
 }
 
 \arguments{
@@ -26,6 +29,8 @@ Detect boundaries (edges). boundaries are cells that have more than one class in
 \value{
 RasterLayer. Cell values are either 1 (a border) or 0 (not a border), or \code{NA}
 }
+
+\note{'edge' is obsolete and should not be used. It will be removed from this pacakge}
 
 \seealso{ \code{\link{focal}}, \code{\link{clump}} }
 

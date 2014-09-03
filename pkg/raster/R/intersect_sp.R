@@ -15,8 +15,8 @@ function(x, y) {
 
 	require(rgeos)
 
-	x <- spChFIDs(x, as.character(1:length(row.names(x))))
-	y <- spChFIDs(y, as.character(1:length(row.names(y))))
+	x <- spChFIDs(x, as.character(1:length(x)))
+	y <- spChFIDs(y, as.character(1:length(y)))
 		
 	if (! identical(proj4string(x), proj4string(y)) ) {
 		warning('non identical CRS')

@@ -14,8 +14,8 @@ function(x, y) {
 
 	stopifnot(require(rgeos))
 
-	x <- spChFIDs(x, as.character(1:length(row.names(x))))
-	y <- spChFIDs(y, as.character(1:length(row.names(y))))
+	x <- spChFIDs(x, as.character(1:length(x)))
+	y <- spChFIDs(y, as.character(1:length(y)))
 
 	if (! identical(proj4string(x), proj4string(y)) ) {
 		warning('non identical CRS')
@@ -63,7 +63,7 @@ function(x, y) {
 
 
 
-.simpleUnion <- function(x, y) {
+...simpleUnion <- function(x, y) {
 	subs <- gIntersects(x, y)
 	if (!any(subs)) {
 		x@polygons <- c(x@polygons, y@polygons)
@@ -104,54 +104,21 @@ function(x, y) {
 	}
 	if (.hasSlot(x, 'data')) {
 		x <- as(x, 'SpatialPolygons')
-		#x$ID <- 1:n
-		#x@data <- x@data[, 'ID', drop=FALSE]
-	} else {
-		#x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:n))
 	}
 	
-	a <- gArea(x, byid=T)
-	ord <- order(a)
-	u <- x[ord[1],]
-	cnt = 1
-#	names(u) <- 'p1'
-	r <- list()
-	ri <- 1
-	for (i in ord[-1]) {
-		cnt <- cnt + 1
-		if (cnt %% 50 == 0) {
-			r[i] <- u
-			i <- i + 1
-			u <- x[i,]
-		} else {
-			u <- .simpleUnion(u, x[i, ])
-		}
-#		names(u)[i] <- paste('p', i, sep='')
-		#cat(paste('p', cnt, '\n', sep=''))
-		#flush.console()
-		#uu <<- u
+	x <- spChFIDs(x, as.character(1:length(x)))
+	x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:n))
+
+	u <- x[1,]
+	names(u) <- 'ID.1'
+	for (i in 2:n) {
+		u <- union(u, x[i, ])
+		names(u)[i] <- paste('ID.', i, sep='')
 	}
 	
-	if (length(ri) == 1) {
-		return(ri[[1]])
-	} else {
-		u <- ri[[1]]
-		for (i in 2:length(ri)) {
-			u <- .simpleUnion(u, ri[i, ])
-		}
-		return(u)
-	}
-	
-	#u@data[!is.na(u@data)] <- 1
-	#u@data[is.na(u@data)] <- 0
-	#u$count <- rowSums(u@data)
-	
-	#xy <- SpatialPoints(coordinates(u), proj4string=crs(u))
-	#u <- SpatialPolygonsDataFrame(u, data.frame(poly.ID=1:length(u)))
-	#e <- extract(xy, x)
-	
-	#e <- reshape(e    )  xxx
-	#u <- merge(u, e, by='poly.ID')
+	u@data[!is.na(u@data)] <- 1
+	u@data[is.na(u@data)] <- 0
+	u$count <- rowSums(u@data)
 	
 	u
 }	

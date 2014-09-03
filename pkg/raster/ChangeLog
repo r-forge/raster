@@ -8,14 +8,14 @@ add AMSR-E ice products and other raw binary products
 add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
 add VRT output to saveStack
 
---- development version
-removed obsolete functions edge and edges (use boundaries instead)
+--- September-2014, version: 2.2-46
 Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux	
 expanded corLocal to RasterStackBrick	
 union function for single SpatialPolygons* object
 removeTmpFiles now also removes sub-folders. Code modified by Matteo Mattiuzzi	
 expanded functionality: aggregate can now aggregate in space and 'time' (layers).  	
 specifying an invalid band number when creating a RasterLayer now leads to an error instead of a warning. In the case of ncdf files there was no warning (reported by Sahar Mokhtari) 
+removed obsolete function edges (use boundaries instead). obsolete function edge still available this version. 
 
 bug fixes: 
 - in plotRGB with stretching (in some cases the image became black). (Reported by Agus Lobo)
