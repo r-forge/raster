@@ -13,7 +13,7 @@ removed obsolete functions edge and edges (use boundaries instead)
 Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux	
 expanded corLocal to RasterStackBrick	
 union function for single SpatialPolygons* object
-removeTmpFiles now also removes sub-folders. Code suggestions by Matteo Mattiuzzi	
+removeTmpFiles now also removes sub-folders. Code modified by Matteo Mattiuzzi	
 expanded functionality: aggregate can now aggregate in space and 'time' (layers).  	
 specifying an invalid band number when creating a RasterLayer now leads to an error instead of a warning. In the case of ncdf files there was no warning (reported by Sahar Mokhtari) 
 
@@ -24,7 +24,7 @@ bug fixes:
 - aspect computation for plotting lon/lat rasters failed in some cases (Reported by Francisco Quevedo)
 - datum/ellipsoid and true scale latitude was incorrect for South NSIDC (Reported by Neal Young)
 - extracting values failed for very large rasters (cell numbers > 2*10^9 because as.integer() returns NA). Problem reported by Samantha Franks and by Alexander Herr
-	
+- subset failed for bricks derived from 4D NetCDF files. Reported by Mark Payne
 	
 --- 6-March-2014, version: 2.2-31
 new functions 'meta<-' and 'meta' to set and get metadata to a Raster object. Metadata is saved to file for native format files only.

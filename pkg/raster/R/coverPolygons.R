@@ -101,14 +101,14 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 		subsx <- apply(subs, 2, any)
 		subsy <- apply(subs, 1, any)
 	
-		int  <- gIntersection(x[subsx,], y[subsy,], byid=TRUE)
-		if (inherits(int, "SpatialCollections")) {
-			if (is.null(int@polyobj)) { # ??
-				warning('polygons do not intersect')
-				next
-			}
-			int <- int@polyobj
-		}
+		int  <- gIntersection(x[subsx,], y[subsy,], byid=TRUE, drop_not_poly=TRUE)
+		#if (inherits(int, "SpatialCollections")) {
+		#	if (is.null(int@polyobj)) { # ??
+		#		warning('polygons do not intersect')
+		#		next
+		#	}
+		#	int <- int@polyobj
+		#}
 		if (!inherits(int, 'SpatialPolygons')) {
 			warning('polygons do not intersect')
 			next

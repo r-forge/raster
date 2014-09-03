@@ -69,10 +69,10 @@ setMethod('crop', signature(x='Spatial', y='ANY'),
 			
 			return( SpatialPolygonsDataFrame(y, data) )
 		} else {
-			y <- gIntersection(x, y)
-			if (inherits(y, "SpatialCollections")) {
-				y <- y@polyobj
-			}
+			y <- gIntersection(x, y, drop_not_poly=TRUE)
+			#if (inherits(y, "SpatialCollections")) {
+			#	y <- y@polyobj
+			#}
 			return(y)
 		}
 }

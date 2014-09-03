@@ -56,9 +56,42 @@ function(x, y) {
 		area <- sapply(x@polygons, function(i) slot(i, 'area'))
 		x <- x[area > 0, ]
 	}
+
 	x
 }
 )
+
+
+
+.simpleUnion <- function(x, y) {
+	subs <- gIntersects(x, y)
+	if (!any(subs)) {
+		x@polygons <- c(x@polygons, y@polygons)
+		x <- spChFIDs(x, as.character(1:length(x)))
+	} else {
+		dif1 <- erase(x, y)
+		dif2 <- erase(y, x)
+		x <- intersect(x, y)
+		x <- list(dif1, dif2, x)
+		x <- x[!sapply(x, is.null)]
+		i <- sapply(x, length) # 
+		x <- x[ i > 0]
+		y <- x[[1]]
+		if (length(x) == 2) {
+			y@polygons <- c(y@polygons, x[[2]]@polygons)
+		} else if (length(x) == 3) {
+			y@polygons <- c(y@polygons, x[[2]]@polygons, x[[3]]@polygons)		
+		}
+		# remove slivers
+		y <- spChFIDs(y, as.character(1:length(y)))
+		area <- sapply(y@polygons, function(i) slot(i, 'area'))
+		x <- y[area > 0, ]
+	}
+	
+	x
+}
+
+
 
 
 
@@ -70,18 +103,56 @@ function(x, y) {
 		return(x)
 	}
 	if (.hasSlot(x, 'data')) {
-		x$ID <- 1:n
-		x@data <- x@data[, 'ID', drop=FALSE]
+		x <- as(x, 'SpatialPolygons')
+		#x$ID <- 1:n
+		#x@data <- x@data[, 'ID', drop=FALSE]
 	} else {
-		x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:n))
+		#x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:n))
 	}
-	u <- x[1,]
-	names(u) <- 'ID.1'
-	for (i in 2:n) {
-		u <- union(u, x[i, ])
-		names(u)[i] <- paste('ID.', i, sep='')
+	
+	a <- gArea(s, byid=T)
+	ord <- order(a)
+	u <- x[ord[1],]
+	cnt = 1
+#	names(u) <- 'p1'
+	r <- list()
+	ri <- 1
+	for (i in ord[-1]) {
+		cnt <- cnt + 1
+		if (cnt %% 50 == 0) {
+			r[i] <- u
+			i <- i + 1
+			u <- x[i,]
+		} else {
+			u <- .simpleUnion(u, x[i, ])
+		}
+#		names(u)[i] <- paste('p', i, sep='')
+		#cat(paste('p', cnt, '\n', sep=''))
+		#flush.console()
+		#uu <<- u
 	}
-	u$count <- apply(data.frame(u), 1, fun=function(x)sum(!is.na(x)))
+	
+	if (length(ri) == 1) {
+		return(ri[[1]])
+	} else {
+		u <- ri[[1]]
+		for (i in 2:length(ri)) {
+			u <- .simpleUnion(u, ri[i, ])
+		}
+		return(u)
+	}
+	
+	#u@data[!is.na(u@data)] <- 1
+	#u@data[is.na(u@data)] <- 0
+	#u$count <- rowSums(u@data)
+	
+	#xy <- SpatialPoints(coordinates(u), proj4string=crs(u))
+	#u <- SpatialPolygonsDataFrame(u, data.frame(poly.ID=1:length(u)))
+	#e <- extract(xy, x)
+	
+	#e <- reshape(e    )  xxx
+	#u <- merge(u, e, by='poly.ID')
+	
 	u
 }	
 )

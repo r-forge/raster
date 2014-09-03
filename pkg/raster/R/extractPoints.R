@@ -18,16 +18,28 @@ function(x, y, ...){
 })
 
 
-setMethod('extract', signature(x='SpatialPoints', y='SpatialPolygons'), 
+
+
+setMethod('extract', signature(x='SpatialPolygons', y='SpatialPoints'), 
 function(x, y, ...){ 
+	
+	stopifnot(require(rgeos))
+	
 	if (! identical(proj4string(x), proj4string(y)) ) {
 		warning('non identical CRS')
 		y@proj4string <- x@proj4string
 	}
-	if (!.hasSlot(y, 'data')) {
-		y <- SpatialPolygonsDataFrame(y, data.frame(ID=1:length(y)))
+    i <- gIntersects(y, x, byid=TRUE)
+	j <- cbind(1:length(y), rep(1:length(x), each=length(y)), as.vector(t(i)))
+	j <- j[j[,3] == 1, -3]
+	colnames(j) <- c('point.ID', 'poly.ID')
+	if (.hasSlot(x, 'data')) {
+		r <- data.frame(j, x@data[j[,2], ,drop=FALSE], row.names=NULL)
+	} else {
+		r <- data.frame(j, row.names=NULL)
 	}
-    over(x, y)
+	q <- data.frame(point.ID = 1:length(y))
+	merge(q, r, by='point.ID', all=TRUE)
 })
 
 
