@@ -52,7 +52,7 @@ setMethod('KML', signature(x='RasterStackBrick'),
 
 function (x, filename, time=NULL, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000, blur=1, zip='', overwrite=FALSE, ...) {
 
-    if (! .couldBeLonLat(x)) { 
+    if (! couldBeLonLat(x)) { 
         stop("CRS of x must be longitude/latitude")
 	}
 	stopifnot(hasValues(x))

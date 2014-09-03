@@ -28,7 +28,7 @@ function(x, origin, omit=NULL, filename="", ...) {
 		stop('cannot compute distance on a RasterLayer with no data')
 	}
 
-	lonlat <- .couldBeLonLat(x)
+	lonlat <- couldBeLonLat(x)
 	filename <- trim(filename)
 	
 	if (filename != ""  & file.exists(filename)) {

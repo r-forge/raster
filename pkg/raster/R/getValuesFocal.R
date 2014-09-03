@@ -36,7 +36,7 @@ function(x, row, nrows, ngb, names=FALSE, padValue=NA, array=FALSE, ...) {
 		stop("'nrows' is too high")
 	}
 	stopifnot(is.atomic(padValue))
-	geo <- .couldBeLonLat(xx)
+	geo <- couldBeLonLat(xx)
 	
 	mask <- FALSE
 	if (is.matrix(ngb)) {

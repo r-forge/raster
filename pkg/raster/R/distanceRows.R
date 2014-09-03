@@ -12,7 +12,7 @@
 	if( (!overwrite) & file.exists(filename)) {
 		stop('file exists; use overwrite=TRUE to overwrite it')
 	}
-	if (.couldBeLonLat(object)) { longlat=TRUE } else { longlat=FALSE }
+	if (couldBeLonLat(object)) { longlat=TRUE } else { longlat=FALSE }
 
 	e <- boundaries(object, classes=FALSE, type='inner', asNA=TRUE) 
 	

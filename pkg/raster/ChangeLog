@@ -7,6 +7,7 @@ function for affine transformation
 add AMSR-E ice products and other raw binary products
 add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on the internal CRS
 add VRT output to saveStack
+Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 
 --- September-2014, version: 2.2-46
 Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux	

@@ -27,7 +27,7 @@ if (!isGeneric("area")) {
 
 setMethod('area', signature(x='SpatialPolygons'), 
 	function(x, ...) {
-		if (.couldBeLonLat(x)) {
+		if (couldBeLonLat(x)) {
 			warning('polygon area in square degrees is not very meaningful')
 		}
 		sapply(x@polygons, function(i) slot(i, 'area'))
@@ -50,7 +50,7 @@ setMethod('area', signature(x='RasterLayer'),
 			rm(x)
 		}	
 	
-		if (! .couldBeLonLat(out)) {
+		if (! couldBeLonLat(out)) {
 			warning('This function is only useful for Raster* objects with a longitude/latitude coordinates')
 			ar <- prod(res(out))
 			return( init(out, function(x) ar, filename=filename, ...) )
@@ -126,7 +126,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 		
 		out <- brick(x, values=FALSE)
 
-		if (! .couldBeLonLat(out)) {
+		if (! couldBeLonLat(out)) {
 			stop('This function is only useful for Raster* objects with a longitude/latitude coordinates')
 		}
 	

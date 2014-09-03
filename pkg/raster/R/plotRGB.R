@@ -95,7 +95,7 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 		if (!axes) par(plt=c(0,1,0,1))
 
 		if (is.null(asp)) {
-			if (.couldBeLonLat(x)) {
+			if (couldBeLonLat(x)) {
 			    ym <- mean(c(x@extent@ymax, x@extent@ymin))
 				asp <- 1/cos((ym * pi)/180)
 				#asp <- min(5, 1/cos((ym * pi)/180))

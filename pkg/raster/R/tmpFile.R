@@ -36,7 +36,7 @@
 	}
 	
 	extension <- .defaultExtension(.filetype())
-	d <- .tmpdir(create=TRUE)
+	d <- tmpDir(create=TRUE)
 #	dir.create(d,  showWarnings = FALSE)
 	f <- paste(round(runif(10)*10), collapse="")
 	d <- paste(d, prefix, f, extension, sep="")
@@ -61,7 +61,7 @@ rasterTmpFile <- function(prefix='raster_tmp_')  {
 	}
 
 	extension <- .defaultExtension(.filetype())
-	d <- .tmpdir()
+	d <- tmpDir()
 
 	while(TRUE) {
 	#	f <- paste(gsub(' ', '_', gsub(':', '', as.character(Sys.time()))), '_', paste(round(runif(5)*10), collapse=""), sep='')
@@ -91,7 +91,7 @@ removeTmpFiles <- function(h=24) {
 	warnopt <- getOption('warn')
 	on.exit(options('warn'= warnopt))
 
-	tmpdir <- .tmpdir(create=FALSE)
+	tmpdir <- tmpDir(create=FALSE)
 	if (!is.na(tmpdir)) {
 	
 		d <- .removeTrailingSlash(tmpdir)
@@ -113,7 +113,7 @@ removeTmpFiles <- function(h=24) {
 
 showTmpFiles <- function() {
 	f <- NULL
-	tmpdir <- .tmpdir(create=FALSE)
+	tmpdir <- tmpDir(create=FALSE)
 	if (!is.na(tmpdir)) {
 		d <- .removeTrailingSlash(tmpdir)
 		if (file.exists(d)) {

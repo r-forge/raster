@@ -14,7 +14,7 @@ setMethod('direction', signature(x='RasterLayer'),
 function(x, filename='', degrees=FALSE, from=FALSE, doEdge=FALSE, ...) {
 
 	out <- raster(x)
-	if (.couldBeLonLat(out)) { 
+	if (couldBeLonLat(out)) { 
 		longlat=TRUE 
 	} else { 
 		longlat=FALSE 

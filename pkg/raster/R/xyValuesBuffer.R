@@ -26,7 +26,7 @@
 	cv <- list()
 	obj <- raster(object) 
 # ?	centralcells <- cellFromXY(obj, xy)
-	if (.couldBeLonLat(obj)) { 
+	if (couldBeLonLat(obj)) { 
 		# from m to degrees
 		bufy <- buffer / 111319.5
 		ymx <- pmin(90, xy[,2] + bufy)

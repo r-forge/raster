@@ -62,7 +62,7 @@
 	
 	
  	if (missing(asp)) {
-		if (.couldBeLonLat(x, warnings=FALSE)) {
+		if (couldBeLonLat(x, warnings=FALSE)) {
 			ym <- mean(c(x@extent@ymax, x@extent@ymin))
 			asp <- 1/cos((ym * pi)/180)
 		} else {

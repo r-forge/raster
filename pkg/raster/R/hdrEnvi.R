@@ -41,7 +41,7 @@
 	btorder <- as.integer(r@file@byteorder != 'little')  # little -> 0, big -> 1
 	cat("byte order = ", btorder, "\n",file = thefile)		
 
-	if (.couldBeLonLat(r)) {
+	if (couldBeLonLat(r)) {
 		cat("map info = {Geographic Lat/Lon, 1, 1,", xmin(r),", ", ymax(r),", ", xres(r),", ", yres(r), "}\n", file = thefile)
 	} else {
 		cat("map info = {projection, 1, 1,", xmin(r),", ", ymax(r),", ", xres(r),", ", yres(r), "}\n", file = thefile)

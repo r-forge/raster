@@ -18,7 +18,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	} else if (name=='CMIP5') {
 		.cmip5(..., download=download, path=path)
 	} else if (name=='ISO3') {
-		.ISO()[,c(2,1)]
+		ccodes()[,c(2,1)]
 	} else if (name=='countries') {
 		.countries(download=download, path=path, ...)
 	} else {
@@ -44,7 +44,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	}
 }
 
-.ISO <- function() {
+ccodes <- function() {
 	path <- paste(system.file(package="raster"), "/external", sep='')
 	d <- read.csv(paste(path, "/countries.csv", sep=""), stringsAsFactors=FALSE, encoding="UTF-8")
 	return(as.matrix(d))
@@ -56,7 +56,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 #	if (nchar(country) < 3) {
 #		stop('provide a 3 letter ISO country code')
 #	}
-	cs <- .ISO()
+	cs <- ccodes()
 	try (cs <- toupper(cs))
 
 	iso3 <- substr(toupper(country), 1, 3)

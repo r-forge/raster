@@ -21,7 +21,7 @@
 	datatype <- .getNetCDFDType(datatype)
 	nl <- nlayers(x)
 	
-	if (.couldBeLonLat(x)) {
+	if (couldBeLonLat(x)) {
 		if (missing(xname)) xname = 'longitude'
 		if (missing(yname)) yname = 'latitude'
 		xunit = 'degrees_east'
