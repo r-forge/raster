@@ -110,7 +110,7 @@ function(x, y) {
 		#x <- SpatialPolygonsDataFrame(x, data.frame(ID=1:n))
 	}
 	
-	a <- gArea(s, byid=T)
+	a <- gArea(x, byid=T)
 	ord <- order(a)
 	u <- x[ord[1],]
 	cnt = 1

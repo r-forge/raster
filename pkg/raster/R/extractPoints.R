@@ -30,6 +30,7 @@ function(x, y, ...){
 		y@proj4string <- x@proj4string
 	}
     i <- gIntersects(y, x, byid=TRUE)
+	
 	j <- cbind(1:length(y), rep(1:length(x), each=length(y)), as.vector(t(i)))
 	j <- j[j[,3] == 1, -3]
 	colnames(j) <- c('point.ID', 'poly.ID')
