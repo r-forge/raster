@@ -1,5 +1,6 @@
 --- to do
 focal for multi-layer objects
+step-size option for focal
 support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
 move resample (bilinear interp. (and add other options)) and rasterize/(lines, polygons) to C
