@@ -16,15 +16,20 @@ Create a new Raster* object that has the same values as \code{x}, except for the
 } 
 
 \usage{
-\S4method{mask}{RasterLayer,RasterLayer}(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
+\S4method{mask}{RasterLayer,RasterLayer}(x, mask, filename="", inverse=FALSE, 
+      maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
 
-\S4method{mask}{RasterStackBrick,RasterLayer}(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
+\S4method{mask}{RasterStackBrick,RasterLayer}(x, mask, filename="", inverse=FALSE,
+      maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
 
-\S4method{mask}{RasterLayer,RasterStackBrick}(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
+\S4method{mask}{RasterLayer,RasterStackBrick}(x, mask, filename="", inverse=FALSE, 
+      maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
 
-\S4method{mask}{RasterStackBrick,RasterStackBrick}(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
+\S4method{mask}{RasterStackBrick,RasterStackBrick}(x, mask, filename="", inverse=FALSE, 
+      maskvalue=NA, updatevalue=NA, updateNA=FALSE, ...)
 
-\S4method{mask}{Raster,Spatial}(x, mask, filename="", inverse=FALSE, updatevalue=NA, updateNA=FALSE, ...)
+\S4method{mask}{Raster,Spatial}(x, mask, filename="", inverse=FALSE, 
+      updatevalue=NA, updateNA=FALSE, ...)
 }
 
 
