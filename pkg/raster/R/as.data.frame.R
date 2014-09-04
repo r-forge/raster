@@ -73,7 +73,10 @@ setMethod('as.data.frame', signature(x='Raster'),
 			rownames(v) <- as.character(v[,1])
 			v <- v[,-1,drop=FALSE]
 		} 
-		colnames(v) <- names(x)  # for nlayers = 1
+		
+		if (nlayers(x) == 1) {
+			colnames(v)[ncol(v)] <- names(x)  # for nlayers = 1
+		}
 				
 		i <- is.factor(x)
 		if (any(is.factor(x))) {
