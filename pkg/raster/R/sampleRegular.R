@@ -93,10 +93,10 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 				
 				for (i in 1:nl) {
 					xx <- x[[i]]
-					con <- GDAL.open(xx@file@name, silent=TRUE)
+					con <- rgdal::GDAL.open(xx@file@name, silent=TRUE)
 					band <- bandnr(xx)
-					vv <- getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
-					closeDataset(con)
+					vv <- rgdal::getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
+					rgdal::closeDataset(con)
 					if (xx@data@gain != 1 | xx@data@offset != 0) {
 						vv <- vv * xx@data@gain + xx@data@offset
 					}
@@ -114,9 +114,9 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 				} else {
 					band <- NULL
 				}
-				con <- GDAL.open(x@file@name, silent=TRUE)
-				v <- getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
-				closeDataset(con)
+				con <- rgdal::GDAL.open(x@file@name, silent=TRUE)
+				v <- rgdal::getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
+				rgdal::closeDataset(con)
 				
 				if (x@data@gain != 1 | x@data@offset != 0) {
 					v <- v * x@data@gain + x@data@offset

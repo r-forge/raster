@@ -22,7 +22,7 @@ function(x, y) {
 		y@proj4string <- x@proj4string
 	}
 	
-	subs <- gIntersects(x, y, byid=TRUE)
+	subs <- rgeos::gIntersects(x, y, byid=TRUE)
 	
 	if (!any(subs)) {
 	
@@ -64,7 +64,7 @@ function(x, y) {
 
 
 ...simpleUnion <- function(x, y) {
-	subs <- gIntersects(x, y)
+	subs <- rgeos::gIntersects(x, y)
 	if (!any(subs)) {
 		x@polygons <- c(x@polygons, y@polygons)
 		x <- spChFIDs(x, as.character(1:length(x)))

@@ -38,7 +38,7 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 			}
 			y@proj4string <- x@proj4string
 		}	
-		subs <- gIntersects(x, y, byid=TRUE)
+		subs <- rgeos::gIntersects(x, y, byid=TRUE)
 		if (!any(subs)) {
 			next
 		} else {
@@ -66,7 +66,7 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 			y@proj4string <- x@proj4string
 		}	
 		
-		i <- gIntersects(x, y)
+		i <- rgeos::gIntersects(x, y)
 		if (!i) {
 			next
 		}
@@ -97,11 +97,11 @@ setMethod('cover', signature(x='SpatialPolygons', y='SpatialPolygons'),
 			doAtt <- FALSE
 		}
 		
-		subs <- gIntersects(x, y, byid=TRUE)
+		subs <- rgeos::gIntersects(x, y, byid=TRUE)
 		subsx <- apply(subs, 2, any)
 		subsy <- apply(subs, 1, any)
 	
-		int  <- gIntersection(x[subsx,], y[subsy,], byid=TRUE, drop_not_poly=TRUE)
+		int  <- rgeos::gIntersection(x[subsx,], y[subsy,], byid=TRUE, drop_not_poly=TRUE)
 		#if (inherits(int, "SpatialCollections")) {
 		#	if (is.null(int@polyobj)) { # ??
 		#		warning('polygons do not intersect')

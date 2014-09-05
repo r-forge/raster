@@ -45,9 +45,9 @@
 		getfun <- ncdf4::ncvar_get
 	
 	} else {
-		nc <- open.ncdf(x@file@name)
-		on.exit( close.ncdf(nc) )
-		getfun <- get.var.ncdf
+		nc <- ncdf::open.ncdf(x@file@name)
+		on.exit( ncdf::close.ncdf(nc) )
+		getfun <- ncdf::get.var.ncdf
 	}
 	
 	if (nc$var[[zvar]]$ndims == 1) {
@@ -137,9 +137,9 @@
 		getfun <- ncdf4::ncvar_get
 	
 	} else {
-		nc <- open.ncdf(x@file@name)
-		on.exit( close.ncdf(nc) )
-		getfun <- get.var.ncdf
+		nc <- ncdf::open.ncdf(x@file@name)
+		on.exit( ncdf::close.ncdf(nc) )
+		getfun <- ncdf::get.var.ncdf
 	}
 	
 	

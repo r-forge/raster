@@ -13,8 +13,8 @@
 		on.exit( ncdf4::nc_close(nc) )		
 		
 	} else {
-		nc <- open.ncdf(filename)
-		on.exit( close.ncdf(nc) )		
+		nc <- ncdf::open.ncdf(filename)
+		on.exit( ncdf::close.ncdf(nc) )		
 	} 
 
 	zvar <- .varName(nc, varname)

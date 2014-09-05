@@ -94,7 +94,7 @@
 			flush.console()
 
 	
-			clusterExport(cl, c('object', 'obj', 'cellnumbers'), envir=environment())
+			snow::clusterExport(cl, c('object', 'obj', 'cellnumbers'), envir=environment())
 			
 			clFun2 <- function(i, xy, rn, rx, cn, cx) {
 				s <- sum(rn, rx, cn, cx)
@@ -123,10 +123,10 @@
 			}
 
 			for (i in 1:nodes) {
-				sendCall(cl[[i]], clFun2, list(i, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
+				snow::sendCall(cl[[i]], clFun2, list(i, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
 			}
 			for (i in 1:nrow(xy)) {
-				d <- recvOneData(cl)
+				d <- snow::recvOneData(cl)
 				if (! d$value$success) {
 					print(d)
 					stop('cluster error')
@@ -135,7 +135,7 @@
 				}
 				ni <- nodes + i
 				if (ni <= nrow(xy)) {
-					sendCall(cl[[d$node]], clFun2, list(ni, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
+					snow::sendCall(cl[[d$node]], clFun2, list(ni, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
 				}
 			}
 		} else {

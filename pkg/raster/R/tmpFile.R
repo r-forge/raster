@@ -11,7 +11,7 @@
 	if (filetypes == "") {
 		filetypes="{{GeoTIFF} {.tif} } {{grid files} {.grd}}"
 	}
-	tclvalue(tkgetSaveFile(filetypes=filetypes))
+	tcltk::tclvalue(tcltk::tkgetSaveFile(filetypes=filetypes))
 }
 
 .fileOpenDialog <- function(filetypes="") {
@@ -21,7 +21,7 @@
 	if (filetypes == "") {
 		filetypes="{{All Files} *} {{GeoTIFF} {.tif} } {{grid files} {.grd}}"
 	}
-	tclvalue(tkgetOpenFile(filetypes=filetypes))
+	tcltk::tclvalue(tcltk::tkgetOpenFile(filetypes=filetypes))
 }
 
 

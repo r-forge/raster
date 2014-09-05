@@ -137,7 +137,7 @@
 	rows <- sort(unique(colrow[,2]))
 
 	nc <- x@ncols
-	con <- GDAL.open(x@file@name, silent=TRUE)
+	con <- rgdal::GDAL.open(x@file@name, silent=TRUE)
 	
 	if (laysel == 1) {
 		if (nl == 1) {
@@ -145,7 +145,7 @@
 		}
 		for (i in 1:length(rows)) {
 			offs <- c(rows[i]-1, 0) 
-			v <- getRasterData(con, offset=offs, region.dim=c(1, nc), band = layers)
+			v <- rgdal::getRasterData(con, offset=offs, region.dim=c(1, nc), band = layers)
 			thisrow <- colrow[colrow[,2] == rows[i], , drop=FALSE]
 			colrow[colrow[,2]==rows[i], 3] <- v[thisrow[,1]]
 		}
@@ -154,19 +154,19 @@
 			thisrow <- colrow[colrow[,2] == rows[i], , drop=FALSE]
 			if (nrow(thisrow) == 1) {
 				offs <- c(rows[i]-1, thisrow[,1]-1)
-				v <- as.vector( getRasterData(con, offset=offs, region.dim=c(1, 1)) )
+				v <- as.vector( rgdal::getRasterData(con, offset=offs, region.dim=c(1, 1)) )
 				colrow[colrow[,2]==rows[i], 2+(1:laysel)] <- v[layers]
 
 			} else {
 				offs <- c(rows[i]-1, 0)
-				v <- getRasterData(con, offset=offs, region.dim=c(1, nc))
+				v <- rgdal::getRasterData(con, offset=offs, region.dim=c(1, nc))
 				v <- do.call(cbind, lapply(1:nl, function(i) v[,,i]))
 			
 				colrow[colrow[,2]==rows[i], 2+(1:laysel)] <- v[thisrow[,1], layers]
 			}
 		}
 	}
-	closeDataset(con)
+	rgdal::closeDataset(con)
 	colnames(colrow)[2+(1:laysel)] <- names(x)[layers]
 	colrow[, 2+(1:laysel)]
 }	

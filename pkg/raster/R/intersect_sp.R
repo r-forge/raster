@@ -23,7 +23,7 @@ function(x, y) {
 		y@proj4string <- x@proj4string
 	}	
 	
-	subs <- gIntersects(x, y, byid=TRUE)
+	subs <- rgeos::gIntersects(x, y, byid=TRUE)
 	if (sum(subs)==0) {
 		warning('polygons do not intersect')
 		return(NULL)
@@ -48,7 +48,7 @@ function(x, y) {
 	subsx <- apply(subs, 2, any)
 	subsy <- apply(subs, 1, any)
 		
-	int  <- gIntersection(x[subsx,], y[subsy,], byid=TRUE, drop_not_poly=TRUE)
+	int  <- rgeos::gIntersection(x[subsx,], y[subsy,], byid=TRUE, drop_not_poly=TRUE)
 #	if (inherits(int, "SpatialCollections")) {
 #		if (is.null(int@polyobj)) { # merely touching, no intersection
 #			#warning('polygons do not intersect')

@@ -107,7 +107,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=TR
 		flush.console()
 
 		
-		clusterExport(cl, c('rsbb', 'rr', 'weights', 'addres', 'cellnumbers', 'small'), envir=environment())
+		snow::clusterExport(cl, c('rsbb', 'rr', 'weights', 'addres', 'cellnumbers', 'small'), envir=environment())
 		clFun <- function(i, pp) {
 			spbb <- bbox(pp)
 		
@@ -172,11 +172,11 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=TR
 		}
 		
         for (ni in 1:nodes) {
-			sendCall(cl[[ni]], clFun, list(ni, y[ni,]), tag=ni)
+			snow::sendCall(cl[[ni]], clFun, list(ni, y[ni,]), tag=ni)
 		}
 		
 		for (i in 1:npol) {
-			d <- recvOneData(cl)
+			d <- snow::recvOneData(cl)
 			if (! d$value$success) {
 				stop('cluster error at polygon: ', i)
 			}
@@ -194,7 +194,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE, small=TR
 			}
 			ni <- ni + 1
 			if (ni <= npol) {
-				sendCall(cl[[d$node]], clFun, list(ni, y[ni,]), tag=ni)
+				snow::sendCall(cl[[d$node]], clFun, list(ni, y[ni,]), tag=ni)
 			}
 			pbStep(pb, i)
 		}
