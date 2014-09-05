@@ -50,8 +50,8 @@ setMethod('as.data.frame', signature(x='Raster'),
 				end <- start + tr$nrows[i] * ncx - 1
 				vv <- cbind(start:end, getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
 				if (xy) {
-					xy <- data.frame(xyFromCell(r, start:end))
-					vv <- na.omit(vv, xy)
+					XY <- data.frame(xyFromCell(r, start:end))
+					vv <- na.omit(vv, XY)
 				}
 				v <- rbind(v, vv)
 				pbStep(pb, i) 	
@@ -60,8 +60,8 @@ setMethod('as.data.frame', signature(x='Raster'),
 		} else {
 			v <- getValues(x)
 			if (xy) {
-				xy <- data.frame(xyFromCell(x, 1:ncell(x)))
-				v <- cbind(xy, v)
+				XY <- data.frame(xyFromCell(x, 1:ncell(x)))
+				v <- cbind(XY, v)
 			}
 			if (na.rm) {
 				v <- na.omit(cbind(1:ncell(x), v))
@@ -89,11 +89,16 @@ setMethod('as.data.frame', signature(x='Raster'),
 		#			}
 		#		}
 			} else {
-				v <- .insertFacts(x, v, 1:nlayers(x))
+				nl <- nlayers(x)
+				if (ncol(v) > nl) {
+					rnge1 <- 1:(ncol(v)-nl)
+					rnge2 <- (ncol(v)-nl+1):ncol(v)
+					v <- cbind(v[, rnge1], .insertFacts(x, v[, rnge2], 1:nl))
+				} else {
+					v <- .insertFacts(x, v, 1:nl)
+				}
 			}
 		}
-		
-		
 		v
 	}
 )

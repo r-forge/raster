@@ -19,6 +19,10 @@
 }
 
 
+.couldBeLonLat <- function(...) {
+	couldBeLonLat(...)
+}
+
 couldBeLonLat <- function(x, warnings=TRUE) {
 	crsLL <- isLonLat(x)
 	crsNA <- is.na(crsLL)

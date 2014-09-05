@@ -44,6 +44,10 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 	}
 }
 
+.ISO <- function() {
+   ccodes()
+}
+
 ccodes <- function() {
 	path <- paste(system.file(package="raster"), "/external", sep='')
 	d <- read.csv(paste(path, "/countries.csv", sep=""), stringsAsFactors=FALSE, encoding="UTF-8")

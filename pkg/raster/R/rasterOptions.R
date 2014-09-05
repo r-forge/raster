@@ -306,6 +306,11 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 }	
 
 
+.tmpdir <- function(...) {
+	tmpDir(...)
+}
+
+
 tmpDir <- function(create=TRUE) {
 	d <- getOption('rasterTmpDir')
 	if (is.null(d)) {
