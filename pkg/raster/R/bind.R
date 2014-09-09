@@ -25,6 +25,20 @@ if (!isGeneric("bind")) {
 }	
 
 
+setMethod('bind', signature(x='data.frame', y='data.frame'), 
+function(x, y, ...) {
+	x <- .frbind(x, y)
+	dots <- list(...)
+	if (length(dots) > 1) {
+		for (i in 1:length(dots)) {
+			x <- .frbind(x, dots[[i]])
+		}
+	}
+	x
+}
+)
+
+
 setMethod('bind', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y, ..., keepnames=FALSE) {
 
