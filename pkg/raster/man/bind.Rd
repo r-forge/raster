@@ -6,6 +6,7 @@
 \alias{bind,SpatialPolygons,SpatialPolygons-method}
 \alias{bind,SpatialLines,SpatialLines-method}
 \alias{bind,SpatialPoints,SpatialPoints-method}
+\alias{bind,data.frame,data.frame-method}
 
 \title{ 
 Bind Spatial* objects
@@ -34,6 +35,10 @@ Bind (append) Spatial* objects into a single object. All objects must be of the 
 \value{
 Spatial* object
 }
+
+
+\seealso{ \code{\link[sp]{merge}} }
+
 
 \examples{
 if (require(rgdal) & require(rgeos)) {
