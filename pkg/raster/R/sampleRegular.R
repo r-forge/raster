@@ -129,7 +129,9 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 						v[v == x@file@nodatavalue] <- NA
 					}
 				}
-				colnames(v) <- names(x)
+				if (NCOL(v) > 1) {
+					colnames(v) <- names(x)
+				}
 			}
 	
 			if (asRaster) {
