@@ -1,7 +1,6 @@
 \name{boundaries}
 
 \alias{boundaries}
-\alias{edge}
 \alias{boundaries,RasterLayer-method}
   
 \title{boundaries (edges) detection}
