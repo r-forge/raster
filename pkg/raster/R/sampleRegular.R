@@ -87,7 +87,7 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 			offs <- c(firstrow,firstcol)-1
 			reg <- c(nrow(rcut), ncol(rcut))-1
 			
-			if (inherits(x, 'RasterStack')) {
+			if ( nl > 1 ) {
 				
 				v <- matrix(NA, ncol=nl, nrow=prod(nr, nc))
 				
@@ -109,15 +109,15 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 				}
 				
 			} else {
-				if (nl == 1) {
-					band <- bandnr(x)
-				} else {
-					band <- NULL
-				}
+			
+				band <- bandnr(x)
 				con <- rgdal::GDAL.open(x@file@name, silent=TRUE)
 				v <- rgdal::getRasterData(con, band=band, offset=offs, region.dim=reg, output.dim=c(nr, nc)) 
 				rgdal::closeDataset(con)
-				
+
+				v <- matrix(v, ncol=1)
+				colnames(v) <- names(x)
+		
 				if (x@data@gain != 1 | x@data@offset != 0) {
 					v <- v * x@data@gain + x@data@offset
 				}
@@ -129,9 +129,7 @@ function( x, size, ext=NULL, cells=FALSE, xy=FALSE, asRaster=FALSE, sp=FALSE, us
 						v[v == x@file@nodatavalue] <- NA
 					}
 				}
-				if (NCOL(v) > 1) {
-					colnames(v) <- names(x)
-				}
+				
 			}
 	
 			if (asRaster) {
