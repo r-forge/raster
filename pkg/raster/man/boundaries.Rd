@@ -11,8 +11,6 @@ Detect boundaries (edges). boundaries are cells that have more than one class in
 
 \usage{
 \S4method{boundaries}{RasterLayer}(x, type='inner', classes=FALSE, directions=8, asNA=FALSE, filename="", ...)
-
-edge(x, ...)
 }
 
 \arguments{
