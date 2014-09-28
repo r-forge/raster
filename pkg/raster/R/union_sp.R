@@ -44,8 +44,9 @@ function(x, y) {
 		x <- intersect(x, y)
 		x <- list(dif1, dif2, x)
 		x <- x[!sapply(x, is.null)]
-		i <- sapply(x, length) # 
-		x <- x[ i > 0]
+
+		i <- sapply(x, length) > 0 
+		x <- x[ i ]
 		if (length(x) > 1) {
 			x <- do.call(bind, x)
 		} else {
@@ -53,8 +54,9 @@ function(x, y) {
 		}
 		
 		# remove slivers
-		area <- sapply(x@polygons, function(i) slot(i, 'area'))
-		x <- x[area > 0, ]
+		#area <- sapply(x@polygons, function(i) slot(i, 'area'))
+		area <- gArea(x, byid=TRUE)
+		x <- x[area > 1e-10, ]
 	}
 
 	x
