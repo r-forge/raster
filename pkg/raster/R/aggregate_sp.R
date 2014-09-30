@@ -71,12 +71,19 @@ function(x, vars=NULL, sums=NULL, dissolve=TRUE, ...) {
 		dc <- apply(dat, 1, function(y) paste(as.character(y), collapse='_'))
 		dc <- data.frame(oid=1:length(dc), v=as.integer(as.factor(dc)))
 		id <- dc[!duplicated(dc$v), , drop=FALSE]
-		id <- id[order(id$v), ]
 
+		if (nrow(id) == nrow(dat)) {
+			# nothing to aggregate
+			if (hd) {
+				x@data <- dat
+			} else {
+				x <- as(x, 'SpatialPolygons')
+			}
+			return(x)
+		}
+
+		id <- id[order(id$v), ]
 		dat <- dat[id[,1], ,drop=FALSE]
-		
-		# here there should be a check if anything needs to be done. Perhaps there is nothing to aggregate.
-		# some of that is done below
 		
 		if (!is.null(sums)) {
 			out <- list()
