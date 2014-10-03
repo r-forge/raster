@@ -148,12 +148,22 @@
 	}
 
 	if (is.character(fun)) {
-		if (!(fun %in% c('first', 'last', 'count'))) {
+		if (fun == 'sum') { # backwards compatibility	
+			fun <- sum
+			doFun <- TRUE
+		} else if (fun == 'min') {
+			fun <- min
+			doFun <- TRUE
+		} else if (fun == 'max') {
+			fun <- max
+			doFun <- TRUE
+		} else if (fun %in% c('first', 'last', 'count')) {
+			doFun <- FALSE
+			if (fun == 'count') {
+				field = 1
+			}
+		} else {
 			stop('invalid value for fun')
-		}
-		doFun <- FALSE
-		if (fun == 'count') {
-			field = 1
 		}
 	} else {
 		doFun <- TRUE
@@ -228,11 +238,13 @@
 		}
 	}
 	
-	if (! silent) {  cat('Found', npol, 'region(s) and', cnt, 'polygon(s)\n') }
+	if (! silent) { 
+		cat('Found', npol, 'region(s) and', cnt, 'polygon(s)\n') 
+	}
+	
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
 #	polinfo <- polinfo[order(polinfo[,1]),]
 #	rm(p)
-
 		
 	lxmin <- min(spbb[1,1], rsbb[1,1]) - xres(rstr)
 	lxmax <- max(spbb[1,2], rsbb[1,2]) + xres(rstr)
@@ -251,18 +263,19 @@
 
 	rxmn <- xmin(rstr) 
 	rxmx <- xmax(rstr) 
+	
 	rv1 <- rep(NA, ncol(rstr))
-	lst1 <- vector(length=ncol(rstr), mode='list')
 	holes1 <- rep(0, ncol(rstr))
+	
 	pb <- pbCreate(nrow(rstr), label='rasterize', ...)
 
 	for (r in 1:nrow(rstr)) {
-		rrv <- rv <- rv1
-		vals <- NULL
 		
+		vals <- NULL
+		holes <- holes1
+
 		ly <- yFromRow(rstr, r)
 		myline <- rbind(c(lxmin,ly), c(lxmax,ly))
-		holes <- holes1
 		
 		subpol <- subset(polinfo, !(polinfo[,2] > ly | polinfo[,3] < ly), drop=FALSE)
 		if (length(subpol[,1]) > 0) {
@@ -341,10 +354,10 @@
 					rrv[u] <- apply(vals[u, ,drop=FALSE], 1, fun, na.rm=TRUE)
 				} else if (mask) {
 					rrv[u] <- 1
-				} else if (fun=='last') {
-					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ ifelse(any(!is.na(x)), na.omit(x)[1], NA) })
 				} else if (fun=='first') {
-					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ ifelse(any(!is.na(x)), na.omit(rev(x))[1], NA) })
+					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ na.omit(x)[1] })
+				} else if (fun=='last') {
+					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ rev(na.omit(x))[1] })
 				} else if (fun=='count') {
 					rrv[u] <- apply(!is.na(vals[u,,drop=FALSE]), 1, sum, na.rm=TRUE)
 				}

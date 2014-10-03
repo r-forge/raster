@@ -33,7 +33,7 @@ function(x, y) {
 		xdata <- .hasSlot(x, 'data')
 		ydata <- .hasSlot(y, 'data')
 		if (xdata & ydata) {
-			nms <- raster:::.goodNames(c(colnames(x@data), colnames(y@data)))
+			nms <- .goodNames(c(colnames(x@data), colnames(y@data)))
 			colnames(x@data) <- nms[1:ncol(x@data)]
 			colnames(y@data) <- nms[(ncol(x@data)+1):length(nms)]
 		} 
