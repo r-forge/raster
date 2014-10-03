@@ -147,28 +147,6 @@
 		field <- -1
 	}
 
-	if (is.character(fun)) {
-		if (fun == 'sum') { # backwards compatibility	
-			fun <- sum
-			doFun <- TRUE
-		} else if (fun == 'min') {
-			fun <- min
-			doFun <- TRUE
-		} else if (fun == 'max') {
-			fun <- max
-			doFun <- TRUE
-		} else if (fun %in% c('first', 'last', 'count')) {
-			doFun <- FALSE
-			if (fun == 'count') {
-				field = 1
-			}
-		} else {
-			stop('invalid value for fun')
-		}
-	} else {
-		doFun <- TRUE
-	}
-	
 	if (mask & update) { 
 		stop('use either "mask" OR "update"')
 	} else if (mask) { 
@@ -211,6 +189,17 @@
 		}
 	}
 
+	if (is.character(fun)) {
+		if (fun=='first') {
+			fun <- function(x, ...){ na.omit(x)[1] } 
+		} else if (fun=='last') {
+			fun <- function(x, ...){ rev(na.omit(x))[1] }
+		} else if (fun == 'count') {
+			fun <- function(x, ...){ sum(!is.na(x)) }
+			field <- 1
+		}
+	}
+	
 	polinfo <- matrix(NA, nrow=npol * 2, ncol=6)
 	colnames(polinfo) <- c('part', 'miny', 'maxy', 'value', 'hole', 'object')
 	addpol <- matrix(NA, nrow=500, ncol=6)
@@ -350,17 +339,11 @@
 		if (!is.null(vals)) {
 			u <- which(rowSums(is.na(vals)) < ncol(vals))
 			if (length(u) > 0) {
-				if (doFun) {
-					rrv[u] <- apply(vals[u, ,drop=FALSE], 1, fun, na.rm=TRUE)
-				} else if (mask) {
+				if (mask) {
 					rrv[u] <- 1
-				} else if (fun=='first') {
-					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ na.omit(x)[1] })
-				} else if (fun=='last') {
-					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ rev(na.omit(x))[1] })
-				} else if (fun=='count') {
-					rrv[u] <- apply(!is.na(vals[u,,drop=FALSE]), 1, sum, na.rm=TRUE)
-				}
+				} else {
+					rrv[u] <- apply(vals[u, ,drop=FALSE], 1, fun, na.rm=TRUE)
+				} 
 			}
 		}
 		
