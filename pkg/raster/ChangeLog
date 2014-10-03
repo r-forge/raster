@@ -13,7 +13,9 @@ Fix lines falling between the cracks in extract (calling rasterzeLines): https:/
 --- Development version
 bug fixes:
 - in 'freq', useNA='always' did not return counts for NA values for large raster files.
-
+- rasterize with polygons did not accept a non character function anymore. Reported by Sarah Lehnen
+- invalid polygons errors are now handled by union/erase/intersect
+- fixed plotting bug due to a change in sampleRegular 
 
 --- 5-September-2014, version: 2.3-0
 Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux	
