@@ -148,7 +148,7 @@
 	}
 
 	if (is.character(fun)) {
-		if (!(fun %in% c('first', 'last', 'sum', 'min', 'max', 'count'))) {
+		if (!(fun %in% c('first', 'last', 'count'))) {
 			stop('invalid value for fun')
 		}
 		doFun <- FALSE
@@ -257,19 +257,18 @@
 	pb <- pbCreate(nrow(rstr), label='rasterize', ...)
 
 	for (r in 1:nrow(rstr)) {
-		if (doFun) {
-			rrv <- rv <- lst1
-		} else {
-			rrv <- rv <- rv1
-		}
+		rrv <- rv <- rv1
+		vals <- NULL
+		
 		ly <- yFromRow(rstr, r)
 		myline <- rbind(c(lxmin,ly), c(lxmax,ly))
 		holes <- holes1
-
+		
 		subpol <- subset(polinfo, !(polinfo[,2] > ly | polinfo[,3] < ly), drop=FALSE)
-		if (length(subpol[,1]) > 0) { 		
+		if (length(subpol[,1]) > 0) {
 			updateHoles <- FALSE
 			lastpolnr <- subpol[1,6]
+			rvtmp <- rv1
 			for (i in 1:nrow(subpol)) {
 				if (i == nrow(subpol)) { 
 					updateHoles <- TRUE 
@@ -282,7 +281,6 @@
 				intersection <- .intersectLinePolygon(myline, mypoly@coords)
 				x <- sort(intersection[,1])
 				if (length(x) > 0) {
-					rvtmp <- rv1
 					if ( sum(x[-length(x)] == x[-1]) > 0 ) {
 					# single node intersection going out of polygon ....
 						spPnts <- SpatialPoints(xyFromCell(rstr, cellFromRowCol(rstr, rep(r, ncol(rstr)), 1:ncol(rstr))))
@@ -324,65 +322,33 @@
 							}
 						}
 					}
-					
-		
-					if (doFun) {
-						ind <- which(!is.na(rvtmp))
-						for (ii in ind) {
-							rv[[ii]] <- c(rv[[ii]], rvtmp[ii])
-						}
-					} else if (mask) {
-						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
-					} else if (fun=='last') {
-						rv[!is.na(rvtmp)] <- rvtmp[!is.na(rvtmp)]
-					} else if (fun=='first') {
-						rv[is.na(rv)] <- rvtmp[is.na(rv)]
-					} else if (fun=='sum') {
-						rv[!is.na(rv) & !is.na(rvtmp)] <- rv[!is.na(rv) & !is.na(rvtmp)] + rvtmp[!is.na(rv) & !is.na(rvtmp)] 
-						rv[is.na(rv)] <- rvtmp[is.na(rv)]
-					} else if (fun=='min') {
-						rv[!is.na(rv) & !is.na(rvtmp)] <- pmin(rv[!is.na(rv) & !is.na(rvtmp)], rvtmp[!is.na(rv) & !is.na(rvtmp)])
-						rv[is.na(rv)] <- rvtmp[is.na(rv)]
-					} else if (fun=='max') {
-						rv[!is.na(rv) & !is.na(rvtmp)] <- pmax(rv[!is.na(rv) & !is.na(rvtmp)], rvtmp[!is.na(rv) & !is.na(rvtmp)])
-						rv[is.na(rv)] <- rvtmp[is.na(rv)]
-					} else if (fun=='count') {
-						rvtmp[!is.na(rvtmp)]  <- 1
-						rv[!is.na(rv) & !is.na(rvtmp)] <- rv[!is.na(rv) & !is.na(rvtmp)] + rvtmp[!is.na(rv) & !is.na(rvtmp)] 
-						rv[is.na(rv)] <- rvtmp[is.na(rv)]				
-					}
-				}
+				}	
+								
 				if (updateHoles) {
-					holes <- holes < 1
-					if (doFun) {
-						#tmp <- rv
-						#rv <- lst1
-						ind <- which(holes )
-						for (ii in ind) {
-							vals <- rv[[ii]]
-							rv[[ii]] <- vals[-length(vals)]
-						}
-					} else {
-						rv[holes] <- NA
-					}
-					stopifnot(length(rrv) == length(rv))
-					rrv[!is.na(rv)] <- rv[!is.na(rv)]
-					holes <- holes1
-					updateHoles <- FALSE	
-					
-				}		
+					rvtmp[holes < 1] <- NA
+					vals <- cbind(vals, rvtmp)
+					rvtmp <- rv1
+				}	
 			}
-		}
+		}	
 		
-		if (doFun) {
-		    
-			rrv <- lapply(rrv, function(x) if(is.null(x)) NA else x)
-			#for (i in 1:length(rrv)) {
-			#	if (is.null(rrv[[i]])) {
-			#		rrv[[i]] <- NA
-			#	}
-			#}
-			rrv <- sapply(rrv, fun)
+		
+		rrv <- rv1
+		if (!is.null(vals)) {
+			u <- which(rowSums(is.na(vals)) < ncol(vals))
+			if (length(u) > 0) {
+				if (doFun) {
+					rrv[u] <- apply(vals[u, ,drop=FALSE], 1, fun, na.rm=TRUE)
+				} else if (mask) {
+					rrv[u] <- 1
+				} else if (fun=='last') {
+					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ ifelse(any(!is.na(x)), na.omit(x)[1], NA) })
+				} else if (fun=='first') {
+					rrv[u] <- apply(vals[u,,drop=FALSE], 1, function(x){ ifelse(any(!is.na(x)), na.omit(rev(x))[1], NA) })
+				} else if (fun=='count') {
+					rrv[u] <- apply(!is.na(vals[u,,drop=FALSE]), 1, sum, na.rm=TRUE)
+				}
+			}
 		}
 		
 		if (mask) {
@@ -424,6 +390,8 @@
 	}
 	return(rstr)
 }
+
+#plot( .polygonsToRaster(p, rstr) )
 
 
 .polygoncover <- function(rstr, filename, polinfo, lxmin, lxmax, pollist, ...) {
