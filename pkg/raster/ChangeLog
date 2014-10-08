@@ -11,11 +11,14 @@ add VRT output to saveStack
 Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 
 --- Development version
+new function: localFun
 bug fixes:
 - in 'freq', useNA='always' did not return counts for NA values for large raster files.
-- rasterize with polygons did not accept a non character function anymore. Reported by Sarah Lehnen
-- invalid polygons errors are now handled by union/erase/intersect
-- fixed plotting bug due to a change in sampleRegular 
+- rasterize with polygons did not accept a non-character function anymore. Reported by Sarah Lehnen.
+- invalid polygons errors are now handled by union/erase/intersect.
+- fixed plotting bug due to a change in sampleRegular .
+- sampleRegular ignored xy=TRUE when size >= ncell(x). Reported by Oscar Perpiñan Lamigueiro.
+
 
 --- 5-September-2014, version: 2.3-0
 Improvement of ENVI hdr file (WKT projection) suggested by Loïc Dutrieux	
