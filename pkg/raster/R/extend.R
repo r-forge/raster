@@ -113,7 +113,12 @@ function(x, y, value=NA, filename='', ...) {
 		startrow <- rowFromY(out, yFromRow(x, 1))
 		endrow <- rowFromY(out, yFromRow(x, nrow(x)))
 		if (endrow < nrow(out) | startrow > 1) {
-			tr$row <- sort(unique(c(tr$row, startrow, endrow)))
+			if (nrow(out) > endrow) {
+				continuerow <- endrow + 1
+			} else {
+				continuerow <- NULL
+			}
+			tr$row <- sort(unique(c(tr$row, startrow, continuerow)))
 			tr$nrows <- c(tr$row[-1], nrow(out)+1) - tr$row
 			tr$n <- length(tr$row)
 			tr$old <- (tr$row <= endrow) & ((tr$row+tr$nrows-1) >= startrow)
