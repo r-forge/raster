@@ -28,7 +28,7 @@ If \code{y} represents lines, the \code{extract} method returns the values of th
 \S4method{extract}{Raster,SpatialLines}(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer,
      nl, factors=FALSE, along=FALSE, sp=FALSE, ...)
 
-\S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, cellnumbers=FALSE,
+\S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cellnumbers=FALSE,
      small=TRUE, df=FALSE, layer, nl, factors=FALSE, sp=FALSE, ...)
 
 
@@ -52,9 +52,11 @@ If \code{y} represents lines, the \code{extract} method returns the values of th
 
 \item{cellnumbers}{logical. If \code{cellnumbers=TRUE}, cell-numbers will also be returned (if no \code{fun} argument is  supplied, and when extracting values with points, if \code{buffer} is \code{NULL})}
 
-\item{df}{logical. If \code{df=TRUE}, results will be returned as a data.frame. The first column is a sequential ID, the other column(s) are the extracted values.}
+\item{df}{logical. If \code{df=TRUE}, results will be returned as a data.frame. The first column is a sequential ID, the other column(s) are the extracted values}
 
-\item{weights}{logical. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction of each cell that is covered by the polygon(rounded to 1/100). The weights can be used for averaging; see examples. This option can be useful (but slow) if the polygons are small relative to the cells size of the Raster* object.}
+\item{weights}{logical. If \code{TRUE}, the function returns, for each polygon, a matrix with the cell values and the approximate fraction of each cell that is covered by the polygon(rounded to 1/100); unless \code{normalizeWeights=TRUE}, in which case they add up to one. The weights can be used for averaging; see examples. This option can be useful (but slow) if the polygons are small relative to the cells size of the Raster* object}
+
+\item{normalizeWeights}{logical. If \code{TRUE}, weights are normalized such that they add up to one for each polygon}
 
 \item{factors}{logical. If \code{TRUE}, factor values are returned, else their integer representation is returned}
 
