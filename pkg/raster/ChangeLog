@@ -11,6 +11,7 @@ add VRT output to saveStack
 Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 
 --- development version
+removed several checks for 'minor' R version that were no longer necessary and wrong since major version 3 (reported by Edzer Pebesma)
 normalizeWeights argument to extract with polygon. Default is TRUE such that weights add up to 1. Setting it to FALSE allows to get the same numbers as in earlier versions (in response to query by Nick Bond)
 
 
