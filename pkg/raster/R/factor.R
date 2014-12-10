@@ -76,7 +76,7 @@ setMethod('is.factor', signature(x='Raster'),
 
 setMethod('is.factor', signature(x='RasterStack'), 
 	function(x) {
-		if (nlayers(s) > 0) {
+		if (nlayers(x) > 0) {
 			s <- sapply(x@layers, function(x) x@data@isfactor)
 			return(s)
 		} else {

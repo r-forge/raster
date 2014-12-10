@@ -10,7 +10,6 @@ if (!isGeneric("intersect")) {
 }	
 
 
-
 setMethod('intersect', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y) {
 
@@ -86,13 +85,6 @@ function(x, y) {
 } 
 )
 
-setMethod('intersect', signature(x='SpatialPolygons', y='Extent'), 
-function(x, y) {
-	y <- as(y, 'SpatialPolygons')
-	crs(y) <- crs(x)
-	intersect(x, y)
-}
-)
 
 
 setMethod('intersect', signature(x='SpatialLines', y='SpatialPolygons'), 
@@ -171,34 +163,19 @@ function(x, y) {
 )
 
 
-setMethod('intersect', signature(x='SpatialLines', y='Extent'), 
+
+setMethod('intersect', signature(x='SpatialVector', y='ANY'), 
 function(x, y) {
-	y <- as(y, 'SpatialPolygons')
-	crs(y) <- crs(x)
-	intersect(x, y)
-}
-)
-
-
-setMethod('intersect', signature(x='SpatialPoints', y='SpatialPolygons'), 
-function(x, y) {
-   if (!identical(proj4string(x), proj4string(y))) {
-        warning("non identical CRS")
-        y@proj4string <- x@proj4string
-    }
-    i <- over(as(x, "SpatialPoints"), as(y, "SpatialPolygons"))
-    i <- which(!is.na(i))
-    x[i, ]
-}	
-)
-
-
-
-setMethod('intersect', signature(x='SpatialPoints', y='Extent'), 
-function(x, y) {
-	y <- as(y, 'SpatialPolygons')
-	crs(y) <- crs(x)
-	intersect(x, y)
+	y <- extent(y)
+	if (inherits(x, 'SpatialPoints')) {
+		xy <- coordinates(x)
+		i <- xy[,1] >= y@xmin & xy[,1] <= y@xmax & xy[,2] >= y@ymin & xy[,2] <= y@ymax
+		x[i, ]
+	} else {
+		y <- as(y, 'SpatialPolygons')
+		crs(y) <- crs(x)
+		intersect(x, y)
+	}
 }
 )
 
