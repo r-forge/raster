@@ -27,13 +27,13 @@ It is also possible to extract values for point locations from SpatialPolygons.
 
 \usage{
 \S4method{extract}{Raster,matrix}(x, y, method='simple', buffer=NULL, small=FALSE, cellnumbers=FALSE, 
-     fun=NULL, na.rm=TRUE, layer, nl, df=FALSE, factors=FALSE, ...)
+   fun=NULL, na.rm=TRUE, layer, nl, df=FALSE, factors=FALSE, ...)
 
 \S4method{extract}{Raster,SpatialLines}(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer,
-     nl, factors=FALSE, along=FALSE, sp=FALSE, ...)
+   nl, factors=FALSE, along=FALSE, sp=FALSE, ...)
 
-\S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cellnumbers=FALSE,
-     small=TRUE, df=FALSE, layer, nl, factors=FALSE, sp=FALSE, ...)
+\S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, 
+   normalizeWeights=TRUE, cellnumbers=FALSE, small=TRUE, df=FALSE, layer, nl, factors=FALSE, sp=FALSE, ...)
 
 
 \S4method{extract}{SpatialPolygons,SpatialPoints}(x, y, ...)
@@ -152,7 +152,7 @@ unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=TRUE) else NA ))
 # v <- extract(r, polys, weights=TRUE, fun=mean)
 # equivalent to:
 # v <- extract(r, polys, weights=TRUE)
-# sapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA  )
+# sapply(v, function(x) if (!is.null(x)) {sum(apply(x, 1, prod)) / sum(x[,2])} else NA)
 
 
 ###############################
