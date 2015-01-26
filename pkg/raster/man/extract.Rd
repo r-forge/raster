@@ -33,7 +33,8 @@ It is also possible to extract values for point locations from SpatialPolygons.
    nl, factors=FALSE, along=FALSE, sp=FALSE, ...)
 
 \S4method{extract}{Raster,SpatialPolygons}(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, 
-   normalizeWeights=TRUE, cellnumbers=FALSE, small=TRUE, df=FALSE, layer, nl, factors=FALSE, sp=FALSE, ...)
+   normalizeWeights=TRUE, cellnumbers=FALSE, small=TRUE, df=FALSE, layer, nl, 
+   factors=FALSE, sp=FALSE, ...)
 
 
 \S4method{extract}{SpatialPolygons,SpatialPoints}(x, y, ...)
