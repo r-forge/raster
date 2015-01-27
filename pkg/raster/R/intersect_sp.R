@@ -13,7 +13,7 @@ if (!isGeneric("intersect")) {
 setMethod('intersect', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y) {
 
-	require(rgeos)
+	requireNamespace("rgeos")
 
 	x <- spChFIDs(x, as.character(1:length(x)))
 	y <- spChFIDs(y, as.character(1:length(y)))
@@ -90,7 +90,7 @@ function(x, y) {
 setMethod('intersect', signature(x='SpatialLines', y='SpatialPolygons'), 
 function(x, y) {
 
-	require(rgeos)
+	requireNamespace("rgeos")
 
 	x <- spChFIDs(x, as.character(1:length(x)))
 	y <- spChFIDs(y, as.character(1:length(y)))

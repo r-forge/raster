@@ -7,7 +7,7 @@
 setMethod('extract', signature(x='SpatialPolygons', y='SpatialPoints'), 
 function(x, y, ...){ 
 	
-	stopifnot(require(rgeos))
+	stopifnot(requireNamespace("rgeos"))
 	
 	if (! identical(proj4string(x), proj4string(y)) ) {
 		warning('non identical CRS')
