@@ -270,7 +270,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 						if (nl > 1 & !weights) {
 							res[[i]] <- apply(res[[i]], 2, fun, na.rm=na.rm)							
 						} else {
-							res[[i]] <- fun(res[[i]])
+							res[[i]] <- fun(res[[i]], na.rm=na.rm)
 						}
 					}
 				}	
