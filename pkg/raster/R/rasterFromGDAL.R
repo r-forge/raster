@@ -117,6 +117,17 @@
 	fixGeoref <- FALSE
 	try( fixGeoref <- .gdFixGeoref(mdata), silent=TRUE )
 
+	bnames <- mdata[grep("Band_", mdata)]
+	# for ERDAS img files
+	if (length(bnames) > 0) {
+		bn <- sapply(strsplit(bnames, '='), function(x) x[2])
+		bi <- gsub("Band_", "", sapply(strsplit(bnames, '='), function(x)x[1]))
+		bnames <- bn[order(as.integer(bi))]
+	} else {
+		bnames <- NULL
+	}
+		
+	
 	if (type == 'RasterBrick') {
 	
 		r <- brick(ncols=nc, nrows=nr, xmn=xn, ymn=yn, xmx=xx, ymx=yx, crs="")
@@ -203,7 +214,11 @@
 	}
 	
 	if (type == 'RasterBrick') {
-		names(r) <- rep(gsub(" ", "_", extension(basename(filename), "")), nbands)
+		if (lenght(bnames) == nlayer(r)) {
+			names(r) <- bnames		
+		} else {
+			names(r) <- rep(gsub(" ", "_", extension(basename(filename), "")), nbands)
+		}
 	} else {
 		lnames <- gsub(" ", "_", extension(basename(filename), ""))
 		if (nbands > 1) {
