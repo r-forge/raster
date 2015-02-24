@@ -121,8 +121,11 @@
 	# for ERDAS img files
 	if (length(bnames) > 0) {
 		bn <- sapply(strsplit(bnames, '='), function(x) x[2])
-		bi <- gsub("Band_", "", sapply(strsplit(bnames, '='), function(x)x[1]))
-		bnames <- bn[order(as.integer(bi))]
+		bi <- gsub("Band_", "", sapply(strsplit(bnames, '='), function(x) x[1]))
+		bnames <- try(bn[order(as.integer(bi))], silent=TRUE)
+		if (class(bnames)=='try-error') {
+			bnames <- NULL
+		}
 	} else {
 		bnames <- NULL
 	}
@@ -214,7 +217,7 @@
 	}
 	
 	if (type == 'RasterBrick') {
-		if (lenght(bnames) == nlayer(r)) {
+		if (length(bnames) == nlayers(r)) {
 			names(r) <- bnames		
 		} else {
 			names(r) <- rep(gsub(" ", "_", extension(basename(filename), "")), nbands)
