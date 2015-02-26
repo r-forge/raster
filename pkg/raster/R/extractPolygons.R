@@ -64,9 +64,9 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 			sp <- FALSE
 			df <- FALSE
 			warning('argument sp=TRUE is ignored if fun=NULL')
-		} else if (df) {
-			df <- FALSE
-			warning('argument df=TRUE is ignored if fun=NULL')
+		#} else if (df) {
+		#	df <- FALSE
+		#	warning('argument df=TRUE is ignored if fun=NULL')
 		}
 		
 		doFun <- FALSE
@@ -299,9 +299,9 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 				warning('cannot return a sp object because the data length varies between polygons')
 				sp <- FALSE
 				df <- FALSE
-			} else if (df) {
-				warning('cannot return a data.frame because the data length varies between polygons')
-				df <- FALSE
+			#} else if (df) {
+				#warning('cannot return a data.frame because the data length varies between polygons')
+				#df <- FALSE
 			}
 		}
 	}
