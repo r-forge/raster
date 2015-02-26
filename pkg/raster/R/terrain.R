@@ -68,10 +68,10 @@ terrain <- function(x, opt='slope', unit='radians', neighbors=8, filename='', ..
 	if ('slope' %in% opt | 'aspect' %in% opt | 'flowdir' %in% opt) {
 		stopifnot(is.character(unit))
 		unit <- trim(tolower(unit))
-		stopifnot(unit %in% c('degrees', 'radians', 'y/x'))
+		stopifnot(unit %in% c('degrees', 'radians', 'tangent'))
 		if (unit=='degrees') {
 			un <- as.integer(0)
-		} else if (unit=='y/x') {
+		} else if (unit=='tangent') {
 			un <- as.integer(2)		
 		}
 		stopifnot(neighbors %in% c(4, 8))
