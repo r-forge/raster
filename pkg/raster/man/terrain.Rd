@@ -7,8 +7,6 @@
 \description{
 
 Compute slope, aspect and other terrain characteristics from a raster with elevation data. The elevation data should be in map units (typically meter) for projected (planar) raster data. They should be in meters when the coordinate reference system (CRS) is longitude/latitude. 
-
-This function is the replacement for the deprecated function \code{\link{slopeAspect}}
 }
 
 \usage{
@@ -19,7 +17,7 @@ terrain(x, opt='slope', unit='radians', neighbors=8, filename='', ...)
 \arguments{
   \item{x}{RasterLayer object with elevation values. Values should have the same unit as the map units, or in meters when the crs is longitude/latitude}
   \item{opt}{Character vector containing one or more of these options: slope, aspect, TPI, TRI, roughness, flowdir (see Details)}
-  \item{unit}{Character. 'degrees' or 'radians'. Only relevant for slope and aspect }
+  \item{unit}{Character. 'degrees', 'radians' or 'y/x' (rise over run). Only relevant for slope and aspect. If 'y/x' is selected that is used for slope, but for aspect 'degrees' is used (as 'y/x' has no meaning for aspect) }
   \item{neighbors}{Integer. Indicating how many neighboring cells to use to compute slope for any cell. Either 8 (queen case) or 4 (rook case). Only used for slope and aspect, see Details}
   \item{filename}{Character. Filename. optional}
   \item{...}{Standard additional arguments for writing Raster* objects to file}
