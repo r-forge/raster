@@ -15,7 +15,7 @@ allow setting a 'spatial window'
 bug fix in extract(Raster, SpatialPolygons, na.rm=TRUE); na.rm=T was ignored in some cases. (reported by Lewis Hagedorn)
 bug fix in union(SpatialPolygons,missing)
 added extraction of layer names for .img files from gdal metadata
-new unit option ('y/x') to compute slopes (terrain function) 
+new unit option ('tangent') to compute slopes (terrain function) 
 
 --- 25-January-2015, version: 2.3-24
 removed several checks for 'minor' R version that were no longer necessary and wrong since major version 3 (reported by Edzer Pebesma)
