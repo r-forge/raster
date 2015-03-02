@@ -1,10 +1,10 @@
 Package: raster
 Type: Package
 Title: Geographic data analysis and modeling
-Version: 2.3-29
-Date: 2015-2-27
+Version: 2.3-30
+Date: 2015-3-1
 Depends: methods, sp (>= 1.0-13), R (>= 2.15.0)
-Suggests: rgdal (>= 0.8-12), rgeos (>= 0.3-8), ncdf, ncdf4, igraph, snow, tcltk, rasterVis
+Suggests: rgdal (>= 0.8-12), rgeos (>= 0.3-8), ncdf, ncdf4, igraph, tcltk, parallel, rasterVis
 Authors@R: c(
 	person("Robert J.", "Hijmans", role = c("cre", "aut"),  email = "r.hijmans@gmail.com"),
 	person("Jacob", "van Etten", role = "ctb"),
@@ -19,3 +19,4 @@ Description: Reading, writing, manipulating, analyzing and modeling of gridded s
 License: GPL (>=3)
 URL: http://cran.r-project.org/web/packages/raster/
 ByteCompile: TRUE
+	
