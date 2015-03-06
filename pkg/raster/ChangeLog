@@ -11,7 +11,7 @@ add VRT output to saveStack
 Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 allow setting a 'spatial window'
 
---- development version
+--- current version
 bug fix in extract(Raster, SpatialPolygons, na.rm=TRUE); na.rm=T was ignored in some cases. (reported by Lewis Hagedorn)
 bug fix in union(SpatialPolygons,missing)
 added extraction of layer names for .img files from gdal metadata
