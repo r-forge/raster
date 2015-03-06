@@ -6,7 +6,7 @@
 	a <- cbind(xFromCol(x, 1), yFromRow(x, 1:nrow(x)))
 	b <- cbind(xFromCol(x, 2), yFromRow(x, 1:nrow(x)))
 	dX <- pointDistance(a,b,longlat=T)
-	m = matrix(1:ncol(r), nrow=nrow(x), ncol=ncol(x), byrow=T)
+	m = matrix(1:ncol(x), nrow=nrow(x), ncol=ncol(x), byrow=T)
 	m <- m * dX
 	
 	z <- raster(x)
