@@ -35,7 +35,7 @@ Spatial*DataFrame (reading). Nothing is returned when writing a shapefile.
 }
 
 \examples{
-if (require(rgdal) {
+if (require(rgdal)) {
 
 filename <- system.file("external/lux.shp", package="raster")
 filename
