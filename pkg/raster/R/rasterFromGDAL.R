@@ -117,8 +117,8 @@
 	fixGeoref <- FALSE
 	try( fixGeoref <- .gdFixGeoref(mdata), silent=TRUE )
 
-	bnames <- mdata[grep("Band_", mdata)]
-	# for ERDAS img files
+	# for ENVI files
+	bnames <- unique(mdata[grep("Band_", mdata)])
 	if (length(bnames) > 0) {
 		bn <- sapply(strsplit(bnames, '='), function(x) x[2])
 		bi <- gsub("Band_", "", sapply(strsplit(bnames, '='), function(x) x[1]))
