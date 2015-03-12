@@ -11,25 +11,27 @@ if (!isGeneric("plot")) {
 
 
 setMethod("plot", signature(x='Raster', y='ANY'), 
-	function(x, y, maxpixels=500000, col, alpha=1, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, maxnl=16, main, ...)  {
+	function(x, y, maxpixels=500000, col, alpha=NULL, colNA=NA, add=FALSE, ext=NULL, useRaster=TRUE, interpolate=FALSE, addfun=NULL, nc, nr, maxnl=16, main, ...)  {
 
 		hasNoCol <- missing(col)
 		if (hasNoCol) {
 			col <- rev(terrain.colors(255))
 		}
 			
-		if (inherits(alpha, 'RasterLayer')) {
-			if (!compareRaster(x, alpha)) {
-				alpha <- NULL
-			}
-		} else {
-			alpha <- pmax(pmin(alpha, 1), 0)
-			if (length(alpha) == 1) {
-				alpha <- alpha * 255 + 1
-				a <- c(0:9, LETTERS[1:6])
-				alpha <- paste(rep(a, each=16), rep(a, times=16), sep='')[alpha]
-				col <- paste(substr(col, 1, 7), alpha, sep="")
-				alpha <- NULL
+		if (!is.null(alpha)) {	
+			if (inherits(alpha, 'RasterLayer')) {
+				if (!compareRaster(x, alpha)) {
+					alpha <- NULL
+				}
+			} else {
+				alpha <- pmax(pmin(alpha, 1), 0)
+				if (length(alpha) == 1) {
+					alpha <- alpha * 255 + 1
+					a <- c(0:9, LETTERS[1:6])
+					alpha <- paste(rep(a, each=16), rep(a, times=16), sep='')[alpha]
+					col <- paste(substr(col, 1, 7), alpha, sep="")
+					alpha <- NULL
+				}
 			}
 		}
 		
