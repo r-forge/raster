@@ -6,9 +6,6 @@
 # based on  create2GDAL and rgdal::saveDataset from the rgdal package
 # authors: Timothy H. Keitt, Roger Bivand, Edzer Pebesma, Barry Rowlingson
 
-
-
-
 .getGDALtransient <- function(r, filename, options, NAflag, ...)  {
 
 	.GDALnodatavalue <- function(x){
@@ -31,6 +28,10 @@
 	} else {
 		hasCT <- FALSE
 	}
+	#isFact <- is.factor(r)
+	#if (any(isFact)) {
+	#	v <- levels(r)
+	#}
 	r <- raster(r)
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
@@ -81,6 +82,14 @@
 		rgdal::GDALcall(b, "SetNoDataValue", NAflag)
 		if (hasCT) {
 			rgdal::GDALcall(b, "SetRasterColorTable", t(col2rgb(ct, TRUE)))
+		}
+		if (isFact[i]) {
+			vv <- v[[i]]
+			if (NCOL(vv) > 1) {
+				cnms <- as.character(vv[,2])
+				rgdal::GDALcall(b, "SetCategoryNames", cnms)
+				cat('attempting (and probably failing) to write category names:', cnms)
+			}
 		}
 	}
 	
