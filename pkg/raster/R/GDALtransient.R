@@ -28,10 +28,10 @@
 	} else {
 		hasCT <- FALSE
 	}
-	#isFact <- is.factor(r)
-	#if (any(isFact)) {
-	#	v <- levels(r)
-	#}
+	isFact <- is.factor(r)
+	if (any(isFact)) {
+		v <- levels(r)
+	}
 	r <- raster(r)
 	datatype <- .datatype(...)
 	overwrite <- .overwrite(...)
@@ -86,9 +86,12 @@
 		if (isFact[i]) {
 			vv <- v[[i]]
 			if (NCOL(vv) > 1) {
-				cnms <- as.character(vv[,2])
+				rn <- data.frame(IDID=0:max(vv[,1]))
+				rnvv <- merge(rn, vv, by=1, all.x=TRUE)
+				rnvv <- rnvv[order(rnvv[,1]), ]
+				cnms <- as.character(rnvv[,2])
+				cnms[is.na(cnms)] <- ''
 				rgdal::GDALcall(b, "SetCategoryNames", cnms)
-				cat('attempting (and probably failing) to write category names:', cnms)
 			}
 		}
 	}
