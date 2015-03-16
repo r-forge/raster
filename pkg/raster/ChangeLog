@@ -13,7 +13,8 @@ allow setting a 'spatial window'
 
 --- current version
 Category names are now written to file via rgdal
-
+bug fixes:
+Creating a brick from RasterLayers with a filename argument did not deal with 'overwrite=TRUE'. Reported by Tom Philippi
 
 --- 12-March-2015, version: 2.3-33
 bug fix in extract(Raster, SpatialPolygons, na.rm=TRUE); na.rm=T was ignored in some cases. (reported by Lewis Hagedorn)
