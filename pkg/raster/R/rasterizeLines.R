@@ -110,9 +110,9 @@
 .rasterizeLineLength <- function(x, r, background=NA, filename="", ...) {
 
 	stopifnot(requireNamespace("rgeos"))
+	r <- raster(r)
 
 	if (canProcessInMemory(r, n=8)) {
-		r <- raster(r)
 		r[] <- 1:ncell(r)
 		
 		rp <- rasterToPolygons(r)
@@ -120,13 +120,13 @@
 		lengths <- rgeos::gLength(rp, byid=TRUE) / 1000
 		
 		n <- tapply(lengths, data.frame(rp)[, names(r)], sum)
-		rr <- setValues(r, background)
-		rr[as.integer(names(n))] <- n
 		
+		out <- setValues(r, background)
+		out[as.integer(names(n))] <- n
 		if (filename != '') {
-			rr <- writeRaster(rr, filename, ...)
+			out <- writeRaster(out, filename, ...)
 		}
-		return(rr)
+		return(out)
 		
 	} else {
 	
@@ -143,8 +143,7 @@
 			lengths <- rgeos::gLength(rp, byid=TRUE) / 1000
 			n <- tapply(lengths, data.frame(rp)[, names(y)], sum)
 			v <- rep(background, ncell(y))
-			j <- as.integer(names(n))
-			v[j] <- n 
+			v[as.integer(names(n))] <- n 
 			out <- writeValues(out, v, tr$row[i])
 			pbStep(pb)
 		}
