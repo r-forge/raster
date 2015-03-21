@@ -42,7 +42,7 @@ names(s) <- c('meuse', 'meuse x 2')
 
 spplot(s)
 
-pts <- data.frame(sampleRandom(r, 10, xy=T))
+pts <- data.frame(sampleRandom(r, 10, xy=TRUE))
 coordinates(pts) <- ~ x + y
 
 spplot(s, scales = list(draw = TRUE), 

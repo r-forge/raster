@@ -25,15 +25,17 @@
 	ct <- r@legend@colortable
 	if (length(ct) > 0 ) {
 		hasCT <- TRUE
+		datatype <- 'INT1U'
 	} else {
 		hasCT <- FALSE
+		datatype <- .datatype(...)
 	}
 	isFact <- is.factor(r)
 	if (any(isFact)) {
 		v <- levels(r)
 	}
 	r <- raster(r)
-	datatype <- .datatype(...)
+
 	overwrite <- .overwrite(...)
 	gdalfiletype <- .filetype(filename=filename, ...)
 
@@ -47,7 +49,7 @@
 		if (!overwrite) {
 			stop("filename exists; use overwrite=TRUE")
 		} else if (!file.remove( filename)) {
-			stop("cannot delete existing file. permission denied.")
+			stop("cannot delete existing file; permission denied.")
 		}
 	}	
 
@@ -81,7 +83,7 @@
 		b <- new("GDALRasterBand", transient, i)
 		rgdal::GDALcall(b, "SetNoDataValue", NAflag)
 		if (hasCT) {
-			rgdal::GDALcall(b, "SetRasterColorTable", t(col2rgb(ct, TRUE)))
+			rgdal::GDALcall(b, "SetRasterColorTable", ct)
 		}
 		if (isFact[i]) {
 			vv <- v[[i]]

@@ -60,6 +60,8 @@ function(x, filename, format, ...) {
 	if (.isNativeDriver(filetype)) {
 		out <- raster(x)
 		try( out@history <- x@history, silent=TRUE)
+		levels(out) <- levels(x)
+		out@legend@colortable <- x@legend@colortable
 		out <- .startRasterWriting(out, filename, format=filetype, ...)
 		out <- writeValues(out, values(x), 1)
 		return( .stopRasterWriting(out) )
