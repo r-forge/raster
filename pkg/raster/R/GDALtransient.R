@@ -25,7 +25,11 @@
 	ct <- r@legend@colortable
 	if (length(ct) > 0 ) {
 		hasCT <- TRUE
-		datatype <- 'INT1U'
+		if (is.null(list(...)$datatype)) {
+			datatype <- 'INT1U'
+		} else {
+			datatype <- .datatype(...)
+		}
 	} else {
 		hasCT <- FALSE
 		datatype <- .datatype(...)

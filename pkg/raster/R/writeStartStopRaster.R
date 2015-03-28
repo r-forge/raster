@@ -14,10 +14,15 @@
 	fnamevals <- .setFileExtensionValues(filename, filetype)
 	
 	if (length(x@legend@colortable) > 1) {
-		datatype <- 'INT1U'
+		if (is.null(list(...)$datatype)) {
+			datatype <- 'INT1U'
+		} else {
+			datatype <- .datatype(...)
+		}
 	} else {
 		datatype <- .datatype(...)
 	}
+	
 	if (filetype %in% c('SAGA', 'IDRISI')) {
 		if (datatype == 'FLT8S') {
 			datatype = 'FLT4S'
