@@ -86,6 +86,13 @@ function(x, y) {
 )
 
 
+setMethod('intersect', signature(x='SpatialPolygons', y='SpatialLines'), 
+function(x, y) {
+	intersect(y, x)
+}
+)
+
+
 
 setMethod('intersect', signature(x='SpatialLines', y='SpatialPolygons'), 
 function(x, y) {

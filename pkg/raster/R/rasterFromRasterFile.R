@@ -222,6 +222,12 @@
 		if (!is.null(zclass)) {
 			if (zclass == 'Date') {
 				try( zvalues <- as.Date(zvalues), silent=TRUE )
+
+			# by Stefan Schlaffer
+			} else if (length(grep("POSIXt",zclass)) > 0 & length(zvalues) == nbands*3) {
+				zvalues <- sapply(seq(1,nbands*3,3), function(i) paste0(zvalues[c(i,i+1,i+2)], collapse=":"))
+				try( zvalues <- as.POSIXct(strptime(zvalues, "%Y-%m-%d %H:%M:%S", tz="UTC")), silent=TRUE )
+
 			} else {
 				try( zvalues <- as(zvalues, zclass), silent=TRUE )
 			}
