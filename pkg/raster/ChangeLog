@@ -16,6 +16,9 @@ Category names are now written to file via rgdal or native format
 color tables are now written to file via rgdal or native format
 bug fixes:
 Creating a brick from RasterLayers with a filename argument did not deal with 'overwrite=TRUE'. Reported by Tom Philippi
+boxplot with two raster wasn't going right (reported by Stefan Schlaffer)
+native format can now write/read POSIXct z-values (patch provided by Stefan Schlaffer)
+
 
 --- 12-March-2015, version: 2.3-33
 bug fix in extract(Raster, SpatialPolygons, na.rm=TRUE); na.rm=T was ignored in some cases. (reported by Lewis Hagedorn)
