@@ -111,8 +111,7 @@ cds1 <- rbind(c(-180,-20), c(-140,55), c(10, 0), c(-140,-60))
 cds2 <- rbind(c(-10,0), c(140,60), c(160,0), c(140,-55))
 cds3 <- rbind(c(-125,0), c(0,60), c(40,5), c(15,-45))
 
-lines <- SpatialLines(list(Lines(list(Line(cds1)), "1"), 
-     Lines(list(Line(cds2)), "2"), Lines(list(Line(cds3)), "3") ))
+lines <- spLines(cds1, cds2, cds3)
 
 r <- raster(ncols=90, nrows=45)
 r <- rasterize(lines, r)
@@ -139,10 +138,11 @@ plot(r)
 
 p1 <- rbind(c(-180,-20), c(-140,55), c(10, 0), c(-140,-60), c(-180,-20))
 hole <- rbind(c(-150,-20), c(-100,-10), c(-110,20), c(-150,-20))
-p1 <- Polygons(list(Polygon(p1), Polygon(hole, hole=TRUE)), 1)
-p2 <- Polygons(list(Polygon(rbind(c(-10,0), c(140,60), c(160,0), c(140,-55), c(-10,0)))), 2)
-p3 <- Polygons(list(Polygon(rbind(c(-125,0), c(0,60), c(40,5), c(15,-45), c(-125,0)))), 3)
-pols <- SpatialPolygons( list( p1 , p2, p3) )
+p1 <- list(p1, hole)
+p2 <- rbind(c(-10,0), c(140,60), c(160,0), c(140,-55), c(-10,0))
+p3 <- rbind(c(-125,0), c(0,60), c(40,5), c(15,-45), c(-125,0))
+
+pols <- spPolygons(p1, p2, p3)
 
 r <- raster(ncol=90, nrow=45)
 r <- rasterize(pols, r, fun=sum)
