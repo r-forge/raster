@@ -18,6 +18,7 @@ bug fixes:
 Creating a brick from RasterLayers with a filename argument did not deal with 'overwrite=TRUE'. Reported by Tom Philippi
 boxplot with two raster wasn't going right (reported by Stefan Schlaffer)
 native format can now write/read POSIXct z-values (patch provided by Stefan Schlaffer)
+error in rasterize/mask with SpatialPolygons that go outside the raster
 
 
 --- 12-March-2015, version: 2.3-33
