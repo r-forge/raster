@@ -208,7 +208,7 @@
 
 
 	if (fixGeoref) {
-		cat('Fixing "AREA_OR_POINT=Point" georeference\n')
+		message('Fixing "AREA_OR_POINT=Point" georeference')
 		rs <- res(r)
 		xmin(r) <- xmin(r) - 0.5 * rs[1]
 		xmax(r) <- xmax(r) - 0.5 * rs[1]

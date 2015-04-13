@@ -228,7 +228,7 @@
 	}
 	
 	if (! silent) { 
-		cat('Found', npol, 'region(s) and', cnt, 'polygon(s)\n') 
+		message('Found', npol, 'region(s) and', cnt, 'polygon(s)') 
 	}
 	
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)

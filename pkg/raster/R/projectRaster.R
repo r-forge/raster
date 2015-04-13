@@ -248,7 +248,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 
 		nodes <- min(ceiling(to@nrows/10), length(cl)) # at least 10 rows per node
 		
-		cat('Using cluster with', nodes, 'nodes\n')
+		message('Using cluster with', nodes, 'nodes')
 		flush.console()
 		
 		tr <- blockSize(to, minblocks=nodes)

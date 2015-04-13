@@ -90,7 +90,7 @@
 			cl <- getCluster()
 			on.exit( returnCluster() )
 			nodes <- min(nrow(xy), length(cl))
-			cat('Using cluster with', nodes, 'nodes\n')
+			message('Using cluster with', nodes, 'nodes')
 			flush.console()
 
 	

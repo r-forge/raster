@@ -103,7 +103,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 		cl <- getCluster()
 		on.exit( returnCluster() )
 		nodes <- min(npol, length(cl)) 
-		cat('Using cluster with', nodes, 'nodes\n')
+		message('Using cluster with', nodes, 'nodes')
 		flush.console()
 
 		

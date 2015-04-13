@@ -64,7 +64,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 		cl <- getCluster()
 		on.exit( returnCluster() )
 		nodes <- min(nlns, length(cl)) 
-		cat('Using cluster with', nodes, 'nodes\n')
+		message('Using cluster with', nodes, 'nodes')
 		flush.console()
 
 		parallel::clusterExport(cl, c('rsbb', 'rr', 'addres', 'cellnumbers'), envir=environment())

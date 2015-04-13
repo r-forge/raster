@@ -63,7 +63,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		
 		nodes <- min(ceiling(y@nrows/10), length(cl)) # at least 10 rows per node
 		
-		cat('Using cluster with', nodes, 'nodes\n')
+		message('Using cluster with', nodes, 'nodes')
 		flush.console()
 		
 		tr <- blockSize(y, minblocks=nodes, n=nl*4*nodes)
