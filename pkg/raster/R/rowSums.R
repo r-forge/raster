@@ -5,7 +5,7 @@
 
 
 setMethod('rowSums', signature(x='Raster'), 
-	function(x,  na.rm = FALSE, dims = 1, ...) {
+	function(x,  na.rm = FALSE, dims = 1L, ...) {
 		nl <- nlayers(x)
 		if (canProcessInMemory(x)) {
 			if(nl == 1) {
@@ -47,7 +47,7 @@ setMethod('rowSums', signature(x='Raster'),
 
 
 setMethod('colSums', signature(x='Raster'), 
-	function(x,  na.rm = FALSE, dims = 1, ...) {
+	function(x, na.rm = FALSE, dims = 1L, ...) {
 		nl <- nlayers(x)
 		if (canProcessInMemory(x)) {
 			if(nl == 1) {
