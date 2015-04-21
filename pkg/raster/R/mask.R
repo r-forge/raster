@@ -28,6 +28,7 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, upda
 	ln <- names(x)
 	out <- raster(x)
 	out@legend@colortable <- x@legend@colortable
+	levels(out) <- levels(x)
 	names(out) <- ln		
 	
 	if ( canProcessInMemory(x, 3)) {
@@ -196,6 +197,7 @@ function(x, mask, filename="", inverse=FALSE, maskvalue=NA, updatevalue=NA, upda
 	
 	out <- brick(x, values=FALSE)
 	names(out) <- ln <- names(x)
+	levels(out) <- levels(x)
 	
 	if (canProcessInMemory(x, nlayers(x)+4)) {
 

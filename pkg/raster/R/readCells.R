@@ -126,7 +126,11 @@
 
 	nl <- nlayers(x)
 	if (nl == 1) {
-		layers <- bandnr(x)
+		if (inherits(x, 'RasterLayer')) {
+			layers <- bandnr(x)
+		} else {
+			layers <- 1		
+		}
 	}
 	laysel <- length(layers)
 	
@@ -140,9 +144,6 @@
 	con <- rgdal::GDAL.open(x@file@name, silent=TRUE)
 	
 	if (laysel == 1) {
-		if (nl == 1) {
-			bandnr(x)
-		}
 		for (i in 1:length(rows)) {
 			offs <- c(rows[i]-1, 0) 
 			v <- rgdal::getRasterData(con, offset=offs, region.dim=c(1, nc), band = layers)
