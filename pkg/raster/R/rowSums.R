@@ -67,7 +67,7 @@ setMethod('colSums', signature(x='Raster'),
 			}
 		} else {
 			tr <- blockSize(x)
-			pb <- pbCreate(tr$n, label='rowSums', ...)
+			pb <- pbCreate(tr$n, label='colSums', ...)
 			nc <- ncol(x)
 			if(nl == 1) {
 				s <- list()
@@ -88,7 +88,7 @@ setMethod('colSums', signature(x='Raster'),
 						s[i, k] <- .colSums(as.matrix(v[,j], nrow=tr$nrows[i], byrow=TRUE), tr$nrows[i], nc, na.rm=na.rm, ...)
 					}
 				}
-				s <- matrix(.colSums(s, nrow(s), ncol(s)), ncol=nl)
+				s <- matrix(.colSums(s, nrow(s), ncol(s)), ncol=nl, na.rm=na.rm)
 				colnames(s) <- names(x)
 				return(s)
 			}
