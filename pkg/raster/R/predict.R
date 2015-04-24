@@ -68,6 +68,7 @@ setMethod('predict', signature(object='Raster'),
 					stop('duplicate names in Raster* object: ', lyrnames)
 				}
 				f <- names( which(dataclasses == 'factor') )
+				f <- f[f %in% names(object)]
 				if (length(f) > 0) { 
 					haveFactor <- TRUE 
 					factlevels <- list()
@@ -153,7 +154,7 @@ setMethod('predict', signature(object='Raster'),
 				predv <- napred
 			} else {
 	
-				predv <- fun(model, blockvals, ...)
+				predv <- fun(model, blockvals)
 		
 				if (class(predv)[1] == 'list') {
 					predv <- unlist(predv)
