@@ -104,7 +104,12 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 			}
 		}
 		
-		plot(NA, NA, xlim=c(bb[1], bb[2]), ylim=c(bb[3], bb[4]), type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE, ...)
+		xlim <- list(...)$xmin
+		ylim <- list(...)$ymin
+		if (is.null(xlim)) xlim=c(bb[1], bb[2])
+		if (is.null(xlim)) ylim=c(bb[3], bb[4])
+		
+		plot(NA, NA, xlim=xlim, ylim=ylim, type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE, ...)
 		if (axes) {
 			xticks <- axTicks(1, c(xmin(r), xmax(r), 4))
 			yticks <- axTicks(2, c(ymin(r), ymax(r), 4))
