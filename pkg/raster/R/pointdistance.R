@@ -38,7 +38,7 @@
 
 .distm <- function (x, longlat) {
 	if (longlat) { 
-		fun <- .haversine 
+		fun <- .geodist 
 	} else { 
 		return(.planedist2(x, x))
 	#	fun <- .planedist
@@ -59,7 +59,7 @@
 
 .distm2 <- function (x, y, longlat) {
 	if (longlat) { 
-		fun <- .haversine 
+		fun <- .geodist 
 	} else { 
 		return(.planedist2(x, y))
 		# fun <- .planedist
@@ -103,7 +103,8 @@ pointDistance <- function (p1, p2, lonlat, allpairs=FALSE, ...) {
 	}
 	
 	if (lonlat ) {
-		return( .haversine(p1[,1], p1[,2], p2[,1], p2[,2], r=6378137) )
+#		return( .haversine(p1[,1], p1[,2], p2[,1], p2[,2], r=6378137) )
+		return( .geodist(p1[,1], p1[,2], p2[,1], p2[,2]) )
 	} else { 
 		return( .planedist(p1[,1], p1[,2], p2[,1], p2[,2]) )
 	}
@@ -123,8 +124,12 @@ pointDistance <- function (p1, p2, lonlat, allpairs=FALSE, ...) {
 }
 
 
+.geodist <- function(x1, y1, x2, y2, a=6378137, f=1/298.257223563) {
+	.Call("inversegeodesic", as.double(x1), as.double(y1), as.double(x2), as.double(y2), as.double(a), as.double(f), PACKAGE='raster')
+}
 
-.haversine <- function(x1, y1, x2, y2, r=6378137) {
+
+.old_haversine <- function(x1, y1, x2, y2, r=6378137) {
 	adj <- pi / 180
 	x1 <- x1 * adj
 	y1 <- y1 * adj

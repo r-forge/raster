@@ -28,7 +28,27 @@ if (!isGeneric("area")) {
 setMethod('area', signature(x='SpatialPolygons'), 
 	function(x, ...) {
 		if (couldBeLonLat(x)) {
-			warning('polygon area in square degrees is not very meaningful; use geosphere::areaPolygon for these polygons')
+
+			a <- 6378137
+			f <- 1/298.257223563
+			x <- x@polygons
+			n <- length(x)
+			res <- vector(length=n)
+			for (i in 1:n) {
+				parts <- length(x[[i]]@Polygons )
+				sumarea <- 0
+				for (j in 1:parts) {
+					crd <- x[[i]]@Polygons[[j]]@coords
+					ar <- .Call("polygonarea", as.double(crd[,1]), as.double(crd[,2]), as.double(a), as.double(f), PACKAGE='raster')
+					if (x[[i]]@Polygons[[j]]@hole) {
+						sumarea <- sumarea - ar
+					} else {
+						sumarea <- sumarea + ar
+					}
+				}
+				res[i] <- sumarea
+			}
+			return(res)
 		}
 		if (requireNamespace("rgeos")) {
 			rgeos::gArea(x, byid=TRUE)
@@ -43,8 +63,7 @@ setMethod('area', signature(x='SpatialPolygons'),
 setMethod('area', signature(x='RasterLayer'), 
 	function(x, filename='', na.rm=FALSE, weights=FALSE, ...) {
 
-		out <- raster(x)
-	
+		out <- raster(x)	
 		if (na.rm) {
 			if (! hasValues(x) ) {
 				na.rm <- FALSE
@@ -79,7 +98,7 @@ setMethod('area', signature(x='RasterLayer'),
 		dy <- pointDistance(c(0,0),c(0, yres(out) ), lonlat=TRUE)
 		y <- yFromRow(out, 1:nrow(out))
 		#dx <- pointDistance(cbind(0, y), cbind(xres(out), y), lonlat=TRUE)
-		dx <- .haversine(0, y, xres(out), y)
+		dx <- .geodist(0, y, xres(out), y)
 
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, label='area', ...)
@@ -130,7 +149,6 @@ setMethod('area', signature(x='RasterStackBrick'),
 		}	
 		
 		out <- brick(x, values=FALSE)
-
 		if (! couldBeLonLat(out)) {
 			stop('This function is only useful for Raster* objects with a longitude/latitude coordinates')
 		}
