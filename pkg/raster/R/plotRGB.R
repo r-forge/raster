@@ -104,10 +104,8 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 			}
 		}
 		
-		xlim <- list(...)$xmin
-		ylim <- list(...)$ymin
-		if (is.null(xlim)) xlim=c(bb[1], bb[2])
-		if (is.null(xlim)) ylim=c(bb[3], bb[4])
+		xlim=c(bb[1], bb[2])
+		ylim=c(bb[3], bb[4])
 		
 		plot(NA, NA, xlim=xlim, ylim=ylim, type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE, ...)
 		if (axes) {

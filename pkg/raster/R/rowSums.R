@@ -88,7 +88,7 @@ setMethod('colSums', signature(x='Raster'),
 						s[i, k] <- .colSums(as.matrix(v[,j], nrow=tr$nrows[i], byrow=TRUE), tr$nrows[i], nc, na.rm=na.rm, ...)
 					}
 				}
-				s <- matrix(.colSums(s, nrow(s), ncol(s)), ncol=nl, na.rm=na.rm)
+				s <- matrix(.colSums(s, nrow(s), ncol(s), na.rm=na.rm), ncol=nl)
 				colnames(s) <- names(x)
 				return(s)
 			}
