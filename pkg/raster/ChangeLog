@@ -12,6 +12,10 @@ Fix lines falling between the cracks in extract (calling rasterzeLines): https:/
 allow setting a 'spatial window'
 
 --- current version
+Improved geodesic algorithm (GeograhicLib by C.F.F. Karney) for pointDistance and other lon/lat distance computations, and to compute the area of an ellipsoidal polygon
+new functions colSums and rowSums
+
+--- 11-April-2015, version: 2.3-40
 Category names are now written to file via rgdal or native format
 color tables are now written to file via rgdal or native format
 bug fixes:

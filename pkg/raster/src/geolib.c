@@ -1,14 +1,9 @@
 #include "geodesic.h"
-
 #include <Rinternals.h>
 
 /* Robert Hijmans, May 2015 */
-/**
- * A simple program to solve the inverse geodesic problem(for the WGS84 ellipsoid).
- **********************************************************************/
  
 SEXP inversegeodesic(SEXP latitude1, SEXP longitude1, SEXP latitude2, SEXP longitude2, SEXP pa, SEXP pf) {
-
 
   PROTECT(latitude1 = coerceVector(latitude1, REALSXP));
   PROTECT(longitude1 = coerceVector(longitude1, REALSXP));
@@ -36,9 +31,7 @@ SEXP inversegeodesic(SEXP latitude1, SEXP longitude1, SEXP latitude2, SEXP longi
   for (i=0; i < length(latitude1); i++) {
     geod_inverse(&g, lon1[i], lat1[i], lon2[i], lat2[i], &s12, &azi1, &azi2);
     xr[i] = s12;
-/*    xr[i*3+1] = azi1;
-    xr[i*3+2] = azi2;
-*/  }
+  }
   
   UNPROTECT(5);
   return r;
@@ -46,7 +39,6 @@ SEXP inversegeodesic(SEXP latitude1, SEXP longitude1, SEXP latitude2, SEXP longi
 
 
 SEXP polygonarea(SEXP latitude, SEXP longitude, SEXP pa, SEXP pf) {
-
 
   PROTECT(latitude = coerceVector(latitude, REALSXP));
   PROTECT(longitude = coerceVector(longitude, REALSXP));
@@ -57,7 +49,6 @@ SEXP polygonarea(SEXP latitude, SEXP longitude, SEXP pa, SEXP pf) {
   double a = REAL(pa)[0];
   double f = REAL(pf)[0];
   
-/*  double a = 6378137, f = 1/298.257223563;  WGS84 */
   double A, P;
   int  i;
   struct geod_geodesic g;
@@ -75,8 +66,6 @@ SEXP polygonarea(SEXP latitude, SEXP longitude, SEXP pa, SEXP pf) {
   SEXP r;
   PROTECT( r = allocVector(REALSXP, 1) );
   xr = REAL(r);
-/*  xr[0] = n;
-  xr[1] = P; */
   xr[0] = A;
 
   UNPROTECT(3);
