@@ -143,3 +143,12 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 )	
 
 
+setMethod("lines", signature(x='RasterLayer'),
+function(x, ...) {
+	if(prod(dim(x)) < 50000) {
+		stop('too many lines')
+	}
+	x <- as(x, 'SpatialPolygons')
+	lines(x, ...)
+}
+)
