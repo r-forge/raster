@@ -46,3 +46,11 @@ function(obj, ...) {
 	spplot(obj, ...)
 })
 
+
+setMethod("lines", signature(x='SpatialPolygons'),
+function(x, ...) {
+	x <- as(x, 'SpatialLines')
+	lines(x, ...)
+}
+)
+
