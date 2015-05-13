@@ -80,8 +80,15 @@ pointDistance <- function (p1, p2, lonlat, allpairs=FALSE, ...) {
 	if (!is.null(longlat)) {
 		lonlat <- longlat
 	}
+
 	if (missing(lonlat)) {
-		stop('you must provide a "lonlat" argument (TRUE/FALSE)')
+		if (isLonLat(p1)) {
+			lonlat <- TRUE
+		} else if (! is.na(projection(p1)) ) {
+			lonlat <- FALSE		
+		} else {
+			stop('you must provide a "lonlat" argument (TRUE/FALSE)')
+		}
 	}
 	stopifnot(is.logical(lonlat)) 
 	

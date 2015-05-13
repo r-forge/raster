@@ -157,10 +157,17 @@ ccodes <- function() {
 
 
 .cmip5 <- function(var, model, rcp, year, res, lon, lat, path, download=TRUE) {
-	if (!res %in% c(2.5, 5, 10)) {
+	if (!res %in% c(0.5, 2.5, 5, 10)) {
 		stop('resolution should be one of: 2.5, 5, 10')
 	}
-	if (res==2.5) { res <- '2_5' }
+	if (res==2.5) { 
+		res <- '2_5m' 
+    } else if (res == 0.5) {
+        res <- "30s"
+    } else {
+		res <- paste(res, 'm', sep='')
+	}
+	
 	var <- tolower(var[1])
 	vars <- c('tmin', 'tmax', 'prec', 'bio')
 	stopifnot(var %in% vars)
@@ -181,11 +188,11 @@ ccodes <- function() {
 		return(invisible(NULL))
 	}
 	
-	path <- paste(path, '/cmip5/', res, 'm/', sep='')
+	path <- paste(path, '/cmip5/', res, '/', sep='')
 	dir.create(path, recursive=TRUE, showWarnings=FALSE)
 
 	zip <- tolower(paste(model, rcp, var, year, '.zip', sep=''))
-	theurl <- paste('http://biogeo.ucdavis.edu/data/climate/cmip5/', res, 'm/', zip, sep='')
+	theurl <- paste('http://biogeo.ucdavis.edu/data/climate/cmip5/', res, '/', zip, sep='')
 
 	zipfile <- paste(path, zip, sep='')
 	if (var == 'bi') {
