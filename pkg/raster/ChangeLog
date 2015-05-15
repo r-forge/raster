@@ -12,10 +12,13 @@ Fix lines falling between the cracks in extract (calling rasterzeLines): https:/
 allow setting a 'spatial window'
 
 --- current version
+
+
+--- 14-May-2015, version: 2.4-1
 Improved geodesic algorithm (GeograhicLib by C.F.F. Karney) for pointDistance and other lon/lat distance computations, and to compute the area of an ellipsoidal polygon
 new functions colSums and rowSums
 fixed colnames for  extract(s, points, df = TRUE, cellnumbers = TRUE). Reported by Loic Dutrieux
-fixes to avoid errors thrown by curren PROJ.4 (crs must have ellipsoid or datum)
+fixes to avoid errors thrown by current PROJ.4 (crs must have ellipsoid or datum)
 
 --- 11-April-2015, version: 2.3-40
 Category names are now written to file via rgdal or native format
