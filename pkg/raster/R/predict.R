@@ -154,7 +154,7 @@ setMethod('predict', signature(object='Raster'),
 				predv <- napred
 			} else {
 	
-				predv <- fun(model, blockvals)
+				predv <- fun(model, blockvals, ...)
 		
 				if (class(predv)[1] == 'list') {
 					predv <- unlist(predv)
