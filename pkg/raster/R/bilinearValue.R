@@ -28,8 +28,13 @@
 	four <- fourCellsFromXY(r, xyCoords, duplicates=FALSE)
 	
 	xy4 <- matrix(xyFromCell(r, as.vector(four)), ncol=8)
-	x <- apply(xy4[,1:4,drop=FALSE], 1, range)
-	y <- apply(xy4[,5:8,drop=FALSE], 1, range)
+	
+	#x <- apply(xy4[,1:4,drop=FALSE], 1, range)
+	#y <- apply(xy4[,5:8,drop=FALSE], 1, range)
+	# much faster, suggested by Joe Cheng
+	x <- rbind(pmin(xy4[,1], xy4[,3]), pmax(xy4[,1], xy4[,3]))
+    y <- rbind(pmin(xy4[,5], xy4[,6]), pmax(xy4[,5], xy4[,6]))
+
 	xy4 <- cbind(c(x[1,], x[1,], x[2,], x[2,]), c(y[1,], y[2,], y[1,], y[2,]))
 	cells <- cellFromXY(r, xy4)
 
