@@ -13,6 +13,7 @@ allow setting a 'spatial window'
 
 --- current version
 Improved geodesic algorithm (GeograhicLib by C.F.F. Karney) for pointDistance and other lon/lat distance computations, and to compute the area of an ellipsoidal polygon
+significant speed improvement for bilinear resample / projection (by Joe Cheng) 
 new functions colSums and rowSums
 fixed colnames for  extract(s, points, df = TRUE, cellnumbers = TRUE). Reported by Loic Dutrieux
 fixes to avoid errors thrown by current PROJ.4 (crs must have ellipsoid or datum)
