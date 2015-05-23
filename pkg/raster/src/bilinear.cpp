@@ -7,7 +7,7 @@ using namespace Rcpp;
 // v:  num[1:n, 1:4]
 //     columns are: bottom-left, top-left, top-right, bottom-right
 
-// [[Rcpp::export]]
+// [[Rcpp::export(name = ".doBilinear")]]
 NumericVector doBilinear(NumericMatrix xy, NumericMatrix x, NumericMatrix y, NumericMatrix v) {
   size_t len = v.nrow();
   NumericVector result(len);

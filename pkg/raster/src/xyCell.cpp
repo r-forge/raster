@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
+// [[Rcpp::export(name = ".doCellFromXY")]]
 IntegerVector doCellFromXY(
     int ncols, int nrows, double xmin, double xmax, double ymin, double ymax,
     NumericVector x, NumericVector y) {
@@ -26,7 +26,7 @@ IntegerVector doCellFromXY(
   return result;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(name = ".doXYFromCell")]]
 NumericMatrix doXYFromCell(
     int ncols, int nrows, double xmin, double xmax, double ymin, double ymax,
     IntegerVector cell
@@ -53,7 +53,8 @@ size_t oneBasedRowColToCellNum(int ncols, int row, int col) {
 	return (row-1) * ncols + col;
 }
 
-// [[Rcpp::export]]
+
+// [[Rcpp::export(name = ".doFourCellsFromXY")]]
 IntegerMatrix doFourCellsFromXY(
 		int ncols, int nrows, double xmin, double xmax, double ymin, double ymax,
 		NumericMatrix xy, bool duplicates, bool isGlobalLonLat

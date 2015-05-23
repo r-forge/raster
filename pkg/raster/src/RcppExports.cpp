@@ -6,7 +6,6 @@
 using namespace Rcpp;
 
 // doBilinear
-// [[Rcpp::export(name = ".doBilinear")]]
 NumericVector doBilinear(NumericMatrix xy, NumericMatrix x, NumericMatrix y, NumericMatrix v);
 RcppExport SEXP raster_doBilinear(SEXP xySEXP, SEXP xSEXP, SEXP ySEXP, SEXP vSEXP) {
 BEGIN_RCPP
@@ -20,9 +19,7 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-
 // doCellFromRowCol
-// [[Rcpp::export(name = ".doCellFromRowCol")]]
 IntegerVector doCellFromRowCol(IntegerVector nrow, IntegerVector ncol, IntegerVector rownr, IntegerVector colnr);
 RcppExport SEXP raster_doCellFromRowCol(SEXP nrowSEXP, SEXP ncolSEXP, SEXP rownrSEXP, SEXP colnrSEXP) {
 BEGIN_RCPP
@@ -36,9 +33,7 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-
 // doCellFromXY
-// [[Rcpp::export(name = ".doCellFromXY")]]
 IntegerVector doCellFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericVector x, NumericVector y);
 RcppExport SEXP raster_doCellFromXY(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
@@ -56,9 +51,7 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-
 // doXYFromCell
-// [[Rcpp::export(name = ".doXYFromCell")]]
 NumericMatrix doXYFromCell(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, IntegerVector cell);
 RcppExport SEXP raster_doXYFromCell(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP cellSEXP) {
 BEGIN_RCPP
@@ -75,9 +68,7 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-
 // doFourCellsFromXY
-// [[Rcpp::export(name = ".doFourCellsFromXY")]]
 IntegerMatrix doFourCellsFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericMatrix xy, bool duplicates, bool isGlobalLonLat);
 RcppExport SEXP raster_doFourCellsFromXY(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP xySEXP, SEXP duplicatesSEXP, SEXP isGlobalLonLatSEXP) {
 BEGIN_RCPP

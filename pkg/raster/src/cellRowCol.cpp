@@ -1,7 +1,8 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
+
+// [[Rcpp::export(name = ".doCellFromRowCol")]]
 IntegerVector doCellFromRowCol(IntegerVector nrow, IntegerVector ncol,
   IntegerVector rownr, IntegerVector colnr) {
 
