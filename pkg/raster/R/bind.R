@@ -102,7 +102,7 @@ function(x, y, ..., keepnames=FALSE) {
 		}
 
 		ln <- sapply(rwn, length)
-		rnu <- .uniqueNames(unlist(rwn))
+		rnu <- .uniqueNames(unlist(rwn, use.names = FALSE))
 		end <- cumsum(ln)
 		start <- c(0, end[-length(end)]) + 1
 		for (i in 1:length(x)) {
@@ -193,7 +193,7 @@ setMethod('bind', signature(x='SpatialLines', y='SpatialLines'),
 		}
 
 		ln <- sapply(rwn, length)
-		rnu <- .uniqueNames(unlist(rwn))
+		rnu <- .uniqueNames(unlist(rwn, use.names = FALSE))
 		end <- cumsum(ln)
 		start <- c(0, end[-length(end)]) + 1
 		for (i in 1:length(x)) {
@@ -269,7 +269,7 @@ setMethod('bind', signature(x='SpatialPoints', y='SpatialPoints'),
 		}
 
 		ln <- sapply(rwn, length)
-		rnu <- .uniqueNames(unlist(rwn))
+		rnu <- .uniqueNames(unlist(rwn, use.names = FALSE))
 		end <- cumsum(ln)
 		start <- c(0, end[-length(end)]) + 1
 		for (i in 1:length(x)) {

@@ -31,7 +31,7 @@ setMethod('freq', signature(x='RasterLayer'),
 			for (i in 1:tr$n) {
 				d <- round(getValuesBlock(x, row=tr$row[i], nrows=tr$nrows[i]), digits=digits)
 				res <- table(d, useNA=useNA )
-				res <- cbind(as.numeric(unlist(as.vector(dimnames(res)))), as.vector(res))
+				res <- cbind(as.numeric(unlist(as.vector(dimnames(res)), use.names = FALSE)), as.vector(res))
 				z <- rbind(z, res)
 				pbStep(pb, i)
 			}

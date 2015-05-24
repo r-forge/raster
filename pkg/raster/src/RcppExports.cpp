@@ -33,6 +33,80 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// doSpmin
+NumericVector doSpmin(NumericVector x, NumericVector y);
+RcppExport SEXP raster_doSpmin(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    __result = Rcpp::wrap(doSpmin(x, y));
+    return __result;
+END_RCPP
+}
+// doSpmax
+NumericVector doSpmax(NumericVector x, NumericVector y);
+RcppExport SEXP raster_doSpmax(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    __result = Rcpp::wrap(doSpmax(x, y));
+    return __result;
+END_RCPP
+}
+// ppmin
+NumericVector ppmin(NumericVector x, NumericVector y, bool narm);
+RcppExport SEXP raster_ppmin(SEXP xSEXP, SEXP ySEXP, SEXP narmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< bool >::type narm(narmSEXP);
+    __result = Rcpp::wrap(ppmin(x, y, narm));
+    return __result;
+END_RCPP
+}
+// ppmax
+NumericVector ppmax(NumericVector x, NumericVector y, bool narm);
+RcppExport SEXP raster_ppmax(SEXP xSEXP, SEXP ySEXP, SEXP narmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< bool >::type narm(narmSEXP);
+    __result = Rcpp::wrap(ppmax(x, y, narm));
+    return __result;
+END_RCPP
+}
+// doRowMin
+NumericVector doRowMin(NumericMatrix x, bool narm);
+RcppExport SEXP raster_doRowMin(SEXP xSEXP, SEXP narmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type narm(narmSEXP);
+    __result = Rcpp::wrap(doRowMin(x, narm));
+    return __result;
+END_RCPP
+}
+// doRowMax
+NumericVector doRowMax(NumericMatrix x, bool narm);
+RcppExport SEXP raster_doRowMax(SEXP xSEXP, SEXP narmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type narm(narmSEXP);
+    __result = Rcpp::wrap(doRowMax(x, narm));
+    return __result;
+END_RCPP
+}
 // doCellFromXY
 IntegerVector doCellFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericVector x, NumericVector y);
 RcppExport SEXP raster_doCellFromXY(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP xSEXP, SEXP ySEXP) {

@@ -9,6 +9,30 @@
     .Call('raster_doCellFromRowCol', PACKAGE = 'raster', nrow, ncol, rownr, colnr)
 }
 
+.doSpmin <- function(x, y) {
+    .Call('raster_doSpmin', PACKAGE = 'raster', x, y)
+}
+
+.doSpmax <- function(x, y) {
+    .Call('raster_doSpmax', PACKAGE = 'raster', x, y)
+}
+
+.ppmin <- function(x, y, narm) {
+    .Call('raster_ppmin', PACKAGE = 'raster', x, y, narm)
+}
+
+.ppmax <- function(x, y, narm) {
+    .Call('raster_ppmax', PACKAGE = 'raster', x, y, narm)
+}
+
+.doRowMin <- function(x, narm) {
+    .Call('raster_doRowMin', PACKAGE = 'raster', x, narm)
+}
+
+.doRowMax <- function(x, narm) {
+    .Call('raster_doRowMax', PACKAGE = 'raster', x, narm)
+}
+
 .doCellFromXY <- function(ncols, nrows, xmin, xmax, ymin, ymax, x, y) {
     .Call('raster_doCellFromXY', PACKAGE = 'raster', ncols, nrows, xmin, xmax, ymin, ymax, x, y)
 }

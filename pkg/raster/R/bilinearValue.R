@@ -18,8 +18,8 @@
 	four <- fourCellsFromXY(r, xyCoords, duplicates=FALSE)
 
 	xy4 <- matrix(xyFromCell(r, as.vector(four)), ncol=8)
-	x <- rbind(pmin(xy4[,1], xy4[,3]), pmax(xy4[,1], xy4[,3]))
-	y <- rbind(pmin(xy4[,5], xy4[,6]), pmax(xy4[,5], xy4[,6]))
+	x <- rbind(.doSpmin(xy4[,1], xy4[,3]), .doSpmax(xy4[,1], xy4[,3]))
+	y <- rbind(.doSpmin(xy4[,5], xy4[,6]), .doSpmax(xy4[,5], xy4[,6]))
 	# data.frame is faster than cbind in this case (less copying?)
 	xy4 <- data.frame(
 		x = c(x[1,], x[1,], x[2,], x[2,]),

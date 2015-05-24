@@ -150,9 +150,9 @@ setMethod('interpolate', signature(object='Raster'),
 				}
 
 				if (class(predv)[1] == 'list') {
-					predv = unlist(predv)
+					predv <- unlist(predv, use.names = FALSE)
 					if (length(predv) != nrow(blockvals)) {
-						predv = matrix(predv, nrow=nrow(blockvals))
+						predv <- matrix(predv, nrow=nrow(blockvals))
 					}					
 				}
 				if (isTRUE(dim(predv)[2] > 1)) {

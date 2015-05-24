@@ -52,7 +52,7 @@ setMethod('zonal', signature(x='RasterLayer', z='RasterLayer'),
 			
 			if (is.array(alltab)) { # multiple numbers
 				id <- as.numeric(dimnames(alltab)[[1]])
-				alltab <- matrix(unlist(alltab), nrow=dim(alltab), byrow=TRUE)
+				alltab <- matrix(unlist(alltab, use.names = FALSE), nrow=dim(alltab), byrow=TRUE)
 				alltab <- cbind(id, alltab)
 			} else {
 				alltab <- cbind(as.numeric(names(alltab)), alltab)

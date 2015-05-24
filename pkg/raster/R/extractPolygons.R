@@ -150,7 +150,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 						xy <- lapply(ppp, function(z)z@coords)
 						xy <- xy[!ishole]
 						if (length(xy) > 0) {
-							cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
+							cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z)), use.names = FALSE))
 							value <- .cellValues(x, cell, layer=layer, nl=nl)
 							if (weights) {
 								weight=rep(1/NROW(value), NROW(value))
@@ -249,7 +249,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 					xy <- lapply(ppp, function(z)z@coords)
 					xy <- xy[!ishole]
 					if (length(xy) > 0) {
-						cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))))
+						cell <- unique(unlist(lapply(xy, function(z) cellFromXY(x, z))), use.names = FALSE)
 						value <- .cellValues(x, cell, layer=layer, nl=nl)
 						if (weights) {
 							weight <- rep(1/NROW(value), NROW(value))

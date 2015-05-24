@@ -27,7 +27,7 @@ setMethod('rowSums', signature(x='Raster'),
 					v <- getValues(x, row=tr$row[i], nrows=tr$nrows[i])
 					s[[i]] <- .colSums(v, nc, tr$nrows[i], na.rm=na.rm, ...)
 				}
-				return(unlist(s))			
+				return(unlist(s), use.names = FALSE)			
 			} else {
 				s <- list()
 				for (i in 1:tr$n) {
