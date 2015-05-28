@@ -210,7 +210,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	
 	pb <- pbCreate(nlns, label='extract', ...)
 	
-	y <- as.data.frame(y, xy=TRUE)	
+	y <- data.frame(geom(y)	)
 	for (i in 1:nlns) {
 		yp <- y[y$object == i, ]
 		nparts <- max(yp$part)

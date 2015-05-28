@@ -3,7 +3,7 @@
 
 .destair <- function(x, keepExtent=TRUE) {
 
-	pts <- as.data.frame(as(x, 'SpatialPolygons'), xy=TRUE, centroids=FALSE)
+	pts <- geom(as(x, 'SpatialPolygons'))
 	
 	if (keepExtent) {
 		bb <- bbox(x)

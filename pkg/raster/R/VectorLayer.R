@@ -106,8 +106,8 @@ setAs('SpatialPolygons', 'VectorLayer',
 	function(from) {
 		v <- new('VectorLayer')
 		v@type <- 'polygons'
-		a <- as.data.frame(from, xy=TRUE, centroids=FALSE)
-		v@coordinates <- as.matrix(a[, c('x', 'y')])
+		a <- geom(from)
+		v@coordinates <- a[, c('x', 'y')]
 		v@extent <- extent(v@coordinates)
 		ag <- aggregate(1:nrow(a), a[,1:2], range)
 		ag <- as.matrix(ag[order(ag$object, ag$part), ])
@@ -132,8 +132,8 @@ setAs('SpatialLines', 'VectorLayer',
 	function(from) {
 		v <- new('VectorLayer')
 		v@type <- 'lines'
-		a <- as.data.frame(from, xy=TRUE)
-		v@coordinates <- as.matrix(a[, c('x', 'y')])
+		a <- geom(from)
+		v@coordinates <- a[, c('x', 'y')]
 		v@extent <- extent(v@coordinates)
 		ag <- aggregate(1:nrow(a), a[,c(1:2)], range)
 		ag <- as.matrix(ag[order(ag$object, ag$part, ag$hole), ])
@@ -152,8 +152,8 @@ setAs('SpatialPoints', 'VectorLayer',
 	function(from) {
 		v <- new('VectorLayer')
 		v@type <- 'points'
-		a <- as.data.frame(from, xy=TRUE, centroids=FALSE)
-		v@coordinates <- as.matrix(a[, c('x', 'y')])
+		a <- geom(from)
+		v@coordinates <- a[, c('x', 'y')]
 		v@extent <- extent(v@coordinates)
 		ag <- aggregate(1:nrow(a), a[,c(1:2)], range)
 		ag <- as.matrix(ag[order(ag$object, ag$part), ])

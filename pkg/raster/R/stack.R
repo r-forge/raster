@@ -136,7 +136,7 @@ function(x, bands=NULL, native=FALSE, RAT=TRUE, ...) {
 	} 
 
 	j <- 1
-	for (i in seq(along=x)) {
+	for (i in seq(along.with=x)) {
 		if (is.character(x[[i]])) {
 			if (!is.null(bands)) {
 				for (b in bands) {

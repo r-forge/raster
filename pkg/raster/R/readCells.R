@@ -224,7 +224,7 @@
 		x <- readStart(x)
 	}
 
-	for (i in seq(along=cells)) {
+	for (i in seq(along.with=cells)) {
 		seek(x@file@con, cells[i])
 		res[i] <- readBin(x@file@con, what=dtype, n=1, size=dsize, endian=byteord, signed=signed) 
 	}

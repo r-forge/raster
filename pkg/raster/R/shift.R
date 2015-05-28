@@ -35,7 +35,7 @@ setMethod('shift', signature(object='Raster'),
 
 setMethod('shift', signature(object='SpatialPolygons'), 
 	function(object, x=0, y=0, ...) {
-		a <- as.data.frame(object, xy=TRUE, centroids=FALSE)
+		a <- data.frame(geom(object))
 		a$x <- a$x + x
 		a$y <- a$y + y
 		if (inherits(object, 'SpatialPolygonsDataFrame')) {
@@ -52,7 +52,7 @@ setMethod('shift', signature(object='SpatialPolygons'),
 
 setMethod('shift', signature(object='SpatialLines'), 
 	function(object, x=0, y=0, ...) {
-		a <- as.data.frame(object, xy=TRUE)
+		a <- data.frame(geom(object))
 		a$x <- a$x + x
 		a$y <- a$y + y
 		if (inherits(object, 'SpatialLinesDataFrame')) {
