@@ -3,9 +3,10 @@ Type: Package
 Title: Geographic Data Analysis and Modeling
 Version: 2.4-5
 Date: 2015-5-23
-Depends: methods, sp (>= 1.0-13), R (>= 2.15.0), Rcpp
+Depends: methods, sp (>= 1.0-13), R (>= 2.15.0)
 Suggests: rgdal (>= 0.8-12), rgeos (>= 0.3-8), ncdf, ncdf4, igraph, tcltk, parallel, rasterVis
 LinkingTo: Rcpp
+Imports: Rcpp
 Authors@R: c(
 	person("Robert J.", "Hijmans", role = c("cre", "aut"),  email = "r.hijmans@gmail.com"),
 	person("Jacob", "van Etten", role = "ctb"),
