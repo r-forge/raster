@@ -131,6 +131,7 @@ setMethod ('print' , 'Spatial',
 			}
 
 			w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
+			w[is.na(w)] <- 2
 			m <- rbind(ln, minv, maxv)
 			
 			# a loop because 'width' is not recycled by format
