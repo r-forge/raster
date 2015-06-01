@@ -2,17 +2,16 @@
 using namespace Rcpp;
 
 // [[Rcpp::export(name = ".getMode")]]
-double getMode(NumericVector x, int ties) {
-	int iSize = x.length();
-	
-	NumericVector values(x);
-    IntegerVector counts(iSize);
+double getMode(NumericVector values, int ties) {
+
+	int n = values.length();
+    IntegerVector counts(n);
 
 	if (ties < 3) {
-		std::sort(x.begin(), x.end());
+		std::sort(values.begin(), values.end());
 	}
 	
-    for (int i = 0; i < iSize; ++i) {
+    for (int i = 0; i < n; ++i) {
         counts[i] = 0;
         int j = 0;
         while ((j < i) && (values[i] != values[j])) {
@@ -26,14 +25,14 @@ double getMode(NumericVector x, int ties) {
 
 	// first (lowest due to sorting)
 	if (ties == 0) {
-		for (int i = 1; i < iSize; ++i) {
+		for (int i = 1; i < n; ++i) {
 			if (counts[i] > counts[maxCount]) {
 				maxCount = i;
 			}
 		}
 	// last	
 	} else if (ties == 1) {
-		for (int i = 1; i < iSize; ++i) {
+		for (int i = 1; i < n; ++i) {
 			if (counts[i] >= counts[maxCount]) {
 				maxCount = i;
 			}
@@ -41,7 +40,7 @@ double getMode(NumericVector x, int ties) {
 
 	// dont care (first, but not sorted)
 	} else if (ties == 2) {
-		for (int i = 1; i < iSize; ++i) {
+		for (int i = 1; i < n; ++i) {
 			if (counts[i] > counts[maxCount]) {
 				maxCount = i;
 			}
@@ -49,7 +48,7 @@ double getMode(NumericVector x, int ties) {
 
 	// random
 	} else if (ties == 3) {
-		for (int i = 1; i < iSize; ++i) {
+		for (int i = 1; i < n; ++i) {
 			if (counts[i] > counts[maxCount]) {
 				maxCount = i;
 			} else if (counts[i] == counts[maxCount]) {
@@ -63,4 +62,5 @@ double getMode(NumericVector x, int ties) {
 	
     return values[maxCount];
 }
+
 
