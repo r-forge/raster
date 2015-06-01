@@ -11,12 +11,15 @@ if (!isGeneric("shapefile")) {
 
 
 setMethod('shapefile', signature(x='character'), 
-	function(x, stringsAsFactors=FALSE, verbose=FALSE, ...) {
+	function(x, stringsAsFactors=FALSE, verbose=FALSE, warnPRJ=TRUE, ...) {
 		.requireRgdal() 
-		x <- path.expand(x)
+		x <- normalizePath(x, winslash = "/", mustWork = TRUE)
 		stopifnot(file.exists(extension(x, '.shp')))
 		stopifnot(file.exists(extension(x, '.shx')))
 		stopifnot(file.exists(extension(x, '.dbf')))
+		if (warnPRJ & !file.exists(extension(x, '.prj'))) {
+			warning('.prj file is missing')
+		}
 		fn <- extension(basename(x), '')
 		rgdal::readOGR(dirname(x), fn, stringsAsFactors=stringsAsFactors, verbose=verbose, ...) 		
 	}
@@ -27,6 +30,8 @@ setMethod('shapefile', signature(x='Spatial'),
 	function(x, filename='', overwrite=FALSE, ...) {
 		.requireRgdal() 
 		stopifnot(filename != '')
+		filename <- normalizePath(filename, winslash = "/", mustWork = FALSE)
+		
 		extension(filename) <- '.shp'
 		if (file.exists(filename)) {
 			if (!overwrite) {
@@ -44,7 +49,7 @@ setMethod('shapefile', signature(x='Spatial'),
 				} else {
 					x <- as(x, 'SpatialPoints')				
 				}
-				warning('Writing SpatialPixels to a shapefile. Writing to a raster file format might be more desireable')
+				warning('Writing SpatialPixels to a shapefile. Writing to a raster file format might be more desirable')
 				
 			} else if ( inherits(x, 'SpatialGrid') ) {
 				stop('These data cannot be written to a shapefile')
