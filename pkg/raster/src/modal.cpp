@@ -3,7 +3,6 @@ using namespace Rcpp;
 
 // [[Rcpp::export(name = ".getMode")]]
 double getMode(NumericVector values, int ties) {
-
 	int n = values.length();
     IntegerVector counts(n);
 
@@ -15,14 +14,12 @@ double getMode(NumericVector values, int ties) {
         counts[i] = 0;
         int j = 0;
         while ((j < i) && (values[i] != values[j])) {
-            if (values[i] != values[j]) {
-                ++j;
-            }
+            ++j;
         }
         ++(counts[j]);
     }
+	
     int maxCount = 0;
-
 	// first (lowest due to sorting)
 	if (ties == 0) {
 		for (int i = 1; i < n; ++i) {
@@ -62,5 +59,4 @@ double getMode(NumericVector values, int ties) {
 	
     return values[maxCount];
 }
-
 
