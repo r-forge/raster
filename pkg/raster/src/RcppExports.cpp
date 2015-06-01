@@ -33,6 +33,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// getMode
+double getMode(NumericVector x, int ties);
+RcppExport SEXP raster_getMode(SEXP xSEXP, SEXP tiesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type ties(tiesSEXP);
+    __result = Rcpp::wrap(getMode(x, ties));
+    return __result;
+END_RCPP
+}
 // doSpmin
 NumericVector doSpmin(NumericVector x, NumericVector y);
 RcppExport SEXP raster_doSpmin(SEXP xSEXP, SEXP ySEXP) {

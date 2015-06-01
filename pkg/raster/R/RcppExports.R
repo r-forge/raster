@@ -9,6 +9,10 @@
     .Call('raster_doCellFromRowCol', PACKAGE = 'raster', nrow, ncol, rownr, colnr)
 }
 
+.getMode <- function(x, ties) {
+    .Call('raster_getMode', PACKAGE = 'raster', x, ties)
+}
+
 .doSpmin <- function(x, y) {
     .Call('raster_doSpmin', PACKAGE = 'raster', x, y)
 }
