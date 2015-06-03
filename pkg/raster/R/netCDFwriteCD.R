@@ -98,11 +98,11 @@
 		ydim <- ncdf4::ncdim_def( yname, yunit, yFromRow(x, 1:nrow(x)) )
 		if (inherits(x, 'RasterBrick')) {
 			zdim <- ncdf4::ncdim_def( zname, zunit, zv, unlim=TRUE )
-			vardef <- ncdf4::ncvar_def( varname, varunit, list(xdim, ydim, zdim), NAvalue(x), prec = datatype )
+			vardef <- ncdf4::ncvar_def( varname, varunit, list(xdim, ydim, zdim), NAvalue(x), prec = datatype, ... )
 			#vardef <- ncdf::var.def.ncdf( varname, varunit, list(xdim,ydim,zdim), -3.4e+38 )
 		} else {
 			#vardef <- ncdf::var.def.ncdf( varname, varunit, list(xdim,ydim), -3.4e+38 )
-			vardef <- ncdf4::ncvar_def( varname, varunit, list(xdim, ydim), NAvalue(x), prec = datatype )
+			vardef <- ncdf4::ncvar_def( varname, varunit, list(xdim, ydim), NAvalue(x), prec = datatype, ... )
 		}
 		nc <- ncdf4::nc_create(filename, vardef)
 
