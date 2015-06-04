@@ -140,7 +140,7 @@
 	if (!(dtype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S'))) {
 		stop('not a valid data type')
 	}
-	type <- tolower(.shortDataType(dtype))
+	type <- .shortDataType(dtype)
 	size <- dataSize(dtype) * 8
 	signed <- dataSigned(dtype)
 	
@@ -150,7 +150,7 @@
 		} else {
 			return("byte")
 		}
-	} else if (type == 'integer') {
+	} else if (type == 'INT') {
 		if (!signed) {
 			warning('netcdf only stores signed integers')
 		}

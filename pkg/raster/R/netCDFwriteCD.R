@@ -6,7 +6,7 @@
 
 
 .startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, att, 
-		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, ...) {
+		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, force_v4=force_v4, ...) {
 
 		
 	ncdf4 <- .NCDFversion4()
@@ -104,7 +104,7 @@
 			#vardef <- ncdf::var.def.ncdf( varname, varunit, list(xdim,ydim), -3.4e+38 )
 			vardef <- ncdf4::ncvar_def( varname, varunit, list(xdim, ydim), NAvalue(x), prec = datatype, ... )
 		}
-		nc <- ncdf4::nc_create(filename, vardef)
+		nc <- ncdf4::nc_create(filename, vardef, force_v4=force_v4)
 
 		if (! missing(zatt)){
 			for (i in 1:length(zatt)) {
