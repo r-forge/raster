@@ -9,8 +9,12 @@
     .Call('raster_doCellFromRowCol', PACKAGE = 'raster', nrow, ncol, rownr, colnr)
 }
 
-.getMode <- function(x, ties) {
-    .Call('raster_getMode', PACKAGE = 'raster', x, ties)
+.getPolygons <- function(xyv, res, nodes) {
+    .Call('raster_getPolygons', PACKAGE = 'raster', xyv, res, nodes)
+}
+
+.getMode <- function(values, ties) {
+    .Call('raster_getMode', PACKAGE = 'raster', values, ties)
 }
 
 .doSpmin <- function(x, y) {

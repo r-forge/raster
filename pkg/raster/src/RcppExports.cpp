@@ -33,15 +33,28 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// getMode
-double getMode(NumericVector x, int ties);
-RcppExport SEXP raster_getMode(SEXP xSEXP, SEXP tiesSEXP) {
+// getPolygons
+NumericMatrix getPolygons(NumericMatrix xyv, NumericVector res, int nodes);
+RcppExport SEXP raster_getPolygons(SEXP xyvSEXP, SEXP resSEXP, SEXP nodesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type xyv(xyvSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type res(resSEXP);
+    Rcpp::traits::input_parameter< int >::type nodes(nodesSEXP);
+    __result = Rcpp::wrap(getPolygons(xyv, res, nodes));
+    return __result;
+END_RCPP
+}
+// getMode
+double getMode(NumericVector values, int ties);
+RcppExport SEXP raster_getMode(SEXP valuesSEXP, SEXP tiesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
     Rcpp::traits::input_parameter< int >::type ties(tiesSEXP);
-    __result = Rcpp::wrap(getMode(x, ties));
+    __result = Rcpp::wrap(getMode(values, ties));
     return __result;
 END_RCPP
 }
