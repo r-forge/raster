@@ -6,7 +6,7 @@
 
 
 .startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, att, 
-		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, force_v4=force_v4, ...) {
+		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, force_v4=FALSE, ...) {
 
 		
 	ncdf4 <- .NCDFversion4()
