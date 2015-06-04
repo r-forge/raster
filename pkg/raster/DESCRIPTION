@@ -20,6 +20,6 @@ Authors@R: c(
 	person("Ashton", "Shortridge", role = "ctb"))
 Description: Reading, writing, manipulating, analyzing and modeling of gridded spatial data. The package implements basic and high-level functions. Processing of very large files is supported.
 License: GPL (>=3)
-URL: http://cran.r-project.org/web/packages/raster/
+URL: http://cran.r-project.org/package=raster
 ByteCompile: TRUE
 	
