@@ -112,7 +112,7 @@ xyFromCell <- function(object, cell, spatial=FALSE) {
 	}
 
 	if (spatial) {
-		xy <- SpatialPoints(na.omit(xy), projection(object, asText=FALSE))
+		xy <- SpatialPoints(na.omit(xy), crs(object))
 	}
 	return(xy)
 }

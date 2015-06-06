@@ -45,7 +45,7 @@ factorValues <- function(x, v, layer=1, att=NULL, append.names=FALSE) {
 		return(v)
 	}
 	i <- which(facts)
-	v <- sapply(1:length(facts), 
+	v <- lapply(1:length(facts), 
 		function(i) {
 			if (facts[i]) {
 				data.frame(factorValues(x, v[, i], i, append.names=TRUE))

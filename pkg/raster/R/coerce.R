@@ -30,7 +30,7 @@ setAs('Raster', 'SpatialPixels',
 		sp <- rasterToPoints(from, fun=NULL, spatial=FALSE)
 		
 		r <- raster(from)
-		sp <- SpatialPoints(sp[,1:2], proj4string= projection(r, FALSE))
+		sp <- SpatialPoints(sp[,1:2], proj4string= crs(r))
 		grd <- as(r, 'GridTopology')
 		SpatialPixels(points=sp, grid=grd)
 	}
@@ -44,7 +44,7 @@ setAs('Raster', 'SpatialPixelsDataFrame',
 		v <- rasterToPoints(from, fun=NULL, spatial=FALSE)
 
 		r <- raster(from)
-		sp <- SpatialPoints(v[,1:2], proj4string= projection(r, FALSE))
+		sp <- SpatialPoints(v[,1:2], proj4string= crs(r))
 
 		grd <- as(r, 'GridTopology')
 		
@@ -73,9 +73,8 @@ setAs('Raster', 'SpatialGrid',
 			stop('\n Cannot coerce because the object is rotated.\n Either coerce to SpatialPoints* from\n or first use the "rectify" function')
 		}	
 		r <- raster(from)
-		crs <- projection(r, FALSE)
 		grd <- as(r, 'GridTopology')
-		SpatialGrid(grd, proj4string=crs)
+		SpatialGrid(grd, proj4string=crs(r))
 	}
 )
 
@@ -86,11 +85,10 @@ setAs('Raster', 'SpatialGridDataFrame',
 		}	
 
 		r <- raster(from)
-		crs <- projection(r, FALSE)
 		grd <- as(r, 'GridTopology')
 
 		if (hasValues(from)) {
-			sp <- SpatialGridDataFrame(grd, proj4string=crs, data=as.data.frame(from))
+			sp <- SpatialGridDataFrame(grd, proj4string=crs(r), data=as.data.frame(from))
 		} else { 
 			warning('object has no values, returning a "SpatialGrid" object')
 			sp  <- SpatialGrid(grd, proj4string=crs)
@@ -167,7 +165,7 @@ setAs('SpatialGrid', 'BasicRaster',
 	function(from){ 
 		to <- new('BasicRaster')
 		to@extent <- extent(from)
-		projection(to) <- from@proj4string
+		crs(to) <- from@proj4string
 		dim(to) <- c(from@grid@cells.dim[2], from@grid@cells.dim[1])	
 		return(to)
 	}
@@ -178,7 +176,7 @@ setAs('SpatialPixels', 'BasicRaster',
 	function(from){ 
 		to <- new('BasicRaster')
 		to@extent <- extent(from)
-		projection(to) <- from@proj4string
+		crs(to) <- from@proj4string
 		dim(to) <- c(from@grid@cells.dim[2], from@grid@cells.dim[1])	
 		return(to)
 	}

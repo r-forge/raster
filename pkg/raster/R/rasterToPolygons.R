@@ -57,10 +57,10 @@ rasterToPolygons <- function(x, fun=NULL, n=4, na.rm=TRUE, digits=12, dissolve=F
 	colnames(xyv) <- c('x', 'y', names(x))
 	if (nrow(xyv) == 0) {
 		warning('no values in selection')
-		NULL
+		return( NULL )
 	}
 	
-	cr <- .getPolygons(xyv, res(x), n)
+	cr <- .getPolygons(xyv[, 1:2, drop=FALSE], res(x), n)
 	
 	# xr <- xres(x)/2
 	# yr <- yres(x)/2
@@ -96,7 +96,7 @@ rasterToPolygons <- function(x, fun=NULL, n=4, na.rm=TRUE, digits=12, dissolve=F
 	cr <- round(cr, digits=digits)
 	
 	sp <- lapply(1:nrow(cr), function(i) Polygons(list(Polygon( matrix( cr[i,], ncol=2 ) )), i))
-	sp <- SpatialPolygons(sp, proj4string=projection(x, FALSE))
+	sp <- SpatialPolygons(sp, proj4string=crs(x))
 	sp <- SpatialPolygonsDataFrame(sp, data.frame(xyv[,3:ncol(xyv),drop=FALSE]), match.ID=FALSE)
 	if (dissolve) {
 		if(! requireNamespace("rgeos") ) {

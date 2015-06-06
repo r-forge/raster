@@ -3,7 +3,7 @@
 
 /* Robert Hijmans, May 2015 */
  
-SEXP inversegeodesic(SEXP latitude1, SEXP longitude1, SEXP latitude2, SEXP longitude2, SEXP pa, SEXP pf) {
+SEXP inversegeodesic(SEXP longitude1, SEXP latitude1, SEXP longitude2, SEXP latitude2, SEXP pa, SEXP pf) {
 
   PROTECT(latitude1 = coerceVector(latitude1, REALSXP));
   PROTECT(longitude1 = coerceVector(longitude1, REALSXP));
@@ -27,9 +27,8 @@ SEXP inversegeodesic(SEXP latitude1, SEXP longitude1, SEXP latitude2, SEXP longi
 
   geod_init(&g, a, f);
   
-  int i;
-  for (i=0; i < length(latitude1); i++) {
-    geod_inverse(&g, lon1[i], lat1[i], lon2[i], lat2[i], &s12, &azi1, &azi2);
+  for (int i=0; i < length(latitude1); i++) {
+    geod_inverse(&g, lat1[i], lon1[i], lat2[i], lon2[i], &s12, &azi1, &azi2);
     xr[i] = s12;
   }
   
@@ -38,7 +37,7 @@ SEXP inversegeodesic(SEXP latitude1, SEXP longitude1, SEXP latitude2, SEXP longi
 }
 
 
-SEXP polygonarea(SEXP latitude, SEXP longitude, SEXP pa, SEXP pf) {
+SEXP polygonarea(SEXP longitude, SEXP latitude, SEXP pa, SEXP pf) {
 
   PROTECT(latitude = coerceVector(latitude, REALSXP));
   PROTECT(longitude = coerceVector(longitude, REALSXP));
@@ -58,7 +57,7 @@ SEXP polygonarea(SEXP latitude, SEXP longitude, SEXP pa, SEXP pf) {
   geod_polygon_init(&p, 0);
 
   for (i=0; i<length(latitude); i++) {
-    geod_polygon_addpoint(&g, &p, lon[i], lat[i]);
+    geod_polygon_addpoint(&g, &p, lat[i], lon[i]);
   }
   
   geod_polygon_compute(&g, &p, 0, 1, &A, &P);
