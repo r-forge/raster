@@ -116,18 +116,14 @@
 .polygonsToRaster <- function(p, rstr, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", getCover=FALSE, filename="", silent=TRUE, ...) {
 
 	leftColFromX <- function ( object, x )	{
-		colnr <- (x - xmin(object)) / xres(object)
-		i <- colnr %% 1 == 0
-		colnr[!i] <- trunc(colnr[!i]) + 1 
-		colnr[colnr <= 0] <- 1
-		colnr
+		colnr <- ceiling(x - xmin(object)) / xres(object)
+		max(1, ceiling(colnr))
 	}
 
 
 	rightColFromX <- function ( object, x )	{
 		colnr <- trunc((x - xmin(object)) / xres(object)) + 1 
-		colnr[ colnr > ncol(object) ] <- object@ncols
-		colnr
+		min(colnr, object@ncols)
 	}
 
 		

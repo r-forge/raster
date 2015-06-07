@@ -96,7 +96,8 @@ removeTmpFiles <- function(h=24) {
 	if (!is.na(tmpdir)) {
 	
 		d <- .removeTrailingSlash(tmpdir)
-		f <- list.files(path=d, pattern='raster_tmp*', full.names=TRUE, include.dirs=TRUE)
+#		f <- list.files(path=d, pattern='raster_tmp*', full.names=TRUE, include.dirs=TRUE)
+		f <- list.files(path=d, pattern='[.]gr[di]', full.names=TRUE, include.dirs=TRUE)
 		fin <- file.info(f)
 		dif <- Sys.time() - fin$mtime
 		dif <- as.numeric(dif, units="hours")
@@ -118,7 +119,8 @@ showTmpFiles <- function() {
 	if (!is.na(tmpdir)) {
 		d <- .removeTrailingSlash(tmpdir)
 		if (file.exists(d)) {
-			f <- list.files(d, pattern='raster_tmp_')
+			#f <- list.files(d, pattern='raster_tmp_')
+			f <- list.files(d, pattern='[.]gr[di]')
 			if (length(f) == 0) {
 				cat('--- none ---\n')
 			} else {
