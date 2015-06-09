@@ -50,7 +50,7 @@
 
 
 
-rasterTmpFile <- function(prefix='raster_tmp_')  {
+rasterTmpFile <- function(prefix='r_tmp_')  {
 	f <- getOption('rasterTmpFile')
 	if (!is.null(f)) {
 		f <- trim(f)
@@ -65,7 +65,7 @@ rasterTmpFile <- function(prefix='raster_tmp_')  {
 
 	while(TRUE) {
 	# added pid as suggested by Daniel Schlaepfer to avoid overlapping file names when running parallel processes and using set.seed() in each node
-		f <- paste(gsub(" ", "_", gsub(":", "", as.character(Sys.time()))), "_", Sys.getpid(), "_", paste(sample(0:9,5,replace=TRUE),collapse=''), extension, sep = "")
+		f <- paste(prefix, gsub(" ", "_", gsub(":", "", as.character(Sys.time()))), "_", Sys.getpid(), "_", paste(sample(0:9,5,replace=TRUE),collapse=''), extension, sep = "")
 		tmpf <- normalizePath(file.path(d, f), winslash = "/", mustWork=FALSE)
 		if (! file.exists(tmpf)) {
 			break
@@ -96,8 +96,8 @@ removeTmpFiles <- function(h=24) {
 	if (!is.na(tmpdir)) {
 	
 		d <- .removeTrailingSlash(tmpdir)
-#		f <- list.files(path=d, pattern='raster_tmp*', full.names=TRUE, include.dirs=TRUE)
-		f <- list.files(path=d, pattern='[.]gr[di]', full.names=TRUE, include.dirs=TRUE)
+		f <- list.files(path=d, pattern='r_tmp*', full.names=TRUE, include.dirs=TRUE)
+#		f <- list.files(path=d, pattern='[.]gr[di]', full.names=TRUE, include.dirs=TRUE)
 		fin <- file.info(f)
 		dif <- Sys.time() - fin$mtime
 		dif <- as.numeric(dif, units="hours")
@@ -119,8 +119,8 @@ showTmpFiles <- function() {
 	if (!is.na(tmpdir)) {
 		d <- .removeTrailingSlash(tmpdir)
 		if (file.exists(d)) {
-			#f <- list.files(d, pattern='raster_tmp_')
-			f <- list.files(d, pattern='\\.gri$')
+			f <- list.files(d, pattern='r_tmp_')
+			#f <- list.files(d, pattern='\\.gri$')
 			if (length(f) == 0) {
 				cat('--- none ---\n')
 			} else {
