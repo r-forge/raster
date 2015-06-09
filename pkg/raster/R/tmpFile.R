@@ -120,7 +120,7 @@ showTmpFiles <- function() {
 		d <- .removeTrailingSlash(tmpdir)
 		if (file.exists(d)) {
 			#f <- list.files(d, pattern='raster_tmp_')
-			f <- list.files(d, pattern='[.]gr[di]')
+			f <- list.files(d, pattern='\\.gri$')
 			if (length(f) == 0) {
 				cat('--- none ---\n')
 			} else {
