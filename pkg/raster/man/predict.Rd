@@ -137,6 +137,7 @@ pfun <- function(x, data) {
    dim(y) <- c(prod(d[1:2]), d[3])
    y
 }
+
 pp <- predict(logo, model, fun=pfun, index=1:3)
 
 # Random Forest
@@ -174,6 +175,7 @@ cl <- factor(c(rep(1, nrow(p)), rep(0, nrow(a))))
 train <- extract(logo, rbind(p, a))
 k <- calc(logo, function(x) as.integer(as.character(knn(train, x, cl))))
 
+}
 }
 
 \keyword{methods}
