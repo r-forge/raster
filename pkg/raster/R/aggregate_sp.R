@@ -3,12 +3,12 @@
 # Version 1.0
 # Licence GPL v3
 
-.getVars <- function(v, cn) {
+.getVars <- function(v, cn, nc) {
 	vl <- length(v)
 	v <- unique(v)
 	if (is.numeric(v)) {
 		v <- round(v)
-		v <- v[v>0 & v <= ncol(x@data)]
+		v <- v[v>0 & v <= nc]
 		if (length(v) < 1) {
 			stop('invalid column numbers')
 		}
@@ -38,7 +38,7 @@
 				} 
 			}
 		}
-		v <- .getVars(sums[[i]][[2]], cn)
+		v <- .getVars(sums[[i]][[2]], cn, ncol(x@data))
 		ag <- aggregate(x@data[,v,drop=FALSE], by=list(dc$v), FUN=fun) 
 		out[[i]] <- ag[,-1,drop=FALSE]
 	}
@@ -168,10 +168,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 )
 
 
-
-setMethod('aggregate', signature(x='SpatialLines'), 
-function(x, by=NULL, sums=NULL, ...) {
-
+.aggregate.SpatialLines <- function(x, by=NULL, sums=NULL, ...) {
 	
 	if (!is.null(by)) {
 		if (!is.character(by)) {
@@ -246,6 +243,6 @@ function(x, by=NULL, sums=NULL, ...) {
 		SpatialLinesDataFrame(x, dat, FALSE)
 	}
 }
-)
+
 
 

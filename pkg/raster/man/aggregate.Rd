@@ -5,10 +5,9 @@
 \alias{aggregate}
 \alias{aggregate,Raster-method}
 \alias{aggregate,SpatialPolygons-method}
-\alias{aggregate,SpatialLines-method}
 
 
-\title{Aggregate raster cells, SpatialLines or SpatialPolygons}
+\title{Aggregate raster cells or SpatialPolygons}
 
 \description{
 Raster* objects: 
@@ -24,13 +23,11 @@ Aggregate ('dissolve') SpatialPolygons, optionally by combining polygons that ha
 \usage{
 \S4method{aggregate}{Raster}(x, fact=2, fun=mean, expand=TRUE, na.rm=TRUE, filename='', ...)
 
-\S4method{aggregate}{SpatialPolygons}(x, by, sums, vars=NULL, dissolve=TRUE, ...)
-
-\S4method{aggregate}{SpatialLines}(x, by=NULL, sums, ...)
+\S4method{aggregate}{SpatialPolygons}(x, by, sums, dissolve=TRUE, vars=NULL, ...)
 }
 
 \arguments{
-  \item{x}{Raster* object, SpatialPolygons* or SpatialLines* object}
+  \item{x}{Raster* object or SpatialPolygons* object}
   \item{fact}{integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor) or three integers (when also aggregating over layers). See Details}  
   \item{fun}{function used to aggregate values }  
   \item{expand}{logical. If \code{TRUE} the output Raster* object will be larger then the input Raster* object if a division of the number of columns or rows with \code{factor} is not an integer}
