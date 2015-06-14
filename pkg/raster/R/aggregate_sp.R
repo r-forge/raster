@@ -5,10 +5,25 @@
 
 
 setMethod('aggregate', signature(x='SpatialPolygons'), 
-function(x, vars=NULL, sums=NULL, dissolve=TRUE, ...) {
-
+function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
+	
+	if (!is.null(vars)) {
+		if (is.null(by)) {
+			by <- vars
+		}
+	}
+	if (!is.null(by)) {
+		if (!is.character(vars)) {
+			spAgg <- get('aggregate', envir=as.environment("package:sp"))
+			spAgg(x, by, ..., dissolve=dissolve)
+		}
+	}
+	
 	if (dissolve) {
-		stopifnot(requireNamespace("rgeos"))
+		if (!requireNamespace("rgeos")) {
+			warning('Cannot dissolve because the rgeos package is not available')
+			dissolve <- FALSE
+		}
 	}
 	
 	if (! .hasSlot(x, 'data') ) {
