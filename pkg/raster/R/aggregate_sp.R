@@ -14,6 +14,8 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 	}
 	if (!is.null(by)) {
 		if (!is.character(vars)) {
+			# sp::aggregate is not exported 
+			# solution by Matt Strimas-Mackey
 			spAgg <- get('aggregate', envir=as.environment("package:sp"))
 			spAgg(x, by, ..., dissolve=dissolve)
 		}

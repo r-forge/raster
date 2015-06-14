@@ -80,8 +80,7 @@ a <- matrix(c(22, 33, 64, 85, 92, 94, 59, 27, 30, 64, 60, 33, 31, 9,
 
 # extract values for points
 xy <- rbind(cbind(1, p), cbind(0, a))
-v <- data.frame(cbind(xy[,1], extract(logo, xy[,2:3])))
-colnames(v)[1] <- 'pa'
+v <- data.frame(cbind(pa=xy[,1], extract(logo, xy[,2:3])))
 
 #build a model, here an example with glm 
 model <- glm(formula=pa~., data=v)
