@@ -22,7 +22,7 @@
 }
 
 
-.doSums <- function(sums, cn, x) {
+.doSums <- function(sums, cn, dc, x) {
 	out <- list()
 	for (i in 1:length(sums)) {
 		if (length(sums[[i]]) != 2) {
@@ -42,8 +42,7 @@
 		ag <- aggregate(x@data[,v,drop=FALSE], by=list(dc$v), FUN=fun) 
 		out[[i]] <- ag[,-1,drop=FALSE]
 	}
-	out <- do.call(cbind, out)
-	cbind(dat, out)
+	do.call(cbind, out)
 }
 
 
@@ -113,7 +112,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 		
 		dat <- x@data
 		cn <- colnames(dat)
-		v <- getVars(by, cn)
+		v <- .getVars(by, cn)
 		
 		dat <- dat[,v, drop=FALSE]
 		crs <- x@proj4string
@@ -135,7 +134,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 		dat <- dat[id[,1], ,drop=FALSE]
 		
 		if (!is.null(sums)) {
-			out <- .doSums(sums, cn, x)
+			out <- .doSums(sums, cn, dc, x)
 			dat <- cbind(dat, out)
 		}
 
@@ -210,7 +209,7 @@ function(x, by=NULL, sums=NULL, ...) {
 		
 		dat <- x@data
 		cn <- colnames(dat)
-		v <- getVars(by, cn)
+		v <- .getVars(by, cn)
 		
 		dat <- dat[,v, drop=FALSE]
 		crs <- x@proj4string
@@ -232,7 +231,7 @@ function(x, by=NULL, sums=NULL, ...) {
 		dat <- dat[id[,1], ,drop=FALSE]
 		
 		if (!is.null(sums)) {
-			out <- .doSums(sums, cn, x)
+			out <- .doSums(sums, cn, dc, x)
 			dat <- cbind(dat, out)
 		}
 		
