@@ -6,25 +6,25 @@ using namespace Rcpp;
 // [[Rcpp::export(name = ".doSpmin")]]
 NumericVector doSpmin(NumericVector x, NumericVector y) {
 	int n = x.length();
-	NumericVector out = clone(x);
+	// NumericVector out = clone(x);
 	for (int i = 0; i < n; ++i) {
 		if (x[i] > y[i]) {
-			out[i] = y[i];
+			x[i] = y[i];
 		}
 	}
-	return out;
+	return x;
 }
 
 // [[Rcpp::export(name = ".doSpmax")]]
 NumericVector doSpmax(NumericVector x, NumericVector y) {
 	int n = x.length();
-	NumericVector out = clone(x);
+	//NumericVector out = clone(x);
 	for (int i = 0; i < n; ++i) {
 		if (x[i] < y[i]) {
-			out[i] = y[i];
+			x[i] = y[i];
 		}
 	}
-	return out;
+	return x;
 }
 
 
@@ -33,49 +33,49 @@ NumericVector doSpmax(NumericVector x, NumericVector y) {
 // [[Rcpp::export(name = ".ppmin")]]
 NumericVector ppmin(NumericVector x, NumericVector y, bool narm) {
 	int n = x.length();
-	NumericVector out = clone(x);
+	//NumericVector out = clone(x);
 	if (narm) {
 		for (int i = 0; i < n; ++i) {
 			if (NumericVector::is_na(x[i])) {
-				out[i] = y[i];			
+				x[i] = y[i];			
 			} else if (x[i] > y[i]) {
-				out[i] = y[i];
+				x[i] = y[i];
 			}
 		}  
 	} else {
 		for (int i = 0; i < n; ++i) {
 			if (NumericVector::is_na(y[i])) {
-				out[i] = y[i];			
+				x[i] = y[i];			
 			} else if (x[i] > y[i]) {
-				out[i] = y[i];
+				x[i] = y[i];
 			}
 		}
 	}
-	return out;
+	return x;
 }
 
 // [[Rcpp::export(name = ".ppmax")]]
 NumericVector ppmax(NumericVector x, NumericVector y, bool narm) {
 	int n = x.length();
-	NumericVector out = clone(x);
+	//NumericVector out = clone(x);
 	if (narm) {
 		for (int i = 0; i < n; ++i) {
 			if (NumericVector::is_na(x[i])) {
-				out[i] = y[i];			
+				x[i] = y[i];			
 			} else if (x[i] < y[i]) {
-				out[i] = y[i];
+				x[i] = y[i];
 			}
 		}  
 	} else {
 		for (int i = 0; i < n; ++i) {
 			if (NumericVector::is_na(y[i])) {
-				out[i] = y[i];			
+				x[i] = y[i];			
 			} else if (x[i] < y[i]) {
-				out[i] = y[i];
+				x[i] = y[i];
 			}
 		}
 	}
-	return out;
+	return x;
 }
 
 

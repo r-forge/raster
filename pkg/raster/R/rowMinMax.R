@@ -1,5 +1,6 @@
 
 .rowMin <- function(x, na.rm=TRUE) {
+#  .Call('raster_doRowMin', PACKAGE = 'raster', x, narm=na.rm)
   .doRowMin(x, narm=na.rm)
 }
 
