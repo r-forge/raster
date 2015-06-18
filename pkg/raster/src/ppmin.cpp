@@ -126,29 +126,29 @@ NumericVector doRowMax(NumericMatrix x, bool narm) {
 	
 	if (narm) {
 		for (int i = 0; i < nrow; i++) {
-			out[i] = INFINITY;
+			out[i] = -INFINITY;
 			for (int j = 0; j < ncol; j++) {
-				if (x(i,j) < out[i]) {
+				if (x(i,j) > out[i]) {
 					out[i] = x(i,j);
 				}
 			}
-			if (out[i] == INFINITY) {
+			if (out[i] == -INFINITY) {
 				out[i] = NA_REAL;	
 			} 
 		}
 	} else {
 		for (int i = 0; i < nrow; i++) {
-			out[i] = INFINITY;
+			out[i] = -INFINITY;
 			for (int j = 0; j < ncol; j++) {
 				if (NumericVector::is_na(x(i,j))) {
 					out[i] = NA_REAL;
 					break;
 				}
-				if (x(i,j) < out[i]) {
+				if (x(i,j) > out[i]) {
 					out[i] = x(i,j);
 				}
 			}
-			if (out[i] == INFINITY) {
+			if (out[i] == -INFINITY) {
 				out[i] = NA_REAL;	
 			} 
 		}
