@@ -59,9 +59,8 @@ cellFromXY <- function(object, xy) {
 		cell <- .doCellFromXY(
 			object@ncols, object@nrows,
 			object@extent@xmin, object@extent@xmax,
-			object@extent@ymin, object@extent@ymax,
-			x, y
-		)
+			object@extent@ymin, object@extent@ymax, 
+			x, y)
 	}
 	return(cell)
 }

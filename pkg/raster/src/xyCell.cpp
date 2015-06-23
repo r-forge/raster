@@ -15,7 +15,14 @@ IntegerVector doCellFromXY(
   
   for (size_t i = 0; i < len; i++) {
     double row = (ymax - y[i]) * yres_inv;
+	if (y[i] == ymax) {
+		row = nrows-1 ;
+	}
     double col = (x[i] - xmin) * xres_inv;
+	if (x[i] == xmax) {
+		col = ncols-1 ;
+	}
+	
     if (row < 0 || row >= nrows || col < 0 || col >= ncols) {
       result[i] = NA_INTEGER;
     } else {
