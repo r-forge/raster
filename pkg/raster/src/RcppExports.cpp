@@ -133,7 +133,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // doCellFromXY
-IntegerVector doCellFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericVector x, NumericVector y);
+NumericVector doCellFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericVector x, NumericVector y);
 RcppExport SEXP raster_doCellFromXY(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -151,7 +151,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // doXYFromCell
-NumericMatrix doXYFromCell(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, IntegerVector cell);
+NumericMatrix doXYFromCell(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericVector cell);
 RcppExport SEXP raster_doXYFromCell(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP cellSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -162,13 +162,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type xmax(xmaxSEXP);
     Rcpp::traits::input_parameter< double >::type ymin(yminSEXP);
     Rcpp::traits::input_parameter< double >::type ymax(ymaxSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type cell(cellSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cell(cellSEXP);
     __result = Rcpp::wrap(doXYFromCell(ncols, nrows, xmin, xmax, ymin, ymax, cell));
     return __result;
 END_RCPP
 }
 // doFourCellsFromXY
-IntegerMatrix doFourCellsFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericMatrix xy, bool duplicates, bool isGlobalLonLat);
+NumericMatrix doFourCellsFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericMatrix xy, bool duplicates, bool isGlobalLonLat);
 RcppExport SEXP raster_doFourCellsFromXY(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP xySEXP, SEXP duplicatesSEXP, SEXP isGlobalLonLatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;

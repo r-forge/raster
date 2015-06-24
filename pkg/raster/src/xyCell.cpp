@@ -1,42 +1,47 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+//IntegerVector doCellFromXY(
+// integer can fail in R when .Machine$integer.max < ncell
+
 // [[Rcpp::export(name = ".doCellFromXY")]]
-IntegerVector doCellFromXY(
+NumericVector doCellFromXY(
     int ncols, int nrows, double xmin, double xmax, double ymin, double ymax,
     NumericVector x, NumericVector y) {
   
-  size_t len = x.size();
+	size_t len = x.size();
   
-  double yres_inv = nrows / (ymax - ymin);
-  double xres_inv = ncols / (xmax - xmin);
+	double yres_inv = nrows / (ymax - ymin);
+	double xres_inv = ncols / (xmax - xmin);
   
-  IntegerVector result(len);
+	//IntegerVector result(len);
+	NumericVector result(len);
   
-  for (size_t i = 0; i < len; i++) {
-    double row = (ymax - y[i]) * yres_inv;
-	if (y[i] == ymax) {
-		row = nrows-1 ;
+	for (size_t i = 0; i < len; i++) {
+		double row = trunc((ymax - y[i]) * yres_inv);
+		if (y[i] == ymax) {
+			row = nrows-1 ;
+		}
+		double col = trunc((x[i] - xmin) * xres_inv);
+		if (x[i] == xmax) {
+			col = ncols-1 ;
+		}
+		
+		if (row < 0 || row >= nrows || col < 0 || col >= ncols) {
+			result[i] = NA_REAL;
+		} else {
+			// result[i] = static_cast<int>(row) * ncols + static_cast<int>(col) + 1;
+			result[i] = row * ncols + col + 1 ;
+		}
 	}
-    double col = (x[i] - xmin) * xres_inv;
-	if (x[i] == xmax) {
-		col = ncols-1 ;
-	}
-	
-    if (row < 0 || row >= nrows || col < 0 || col >= ncols) {
-      result[i] = NA_INTEGER;
-    } else {
-      result[i] = static_cast<int>(row) * ncols + static_cast<int>(col) + 1;
-    }
-  }
   
-  return result;
+	return result;
 }
 
 // [[Rcpp::export(name = ".doXYFromCell")]]
 NumericMatrix doXYFromCell(
     int ncols, int nrows, double xmin, double xmax, double ymin, double ymax,
-    IntegerVector cell
+    NumericVector cell	//    IntegerVector cell
 ) {
   size_t len = cell.size();
   
@@ -46,8 +51,10 @@ NumericMatrix doXYFromCell(
   NumericMatrix result(len, 2);
   
   for (size_t i = 0; i < len; i++) {
-    int c = cell[i] - 1;
-    size_t col = c % ncols;
+    // double in stead of int
+    double c = cell[i] - 1;
+	// fmod in stead of %
+    size_t col = fmod(c, ncols);
     size_t row = (c / ncols);
     result(i,0) = (col + 0.5) * xres + xmin;
     result(i,1) = -((row + 0.5) * yres - ymax);
@@ -56,22 +63,25 @@ NumericMatrix doXYFromCell(
   return result;
 }
 
-size_t oneBasedRowColToCellNum(int ncols, int row, int col) {
+
+
+double oneBasedRowColToCellNum(int ncols, int row, int col) {
 	return (row-1) * ncols + col;
 }
 
 
 // [[Rcpp::export(name = ".doFourCellsFromXY")]]
-IntegerMatrix doFourCellsFromXY(
+NumericMatrix doFourCellsFromXY(
 		int ncols, int nrows, double xmin, double xmax, double ymin, double ymax,
-		NumericMatrix xy, bool duplicates, bool isGlobalLonLat
-) {
+		NumericMatrix xy, bool duplicates, bool isGlobalLonLat ) {
+		
+		
 	size_t len = xy.nrow();
 
 	double yres_inv = nrows / (ymax - ymin);
 	double xres_inv = ncols / (xmax - xmin);
 	
-	IntegerMatrix result(len, 4);
+	NumericMatrix result(len, 4);
 	
 	for (size_t i = 0; i < len; i++) {
 		// 1-based row and col. The 0.5 is because rows/cells are addressed by their
@@ -84,10 +94,10 @@ IntegerMatrix doFourCellsFromXY(
 		
 		// Check for out-of-bounds.
 		if (roundRow < 1 || roundRow > nrows || roundCol < 1 || roundCol > ncols) {
-			result(i,0) = NA_INTEGER;
-			result(i,1) = NA_INTEGER;
-			result(i,2) = NA_INTEGER;
-			result(i,3) = NA_INTEGER;
+			result(i,0) = NA_REAL;
+			result(i,1) = NA_REAL;
+			result(i,2) = NA_REAL;
+			result(i,3) = NA_REAL;
 			continue;
 		}
 		
@@ -148,3 +158,5 @@ IntegerMatrix doFourCellsFromXY(
 	
 	return result;
 }
+
+
