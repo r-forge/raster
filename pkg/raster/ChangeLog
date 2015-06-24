@@ -19,6 +19,7 @@ fixed colnames for  extract(s, points, df = TRUE, cellnumbers = TRUE). Reported 
 fixes to avoid errors thrown by current PROJ.4 (crs must have ellipsoid or datum)
 bug fix: writeRaster did not write names of in memory RasterLayers. Reported by Toph Allen
 temp files were not removed. Fixed by Samuel Bosch
+image failed for a raster with a single row. Patched by Daniel Schlaepfer
 
 --- 11-April-2015, version: 2.3-40
 Category names are now written to file via rgdal or native format

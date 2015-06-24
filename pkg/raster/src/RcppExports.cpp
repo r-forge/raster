@@ -20,7 +20,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // doCellFromRowCol
-IntegerVector doCellFromRowCol(IntegerVector nrow, IntegerVector ncol, IntegerVector rownr, IntegerVector colnr);
+NumericVector doCellFromRowCol(IntegerVector nrow, IntegerVector ncol, IntegerVector rownr, IntegerVector colnr);
 RcppExport SEXP raster_doCellFromRowCol(SEXP nrowSEXP, SEXP ncolSEXP, SEXP rownrSEXP, SEXP colnrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
