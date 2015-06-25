@@ -95,10 +95,11 @@ setMethod('area', signature(x='RasterLayer'),
 			out <- writeStart(out, filename=filename, ...)
 		}
 
-		dy <- pointDistance(c(0,0),c(0, yres(out) ), lonlat=TRUE)
+		dy <- .geodist(0, 0, 0, yres(out)) 
+
 		y <- yFromRow(out, 1:nrow(out))
-		#dx <- pointDistance(cbind(0, y), cbind(xres(out), y), lonlat=TRUE)
-		dx <- .geodist(0, y, xres(out), y)
+		dx <- .geodist(0, y, xres(out), y) 
+
 
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, label='area', ...)

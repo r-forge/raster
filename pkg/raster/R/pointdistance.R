@@ -38,39 +38,35 @@
 
 .distm <- function (x, longlat) {
 	if (longlat) { 
-		fun <- .geodist 
+		n <- nrow(x)
+		dm <- matrix(ncol = n, nrow = n)
+		dm[cbind(1:n, 1:n)] <- 0
+		if (n > 1) {
+			for (i in 2:n) {
+				j = 1:(i - 1)
+				dm[i, j] = .geodist(x[i, 1], x[i, 2], x[j, 1], x[j, 2])
+			}
+		}
+		return(dm)
 	} else { 
 		return(.planedist2(x, x))
-	#	fun <- .planedist
 	}
-    n = nrow(x)
-    dm = matrix(ncol = n, nrow = n)
-    dm[cbind(1:n, 1:n)] = 0
-    if (n == 1) {
-        return(dm)
-    }
-    for (i in 2:n) {
-        j = 1:(i - 1)
-        dm[i, j] = fun(x[i, 1], x[i, 2], x[j, 1], x[j, 2])
-    }
-    return(dm)
 }
 
 
 .distm2 <- function (x, y, longlat) {
 	if (longlat) { 
-		fun <- .geodist 
+		n <- nrow(x)
+		m <- nrow(y)
+		dm <- matrix(ncol=m, nrow=n)
+		for (i in 1:n) {
+			dm[i,] <- .geodist(x[i, 1], x[i, 2], y[, 1], y[, 2])
+		}
+		return(dm)
 	} else { 
 		return(.planedist2(x, y))
 		# fun <- .planedist
 	}
-	n = nrow(x)
-	m = nrow(y)
-	dm = matrix(ncol=m, nrow=n)
-	for (i in 1:n) {
-		dm[i,] = fun(x[i, 1], x[i, 2], y[, 1], y[, 2])
-	}
-	return(dm)
 }
 
 
@@ -132,7 +128,10 @@ pointDistance <- function (p1, p2, lonlat, allpairs=FALSE, ...) {
 
 
 .geodist <- function(x1, y1, x2, y2, a=6378137, f=1/298.257223563) {
-	.Call("inversegeodesic", as.double(x1), as.double(y1), as.double(x2), as.double(y2), as.double(a), as.double(f), PACKAGE='raster')
+	# recycle
+    p <- cbind(x1, y1, x2, y2)
+	
+	.Call("inversegeodesic", as.double(p[,1]), as.double(p[,2]), as.double(p[,3]), as.double(p[,4]), as.double(a), as.double(f), PACKAGE='raster')
 }
 
 
