@@ -25,7 +25,7 @@ Compute the mode for a vector of numbers, or across raster layers. The mode, or 
 }
 
 \value{
-vector or RasterLayer
+vector or RasterLayer. The vector has length 1 and is of the same type as \code{x}, except when \code{x} is a factor and additional arguments (values) are supplied, in which case the values are coerced to characters and a character value is returned.
 }
 
 \examples{
