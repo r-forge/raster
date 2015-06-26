@@ -18,11 +18,16 @@ NumericVector doCellFromXY(
 	NumericVector result(len);
   
 	for (size_t i = 0; i < len; i++) {
-		double row = trunc((ymax - y[i]) * yres_inv);
-		if (y[i] == ymax) {
+		// cannot use trunc here because trunc(-0.1) == 0
+		double row = floor((ymax - y[i]) * yres_inv);
+		// points in between rows go to the row below
+		// except for the last row, when they must go up
+		if (y[i] == ymin) {  
 			row = nrows-1 ;
 		}
-		double col = trunc((x[i] - xmin) * xres_inv);
+		
+		double col = floor((x[i] - xmin) * xres_inv);
+		// as for rows above. Go right, except for last column
 		if (x[i] == xmax) {
 			col = ncols-1 ;
 		}
@@ -37,6 +42,7 @@ NumericVector doCellFromXY(
   
 	return result;
 }
+
 
 // [[Rcpp::export(name = ".doXYFromCell")]]
 NumericMatrix doXYFromCell(
