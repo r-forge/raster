@@ -42,7 +42,7 @@ function(x, ..., ties='random', na.rm=FALSE, freq=FALSE) {
 		}
 	}  	
 
-	ties <- match(ties, c('lowest', 'highest', 'first', 'random', 'NA')) - 1
+	ties <- match(ties[1], c('lowest', 'highest', 'first', 'random', 'NA')) - 1
 	if (is.na(ties)) {
 		stop("the value of 'ties' should be 'lowest', 'highest', 'first', 'random' or 'NA'")
 	}
