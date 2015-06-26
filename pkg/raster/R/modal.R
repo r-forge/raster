@@ -21,7 +21,7 @@ function(x, ..., ties='random', na.rm=FALSE, freq=FALSE) {
 			x <- as.character(x)
 			dots <- unlist(lapply(dots, as.character))
 		}
-		x <- c(x, dots)
+		x <- c(x, unlist(dots))
 	}
 
 	
