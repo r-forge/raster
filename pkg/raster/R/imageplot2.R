@@ -44,7 +44,7 @@
     legend.shrink=0.5, legend.width=0.6, legend.mar = ifelse(horizontal, 3.1, 5.1),
 	legend.lab=NULL, graphics.reset=FALSE, bigplot = NULL, smallplot = NULL, legend.only = FALSE, 
     lab.breaks=NULL, axis.args=NULL, legend.args = NULL, interpolate=FALSE, box=TRUE, breaks=NULL, 
-	zlim=NULL, zlimcol=NULL, fun=NULL, asp, colNA = NA, alpha=NULL, ...) {
+	zlim=NULL, zlimcol=NULL, fun=NULL, asp, colNA = NA, alpha=NULL, npretty=0, ...) {
 
 	
 	if (!is.null(alpha)) {
@@ -81,8 +81,9 @@
 	}
 	
 	
+	lonlat <- .couldBeLonLat(x, warnings=FALSE)
  	if (missing(asp)) {
-		if (couldBeLonLat(x, warnings=FALSE)) {
+		if (lonlat) {
 			ym <- mean(c(x@extent@ymax, x@extent@ymin))
 			asp <- 1/cos((ym * pi)/180)
 		} else {
@@ -142,10 +143,22 @@
 	} else {
         if (!add) {
             par(plt = bigplot)
-			plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', asp=asp, ...)
-        }
+			if (lonlat & (npretty > 0)) {
+				lX <- pretty(e[1]:e[2], npretty)	
+				lX <- lX[lX >= -180 & lX <= 180]
+				lY <- pretty(e[3]:e[4], npretty)
+				lY <- lY[lY >= -90 & lY <= 90]
+				labelsX <- parse(text=paste(lX, "^o", sep=""))
+				labelsY <- parse(text=paste(lY, "^o", sep=""))
+				plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', asp=asp, axes = FALSE, ...)
+				axis(1, lX, labels=labelsX)
+				axis(2, lY, labels=labelsY)
+			} else {
+				plot(NA, NA, xlim=e[1:2], ylim=e[3:4], type = "n", , xaxs ='i', yaxs = 'i', asp=asp, ...)
+			}
+		}	
 		rasterImage(x, e[1], e[3], e[2], e[4], interpolate=interpolate)
-        big.par <- par(no.readonly = TRUE)
+		big.par <- par(no.readonly = TRUE)
     } 
 	
 	if (legend) {
@@ -255,3 +268,4 @@
 	invisible()
 	
 }
+
