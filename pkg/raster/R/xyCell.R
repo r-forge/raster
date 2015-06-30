@@ -111,7 +111,7 @@ xyFromCell <- function(object, cell, spatial=FALSE) {
 	}
 
 	if (spatial) {
-		xy <- SpatialPoints(na.omit(xy), crs(object))
+		xy <- SpatialPoints(stats::na.omit(xy), crs(object))
 	}
 	return(xy)
 }

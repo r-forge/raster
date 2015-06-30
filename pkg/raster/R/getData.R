@@ -50,7 +50,7 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 
 ccodes <- function() {
 	path <- paste(system.file(package="raster"), "/external", sep='')
-	d <- read.csv(paste(path, "/countries.csv", sep=""), stringsAsFactors=FALSE, encoding="UTF-8")
+	d <- utils::read.csv(paste(path, "/countries.csv", sep=""), stringsAsFactors=FALSE, encoding="UTF-8")
 	return(as.matrix(d))
 }
 
@@ -214,7 +214,7 @@ ccodes <- function() {
 				message("\nFile not available locally. Use 'download = TRUE'")
 			}
 		}	
-		unzip(zipfile, exdir=dirname(zipfile))
+		utils::unzip(zipfile, exdir=dirname(zipfile))
 	}
 	stack(paste(path, tifs, sep=''))
 }
@@ -281,7 +281,7 @@ ccodes <- function() {
 				message("\nFile not available locally. Use 'download = TRUE'")
 			}
 		}	
-		unzip(zipfile, exdir=dirname(zipfile))
+		utils::unzip(zipfile, exdir=dirname(zipfile))
 		for (h in paste(path, hdrfiles, sep='')) {
 			x <- readLines(h)
 			x <- c(x[1:14], 'PIXELTYPE     SIGNEDINT', x[15:length(x)])
@@ -325,7 +325,7 @@ ccodes <- function() {
 				message("\nFile not available locally. Use 'download = TRUE'")
 			}
 		}
-		ff <- unzip(zipfilename, exdir=dirname(zipfilename))
+		ff <- utils::unzip(zipfilename, exdir=dirname(zipfilename))
 		if (!keepzip) {
 			file.remove(zipfilename)
 		}
@@ -383,7 +383,7 @@ ccodes <- function() {
 			} else {message('file not available locally, use download=TRUE') }	
 		}
 		if (file.exists(zipfilename)) { 
-			unzip(zipfilename, exdir=dirname(zipfilename))
+			utils::unzip(zipfilename, exdir=dirname(zipfilename))
 			file.remove(zipfilename)
 		}	
 	}

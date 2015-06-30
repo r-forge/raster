@@ -68,7 +68,7 @@ setMethod('extent', signature(x='BasicRaster'),
 		}
 		
 		e <- extent(sort(c(xn, xx)), sort(c(yn, yx)))
-		if (validObject(e)) { 
+		if (methods::validObject(e)) { 
 			return(e) 
 		}
 	}

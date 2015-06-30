@@ -46,7 +46,7 @@ function(x, breaks, ..., filename='', format, datatype='INT2S', overwrite, progr
 			breaks <- round(breaks)
 			stopifnot(breaks > 1)
 			probs <- c(0, 1:breaks * 1/breaks)
-			breaks <- na.omit(sampleRegular(x, 10000, useGDAL=TRUE))
+			breaks <- stats::na.omit(sampleRegular(x, 10000, useGDAL=TRUE))
 			warning('breaks are approximate, based on a sample of ', length(breaks), ' cells that are not NA')
 			breaks <- quantile(, probs, names=FALSE)
 			breaks[1] <- -Inf

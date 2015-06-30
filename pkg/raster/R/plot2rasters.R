@@ -144,7 +144,7 @@ setMethod("plot", signature(x='Raster', y='Raster'),
 
 
 .plotdens <- function(x, y, nc, nr, asp=NULL, xlim=NULL, ylim=NULL, ...) {
-	xy <- na.omit(cbind(x,y))
+	xy <- stats::na.omit(cbind(x,y))
 	if (nrow(xy) == 0) {
 		stop('only NA values (in this sample?)')
 	}

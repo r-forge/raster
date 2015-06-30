@@ -10,7 +10,7 @@
 	
 	if (length(cells) < 1) {
 #		cat(cells,"\n")
-#		flush.console()
+#		utils::flush.console()
 		return(NULL)
 	}
 	
@@ -19,7 +19,7 @@
 	
 	cells <- cbind(1:length(cells), cells)
 	cells <- cells[order(cells[,2]), ,drop=FALSE]
-	uniquecells <- sort(na.omit(unique(cells[,2])))
+	uniquecells <- sort(stats::na.omit(unique(cells[,2])))
 	uniquecells <- uniquecells[(uniquecells > 0) & (uniquecells <= ncell(x))]
 	if (length(uniquecells) == 0) {
 		return( matrix(NA, nrow=nrow(cells), ncol=length(layers)) )

@@ -44,7 +44,7 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			}
 		}
 		
-		rsd <- na.omit(v) # min and max values
+		rsd <- stats::na.omit(v) # min and max values
 		if (length(rsd) > 0) {
 			x@data@min <- min(x@data@min, rsd)
 			x@data@max <- max(x@data@max, rsd)

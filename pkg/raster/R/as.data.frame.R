@@ -49,7 +49,7 @@ setMethod('as.data.frame', signature(x='Raster'),
 				vv <- cbind(start:end, getValues(x, row=tr$row[i], nrows=tr$nrows[i]))
 				if (xy) {
 					XY <- data.frame(xyFromCell(r, start:end))
-					vv <- na.omit(vv, XY)
+					vv <- stats::na.omit(vv, XY)
 				}
 				v <- rbind(v, vv)
 				pbStep(pb, i) 	
@@ -62,7 +62,7 @@ setMethod('as.data.frame', signature(x='Raster'),
 				v <- cbind(XY, v)
 			}
 			if (na.rm) {
-				v <- na.omit(cbind(1:ncell(x), v))
+				v <- stats::na.omit(cbind(1:ncell(x), v))
 			}
 		}
 		

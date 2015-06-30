@@ -16,7 +16,7 @@ setMethod('hist', signature(x='Raster'),
 		}
 		
 		y <- unique(as.integer(round(y)))
-		y <- na.omit(y)
+		y <- stats::na.omit(y)
 		y <- y[ y >= 1 & y <= nlayers(x) ]
 		nl <- length(y)
 		
@@ -71,7 +71,7 @@ setMethod('hist', signature(x='Raster'),
 		} else if ( fromDisk(x) ) {
 			
 			if (ncell(x) <= maxpixels) {
-				v <- na.omit(getValues(x))
+				v <- stats::na.omit(getValues(x))
 			} else {
 
 			# TO DO: make a function that does this by block and combines  all data into a single histogram

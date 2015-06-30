@@ -39,9 +39,9 @@ setMethod('shift', signature(object='SpatialPolygons'),
 		a$x <- a$x + x
 		a$y <- a$y + y
 		if (inherits(object, 'SpatialPolygonsDataFrame')) {
-			a <- as(a, 'SpatialPolygonsDataFrame')	
+			a <- methods::as(a, 'SpatialPolygonsDataFrame')	
 		} else {
-			a <- as(a, 'SpatialPolygons')			
+			a <- methods::as(a, 'SpatialPolygons')			
 		}
 		crs(a) <- crs(object)
 		return(object)
@@ -56,9 +56,9 @@ setMethod('shift', signature(object='SpatialLines'),
 		a$x <- a$x + x
 		a$y <- a$y + y
 		if (inherits(object, 'SpatialLinesDataFrame')) {
-			a <- as(a, 'SpatialLinesDataFrame')	
+			a <- methods::as(a, 'SpatialLinesDataFrame')	
 		} else {
-			a <- as(a, 'SpatialLines')			
+			a <- methods::as(a, 'SpatialLines')			
 		}
 		crs(a) <- crs(object)
 		return(object)

@@ -242,7 +242,7 @@
 
 .writeValuesCDF <- function(x, v, start=1) {
 
-	rsd <- na.omit(v) 
+	rsd <- stats::na.omit(v) 
 	if (length(rsd) > 0) {
 		x@data@min <- min(x@data@min, rsd)
 		x@data@max <- max(x@data@max, rsd)
@@ -285,7 +285,7 @@
 		lstart <- layer
 		lend <- layer	
 
-		rsd <- na.omit(v) 
+		rsd <- stats::na.omit(v) 
 		if (length(rsd) > 0) {
 			x@data@min[layer] <- min(x@data@min[layer], rsd)
 			x@data@max[layer] <- max(x@data@max[layer], rsd)

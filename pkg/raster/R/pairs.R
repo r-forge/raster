@@ -23,7 +23,7 @@ setMethod('pairs', signature(x='RasterStackBrick'),
 			usr <- par("usr")
 			on.exit(par(usr))
 			par(usr = c(0, 1, 0, 1))
-			r <- abs(cor(x, y, use=use))
+			r <- abs(stats::cor(x, y, use=use))
 			txt <- format(c(r, 0.123456789), digits=2)[1]
 			text(0.5, 0.5, txt, cex = max(0.5, r * 2))
 		}

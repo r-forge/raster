@@ -91,7 +91,7 @@
 			on.exit( returnCluster() )
 			nodes <- min(nrow(xy), length(cl))
 			message('Using cluster with', nodes, 'nodes')
-			flush.console()
+			utils::flush.console()
 
 	
 			parallel::clusterExport(cl, c('object', 'obj', 'cellnumbers'), envir=environment())
@@ -200,7 +200,7 @@
 	if (! is.null(fun)) {
 		if (na.rm) {
 			fun2 <- function(x){
-						x <- na.omit(x)
+						x <- stats::na.omit(x)
 						if (length(x) > 0) { return(fun(x)) 
 						} else { return(NA) 
 						}

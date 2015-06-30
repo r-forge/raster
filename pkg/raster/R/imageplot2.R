@@ -31,7 +31,7 @@
 	}
 	x[] <- col[x]
 	if (!is.na(colNA)) {
-		x[is.na(x)] <- rgb(t(col2rgb(colNA)), maxColorValue=255)
+		x[is.na(x)] <- grDevices::rgb(t(grDevices::col2rgb(colNA)), maxColorValue=255)
 	}
 	if (!is.null(alpha)) {
 		x[] <- paste(substr(as.vector(x), 1, 7), t(alpha), sep='')

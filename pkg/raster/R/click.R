@@ -30,7 +30,7 @@ if (!isGeneric("click")) {
 		text(xyCoords, labels=1:n)
 	}
 	cells <- cellFromXY(x, xyCoords)
-	cells <- unique(na.omit(cells))
+	cells <- unique(stats::na.omit(cells))
 	if (length(cells) == 0 ) { 
 		stop('no valid cells selected') 
 	}
@@ -52,7 +52,7 @@ setMethod('click', signature(x='SpatialGrid'),
 		r <- raster(x)
 		cells <- .getCellFromClick(r, n, type, id, ...)
 		
-		if (.hasSlot(x, 'data')) {
+		if (methods::.hasSlot(x, 'data')) {
 			value <- x@data[cells, ,drop=FALSE]
 		} else {
 			value <- NULL
@@ -74,7 +74,7 @@ setMethod('click', signature(x='SpatialPixels'),
 		r <- raster(x)
 		cells <- .getCellFromClick(r, n, type, id, ...)
 		
-		if (.hasSlot(x, 'data')) {
+		if (methods::.hasSlot(x, 'data')) {
 			value <- x@data[cells, ,drop=FALSE]
 		} else {
 			value <- NULL
@@ -126,7 +126,7 @@ setMethod('click', signature(x='Raster'),
 		if (id) { 
 			text(xyCoords, labels=i) 
 		}
-		cells <- na.omit(cellFromXY(x, xyCoords))
+		cells <- stats::na.omit(cellFromXY(x, xyCoords))
 		if (length(cells) == 0) break
 		
 		value <- extract(x, cells)
@@ -140,7 +140,7 @@ setMethod('click', signature(x='Raster'),
 		} 
 		if (show) {
 			print(value)
-			flush.console()
+			utils::flush.console()
 		}
 		if (is.null(dim(value))) { 
 			value <- matrix(value)
@@ -171,7 +171,7 @@ setMethod('click', signature(x='SpatialPolygons'),
 		xyCoords@proj4string <- x@proj4string
 		i <- which(!is.na(over(x, xyCoords)))
 		if (length(i) > 0) {
-			if (.hasSlot(x, 'data')) {
+			if (methods::.hasSlot(x, 'data')) {
 				x <- x@data[i,]
 			} else {
 				x <- row.names(x)[i]
@@ -190,11 +190,11 @@ setMethod('click', signature(x='SpatialPolygons'),
 
 setMethod('click', signature(x='SpatialLines'), 
 	function(x, ...) {
-		e <- as(drawExtent(), 'SpatialPolygons')
+		e <- methods::as(drawExtent(), 'SpatialPolygons')
 		e@proj4string <- x@proj4string
 		i <- which(!is.na(over(x, e)))
 		if (length(i) > 0) {
-			if (.hasSlot(x, 'data')) {
+			if (methods::.hasSlot(x, 'data')) {
 				x <- x@data[i,]
 			} else {
 				x <- row.names(x)[i]
@@ -208,11 +208,11 @@ setMethod('click', signature(x='SpatialLines'),
 
 setMethod('click', signature(x='SpatialPoints'), 
 	function(x, ...) {
-		e <- as(drawExtent(), 'SpatialPolygons')
+		e <- methods::as(drawExtent(), 'SpatialPolygons')
 		e@proj4string <- x@proj4string
 		i <- which(!is.na(over(x, e)))
 		if (length(i) > 0) {
-			if (.hasSlot(x, 'data')) {
+			if (methods::.hasSlot(x, 'data')) {
 				x <- x@data[i,]
 			} else {
 				x <- row.names(x)[i]

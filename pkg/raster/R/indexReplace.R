@@ -63,7 +63,7 @@ setReplaceMethod("[", c("RasterLayer","missing","missing"),
 	#	if (! is.numeric(i)) { 
 	#		i <- as.integer(i) 
 	#	}
-		i <- na.omit(i)
+		i <- stats::na.omit(i)
 	}
 
 	nl <- nlayers(x)

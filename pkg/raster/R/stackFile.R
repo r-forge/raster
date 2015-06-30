@@ -6,7 +6,7 @@
 
 
 stackOpen <- function(stackfile) {
-	f <- read.table(stackfile, as.is=FALSE, strip.white=TRUE)
+	f <- utils::read.table(stackfile, as.is=FALSE, strip.white=TRUE)
 	if (dim(f)[2] > 1) {
 		s <- stack(as.vector(f[,1]), bands=as.vector(f[,2]))
 	} else {
@@ -17,7 +17,7 @@ stackOpen <- function(stackfile) {
 }
 
 ..stackOpen <- function(stackfile, quick=FALSE) {
-	f <- read.table(stackfile, as.is=FALSE, strip.white=TRUE)
+	f <- utils::read.table(stackfile, as.is=FALSE, strip.white=TRUE)
 	if (quick) {
 		if (dim(f)[2] > 1) {
 			s <- .quickStack(f[,1], f[,2], f[,3])	

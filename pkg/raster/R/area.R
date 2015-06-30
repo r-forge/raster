@@ -54,7 +54,7 @@ setMethod('area', signature(x='SpatialPolygons'),
 			rgeos::gArea(x, byid=TRUE)
 		} else {	
 			warning('install rgeos for better area estimation')
-			sapply(x@polygons, function(i) slot(i, 'area'))
+			sapply(x@polygons, function(i) methods::slot(i, 'area'))
 		}
 	}
 )	
@@ -180,7 +180,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 			on.exit( returnCluster() )
 			nodes <- min(nrow(out), length(cl))	
 			message( 'Using cluster with', nodes, 'nodes' )
-			flush.console()		
+			utils::flush.console()		
 				
 			tr <- blockSize(out, minblocks=nodes)
 			pb <- pbCreate(tr$n, label='area', ...)

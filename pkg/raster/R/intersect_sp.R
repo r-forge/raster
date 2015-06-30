@@ -29,8 +29,8 @@ function(x, y) {
 		return(NULL)
 	}
 		
-	xdata <- .hasSlot(x, 'data')
-	ydata <- .hasSlot(y, 'data')
+	xdata <- methods::.hasSlot(x, 'data')
+	ydata <- methods::.hasSlot(y, 'data')
 	dat <- NULL
 	if (xdata & ydata) {
 		nms <- .goodNames(c(colnames(x@data), colnames(y@data)))
@@ -126,8 +126,8 @@ function(x, y) {
 		return(NULL)
 	}
 		
-	xdata <- .hasSlot(x, 'data')
-	ydata <- .hasSlot(y, 'data')
+	xdata <- methods::.hasSlot(x, 'data')
+	ydata <- methods::.hasSlot(y, 'data')
 	dat <- NULL
 	if (xdata & ydata) {
 		nms <- .goodNames(c(colnames(x@data), colnames(y@data)))
@@ -193,8 +193,8 @@ function(x, y) {
 	} 
 	
 	
-	xdata <- .hasSlot(x, 'data')
-	ydata <- .hasSlot(y, 'data')
+	xdata <- methods::.hasSlot(x, 'data')
+	ydata <- methods::.hasSlot(y, 'data')
 	if (! any(c(xdata, ydata))) {
 		return(  rgeos::gIntersection(y, x, byid=TRUE) )
 	}
@@ -276,9 +276,9 @@ function(x, y) {
 		j <- j[order(j[,2]), ]
 		x <- x[j[,2], ]
 		
-		if (.hasSlot(y, 'data')) {
+		if (methods::.hasSlot(y, 'data')) {
 			d <- y@data[j[,1], ]
-			if (!.hasSlot(x, 'data')) {
+			if (!methods::.hasSlot(x, 'data')) {
 				x <- SpatialPointsDataFrame(x, d)
 			} else {
 				x@data <- cbind(x@data, d)

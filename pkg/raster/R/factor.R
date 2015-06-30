@@ -21,7 +21,7 @@ factorValues <- function(x, v, layer=1, att=NULL, append.names=FALSE) {
 	rownames(r) <- NULL
 	if (!is.null(att)) {
 		if (is.character(att)) {
-			att <- na.omit(match(att, colnames(r)))
+			att <- stats::na.omit(match(att, colnames(r)))
 			if (length(att)	== 0) {
 				warning("att does not includes valid names")
 			} else {
@@ -211,7 +211,7 @@ setMethod('asFactor', signature(x='RasterLayer'),
 		#warning("please use as.factor")
 		x@data@isfactor <- TRUE
 		if (is.null(value) ) {
-			#x <- round(x) #this makes slot isfactor FALSE again
+			#x <- round(x) #this makes methods::slot( isfactor FALSE again
 			x@data@attributes <- list(data.frame(VALUE=unique(x)))
 		} else {
 			x@data@attributes <- value

@@ -146,7 +146,7 @@ setMethod('predict', signature(object='Raster'),
 				if (inf.rm) {
 					blockvals[!is.finite(as.matrix(blockvals))] <- NA
 				}
-				blockvals <- na.omit(blockvals)						
+				blockvals <- stats::na.omit(blockvals)						
 			}
 
 			nrb <- nrow(blockvals)

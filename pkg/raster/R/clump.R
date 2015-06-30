@@ -85,7 +85,7 @@ function(x, filename='', directions=8, gaps=TRUE, ...) {
 		xc <- .smallClump(xc, directions) + maxval
 		if (i > 1) {
 			firstrow <- getValues(xc, 1)
-			rc <- na.omit(unique(cbind(lastrow, firstrow)))
+			rc <- stats::na.omit(unique(cbind(lastrow, firstrow)))
 			rcl <- rbind(rcl, rc)
 		}
 		lastrow <- getValues(xc, nrow(xc))

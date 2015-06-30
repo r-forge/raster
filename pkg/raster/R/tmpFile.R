@@ -38,7 +38,7 @@
 	extension <- .defaultExtension(.filetype())
 	d <- tmpDir(create=TRUE)
 #	dir.create(d,  showWarnings = FALSE)
-	f <- paste(round(runif(10)*10), collapse="")
+	f <- paste(round(stats::runif(10)*10), collapse="")
 	d <- paste(d, prefix, f, extension, sep="")
 	if (file.exists(d)) {
 		d <- rasterTmpFile(prefix=prefix)

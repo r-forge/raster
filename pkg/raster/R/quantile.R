@@ -22,7 +22,7 @@ setMethod('quantile', signature(x='Raster'),
 			}
 		}
 		if (na.rm) {
-			v <- na.omit(v)
+			v <- stats::na.omit(v)
 		}
 		if (nlayers(x)==1) {
 			return(quantile(v, ...))

@@ -74,7 +74,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 		}
 	}
 	
-	if (! .hasSlot(x, 'data') ) {
+	if (! methods::.hasSlot(x, 'data') ) {
 		hd <- FALSE
 		if (!is.null(by)) {
 			if (length(by) == length(x@polygons)) {
@@ -125,7 +125,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 			if (hd) {
 				x@data <- dat
 			} else {
-				x <- as(x, 'SpatialPolygons')
+				x <- methods::as(x, 'SpatialPolygons')
 			}
 			return(x)
 		}
@@ -140,7 +140,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 
 		
 		if (hd) {
-			x <- as(x, 'SpatialPolygons')
+			x <- methods::as(x, 'SpatialPolygons')
 		}
 		
 		if (dissolve) {
@@ -179,7 +179,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 		}
 	}
 	
-	if (! .hasSlot(x, 'data') ) {
+	if (! methods::.hasSlot(x, 'data') ) {
 		hd <- FALSE
 		if (!is.null(by)) {
 			if (length(by) == length(x@lines)) {
@@ -219,7 +219,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 			if (hd) {
 				x@data <- dat
 			} else {
-				x <- as(x, 'SpatialLines')
+				x <- methods::as(x, 'SpatialLines')
 			}
 			return(x)
 		}
@@ -233,7 +233,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 		}
 		
 		if (hd) {
-			x <- as(x, 'SpatialLines')
+			x <- methods::as(x, 'SpatialLines')
 		}
 		x <- lapply(1:nrow(id), function(y) spChFIDs(aggregate(x[dc[dc$v==y,1],], dissolve=FALSE), as.character(y)))
 		

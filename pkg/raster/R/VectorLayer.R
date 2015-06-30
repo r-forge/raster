@@ -28,7 +28,7 @@ setClass ('VectorLayer',
 		history = list()
 	),
 	validity = function(object) {
-		validObject(extent(object))
+		methods::validObject(extent(object))
 		return(type %in% c('points', 'lines', 'polygons'))
 	}
 )
@@ -37,14 +37,14 @@ setClass ('VectorLayer',
 
 setMethod("plot", signature(x='VectorLayer'),
 function(x, ...) {
-	x <- as(x, 'Spatial')
+	x <- methods::as(x, 'Spatial')
 	plot(x, ...)
 }
 )
 
 setMethod("spplot", signature(obj='VectorLayer'),
 function(obj, ...) {
-	obj <- as(obj, 'Spatial')
+	obj <- methods::as(obj, 'Spatial')
 	spplot(obj, ...)
 }
 )
@@ -119,7 +119,7 @@ setAs('SpatialPolygons', 'VectorLayer',
 		}
 		colnames(ag) <- colnames(v@index)
 		v@index <- ag
-		if (.hasSlot(from, 'data')) {
+		if (methods::.hasSlot(from, 'data')) {
 			v@attributes <- from@data
 		}
 		v@crs <- from@proj4string
@@ -139,7 +139,7 @@ setAs('SpatialLines', 'VectorLayer',
 		ag <- as.matrix(ag[order(ag$object, ag$part, ag$hole), ])
 		colnames(ag) <- colnames(v@index)
 		v@index <- ag
-		if (.hasSlot(from, 'data')) {
+		if (methods::.hasSlot(from, 'data')) {
 			v@attributes <- from@data
 		}
 		v@crs <- from@proj4string
@@ -159,7 +159,7 @@ setAs('SpatialPoints', 'VectorLayer',
 		ag <- as.matrix(ag[order(ag$object, ag$part), ])
 		colnames(ag) <- colnames(v@index)
 		v@index <- ag
-		if (.hasSlot(from, 'data')) {
+		if (methods::.hasSlot(from, 'data')) {
 			v@attributes <- from@data
 		}
 		v@crs <- from@proj4string
@@ -171,11 +171,11 @@ setAs('SpatialPoints', 'VectorLayer',
 setAs('VectorLayer', 'Spatial', 
 	function(from) {
 		if (from@type == 'polygons') {
-			as(from, 'SpatialPolygons')
+			methods::as(from, 'SpatialPolygons')
 		} else if (from@type == 'lines') {
-			as(from, 'SpatialLines')
+			methods::as(from, 'SpatialLines')
 		} else if (from@type == 'points') {
-			as(from, 'SpatialPoints')
+			methods::as(from, 'SpatialPoints')
 		}
 	}
 )

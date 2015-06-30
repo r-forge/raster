@@ -36,7 +36,7 @@
 
 
 .arrow <- function(d, xy=click(), head=0.1, ...) {
-	arrows(xy[1], xy[2], xy[1], xy[2]+d, length=head, ...)
+	graphics::arrows(xy[1], xy[2], xy[1], xy[2]+d, length=head, ...)
 	lines(rbind(xy, rbind(cbind(xy[1], xy[2]-d))), ...)
 	text(xy[1,1], xy[1,2]-(0.25*d), 'N')
 }

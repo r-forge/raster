@@ -76,7 +76,7 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 				y <- match(y, names(x))
 			}
 			y <- unique(as.integer(round(y)))
-			y <- na.omit(y)
+			y <- stats::na.omit(y)
 		}
 		
 		
@@ -148,7 +148,7 @@ function(x, ...) {
 	if(prod(dim(x)) < 50000) {
 		stop('too many lines')
 	}
-	x <- as(x, 'SpatialPolygons')
+	x <- methods::as(x, 'SpatialPolygons')
 	lines(x, ...)
 }
 )

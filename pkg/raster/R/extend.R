@@ -25,7 +25,7 @@ function(x, y, ...) {
 	x@xmax <- x@xmax + y[2]
 	x@ymin <- x@ymin - y[3]
 	x@ymax <- x@ymax + y[4]
-	validObject(x)
+	methods::validObject(x)
 	x
 }
 )

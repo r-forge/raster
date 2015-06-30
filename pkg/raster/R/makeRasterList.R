@@ -11,7 +11,7 @@
 			compareRaster(x[[1]], r)  
 		}
 		return( c(x, r) )
-	} else if (! extends(class(r), 'Raster')) {
+	} else if (! methods::extends(class(r), 'Raster')) {
 		if (giveError) {
 			stop('... arguments must be a filename or objects that extend the Raster class')
 		} else {

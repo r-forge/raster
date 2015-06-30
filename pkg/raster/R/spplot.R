@@ -21,7 +21,7 @@ setMethod("spplot", signature(obj='Raster'),
 				obj[obj < zlim[1] | obj > zlim[2]] <- NA
 			}
 		}
-		obj <- as(obj, 'SpatialGridDataFrame')
+		obj <- methods::as(obj, 'SpatialGridDataFrame')
 		#obj@data <- obj@data[, ncol(obj@data):1]
 		spplot(obj, ..., as.table=as.table)
 	}
@@ -49,7 +49,7 @@ function(obj, ...) {
 
 setMethod("lines", signature(x='SpatialPolygons'),
 function(x, ...) {
-	x <- as(x, 'SpatialLines')
+	x <- methods::as(x, 'SpatialLines')
 	lines(x, ...)
 }
 )

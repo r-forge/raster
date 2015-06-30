@@ -27,7 +27,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 		cellnumbers <- FALSE
 	    if (weights) {
 			if (!is.null(fun)) {
-				test <- try(slot(fun, 'generic') == 'mean', silent=TRUE)
+				test <- try(methods::slot(fun, 'generic') == 'mean', silent=TRUE)
 				if (!isTRUE(test)) {
 					warning('"fun" was changed to "mean"; other functions cannot be used when "weights=TRUE"' )
 				}
@@ -104,7 +104,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 		on.exit( returnCluster() )
 		nodes <- min(npol, length(cl)) 
 		message('Using cluster with', nodes, 'nodes')
-		flush.console()
+		utils::flush.console()
 
 		
 		parallel::clusterExport(cl, c('rsbb', 'rr', 'weights', 'addres', 'cellnumbers', 'small'), envir=environment())
@@ -342,7 +342,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 			return(res)
 		}
 		
-		if (! .hasSlot(y, 'data') ) {
+		if (! methods::.hasSlot(y, 'data') ) {
 			y <- SpatialPolygonsDataFrame(y, res[, -1, drop=FALSE])
 		} else {
 			y@data <- cbind(y@data, res[, -1, drop=FALSE])

@@ -270,7 +270,7 @@
 						# this is really a color table
 						rats[i] <- FALSE
 						if (is.null(ct)) { 
-							r@legend@colortable <- rgb(dr$Red, dr$Green, dr$Blue, dr$Opacity)
+							r@legend@colortable <- grDevices::rgb(dr$Red, dr$Green, dr$Blue, dr$Opacity)
 						}
 						next
 					} else {

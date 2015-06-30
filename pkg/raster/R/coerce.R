@@ -31,7 +31,7 @@ setAs('Raster', 'SpatialPixels',
 		
 		r <- raster(from)
 		sp <- SpatialPoints(sp[,1:2], proj4string= crs(r))
-		grd <- as(r, 'GridTopology')
+		grd <- methods::as(r, 'GridTopology')
 		SpatialPixels(points=sp, grid=grd)
 	}
 )
@@ -46,7 +46,7 @@ setAs('Raster', 'SpatialPixelsDataFrame',
 		r <- raster(from)
 		sp <- SpatialPoints(v[,1:2], proj4string= crs(r))
 
-		grd <- as(r, 'GridTopology')
+		grd <- methods::as(r, 'GridTopology')
 		
 		if (ncol(v) > 2) {
 			v <- data.frame(v[, 3:ncol(v), drop = FALSE])
@@ -73,7 +73,7 @@ setAs('Raster', 'SpatialGrid',
 			stop('\n Cannot coerce because the object is rotated.\n Either coerce to SpatialPoints* from\n or first use the "rectify" function')
 		}	
 		r <- raster(from)
-		grd <- as(r, 'GridTopology')
+		grd <- methods::as(r, 'GridTopology')
 		SpatialGrid(grd, proj4string=crs(r))
 	}
 )
@@ -85,7 +85,7 @@ setAs('Raster', 'SpatialGridDataFrame',
 		}	
 
 		r <- raster(from)
-		grd <- as(r, 'GridTopology')
+		grd <- methods::as(r, 'GridTopology')
 
 		if (hasValues(from)) {
 			sp <- SpatialGridDataFrame(grd, proj4string=crs(r), data=as.data.frame(from))
@@ -103,7 +103,7 @@ setAs('Raster', 'SpatialGridDataFrame',
 setAs('Raster', 'SpatialPolygons', 
 	function(from){ 
 		r <- rasterToPolygons(from[[1]])
-		as(r, 'SpatialPolygons')
+		methods::as(r, 'SpatialPolygons')
 	}
 )
 
@@ -232,8 +232,8 @@ setAs('STFDF', 'RasterBrick',
 
 setAs('STSDF', 'RasterBrick', 
 	function(from) {
-		from <- as(from, 'STFDF')
-		as(from, 'RasterBrick')
+		from <- methods::as(from, 'STFDF')
+		methods::as(from, 'RasterBrick')
 	}
 )
 
@@ -268,7 +268,7 @@ setAs('RasterLayer', 'matrix',
 setAs('RasterLayer', 'RasterLayerSparse', 
 	function(from){ 
 		x <- new('RasterLayerSparse', from)
-		v <- na.omit(cbind(1:ncell(from), getValues(from)))
+		v <- stats::na.omit(cbind(1:ncell(from), getValues(from)))
 		setValues(x, v[,2], v[,1])
 	}
 )

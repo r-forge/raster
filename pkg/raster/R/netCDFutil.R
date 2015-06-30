@@ -55,7 +55,7 @@
 		warning("cannot process these parts of the CRS:\n", mtxt)
 		vars <- vars[!is.na(i)]
 		vals <- vals[!is.na(i)]
-		i <- na.omit(i)
+		i <- stats::na.omit(i)
 	}
 	tab <- cbind(m[i,], vals)
 	p <- which(tab[,2] == '+proj')

@@ -169,7 +169,7 @@ function(x, bands=NULL, native=FALSE, RAT=TRUE, ...) {
 					}
 				}
 			}
-		} else if (extends(class(x[[i]]), "Raster")) {
+		} else if (methods::extends(class(x[[i]]), "Raster")) {
 			if (inherits(x[[i]], 'RasterStackBrick')) {
 			# commented on 2012/11/21 because bands should 
 			# only refer to files, not to layers in Raster objects
@@ -231,7 +231,7 @@ setMethod("stack", signature(x='SpatialGridDataFrame'),
 
 setMethod("stack", signature(x='SpatialPixelsDataFrame'), 
 	function(x, ...) {
-		x <- as(x, 'SpatialGridDataFrame')
+		x <- methods::as(x, 'SpatialGridDataFrame')
 		.stackFromBrick(brick(x), ...)
 	}
 )
@@ -240,6 +240,6 @@ setMethod("stack", signature(x='SpatialPixelsDataFrame'),
 
 setMethod('stack', signature(x='kasc'), 
 	function(x) {
-		as(x, 'RasterStack')
+		methods::as(x, 'RasterStack')
 	}
 )

@@ -127,7 +127,7 @@ setMethod('freq', signature(x='RasterStackBrick'),
 			if (is.na(value)) {
 				x <- sum(is.na(getValues(x)))
 			} else {
-				v <- na.omit(round(getValues(x), digits=digits))
+				v <- stats::na.omit(round(getValues(x), digits=digits))
 				x <- sum(v == value)
 			}
 			return(x)
@@ -140,7 +140,7 @@ setMethod('freq', signature(x='RasterStackBrick'),
 				if (is.na(value)) {
 					r <- r + sum(is.na(v))
 				} else {
-					v <- na.omit(round(v, digits=digits))
+					v <- stats::na.omit(round(v, digits=digits))
 					r <- r + sum(v == value)
 				}
 				pbStep(pb, i)
