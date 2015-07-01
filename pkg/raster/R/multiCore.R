@@ -4,10 +4,9 @@
 # Licence GPL v3
 
 
+.sendCall <- eval( parse( text="parallel:::sendCall") )
+
 .recvOneData <- eval(parse(text="parallel:::recvOneData"))
-
-.sendCall <- eval(parse(text="parallel:::sendCall"))
-
 
 beginCluster <- function(n, type='SOCK', nice, exclude=NULL) {
 	if (! requireNamespace("parallel") ) {
