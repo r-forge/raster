@@ -251,7 +251,7 @@
 			legend.args <- list(text = legend.lab, side = ifelse(horizontal, 1, 4), line = legend.mar - 2)
 		}
 		if (!is.null(legend.args)) {
-			do.call(mtext, legend.args)
+			do.call(graphics::mtext, legend.args)
 		}
 	}
 	

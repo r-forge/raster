@@ -107,17 +107,17 @@
 	
 		# title(main = list(legend.lab, cex=1, font=1))
 		if (!is.null(legend.lab)) {
-			# mtext(legend.lab, side=3, line=0.75)
+			# graphics::mtext(legend.lab, side=3, line=0.75)
 			#legend.args <- list(text = legend.lab, side = ifelse(horizontal, 1, 4), line = legend.mar - 2)
 			legend.args <- list(text = legend.lab, side=3, line=0.75)
 		}
 		if (!is.null(legend.args)) {
-			#do.call(mtext, legend.args)
+			#do.call(graphics::mtext, legend.args)
 		}
 	}
 
 
-.plot2 <- function(x, maxpixels=100000, col=rev(terrain.colors(25)), xlab='', ylab='', asp, box=TRUE, add=FALSE, legend=TRUE, legend.at='', ...)  {
+.plot2 <- function(x, maxpixels=100000, col=rev(grDevices::terrain.colors(25)), xlab='', ylab='', asp, box=TRUE, add=FALSE, legend=TRUE, legend.at='', ...)  {
 		
 
 	if (!add & missing(asp)) {

@@ -40,7 +40,7 @@ function(x, i, j, ... ,drop=TRUE) {
 	
 	if (! hasValues(i) ) {
 		i <- extent(i)
-		callNextMethod(x, i=i, ..., drop=drop)
+		methods::callNextMethod(x, i=i, ..., drop=drop)
 	
 	} else if (compareRaster(x, i, stopiffalse=FALSE, showwarning=FALSE)) {
 		i <- which( as.logical( getValues(i) ) )
@@ -49,7 +49,7 @@ function(x, i, j, ... ,drop=TRUE) {
 	} else {
 
 		i <- intersect(extent(x), extent(i))
-		callNextMethod(x, i=i, ..., drop=drop)
+		methods::callNextMethod(x, i=i, ..., drop=drop)
 	}
 })
 

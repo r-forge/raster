@@ -34,7 +34,9 @@ setMethod ('print', 'Raster',
 				}
 			# cat('levels      :' , paste(object@data@levels, collapse=', '), '\n')
 			# cat('labels      :' , paste(object@data@labels, collapse=', '), '\n')
-			} else callNextMethod(x, ...)
+			} else {
+				methods::callNextMethod(x, ...)
+			}
 		}
 	}
 )

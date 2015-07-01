@@ -57,5 +57,5 @@ filledContour <- function(x, y=1, maxpixels=100000, ...) {
 	X <- xFromCol(x, 1:ncol(x))
 	Y <- yFromRow(x, nrow(x):1)
 	Z <- t( matrix( getValues(x), ncol=x@ncols, byrow=TRUE)[nrow(x):1,] )
-	filled.contour(x=X,y=Y,z=Z,...)
+	graphics::filled.contour(x=X,y=Y,z=Z,...)
 }
