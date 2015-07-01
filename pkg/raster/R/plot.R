@@ -15,7 +15,7 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 
 		hasNoCol <- missing(col)
 		if (hasNoCol) {
-			col <- rev(terrain.colors(255))
+			col <- rev(grDevices::terrain.colors(255))
 		}
 			
 		if (!is.null(alpha)) {	
@@ -105,9 +105,9 @@ setMethod("plot", signature(x='Raster', y='ANY'),
 				nc <- ceiling(nl / nr)
 			}
 		
-			old.par <- par(no.readonly = TRUE) 
-			on.exit(par(old.par))
-			par(mfrow=c(nr, nc), mar=c(2, 2, 2, 4))
+			old.par <- graphics::par(no.readonly = TRUE) 
+			on.exit(graphics::par(old.par))
+			graphics::par(mfrow=c(nr, nc), mar=c(2, 2, 2, 4))
 			xa='n'
 			rown=1
 			coln=0

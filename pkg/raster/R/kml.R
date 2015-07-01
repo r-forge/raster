@@ -79,9 +79,9 @@ function (x, filename, col=rev(terrain.colors(255)), colNA=NA, maxpixels=100000,
 
 	png(filename = imagefile, width=max(480, blur*ncol(x)), height=max(480,blur*nrow(x)), bg="transparent")
 	if (!is.na(colNA)) {
-		par(mar=c(0,0,0,0), bg=colNA)
+		graphics::par(mar=c(0,0,0,0), bg=colNA)
 	} else {
-		par(mar=c(0,0,0,0))	
+		graphics::par(mar=c(0,0,0,0))	
 	}
 	image(x, col=col, axes=FALSE, useRaster=TRUE, maxpixels=maxpixels, ...)
 	dev.off()

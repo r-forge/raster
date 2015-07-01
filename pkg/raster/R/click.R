@@ -14,7 +14,7 @@ if (!isGeneric("click")) {
 .getClicks <- function(...) {
 	res <- list()
 	while(TRUE) {
-		loc <- locator(1, ...)
+		loc <- graphics::locator(1, ...)
 		if (is.null(loc)) break
 		res <- c(res, loc)
 	}
@@ -24,7 +24,7 @@ if (!isGeneric("click")) {
 
 
 .getCellFromClick <- function(x, n, type, id, ...) {
-	loc <- locator(n, type, ...)
+	loc <- graphics::locator(n, type, ...)
 	xyCoords <- cbind(x=loc$x, y=loc$y)
 	if (id) {
 		text(xyCoords, labels=1:n)
@@ -41,7 +41,7 @@ if (!isGeneric("click")) {
 
 setMethod('click', signature(x='missing'), 
 	function(x, n=1, type="n", ...) {
-		loc <- locator(n, type, ...)
+		loc <- graphics::locator(n, type, ...)
 		cbind(x=loc$x, y=loc$y)
 	}
 )
@@ -121,7 +121,7 @@ setMethod('click', signature(x='Raster'),
 	n <- max(n, 1)
 	while (i < n) {
 		i <- i + 1
-		loc <- locator(1, type, ...)
+		loc <- graphics::locator(1, type, ...)
 		xyCoords <- cbind(x=loc$x, y=loc$y)
 		if (id) { 
 			text(xyCoords, labels=i) 
@@ -161,7 +161,7 @@ setMethod('click', signature(x='Raster'),
 	
 setMethod('click', signature(x='SpatialPolygons'),
 	function(x, n=1, id=FALSE, xy=FALSE, type="n", ...) {
-		loc <- locator(n, type, ...)
+		loc <- graphics::locator(n, type, ...)
 		xyCoords <- cbind(x=loc$x, y=loc$y)
 		if (id) {
 			text(xyCoords, labels=1:n)

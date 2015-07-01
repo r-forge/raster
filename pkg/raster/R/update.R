@@ -368,7 +368,7 @@ function(object, v, cell, band) {
 
 
 .updateGDAL <- function(object, v, cell, band, setminmax) {
-	gdal <- new("GDALDataset", filename(object))
+	gdal <- methods::new("GDALDataset", filename(object))
 	on.exit( rgdal::GDAL.close(gdal) )
 
 	dr <- rgdal::getDriverName(rgdal::getDriver(gdal))
@@ -418,7 +418,7 @@ function(object, v, cell, band) {
 	}
 
 	if (setminmax) {	
-		b <- new("GDALRasterBand", gdal, band)
+		b <- methods::new("GDALRasterBand", gdal, band)
 		statistics <- c(object@data@min, object@data@max, NA, NA)
 		rgdal::GDALcall(b, "SetStatistics", statistics)	
 	}

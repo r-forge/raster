@@ -38,10 +38,10 @@ setMethod('hist', signature(x='Raster'),
 
 			nc <- ceiling(sqrt(nl))
 			nr <- ceiling(nl / nc)
-			mfrow <- par("mfrow")
+			mfrow <- graphics::par("mfrow")
 			spots <- mfrow[1] * mfrow[2]
 			if (spots < nl) {
-				par(mfrow=c(nr, nc))
+				graphics::par(mfrow=c(nr, nc))
 			}
 			for (i in 1:length(y)) {
 				res[[i]] = .hist1(raster(x, y[i]), maxpixels=maxpixels, main=main[y[i]], plot=plot, ...) 

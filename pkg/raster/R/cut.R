@@ -48,7 +48,7 @@ function(x, breaks, ..., filename='', format, datatype='INT2S', overwrite, progr
 			probs <- c(0, 1:breaks * 1/breaks)
 			breaks <- stats::na.omit(sampleRegular(x, 10000, useGDAL=TRUE))
 			warning('breaks are approximate, based on a sample of ', length(breaks), ' cells that are not NA')
-			breaks <- quantile(, probs, names=FALSE)
+			breaks <- stats::quantile(breaks, probs, names=FALSE)
 			breaks[1] <- -Inf
 			breaks[length(breaks)] <- Inf
 		}

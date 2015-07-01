@@ -16,7 +16,7 @@
 	
 	.bandwidth.nrd <- function(x) {
 	### this function is from the MASS package
-		r <- quantile(x, c(0.25, 0.75))
+		r <- stats::quantile(x, c(0.25, 0.75))
 		h <- (r[2L] - r[1L])/1.34
 		4 * 1.06 * min(sqrt(var(x)), h) * length(x)^(-1/5)
 	}

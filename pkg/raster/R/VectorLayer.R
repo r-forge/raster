@@ -104,7 +104,7 @@ setMethod ('show' , 'VectorLayer',
 
 setAs('SpatialPolygons', 'VectorLayer',
 	function(from) {
-		v <- new('VectorLayer')
+		v <- methods::new('VectorLayer')
 		v@type <- 'polygons'
 		a <- geom(from)
 		v@coordinates <- a[, c('x', 'y')]
@@ -130,7 +130,7 @@ setAs('SpatialPolygons', 'VectorLayer',
 
 setAs('SpatialLines', 'VectorLayer',
 	function(from) {
-		v <- new('VectorLayer')
+		v <- methods::new('VectorLayer')
 		v@type <- 'lines'
 		a <- geom(from)
 		v@coordinates <- a[, c('x', 'y')]
@@ -150,7 +150,7 @@ setAs('SpatialLines', 'VectorLayer',
 
 setAs('SpatialPoints', 'VectorLayer',
 	function(from) {
-		v <- new('VectorLayer')
+		v <- methods::new('VectorLayer')
 		v@type <- 'points'
 		a <- geom(from)
 		v@coordinates <- a[, c('x', 'y')]

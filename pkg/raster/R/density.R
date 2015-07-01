@@ -54,12 +54,12 @@ setMethod('density', signature(x='Raster'),
 			nr <- ceiling(nl / nc)
 			
 			
-			mfrow <- par("mfrow")
+			mfrow <- graphics::par("mfrow")
 			spots <- mfrow[1] * mfrow[2]
 			if (spots < nl) {
-				old.par <- par(no.readonly = TRUE) 
-				on.exit(par(old.par))
-				par(mfrow=c(nr, nc))
+				old.par <- graphics::par(no.readonly = TRUE) 
+				on.exit(graphics::par(old.par))
+				graphics::par(mfrow=c(nr, nc))
 			}
 			for (i in 1:length(y)) {	
 				r <- raster(x, y[i])

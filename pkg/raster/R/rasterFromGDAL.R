@@ -97,7 +97,7 @@
 		}
 	
 		crd <- trans(cbind(c(0, 0, nc, nc), c(0, nr, 0, nr))+0.5)
-		rot <- new(".Rotation")
+		rot <- methods::new(".Rotation")
 		
 		gtr <- gdalinfo[c('ll.x', 'res.x', 'oblique.x', NA, 'oblique.y', 'res.y')]
 		gtr[4] <- yx

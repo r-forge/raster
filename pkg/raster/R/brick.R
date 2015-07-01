@@ -160,7 +160,7 @@ setMethod('brick', signature(x='Extent'),
 		nc = as.integer(round(ncols))
 		if (nc < 1) { stop("ncols should be > 0") }
 		if (nr < 1) { stop("nrows should be > 0") }
-		b <- new("RasterBrick", extent=bb, ncols=nc, nrows=nr)
+		b <- methods::new("RasterBrick", extent=bb, ncols=nc, nrows=nr)
 		projection(b) <- crs
 		nl <- max(round(nl), 0)
 		b@data@nlayers <- as.integer(nl)

@@ -46,9 +46,9 @@ stackSave <- function(x, filename) {
 		stop("cannot save a RasterStack that has layers that only exist in memory. Use writeRaster first/instead.")
 	}
 	if (any(info[,2] != '1')) {
-		write.table(info, filename, row.names=FALSE, col.names=FALSE)
+		utils::write.table(info, filename, row.names=FALSE, col.names=FALSE)
 	} else {
-		write.table(info[,1], filename, row.names=FALSE, col.names=FALSE)
+		utils::write.table(info[,1], filename, row.names=FALSE, col.names=FALSE)
 	}
 	x@filename <- filename
 	return(x)

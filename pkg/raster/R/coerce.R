@@ -163,7 +163,7 @@ setAs('SpatialPixels', 'RasterLayer',
 
 setAs('SpatialGrid', 'BasicRaster', 
 	function(from){ 
-		to <- new('BasicRaster')
+		to <- methods::new('BasicRaster')
 		to@extent <- extent(from)
 		crs(to) <- from@proj4string
 		dim(to) <- c(from@grid@cells.dim[2], from@grid@cells.dim[1])	
@@ -174,7 +174,7 @@ setAs('SpatialGrid', 'BasicRaster',
 
 setAs('SpatialPixels', 'BasicRaster', 
 	function(from){ 
-		to <- new('BasicRaster')
+		to <- methods::new('BasicRaster')
 		to@extent <- extent(from)
 		crs(to) <- from@proj4string
 		dim(to) <- c(from@grid@cells.dim[2], from@grid@cells.dim[1])	
@@ -267,7 +267,7 @@ setAs('RasterLayer', 'matrix',
 
 setAs('RasterLayer', 'RasterLayerSparse', 
 	function(from){ 
-		x <- new('RasterLayerSparse', from)
+		x <- methods::new('RasterLayerSparse', from)
 		v <- stats::na.omit(cbind(1:ncell(from), getValues(from)))
 		setValues(x, v[,2], v[,1])
 	}

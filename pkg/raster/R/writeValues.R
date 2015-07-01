@@ -106,7 +106,7 @@ setMethod('writeValues', signature(x='RasterLayer', v='vector'),
 			}
 					
 			v <- matrix(v, ncol=ncol(x), byrow=TRUE)
-			write.table(v, x@file@name, append = TRUE, quote = FALSE, sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
+			utils::write.table(v, x@file@name, append = TRUE, quote = FALSE, sep = " ", eol = "\n", dec = ".", row.names = FALSE, col.names = FALSE)
 			options(scipen=opsci)
 			
 		} else {

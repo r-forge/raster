@@ -27,9 +27,9 @@ setMethod('quantile', signature(x='Raster'),
 		if (nlayers(x)==1) {
 			return(quantile(v, ...))
 		} else {
-			q <- quantile(v[,1], ...)
+			q <- stats::quantile(v[,1], ...)
 			for (i in 2:nlayers(x)) {
-				q <- rbind(q, quantile(v[,i], ...))
+				q <- rbind(q, stats::quantile(v[,i], ...))
 			}
 			rownames(q) <- names(x)
 			return(q)

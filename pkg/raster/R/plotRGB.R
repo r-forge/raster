@@ -92,7 +92,7 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 
 	
 	if (!add) {
-		if (!axes) par(plt=c(0,1,0,1))
+		if (!axes) graphics::par(plt=c(0,1,0,1))
 
 		if (is.null(asp)) {
 			if (couldBeLonLat(x)) {
@@ -109,17 +109,17 @@ function(x, r=1, g=2, b=3, scale, maxpixels=500000, stretch=NULL, ext=NULL, inte
 		
 		plot(NA, NA, xlim=xlim, ylim=ylim, type = "n", xaxs='i', yaxs='i', xlab=xlab, ylab=ylab, asp=asp, axes=FALSE, ...)
 		if (axes) {
-			xticks <- axTicks(1, c(xmin(r), xmax(r), 4))
-			yticks <- axTicks(2, c(ymin(r), ymax(r), 4))
+			xticks <- graphics::axTicks(1, c(xmin(r), xmax(r), 4))
+			yticks <- graphics::axTicks(2, c(ymin(r), ymax(r), 4))
 			if (xres(r) %% 1 == 0) xticks = round(xticks)
 			if (yres(r) %% 1 == 0) yticks = round(yticks)
-			axis(1, at=xticks)
-			axis(2, at=yticks, las = 1)
-			#axis(3, at=xticks, labels=FALSE, lwd.ticks=0)
-			#axis(4, at=yticks, labels=FALSE, lwd.ticks=0)
+			graphics::axis(1, at=xticks)
+			graphics::axis(2, at=yticks, las = 1)
+			#graphics::axis(3, at=xticks, labels=FALSE, lwd.ticks=0)
+			#graphics::axis(4, at=yticks, labels=FALSE, lwd.ticks=0)
 		}
 	}
-	rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate, ...)
+	graphics::rasterImage(z, bb[1], bb[3], bb[2], bb[4], interpolate=interpolate, ...)
 	
 	if (!is.null(addfun)) {
 		if (is.function(addfun)) {

@@ -62,7 +62,7 @@ function(x, y, value=NA, filename='', ...) {
 		leg <- x@legend
 	} else {
 		out <- brick(x, values=FALSE)	
-		leg <- new('.RasterLegend')
+		leg <- methods::new('.RasterLegend')
 	}
 	out@data@names <- names(x)
 	out <- setExtent(out, y, keepres=TRUE)
