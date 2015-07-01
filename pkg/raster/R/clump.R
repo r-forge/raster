@@ -104,7 +104,7 @@ function(x, filename='', directions=8, gaps=TRUE, ...) {
 	if (nrow(rcl) > 0) {
 		g <- igraph::graph.edgelist(rcl, directed=FALSE)
 		clumps <- igraph::clusters(g)$membership
-		rc <- cbind(V(g), clumps)
+		rc <- cbind(igraph::V(g), clumps)
 		i <- rc[,1] != rc[,2]
 		rc <- rc[i, ,drop=FALSE]
 		if (is.null(datatype)) {
