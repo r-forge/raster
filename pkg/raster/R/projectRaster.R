@@ -272,7 +272,7 @@ projectRaster <- function(from, to, res, crs, method="bilinear", alignOnly=FALSE
 			return(v)
 		}
 	
-	
+		.sendCall <- eval( parse( text="parallel:::sendCall") )	
 		# for debugging
 		# parallel::clusterExport(cl,c("tr", "projto", "projfrom", "method", "from", "to"))
         for (i in 1:nodes) {

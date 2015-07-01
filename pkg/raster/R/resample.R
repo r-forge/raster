@@ -80,7 +80,7 @@ function(x, y, method="bilinear", filename="", ...)  {
 		}
 
 		parallel::clusterExport(cl, c('x', 'y', 'tr', 'method'), envir=environment())
-		
+		.sendCall <- eval( parse( text="parallel:::sendCall") )
         for (ni in 1:nodes) {
 			.sendCall(cl[[ni]], clFun, list(ni), tag=ni)
 		}

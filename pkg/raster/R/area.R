@@ -145,6 +145,7 @@ setMethod('area', signature(x='RasterLayer'),
 setMethod('area', signature(x='RasterStackBrick'), 
 	function(x, filename='', na.rm=FALSE, weights=FALSE, ...) {
 
+
 		if (! na.rm) {
 			return( area(raster(x), filename=filename, na.rm=FALSE, weights=weights, ...) )
 		}	
@@ -196,6 +197,7 @@ setMethod('area', signature(x='RasterStackBrick'),
 				vv[is.na(a)] <- NA
 				return(vv)
 			}
+			.sendCall <- eval( parse( text="parallel:::sendCall") )
 
 			parallel::clusterExport(cl, c('tr', 'dx', 'dy', 'out', 'nl'), envir=environment())
 			

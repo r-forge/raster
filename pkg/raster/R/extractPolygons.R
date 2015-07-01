@@ -106,7 +106,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 		message('Using cluster with', nodes, 'nodes')
 		utils::flush.console()
 
-		
+		.sendCall <- eval( parse( text="parallel:::sendCall") )
 		parallel::clusterExport(cl, c('rsbb', 'rr', 'weights', 'addres', 'cellnumbers', 'small'), envir=environment())
 		clFun <- function(i, pp) {
 			spbb <- bbox(pp)

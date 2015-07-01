@@ -61,6 +61,8 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	pb <- pbCreate(nlns, label='extract', ...)
 	
 	if (.doCluster()) {
+		.sendCall <- eval( parse( text="parallel:::sendCall") )
+
 		cl <- getCluster()
 		on.exit( returnCluster() )
 		nodes <- min(nlns, length(cl)) 

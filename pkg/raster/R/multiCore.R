@@ -4,7 +4,6 @@
 # Licence GPL v3
 
 
-.sendCall <- eval( parse( text="parallel:::sendCall") )
 
 .recvOneData <- eval(parse(text="parallel:::recvOneData"))
 

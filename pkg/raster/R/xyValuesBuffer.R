@@ -121,7 +121,7 @@
 					return(pd)
 				}
 			}
-
+			.sendCall <- eval( parse( text="parallel:::sendCall") )
 			for (i in 1:nodes) {
 				.sendCall(cl[[i]], clFun2, list(i, xy[i, ,drop=FALSE], rn[i], rx[i], cn[i], cx[i]), tag=i)
 			}
