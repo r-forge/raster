@@ -117,7 +117,7 @@
 	}
 
 
-.plot2 <- function(x, maxpixels=100000, col=rev(grDevices::terrain.colors(25)), xlab='', ylab='', asp, box=TRUE, add=FALSE, legend=TRUE, legend.at='', ...)  {
+.plot2 <- function(x, maxpixels=100000, col=rev(terrain.colors(25)), xlab='', ylab='', asp, box=TRUE, add=FALSE, legend=TRUE, legend.at='', ...)  {
 		
 
 	if (!add & missing(asp)) {
