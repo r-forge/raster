@@ -37,14 +37,14 @@ setClass ('VectorLayer',
 
 setMethod("plot", signature(x='VectorLayer'),
 function(x, ...) {
-	x <- methods::as(x, 'Spatial')
+	x <- as(x, 'Spatial')
 	plot(x, ...)
 }
 )
 
 setMethod("spplot", signature(obj='VectorLayer'),
 function(obj, ...) {
-	obj <- methods::as(obj, 'Spatial')
+	obj <- as(obj, 'Spatial')
 	spplot(obj, ...)
 }
 )
@@ -171,11 +171,11 @@ setAs('SpatialPoints', 'VectorLayer',
 setAs('VectorLayer', 'Spatial', 
 	function(from) {
 		if (from@type == 'polygons') {
-			methods::as(from, 'SpatialPolygons')
+			as(from, 'SpatialPolygons')
 		} else if (from@type == 'lines') {
-			methods::as(from, 'SpatialLines')
+			as(from, 'SpatialLines')
 		} else if (from@type == 'points') {
-			methods::as(from, 'SpatialPoints')
+			as(from, 'SpatialPoints')
 		}
 	}
 )

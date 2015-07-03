@@ -125,7 +125,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 			if (hd) {
 				x@data <- dat
 			} else {
-				x <- methods::as(x, 'SpatialPolygons')
+				x <- as(x, 'SpatialPolygons')
 			}
 			return(x)
 		}
@@ -140,7 +140,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 
 		
 		if (hd) {
-			x <- methods::as(x, 'SpatialPolygons')
+			x <- as(x, 'SpatialPolygons')
 		}
 		
 		if (dissolve) {
@@ -219,7 +219,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 			if (hd) {
 				x@data <- dat
 			} else {
-				x <- methods::as(x, 'SpatialLines')
+				x <- as(x, 'SpatialLines')
 			}
 			return(x)
 		}
@@ -233,7 +233,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 		}
 		
 		if (hd) {
-			x <- methods::as(x, 'SpatialLines')
+			x <- as(x, 'SpatialLines')
 		}
 		x <- lapply(1:nrow(id), function(y) spChFIDs(aggregate(x[dc[dc$v==y,1],], dissolve=FALSE), as.character(y)))
 		
