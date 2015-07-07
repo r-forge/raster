@@ -168,8 +168,9 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 )
 
 
-.aggregate.SpatialLines <- function(x, by=NULL, sums=NULL, ...) {
-	
+setMethod('aggregate', signature(x='SpatialLines'), 
+function(x, by=NULL, sums=NULL, ...) {
+
 	if (!is.null(by)) {
 		if (!is.character(by)) {
 			# sp::aggregate is not exported 
@@ -243,6 +244,6 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 		SpatialLinesDataFrame(x, dat, FALSE)
 	}
 }
-
+)
 
 
