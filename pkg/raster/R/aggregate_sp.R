@@ -63,7 +63,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 			# sp::aggregate is not exported 
 			# solution by Matt Strimas-Mackey
 			spAgg <- get('aggregate', envir=as.environment("package:sp"))
-			spAgg(x, by, ..., dissolve=dissolve)
+			return( spAgg(x, by, ..., dissolve=dissolve) )
 		}
 	}
 	
@@ -176,7 +176,7 @@ function(x, by=NULL, sums=NULL, ...) {
 			# sp::aggregate is not exported 
 			# solution by Matt Strimas-Mackey
 			spAgg <- get('aggregate', envir=as.environment("package:sp"))
-			spAgg(x, by, ...)
+			return( spAgg(x, by, ..., dissolve=dissolve) )			
 		}
 	}
 	
