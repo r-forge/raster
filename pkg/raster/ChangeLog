@@ -11,8 +11,9 @@ add VRT output to saveStack
 Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 allow setting a 'spatial window'
 
---- current version
 
+--- current version
+Mihai-Andrei Mirt send a bug fix for corLocal
 
 --- 2-July-2015, version: 2.4-15
 Improved geodesic algorithm (GeograhicLib by C.F.F. Karney) for pointDistance and other lon/lat distance computations, and to compute the area of an ellipsoidal polygon
