@@ -44,7 +44,7 @@ setMethod('shift', signature(object='SpatialPolygons'),
 			a <- as(a, 'SpatialPolygons')			
 		}
 		crs(a) <- crs(object)
-		return(object)
+		return(a)
 	}
 )
 
@@ -61,7 +61,7 @@ setMethod('shift', signature(object='SpatialLines'),
 			a <- as(a, 'SpatialLines')			
 		}
 		crs(a) <- crs(object)
-		return(object)
+		return(a)
 	}
 )
 
