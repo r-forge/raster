@@ -61,18 +61,24 @@ ccodes <- function() {
 #		stop('provide a 3 letter ISO country code')
 #	}
 	cs <- ccodes()
-	try (cs <- toupper(cs))
+	cs <- toupper(cs)
 
-	iso3 <- substr(toupper(country), 1, 3)
+	iso3 <- substr(country, 1, 3)
 	if (iso3 %in% cs[,2]) {
 		return(iso3)
 	} else {
-		iso2 <- substr(toupper(country), 1, 3)
+		iso2 <- substr(country, 1, 2)
 		if (iso2 %in% cs[,3]) {
 			i <- which(country==cs[,3])
 			return( cs[i,2] )
 		} else if (country %in% cs[,1]) {
 			i <- which(country==cs[,1])
+			return( cs[i,2] )
+		} else if (country %in% cs[,4]) {
+			i <- which(country==cs[,4])
+			return( cs[i,2] )
+		} else if (country %in% cs[,5]) {
+			i <- which(country==cs[,5])
 			return( cs[i,2] )
 		} else {
 			stop('provide a valid name or 3 letter ISO country code; you can get a list with: getData("ISO3")')
@@ -104,18 +110,26 @@ ccodes <- function() {
 }
 
 
-.GADM <- function(country, level, download, path) {
+.GADM <- function(country, level, download, path, version='latest') {
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
+
 
 	country <- .getCountry(country)
 	if (missing(level)) {
 		stop('provide a "level=" argument; levels can be 0, 1, or 2 for most countries, and higer for some')
 	}
 	
-	filename <- paste(path, country, '_adm', level, ".RData", sep="")
+	filename <- paste(path, country, '_adm', level, ".rds", sep="")
 	if (!file.exists(filename)) {
 		if (download) {
-			theurl <- paste("http://biogeo.ucdavis.edu/data/gadm2/R/", country, '_adm', level, ".RData", sep="")
+		
+			if (version == 'latest') {
+				theurl <- "http://biogeo.ucdavis.edu/data/gadm-current/R/"
+			} else {
+				theurl <- paste("http://biogeo.ucdavis.edu/data/gadm", version, "/R/")
+			}
+			theurl <- paste(theurl, country, '_adm', level, ".rds", sep="")
+			
 			.download(theurl, filename)
 			if (!file.exists(filename))	{ 
 				message("\nCould not download file -- perhaps it does not exist") 
@@ -125,8 +139,9 @@ ccodes <- function() {
 		}
 	}	
 	if (file.exists(filename)) {
-		thisenvir = new.env()
-		data <- get(load(filename, thisenvir), thisenvir)
+		#thisenvir = new.env()
+		#data <- get(load(filename, thisenvir), thisenvir)
+		data <- readRDS(filename)
 		return(data)
 	} 
 }
@@ -139,7 +154,7 @@ ccodes <- function() {
 	filename <- paste(path, 'countries.RData', sep="")
 	if (!file.exists(filename)) {
 		if (download) {
-			theurl <- paste("http://biogeo.ucdavis.edu/data/diva/misc/countries.RData", sep="")
+			theurl <- paste("http://biogeo.ucdavis.edu/data/gadm2.6/countries_gadm26.rds", sep="")
 			.download(theurl, filename)
 			if (!file.exists(filename)) {
 				message("\nCould not download file -- perhaps it does not exist") 
@@ -149,8 +164,9 @@ ccodes <- function() {
 		}
 	}	
 	if (file.exists(filename)) {
-		thisenvir = new.env()
-		data <- get(load(filename, thisenvir), thisenvir)
+		#thisenvir = new.env()
+		#data <- get(load(filename, thisenvir), thisenvir)
+		data <- readRDS(filename)
 		return(data)
 	} 
 }
