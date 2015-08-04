@@ -57,7 +57,7 @@ ccodes <- function() {
 
 .getCountry <- function(country='') {
 	country <- toupper(trim(country[1]))
-#	if (nchar(country) < 3) {
+#	if (.nchar(country) < 3) {
 #		stop('provide a 3 letter ISO country code')
 #	}
 	cs <- ccodes()
@@ -92,10 +92,10 @@ ccodes <- function() {
 	if (path=='') {
 		path <- .dataloc()
 	} else {
-		if (substr(path, nchar(path)-1, nchar(path)) == '//' ) {
-			p <- substr(path, 1, nchar(path)-2)		
-		} else if (substr(path, nchar(path), nchar(path)) == '/'  | substr(path, nchar(path), nchar(path)) == '\\') {
-			p <- substr(path, 1, nchar(path)-1)
+		if (substr(path, .nchar(path)-1, .nchar(path)) == '//' ) {
+			p <- substr(path, 1, .nchar(path)-2)		
+		} else if (substr(path, .nchar(path), .nchar(path)) == '/'  | substr(path, .nchar(path), .nchar(path)) == '\\') {
+			p <- substr(path, 1, .nchar(path)-1)
 		} else {
 			p <- path
 		}
@@ -103,7 +103,7 @@ ccodes <- function() {
 			stop('path does not exist: ', path)
 		}
 	}
-	if (substr(path, nchar(path), nchar(path)) != '/' & substr(path, nchar(path), nchar(path)) != '\\') {
+	if (substr(path, .nchar(path), .nchar(path)) != '/' & substr(path, .nchar(path), .nchar(path)) != '\\') {
 		path <- paste(path, "/", sep="")
 	}
 	return(path)
@@ -351,7 +351,7 @@ ccodes <- function() {
 	} else {
 		#patrn <- paste(country, '.', mskname, name, ".grd", sep="")
 		#f <- list.files(path, pattern=patrn)
-		f <- ff[substr(ff, nchar(ff)-3, nchar(ff)) == '.grd']
+		f <- ff[substr(ff, .nchar(ff)-3, .nchar(ff)) == '.grd']
 		if (length(f)==0) {
 			warning('something went wrong')
 			return(NULL)
