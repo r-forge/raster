@@ -176,7 +176,7 @@ function(x, by=NULL, sums=NULL, ...) {
 			# sp::aggregate is not exported 
 			# solution by Matt Strimas-Mackey
 			spAgg <- get('aggregate', envir=as.environment("package:sp"))
-			return( spAgg(x, by, ..., dissolve=dissolve) )			
+			return( spAgg(x, by, ...) )			
 		}
 	}
 	
@@ -236,7 +236,7 @@ function(x, by=NULL, sums=NULL, ...) {
 		if (hd) {
 			x <- as(x, 'SpatialLines')
 		}
-		x <- lapply(1:nrow(id), function(y) spChFIDs(aggregate(x[dc[dc$v==y,1],], dissolve=FALSE), as.character(y)))
+		x <- lapply(1:nrow(id), function(y) spChFIDs(aggregate(x[dc[dc$v==y,1],]), as.character(y)))
 		
 		x <- do.call(rbind, x)
 		x@proj4string <- crs

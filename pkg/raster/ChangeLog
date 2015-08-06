@@ -13,7 +13,9 @@ allow setting a 'spatial window'
 
 
 --- current version
-Mihai-Andrei Mirt send a bug fix for corLocal
+Andrei Mirt send a bug fix for corLocal
+.nchar to replace nchar to avoid R version problem
+various minor fixes
 
 --- 2-July-2015, version: 2.4-15
 Improved geodesic algorithm (GeograhicLib by C.F.F. Karney) for pointDistance and other lon/lat distance computations, and to compute the area of an ellipsoidal polygon

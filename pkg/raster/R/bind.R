@@ -317,7 +317,7 @@ setMethod('bind', signature(x='SpatialPoints', y='SpatialPoints'),
 #		if (! dataFound ) { return( do.call(rbind, x) ) }
 		x <- sapply(x, function(x) as(x, 'SpatialPoints'))
 		x <- do.call(rbind, x)
-		SpatialPoinsDataFrame(x, dat)
+		SpatialPointsDataFrame(x, dat)
 }
 )
 
