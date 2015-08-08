@@ -10,7 +10,7 @@ if (!isGeneric("text")) {
 }	
 
 
-.shadowtext <- function(x, y=NULL, labels, col='black', hc='white', hw=0.1, ... ) {
+.haloText <- function(x, y=NULL, labels, col='black', hc='white', hw=0.1, ... ) {
 # with minor modifications from
 #From: Greg Snow <Greg.Snow <at> imail.org>
 #Subject: Re: Text Contrast in a Plot
@@ -40,7 +40,7 @@ setMethod('text', signature(x='RasterLayer'),
 			}
 		}
 		if (halo) {
-			.shadowtext(x[,1], x[,2], labels, ...)
+			.haloText(x[,1], x[,2], labels, ...)
 		} else {
 			text(x[,1], x[,2], labels, ...)
 		}
@@ -65,7 +65,7 @@ setMethod('text', signature(x='RasterStackBrick'),
 			labels <- as.character(round(x[,3], digits=digits) )
 		}
 		if (halo) {
-			.shadowtext(x[,1], x[,2], labels, ...)
+			.haloText(x[,1], x[,2], labels, ...)
 		} else {
 			text(x[,1], x[,2], labels, ...)
 		}
@@ -94,7 +94,7 @@ setMethod('text', signature(x='SpatialPolygons'),
 		
 		xy <- coordinates(x)
 		if (halo) {
-			.shadowtext(x[,1], x[,2], labels, ...)
+			.haloText(xy[,1], xy[,2], labels, ...)
 		} else {
 			text(xy[,1], xy[,2], labels, ...)
 		}
@@ -124,7 +124,7 @@ setMethod('text', signature(x='SpatialPoints'),
 
 		xy <- coordinates(x)		
 		if (halo) {
-			.shadowtext(x[,1], x[,2], labels, ...)
+			.haloText(xy[,1], xy[,2], labels, ...)
 		} else {
 			text(xy[,1], xy[,2], labels, ...)
 		}
