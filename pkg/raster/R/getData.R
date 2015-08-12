@@ -8,7 +8,7 @@
 getData <- function(name='GADM', download=TRUE, path='', ...) {
 	path <- .getDataPath(path)
 	if (name=='GADM') {
-		.GADM(..., download=download, path=path)
+		.GADM(..., download=download, path=path, version=2.7)
 	} else if (name=='SRTM') {
 		.SRTM(..., download=download, path=path)
 	} else if (name=='alt') {
@@ -110,40 +110,45 @@ ccodes <- function() {
 }
 
 
-.GADM <- function(country, level, download, path, version='latest') {
+.GADM <- function(country, level, download, path, version) {
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
-
 
 	country <- .getCountry(country)
 	if (missing(level)) {
-		stop('provide a "level=" argument; levels can be 0, 1, or 2 for most countries, and higer for some')
+		stop('provide a "level=" argument; levels can be 0, 1, or 2 for most countries, and higher for some')
 	}
 	
-	filename <- paste(path, country, '_adm', level, ".rds", sep="")
+	filename <- paste(path, 'GADM_', version, '_', country, '_adm', level, ".rds", sep="")
+	print(filename)
 	if (!file.exists(filename)) {
 		if (download) {
 		
-			if (version == 'latest') {
-				theurl <- "http://biogeo.ucdavis.edu/data/gadm-current/R/"
+			baseurl <- paste0("http://biogeo.ucdavis.edu/data/gadm", version)
+			if (version == 2) {
+				theurl <- paste(baseurl, '/R/', country, '_adm', level, ".RData", sep="")
 			} else {
-				theurl <- paste("http://biogeo.ucdavis.edu/data/gadm", version, "/R/")
+				theurl <- paste(baseurl, '/rds/', country, '_adm', level, ".rds", sep="")			
 			}
-			theurl <- paste(theurl, country, '_adm', level, ".rds", sep="")
 			
 			.download(theurl, filename)
 			if (!file.exists(filename))	{ 
 				message("\nCould not download file -- perhaps it does not exist") 
 			}
 		} else {
-			message("\nFile not available locally. Use 'download = TRUE'")
+			message("File not available locally. Use 'download = TRUE'")
 		}
 	}	
 	if (file.exists(filename)) {
-		#thisenvir = new.env()
-		#data <- get(load(filename, thisenvir), thisenvir)
-		data <- readRDS(filename)
+		if (version == 2) {
+			thisenvir <- new.env()
+			data <- get(load(filename, thisenvir), thisenvir)
+		} else {
+			data <- readRDS(filename)
+		}
 		return(data)
-	} 
+	} else {
+		return(NULL)
+	}
 }
 
 
@@ -160,7 +165,7 @@ ccodes <- function() {
 				message("\nCould not download file -- perhaps it does not exist") 
 			}
 		} else {
-			message("\nFile not available locally. Use 'download = TRUE'")
+			message("File not available locally. Use 'download = TRUE'")
 		}
 	}	
 	if (file.exists(filename)) {
@@ -227,7 +232,7 @@ ccodes <- function() {
 					message("\n Could not download file -- perhaps it does not exist") 
 				}
 			} else {
-				message("\nFile not available locally. Use 'download = TRUE'")
+				message("File not available locally. Use 'download = TRUE'")
 			}
 		}	
 		utils::unzip(zipfile, exdir=dirname(zipfile))
@@ -294,7 +299,7 @@ ccodes <- function() {
 					message("\n Could not download file -- perhaps it does not exist") 
 				}
 			} else {
-				message("\nFile not available locally. Use 'download = TRUE'")
+				message("File not available locally. Use 'download = TRUE'")
 			}
 		}	
 		utils::unzip(zipfile, exdir=dirname(zipfile))
@@ -338,7 +343,7 @@ ccodes <- function() {
 					message("\nCould not download file -- perhaps it does not exist") 
 				}
 			} else {
-				message("\nFile not available locally. Use 'download = TRUE'")
+				message("File not available locally. Use 'download = TRUE'")
 			}
 		}
 		ff <- utils::unzip(zipfilename, exdir=dirname(zipfilename))
