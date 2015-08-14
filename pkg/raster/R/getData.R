@@ -119,7 +119,6 @@ ccodes <- function() {
 	}
 	
 	filename <- paste(path, 'GADM_', version, '_', country, '_adm', level, ".rds", sep="")
-	print(filename)
 	if (!file.exists(filename)) {
 		if (download) {
 		
