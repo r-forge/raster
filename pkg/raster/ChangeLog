@@ -13,12 +13,16 @@ allow setting a 'spatial window'
 
 
 --- current version
+Bug fixes:
+in rasterFromXYZ (by Gareth Davies)
+in crop (by Florian Detsch)
+
+--- 8-September-2015, version: 2.4-20
 Andrei Mirt send a bug fix for corLocal
 namespace now captures all functions from other packages
 .nchar to replace nchar to avoid R version problem
 Sebastian Bock reported a bug in raster:::.circular.weight
 various minor fixes
-
 
 --- 2-July-2015, version: 2.4-15
 Improved geodesic algorithm (GeograhicLib by C.F.F. Karney) for pointDistance and other lon/lat distance computations, and to compute the area of an ellipsoidal polygon
