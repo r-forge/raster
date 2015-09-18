@@ -122,6 +122,7 @@ setMethod('click', signature(x='Raster'),
 	while (i < n) {
 		i <- i + 1
 		loc <- graphics::locator(1, type, ...)
+		if (is.null(loc)) break
 		xyCoords <- cbind(x=loc$x, y=loc$y)
 		if (id) { 
 			text(xyCoords, labels=i) 

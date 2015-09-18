@@ -16,6 +16,7 @@ allow setting a 'spatial window'
 Bug fixes:
 in rasterFromXYZ (by Gareth Davies)
 in crop (by Florian Detsch)
+in stack (http://stackoverflow.com/questions/32564932/r-import-two-or-more-selected-bands-from-an-image-stack)
 
 --- 8-September-2015, version: 2.4-20
 Andrei Mirt send a bug fix for corLocal
