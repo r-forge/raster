@@ -153,7 +153,7 @@ function(x, y, ..., keepnames=FALSE) {
 #		if (! dataFound ) { return( do.call(rbind, x) ) }
 		x <- sapply(x, function(x) as(x, 'SpatialPolygons'))
 		x <- do.call(rbind, x)
-		SpatialPolygonsDataFrame(x, dat)
+		SpatialPolygonsDataFrame(x, dat, match.ID=FALSE)
 }
 )
 
@@ -237,14 +237,14 @@ setMethod('bind', signature(x='SpatialLines', y='SpatialLines'),
 					dat[1:length(x[[i]]@lines),] <- NA
 					rownames(dat) <- row.names(x[[i]])
 				} else {
-					dat[(nrow(dat)+1):(nrow(dat)+nrow(x[[i]]@coords)),] <- NA
+					dat[(nrow(dat)+1):(nrow(dat) + length(x[[i]])), ] <- NA
 				}	
 			}
 		}
 #		if (! dataFound ) { return( do.call(rbind, x) ) }
 		x <- sapply(x, function(x) as(x, 'SpatialLines'))
 		x <- do.call(rbind, x)
-		SpatialLinesDataFrame(x, dat)
+		SpatialLinesDataFrame(x, dat, match.ID=FALSE)
 }
 )
 
