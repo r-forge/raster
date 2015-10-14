@@ -16,7 +16,7 @@
 
 	row1 <- rowFromCell(x, min(cells))
 	row2 <- rowFromCell(x, max(cells))
-	if ((row2 - row1) > 10 )
+	if ((row2 - row1) < 10 ) {
 	# read only rows needed	
 		ncl <- (row2 - row1 + 1) * x@ncols
 		r <- raster(nrow=1, ncol=ncl)
