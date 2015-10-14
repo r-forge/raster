@@ -13,7 +13,10 @@ allow setting a 'spatial window'
 
 
 --- current version
-Bug fixes:
+
+Major bug fix
+Extraction of values with xy or cellnumber from a ncdf file where 'level' is the fourth variable (and time third, in stead of the other way around) did not work correctly. Reported by John Gross
+Minor bug fixes:
 in rasterFromXYZ (by Gareth Davies)
 in crop (by Florian Detsch)
 in stack (http://stackoverflow.com/questions/32564932/r-import-two-or-more-selected-bands-from-an-image-stack)

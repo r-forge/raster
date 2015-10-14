@@ -6,18 +6,18 @@
 
 .readRasterCellsNetCDF <- function(x, cells) {
 
-# read all
 	if (canProcessInMemory(x, 2)) {
+    # read all
 		r <- getValues(x)
 		r <- r[cells]
 		return(r)
 	} 
 	
 
-	if (canProcessInMemory(x, 2)) {
+	row1 <- rowFromCell(x, min(cells))
+	row2 <- rowFromCell(x, max(cells))
+	if ((row2 - row1) > 10 )
 	# read only rows needed	
-		row1 <- rowFromCell(x, min(cells))
-		row2 <- rowFromCell(x, max(cells))
 		ncl <- (row2 - row1 + 1) * x@ncols
 		r <- raster(nrow=1, ncol=ncl)
 		v <- getValues(x, row1, row2-row1+1)
@@ -171,7 +171,7 @@
 			count <- c(1, 1, nl, 1)
 			res <- matrix(nrow=length(cells), ncol=nl)
 			for (i in 1:length(cells)) {
-				start <- c(cols[i], rows[i], layer, 1)
+				start <- c(cols[i], rows[i], layer, x@data@level)
 				res[i,] <- getfun(nc, varid=zvar, start=start, count=count)
 			}	
 		}

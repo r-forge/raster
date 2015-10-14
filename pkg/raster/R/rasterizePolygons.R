@@ -184,7 +184,9 @@
 	if (ncol(pvals) > 1) {
 		rstr@data@isfactor <- TRUE
 		rstr@data@attributes <- list(pvals)
-		if (!(fun %in% c('first', 'last'))) {
+		if (!is.character(fun)) {
+			stop('when rasterizing multiple values you must use "fun=first" or "fun=last"')
+		} else if (!(fun %in% c('first', 'last'))) {
 			stop('when rasterizing multiple values you must use "fun=first" or "fun=last"')
 		}
 	}
@@ -228,7 +230,7 @@
 	}
 	
 	if (! silent) { 
-		message('Found', npol, 'region(s) and', cnt, 'polygon(s)') 
+		message('Found', npol, ' region(s) and', cnt, ' polygon(s)') 
 	}
 	
 	polinfo <- subset(polinfo, polinfo[,1] <= cnt, drop=FALSE)
