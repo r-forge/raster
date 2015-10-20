@@ -10,7 +10,7 @@
 		return( data.frame(v=rep(1, length=n)) )
 	
 	} else if (missing(field)) {
-		if (methods::.hasSlot(obj, 'data')) {
+		if (.hasSlot(obj, 'data')) {
 			putvals <- obj@data
 			cn <- validNames(c('ID', colnames(putvals)))
 			cn[1] <- 'ID'
@@ -26,7 +26,7 @@
 
 		
 	} else if (is.character(field) ) {
-		if (methods::.hasSlot(obj, 'data')) {
+		if (.hasSlot(obj, 'data')) {
 			nms <- names(obj)
 			if (length(field) <= length(nms)) {
 				m <- match(field, nms)

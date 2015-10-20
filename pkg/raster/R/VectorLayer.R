@@ -119,7 +119,7 @@ setAs('SpatialPolygons', 'VectorLayer',
 		}
 		colnames(ag) <- colnames(v@index)
 		v@index <- ag
-		if (methods::.hasSlot(from, 'data')) {
+		if (.hasSlot(from, 'data')) {
 			v@attributes <- from@data
 		}
 		v@crs <- from@proj4string
@@ -139,7 +139,7 @@ setAs('SpatialLines', 'VectorLayer',
 		ag <- as.matrix(ag[order(ag$object, ag$part, ag$hole), ])
 		colnames(ag) <- colnames(v@index)
 		v@index <- ag
-		if (methods::.hasSlot(from, 'data')) {
+		if (.hasSlot(from, 'data')) {
 			v@attributes <- from@data
 		}
 		v@crs <- from@proj4string
@@ -159,7 +159,7 @@ setAs('SpatialPoints', 'VectorLayer',
 		ag <- as.matrix(ag[order(ag$object, ag$part), ])
 		colnames(ag) <- colnames(v@index)
 		v@index <- ag
-		if (methods::.hasSlot(from, 'data')) {
+		if (.hasSlot(from, 'data')) {
 			v@attributes <- from@data
 		}
 		v@crs <- from@proj4string

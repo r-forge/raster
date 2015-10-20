@@ -342,7 +342,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 			return(res)
 		}
 		
-		if (! methods::.hasSlot(y, 'data') ) {
+		if (!.hasSlot(y, 'data') ) {
 			y <- SpatialPolygonsDataFrame(y, res[, -1, drop=FALSE])
 		} else {
 			y@data <- cbind(y@data, res[, -1, drop=FALSE])

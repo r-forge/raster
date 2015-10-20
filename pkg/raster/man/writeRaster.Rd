@@ -51,7 +51,8 @@ NetCDF files have the following additional, optional, arguments: \code{varname},
 when writing to an ascii file or another file type that does not store the crs
 }
 
-\item{bylayer}{if \code{TRUE}, write a seperate file for each layer}
+\item{bylayer}{if \code{TRUE}, write a separate file for each layer. You can provide a vector of filenames that matches the number of layers. Or you can provide a single filename that will get a unique suffix (see below)}
+
 \item{suffix}{'numbers' or 'names' to determine the suffix that each file gets when \code{bylayer=TRUE}; either a number between \code{1} and \code{nlayers(x)} or \code{names(x)}}
 }
 

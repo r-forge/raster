@@ -133,7 +133,7 @@ function(x, y, ..., keepnames=FALSE) {
 		dat <- NULL
 #		dataFound <- FALSE
 		for (i in 1:length(x)) {
-			if (methods::.hasSlot(x[[i]], 'data')) {
+			if (.hasSlot(x[[i]], 'data')) {
 #				dataFound <- TRUE
 				if (is.null(dat)) {
 					dat <- x[[i]]@data
@@ -224,7 +224,7 @@ setMethod('bind', signature(x='SpatialLines', y='SpatialLines'),
 		dat <- NULL
 #		dataFound <- FALSE
 		for (i in 1:length(x)) {
-			if (methods::.hasSlot(x[[i]], 'data')) {
+			if (.hasSlot(x[[i]], 'data')) {
 #				dataFound <- TRUE
 				if (is.null(dat)) {
 					dat <- x[[i]]@data
@@ -298,7 +298,7 @@ setMethod('bind', signature(x='SpatialPoints', y='SpatialPoints'),
 		
 		dat <- NULL
 		for (i in 1:length(x)) {
-			if (methods::.hasSlot(x[[i]], 'data')) {
+			if (.hasSlot(x[[i]], 'data')) {
 				if (is.null(dat)) {
 					dat <- x[[i]]@data
 				} else {

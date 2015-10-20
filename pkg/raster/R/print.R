@@ -74,7 +74,7 @@ setMethod ('print' , 'Spatial',
 		cat('class       :' , class(x), '\n')
 		isRaster <- hasData <- FALSE
 		nc <- 0
-		if (methods::.hasSlot(x, 'data')) {
+		if (.hasSlot(x, 'data')) {
 			hasData <- TRUE
 			nc <- ncol(x@data)
 		}
