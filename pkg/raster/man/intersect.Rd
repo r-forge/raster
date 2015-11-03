@@ -6,11 +6,13 @@
 
 \alias{intersect,Extent,ANY-method}
 \alias{intersect,Raster,ANY-method}
+
 \alias{intersect,SpatialPoints,ANY-method}
 
 \alias{intersect,SpatialPolygons,SpatialPolygons-method}
 \alias{intersect,SpatialPolygons,SpatialLines-method}
 \alias{intersect,SpatialPolygons,SpatialPoints-method}
+\alias{intersect,SpatialPolygons,ANY-method}
 
 \alias{intersect,SpatialLines,SpatialPolygons-method}
 \alias{intersect,SpatialLines,SpatialLines-method}

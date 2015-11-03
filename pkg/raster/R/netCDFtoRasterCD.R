@@ -342,6 +342,11 @@
 			names(r@z) <- nc$var[[zvar]]$dim[[dim3]]$units
 		}
 	}
+
+	if (length(ndims)== 2 & type != 'RasterLayer') { 
+		warning('cannot make a RasterBrick from data that has only two dimensions (no time step), returning a RasterLayer instead')	
+	} 
+
 	
 	if (type == 'RasterLayer') {
 		if (is.null(band) | is.na(band)) {
@@ -368,9 +373,6 @@
 		} 
 
 	} else {
-		#if (length(ndims)== 2) { 
-		#	stop('cannot make a RasterBrick from data that has only two dimensions (no time step), use raster() instead, and then make a RasterBrick from that')	
-		#} 
 		r@data@nlayers <- r@file@nbands
 		r@data@min <- rep(Inf, r@file@nbands)
 		r@data@max <- rep(-Inf, r@file@nbands)

@@ -295,3 +295,13 @@ function(x, y) {
 }
 )
 
+
+
+
+setMethod('intersect', signature(x='SpatialPolygons', y='ANY'), 
+function(x, y) {
+	y <- extent(y)
+	y <- as(y, 'SpatialPolygns')
+	intersect(x, y)
+}
+)
