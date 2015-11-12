@@ -103,7 +103,7 @@ function(x, y, fun=NULL, na.rm=FALSE, weights=FALSE, normalizeWeights=TRUE, cell
 		cl <- getCluster()
 		on.exit( returnCluster() )
 		nodes <- min(npol, length(cl)) 
-		message('Using cluster with', nodes, 'nodes')
+		message('Using cluster with ', nodes, ' nodes')
 		utils::flush.console()
 
 		.sendCall <- eval( parse( text="parallel:::sendCall") )

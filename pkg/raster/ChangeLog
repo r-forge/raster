@@ -13,9 +13,9 @@ allow setting a 'spatial window'
 
 
 --- current version
-
-Major bug fix
+Major bug fixes:
 Extraction of values with xy or cellnumber from a ncdf file where 'level' is the fourth variable (and time third, in stead of the other way around) did not work correctly. Reported by John Gross
+rasterize(..., getCover=TRUE) did not work properly. Reported by Sam Tomlinso
 Minor bug fixes:
 in rasterFromXYZ (by Gareth Davies)
 in crop (by Florian Detsch)
