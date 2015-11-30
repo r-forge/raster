@@ -1,10 +1,10 @@
 Package: raster
 Type: Package
 Title: Geographic Data Analysis and Modeling
-Version: 2.4-27
-Date: 2015-11-18
+Version: 2.4-28
+Date: 2015-11-29
 Depends: methods, sp (>= 1.2-0), R (>= 3.0.0)
-Suggests: rgdal (>= 0.9-1), rgeos (>= 0.3-8), ncdf, ncdf4, igraph, tcltk, parallel, rasterVis
+Suggests: rgdal (>= 0.9-1), rgeos (>= 0.3-8), ncdf4, igraph, tcltk, parallel, rasterVis
 LinkingTo: Rcpp
 Imports: Rcpp
 Authors@R: c(

@@ -39,17 +39,10 @@
 	zvar = x@data@zvar
 	time = x@data@band
 	
-	if (isTRUE(getOption('rasterNCDF4'))) {
-		nc <- ncdf4::nc_open(x@file@name)
-		on.exit( ncdf4::nc_close(nc) )		
-		getfun <- ncdf4::ncvar_get
-	
-	} else {
-		nc <- ncdf::open.ncdf(x@file@name)
-		on.exit( ncdf::close.ncdf(nc) )
-		getfun <- ncdf::get.var.ncdf
-	}
-	
+	nc <- ncdf4::nc_open(x@file@name)
+	on.exit( ncdf4::nc_close(nc) )		
+	getfun <- ncdf4::ncvar_get
+
 	if (nc$var[[zvar]]$ndims == 1) {
 		ncx <- x@ncols
 		count <- ncx
@@ -131,17 +124,9 @@
 	}
 		
 
-	if (getOption('rasterNCDF4')) {
-		nc <- ncdf4::nc_open(x@file@name)
-		on.exit( ncdf4::nc_close(nc) )		
-		getfun <- ncdf4::ncvar_get
-	
-	} else {
-		nc <- ncdf::open.ncdf(x@file@name)
-		on.exit( ncdf::close.ncdf(nc) )
-		getfun <- ncdf::get.var.ncdf
-	}
-	
+	nc <- ncdf4::nc_open(x@file@name)
+	on.exit( ncdf4::nc_close(nc) )		
+	getfun <- ncdf4::ncvar_get
 	
 	# this needs to be optimized. Read chunks and extract cells
 	j <- which(!is.na(cells))

@@ -56,12 +56,7 @@
 				# return ( .rasterFromCDF(x, objecttype, ...) )
 				return ( .rasterObjectFromCDF(x, type=objecttype, band=band, ...) )
 			}
-		} else if (requireNamespace("ncdf")) {
-			if (.isNetCDF(x)) {
-				# return ( .rasterFromCDF(x, objecttype, ...) )
-				return ( .rasterObjectFromCDF(x, type=objecttype, band=band, ...) )
-			}
-		}
+		} 
 	}
 
 	if ( fileext == ".BIG" | fileext == ".BRD") {

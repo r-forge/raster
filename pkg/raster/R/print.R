@@ -11,15 +11,9 @@ setMethod ('print', 'Raster',
 			show(x)
 		} else {
 			if (x@file@driver == 'netcdf') {
-				if (getOption('rasterNCDF4')) {
-					nc <- ncdf4::nc_open(x@file@name)
-					print(nc)
-					ncdf4::nc_close(nc)
-				} else {
-					nc <- ncdf::open.ncdf(x@file@name)
-					print(nc)
-					ncdf::close.ncdf(nc)
-				}
+				nc <- ncdf4::nc_open(x@file@name)
+				print(nc)
+				ncdf4::nc_close(nc)
 			} else if (any(is.factor(x))) {
 				cat('factor levels (value attributes)\n')
 				f <- x@data@attributes

@@ -6,16 +6,8 @@
 
 .stackCDF <- function(filename, varname='', bands='') {
 
-	ncdf4 <- .NCDFversion4()
-
-	if (ncdf4) {
-		nc <- ncdf4::nc_open(filename)
-		on.exit( ncdf4::nc_close(nc) )		
-		
-	} else {
-		nc <- ncdf::open.ncdf(filename)
-		on.exit( ncdf::close.ncdf(nc) )		
-	} 
+	nc <- ncdf4::nc_open(filename)
+	on.exit( ncdf4::nc_close(nc) )		
 
 	zvar <- .varName(nc, varname)
 	dims <- nc$var[[zvar]]$ndims	
