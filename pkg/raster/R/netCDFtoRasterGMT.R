@@ -3,7 +3,7 @@
 # Version 1.0
 # Licence GPL v3
 
-.rasterObjectFromCDF_GMT <- function(nc, ncdf4) {
+.rasterObjectFromCDF_GMT <- function(nc) {
 	dims <- ncdf4::ncvar_get(nc, "dimension", 1)
 	xr <- ncdf4::ncvar_get(nc, "x_range", 1)
 	yr <- ncdf4::ncvar_get(nc, "y_range", 1)

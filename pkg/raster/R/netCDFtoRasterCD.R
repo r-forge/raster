@@ -134,7 +134,7 @@
 	
 	if (ndims== 1) { 
 		
-		return(.rasterObjectFromCDF_GMT(nc, ncdf4))
+		return(.rasterObjectFromCDF_GMT(nc))
 		
 	} else if (ndims == 4) { 
 		if (type != 'RasterQuadBrick') {
@@ -293,7 +293,7 @@
 		r@file@nbands <- nc$var[[zvar]]$dim[[dim3]]$len
 		r@z <- list( nc$var[[zvar]]$dim[[dim3]]$vals )
 		if ( nc$var[[zvar]]$dim[[dim3]]$name == 'time' ) {
-			try( r <- .doTime(r, nc, zvar, dim3, ncdf4) )
+			try( r <- .doTime(r, nc, zvar, dim3) )
 		} else {
 			names(r@z) <- nc$var[[zvar]]$dim[[dim3]]$units
 		}

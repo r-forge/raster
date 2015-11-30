@@ -60,7 +60,7 @@ when writing to an ascii file or another file type that does not store the crs
 \details{
 See \code{writeFormats} for supported file types ("formats", "drivers").
 
-The rgdal package is needed, except for these file formats: 'raster', 'BIL', 'BIP', 'BSQ', 'SAGA', 'ascii', 'IDRISI', and 'CDF'. Some of these formats can be used with or without rgdal (idrisi, SAGA, ascii).  You need the 'ncdf' library for the 'CDF' format. 
+The rgdal package is needed, except for these file formats: 'raster', 'BIL', 'BIP', 'BSQ', 'SAGA', 'ascii', 'IDRISI', and 'CDF'. Some of these formats can be used with or without rgdal (idrisi, SAGA, ascii).  You need the 'ncdf4' library for the 'CDF' format. 
 
 In multi-layer files (i.e. files saved from RasterStack or RasterBrick objects), in the native 'raster' format, the band-order can be set to BIL ('Bands Interleaved by Line'), BIP ('Bands Interleaved by Pixels') or BSQ ('Bands SeQuential'). Note that bandorder is not the same as filetype here. 
 
@@ -72,7 +72,7 @@ Supported file types include:
     \tab \code{ascii}     \tab ESRI Ascii  \tab .asc                 \tab  No \cr
     \tab \code{SAGA}      \tab SAGA GIS    \tab .sdat                \tab  No \cr
     \tab \code{IDRISI}    \tab IDRISI      \tab .rst                 \tab  No \cr
-    \tab \code{CDF}       \tab netCDF (requires ncdf) \tab .nc    \tab  Yes \cr
+    \tab \code{CDF}       \tab netCDF (requires ncdf4) \tab .nc    \tab  Yes \cr
     \tab \code{GTiff}     \tab GeoTiff (requires rgdal) \tab .tif    \tab  Yes  \cr
     \tab \code{ENVI}      \tab ENVI .hdr Labelled       \tab .envi   \tab Yes  \cr
     \tab \code{EHdr}      \tab ESRI .hdr Labelled       \tab  .bil   \tab Yes  \cr
@@ -108,7 +108,7 @@ if (require(rgdal)) {
 }
  
 # write to netcdf 
-if (require(ncdf)) {	
+if (require(ncdf4)) {	
  rnc <- writeRaster(r, filename='netCDF.nc', format="CDF", overwrite=TRUE)   
 }
 }

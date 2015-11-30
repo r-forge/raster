@@ -34,7 +34,7 @@
 		st@z <- list( nc$var[[zvar]]$dim[[dim3]]$vals[bands] )
 		names(st@z) <- nc$var[[zvar]]$dim[[dim3]]$units
 		if ( nc$var[[zvar]]$dim[[dim3]]$name == 'time' ) {	
-			try( st <- .doTime(st, nc, zvar, dim3, ncdf4)  )
+			try( st <- .doTime(st, nc, zvar, dim3)  )
 		}
 		nms <- as.character(st@z[[1]])
 		st@layers <- lapply(bands, function(x){
