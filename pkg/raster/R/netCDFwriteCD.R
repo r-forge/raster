@@ -8,6 +8,7 @@
 .startWriteCDF <- function(x, filename, datatype='FLT4S', overwrite=FALSE, att, 
 		varname, varunit, varatt, longname, xname, yname, zname, zunit, zatt, NAflag, force_v4=FALSE, ...) {
 
+	stopifnot(requireNamespace("ncdf4"))
 		
 	filename <- trim(filename)
 	if (filename == '') { 
@@ -138,7 +139,7 @@
 
 		
 	pkgversion <- drop(read.dcf(file=system.file("DESCRIPTION", package='raster'), fields=c("Version")))
-	ncdf4::ncatt_put(nc, 0, 'created_by', paste('R, packages ncdf and raster (version ', pkgversion, ')', sep=''))
+	ncdf4::ncatt_put(nc, 0, 'created_by', paste('R, packages ncdf4 and raster (version ', pkgversion, ')', sep=''))
 	ncdf4::ncatt_put(nc, 0, 'date', format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
 
 	ncdf4::nc_close(nc)

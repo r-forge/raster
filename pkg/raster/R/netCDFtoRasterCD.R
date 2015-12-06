@@ -121,6 +121,8 @@
 .rasterObjectFromCDF <- function(filename, varname='', band=NA, type='RasterLayer', lvar=3, level=0, 
                         warn=TRUE, dims=1:3, crs=NA, stopIfNotEqualSpaced=TRUE, ...) {
 
+	stopifnot(requireNamespace("ncdf4"))
+
 	nc <- ncdf4::nc_open(filename)
 	on.exit( ncdf4::nc_close(nc) )		
 	conv <- ncdf4::ncatt_get(nc, 0, "Conventions")

@@ -4,6 +4,9 @@
 # Licence GPL v3
 
 .rasterObjectFromCDF_GMT <- function(nc) {
+
+	stopifnot(requireNamespace("ncdf4"))
+
 	dims <- ncdf4::ncvar_get(nc, "dimension", 1)
 	xr <- ncdf4::ncvar_get(nc, "x_range", 1)
 	yr <- ncdf4::ncvar_get(nc, "y_range", 1)

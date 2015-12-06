@@ -6,6 +6,8 @@
 
 .stackCDF <- function(filename, varname='', bands='') {
 
+	stopifnot(requireNamespace("ncdf4"))
+
 	nc <- ncdf4::nc_open(filename)
 	on.exit( ncdf4::nc_close(nc) )		
 
