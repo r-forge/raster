@@ -11,8 +11,10 @@ add VRT output to saveStack
 Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 allow setting a 'spatial window'
 
-
 --- current version
+
+
+--- 10-December-2015, version: 2.4-30
 package ncdf is now obsolete and no longer supported (use ncdf4 instead)
 Major bug fixes:
 Extraction of values with xy or cellnumber from a ncdf file where 'level' is the fourth variable (and time third, in stead of the other way around) did not work correctly. Reported by John Gross
