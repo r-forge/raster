@@ -30,14 +30,14 @@ If there is insufficient memory to load all values, you can use \code{\link{getV
 as.matrix(x, ...)
 as.array(x, ...)
 
-\S4method{as.vector}{Extent}(x, mode='any')
+\S4method{as.vector}{Extent}(x, mode)
 
-\S4method{as.vector}{Raster}(x, mode='any')
+\S4method{as.vector}{Raster}(x, mode)
 }
 
 \arguments{
  \item{x}{ Raster* or (for \code{as.matrix} and \code{as.vector}) Extent object }
- \item{mode}{Character string giving an atomic mode or "list", or "any" (currently ignored!)}
+ \item{mode}{Character string giving an atomic mode or "list", or "any". Note that the \code{mode} argument is ccurrently ignored!}
  \item{...}{ additional arguments: 
  
 	\code{maxpixels} Integer. To regularly subsample very large objects 
