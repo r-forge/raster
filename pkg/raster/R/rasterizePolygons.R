@@ -226,7 +226,7 @@
 				polinfo[cnt, 5] <- 0
 			}
 			polinfo[cnt, 6] <- i
-			pollist[cnt] <- p@polygons[[i]]@Polygons[[j]]
+			pollist[[cnt]] <- p@polygons[[i]]@Polygons[[j]]
 		}
 	}
 	

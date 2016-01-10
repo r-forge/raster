@@ -30,7 +30,6 @@ vector of cell numbers (if \code{x} is a RasterLayer) or (if \code{x} is a Raste
 
 
 \examples{
-\dontrun{
 b <- brick(system.file("external/rlogo.grd", package="raster")) 
 
 r <- which.min(b)
@@ -39,7 +38,6 @@ i <- which.min(b[[3]])
 xy <- xyFromCell(b, i)
 plot(b[[3]])
 points(xy)
-}
 }
 
 \keyword{spatial}
