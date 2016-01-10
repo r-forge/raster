@@ -337,8 +337,6 @@
 		try( names(r) <- as.character(r@z[[1]]), silent=TRUE )
 	}
 	
-
-	
 	return(r)
 }
 
