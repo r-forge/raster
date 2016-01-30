@@ -104,21 +104,21 @@ setMethod('area', signature(x='RasterLayer'),
 		tr <- blockSize(out)
 		pb <- pbCreate(tr$n, label='area', ...)
 
-			for (i in 1:tr$n) {
-				r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
-				vv <- dx[r] * dy / 1000000
-				vv <- rep(vv, each=out@ncols)
-				if (na.rm) {
-					a <- getValues(x, tr$row[i], tr$nrows[i])
-					vv[is.na(a)] <- NA
-				}
-				if (filename == "") {
-					v[,r] <- vv
-				} else {
-					out <- writeValues(out, vv, tr$row[i])
-				}
-				pbStep(pb, i)
+		for (i in 1:tr$n) {
+			r <- tr$row[i]:(tr$row[i]+tr$nrows[i]-1)
+			vv <- dx[r] * dy / 1000000
+			vv <- rep(vv, each=out@ncols)
+			if (na.rm) {
+				a <- getValues(x, tr$row[i], tr$nrows[i])
+				vv[is.na(a)] <- NA
 			}
+			if (filename == "") {
+				v[,r] <- vv
+			} else {
+				out <- writeValues(out, vv, tr$row[i])
+			}
+			pbStep(pb, i)
+		}
 
 		pbClose(pb)
 		
