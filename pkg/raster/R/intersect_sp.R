@@ -301,7 +301,7 @@ function(x, y) {
 setMethod('intersect', signature(x='SpatialPolygons', y='ANY'), 
 function(x, y) {
 	y <- extent(y)
-	y <- as(y, 'SpatialPolygns')
+	y <- as(y, 'SpatialPolygons')
 	intersect(x, y)
 }
 )
