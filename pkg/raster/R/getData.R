@@ -49,9 +49,9 @@ getData <- function(name='GADM', download=TRUE, path='', ...) {
 }
 
 ccodes <- function() {
-	path <- paste(system.file(package="raster"), "/external", sep='')
-	d <- utils::read.csv(paste(path, "/countries.csv", sep=""), stringsAsFactors=FALSE, encoding="UTF-8")
-	return(as.matrix(d))
+	path <- system.file(package="raster")
+	#d <- utils::read.csv(paste(path, "/external/countries.csv", sep=""), stringsAsFactors=FALSE, encoding="UTF-8")
+	readRDS(file.path(path, "external/countries.rds"))
 }
 
 
