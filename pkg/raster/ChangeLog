@@ -13,7 +13,9 @@ allow setting a 'spatial window'
 
 --- current version
 new functions for Raster objects: as.integer, as.list
+new functions whiches.min and whiches.max (to get all layers that are which.min/max)
 added 'forcefun' argument to overlay
+atan2 now available for all Raster objects
 
 --- 19-December-2015, version: 2.5-2
 Big fixes:
