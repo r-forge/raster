@@ -36,8 +36,8 @@ setMethod("whiches.min", "RasterStackBrick",
 	
 		r <- raster(x)
 		nl <- nlayers(x)
-		if (nl > 15) {
-			warning('using this function with more than 15 layers can lead to incorrect results')
+		if (nl > 9) {
+			stop('you can use only use this function for an object with less than 10 layers')
 		}
 	
 		if (canProcessInMemory(x)) {
@@ -83,8 +83,8 @@ setMethod("whiches.max", "RasterStackBrick",
 
 		r <- raster(x)
 		nl <- nlayers(x)
-		if (nl > 15) {
-			warning('using this function with more than 15 layers can lead to incorrect results')
+		if (nl > 9) {
+			stop('you can use only use this function for an object with less than 10 layers')
 		}
 		
 		if (canProcessInMemory(x)) {

@@ -19,7 +19,7 @@
 
 which.min and which.max return the index of the first layer that has the min or max value for a cell. This can be problematic if there are ties. 
 
-In you want the index of all the layers that have the min or max value, use whiches.min or whiches.max.
+In you want the index of all the layers that have the min or max value, use whiches.min or whiches.max (only for objects with less than 10 layers).
 }
 
 \usage{
