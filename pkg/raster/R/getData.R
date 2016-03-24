@@ -61,7 +61,7 @@ ccodes <- function() {
 #		stop('provide a 3 letter ISO country code')
 #	}
 	cs <- ccodes()
-	cs <- toupper(cs)
+	cs <- sapply(cs, toupper)
 
 	iso3 <- substr(country, 1, 3)
 	if (iso3 %in% cs[,2]) {
