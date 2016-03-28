@@ -28,6 +28,9 @@ if (!isGeneric("area")) {
 setMethod('area', signature(x='SpatialPolygons'), 
 	function(x, ...) {
 		if (couldBeLonLat(x)) {
+			if (!isLonLat(x)) {
+				warning('assuming that the CRS is longitude/latitude!')
+			}
 
 			a <- 6378137
 			f <- 1/298.257223563
@@ -51,7 +54,7 @@ setMethod('area', signature(x='SpatialPolygons'),
 			return(res)
 		}
 		if (requireNamespace("rgeos")) {
-			rgeos::gArea(x, byid=TRUE)
+			as.vector(rgeos::gArea(x, byid=TRUE))
 		} else {	
 			warning('install rgeos for better area estimation')
 			sapply(x@polygons, function(i) methods::slot(i, 'area'))
