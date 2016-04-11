@@ -51,6 +51,7 @@ setMethod('area', signature(x='SpatialPolygons'),
 				}
 				res[i] <- sumarea
 			}
+			res <- abs(res)
 			return(res)
 		}
 		if (requireNamespace("rgeos")) {
