@@ -44,3 +44,16 @@ function(x, lower=-Inf, upper=Inf, useValues=TRUE, filename='', ...) {
 }
 )
 
+
+setMethod('clamp', signature(x='numeric'), 
+function(x, lower=-Inf, upper=Inf, ...) {
+	if (x < lower) {
+		x <- lower
+	} else if (x > upper) {
+		x <- upper
+	}
+	return(x)
+}
+)
+
+
