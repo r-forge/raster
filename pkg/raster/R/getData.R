@@ -63,29 +63,29 @@ ccodes <- function() {
 	nc <- nchar(country)
 
 	if (nc == 3) {
-		if (country %in% cs[,2]) {
-			return(iso3)
+		if (country %in% cs$ISO3) {
+			return(country)
 		} else {
-			stop('unknown code')
+			stop('unknown country')
 		}
 	} else if (nc == 2) {
-		if (iso2 %in% cs[,3]) {
-			i <- which(country==cs[,3])
-			return( cs[i,2] )
+		if (country %in% cs$ISO2) {
+			i <- which(country==cs$ISO2)
+			return( cs$ISO3[i] )
 		} else {
-			stop('unknown code')
+			stop('unknown country')
 		}
 	} else if (country %in% cs[,1]) {
 		i <- which(country==cs[,1])
-		return( cs[i,2] )
+		return( cs$ISO3[i] )
 	} else if (country %in% cs[,4]) {
 		i <- which(country==cs[,4])
-		return( cs[i,2] )
+		return( cs$ISO3[i] )
 	} else if (country %in% cs[,5]) {
 		i <- which(country==cs[,5])
-		return( cs[i,2] )
+		return( cs$ISO3[i] )
 	} else {
-		stop('provide a valid name name or 3 letter ISO country code; you can get a list with: getData("ISO3")')
+		stop('provide a valid name name or 3 letter ISO country code; you can get a list with "ccodes()"')
 	}
 }
 

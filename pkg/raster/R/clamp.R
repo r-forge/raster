@@ -12,6 +12,9 @@ if (!isGeneric("clamp")) {
 
 setMethod('clamp', signature(x='Raster'), 
 function(x, lower=-Inf, upper=Inf, useValues=TRUE, filename='', ...) {
+
+	stopifnot(lower <= upper)
+
 	if (!hasValues(x)) return(x)
 	range <- sort(as.numeric(c(lower[1], upper[1])))
 	nl <- nlayers(x)
@@ -47,11 +50,9 @@ function(x, lower=-Inf, upper=Inf, useValues=TRUE, filename='', ...) {
 
 setMethod('clamp', signature(x='numeric'), 
 function(x, lower=-Inf, upper=Inf, ...) {
-	if (x < lower) {
-		x <- lower
-	} else if (x > upper) {
-		x <- upper
-	}
+	stopifnot(lower <= upper)
+	x[x < lower] <- lower
+	x[x > upper] <- upper
 	return(x)
 }
 )

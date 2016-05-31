@@ -81,13 +81,19 @@ function(x, y, filename='', doEdge=TRUE, ...) {
 
 setMethod('distance', signature(x='RasterLayer', y='RasterLayer'), 
 function(x, y, ...) {
-	dist(as.matrix(stack(x, y)))
+	stats::dist(as.matrix(stack(x, y)))
 }
 )
 
 setMethod('distance', signature(x='Spatial', y='Spatial'), 
 function(x, y, ...) {
-	d <- gDistance(x, y, byid=TRUE)
+	if (!requireNamespace("rgeos")) {
+		stop('This function needs the rgeos package to be available')
+	} 
+	stopifnot(inherits(class(x), 'SpatialVector'))
+	stopifnot(inherits(class(y), 'SpatialVector'))	
+	d <- rgeos::gDistance(x, y, byid=TRUE)
 	apply(d, 1, min)
 }
 )
+

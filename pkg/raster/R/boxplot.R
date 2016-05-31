@@ -17,7 +17,7 @@ setMethod('boxplot', signature(x='RasterStackBrick'),
 			x <- getValues(x)
 		} else {
 			warning('taking a sample of ', maxpixels, ' cells')
-			x = sampleRegular(x, maxpixels, useGDAL=TRUE)
+			x <- sampleRegular(x, maxpixels, useGDAL=TRUE)
 		}	
 		colnames(x) <- cn
 		boxplot(x, ...)
@@ -39,8 +39,8 @@ setMethod('boxplot', signature(x='RasterLayer'),
 			colnames(x) <- cn
 			boxplot(x, ...)
 		} else {
-			s <- stack(x,y)
-			if ( canProcessInMemory(x)) {
+			s <- stack(x, y)
+			if ( canProcessInMemory(s)) {
 				s <- getValues(s)
 			} else {
 				warning('taking a sample of ', maxpixels, ' cells')
