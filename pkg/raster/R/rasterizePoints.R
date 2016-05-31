@@ -40,7 +40,7 @@
 				if (fun == 'first') {
 					fun <- function(x, ...) { 
 						# stats::na.omit(x[1]) 
-						# fix by Daniel Schläpfer
+						# fix by Daniel Schlapfer
 							stats::na.omit(x)[1]
 						}
 						
@@ -55,7 +55,7 @@
 				} else if (fun == 'last') {
 					fun <- function(x, ...) { 
 						# x[length(x)] 
-						# fix by Daniel Schläpfer
+						# fix by Daniel Schlapfer
 						x <- stats::na.omit(x)
 						if (length(x) > 0) {
 							x[length(x)]
