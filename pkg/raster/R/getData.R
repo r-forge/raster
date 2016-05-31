@@ -60,6 +60,7 @@ ccodes <- function() {
 
 	cs <- ccodes()
 	cs <- sapply(cs, toupper)
+	cs <- data.frame(cs, stringsAsFactors=FALSE)
 	nc <- nchar(country)
 
 	if (nc == 3) {
