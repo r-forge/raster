@@ -9,7 +9,7 @@ extension <- function(filename, value=NULL, maxchar=10) {
 		extension(filename) <- value
 		return(filename)
 	}   
-	lfn <- .nchar(filename)
+	lfn <- nchar(filename)
 	ext <- list()
 	for (f in 1:length(filename)) {
 		extstart <- -1
@@ -36,7 +36,7 @@ extension <- function(filename, value=NULL, maxchar=10) {
 	if (value != "" & substr(value, 1, 1) != ".") {
 		value <- paste(".", value, sep="") 
 	}
-	lfn <- .nchar(filename)
+	lfn <- nchar(filename)
 	fname <- list()
 	for (f in 1:length(filename)) {
 		extstart <- -1

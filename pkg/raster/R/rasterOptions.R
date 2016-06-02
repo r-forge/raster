@@ -36,11 +36,11 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		if (!missing(tmpdir)) {
 			tmpdir <- trim(tmpdir)
 			if (tmpdir != '') {
-				lastchar = substr(tmpdir, .nchar(tmpdir), .nchar(tmpdir))
+				lastchar = substr(tmpdir, nchar(tmpdir), nchar(tmpdir))
 				if (lastchar != "/" & lastchar != '\\') {
 					tmpdir <- paste(tmpdir, '/', sep='')
 				}
-				#res <- file.exists(substr(tmpdir, 1, .nchar(tmpdir)-1))
+				#res <- file.exists(substr(tmpdir, 1, nchar(tmpdir)-1))
 				#if (!res) { 
 				#	res <- dir.create(tmpdir, recursive=TRUE, showWarnings = FALSE) 
 				#}
@@ -316,9 +316,9 @@ tmpDir <- function(create=TRUE) {
 	if (is.null(d)) {
 		d <- .tmppath()
 	}
-	#lastchar <- substr(d, .nchar(d), .nchar(d))
+	#lastchar <- substr(d, nchar(d), nchar(d))
 	# if (lastchar == '/' | lastchar == '\\') {
-	#	d <- substr( d, 1, .nchar(d)-1 )
+	#	d <- substr( d, 1, nchar(d)-1 )
 	#}
 	if (!file.exists(d) & create) {
 		dir.create( d, recursive=TRUE, showWarnings=FALSE )
