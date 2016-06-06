@@ -52,7 +52,7 @@ setMethod('getValuesBlock', signature(x='RasterStack'),
 		}
 		
 		for (i in 1:nlyrs) {
-			xx <- x@layers[[lyrs[i]]]
+			xx <- x@layers[[i]]
 			if ( inMemory(xx) ) {			
 				res[,i] <- xx@data@values[cells]		
 			} else {
