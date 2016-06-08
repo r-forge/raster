@@ -27,12 +27,13 @@ if (!isGeneric("erase")) {
 		}
 	}
 	if (length(x) > 0) {
+
 		w <- getOption('warn')
 		on.exit(options('warn' = w))
 		options('warn'=-1) 
 
 		j <- rgeos::gIsValid(x, byid=TRUE, reason=FALSE)
-	#j <- which(gArea(x, byid=TRUE) > 0)			
+		#j <- which(gArea(x, byid=TRUE) > 0)			
 		if (!all(j)) {
 			bad <- which(!j)
 			for (i in bad) {
