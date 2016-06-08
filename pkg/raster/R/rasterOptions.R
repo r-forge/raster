@@ -139,7 +139,7 @@ rasterOptions <- function(format, overwrite, datatype, tmpdir, tmptime, progress
 		x <- x[1]
 		if (is.character(x)) {
 			x <- toupper(trim(x))
-			if (.nchar(x) < 3) {
+			if (nchar(x) < 3) {
 				x <- ''
 			}
 			options(rasterAddHeader = x)
@@ -432,7 +432,7 @@ tmpDir <- function(create=TRUE) {
 
 .getFormat <- function(filename) {
 	ext <- tolower(extension(filename, maxchar=5))
-	if (.nchar(ext) < 3) {
+	if (nchar(ext) < 3) {
 		return('')
 	} else {
 		if (ext == '.tif' | ext == '.tiff') { return('GTiff')

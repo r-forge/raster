@@ -170,7 +170,7 @@ setMethod ('show' , 'RasterBrick',
 					}
 				}
 				
-				w <- pmax(.nchar(ln), nchar(minv), nchar(maxv))
+				w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
 				m <- rbind(ln, minv, maxv)
 				# a loop because 'width' is not recycled by format
 				for (i in 1:ncol(m)) {
@@ -260,7 +260,7 @@ setMethod ('show' , 'RasterStack',
 					minv <- c(minv[1:mnr], '...')
 					maxv <- c(maxv[1:mnr], '...')
 				}
-				w <- pmax(.nchar(ln), nchar(minv), nchar(maxv))
+				w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
 				m <- rbind(ln, minv, maxv)
 				# a loop because 'width' is not recycled by format
 				for (i in 1:ncol(m)) {

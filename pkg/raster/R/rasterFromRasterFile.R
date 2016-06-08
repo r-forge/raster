@@ -201,7 +201,7 @@
 		x@file@bandorder <- bandorder 
 	}
 
-	if (.nchar(layernames) > 0) {
+	if (nchar(layernames) > 0) {
 		lnames <- as.vector(unlist(strsplit(layernames, ':')))
 		if (length(lnames) != nbands) {
 			lnames <- rep( gsub(" ", "_", extension(basename(filename), "")), nbands)

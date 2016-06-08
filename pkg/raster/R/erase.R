@@ -27,10 +27,29 @@ if (!isGeneric("erase")) {
 		}
 	}
 	if (length(x) > 0) {
-		j <- which(rgeos::gIsValid(x, byid=TRUE, reason=FALSE))
+		w <- getOption('warn')
+		on.exit(options('warn' = w))
+		options('warn'=-1) 
+
+		j <- rgeos::gIsValid(x, byid=TRUE, reason=FALSE)
 	#j <- which(gArea(x, byid=TRUE) > 0)			
-		x <- x[j,]
-		rn <- rn[j]			
+		if (!all(j)) {
+			bad <- which(!j)
+			for (i in bad) {
+				# it could be that a part of a polygon is a sliver, but that other parts are OK
+				a <- disaggregate(x[i, ])
+				if (length(a) > 1) {
+					jj <- which(rgeos::gIsValid(a, byid=TRUE, reason=FALSE))
+					a <- a[jj, ]
+					if (length(a) > 0) {
+						x@polygons[i] <- aggregate(a)@polygons
+						j[i] <- TRUE
+					}
+				} 
+			}
+			x <- x[j,]
+			rn <- rn[j]			
+		}
 	
 		if (length(rn) > 0) {
 			row.names(x) <- rn

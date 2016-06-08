@@ -26,7 +26,7 @@ extension <- function(filename, value=NULL, maxchar=10) {
 		}   
 	}
 	ext <- unlist(ext)
-	ext[.nchar(ext) > maxchar] <- ''
+	ext[nchar(ext) > maxchar] <- ''
 	return(ext)
 }   
 

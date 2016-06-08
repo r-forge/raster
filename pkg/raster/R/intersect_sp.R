@@ -10,6 +10,7 @@ if (!isGeneric("intersect")) {
 }	
 
 
+
 setMethod('intersect', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y) {
 
@@ -78,8 +79,28 @@ function(x, y) {
 	}
 	
 	if (length(int) > 0) {
-		j <- which(rgeos::gIsValid(int, byid=TRUE, reason=FALSE))
-		int <- int[j, ]
+	
+		w <- getOption('warn')
+		on.exit(options('warn' = w))
+		options('warn'=-1) 
+	
+		j <- rgeos::gIsValid(int, byid=TRUE, reason=FALSE)
+		if (!all(j)) {
+			bad <- which(!j)
+			for (i in bad) {
+				# it could be that a part of a polygon is a sliver, but that other parts are OK
+				a <- disaggregate(int[i, ])
+				if (length(a) > 1) {
+					jj <- which(rgeos::gIsValid(a, byid=TRUE, reason=FALSE))
+					a <- a[jj, ]
+					if (length(a) > 0) {
+						int@polygons[i] <- aggregate(a)@polygons
+						j[i] <- TRUE
+					}
+				} 
+			}
+			int <- int[j,]
+		}		
 	}
 	int	
 } 
