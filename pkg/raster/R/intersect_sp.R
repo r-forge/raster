@@ -16,6 +16,16 @@ function(x, y) {
 
 	requireNamespace("rgeos")
 
+
+#	threshold <- get_RGEOS_polyThreshold()
+#	on.exit(set_RGEOS_polyThreshold(threshold))
+#	minarea <- min(apply(bbox(union(extent(x), extent(y))), 1, diff) / 1000000, 0.00001)
+#	set_RGEOS_polyThreshold(minarea)
+#	slivers <- get_RGEOS_dropSlivers()
+#	on.exit(set_RGEOS_dropSlivers(slivers))
+#	set_RGEOS_dropSlivers(TRUE)
+    
+
 	x <- spChFIDs(x, as.character(1:length(x)))
 	y <- spChFIDs(y, as.character(1:length(y)))
 		
