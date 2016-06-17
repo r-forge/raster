@@ -10,6 +10,7 @@ if (!isGeneric("approxNA")) {
 
 
 
+
 setMethod('approxNA', signature(x='RasterStackBrick'), 
 function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean, z=NULL, NArule=1, ...) { 
 
@@ -73,7 +74,8 @@ function(x, filename="", method="linear", yleft, yright, rule=1, f=0, ties=mean,
     nc <- ncol(out)
 	for (j in 1:tr$n) {
 		v <- getValues(x, row=tr$row[j], nrows=tr$nrows[j])
-		s <- .rowSums(is.na(v),tr$nrows[j], nc)
+		s <- .rowSums(is.na(v), nrow(v), nl)
+
 		if (isTRUE(NArule)) {
 			j <- s == (nl-1) # one non-NA only
 			if (length(j) > 0 ) {
