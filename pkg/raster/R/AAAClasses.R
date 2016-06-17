@@ -106,7 +106,7 @@ setClass('.RasterFile',
 		open = FALSE
 	),
 	validity = function(object) {
-		c1 <- datanotation %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S')
+		c1 <- object@datanotation %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT1U', 'INT2U', 'FLT4S', 'FLT8S')
 		return(c1)
 	}
 )
