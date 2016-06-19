@@ -13,25 +13,25 @@
 \title{Rasterize points, lines, or polygons}
 
 \description{
-Transfer values associated with 'object' type spatial data (points, lines, polygons) to raster cells. 
+Transfer values associated with 'object' type spatial data (points, lines, polygons) to raster cells.
 
-For polygons, values are transferred if the polygon covers the center of a raster cell. For lines, values are transferred to all cells that are touched by a line. You can combine this behaviour by rasterizing polygons as lines first and then as polygons. 
+For polygons, values are transferred if the polygon covers the center of a raster cell. For lines, values are transferred to all cells that are touched by a line. You can combine this behaviour by rasterizing polygons as lines first and then as polygons.
 
-If \code{x} represents points, each point is assigned to a grid cell. Points that fall on a border between cells are placed in the cell to the right and/or in the cell below. The value of a grid cell is determined by the values associated with the points and function \code{fun}. 
+If \code{x} represents points, each point is assigned to a grid cell. Points that fall on a border between cells are placed in the cell to the right and/or in the cell below. The value of a grid cell is determined by the values associated with the points and function \code{fun}.
 }
 
 \usage{
 \S4method{rasterize}{matrix,Raster}(x, y, field, fun='last', background=NA,
      mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...)
-	
-\S4method{rasterize}{SpatialPoints,Raster}(x, y, field, fun='last', background=NA, 
+
+\S4method{rasterize}{SpatialPoints,Raster}(x, y, field, fun='last', background=NA,
     mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...)
-	
-\S4method{rasterize}{SpatialLines,Raster}(x, y, field, fun='last', background=NA, 
+
+\S4method{rasterize}{SpatialLines,Raster}(x, y, field, fun='last', background=NA,
     mask=FALSE, update=FALSE, updateValue='all', filename="", ...)
-	
-\S4method{rasterize}{SpatialPolygons,Raster}(x, y, field, fun='last', background=NA, 
-    mask=FALSE, update=FALSE, updateValue='all', filename="", 
+
+\S4method{rasterize}{SpatialPolygons,Raster}(x, y, field, fun='last', background=NA,
+    mask=FALSE, update=FALSE, updateValue='all', filename="",
     getCover=FALSE, silent=TRUE, ...)
 }
 
@@ -45,7 +45,7 @@ If \code{x} represents points, each point is assigned to a grid cell. Points tha
 \item{fun}{function or character. To determine what values to assign to cells that are covered by multiple spatial features. You can use functions such as \code{min, max}, or \code{mean}, or one of the following character values: \code{'first'}, \code{'last'}, \code{'count'}. The default value is \code{'last'}. In the case of SpatialLines*, \code{'length'} is also allowed (currently for planar coordinate systems only).
 
 
-If \code{x} represents points, \code{fun} must accept a \code{na.rm} argument, either explicitly or through 'dots'. This means that \code{fun=length} fails, but \code{fun=function(x,...)length(x)} works, although it ignores the \code{na.rm} argument. To use the \code{na.rm} argument you can use a function like this: fun=function(x, na.rm){if (na.rm) length(na.omit(x)) else (length(x)}, or use a function that removes \code{NA} values in all cases, like this function to compute the number of unique values per grid cell "richness": \code{fun=function(x, ...) {length(unique(na.omit(x)))} }. If you want to count the number of points in each grid cell, you can use \code{ fun='count'} or  \code{fun=function(x,...){length(x)}}. 
+If \code{x} represents points, \code{fun} must accept a \code{na.rm} argument, either explicitly or through 'dots'. This means that \code{fun=length} fails, but \code{fun=function(x,...)length(x)} works, although it ignores the \code{na.rm} argument. To use the \code{na.rm} argument you can use a function like this: fun=function(x, na.rm){if (na.rm) length(na.omit(x)) else (length(x)}, or use a function that removes \code{NA} values in all cases, like this function to compute the number of unique values per grid cell "richness": \code{fun=function(x, ...) {length(unique(na.omit(x)))} }. If you want to count the number of points in each grid cell, you can use \code{ fun='count'} or  \code{fun=function(x,...){length(x)}}.
 
 You can also pass multiple functions using a statement like \code{fun=function(x, ...) c(length(x),mean(x))}, in which case the returned object is a RasterBrick (multiple layers).
 }
@@ -83,6 +83,7 @@ RasterLayer or RasterBrick
 ###############################
 r <- raster(ncols=36, nrows=18)
 n <- 1000
+set.seed(123)
 x <- runif(n) * 360 - 180
 y <- runif(n) * 180 - 90
 xy <- cbind(x, y)
@@ -154,7 +155,7 @@ plot(r)
 plot(pols, add=T)
 
 # add a polygon
-p5 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),  
+p5 <- rbind(c(-180,10), c(0,90), c(40,90), c(145,-10),
             c(-25, -15), c(-180,0), c(-180,10))
 addpoly <- SpatialPolygons(list(Polygons(list(Polygon(p5)), 1)))
 addpoly <- as(addpoly, "SpatialPolygonsDataFrame")
@@ -172,4 +173,3 @@ r3 <- rasterize(pols, r3, getCover=TRUE)
 
 \keyword{methods}
 \keyword{spatial}
-
