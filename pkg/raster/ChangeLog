@@ -14,7 +14,7 @@ allow setting a 'spatial window'
 --- current version
 Bug fixes:
 getValuesBlock with lyrs argument. Reported by Antoine Stevens
-In approxNA with large files NAs were ignored. Reported by Pablo Timoner
+In approxNA with large files NAs were ignored and the NArule was ignored. Reported by Pablo Timoner
 isValid(raster()) failed. Reported by dww on http://stackoverflow.com/questions/37869271/how-to-dput-a-raster/37871930
 zapply passes on ... arguments to stackApply
 
