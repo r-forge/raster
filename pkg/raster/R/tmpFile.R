@@ -102,11 +102,8 @@ removeTmpFiles <- function(h=24) {
 		dif <- Sys.time() - fin$mtime
 		dif <- as.numeric(dif, units="hours")
 		
-		dif[is.na(dif)] <- h + 1
-		f <- f[dif > h]
-		if (length(f) > 1) {
-			unlink(f, recursive=TRUE)
-		}
+		f <- f[which(dif > h)]
+		unlink(f, recursive=TRUE)
 	}	
 	options('warn'=warnopt) 
 }
