@@ -9,8 +9,60 @@ if (!isGeneric('buffer')) {
 		standardGeneric('buffer'))
 }	
 
+.pointBuffer <- function(xy, d, n=360, lonlat=TRUE, a=6378137, f=1/298.257223563, crs=NA, ... ) {
+	
+	if (length(d)==1) {
+		d <- rep(d, nrow(xy))
+	} else if (length(d) != nrow(xy)) {
+		# recycling
+		dd <- vector(length=nrow(xy))
+		dd[] <- d
+		d <- dd
+	}
+
+	n <- max(5, round(n))
+	brng <- 1:n * 360/n
+
+	pols <- list()
+
+	if (lonlat) {
+		for (i in 1:nrow(xy)) {
+			p <- cbind(xy[i,1], xy[i,2], brng, d[i])
+			r <- .Call("geodesic", as.double(p[,1]), as.double(p[,2]), as.double(p[,3]), as.double(p[,4]), as.double(a), as.double(f), PACKAGE='raster')
+			pols[[i]] <- matrix(r, ncol=3, byrow=TRUE)[, 1:2]
+		}
+	} else {
+		brng <- brng * pi/180
+		for (i in 1:nrow(xy)) {
+			x <- xy[i,1] + d[i] * cos(brng)
+			y <- xy[i,2] + d[i] * sin(brng)
+			pols[[i]] <- cbind(x, y)
+		}
+	}
+	
+	sp <- do.call(spPolygons, pols)
+	crs(sp) <- crs
+	sp
+}
+
+
+
+
 setMethod('buffer', signature(x='Spatial'), 
 function(x, width=1, dissolve=TRUE, ...) {
+	if (inherits(x, 'SpatialPoints')) {
+		if (isLonLat(x)) {
+			pb <- .pointBuffer(xy=coordinates(x), d=width, lonlat=TRUE, crs=crs(x), ...)
+			if (dissolve) {
+				pb <- aggregate(pb)
+			} else {
+				if (.hasSlot(x, 'data')) {
+					pb <- SpatialPointsDataFrame(pb, x@data)
+				}
+			}
+			return(pb)
+		}
+	}
 	stopifnot(requireNamespace("rgeos"))
 	rgeos::gBuffer(x, byid=!dissolve, width=width, ...)
 }

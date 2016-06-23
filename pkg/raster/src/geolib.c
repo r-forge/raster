@@ -3,6 +3,42 @@
 
 /* Robert Hijmans, May 2015 */
  
+SEXP geodesic(SEXP longitude, SEXP latitude, SEXP azimuth, SEXP distance, SEXP pa, SEXP pf) {
+
+  PROTECT(latitude = coerceVector(latitude, REALSXP));
+  PROTECT(longitude = coerceVector(longitude, REALSXP));
+  PROTECT(azimuth = coerceVector(azimuth, REALSXP));
+  PROTECT(distance = coerceVector(distance, REALSXP));
+  double a = REAL(pa)[0];
+  double f = REAL(pf)[0];
+  
+  double *lat1, *lon1, *azi1, *s12, *xr;
+  lat1 = REAL(latitude);
+  lon1 = REAL(longitude);
+  azi1 = REAL(azimuth);
+  s12 = REAL(distance);
+
+  double lat2, lon2, azi2;
+  struct geod_geodesic g;
+
+  geod_init(&g, a, f);
+
+  int i;
+  SEXP r;
+  PROTECT( r = allocVector(REALSXP, 3 * length(latitude) ) );
+  xr = REAL(r);  
+  for (i=0; i < length(latitude); i++) {
+    geod_direct(&g, lat1[i], lon1[i], azi1[i], s12[i], &lat2, &lon2, &azi2);
+    xr[i*3] = lon2;
+    xr[i*3+1] = lat2;
+    xr[i*3+2] = azi2;	
+  }
+  UNPROTECT(5);
+  return r;
+  
+}
+ 
+ 
 SEXP inversegeodesic(SEXP longitude1, SEXP latitude1, SEXP longitude2, SEXP latitude2, SEXP pa, SEXP pf) {
 
   PROTECT(latitude1 = coerceVector(latitude1, REALSXP));
