@@ -9,7 +9,15 @@ if (!isGeneric('buffer')) {
 		standardGeneric('buffer'))
 }	
 
-.pointBuffer <- function(xy, d, n=360, lonlat=TRUE, a=6378137, f=1/298.257223563, crs=NA, ... ) {
+.pointBuffer <- function(xy, d, lonlat=TRUE, a=6378137, f=1/298.257223563, crs=NA, ... ) {
+	
+	n <- list(...)$quadsegs
+	# overwrite the default, else take the argument
+	if (isTRUE(n == 5)) { 
+		n <- 360 
+	} else {
+		n <- n * 4
+	}
 	
 	if (length(d)==1) {
 		d <- rep(d, nrow(xy))
