@@ -372,6 +372,23 @@ setMethod("Arith", signature(e1='logical', e2='RasterStackBrick'),
 	return(e1)
 }
 		
+		
+.add_Extent <- function(e1, e2, g) {	
+	
+	if (length(e2) == 4) {
+		return(extent(as.vector(e1) + e2))
+	}
+	e2 <- rep_len(e2, length.out=2)
+	dx <- e2[1] / 2
+	dy <- e2[2] / 2
+	e1@xmax <- e1@xmax + dx
+	e1@xmin <- e1@xmin - dx
+	e1@ymax <- e1@ymax + dy
+	e1@ymin <- e1@ymin - dy
+	
+	return(e1)
+}
+
 
 setMethod("Arith", signature(e1='Extent', e2='numeric'),
 	function(e1, e2){ 
@@ -381,6 +398,11 @@ setMethod("Arith", signature(e1='Extent', e2='numeric'),
 				e2 <- 1 / e2
 			}
 			return( .multiply_Extent(e1, e2) )
+		} else if (g %in% c("+", "-")) {
+			if (g == '-') {
+				e2 <- -1 * e2
+			}
+			return( .add_Extent(e1, e2) )
 		}
 		extent(methods::callGeneric(as.vector(e1), .getE2(e2)))
 	}

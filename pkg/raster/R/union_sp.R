@@ -70,7 +70,7 @@ function(x, y) {
 		return(x)
 	}
 	
-	if (!gIntersects(x)) {
+	if (!rgeos::gIntersects(x)) {
 		return(x)
 	}
 	

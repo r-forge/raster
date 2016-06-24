@@ -12,6 +12,11 @@ Fix lines falling between the cracks in extract (calling rasterzeLines): https:/
 allow setting a 'spatial window'
 
 --- current version
+New:
+buffer for lon/lat points
+erase for SpatialLines with Polygons
+kernelDensity function
+
 Bug fixes:
 getValuesBlock with lyrs argument. Reported by Antoine Stevens
 In approxNA with large files NAs were ignored and the NArule was ignored. Reported by Pablo Timoner
