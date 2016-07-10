@@ -132,6 +132,65 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// area_polygon
+NumericVector area_polygon(NumericMatrix d, bool lonlat);
+RcppExport SEXP raster_area_polygon(SEXP dSEXP, SEXP lonlatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    Rcpp::traits::input_parameter< bool >::type lonlat(lonlatSEXP);
+    __result = Rcpp::wrap(area_polygon(d, lonlat));
+    return __result;
+END_RCPP
+}
+// point_distance
+NumericVector point_distance(NumericMatrix p1, NumericMatrix p2, bool lonlat, double a, double f);
+RcppExport SEXP raster_point_distance(SEXP p1SEXP, SEXP p2SEXP, SEXP lonlatSEXP, SEXP aSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type p1(p1SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type p2(p2SEXP);
+    Rcpp::traits::input_parameter< bool >::type lonlat(lonlatSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    __result = Rcpp::wrap(point_distance(p1, p2, lonlat, a, f));
+    return __result;
+END_RCPP
+}
+// distanceToNearestPoint
+NumericVector distanceToNearestPoint(NumericMatrix d, NumericMatrix p, bool lonlat, double a, double f);
+RcppExport SEXP raster_distanceToNearestPoint(SEXP dSEXP, SEXP pSEXP, SEXP lonlatSEXP, SEXP aSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type p(pSEXP);
+    Rcpp::traits::input_parameter< bool >::type lonlat(lonlatSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    __result = Rcpp::wrap(distanceToNearestPoint(d, p, lonlat, a, f));
+    return __result;
+END_RCPP
+}
+// directionToNearestPoint
+NumericVector directionToNearestPoint(NumericMatrix d, NumericMatrix p, bool lonlat, bool degrees, bool from, double a, double f);
+RcppExport SEXP raster_directionToNearestPoint(SEXP dSEXP, SEXP pSEXP, SEXP lonlatSEXP, SEXP degreesSEXP, SEXP fromSEXP, SEXP aSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type p(pSEXP);
+    Rcpp::traits::input_parameter< bool >::type lonlat(lonlatSEXP);
+    Rcpp::traits::input_parameter< bool >::type degrees(degreesSEXP);
+    Rcpp::traits::input_parameter< bool >::type from(fromSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    __result = Rcpp::wrap(directionToNearestPoint(d, p, lonlat, degrees, from, a, f));
+    return __result;
+END_RCPP
+}
 // doCellFromXY
 NumericVector doCellFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericVector x, NumericVector y);
 RcppExport SEXP raster_doCellFromXY(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP xSEXP, SEXP ySEXP) {

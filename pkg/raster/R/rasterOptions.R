@@ -420,11 +420,11 @@ tmpDir <- function(create=TRUE) {
 	if (missing(datatype)) { 
 		datatype <- getOption('rasterDatatype')
 		if (is.null(datatype)) {
-			return('FLT8S') 
+			return('FLT4S') 
 		} 
 	} 
 	if (! datatype %in% c('LOG1S', 'INT1S', 'INT2S', 'INT4S', 'INT1U', 'INT2U', 'INT4U', 'FLT4S', 'FLT8S')) {
-		warning(datatype, ' is an invalid datatype value, changed to "FLT8S"')
+		warning(datatype, ' is an invalid datatype value, changed to "FLT4S"')
 		datatype <- 'FLT4S'
 	}
 	return(datatype)

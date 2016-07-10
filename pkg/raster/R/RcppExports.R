@@ -41,6 +41,22 @@
     .Call('raster_doRowMax', PACKAGE = 'raster', x, narm)
 }
 
+.area_polygon <- function(d, lonlat) {
+    .Call('raster_area_polygon', PACKAGE = 'raster', d, lonlat)
+}
+
+.point_distance <- function(p1, p2, lonlat, a, f) {
+    .Call('raster_point_distance', PACKAGE = 'raster', p1, p2, lonlat, a, f)
+}
+
+.distanceToNearestPoint <- function(d, p, lonlat, a, f) {
+    .Call('raster_distanceToNearestPoint', PACKAGE = 'raster', d, p, lonlat, a, f)
+}
+
+.directionToNearestPoint <- function(d, p, lonlat, degrees, from, a, f) {
+    .Call('raster_directionToNearestPoint', PACKAGE = 'raster', d, p, lonlat, degrees, from, a, f)
+}
+
 .doCellFromXY <- function(ncols, nrows, xmin, xmax, ymin, ymax, x, y) {
     .Call('raster_doCellFromXY', PACKAGE = 'raster', ncols, nrows, xmin, xmax, ymin, ymax, x, y)
 }

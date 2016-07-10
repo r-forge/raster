@@ -114,7 +114,7 @@ function(x, width=0, filename='', doEdge=FALSE, ...) {
 		pbStep(pb)
 		x[] <- 0
 		xy <- xyFromCell(out, i)
-		x[i] <- .Call("distanceToNearestPoint", xy, pts, as.integer(longlat), PACKAGE='raster')
+		vals <- .Call('raster_distanceToNearestPoint', xy, pts, longlat, 6378137.0, 1/298.257223563, PACKAGE='raster')
 		pbStep(pb)
 		x[x > width] <- NA
 		x[!is.na(x)] <- 1
@@ -141,7 +141,7 @@ function(x, width=0, filename='', doEdge=FALSE, ...) {
 		j <- which(is.na(vals))
 		vals[] <- 0
 		if (length(j) > 0) {
-			vals[j] <- .Call("distanceToNearestPoint", xy[j,,drop=FALSE], pts, as.integer(longlat), PACKAGE='raster')
+			vals[j] <- .Call('raster_distanceToNearestPoint', xy[j,,drop=FALSE], pts, longlat, 6378137.0, 1/298.257223563, PACKAGE='raster')
 		}
 		vals[vals > width] <- NA
 		vals[!is.na(vals)] <- 1
