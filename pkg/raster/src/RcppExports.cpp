@@ -191,6 +191,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// dest_point
+NumericMatrix dest_point(NumericMatrix xybd, bool lonlat, double a, double f);
+RcppExport SEXP raster_dest_point(SEXP xybdSEXP, SEXP lonlatSEXP, SEXP aSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type xybd(xybdSEXP);
+    Rcpp::traits::input_parameter< bool >::type lonlat(lonlatSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    __result = Rcpp::wrap(dest_point(xybd, lonlat, a, f));
+    return __result;
+END_RCPP
+}
 // doCellFromXY
 NumericVector doCellFromXY(int ncols, int nrows, double xmin, double xmax, double ymin, double ymax, NumericVector x, NumericVector y);
 RcppExport SEXP raster_doCellFromXY(SEXP ncolsSEXP, SEXP nrowsSEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP yminSEXP, SEXP ymaxSEXP, SEXP xSEXP, SEXP ySEXP) {

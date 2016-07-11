@@ -84,3 +84,30 @@ NumericVector directionToNearestPoint(NumericMatrix d, NumericMatrix p, bool lon
 }
 
 
+
+
+// [[Rcpp::export(name = ".dest_point")]]
+NumericMatrix dest_point(NumericMatrix xybd, bool lonlat, double a, double f) {
+
+	std::vector<double> x(xybd(_,0).begin(), xybd(_,0).end());
+	std::vector<double> y(xybd(_,1).begin(), xybd(_,1).end());
+	std::vector<double> b(xybd(_,2).begin(), xybd(_,2).end());
+	std::vector<double> d(xybd(_,3).begin(), xybd(_,3).end());
+
+    std::vector<std::vector<double> > res;	
+	if (lonlat) {
+		res = destpoint_lonlat(x, y, b, d, a, f);
+	} else {
+		res = destpoint_plane(x, y, b, d);		
+	}
+	int n = res.size();
+	int m = res[0].size();
+	
+	NumericMatrix r(n, m);
+	for (int i=0; i < n; i++) {
+		for (int j=0; j < m; j++) {
+			r(i,j) = res[i][j];
+		}
+	}	
+	return(r);	
+}

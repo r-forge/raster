@@ -12,8 +12,7 @@ if (!isGeneric('buffer')) {
 .pointBuffer <- function(xy, d, lonlat=TRUE, a=6378137, f=1/298.257223563, crs=NA, ... ) {
 	
 	n <- list(...)$quadsegs
-	# overwrite the default, else take the argument
-	if (isTRUE(n == 5)) { 
+	if (is.null(n)) {
 		n <- 360 
 	} else {
 		n <- n * 4
@@ -34,10 +33,16 @@ if (!isGeneric('buffer')) {
 	pols <- list()
 
 	if (lonlat) {
+		a = 6378137.0
+		f = 1/298.257223563
 		for (i in 1:nrow(xy)) {
 			p <- cbind(xy[i,1], xy[i,2], brng, d[i])
-			r <- .Call("geodesic", as.double(p[,1]), as.double(p[,2]), as.double(p[,3]), as.double(p[,4]), as.double(a), as.double(f), PACKAGE='raster')
-			pols[[i]] <- matrix(r, ncol=3, byrow=TRUE)[, 1:2]
+			
+			#r <- .Call("geodesic", as.double(p[,1]), as.double(p[,2]), as.double(p[,3]), as.double(p[,4]), as.double(a), as.double(f), PACKAGE='raster')
+			#pols[[i]] <- matrix(r, ncol=3, byrow=TRUE)[, 1:2]
+			
+			r <- .Call("raster_dest_point", p, TRUE, a, f, PACKAGE='raster')
+			pols[[i]] <- r[,1:2]						
 		}
 	} else {
 		brng <- brng * pi/180
@@ -58,19 +63,28 @@ if (!isGeneric('buffer')) {
 
 setMethod('buffer', signature(x='Spatial'), 
 function(x, width=1, dissolve=TRUE, ...) {
+
 	if (inherits(x, 'SpatialPoints')) {
-		if (isLonLat(x)) {
-			pb <- .pointBuffer(xy=coordinates(x), d=width, lonlat=TRUE, crs=crs(x), ...)
-			if (dissolve) {
-				pb <- aggregate(pb)
-			} else {
-				if (.hasSlot(x, 'data')) {
-					pb <- SpatialPointsDataFrame(pb, x@data)
-				}
+		
+		if (.couldBeLonLat(x)) {
+			if (!isLonLat(x)) {
+				warning('crs unknown, assuming lonlat')
 			}
-			return(pb)
+			lonlat=TRUE
+		} else {
+			lonlat = FALSE
 		}
+		
+		pb <- .pointBuffer(xy=coordinates(x), d=width, lonlat=lonlat, crs=crs(x), ...)
+
+		if (dissolve) {
+			pb <- aggregate(pb)
+		} else if (.hasSlot(x, 'data')) {
+			pb <- SpatialPointsDataFrame(pb, x@data, match.ID=FALSE)
+		}
+		return(pb)		
 	}
+	
 	stopifnot(requireNamespace("rgeos"))
 	rgeos::gBuffer(x, byid=!dissolve, width=width, ...)
 }

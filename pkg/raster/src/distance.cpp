@@ -238,3 +238,50 @@ std::vector<double> directionToNearest_plane(std::vector<double> x1, std::vector
   	return r;
 }
 
+
+std::vector<double> destpoint_lonlat(double longitude, double latitude, double  bearing, double distance, double a, double f) {
+	struct geod_geodesic g;
+	geod_init(&g, a, f);
+	double lat2, lon2, azi2;
+	geod_direct(&g, latitude, longitude, bearing, distance, &lat2, &lon2, &azi2);
+	std::vector<double> out = {lon2, lat2, azi2 };
+	return out;
+}
+
+
+std::vector<std::vector<double> > destpoint_lonlat(std::vector<double> longitude, std::vector<double> latitude, std::vector<double> bearing, std::vector<double> distance, double a, double f) {
+	struct geod_geodesic g;
+	geod_init(&g, a, f);
+	int n = longitude.size();
+	std::vector<std::vector<double> > out;
+	double lat2, lon2, azi2;
+	for (int i=0; i < n; i++) {
+		geod_direct(&g, latitude[i], longitude[i], bearing[i], distance[i], &lat2, &lon2, &azi2);
+		out.push_back( {lon2, lat2, azi2 });
+	}
+	return out;
+}
+ 
+ 
+std::vector<double> destpoint_plane(double x, double y, double bearing, double distance) {
+	bearing = bearing * M_PI / 180;
+	x += distance * cos(bearing);
+	y += distance * sin(bearing);
+	std::vector<double> out = {x, y};
+	return(out);
+}
+
+
+std::vector<std::vector<double> > destpoint_plane(std::vector<double>  x, std::vector<double>  y, std::vector<double>  bearing, std::vector<double>  distance) {
+	int n = x.size();
+	std::vector<std::vector<double> > out(n, std::vector<double>(3));
+	double xd, yd, b;
+	for (int i=0; i < n; i++) {
+		b = bearing[i] * M_PI / 180;
+		xd = x[i] + distance[i] * cos(b);
+		yd = y[i] + distance[i] * sin(b);
+		out.push_back( {xd, yd });
+	}
+	return(out);
+}
+

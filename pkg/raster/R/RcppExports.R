@@ -57,6 +57,10 @@
     .Call('raster_directionToNearestPoint', PACKAGE = 'raster', d, p, lonlat, degrees, from, a, f)
 }
 
+.dest_point <- function(xybd, lonlat, a, f) {
+    .Call('raster_dest_point', PACKAGE = 'raster', xybd, lonlat, a, f)
+}
+
 .doCellFromXY <- function(ncols, nrows, xmin, xmax, ymin, ymax, x, y) {
     .Call('raster_doCellFromXY', PACKAGE = 'raster', ncols, nrows, xmin, xmax, ymin, ymax, x, y)
 }

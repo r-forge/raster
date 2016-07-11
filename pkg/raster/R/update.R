@@ -9,7 +9,7 @@ if (!isGeneric("update")) {
 }	
 
 setMethod('update', signature(object='RasterLayer'), 
-function(object, v, cell) {
+function(object, v, cell, ...) {
 
 	if (!fromDisk(object)) { 
 		stop('object is not associated with a file on disk.')
@@ -56,7 +56,7 @@ function(object, v, cell) {
 
 
 setMethod('update', signature(object='RasterBrick'), 
-function(object, v, cell, band) {
+function(object, v, cell, band, ...) {
 
 	if (!fromDisk(object)) { 
 		stop('object is not associated with a file on disk.')
