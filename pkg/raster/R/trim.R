@@ -10,10 +10,15 @@ if (!isGeneric("trim")) {
 
 
 setMethod('trim', signature(x='character'), 
-	function(x, ...) {
-		gsub("^\\s+|\\s+$", "", x)
+	function(x, internal=FALSE, ...) {
+		if (internal) {
+			gsub("^ *|(?<= ) | *$", "", x, perl=TRUE)
+		} else {
+			gsub("^\\s+|\\s+$", "", x)
+		}
 	}
 )
+
 
 setMethod('trim', signature(x='data.frame'), 
 	function(x, ...) {
