@@ -303,14 +303,14 @@ function(x, y) {
 	if (inherits(y, 'SpatialLines')) {
 		stop('intersect of SpatialPoints and Lines is not supported because of numerical inaccuracies.\nUse "buffer", to create SpatialPoygons from the lines and use that in intersect.\nOr see rgeos::gIntersection')
 	}
-
-	if (! identical(proj4string(x), proj4string(y)) ) {
-		warning('non identical CRS')
-		y@proj4string <- x@proj4string
-	} 
 	
 	if (inherits(y, 'SpatialPolygons')) {
 	
+		if (! identical(proj4string(x), proj4string(y)) ) {
+			warning('non identical CRS')
+			y@proj4string <- x@proj4string
+		} 
+
 		stopifnot(requireNamespace("rgeos"))
 		i <- rgeos::gIntersects(y, x, byid=TRUE)
 	
