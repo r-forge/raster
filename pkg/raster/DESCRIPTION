@@ -1,8 +1,8 @@
 Package: raster
 Type: Package
 Title: Geographic Data Analysis and Modeling
-Version: 2.5-17
-Date: 2016-08-21
+Version: 2.6-0
+Date: 2017-10-22
 Depends: methods, sp (>= 1.2-0), R (>= 3.0.0)
 Suggests: rgdal (>= 0.9-1), rgeos (>= 0.3-8), ncdf4, igraph, tcltk, parallel, rasterVis, MASS
 LinkingTo: Rcpp
@@ -21,6 +21,6 @@ Authors@R: c(
 	person("Ashton", "Shortridge", role = "ctb"))
 Description: Reading, writing, manipulating, analyzing and modeling of gridded spatial data. The package implements basic and high-level functions. Processing of very large files is supported.
 License: GPL (>=3)
-URL: http://cran.r-project.org/package=raster
+URL: http://www.rspatial.org/
 ByteCompile: TRUE
 	

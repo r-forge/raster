@@ -4,7 +4,7 @@
 # Licence GPL v3
 
 
-kernelDensity <- function(xy, r, bandwidth) {
+.kernelDensity <- function(xy, r, bandwidth) {
 	requireNamespace("MASS")
     lims <- as.vector(extent(r)) + rep(res(r), each=2) * c(0.5,-0.5)
     n <- rev(dim(r)[1:2])

@@ -60,7 +60,7 @@ function(x, filename='', degrees=FALSE, from=FALSE, doEdge=FALSE, ...) {
 		j <- which(is.na(vals))
 		vals[] <- NA
 		if (length(j) > 0) {
-			vals[j] <- .Call("directionToNearestPoint", xy[j, ,drop=FALSE], pts, longlat, degrees, from, PACKAGE='raster')
+			vals[i] <- .Call('raster_directionToNearestPoint', xy[j, ,drop=FALSE], pts, longlat, degrees, from, a=6378137.0, f=1/298.257223563, PACKAGE='raster')
 		}
 		out <- writeValues(out, vals, tr$row[i])
 		pbStep(pb) 	

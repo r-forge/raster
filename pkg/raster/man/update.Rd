@@ -28,6 +28,7 @@ See \code{\link{writeFormats}} for supported formats.
   \item{v}{vector or matrix with new values} 
   \item{cell}{cell from where to start writing. Or a vector of cell numbers if v is a vector of the same length}.
   \item{band}{band (layer) to update (for RasterBrick objects)}.
+  \item{...}{additional arguments. None implemented} 
 }
 
 \value{

@@ -1,5 +1,5 @@
 
-makeTiles <- function(x, y, filename="", ...) {
+.makeTiles <- function(x, y, filename="", ...) {
 	res <- res(y)
 	xy <- xyFromCell(y, 1:ncell(y))
 	xy1 <- xy - 0.5 * res
@@ -17,7 +17,7 @@ makeTiles <- function(x, y, filename="", ...) {
 		extension(filename) <- ''
 		filename <- paste0(filename, '_', 1:ncell(y), ext)
 	} else {
-		filename <- rep("", ncell(a))
+		filename <- rep("", ncell(y))
 	}
 	
 	for (i in 1:ncell(y)) {

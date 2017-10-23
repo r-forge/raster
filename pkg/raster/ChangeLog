@@ -12,10 +12,13 @@ Fix lines falling between the cracks in extract (calling rasterzeLines): https:/
 allow setting a 'spatial window'
 
 --- current version
+
+--- 10-Oct-2017, version: 2.6-0
 New:
+new extent objects are now checked for being valid. Suggested by Mike Sumner
 buffer for lon/lat points
 erase for SpatialLines with Polygons
-kernelDensity function
+kernelDensity function (hidden)
 
 Bug fixes:
 as.data.frame from file based rasters ingored na.rm=TRUE (unless xy=TRUE). Reported by Jean-Gabriel Elie

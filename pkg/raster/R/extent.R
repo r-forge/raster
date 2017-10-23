@@ -107,7 +107,7 @@ setMethod('extent', signature(x='matrix'),
 			e@ymin <- a[3]
 			e@ymax <- a[4]
 		}
-		return(e)
+		if (validObject(e)) return(e)
 	}
 )
 	
@@ -127,7 +127,7 @@ setMethod('extent', signature(x='numeric'),
 		e@xmax <- x[2]
 		e@ymin <- x[3]
 		e@ymax <- x[4]
-		return(e)
+		if (validObject(e)) return(e)
 	}	
 )
 
