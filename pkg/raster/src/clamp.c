@@ -11,7 +11,7 @@
 #include "util.h"
 
 
-SEXP clamp(SEXP d, SEXP rr, SEXP usevals) {
+SEXP do_clamp(SEXP d, SEXP rr, SEXP usevals) {
 					
 	R_len_t i;
 	SEXP val;

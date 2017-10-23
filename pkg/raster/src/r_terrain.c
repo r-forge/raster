@@ -35,7 +35,7 @@ double distHav(double lon1, double lat1, double lon2, double lat2, double r) {
 
 
 
-SEXP terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP geoy) {
+SEXP do_terrain(SEXP d, SEXP dim, SEXP res, SEXP un, SEXP opt, SEXP lonlat, SEXP geoy) {
 					
 	R_len_t i, j;
 	SEXP val;
