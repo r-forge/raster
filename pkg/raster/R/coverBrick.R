@@ -29,7 +29,7 @@ setMethod('cover', signature(x='RasterStackBrick', y='Raster'),
 	filename <- trim(filename)
 	dots <- list(...)
 	if (is.null(dots$format))  { 
-		format <- .filetype(format=format, filename=filename)
+		format <- .filetype(filename=filename)
 	} else { 
 		format <- dots$format 
 	}
