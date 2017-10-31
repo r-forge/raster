@@ -4,11 +4,6 @@
 # Licence GPL v3
 
 
-if (!isGeneric("cover")) {
-	setGeneric("cover", function(x, y, ...)
-		standardGeneric("cover"))
-}	
-
 setMethod('cover', signature(x='RasterStackBrick', y='Raster'), 
 	function(x, y, ..., filename=''){ 
 
