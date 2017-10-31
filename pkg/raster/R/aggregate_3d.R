@@ -121,7 +121,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				add <- matrix(NA, nrow=nrow(v), ncol=addlyrs)
 				v <- cbind(v, add)
 			}
-			v <- .Call("aggregate_get", as.double(v), as.integer(dims), PACKAGE='raster')
+			v <- .Call("_aggregate_get", as.double(v), as.integer(dims), PACKAGE='raster')
 			v <- matrix(v, nrow=xyzfact)
 			v <- apply(v, 2, fun, na.rm=na.rm)
 			out <- setValues(out, v)
@@ -155,7 +155,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 					add <- rep(NA, nrow(vals)*addlyrs)
 					vals <- c(vals, add)
 				}
-				vals <- .Call("aggregate_get", as.double(vals), as.integer(dims), PACKAGE='raster')
+				vals <- .Call("_aggregate_get", as.double(vals), as.integer(dims), PACKAGE='raster')
 				vals <- matrix(vals, nrow=xyzfact)
 				vals <- apply(vals, 2, fun, na.rm=na.rm)
 				out <- writeValues(out, matrix(vals, ncol=nl), tr$write[i])
@@ -176,7 +176,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		
 			dims <- as.integer(c(lastrow, lastcol, nl, dim(out)[1:2], xfact, yfact))
 			x <- getValuesBlock(x, 1, lastrow, 1, lastcol)
-			out <- setValues(out, .Call("aggregate", as.double(x), op, as.integer(na.rm), dims, PACKAGE='raster'))
+			out <- setValues(out, .Call("_do_aggregate", as.double(x), op, as.integer(na.rm), dims, PACKAGE='raster'))
 
 			if (filename != '') {
 				out <- writeRaster(out, filename, ...)
@@ -208,7 +208,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				for (i in 1:tr$n) {
 					dims[c(1, 4)] = as.integer(c(tr$nrows[i], tr$outrows[i]))
 					vals <- getValuesBlock(x, tr$row[i], tr$nrows[i], 1, lastcol)
-					vals <- .Call("aggregate", as.double(vals), op, as.integer(na.rm), dims, PACKAGE='raster')
+					vals <- .Call("_do_aggregate", as.double(vals), op, as.integer(na.rm), dims, PACKAGE='raster')
 					out <- writeValues(out, matrix(vals, ncol=nl), tr$write[i])
 					pbStep(pb, i) 
 				}
@@ -216,7 +216,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 				for (i in 1:tr$n) {
 					dims[c(1, 4)] = as.integer(c(tr$nrows[i], tr$outrows[i]))
 					vals <- getValuesBlock(x, tr$row[i], tr$nrows[i], 1, lastcol)
-					vals <- .Call("aggregate", as.double(vals), op,	as.integer(na.rm), dims, PACKAGE='raster')
+					vals <- .Call("_do_aggregate", as.double(vals), op,	as.integer(na.rm), dims, PACKAGE='raster')
 					out <- writeValues(out, vals, tr$write[i])
 					pbStep(pb, i) 
 				}
@@ -392,7 +392,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 			}
 			if (!is.na(op) & doC) {
 				dim <- c(dim(x), dim(out)[1:2], xfact, yfact)
-				v  <- .Call("aggregate", 
+				v  <- .Call("_do_aggregate", 
 						as.double(getValues(x)), op, as.integer(na.rm), 
 						as.integer(dim), PACKAGE='raster')
 						

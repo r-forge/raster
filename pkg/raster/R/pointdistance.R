@@ -77,7 +77,7 @@
 		xx <- cbind(rep(x[,1], m), rep(x[,2], m))
 		yy <- cbind(rep(y[,1], each=n), rep(y[,2], each=n))
 		
-		g <- .Call("raster_point_distance", xx, yy, TRUE, a, f, PACKAGE='raster')
+		g <- .Call("_raster_point_distance", xx, yy, TRUE, a, f, PACKAGE='raster')
 		return(matrix(g, n, m))
 	} else { 
 		return(.planedist2(x, y))
@@ -146,7 +146,7 @@ pointDistance <- function (p1, p2, lonlat, allpairs=FALSE, ...) {
 .geodist <- function(x1, y1, x2, y2, a=6378137, f=1/298.257223563) {
 	# recycle
     p <- cbind(x1, y1, x2, y2)
-	.Call("raster_point_distance", p[,1:2, drop=FALSE], p[, 3:4,drop=FALSE], TRUE, a, f, PACKAGE='raster')
+	.Call("_raster_point_distance", p[,1:2, drop=FALSE], p[, 3:4,drop=FALSE], TRUE, a, f, PACKAGE='raster')
 #	.Call("inversegeodesic", as.double(p[,1]), as.double(p[,2]), as.double(p[,3]), as.double(p[,4]), as.double(a), as.double(f), PACKAGE='raster')
 }
 

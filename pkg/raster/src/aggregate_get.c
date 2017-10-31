@@ -2,15 +2,10 @@
 
 #include <R.h>
 #include <Rinternals.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <Rmath.h>
-#include "Rdefines.h"
 #include "R_ext/Rdynload.h"
 
 
-SEXP aggregate_get(SEXP d, SEXP dim) {
+SEXP _aggregate_get(SEXP d, SEXP dim) {
 
 	R_len_t i, j, k, q;
 	

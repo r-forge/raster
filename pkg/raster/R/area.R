@@ -36,7 +36,7 @@ setMethod('area', signature(x='SpatialPolygons'),
 			lonlat = FALSE
 		}
 		g <- geom(x)
-		.Call('raster_area_polygon', PACKAGE = 'raster', g, lonlat)
+		.Call('_raster_get_area_polygon', PACKAGE = 'raster', g, lonlat)
 	}
 )	
 

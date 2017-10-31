@@ -11,7 +11,7 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 
 
-SEXP aggregate(SEXP d, SEXP op, SEXP na, SEXP dim) {
+SEXP _do_aggregate(SEXP d, SEXP op, SEXP na, SEXP dim) {
 					
 	R_len_t i, j, k, n;
 	SEXP v;

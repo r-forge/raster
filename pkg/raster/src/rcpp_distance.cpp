@@ -4,11 +4,13 @@ July 2016
 
 #include <Rcpp.h>
 using namespace Rcpp;
+
 #include "distance.h"
 #include "area.h"
 
-// [[Rcpp::export(name = ".area_polygon")]]
-NumericVector area_polygon(NumericMatrix d, bool lonlat) {
+
+// [[Rcpp::export(name = ".get_area_polygon")]]
+NumericVector get_area_polygon(NumericMatrix d, bool lonlat) {
 	std::vector<int> pols(d(_,0).begin(), d(_,0).end());
 	std::vector<int> parts(d(_,1).begin(), d(_,1).end());
 	std::vector<int> holes(d(_,3).begin(), d(_,3).end());
