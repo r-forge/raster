@@ -7,7 +7,10 @@
 setMethod('cover', signature(x='RasterStackBrick', y='Raster'), 
 	function(x, y, ..., filename=''){ 
 
+	
 	rasters <- .makeRasterList(x, y, ..., unstack=FALSE)
+	compareRasters(rasters)
+	
 	nl <- sapply(rasters, nlayers)
 	un <- unique(nl)
 	if (length(un) > 3) {
@@ -19,6 +22,7 @@ setMethod('cover', signature(x='RasterStackBrick', y='Raster'),
 	}
 	
 	outRaster <- brick(x, values=FALSE)
+	compareRaster(rasters)
 
 	
 	filename <- trim(filename)
