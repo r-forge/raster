@@ -30,6 +30,8 @@ res() for rotated rasters was wrong https://gis.stackexchange.com/questions/2593
 cover with RasterStackBrick objects could not write to file (reported by L. Wasser https://stackoverflow.com/questions/44295842/r-raster-cover-function-error-with-landsat-stacks 
 Raster Attribute Tables with labels with a colon it could not be written because the colon was used as delimiter in the grd file.
 https://stackoverflow.com/questions/46832976/why-is-crop-sometimes-introducing-nas-on-a-categorical-raster
+An error was thrown if "rasterToPoints" returned no points, and "spatial=TRUE". Instead an empty SpatialPointsDataFrame is now returned (reported and suggested by Arnaud Mosnier)
+
 
 --- 31-May-2016, version: 2.5-8
 new functions for Raster objects: as.integer, as.list
