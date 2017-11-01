@@ -31,6 +31,7 @@ cover with RasterStackBrick objects could not write to file (reported by L. Wass
 Raster Attribute Tables with labels with a colon it could not be written because the colon was used as delimiter in the grd file.
 https://stackoverflow.com/questions/46832976/why-is-crop-sometimes-introducing-nas-on-a-categorical-raster
 An error was thrown if "rasterToPoints" returned no points, and "spatial=TRUE". Instead an empty SpatialPointsDataFrame is now returned (reported and suggested by Arnaud Mosnier)
+Another error when rasterToPoints was used on a single-pixel multi-layer raster object (reported by Daniele Baisero)
 
 
 --- 31-May-2016, version: 2.5-8
