@@ -134,7 +134,9 @@
 		#else if (ini[i,2] == "RATROWS") { ratrows <- as.integer(ini[i,3]) }
 		} else if (ini[i,2] == "RATNAMES") { ratnames <- unlist(strsplit(ini[i,3], ':'), use.names=FALSE) 
 		} else if (ini[i,2] == "RATTYPES") { rattypes <- unlist(strsplit(ini[i,3], ':'), use.names=FALSE)
-		} else if (ini[i,2] == "RATVALUES") { ratvalues <- unlist(strsplit(ini[i,3], ':'), use.names=FALSE)
+		} else if (ini[i,2] == "RATVALUES") { 
+			ratvalues <- unlist(strsplit(ini[i,3], ':'), use.names=FALSE)
+			ratvalues <- gsub('~^colon^~', ':', ratvalues)
 		} else if (ini[i,2] == "LEVELS") { try ( catlevels <-  unlist(strsplit(ini[i,3], ':'), use.names=FALSE ), silent = TRUE)
 		} else if (ini[i,2] == "COLORTABLE") { try ( colortable <-  unlist(strsplit(ini[i,3], ':'), use.names=FALSE), silent = TRUE ) 
 		} else if (ini[i,2] == "NODATAVALUE") { 
