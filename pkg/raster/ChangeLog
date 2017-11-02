@@ -32,7 +32,7 @@ Raster Attribute Tables with labels with a colon it could not be written because
 https://stackoverflow.com/questions/46832976/why-is-crop-sometimes-introducing-nas-on-a-categorical-raster
 An error was thrown if "rasterToPoints" returned no points, and "spatial=TRUE". Instead an empty SpatialPointsDataFrame is now returned (reported and suggested by Arnaud Mosnier)
 Another error when rasterToPoints was used on a single-pixel multi-layer raster object (reported by Daniele Baisero)
-
+rasterize polygons bugged in some cases if a polygon node was exactly in the center of a cell. Reported by Marco Sciaini  https://gis.stackexchange.com/questions/252210/rasterize-a-spatialpolygonsdataframe-error-in-if-x2a-rxmn
 
 --- 31-May-2016, version: 2.5-8
 new functions for Raster objects: as.integer, as.list

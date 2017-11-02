@@ -551,3 +551,19 @@ function(object, v, cell, band, ...) {
 	}
 	return(list(object, setminmax))
 }
+
+
+
+
+
+.updateGDALminmax <- function(object, minv, maxv) {
+	gdal <- methods::new("GDALDataset", filename(object))
+	on.exit( rgdal::GDAL.close(gdal) )
+
+	for (band in 1:nlayers(object)) {
+		b <- methods::new("GDALRasterBand", gdal, band)
+		statistics <- c(minv[band], maxv[band], NA, NA)
+		rgdal::GDALcall(b, "SetStatistics", statistics)	
+	}
+	return(object)
+}

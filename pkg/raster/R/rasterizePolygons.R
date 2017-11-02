@@ -106,7 +106,7 @@
 			resxy <- rbind(resxy, xy)
 		}
 	}
-	return(resxy)
+	return((resxy))
 }
 
 
@@ -284,6 +284,11 @@
 				
 				mypoly <- pollist[[subpol[i,1]]]
 				intersection <- .intersectLinePolygon(myline, mypoly@coords)
+				if (nrow(intersection) %% 2 == 1) {
+				# this is a bit speculative
+					intersection <- unique(intersection)
+				}
+
 				x <- sort(intersection[,1])
 				if (length(x) > 0) {
 					if ( sum(x[-length(x)] == x[-1]) > 0 ) {
@@ -299,6 +304,7 @@
 						}
 						# print(paste('exit node intersection on row:', r))
 					} else {
+					
 						for (k in 1:round(nrow(intersection)/2)) {
 							l <- (k * 2) - 1		
 							x1 <- x[l]
