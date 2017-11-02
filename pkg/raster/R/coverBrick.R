@@ -9,7 +9,7 @@ setMethod('cover', signature(x='RasterStackBrick', y='Raster'),
 
 	
 	rasters <- .makeRasterList(x, y, ..., unstack=FALSE)
-	compareRasters(rasters)
+	compareRaster(rasters)
 	
 	nl <- sapply(rasters, nlayers)
 	un <- unique(nl)
