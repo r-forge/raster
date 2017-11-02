@@ -34,7 +34,10 @@ An error was thrown if "rasterToPoints" returned no points, and "spatial=TRUE". 
 Another error when rasterToPoints was used on a single-pixel multi-layer raster object (reported by Daniele Baisero)
 rasterize polygons bugged in some cases if a polygon node was exactly in the center of a cell. Reported by Marco Sciaini  https://gis.stackexchange.com/questions/252210/rasterize-a-spatialpolygonsdataframe-error-in-if-x2a-rxmn
 bug in projectRaster related to dateline: https://stackoverflow.com/questions/47047623/projectraster-raster-projection-of-bathymetry-data-noaa-nc-in-the-pacific
+raster::pring of a SpatialPointsDataFrame showed an error message if the data.frame had zero columns (reported by Bart Branstauber)
+Really bad bug: for Raster 'r', 'r < 50' was not equivalent to '50 > r' (the latter being wrong!). Reported by Jonathan Proctor
 
+ 
 --- 31-May-2016, version: 2.5-8
 new functions for Raster objects: as.integer, as.list
 new functions whiches.min and whiches.max (to get all layers that are which.min/max)

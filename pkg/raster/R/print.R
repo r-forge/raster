@@ -69,8 +69,8 @@ setMethod ('print' , 'Spatial',
 	isRaster <- hasData <- FALSE
 	nc <- 0
 	if (.hasSlot(x, 'data')) {
-		hasData <- TRUE
 		nc <- ncol(x@data)
+		hasData <- TRUE
 	}
 	ln <- 1
 	if (inherits(x, 'SpatialPixels')) {
@@ -101,47 +101,49 @@ setMethod ('print' , 'Spatial',
 	
 	if (hasData) {
 		x <- x@data
-		
 		maxnl <- 15
 		
 		if (! isRaster) {
 			cat('variables   : ', nc, '\n', sep="" ) 
 		}
-		if (nc > maxnl) {
-			x <- x[, 1:maxnl]
-		}
-		ln <- colnames(x)
-		if (nc > maxnl) {
-			ln <- c(ln[1:maxnl], '...')
-			x <- x[, 1:maxnl]
-		}
-		wrn <- getOption('warn')
-		on.exit(options('warn' = wrn))
-		options('warn'=-1) 
-		r <- apply(x, 2, range, na.rm=TRUE)
-		minv <- as.vector(r[1, ])
-		maxv <- as.vector(r[2, ])
-		if (nc > maxnl) {
-			minv <- c(minv, '...')
-			maxv <- c(maxv, '...')
-		}
+		if (nc > 0) {
+			if (nc > maxnl) {
+				x <- x[, 1:maxnl]
+			}
+			ln <- colnames(x)
+			if (nc > maxnl) {
+				ln <- c(ln[1:maxnl], '...')
+				x <- x[, 1:maxnl]
+			}
+			wrn <- getOption('warn')
+			on.exit(options('warn' = wrn))
+			options('warn'=-1) 
+			r <- apply(x, 2, range, na.rm=TRUE)
+			minv <- as.vector(r[1, ])
+			maxv <- as.vector(r[2, ])
+			if (nc > maxnl) {
+				minv <- c(minv, '...')
+				maxv <- c(maxv, '...')
+			}
 
-		w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
-		w[is.na(w)] <- 2
-		m <- rbind(ln, minv, maxv)
-		
-		# a loop because 'width' is not recycled by format
-		for (i in 1:ncol(m)) {
-			m[,i] <- format(m[,i], width=w[i], justify="right")
-		}
+			w <- pmax(nchar(ln), nchar(minv), nchar(maxv))
+			w[is.na(w)] <- 2
+			m <- rbind(ln, minv, maxv)
+			
+			# a loop because 'width' is not recycled by format
+			for (i in 1:ncol(m)) {
+				m[,i] <- format(m[,i], width=w[i], justify="right")
+			}
 
-		cat('names       :', paste(m[1,], collapse=', '), '\n')
-		if (nf > 1) {
-			cat('min values  :', paste(m[2,], collapse=', '), '\n')
-			cat('max values  :', paste(m[3,], collapse=', '), '\n')
-		} else if (nf == 1) {
-			cat('value       :', paste(m[2,], collapse=', '), '\n')			
-		}
+			cat('names       :', paste(m[1,], collapse=', '), '\n')
+			if (nf > 1) {
+				cat('min values  :', paste(m[2,], collapse=', '), '\n')
+				cat('max values  :', paste(m[3,], collapse=', '), '\n')
+			} else if (nf == 1) {
+				cat('value       :', paste(m[2,], collapse=', '), '\n')			
+			}
+		}	
 	}
 }
-	
+
+
