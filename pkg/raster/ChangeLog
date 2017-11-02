@@ -13,7 +13,7 @@ allow setting a 'spatial window'
 
 --- current version
 
---- 31-Oct-2017, version: 2.6-1
+--- 1-Nov-2017, version: 2.6-2
 New:
 new extent objects are now checked for being valid. Suggested by Mike Sumner
 buffer for lon/lat points
@@ -33,6 +33,7 @@ https://stackoverflow.com/questions/46832976/why-is-crop-sometimes-introducing-n
 An error was thrown if "rasterToPoints" returned no points, and "spatial=TRUE". Instead an empty SpatialPointsDataFrame is now returned (reported and suggested by Arnaud Mosnier)
 Another error when rasterToPoints was used on a single-pixel multi-layer raster object (reported by Daniele Baisero)
 rasterize polygons bugged in some cases if a polygon node was exactly in the center of a cell. Reported by Marco Sciaini  https://gis.stackexchange.com/questions/252210/rasterize-a-spatialpolygonsdataframe-error-in-if-x2a-rxmn
+bug in projectRaster related to dateline: https://stackoverflow.com/questions/47047623/projectraster-raster-projection-of-bathymetry-data-noaa-nc-in-the-pacific
 
 --- 31-May-2016, version: 2.5-8
 new functions for Raster objects: as.integer, as.list
