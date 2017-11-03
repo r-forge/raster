@@ -15,7 +15,7 @@ allow setting a 'spatial window'
 
 --- 1-Nov-2017, version: 2.6-2
 New:
-new extent objects are now checked for being valid. Suggested by Mike Sumner
+new extent objects created from a vector of coordinates are now checked for being valid. Suggested by Mike Sumner
 buffer for lon/lat points
 erase for SpatialLines with Polygons
 kernelDensity function (hidden)
