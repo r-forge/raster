@@ -13,7 +13,7 @@ allow setting a 'spatial window'
 
 --- current version
 
---- 1-Nov-2017, version: 2.6-2
+--- 6-Nov-2017, version: 2.6-3
 New:
 new extent objects created from a vector of coordinates are now checked for being valid. Suggested by Mike Sumner
 buffer for lon/lat points
