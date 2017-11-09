@@ -18,7 +18,9 @@ Authors@R: c(
 	person("Oscar", "Perpinan Lamigueiro", role = "ctb"),
 	person("Andrew", "Bevan", role = "ctb"),
 	person("Etienne B.", "Racine", role = "ctb"),
-	person("Ashton", "Shortridge", role = "ctb"))
+	person("Ashton", "Shortridge", role = "ctb"),
+	person("Aniruddha", "Ghosh", role = "ctb")
+	)
 Description: Reading, writing, manipulating, analyzing and modeling of gridded spatial data. The package implements basic and high-level functions. Processing of very large files is supported.
 License: GPL (>=3)
 URL: http://www.rspatial.org/
