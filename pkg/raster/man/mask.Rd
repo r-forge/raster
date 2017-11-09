@@ -8,6 +8,7 @@
 \alias{mask,RasterLayer,RasterStackBrick-method}
 \alias{mask,RasterStackBrick,RasterStackBrick-method}
 \alias{mask,Raster,Spatial-method}
+\alias{mask,Raster,sf-method}
 
 \title{Mask values in a Raster object}
 

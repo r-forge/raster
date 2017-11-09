@@ -29,6 +29,16 @@ setMethod('rasterize', signature(x='data.frame', y='Raster'),
 )
 
 
+setMethod('rasterize', signature(x='sf', y='Raster'), 
+	function(x, y, ...) {
+		x <- .sf2sp(x)
+		#if (is.list(x)) {}
+		
+		rasterize(x, y, ...)
+	}
+)
+
+
 setMethod('rasterize', signature(x='SpatialPoints', y='Raster'), 
 	function(x, y, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue='all', filename="", na.rm=TRUE, ...){ 
 	

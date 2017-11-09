@@ -5,6 +5,7 @@
 \alias{rasterize}
 \alias{rasterize,matrix,Raster-method}
 \alias{rasterize,data.frame,Raster-method}
+\alias{rasterize,sf,Raster-method}
 \alias{rasterize,SpatialPoints,Raster-method}
 \alias{rasterize,SpatialLines,Raster-method}
 \alias{rasterize,SpatialPolygons,Raster-method}

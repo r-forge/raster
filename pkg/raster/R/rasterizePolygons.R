@@ -292,8 +292,8 @@
 
 				x <- sort(intersection[,1])
 				if (length(x) > 0) {
-					if (nrow(intersection) %% 2 == 1) {
-					# if ( sum(x[-length(x)] == x[-1]) > 0 ) {
+					if ((nrow(intersection) %% 2 == 1) || ( sum(x[-length(x)] == x[-1]) > 0 )) {
+					# uneven number or duplicates
 					# e.g. single node intersection going out of polygon ....
 						spPnts <- SpatialPoints(xyFromCell(rstr, cellFromRowCol(rstr, rep(r, ncol(rstr)), 1:ncol(rstr))))
 						spPol <- SpatialPolygons(list(Polygons(list(mypoly), 1)))
