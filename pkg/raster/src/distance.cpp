@@ -182,21 +182,20 @@ std::vector<double> directionToNearest_lonlat(std::vector<double> lon1, std::vec
 
 double direction_plane(double x1, double y1, double x2, double y2, bool degrees) {
 	double a;
-	a = fmod(atan2( x2 - x1, y2 - y1), M_PI);
-	a = (a < 0 ? -a : a + M_PI);
+	a = fmod(atan2( x2 - x1, y2 - y1), M_2PI);
+	a = (a < 0 ? a + M_2PI : a );
 	return (degrees ? toDeg(a) : a);
 }
+
 
 
 std::vector<double> direction_plane(std::vector<double> x1, std::vector<double> y1, std::vector<double> x2, std::vector<double> y2, bool degrees) {
 // xy1 and xy2 should have the same length
 	std::vector<double> r (x1.size()); 
-	double a;
+	//double a;
 	int n = x1.size();
   	for (int i=0; i < n; i++) {
-		a = fmod(atan2( x2[i] - x1[i], y2[i] - y1[i]), M_PI);
-		a = (a < 0 ? -a : a + M_PI);
-		r[i] = (degrees ? toDeg(a) : a);
+		r[i] = direction_plane(x1[i], y1[i], x2[i], y2[i], degrees);
 	}
   	return r;
 }
@@ -207,38 +206,40 @@ std::vector<double> directionToNearest_plane(std::vector<double> x1, std::vector
 	int n = x1.size();
 	int m = x2.size();
 	std::vector<double> r(n); 
-	double d, mind, a;
+	double d, mind;
+	int minj;
 	if (from) {
 		for (int i = 0; i < n; i++) {
-			mind = sqrt(pow((x2[0]-x1[i]),2) + pow((y2[0]-y1[i]), 2));
-			r[i] = direction_plane(x2[0], y2[0], x1[i], y1[i], degrees);
+			mind = distance_plane(x1[i], y1[i], x2[0], y2[0]);
+			minj = 0;
 			for (int j = 1; j < m; j++) {
-				d = sqrt(pow((x2[j]-x1[i]),2) + pow((y2[j]-y1[i]), 2));
+				d = distance_plane(x1[i], y1[i], x2[j], y2[j]);
 				if (d < mind) {
 					mind = d;
-					a = fmod(atan2(x1[j] - x2[i], y1[j]-y2[i]), M_PI);
-					a = (a < 0 ? -a : a + M_PI);
-					r[i] = (degrees ? toDeg(a) : a);
+					minj = j;
 				}
 			}
+			r[i] = direction_plane(x2[minj], y2[minj], x1[i], y1[i], degrees);
 		}		
 	} else {
 		for (int i = 0; i < n; i++) {
-			mind = sqrt(pow((x2[0]-x1[i]),2) + pow((y2[0]-y1[i]), 2));
-			r[i] = direction_plane(x1[i], y1[i], x2[0], y2[0], degrees);
+			mind = distance_plane(x1[i], y1[i], x2[0], y2[0]);
+			minj = 0;
 			for (int j = 1; j < m; j++) {
-				d = sqrt(pow((x2[j]-x1[i]),2) + pow((y2[j]-y1[i]), 2));
+				d = distance_plane(x1[i], y1[i], x2[j], y2[j]);
 				if (d < mind) {
 					mind = d;
-					a = fmod(atan2(x2[j] - x1[i], y2[j]-y1[i]), M_PI);
-					a = (a < 0 ? -a : a + M_PI);
-					r[i] = (degrees ? toDeg(a) : a);
+					minj = j;
 				}
 			}
+			r[i] = direction_plane(x1[i], y1[i], x2[minj], y2[minj], degrees);					
 		}
 	}
   	return r;
 }
+
+
+
 
 
 std::vector<double> destpoint_lonlat(double longitude, double latitude, double  bearing, double distance, double a, double f) {

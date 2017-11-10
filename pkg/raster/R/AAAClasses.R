@@ -20,10 +20,14 @@ setClass('Extent',
 	),
 	validity = function(object)	{
 		c1 <- (object@xmin <= object@xmax)
-		if (!c1) { stop('invalid extent: xmin >= xmax') }
 		c2 <- (object@ymin <= object@ymax)
+		# fix to not break dependencies
+		if (is.na(c1)) c1 <- TRUE
+		if (is.na(c2)) c2 <- TRUE
+		if (!c1) { stop('invalid extent: xmin >= xmax') }
 		if (!c2) { stop('invalid extent: ymin >= ymax') }
 		return(c1 & c2)
+		# fix to not break dependencies
 		#v <- c(object@xmin, object@xmax, object@ymin, object@ymax)
 		#c3 <- all(!is.infinite(v))
 		#if (!c3) { stop('invalid extent: infinite value') }		
