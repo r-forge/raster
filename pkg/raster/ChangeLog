@@ -37,7 +37,9 @@ bug in projectRaster related to dateline: https://stackoverflow.com/questions/47
 raster::pring of a SpatialPointsDataFrame showed an error message if the data.frame had zero columns (reported by Bart Branstauber)
 Really bad bug: for Raster 'r', 'r < 50' was not equivalent to '50 > r' (the latter being wrong!). Reported by Jonathan Proctor
 Error in the correction for the standard deviation with asSample=FALSE. Reported and fix provided by Benjamin Leutner
- 
+raster::colSums gave false results when !canProcessInMemory(x). Reported and fix provided by Peter Kullberg
+zonal(  ,stat='sd') did not work. Reported by Matt Biber
+
 --- 31-May-2016, version: 2.5-8
 new functions for Raster objects: as.integer, as.list
 new functions whiches.min and whiches.max (to get all layers that are which.min/max)
