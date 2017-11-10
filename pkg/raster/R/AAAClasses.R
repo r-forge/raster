@@ -23,10 +23,11 @@ setClass('Extent',
 		if (!c1) { stop('invalid extent: xmin >= xmax') }
 		c2 <- (object@ymin <= object@ymax)
 		if (!c2) { stop('invalid extent: ymin >= ymax') }
-		v <- c(object@xmin, object@xmax, object@ymin, object@ymax)
-		c3 <- all(!is.infinite(v))
-		if (!c3) { stop('invalid extent: infinite value') }		
-		return(c1 & c2 & c3)
+		return(c1 & c2)
+		#v <- c(object@xmin, object@xmax, object@ymin, object@ymax)
+		#c3 <- all(!is.infinite(v))
+		#if (!c3) { stop('invalid extent: infinite value') }		
+		#return(c1 & c2 & c3)
 	}
 )
 

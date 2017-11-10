@@ -29,7 +29,9 @@ if (!isGeneric("erase")) {
 				x@lines[i] <- z@lines	
 			}
 		}
-		row.names(x) <- rn				
+		if (length(rn) > 0) {
+			row.names(x) <- rn				
+		}
 	}
 	if ((type=='polygons') & (length(x) > 0)) {
 

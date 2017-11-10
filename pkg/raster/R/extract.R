@@ -22,7 +22,7 @@ setMethod('extract', signature(x='Raster', y='sf'),
 function(x, y, ...){ 
 	y <- .sf2sp(y)
 	#if (is.list(x)) {}
-	rasterize(x, y, ...)
+	extract(x, y, ...)
 }
 )
 
