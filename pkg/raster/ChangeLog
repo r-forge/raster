@@ -1,7 +1,6 @@
 --- to do
 focal for multi-layer objects
 step-size option for focal
-support for RasterQuad (4 dimensional) objects
 add equivalent to "subsWithNA" to reclassify
 move rasterize/(lines, polygons) to C
 function for affine transformation
@@ -10,15 +9,16 @@ add orientation fixes for AVISO currents and similar NetCDFs lacking metadata on
 add VRT output to saveStack
 Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 allow setting a 'spatial window'
-
+Better handling of NA values in 1 byte raster files
 --- current version
 
---- 6-Nov-2017, version: 2.6-4
+--- 11-Nov-2017, version: 2.6-6
 New:
 new extent objects created from a vector of coordinates are now checked for being valid. Suggested by Mike Sumner
 buffer for lon/lat points
 erase for SpatialLines with Polygons
 kernelDensity function (hidden)
+output from freq is always ordered (whether computed from disk or from in memory values). Requested by Benjamin Leutner
 
 Bug fixes:
 as.data.frame from file based rasters ingored na.rm=TRUE (unless xy=TRUE). Reported by Jean-Gabriel Elie
@@ -36,7 +36,7 @@ rasterize polygons bugged in some cases if a polygon node was exactly in the cen
 bug in projectRaster related to dateline: https://stackoverflow.com/questions/47047623/projectraster-raster-projection-of-bathymetry-data-noaa-nc-in-the-pacific
 raster::pring of a SpatialPointsDataFrame showed an error message if the data.frame had zero columns (reported by Bart Branstauber)
 Really bad bug: for Raster 'r', 'r < 50' was not equivalent to '50 > r' (the latter being wrong!). Reported by Jonathan Proctor
-
+Error in the correction for the standard deviation with asSample=FALSE. Reported and fix provided by Benjamin Leutner
  
 --- 31-May-2016, version: 2.5-8
 new functions for Raster objects: as.integer, as.list
