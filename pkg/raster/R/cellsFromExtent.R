@@ -31,7 +31,7 @@ cellsFromExtent <- function(object, extent, expand=FALSE) {
 
 # By Mike Sumner
 extentFromCells <- function (object, cells) {
-	cells <- na.omit(unique(round(cells)))
+	cells <- stats::na.omit(unique(round(cells)))
 	cells <- cells[cells > 0 & cells <= ncell(object)]
 	if (length(cells) < 1) {
 		stop('no valid cells')
