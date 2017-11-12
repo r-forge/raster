@@ -132,6 +132,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// aggregate_get
+NumericMatrix aggregate_get(NumericMatrix d, NumericVector dims);
+RcppExport SEXP _raster_aggregate_get(SEXP dSEXP, SEXP dimsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type dims(dimsSEXP);
+    rcpp_result_gen = Rcpp::wrap(aggregate_get(d, dims));
+    return rcpp_result_gen;
+END_RCPP
+}
+// aggregate_fun
+NumericMatrix aggregate_fun(NumericMatrix d, NumericVector dim, bool narm, int fun);
+RcppExport SEXP _raster_aggregate_fun(SEXP dSEXP, SEXP dimSEXP, SEXP narmSEXP, SEXP funSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< bool >::type narm(narmSEXP);
+    Rcpp::traits::input_parameter< int >::type fun(funSEXP);
+    rcpp_result_gen = Rcpp::wrap(aggregate_fun(d, dim, narm, fun));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_area_polygon
 NumericVector get_area_polygon(NumericMatrix d, bool lonlat);
 RcppExport SEXP _raster_get_area_polygon(SEXP dSEXP, SEXP lonlatSEXP) {
@@ -260,9 +286,7 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP _aggregate_get(SEXP, SEXP);
 RcppExport SEXP _broom(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP _do_aggregate(SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP _do_clamp(SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP _do_layerize(SEXP, SEXP, SEXP);
 RcppExport SEXP _do_terrain(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -284,6 +308,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_raster_ppmax", (DL_FUNC) &_raster_ppmax, 3},
     {"_raster_doRowMin", (DL_FUNC) &_raster_doRowMin, 2},
     {"_raster_doRowMax", (DL_FUNC) &_raster_doRowMax, 2},
+    {"_raster_aggregate_get", (DL_FUNC) &_raster_aggregate_get, 2},
+    {"_raster_aggregate_fun", (DL_FUNC) &_raster_aggregate_fun, 4},
     {"_raster_get_area_polygon", (DL_FUNC) &_raster_get_area_polygon, 2},
     {"_raster_point_distance", (DL_FUNC) &_raster_point_distance, 5},
     {"_raster_distanceToNearestPoint", (DL_FUNC) &_raster_distanceToNearestPoint, 5},
@@ -292,9 +318,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_raster_doCellFromXY", (DL_FUNC) &_raster_doCellFromXY, 8},
     {"_raster_doXYFromCell", (DL_FUNC) &_raster_doXYFromCell, 7},
     {"_raster_doFourCellsFromXY", (DL_FUNC) &_raster_doFourCellsFromXY, 9},
-    {"_aggregate_get",                  (DL_FUNC) &_aggregate_get,                  2},
     {"_broom",                          (DL_FUNC) &_broom,                          6},
-    {"_do_aggregate",                   (DL_FUNC) &_do_aggregate,                   4},
     {"_do_clamp",                       (DL_FUNC) &_do_clamp,                       4},
     {"_do_layerize",                    (DL_FUNC) &_do_layerize,                    3},
     {"_do_terrain",                     (DL_FUNC) &_do_terrain,                     8},

@@ -11,14 +11,14 @@ if (!isGeneric("getValuesBlock")) {
 
 
 setMethod('getValuesBlock', signature(x='RasterStack'), 
-	function(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), lyrs) {
+	function(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), lyrs, ...) {
 		stopifnot(hasValues(x))
 		stopifnot(row <= x@nrows)
 		stopifnot(col <= x@ncols)
 		stopifnot(nrows > 0)
 		stopifnot(ncols > 0)
 		row <- max(1, min(x@nrows, round(row[1])))
-		lastrow <- min(x@nrows, row + round(nrows[1]) - 1)
+		lastrow <- row + round(nrows[1]) - 1
 		nrows <- lastrow - row + 1
 		col <- max(1, min(x@ncols, round(col[1])))
 		lastcol <- col + round(ncols[1]) - 1
@@ -68,16 +68,18 @@ setMethod('getValuesBlock', signature(x='RasterStack'),
 
 
 setMethod('getValuesBlock', signature(x='RasterBrick'), 
-	function(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), lyrs) {
+	function(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), lyrs, ...) {
 		stopifnot(hasValues(x))
 		row <- max(1, round(row))
 		col <- max(1, round(col))
 		stopifnot(row <= x@nrows)
 		stopifnot(col <= x@ncols)
-		nrows <- min(round(nrows), x@nrows-row+1)		
-		ncols <- min((x@ncols-col+1), round(ncols))
-		stopifnot(nrows > 0)
-		stopifnot(ncols > 0)
+		#nrows <- min(round(nrows), x@nrows-row+1)		
+		#ncols <- min((x@ncols-col+1), round(ncols))
+		nrows <- max(1, x@nrows-row+1)		
+		ncols <- max(1, x@ncols-col+1)
+		#stopifnot(nrows > 0)
+		#stopifnot(ncols > 0)
 
 		
 		nlyrs <- nlayers(x)
@@ -151,7 +153,9 @@ setMethod('getValuesBlock', signature(x='RasterLayer'),
 			res <- rep(NA, nrows * ncols)			
 		}
 	
-		if (format=='matrix') {
+		if (format=='m') {
+			res = matrix(res)
+		} else if (format=='matrix') {
 			res = matrix(res, nrow=nrows , ncol=ncols, byrow=TRUE )
 			colnames(res) <- col:lastcol
 			rownames(res) <- row:lastrow
