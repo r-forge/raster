@@ -14,7 +14,7 @@ getValuesBlock returns values for a block (rectangular area) of values of a Rast
 
 
 \usage{
-\S4method{getValuesBlock}{RasterLayer}(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), format='')
+\S4method{getValuesBlock}{RasterLayer}(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), format='', ...)
 
 \S4method{getValuesBlock}{RasterBrick}(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), lyrs, ...)
 

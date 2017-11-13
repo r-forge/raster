@@ -124,7 +124,7 @@ setMethod('getValuesBlock', signature(x='RasterBrick'),
 
 
 setMethod('getValuesBlock', signature(x='RasterLayer'), 
- 	function(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), format='') {
+ 	function(x, row=1, nrows=1, col=1, ncols=(ncol(x)-col+1), format='', ...) {
 		
 		row <- max(1, min(x@nrows, round(row[1])))
 		lastrow <- min(x@nrows, row + round(nrows[1]) - 1)
@@ -169,7 +169,7 @@ setMethod('getValuesBlock', signature(x='RasterLayer'),
 
 
 setMethod('getValuesBlock', signature(x='RasterLayerSparse'), 
- 	function(x=1, row, nrows=1, col=1, ncols=(ncol(x)-col+1), format='') {
+ 	function(x=1, row, nrows=1, col=1, ncols=(ncol(x)-col+1), format='', ...) {
 		
 		row <- max(1, min(x@nrows, round(row[1])))
 		lastrow <- min(x@nrows, row + round(nrows[1]) - 1)
