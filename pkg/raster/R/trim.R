@@ -68,6 +68,7 @@ function(x, padding=0, values=NA, filename='', ...) {
 	ncl <- nc * nlayers(x)
 	
 	cnt <- 0
+
 	for (r in 1:nr) {
 		v <- getValues(x, r)
 		if (sum(v %in% values) < ncl) {
@@ -78,9 +79,11 @@ function(x, padding=0, values=NA, filename='', ...) {
 	if ( cnt == nr) { stop('only NA values found') }
 	firstrow <- min(max(r-padding, 1), nr)
 	
-	for (r in nr:1) {
+	for (r in nr:firstrow) {
 		v <- getValues(x, r)
-		if (sum(v %in% values) < ncl) { break }
+		if (sum(v %in% values) < ncl) { 
+			break 
+		}
 	}
 	lastrow <- max(min(r+padding, nr), 1)
 	

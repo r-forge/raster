@@ -370,7 +370,7 @@ tmpDir <- function(create=TRUE) {
 
 
 .maxmemory <- function() {
-	default <- 1e+08
+	default <- 1e+09
 	d <- getOption('rasterMaxMemory')
 	if (is.null(d)) {
 		return( default )
