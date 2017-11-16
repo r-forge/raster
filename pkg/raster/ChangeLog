@@ -10,7 +10,11 @@ add VRT output to saveStack
 Fix lines falling between the cracks in extract (calling rasterzeLines): https://stat.ethz.ch/pipermail/r-sig-geo/2014-May/020973.html
 allow setting a 'spatial window'
 Better handling of NA values in 1 byte raster files
+
 --- current version
+
+
+
 
 --- 11-Nov-2017, version: 2.6-6
 New:

@@ -98,7 +98,7 @@ function(x, fact=2, fun='mean', expand=TRUE, na.rm=TRUE, filename="", ...)  {
 		op <- NA
 	}
 
-	# note that it is yfact, xfact, zfact.
+	# note that it is yfact, xfact, zfact
 	dims <- as.integer(c(lastrow, lastcol, length(lyrs), yfact, xfact, zfact))
 	
 	if (is.na(op)) {
