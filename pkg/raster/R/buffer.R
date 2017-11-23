@@ -130,7 +130,7 @@ function(x, width=0, filename='', doEdge=FALSE, ...) {
 		xy <- xyFromCell(out, i)
 		vals <- .Call('_raster_distanceToNearestPoint', xy, pts, longlat, 6378137.0, 1/298.257223563, PACKAGE='raster')
 		pbStep(pb)
-		x[x > width] <- NA
+		x[vals > width] <- NA
 		x[!is.na(x)] <- 1
 		pbStep(pb)
 		out <- setValues(out, x)
