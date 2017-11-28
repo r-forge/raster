@@ -99,7 +99,7 @@ function(x, padding=0, values=NA, filename='', ...) {
 	}
 	firstcol <- min(max(c-padding, 1), nc) 
 	
-	for (c in nc:1) {
+	for (c in nc:firstcol) {
 		v <- getValuesBlock(x, 1 ,nrow(x), c, 1)
 		if (sum(v %in% values) < nrl) { break }
 	}
