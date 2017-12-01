@@ -4,12 +4,6 @@
 # Licence GPL v3
 
 
-if (!isGeneric("crop")) {
-	setGeneric("crop", function(x, y, ...)
-		standardGeneric("crop"))
-}	
-
-
 .copyWithProperties <- function(x) {
 	if (inherits(x, 'RasterStackBrick')) {
 		out <- brick(x, values=FALSE)	

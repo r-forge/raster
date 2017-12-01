@@ -3,10 +3,6 @@
 # Version 1.0
 # Licence GPL v3
 
-if (!isGeneric("trim")) {
-	setGeneric("trim", function(x, ...)
-		standardGeneric("trim"))
-}	
 
 
 setMethod('trim', signature(x='character'), 

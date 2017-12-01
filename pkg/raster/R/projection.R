@@ -5,10 +5,6 @@
 
 
 
-if (!isGeneric("crs")) {
-	setGeneric("crs", function(x, ...)
-		standardGeneric("crs"))
-}	
 
 setMethod("crs", signature('ANY'), 
 	function(x, asText=FALSE, ...) {
