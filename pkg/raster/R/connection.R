@@ -81,7 +81,7 @@ setMethod('readStop', signature(x='RasterStack'),
 		d <- which(sapply(x@layers, fromDisk))
 		if (length(d) > 0) {
 			for (i in d) {
-				x@layers[[i]] <- readStop(x@layers[[i]], ...)
+				x@layers[[i]] <- readStop(x@layers[[i]])
 			}
 		}
 		x
