@@ -62,12 +62,12 @@ setMethod('readStart', signature(x='RasterStack'),
 
 
 if (!isGeneric("readStop")) {
-	setGeneric("readStop", function(x, ...)
+	setGeneric("readStop", function(x)
 		standardGeneric("readStop"))
 }	
 
 setMethod('readStop', signature(x='Raster'), 
-	function(x, ...) {
+	function(x) {
 		if ( fromDisk(x) ) {
 			return (.closeConnection(x))
 		} else {
@@ -77,7 +77,7 @@ setMethod('readStop', signature(x='Raster'),
 )
 
 setMethod('readStop', signature(x='RasterStack'), 
-	function(x, ...) {
+	function(x) {
 		d <- which(sapply(x@layers, fromDisk))
 		if (length(d) > 0) {
 			for (i in d) {
