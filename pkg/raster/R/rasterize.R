@@ -32,8 +32,7 @@ setMethod('rasterize', signature(x='data.frame', y='Raster'),
 setMethod('rasterize', signature(x='sf', y='Raster'), 
 	function(x, y, ...) {
 		x <- .sf2sp(x)
-		#if (is.list(x)) {}
-		
+		#if (is.list(x)) {}	
 		rasterize(x, y, ...)
 	}
 )

@@ -47,7 +47,6 @@ setMethod('as.character', signature(x='CRS'),
 			}
 		}
 	} 
-	
 	if (inherits(x, 'Spatial')) {
 		x@proj4string <- crs
 	} else {
@@ -65,6 +64,8 @@ projection <- function(x, asText=TRUE) {
 		x <- x@crs 
 	} else if (methods::extends(class(x), "Spatial")) { 
 		x <- x@proj4string
+	} else if (methods::extends(class(x), "sf")) {
+		return( attr(x$geometry, 'crs')$proj4string )
 	} else if (class(x) == 'character') { 
 		if (asText) {
 			return(x)
