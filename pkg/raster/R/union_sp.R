@@ -70,9 +70,10 @@ function(x, y) {
 		return(x)
 	}
 	
-	if (!rgeos::gIntersects(x)) {
-		return(x)
-	}
+	#if (!rgeos::gIntersects(x)) {
+	# this is a useful test, but returned topologyerrors
+	#	return(x)
+	#}
 	
 	if (.hasSlot(x, 'data')) {
 		x <- as(x, 'SpatialPolygons')
