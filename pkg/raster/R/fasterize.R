@@ -19,7 +19,7 @@
 				}
 				yh <- y[y$hole > 0, ]
 				zz <- split(yh, yh$part)
-				for (j in 1:length(z)) {
+				for (j in 1:length(zz)) {
 					id <- zz[[j]]$hole[1]
 					z[[id]]$setHole(zz[[j]]$x, zz[[j]]$y)
 				}
