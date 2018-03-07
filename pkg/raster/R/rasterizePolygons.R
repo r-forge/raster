@@ -113,8 +113,46 @@
 
 
 
-.polygonsToRaster <- function(p, rstr, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", getCover=FALSE, filename="", silent=TRUE, ...) {
+.polygonsToRaster <- function(p, rstr, field, fun='last', background=NA, mask=FALSE, update=FALSE, updateValue="all", getCover=FALSE, filename="", silent=TRUE, faster=TRUE, ...) {
 
+
+	npol <- length(p@polygons)
+	pvals <- .getPutVals(p, field, npol, mask)
+	putvals <- pvals[,1]
+	if (ncol(pvals) > 1) {
+		rstr@data@isfactor <- TRUE
+		rstr@data@attributes <- list(pvals)
+		if (!is.character(fun)) {
+			stop('when rasterizing multiple values you must use "fun=first" or "fun=last"')
+		} else if (!(fun %in% c('first', 'last'))) {
+			stop('when rasterizing multiple values you must use "fun=first" or "fun=last"')
+		}
+	}
+
+
+	### new code
+	if (is.character(fun) && (ncol(pvals) == 1) && faster) {
+		if (fun == "last") {
+			if (getCover) {
+				rstr <- disaggregate(raster(rstr), 10)
+				r <- .fasterize(p, rstr, rep(1, npol), background=NA, filename, ...) 
+				r <- aggregate(r, 10, mean, na.rm=TRUE)
+			} 
+			if (mask || update) {
+				if (mask && update) stop("either use 'mask' OR 'update'")	
+				background = NA
+			}
+			r <- .fasterize(p, rstr, pvals[,1], background, filename, ...) 
+			if (mask) r <- mask(rstr, r)
+			if (update) r <- cover(rstr, r)
+			return(r)
+		}
+		
+	}
+	### end new code
+
+
+	
 	leftColFromX <- function ( object, x )	{
 		colnr <- (x - xmin(object)) / xres(object)
 		i <- colnr %% 1 == 0

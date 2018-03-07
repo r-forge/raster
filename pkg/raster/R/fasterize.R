@@ -85,9 +85,7 @@
 	for (i in 1:npol) {
 		pp <- sp$subset(i-1)
 		ep <- pp$extent$vector
-		if (ep[1] >= er[2] | ep[2] <= er[1] | ep[3] >= er[4] | ep[4] <= er[3]) {
-				# do nothing; res[[i]] <- NULL
-		} else {
+		if (!(ep[1] >= er[2] || ep[2] <= er[1] || ep[3] >= er[4] || ep[4] <= er[3])) {
 			rc <- crop(rr, extent(ep)+addres)
 			rc <- .fasterize(pp, rc, values=1, background = NA)
 			xy <- rasterToPoints(rc)[,-3,drop=FALSE]
