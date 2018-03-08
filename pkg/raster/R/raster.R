@@ -316,7 +316,7 @@ setMethod('raster', signature(x='sf'),
 	function(x, origin, ...){
 		x <- .sf2sp(x)
 		raster(x, origin, ...)
-		r
+		x
 	}
 )
 
