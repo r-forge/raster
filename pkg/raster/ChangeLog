@@ -13,7 +13,7 @@ Better handling of NA values in 1 byte raster files
 
 --- current version
 buffer did not work with values in memory. Bug reported and solution proposed by Carlos Alberto Arnillas
-
+faster rasterization of polygons
 
 --- 11-Nov-2017, version: 2.6-6
 New:

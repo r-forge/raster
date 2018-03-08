@@ -141,11 +141,24 @@
 			if (mask || update) {
 				if (mask && update) stop("either use 'mask' OR 'update'")	
 				background = NA
+				r <- .fasterize(p, rstr, pvals[,1], background) 
+				if (mask) r <- mask(rstr, r)
+				if (update) {
+					if (updateValue[1]=="all") {
+						r <- cover(r, rstr)
+					} else if (updateValue[1]=="NA") {
+						r <- cover(rstr, r, ...)
+					} else if (updateValue[1]=="!NA") {
+						r <- mask(cover(r, rstr), rstr, ...)
+					} else {
+						s <- stack(r, rstr)
+						r <- overlay(rstr, r, fun=function(x,y){ i = (x %in% updateValue & !is.na(y)); x[i] <- y[i]; x }, ... )
+					}
+				}
+				return(r)
+			} else {
+				r <- .fasterize(p, rstr, pvals[,1], background, filename, ...) 
 			}
-			r <- .fasterize(p, rstr, pvals[,1], background, filename, ...) 
-			if (mask) r <- mask(rstr, r)
-			if (update) r <- cover(rstr, r)
-			return(r)
 		}
 		
 	}

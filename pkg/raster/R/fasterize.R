@@ -79,7 +79,7 @@
 	addres <- max(res(x)) * 2
 	rr <- raster(x)
 	er <- as.vector(extent(x))
-	sp <- raster:::.makeSpatPolygons(p)
+	sp <- .makeSpatPolygons(p)
 	npol <- sp$size()
 	res <- list(rep(NA, sp$size()))
 	for (i in 1:npol) {
