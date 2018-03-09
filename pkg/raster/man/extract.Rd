@@ -135,7 +135,11 @@ extract(r, lines)
 ###############################
 # extract values with polygons
 ###############################
+cds1 <- rbind(c(-180,-20), c(-160,5), c(-60, 0), c(-160,-60), c(-180,-20))
+cds2 <- rbind(c(80,0), c(100,60), c(120,0), c(120,-55), c(80,0))
+polys <- spPolygons(cds1, cds2)
 
+v <- extract(r, polys)
 # mean for each polygon
 unlist(lapply(v, function(x) if (!is.null(x)) mean(x, na.rm=TRUE) else NA ))
 
