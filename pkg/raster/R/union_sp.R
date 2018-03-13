@@ -98,4 +98,14 @@ function(x, y) {
 }	
 )
 
+setMethod('union', signature(x='SpatialPoints', y='SpatialPoints'), 
+function(x, y) {
+	bind(x,y)
+})
+
+setMethod('union', signature(x='SpatialLines', y='SpatialLines'), 
+function(x, y) {
+	bind(x,y)
+})
+
 
