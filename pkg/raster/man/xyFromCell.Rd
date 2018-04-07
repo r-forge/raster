@@ -5,12 +5,14 @@
 \alias{xFromCol,Raster,numeric-method}
 \alias{yFromRow}
 \alias{yFromRow,Raster,numeric-method}
-\alias{xyFromCell}
-\alias{xyFromCell,Raster,numeric-method}
 \alias{xFromCell}
 \alias{xFromCell,Raster,numeric-method}
 \alias{yFromCell}
 \alias{yFromCell,Raster,numeric-method}
+\alias{xyFromCell}
+\alias{xyFromCell,BasicRaster-method}
+\alias{xyFromCell,BasicRaster,ANY-method}
+\alias{xyFromCell,Raster-method}
 
 
 \title{Coordinates from a row, column or cell number}
@@ -22,9 +24,9 @@ These functions get coordinates of the center of raster cells for a row, column,
 \usage{
 \S4method{xFromCol}{Raster,numeric}(object, col)
 \S4method{yFromRow}{Raster,numeric}(object, row)
-\S4method{xyFromCell}{Raster,numeric}(object, cell, spatial=FALSE, ...)
 \S4method{xFromCell}{Raster,numeric}(object, cell)
 \S4method{yFromCell}{Raster,numeric}(object, cell)
+\S4method{xyFromCell}{BasicRaster,ANY}(object, cell, spatial=FALSE, ...)
 }
 
 

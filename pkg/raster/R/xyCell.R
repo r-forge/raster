@@ -41,7 +41,7 @@ setMethod("xFromCol", signature(object="Raster", col="numeric"),
 }  
 
 
-setMethod("cellFromXY", signature(object="Raster", xy="ANY"), 
+setMethod("cellFromXY", signature(object="BasicRaster", xy="ANY"), 
 	function(object, xy) {
 		if (inherits(xy, 'SpatialPoints')) {
 			xy <- coordinates(xy)
@@ -101,7 +101,7 @@ setMethod("rowFromY", signature(object="Raster", y="numeric"),
 )	
 
 
-setMethod("xyFromCell", signature(object="Raster", cell="numeric"), 
+setMethod("xyFromCell", signature(object="BasicRaster", cell="ANY"), 
 	function(object, cell, spatial=FALSE, ...) {
 		if (rotated(object)) {
 			xy <- object@rotation@transfun( 
