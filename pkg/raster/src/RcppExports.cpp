@@ -294,7 +294,6 @@ RcppExport SEXP _edge(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP _focal_fun(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP _focal_get(SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP _focal_sum(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP _point_in_polygon2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP _reclass(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP _rcpp_module_boot_spat();
 
@@ -328,7 +327,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_focal_fun",                      (DL_FUNC) &_focal_fun,                      7},
     {"_focal_get",                      (DL_FUNC) &_focal_get,                      4},
     {"_focal_sum",                      (DL_FUNC) &_focal_sum,                      7},
-    {"_point_in_polygon2",              (DL_FUNC) &_point_in_polygon2,              6},
     {"_reclass",                        (DL_FUNC) &_reclass,                        7},
     {NULL, NULL, 0}
 };
