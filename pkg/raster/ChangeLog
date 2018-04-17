@@ -484,7 +484,7 @@ Bug fix in ascii file writing. In some cases NA was written as -Inf, which was n
 
 --- 15-June-2011, version 1.8-35
 new helper functions spplot for plotting Raster* objects with spplot (sp package) 
-new helper functions gplot for plotting Raster* objects with ggplot (ggplot2 package), based on an example by Paul Hiemstra
+new helper functions gplot for plotting Raster* objects with ggplot (ggplot2 package), based on an example by Paul Hiemstra (later moved to RasterVis)
 new slot 'z' in Raster* objects to (somewhat) formalize management of time series. Is to replace the 'zvalue' slot
 new function zApply (by Oscar Perpiñan Lamigueiro); a stackApply for time series using the z slot. 
 implemented generic function 'coordinates' for Raster* objects

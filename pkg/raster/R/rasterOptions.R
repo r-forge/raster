@@ -607,3 +607,8 @@ tmpDir <- function(create=TRUE) {
 	return(y)
 }
 
+
+.tmppath <- function() {
+   file.path(tempdir(), 'raster', '/')
+}
+
