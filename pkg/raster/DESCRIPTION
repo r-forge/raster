@@ -1,8 +1,8 @@
 Package: raster
 Type: Package
 Title: Geographic Data Analysis and Modeling
-Version: 2.7-6
-Date: 2018-04-17
+Version: 2.7-7
+Date: 2018-04-24
 Depends: methods, sp (>= 1.2-0), R (>= 3.0.0)
 Suggests: rgdal (>= 0.9-1), rgeos (>= 0.3-8), ncdf4, igraph, tcltk, parallel, rasterVis, MASS, sf
 LinkingTo: Rcpp
@@ -25,9 +25,11 @@ Authors@R: c(
 	person("Josh", "Gray", role = "ctb"),
 	person("Paul", "Hiemstra", role = "ctb"),
 	person("Institute for Mathematics Applied Geosciences", role="cph"),
+	person("Charles", "Karney", role = "ctb"),
 	person("Steven", "Mosher", role = "ctb"),
 	person("Edzer", "Pebesma", role = "ctb"),
 	person("Etienne B.", "Racine", role = "ctb"),
+	person("Barry", "Rowlingson", role = "ctb"),
 	person("Ashton", "Shortridge", role = "ctb"),
 	person("Bill", "Venables", role = "ctb"),
 	person("Rafael", "Wueest", role = "ctb")
