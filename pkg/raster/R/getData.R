@@ -8,7 +8,7 @@
 getData <- function(name='GADM', download=TRUE, path='', ...) {
 	path <- .getDataPath(path)
 	if (name=='GADM') {
-		.GADM(..., download=download, path=path, version=2.8)
+		.GADM(..., download=download, path=path)
 	} else if (name=='SRTM') {
 		.SRTM(..., download=download, path=path)
 	} else if (name=='alt') {
@@ -114,25 +114,36 @@ ccodes <- function() {
 }
 
 
-.GADM <- function(country, level, download, path, version) {
+.GADM <- function(country, level, download, path, version=3.6, type='sp') {
 #	if (!file.exists(path)) {  dir.create(path, recursive=T)  }
 
 	country <- .getCountry(country)
 	if (missing(level)) {
 		stop('provide a "level=" argument; levels can be 0, 1, or 2 for most countries, and higher for some')
 	}
+
+	if (version > 3) {
+		if (type == 'sf') {
+			filename <- file.path(path, paste0('gadm36_', country, '_', level, "_sf.rds"))
+		} else {
+			filename <- file.path(path, paste0('gadm36_', country, '_', level, "_sp.rds"))
+		}
+	} else {
+		filename <- paste(path, 'GADM_', version, '_', country, '_', level, ".rds", sep="")	
+	}
 	
-	filename <- paste(path, 'GADM_', version, '_', country, '_adm', level, ".rds", sep="")
 	if (!file.exists(filename)) {
 		if (download) {
-		
 			baseurl <- paste0("https://biogeo.ucdavis.edu/data/gadm", version)
-			if (version == 2) {
-				theurl <- paste(baseurl, '/R/', country, '_adm', level, ".RData", sep="")
-			} else {
+			if (version == 2.8) {
 				theurl <- paste(baseurl, '/rds/', country, '_adm', level, ".rds", sep="")			
+			} else {
+				if (type == 'sf') {
+					theurl <- paste(baseurl, '/Rsf/gadm36_', country, '_', level, "_sf.rds", sep="")			
+				} else {
+					theurl <- paste(baseurl, '/Rsp/gadm36_', country, '_', level, "_sp.rds", sep="")			
+				}
 			}
-			
 			.download(theurl, filename)
 			if (!file.exists(filename))	{ 
 				message("\nCould not download file -- perhaps it does not exist") 
@@ -142,13 +153,7 @@ ccodes <- function() {
 		}
 	}	
 	if (file.exists(filename)) {
-		if (version == 2) {
-			thisenvir <- new.env()
-			data <- get(load(filename, thisenvir), thisenvir)
-		} else {
-			data <- readRDS(filename)
-		}
-		return(data)
+		return(readRDS(filename))
 	} else {
 		return(NULL)
 	}
