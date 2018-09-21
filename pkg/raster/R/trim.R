@@ -50,14 +50,42 @@ setMethod('trim', signature(x='matrix'),
 )
 
 
+
 # June 2013, modification by Mike Sumner, added argument "value"
+
+
+.memtrimlayer <- function(r, padding=0, values=NA, filename='', ...) {
+	x <- as.matrix(r)
+	if (all(is.na(values))) {
+		rows <- rowSums(is.na(x))
+		cols <- colSums(is.na(x))
+	} else {
+		rows <- apply(x, 1, function(i) sum(i %in% values))
+		cols <- apply(x, 2, function(i) sum(i %in% values))
+	}
+	rows <- which(rows != ncol(x))
+	cols <- which(cols != nrow(x))
+	if (length(rows)==0) { 	stop('only NA values found') }
+	
+	rows <- pmin(pmax(1, c(min(rows) - padding, max(rows + padding))), nrow(r))
+	cols <- pmin(pmax(1, c(min(cols) - padding, max(cols + padding))), ncol(r))
+
+	e <- extent(r, rows[1], rows[2], cols[1], cols[2])
+	crop(r, e, filename=filename, ...)
+}
+
 
 setMethod('trim', signature(x='Raster'), 
 function(x, padding=0, values=NA, filename='', ...) {
 
-
 	filename <- trim(filename)
-
+	if (!hasValues(x)) { stop('The Raster object has no values') } 
+	
+	if (nlayers(x) == 1 && canProcessInMemory(x)) {
+		x <- .memtrimlayer(x, padding=padding, ...) 
+		return(x)
+	}
+	
 	nr <- nrow(x)
 	nc <- ncol(x)
 	nrl <- nr * nlayers(x)
