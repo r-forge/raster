@@ -5,6 +5,7 @@
 
 
 
+
 if ( !isGeneric("raster") ) {
 	setGeneric("raster", function(x, ...)
 		standardGeneric("raster"))
