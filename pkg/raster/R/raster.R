@@ -5,13 +5,6 @@
 
 
 
-
-if ( !isGeneric("raster") ) {
-	setGeneric("raster", function(x, ...)
-		standardGeneric("raster"))
-}
-
-
 setMethod('raster', signature(x='missing'), 
 	function(nrows=180, ncols=360, xmn=-180, xmx=180, ymn=-90, ymx=90, crs, ext, resolution, vals=NULL) {
 		if (missing(ext)) {
@@ -267,7 +260,7 @@ setMethod('raster', signature(x='RasterBrick'),
 				
 				# ncdf files
 				zvar <- try(methods::slot(x@data, 'zvar'), silent=TRUE)
-				if (class(zvar) != 'try-error') {
+				if (!(inherits(zvar, "try-error"))) {
 					attr(r@data, "zvar") <- zvar
 					attr(r@data, "dim3") <- x@data@dim3
 					attr(r@data, "level") <- x@data@level
