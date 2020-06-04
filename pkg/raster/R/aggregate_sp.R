@@ -101,7 +101,7 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 				nsubobs <- length(x@polygons[[i]]@Polygons)
 				p <- c(p, lapply(1:nsubobs, function(j) x@polygons[[i]]@Polygons[[j]]))
 			}
-			x <- SpatialPolygons(list(Polygons(p, '1')), proj4string=x@proj4string)
+			x <- SpatialPolygons(list(Polygons(p, '1')), proj4string=proj4string(x))
 		}
 		#if (hd) {
 		#	x <- SpatialPolygonsDataFrame(x, data=data.frame(ID=1))
@@ -159,7 +159,17 @@ function(x, by=NULL, sums=NULL, dissolve=TRUE, vars=NULL, ...) {
 					)
 			}	
 		} else {
-			x <- lapply(1:nrow(id), function(y) spChFIDs(aggregate(x[dc[dc$v==y,1],], dissolve=FALSE), as.character(y)))
+			#x <- lapply(1:nrow(id), function(y) {
+			#spChFIDs(aggregate(x[dc[dc$v==y,1],], dissolve=FALSE), as.character(y)))
+			x <- lapply(1:nrow(id), function(y) {
+				d <- data.frame(geom(x[dc[dc$v==y,1],]))
+				pmx = tapply(d[,"part"], d[,"object"], max)
+				z <- as.vector(cumsum(pmx) - 1)
+				d$part <- z[d$object] + d$part
+				d$object <- y
+				d <- as(d, "SpatialPolygons")
+				spChFIDs(d, as.character(y))
+			})
 		}
 		
 		x <- do.call(rbind, x)
@@ -203,7 +213,7 @@ function(x, by=NULL, sums=NULL, ...) {
 			nsubobs <- length(x@lines[[i]]@Lines)
 			p <- c(p, lapply(1:nsubobs, function(j) x@lines[[i]]@Lines[[j]]))
 		}
-		x <- SpatialLines(list(Lines(p, '1')), proj4string=x@proj4string)
+		x <- SpatialLines(list(Lines(p, '1')), proj4string=proj4string(x))
 		return(x)
 		
 	} else {
@@ -242,7 +252,7 @@ function(x, by=NULL, sums=NULL, ...) {
 		x <- lapply(1:nrow(id), function(y) spChFIDs(aggregate(x[dc[dc$v==y,1],]), as.character(y)))
 		
 		x <- do.call(rbind, x)
-		x@proj4string <- crs
+		crs(x) <- crs
 		rownames(dat) <- NULL
 		SpatialLinesDataFrame(x, dat, FALSE)
 	}

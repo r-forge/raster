@@ -30,7 +30,7 @@ setAs('Raster', 'SpatialPixels',
 		sp <- rasterToPoints(from, fun=NULL, spatial=FALSE)
 		
 		r <- raster(from)
-		sp <- SpatialPoints(sp[,1:2,drop=FALSE], proj4string= crs(r))
+		sp <- SpatialPoints(sp[,1:2,drop=FALSE], proj4string= .getCRS(r))
 		grd <- as(r, 'GridTopology')
 		SpatialPixels(points=sp, grid=grd)
 	}
@@ -44,7 +44,7 @@ setAs('Raster', 'SpatialPixelsDataFrame',
 		v <- rasterToPoints(from, fun=NULL, spatial=FALSE)
 
 		r <- raster(from)
-		sp <- SpatialPoints(v[,1:2,drop=FALSE], proj4string= crs(r))
+		sp <- SpatialPoints(v[,1:2,drop=FALSE], proj4string= .getCRS(r))
 
 		grd <- as(r, 'GridTopology')
 		
@@ -74,7 +74,7 @@ setAs('Raster', 'SpatialGrid',
 		}	
 		r <- raster(from)
 		grd <- as(r, 'GridTopology')
-		SpatialGrid(grd, proj4string=crs(r))
+		SpatialGrid(grd, proj4string=.getCRS(r))
 	}
 )
 
@@ -88,10 +88,10 @@ setAs('Raster', 'SpatialGridDataFrame',
 		grd <- as(r, 'GridTopology')
 
 		if (hasValues(from)) {
-			sp <- SpatialGridDataFrame(grd, proj4string=crs(r), data=as.data.frame(from))
+			sp <- SpatialGridDataFrame(grd, proj4string=.getCRS(r), data=as.data.frame(from))
 		} else { 
 			warning('object has no values, returning a "SpatialGrid" object')
-			sp  <- SpatialGrid(grd, proj4string=crs)
+			sp  <- SpatialGrid(grd, proj4string=.getCRS(r))
 		}
 		sp
 	}
@@ -115,7 +115,7 @@ setAs('Raster', 'SpatialPolygonsDataFrame',
 
 setAs('Raster', 'SpatialPoints', 
 	function(from) { 
-		SpatialPoints(rasterToPoints(from, spatial=FALSE)[,1:2], proj4string=projection(from, FALSE))
+		SpatialPoints(rasterToPoints(from, spatial=FALSE)[,1:2], proj4string=.getCRS(from))
 	}
 )
 
@@ -271,17 +271,6 @@ setAs('matrix', 'RasterLayer',
 
 setAs('RasterLayer', 'matrix',
 	function(from){ return( getValues(from, format='matrix')) }
-)
-
-
-#setAs('RasterLayerSparse', 'RasterLayer', function(from){ raster(from) } )
-
-setAs('RasterLayer', 'RasterLayerSparse', 
-	function(from){ 
-		x <- methods::new('RasterLayerSparse')
-		v <- stats::na.omit(cbind(1:ncell(from), getValues(from)))
-		setValues(x, v[,2], v[,1])
-	}
 )
 
 

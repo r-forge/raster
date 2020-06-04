@@ -42,6 +42,12 @@
 }
 
 
+setMethod("couldBeLonLat", signature("ANY"), 
+	function(x, warnings=TRUE, ...) {
+		.couldBeLonLat(x, warnings=warnings)
+	}
+)
+
 setMethod("couldBeLonLat", signature("BasicRaster"), 
 	function(x, warnings=TRUE, ...) {
 		.couldBeLonLat(x, warnings=warnings)
@@ -66,7 +72,7 @@ setMethod('isLonLat', signature(x='BasicRaster'),
 #author:
 # ...
 	function(x, ...){
-		p4str <- projection(x)
+		p4str <- proj4string(x)
 		if (is.na(p4str) || nchar(p4str) == 0) {
 			return(FALSE)
 		} 

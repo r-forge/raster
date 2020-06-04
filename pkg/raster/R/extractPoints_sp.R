@@ -48,7 +48,7 @@ function(x, y, ...) {
 		r <- cbind(data.frame(point.ID=1:nrow(y), poly.ID=NA), x@data[0,][1:nrow(y),])
 		rownames(r) <- NULL
 	} else if (length(i) < nrow(y)) {
-		sp <- SpatialPoints(y[i,], proj4string=crs(x))
+		sp <- SpatialPoints(y[i,], proj4string=x@proj4string)
 		v <- extract(x, sp, ...)
 		r <- cbind(data.frame(point.ID=1:nrow(y), poly.ID=NA), x@data[0,][1:nrow(y),])
 		if (nrow(v) == nrow(sp)) {  # no overlapping polygons
@@ -60,7 +60,7 @@ function(x, y, ...) {
 		}
 		rownames(r) <- NULL
 	} else {
-		sp <- SpatialPoints(y, proj4string=crs(x))
+		sp <- SpatialPoints(y, proj4string=x@proj4string)
 		r <- extract(x, sp, ...)
 	}
 	return(r)

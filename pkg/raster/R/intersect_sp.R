@@ -227,7 +227,7 @@ function(x, y) {
 	if (! any(c(xdata, ydata))) {
 		z <- rgeos::gIntersection(x, y, byid=TRUE)
 		if (is.null(z)) {
-			z <- SpatialPoints(cbind(0,0), proj4string=crs(x))
+			z <- SpatialPoints(cbind(0,0), proj4string=x@proj4string)
 			z <- SpatialPointsDataFrame(z,data.frame(x=0, y=0))
 			return( z[-1, ] )
 		}
@@ -242,7 +242,7 @@ function(x, y) {
 	z <- rgeos::gIntersection(y, x, byid=TRUE)
 	
 	if (is.null(z)) {
-		z <- SpatialPoints(cbind(0,0), proj4string=crs(x))
+		z <- SpatialPoints(cbind(0,0), proj4string=x@proj4string)
 		return( z[-1, ] )
 	}
 	

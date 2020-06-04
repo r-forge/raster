@@ -7,8 +7,9 @@
 setMethod('extract', signature(x='Raster', y='SpatialLines'), 
 function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, factors=FALSE, along=FALSE, sp=FALSE, ...){ 
 
-	px <- projection(x, asText=FALSE)
-	comp <- compareCRS(px, projection(y), unknown=TRUE)
+	#px <-.getCRS(x, asText=FALSE)
+	px <-.getCRS(x)
+	comp <- compareCRS(px,.getCRS(y), unknown=TRUE)
 	if (!comp) {
 		.requireRgdal()
 		warning('Transforming SpatialLines to the CRS of the Raster object')
@@ -273,7 +274,7 @@ function(x, y, fun=NULL, na.rm=FALSE, cellnumbers=FALSE, df=FALSE, layer, nl, fa
 	
 	
 	if (df) {
-		res <- data.frame( do.call(rbind, sapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
+		res <- data.frame( do.call(rbind, lapply(1:length(res), function(x) if (!is.null(res[[x]])) cbind(x, res[[x]]))) )
 		lyrs <- layer:(layer+nl-1)
 		colnames(res) <- c('ID', names(x)[lyrs])
 		

@@ -114,7 +114,7 @@ function(x, y, ..., keepnames=FALSE) {
 					warning('non identical CRS')
 					haswarned <- TRUE
 				}
-				x[[i]]@proj4string <- x[[1]]@proj4string
+				x[[i]]@proj4string <- x[[1]]@proj4string			
 			}
 		}	
 				
@@ -204,7 +204,7 @@ setMethod('bind', signature(x='SpatialLines', y='SpatialLines'),
 					warning('non identical CRS')
 					haswarned <- TRUE
 				}
-				x[[i]]@proj4string <- x[[1]]@proj4string
+				x[[i]]@proj4string <- x[[1]]@proj4string			
 			}
 		}	
 		

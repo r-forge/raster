@@ -66,10 +66,10 @@
 								zname <- 'time'
 							}
 							if (cls == 'Date') {
-								zatt <- list('units=days since 1970-01-01 00:00:00')
+								zatt <- list('units=days since 1970-1-1')
 								zunit <- 'days'
 							} else {
-								zatt <- list('units=seconds since 1970-01-01 00:00:00')							
+								zatt <- list('units=seconds since 1970-1-1 00:00:00')							
 								zunit <- 'seconds'
 							}
 						}
@@ -107,7 +107,7 @@
 	nc <- ncdf4::nc_create(filename, defs, force_v4=force_v4)
 	prj <- crs(x)
 	if (!is.na(prj)) {
-		ncdf4::ncatt_put(nc, "crs", "proj4", as.character(prj), prec='text')
+		ncdf4::ncatt_put(nc, "crs", "proj4", proj4string(prj), prec='text')
 		ncdf4::ncatt_put(nc, varname, "grid_mapping", "crs")
 		ncdf4::ncatt_put(nc, varname, "proj4", as.character(prj), prec='text')
 	}
