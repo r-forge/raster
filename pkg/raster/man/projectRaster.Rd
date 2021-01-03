@@ -49,14 +49,18 @@ This is the preferred method because you have most control. For example you can 
 
 Projection is performed using the PROJ.4 library accessed through the rgdal package. 
 
-One of the best places to find PROJ.4 coordinate reference system descriptions is \url{http://www.spatialreference.org}. 
+One of the best places to find PROJ.4 coordinate reference system descriptions is \url{https://www.spatialreference.org}. 
 
-You can also consult this page: \url{http://geotiff.maptools.org/proj_list} to find the parameter options and names for projections.
+You can also consult this page: \url{http://geotiff.maptools.org/proj_list/} to find the parameter options and names for projections.
 
 Also see \code{projInfo('proj')}, \code{projInfo('ellps')}, and \code{projInfo('datum')} for valid PROJ.4 values. 
 }
 
 \note{
+User beware. Sadly, the PROJ.4 notation has been partly deprecated in the GDAL/PROJ library that is used by this function. You can still use it, but *only* with the the WGS84 datum. Other datums are silently ignored. 
+
+When printing a Spat* object the PROJ.4 notation is shown because it is the most concise and clear format available. However, internally a WKT representation is used (see \code{\link{crs}}).
+
 Vector (points, lines, polygons) can be transformed with \code{\link[sp]{spTransform}}.
 
 \code{projectExtent} does not work very well when transforming projected circumpolar data to (e.g.) longitude/latitude. 

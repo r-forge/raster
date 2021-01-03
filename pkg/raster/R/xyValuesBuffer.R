@@ -26,6 +26,8 @@
 	cv <- list()
 	obj <- raster(object) 
 # ?	centralcells <- cellFromXY(obj, xy)
+
+# needs to deal with global wrapping....
 	if (couldBeLonLat(obj)) { 
 		# from m to degrees
 		bufy <- buffer / 111319.5
@@ -208,7 +210,9 @@
 		} else {
 			fun2 <- fun
 		}
-		if (inherits(object, 'RasterLayer')) {
+		#if (inherits(object, 'RasterLayer')) {
+		
+		if (nl == 1) {
 			cv <- unlist(lapply(cv, fun2), use.names = FALSE)
 		} else {
 			np <- length(cv)

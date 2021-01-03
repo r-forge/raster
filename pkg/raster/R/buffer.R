@@ -81,8 +81,13 @@ function(x, width=1, dissolve=TRUE, ...) {
 		return(pb)		
 	}
 	
-	stopifnot(requireNamespace("rgeos"))
-	rgeos::gBuffer(x, byid=!dissolve, width=width, ...)
+	valgeos <- .checkGEOS(); on.exit(rgeos::set_RGEOS_CheckValidity(valgeos))
+	
+	prj <- x@proj4string
+	x@proj4string <- CRS(as.character(NA))
+	x <- rgeos::gBuffer(x, byid=!dissolve, width=width, ...)
+	x@proj4string <- prj
+	x
 }
 )
 

@@ -1,14 +1,14 @@
 Package: raster
 Type: Package
 Title: Geographic Data Analysis and Modeling
-Version: 3.3-3
-Date: 2020-06-01
+Version: 3.4-8
+Date: 2020-12-22
 Depends: sp (>= 1.4.1), R (>= 3.5.0)
-Suggests: rgdal (>= 1.5-8), rgeos (>= 0.3-8), ncdf4, igraph, tcltk, parallel, rasterVis, MASS, sf, testthat
+Suggests: rgdal (>= 1.5-8), rgeos (>= 0.3-8), ncdf4, igraph, tcltk, parallel, rasterVis, MASS, sf, tinytest, gstat, fields
 LinkingTo: Rcpp
 Imports: Rcpp, methods
 SystemRequirements: C++11
-Description: Reading, writing, manipulating, analyzing and modeling of gridded spatial data. The package implements basic and high-level functions. Processing of very large files is supported. There is a also support for vector data operations such as intersections. See the manual and tutorials on <https://rspatial.org/> to get started.
+Description: Reading, writing, manipulating, analyzing and modeling of spatial data. The package implements basic and high-level functions for raster data and for vector data operations such as intersections. See the manual and tutorials on <https://rspatial.org/> to get started.
 License: GPL (>=3)
 URL: https://rspatial.org/raster
 BugReports: https://github.com/rspatial/raster/issues/
@@ -19,10 +19,12 @@ Authors@R: c(
 	person("Jacob", "van Etten", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"),
 	person("Joe", "Cheng", role = "ctb"),
+	person("Dan", "Baston", role = "ctb"),
 	person("Andrew", "Bevan", role = "ctb"),
 	person("Roger", "Bivand", role = "ctb"),
 	person("Lorenzo", "Busetto", role = "ctb"),
 	person("Mort", "Canty", role = "ctb"),
+	person("Ben", "Fasoli", role = "ctb"),
 	person("David", "Forrest", role = "ctb"),
 	person("Aniruddha", "Ghosh", role = "ctb"),
 	person("Duncan", "Golicher", role = "ctb"),
@@ -34,6 +36,7 @@ Authors@R: c(
 	person("Charles", "Karney", role = "ctb"),
 	person("Matteo", "Mattiuzzi", role = "ctb"),
 	person("Steven", "Mosher", role = "ctb"),
+	person("Babak", "Naimi", role = "ctb"),	
 	person("Jakub", "Nowosad", role = "ctb"),
 	person("Edzer", "Pebesma", role = "ctb"),
 	person("Oscar", "Perpinan Lamigueiro", role = "ctb"),

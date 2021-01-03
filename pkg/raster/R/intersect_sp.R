@@ -4,12 +4,22 @@
 # Licence GPL v3
 
 
+.checkGEOS <- function() {
+	stopifnot(requireNamespace("rgeos"))
+	gval <- rgeos::get_RGEOS_CheckValidity()
+	rgeos::set_RGEOS_CheckValidity(2L)
+	gval
+}
+
 
 setMethod('intersect', signature(x='SpatialPolygons', y='SpatialPolygons'), 
 function(x, y) {
 
-	requireNamespace("rgeos")
-
+	valgeos <- .checkGEOS(); on.exit(rgeos::set_RGEOS_CheckValidity(valgeos))
+	prj <- x@proj4string
+	if (is.na(prj)) prj <- y@proj4string
+	x@proj4string <- CRS(as.character(NA))
+	y@proj4string <- CRS(as.character(NA))
 
 #	threshold <- get_RGEOS_polyThreshold()
 #	on.exit(set_RGEOS_polyThreshold(threshold))
@@ -23,11 +33,6 @@ function(x, y) {
 	x <- spChFIDs(x, as.character(1:length(x)))
 	y <- spChFIDs(y, as.character(1:length(y)))
 		
-	if (! identical(proj4string(x), proj4string(y)) ) {
-		warning('non identical CRS')
-		y@proj4string <- x@proj4string
-	}	
-	
 	subs <- rgeos::gIntersects(x, y, byid=TRUE)
 	if (sum(subs)==0) {
 		warning('polygons do not intersect')
@@ -106,6 +111,7 @@ function(x, y) {
 			int <- int[j,]
 		}		
 	}
+	int@proj4string <- prj
 	int	
 } 
 )
@@ -114,12 +120,18 @@ function(x, y) {
 setMethod('intersect', signature(x='SpatialPolygons', y='SpatialLines'), 
 function(x, y) {
 
-	requireNamespace("rgeos")
-		
-	if (! identical(proj4string(x), proj4string(y)) ) {
-		warning('non identical CRS')
-		y@proj4string <- x@proj4string
-	}	
+	valgeos <- .checkGEOS(); on.exit(rgeos::set_RGEOS_CheckValidity(valgeos))
+	gval <- rgeos::get_RGEOS_CheckValidity()
+	if (gval != 2) {
+		on.exit(rgeos::set_RGEOS_CheckValidity(gval))
+		rgeos::set_RGEOS_CheckValidity(2L)
+	}
+
+	prj <- x@proj4string
+	if (is.na(prj)) prj <- y@proj4string
+	x@proj4string <- CRS(as.character(NA))
+	y@proj4string <- CRS(as.character(NA))
+
 	
 	subs <- rgeos::gIntersects(x, y, byid=TRUE)
 	if (sum(subs)==0) {
@@ -127,6 +139,7 @@ function(x, y) {
 		return(NULL)
 	}
 
+	if (inherits(x, "Spatial")) { x@proj4string <- prj }
 	i <- which(apply(subs, 2, any))
 	x[i, ]
 }
@@ -135,7 +148,17 @@ function(x, y) {
 setMethod('intersect', signature(x='SpatialLines', y='SpatialPolygons'), 
 function(x, y) {
 
-	requireNamespace("rgeos")
+	valgeos <- .checkGEOS(); on.exit(rgeos::set_RGEOS_CheckValidity(valgeos))
+	gval <- rgeos::get_RGEOS_CheckValidity()
+	if (gval != 2) {
+		on.exit(rgeos::set_RGEOS_CheckValidity(gval))
+		rgeos::set_RGEOS_CheckValidity(2L)
+	}
+	
+	prj <- x@proj4string
+	if (is.na(prj)) prj <- y@proj4string
+	x@proj4string <- CRS(as.character(NA))
+	y@proj4string <- CRS(as.character(NA))
 
 	x <- spChFIDs(x, as.character(1:length(x)))
 	y <- spChFIDs(y, as.character(1:length(y)))
@@ -203,6 +226,7 @@ function(x, y) {
 		j <- which(rgeos::gIsValid(int, byid=TRUE, reason=FALSE))
 		int <- int[j, ]
 	}
+	int@proj4string <- prj
 	int	
 } 
 )
@@ -210,13 +234,17 @@ function(x, y) {
 
 setMethod('intersect', signature(x='SpatialLines', y='SpatialLines'), 
 function(x, y) {
-	stopifnot(requireNamespace("rgeos"))
+	valgeos <- .checkGEOS(); on.exit(rgeos::set_RGEOS_CheckValidity(valgeos))
+	gval <- rgeos::get_RGEOS_CheckValidity()
+	if (gval != 2) {
+		on.exit(rgeos::set_RGEOS_CheckValidity(gval))
+		rgeos::set_RGEOS_CheckValidity(2L)
+	}
 
-	if (! identical(proj4string(x), proj4string(y)) ) {
-		warning('non identical CRS')
-		y@proj4string <- x@proj4string
-	} 
-	
+	prj <- x@proj4string
+	if (is.na(prj)) prj <- y@proj4string
+	x@proj4string <- CRS(as.character(NA))
+	y@proj4string <- CRS(as.character(NA))
 	
 	xdata <-.hasSlot(x, 'data')
 	ydata <-.hasSlot(y, 'data')
@@ -227,7 +255,7 @@ function(x, y) {
 	if (! any(c(xdata, ydata))) {
 		z <- rgeos::gIntersection(x, y, byid=TRUE)
 		if (is.null(z)) {
-			z <- SpatialPoints(cbind(0,0), proj4string=x@proj4string)
+			z <- SpatialPoints(cbind(0,0), proj4string=prj)
 			z <- SpatialPointsDataFrame(z,data.frame(x=0, y=0))
 			return( z[-1, ] )
 		}
@@ -235,14 +263,15 @@ function(x, y) {
 		d <- data.frame(matrix(as.integer(unlist(strsplit(rn, ' '))), ncol=2, byrow=TRUE))
 		colnames(d) <- c('x', 'y')
 		rownames(z@coords) <- NULL
-		z <- SpatialPointsDataFrame(z,d)
+		z <- SpatialPointsDataFrame(z, d)
+		z@proj4string <- prj
 		return(z)
 	}
 	
 	z <- rgeos::gIntersection(y, x, byid=TRUE)
 	
 	if (is.null(z)) {
-		z <- SpatialPoints(cbind(0,0), proj4string=x@proj4string)
+		z <- SpatialPoints(cbind(0,0), proj4string=prj)
 		return( z[-1, ] )
 	}
 	
@@ -268,6 +297,8 @@ function(x, y) {
 	}
 	row.names(d) <- NULL
 	row.names(z) <- as.character(1:length(z))
+	z@proj4string <- prj
+	
 	SpatialPointsDataFrame(z, d)
 }
 )
@@ -277,15 +308,22 @@ function(x, y) {
 setMethod('intersect', signature(x='SpatialPolygons', y='SpatialPoints'), 
 function(x, y) {
 	
-	stopifnot(requireNamespace("rgeos"))
+	valgeos <- .checkGEOS(); on.exit(rgeos::set_RGEOS_CheckValidity(valgeos))
+	gval <- rgeos::get_RGEOS_CheckValidity()
+	if (gval != 2) {
+		on.exit(rgeos::set_RGEOS_CheckValidity(gval))
+		rgeos::set_RGEOS_CheckValidity(2L)
+	}
+
+	prj <- x@proj4string
+	if (is.na(prj)) prj <- y@proj4string
+	x@proj4string <- CRS(as.character(NA))
+	y@proj4string <- CRS(as.character(NA))
 	
-	if (! identical(proj4string(x), proj4string(y)) ) {
-		warning('non identical CRS')
-		y@proj4string <- x@proj4string
-	} 
 	
 	i <- rgeos::gIntersects(x, y, byid=TRUE)
 	i <- which(apply(i, 2, any))
+	if (inherits(x, "Spatial")) { x@proj4string <- prj }
 	x[i, ]
 }
 )
@@ -299,13 +337,18 @@ function(x, y) {
 	}
 	
 	if (inherits(y, 'SpatialPolygons')) {
-	
-		if (! identical(proj4string(x), proj4string(y)) ) {
-			warning('non identical CRS')
-			y@proj4string <- x@proj4string
-		} 
 
-		stopifnot(requireNamespace("rgeos"))
+		valgeos <- .checkGEOS(); on.exit(rgeos::set_RGEOS_CheckValidity(valgeos))
+		gval <- rgeos::get_RGEOS_CheckValidity()
+		if (gval != 2) {
+			on.exit(rgeos::set_RGEOS_CheckValidity(gval))
+			rgeos::set_RGEOS_CheckValidity(2L)
+		}
+		prj <- x@proj4string
+		if (is.na(prj)) prj <- y@proj4string
+		x@proj4string <- CRS(as.character(NA))
+		y@proj4string <- CRS(as.character(NA))
+
 		i <- rgeos::gIntersects(y, x, byid=TRUE)
 	
 		j <- cbind(1:length(y), rep(1:length(x), each=length(y)), as.vector(t(i)))
@@ -321,6 +364,7 @@ function(x, y) {
 				x@data <- cbind(x@data, d)
 			}
 		} 
+		x@proj4string <- prj
 		return(x)
 		
 	} else {

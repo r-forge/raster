@@ -4,12 +4,12 @@
 # Licence GPL v3
 
 
-setMethod('flip', signature(x='RasterLayer', direction='ANY'), 
+setMethod('flip', signature(x='RasterLayer'), 
 	function(x, direction='y', filename='', ...)  {
 	
 		filename <- trim(filename)
-		outRaster <- raster(x)
-
+		outRaster <- .copyWithProperties(x)	
+	
 		if (direction[1] == 1) { 
 			direction <- 'x'
 		} else if (direction[1] == 2) { 
@@ -72,7 +72,7 @@ setMethod('flip', signature(x='RasterLayer', direction='ANY'),
 
 
 
-setMethod('flip', signature(x='RasterStackBrick', direction='ANY'), 
+setMethod('flip', signature(x='RasterStackBrick'), 
 	function(x, direction='y', filename='', ...)  {
 	
 		filename <- trim(filename)
